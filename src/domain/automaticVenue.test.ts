@@ -78,3 +78,10 @@ it('closes floor topology at detected stairs without adding a physical wall acro
  const result=buildAutomaticVenue(p).project;
  expect(result?.openings?.[0].kind).toBe('stair-access');expect(result?.walls).toHaveLength(5);expect(parseProject(result).openings?.[0].kind).toBe('stair-access');
 });
+it('connects a raster-offset partition to a boundary interior before classifying the room',()=>{
+ const p=fixture();p.analysis!.lines.push(line('offset-partition',500,103,500,697,5));
+ const result=buildAutomaticVenue(p).project;
+ expect(result?.walls.filter(w=>w.role==='partition')).toHaveLength(1);
+ expect(result?.walls.find(w=>w.role==='partition')?.start).toEqual({x:5000,z:1000});
+ expect(result?.planReference?.mmPerPixel).toBe(10);expect(parseProject(result).walls).toHaveLength(7);
+});
