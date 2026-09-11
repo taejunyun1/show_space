@@ -90,6 +90,6 @@ export function PlanView() {
   <p className="canvas-hint">{panMode?'드래그하여 화면 이동 · 화면 이동 버튼을 끄면 편집':'벽 끝점 드래그 · 10 mm 단위 이동'}{project.planImageUrl?reference?.calibrated?' · 도면 축척 보정됨':' · 축척 미보정':''}</p>
   {reviewLabels&&<PlanLabelReview onClose={()=>setReviewLabels(false)}/>}
   {reviewCandidates&&reference&&project.planImageUrl&&<WallCandidateDialog onClose={()=>setReviewCandidates(false)}/>}
-  {importFile&&<PlanImportDialog file={importFile} onClose={()=>setImportFile(null)} onImport={image=>{patchProject({planImageUrl:image.imageUrl,planLabels:image.labels??[],planAnalysis:image.analysis,planReference:fitPlan(image.widthPx,image.heightPx,{x:wallMinX,z:wallMinZ},Math.max(wallWidth,1000)),planOpacity:0.55});setImportFile(null);notify('도면을 배치했습니다. 두 점 축척 보정 후 벽을 맞춰 주세요.');}}/>}
+  {importFile&&<PlanImportDialog onAdopt={draft=>{useEditor.getState().commit(draft);setImportFile(null);notify("자동 공간 초안을 적용했습니다. 높이·두께는 임시값입니다. 실행 취소로 이전 작업을 복원할 수 있습니다.");}} file={importFile} onClose={()=>setImportFile(null)} onImport={image=>{patchProject({planImageUrl:image.imageUrl,planLabels:image.labels??[],planAnalysis:image.analysis,planReference:fitPlan(image.widthPx,image.heightPx,{x:wallMinX,z:wallMinZ},Math.max(wallWidth,1000)),planOpacity:0.55});setImportFile(null);notify('도면을 배치했습니다. 두 점 축척 보정 후 벽을 맞춰 주세요.');}}/>}
   </div>;
 }

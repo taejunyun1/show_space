@@ -22,6 +22,6 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  else if(!lines.length)issues.push('구조 선을 찾지 못했습니다. 원본 또는 다른 페이지가 필요할 수 있습니다.');
  if(numeric.some(l=>readPlanNumbers(l.text).some(n=>n.values.length>1)))issues.push('해석이 여러 개인 숫자가 있습니다. 치수 자동 적용 전 해소가 필요합니다.');
  if(!numeric.length)issues.push('치수 숫자를 찾지 못했습니다. 실제 길이 기준이 필요합니다.');
- issues.push('자동 축척·벽 구성은 아직 연결 전입니다. 현재 결과는 분석 초안입니다.');
+ issues.push('닫힌 경계와 치수 근거를 확인해 공간 초안 생성 여부를 판단합니다.');
  return {...page,labels,textSource:textResult.status==='fulfilled'?(page.textSource==='pdf-text'?'pdf-text':'ocr'):page.textSource,analysis:{lines,issues,numericCount:numeric.length,textState:textResult.status==='fulfilled'?'complete':'failed',lineState:lineResult.status==='fulfilled'?'complete':'failed'}};
 }

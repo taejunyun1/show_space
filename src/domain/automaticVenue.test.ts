@@ -1,0 +1,15 @@
+import {it,expect} from 'vitest';
+import {buildAutomaticVenue} from './automaticVenue';
+import {detectPlanLabels} from './planLabels';
+import {detectWallCandidates} from './wallCandidates';
+import {parseProject} from './model';
+import type {PlanPage} from '../lib/planImport';
+const line=(id:string,x:number,y:number,x2:number,y2:number,thicknessPx=1)=>({id,start:{x,y},end:{x:x2,y:y2},thicknessPx});
+function fixture():PlanPage{return {imageUrl:'data:image/png;base64,AA==',widthPx:1000,heightPx:800,labels:detectPlanLabels([{text:'8000 mm',source:'pdf-text',box:{x:400,y:30,width:100,height:20}},{text:'6000 mm',source:'pdf-text',box:{x:30,y:350,width:20,height:80}}]),analysis:{textState:'complete',lineState:'complete',numericCount:2,issues:[],lines:[line('a',100,100,900,100,5),line('b',900,100,900,700,5),line('c',900,700,100,700,5),line('d',100,700,100,100,5),line('dx',100,60,900,60),line('wx1',100,50,100,105),line('wx2',900,50,900,105),line('dy',60,100,60,700),line('wy1',50,100,105,100),line('wy2',50,700,105,700)]}};}
+it('builds a separate valid draft from two independent dimensions without changing input',()=>{const p=fixture(),before=structuredClone(p),r=buildAutomaticVenue(p);expect(r.project?.planReference?.mmPerPixel).toBe(10);expect(r.project?.walls).toHaveLength(4);expect(r.project?.artworks).toEqual([]);expect(parseProject(r.project).walls).toHaveLength(4);expect(p).toEqual(before);});
+it('withholds conflicting scale',()=>{const p=fixture();p.labels![1].text='9000 mm';expect(buildAutomaticVenue(p).project).toBeUndefined();});
+it('does not guess missing units or use a duplicate wall as independent evidence',()=>{const p=fixture();p.labels![1]={...p.labels![0],id:'duplicate'};expect(buildAutomaticVenue(p).project).toBeUndefined();for(const l of p.labels!)l.text='8000';expect(buildAutomaticVenue(p).project).toBeUndefined();});
+it('withholds low confidence OCR and dismissed evidence',()=>{for(const patch of [{source:'ocr' as const,confidence:60},{status:'dismissed' as const}]){const p=fixture();Object.assign(p.labels![1],patch);expect(buildAutomaticVenue(p).project).toBeUndefined();}});
+it('never closes large openings or builds incomplete analysis',()=>{const p=fixture();p.analysis!.lines[0].start.x=150;expect(buildAutomaticVenue(p).project).toBeUndefined();p.analysis!.lineState='failed';expect(buildAutomaticVenue(p).project).toBeUndefined();});
+it('ignores short glyph strokes',()=>{const p=fixture();p.analysis!.lines.push(line('glyph',400,30,400,50,5));expect(buildAutomaticVenue(p).project?.walls).toHaveLength(4);});
+it('connects raster detection to automatic draft generation',()=>{const p=fixture(),pixels=new Uint8ClampedArray(1000*800*4).fill(255);for(const l of p.analysis!.lines){const half=Math.floor(l.thicknessPx/2);for(let y=Math.min(l.start.y,l.end.y)-half;y<=Math.max(l.start.y,l.end.y)+half;y++)for(let x=Math.min(l.start.x,l.end.x)-half;x<=Math.max(l.start.x,l.end.x)+half;x++){const i=(y*1000+x)*4;pixels[i]=pixels[i+1]=pixels[i+2]=0;}}p.analysis!.lines=detectWallCandidates(pixels,1000,800,{threshold:155,minLengthPx:10,minThicknessPx:1});expect(buildAutomaticVenue(p).project?.walls).toHaveLength(4);});
