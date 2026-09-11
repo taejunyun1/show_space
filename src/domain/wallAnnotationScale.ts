@@ -8,18 +8,27 @@ export function wallAnnotationScale(walls:Wall[],labels:PlanLabel[],occludingWal
  const declared=pageUnit(labels);
  // A T-junction can bound a labelled portion of an otherwise continuous wall.
  // Keep the whole as a competing target: text alone must not choose between both.
- const targets=walls.flatMap(w=>{
+ const targets:(Wall&{uncertain?:boolean})[]=walls.flatMap(w=>{
   const horizontal=Math.abs(w.start.z-w.end.z)<1e-6,vertical=Math.abs(w.start.x-w.end.x)<1e-6;
   if(!horizontal&&!vertical)return [w];
   const axis=horizontal?'x':'z',cross=horizontal?'z':'x';
   const lo=Math.min(w.start[axis],w.end[axis]),hi=Math.max(w.start[axis],w.end[axis]);
-  const cuts=[lo,hi];
+  const cuts=[lo,hi],nearCuts:number[]=[];
   for(const other of walls){
-   if(other.id===w.id||Math.abs(other.start[cross]-other.end[cross])<1)continue;
-   for(const p of [other.start,other.end])if(Math.abs(p[cross]-w.start[cross])<1e-6&&p[axis]>lo&&p[axis]<hi)cuts.push(p[axis]);
+   const otherLength=Math.hypot(other.end.x-other.start.x,other.end.z-other.start.z);
+   // Raster drift on a parallel wall face is not a return or T-junction.
+   if(other.id===w.id||otherLength===0||Math.abs(other.start[cross]-other.end[cross])/otherLength<.3)continue;
+   for(const p of [other.start,other.end])if(p[axis]>lo&&p[axis]<hi){
+    const gap=Math.abs(p[cross]-w.start[cross]);
+    if(gap<1e-6)cuts.push(p[axis]);else if(gap<=8)nearCuts.push(p[axis]);
+   }
   }
-  const sorted=[...new Set(cuts)].sort((a,b)=>a-b);if(sorted.length===2)return [w];
-  return [w,...sorted.slice(1).map((to,i)=>({...w,start:{...w.start,[axis]:sorted[i]},end:{...w.end,[axis]:to}}))];
+  const unresolved=nearCuts.filter(value=>!cuts.includes(value));
+  const sorted=[...new Set(cuts)].sort((a,b)=>a-b),possible=[...new Set([...cuts,...unresolved])].sort((a,b)=>a-b);
+  const segment=(from:number,to:number)=>({...w,start:{...w.start,[axis]:from},end:{...w.end,[axis]:to}});
+  // Nearby but disconnected ends can veto a false whole-wall assignment. They
+  // cannot supply a measured interval until the actual junction is recovered.
+  return [w,...(sorted.length>2?sorted.slice(1).map((to,i)=>segment(sorted[i],to)):[]),...possible.slice(1).flatMap((to,i)=>unresolved.includes(possible[i])||unresolved.includes(to)?[{...segment(possible[i],to),uncertain:true}]:[])];
  });
  const matches:{wallId:string;labelId:string;mm:number;lengthPx:number;horizontal:boolean;ratio:number;from:number;to:number}[]=[];
  for(const label of labels){
@@ -49,7 +58,7 @@ export function wallAnnotationScale(walls:Wall[],labels:PlanLabel[],occludingWal
    if(obscured)return false;
    return to-from>=30&&cross>=8&&cross<=60&&along>from&&along<to&&Math.abs(along-(from+to)/2)<=Math.max((to-from)*.2,(horizontal?label.box.width:label.box.height)/2);
   });
-  if(candidates.length!==1)continue;
+  if(candidates.length!==1||candidates[0].uncertain)continue;
   const wall=candidates[0],lengthPx=Math.hypot(wall.end.x-wall.start.x,wall.end.z-wall.start.z);
   const from=horizontal?Math.min(wall.start.x,wall.end.x):Math.min(wall.start.z,wall.end.z),to=horizontal?Math.max(wall.start.x,wall.end.x):Math.max(wall.start.z,wall.end.z);
   matches.push({wallId:wall.id,labelId:label.id,mm,lengthPx,horizontal,ratio:mm/lengthPx,from,to});

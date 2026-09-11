@@ -37,3 +37,9 @@ it('does not connect through a closer parallel wall or accept a materially slant
  expect(wallAnnotationScale([wall('far',160,0,160,500),wall('near',130,180,130,280)],text).allMatches.every(m=>m.wallId!=='far')).toBe(true);
  expect(wallAnnotationScale([wall('slanted',150,0,160,500)],text).matches).toEqual([]);
 });
+
+it('does not assign a whole boundary when a nearby disconnected return suggests a partial dimension',()=>{
+ const input=[wall('bottom',0,100,1000,100),wall('left',300,0,300,100),wall('near-right',700,0,700,95)];
+ const text=detectPlanLabels([{text:'2850 mm',source:'pdf-text',box:{x:470,y:120,width:60,height:20}}]);
+ expect(wallAnnotationScale(input,text).allMatches).toEqual([]);
+});
