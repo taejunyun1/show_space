@@ -1,10 +1,9 @@
-import {detectFramedWindows} from './framedWindows';
+import {resolvePlanOpenings} from './planOpenings';
 import {trimThinOverruns} from './trimThinOverruns';
 import {detectStairRegions,interiorStairTreadIds} from './stairRegions';
 import {alignRasterCorners} from './rasterCorners';
 import {pageUnit} from './planUnits';
 import {pairWallEdges} from './pairWallEdges';
-import {detectOpeningGaps} from './detectOpenings';
 import {selectStructuralLines} from './structuralLines';
 import type {PlanPage} from '../lib/planImport';
 import type {Project, Wall} from './types';
@@ -50,9 +49,7 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  if(page.analysis.lineState!=='complete'||page.analysis.textState!=='complete')return blocked('문자와 선 분석을 모두 완료해야 공간 초안을 만들 수 있습니다.');
  const candidates=extractStructuralWalls(page);
  const maxGap=Math.max(page.widthPx,page.heightPx)*.2;
- const framed=detectFramedWindows(candidates,page.labels??[],maxGap),frameIds=new Set(framed.flatMap(f=>f.frameIds)),frameLabels=new Set(framed.map(f=>f.labelId));
- const structure=candidates.filter(w=>!frameIds.has(w.id));
- const gaps=[...framed,...detectOpeningGaps(structure,(page.labels??[]).filter(l=>!frameLabels.has(l.id)),maxGap)];
+ const {structure,gaps}=resolvePlanOpenings(candidates,page.labels??[],maxGap);
  const classified=classifyAutomaticWalls([...structure,...gaps.map(g=>g.wall)]);
  const gapIds=new Set(gaps.map(g=>g.wall.id));
  const walls=classified?.filter(w=>!gapIds.has(w.id));

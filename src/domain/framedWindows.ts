@@ -19,7 +19,7 @@ export function detectFramedWindows(walls:Wall[],labels:PlanLabel[],maxGap:numbe
    const a=ends[i],b=ends[j],dx=b.point.x-a.point.x,dz=b.point.z-a.point.z,length=Math.hypot(dx,dz);
    if(a.wall.id===b.wall.id||length<30||length>maxGap)continue;
    const across=(p:Wall['start'])=>Math.abs(dx*(p.z-a.point.z)-dz*(p.x-a.point.x))/length;
-   if(across(a.other)>1||across(b.other)>1||dx*(a.other.x-a.point.x)+dz*(a.other.z-a.point.z)>=0||dx*(b.other.x-b.point.x)+dz*(b.other.z-b.point.z)<=0)continue;
+   if(across(a.other)>2||across(b.other)>2||dx*(a.other.x-a.point.x)+dz*(a.other.z-a.point.z)>=0||dx*(b.other.x-b.point.x)+dz*(b.other.z-b.point.z)<=0)continue;
    const center={x:label.box.x+label.box.width/2,z:label.box.y+label.box.height/2},t=((center.x-a.point.x)*dx+(center.z-a.point.z)*dz)/(length*length);
    if(t<=0||t>=1||across(center)>60)continue;
    const first=walls.filter(w=>w.id!==a.wall.id&&w.id!==b.wall.id&&(same(w.start,a.point)||same(w.end,a.point)));
@@ -29,7 +29,7 @@ export function detectFramedWindows(walls:Wall[],labels:PlanLabel[],maxGap:numbe
     for(const frame of walls){
      if([a.wall.id,b.wall.id,capA.id].includes(frame.id)||(!same(frame.start,p)&&!same(frame.end,p)))continue;
      const q=same(frame.start,p)?frame.end:frame.start;
-     if(Math.abs((q.x-p.x)*dz-(q.z-p.z)*dx)/length>1||Math.abs(Math.hypot(q.x-p.x,q.z-p.z)-length)>2)continue;
+     if(Math.abs((q.x-p.x)*dz-(q.z-p.z)*dx)/length>2||Math.abs(Math.hypot(q.x-p.x,q.z-p.z)-length)>2)continue;
      const caps=walls.filter(w=>![a.wall.id,b.wall.id,capA.id,frame.id].includes(w.id)&&((same(w.start,q)&&same(w.end,b.point))||(same(w.end,q)&&same(w.start,b.point))));
      if(caps.length!==1||Math.hypot(q.x-b.point.x,q.z-b.point.z)>30)continue;
      const ids=[capA.id,frame.id,caps[0].id];
