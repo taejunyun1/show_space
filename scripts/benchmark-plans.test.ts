@@ -1,3 +1,4 @@
+import {detectFramedWindows} from '../src/domain/framedWindows';
 import {detectStairRegions,stableStairRegions} from '../src/domain/stairRegions';
 import {createHash} from 'node:crypto';
 import {readPlanNumbers} from '../src/domain/planNumbers';
@@ -51,7 +52,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    const runs=[125,155,190].map(threshold=>{
     const lines=detectWallCandidates(pixels,small.width,small.height,{threshold,maxCandidates:500,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height),...(l.solidSupportThicknessPx===undefined?{}:{solidSupportThicknessPx:l.solidSupportThicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)})}));
     const input:PlanPage={imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
-    const structural=extractStructuralWalls(input);const draft=buildAutomaticVenue(input);return {stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
+    const structural=extractStructuralWalls(input);const draft=buildAutomaticVenue(input);return {framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
    });
    const score=(items:typeof labels)=>truth.regions.map((region:{value:number;box:{x:number;y:number;width:number;height:number}})=>({value:region.value,matched:items.some(l=>{const n=readPlanNumbers(l.text),x=l.box.x+l.box.width/2,y=l.box.y+l.box.height/2,b=region.box;return !l.numericConflict&&(l.confidence??0)>=90&&n.length===1&&n[0].values.length===1&&n[0].values[0]===region.value&&x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height;})}));
    const selectedTruth=sha256===truth.sha256&&file===truth.file&&number===truth.page&&canvas.width===truth.widthPx&&canvas.height===truth.heightPx?{scope:truth.scope,baseline:score(baselineLabels),enhanced:score(labels)}:undefined;

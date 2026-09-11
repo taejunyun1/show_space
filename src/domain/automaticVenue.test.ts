@@ -57,3 +57,10 @@ it('restores a closed venue from a thin edge with small raster cap overruns',()=
  const result=buildAutomaticVenue(p).project;
  expect(result?.walls).toHaveLength(4);expect(result?.planReference?.mmPerPixel).toBe(10);expect(parseProject(result).walls).toHaveLength(4);
 });
+it('turns a labelled inset window frame into an opening without installation walls',()=>{
+ const p=fixture();p.analysis!.lines=p.analysis!.lines.filter(l=>l.id!=='c');
+ p.analysis!.lines.push(line('bottom-left',100,700,450,700,5),line('bottom-right',550,700,900,700,5),line('cap-left',450,700,450,715,5),line('frame',450,715,550,715,5),line('cap-right',550,715,550,700,5));
+ p.labels!.push(...detectPlanLabels([{text:'Window',source:'pdf-text',box:{x:470,y:730,width:60,height:20}}]).map(l=>({...l,id:'window-label'})));
+ const result=buildAutomaticVenue(p).project;
+ expect(result?.openings).toHaveLength(1);expect(result?.openings?.[0].kind).toBe('window');expect(result?.walls).toHaveLength(5);expect(parseProject(result).walls).toHaveLength(5);
+});

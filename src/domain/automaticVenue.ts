@@ -1,3 +1,4 @@
+import {detectFramedWindows} from './framedWindows';
 import {trimThinOverruns} from './trimThinOverruns';
 import {detectStairRegions,interiorStairTreadIds} from './stairRegions';
 import {alignRasterCorners} from './rasterCorners';
@@ -48,8 +49,11 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  if(page.analysis.selfCheck?.status==='withheld')return blocked('자체 검증에서 공간 구조를 확정하지 못했습니다. 원본과 분석 결과를 보존했으며 자동 적용은 보류했습니다.');
  if(page.analysis.lineState!=='complete'||page.analysis.textState!=='complete')return blocked('문자와 선 분석을 모두 완료해야 공간 초안을 만들 수 있습니다.');
  const candidates=extractStructuralWalls(page);
- const gaps=detectOpeningGaps(candidates,page.labels??[],Math.max(page.widthPx,page.heightPx)*.2);
- const classified=classifyAutomaticWalls([...candidates,...gaps.map(g=>g.wall)]);
+ const maxGap=Math.max(page.widthPx,page.heightPx)*.2;
+ const framed=detectFramedWindows(candidates,page.labels??[],maxGap),frameIds=new Set(framed.flatMap(f=>f.frameIds)),frameLabels=new Set(framed.map(f=>f.labelId));
+ const structure=candidates.filter(w=>!frameIds.has(w.id));
+ const gaps=[...framed,...detectOpeningGaps(structure,(page.labels??[]).filter(l=>!frameLabels.has(l.id)),maxGap)];
+ const classified=classifyAutomaticWalls([...structure,...gaps.map(g=>g.wall)]);
  const gapIds=new Set(gaps.map(g=>g.wall.id));
  const walls=classified?.filter(w=>!gapIds.has(w.id));
  if(classified&&gaps.some(g=>classified.filter(w=>w.id===g.wall.id).length!==1))return blocked('개구부와 다른 구조선이 교차해 자동 연결을 보류했습니다.');
