@@ -1,4 +1,8 @@
 import {mergePdfFacilityOcr} from '../domain/hybridPlanLabels';
+import {conflictingDimensionLabels,dimensionRecheckTargets,recheckDimensionReadings} from '../domain/dimensionRecheck';
+import {extractStructuralWalls} from '../domain/automaticVenue';
+import {resolvePlanOpenings} from '../domain/planOpenings';
+import {venueDimensions} from '../domain/venueDimensions';
 import {shapeLabelRegions} from '../domain/shapeLabelRegions';
 import {prepareConstrainedVenue} from '../domain/constrainedVenue';
 import {renderMappedPlan} from './renderMappedPlan';
@@ -15,7 +19,7 @@ import {readPlanOcr} from './readPlanOcr';
 import {detectPlanWalls} from './detectPlanWalls';
 export interface PlanAnalysis {stairRegions?:StairRegion[];lines:WallCandidate[];issues:string[];textState:'complete'|'failed';lineState:'complete'|'failed';numericCount:number;selfCheck?:{attempts:number;status:'stable'|'withheld'}}
 export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(message:string)=>void=()=>{}):Promise<PlanPage>{
- page={...page,resolvedVenue:undefined};
+ page={...page,resolvedVenue:undefined,dimensionRechecks:undefined};
  const abort=()=>{if(signal.aborted)throw new Error('자동 분석을 취소했습니다.');};abort();
  onStage('문자·숫자와 구조 선을 자동 분석하고 있습니다.');
  const reuseText=(page.textSource==='pdf-text'||page.textSource==='ocr')&&(page.labels?.length??0)>0;
@@ -100,6 +104,16 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  const successes=drafts.flatMap((p,i)=>p?[{project:p,index:i}]:[]);
  const stable=successes.length>=2&&successes.every(s=>venueDraftsAgree(successes[0].project,s.project));
  const selectedIndex=stable?successes[0].index:0,selected=candidates[selectedIndex];
+ const structural=extractStructuralWalls(selected);
+ const openings=resolvePlanOpenings(structural,labels,Math.max(page.widthPx,page.heightPx)*.2,selected.analysis!.stairRegions);
+ const dimensions=venueDimensions(selected,structural,openings.structure,openings.gaps);
+ const conflicts=[...conflictingDimensionLabels(dimensions.annotations.allMatches),...dimensions.solution.axes.flatMap(a=>a.conflicts.map(c=>c.labelId))];
+ const targets=dimensionRecheckTargets(labels,page.widthPx,page.heightPx,conflicts);
+ const dimensionRechecks=await recheckDimensionReadings(targets,signal,(region,rotation)=>readPlanOcr(page.imageUrl,signal,undefined,'numbers',rotation,region),onStage);
+ if(dimensionRechecks.length){
+  const confirmed=dimensionRechecks.filter(r=>r.status==='reading-confirmed').length,disagrees=dimensionRechecks.filter(r=>r.status==='reading-disagrees').length;
+  issues.push(`충돌 치수 ${dimensionRechecks.length}개를 자동 재인식했습니다. 기존 숫자와 일치 ${confirmed}개 · 다른 숫자 ${disagrees}개 · 판독 미완료 ${dimensionRechecks.length-confirmed-disagrees}개. 숫자 일치는 벽 연결이나 실측 치수 검증을 뜻하지 않습니다.`);
+ }
  const stairRegions=selected.analysis!.stairRegions??[];
  let resolvedVenue:PlanPage['resolvedVenue'];
  if(stable&&!buildAutomaticVenue(selected).project&&constrained[selectedIndex]){
@@ -112,5 +126,5 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  }
  const adopted=stable&&(!!buildAutomaticVenue(selected).project||!!resolvedVenue);
  const message=adopted?'서로 다른 선 검출 조건에서 구조와 축척이 일치했습니다.':'자동 재분석으로 구조·축척을 확정하지 못해 공간 생성을 보류했습니다. 원본과 분석 결과는 유지합니다.';
- return {...selected,resolvedVenue,analysis:{...selected.analysis!,stairRegions,issues:[...issues.filter(i=>!i.startsWith('닫힌 경계')),message],selfCheck:{attempts:candidates.length,status:adopted?'stable':'withheld'}}};
+ return {...selected,resolvedVenue,dimensionRechecks,analysis:{...selected.analysis!,stairRegions,issues:[...issues.filter(i=>!i.startsWith('닫힌 경계')),message],selfCheck:{attempts:candidates.length,status:adopted?'stable':'withheld'}}};
 }

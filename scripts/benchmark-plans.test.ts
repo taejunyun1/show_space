@@ -1,4 +1,5 @@
 import {pageTextPanels} from '../src/lib/textPanels';
+import {conflictingDimensionLabels,dimensionRecheckTargets,recheckDimensionReadings} from '../src/domain/dimensionRecheck';
 import {venueDimensions} from '../src/domain/venueDimensions';
 import {pdfSignImages} from '../src/lib/pdfSignImages';
 import type {Matrix6} from '../src/domain/pdfImagePlacements';
@@ -143,11 +144,28 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
     })})):undefined;
     const draft=buildAutomaticVenue(input);return {textPanels,unlabelledStairCandidates:detectUnlabelledStairCandidates(lines,labels),topologyDiagnostics,constrainedVenueReady:!!prepareConstrainedVenue(input),dimensionMapReady:!!createDimensionMap(dimensionConstraints),openingDimensions,selectedAnnotationTruth,measuredSpans,dimensionConstraints,annotationScale:wallAnnotationScale(structural,labels),topologyResolved,structureScore,openingCandidates:resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines)).gaps,framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
    });
+   const selected=runs[1],conflictIds=[...conflictingDimensionLabels(selected.annotationScale.allMatches),...selected.dimensionConstraints.axes.flatMap(a=>a.conflicts.map(c=>c.labelId))];
+   const recheckTargets=dimensionRecheckTargets(labels,canvas.width,canvas.height,conflictIds);
+   const dimensionRechecks=await recheckDimensionReadings(recheckTargets,new AbortController().signal,async(crop,rotation)=>{
+    if(!numbersOcr){numbersOcr=await createWorker('eng',OEM.LSTM_ONLY,{langPath:resolve('public/ocr/lang'),cacheMethod:'none'});await numbersOcr.setParameters({tessedit_pageseg_mode:PSM.SPARSE_TEXT,preserve_interword_spaces:'1',user_defined_dpi:'150'});}
+    const scale=Math.min(2,3600/Math.max(crop.width,crop.height)),width=rotation%180?crop.height:crop.width,height=rotation%180?crop.width:crop.height;
+    const tile=createCanvas(Math.round(width*scale),Math.round(height*scale)),ctx=tile.getContext('2d');
+    ctx.fillStyle='white';ctx.fillRect(0,0,tile.width,tile.height);
+    if(rotation===90)ctx.translate(tile.width,0);if(rotation===180)ctx.translate(tile.width,tile.height);if(rotation===270)ctx.translate(0,tile.height);ctx.rotate(rotation*Math.PI/180);
+    ctx.drawImage(canvas,crop.x,crop.y,crop.width,crop.height,0,0,rotation%180?tile.height:tile.width,rotation%180?tile.width:tile.height);
+    try{
+     const result=await numbersOcr.recognize(tile.toBuffer('image/png'),{},{blocks:true});
+     return (result.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>{
+      const box=unrotateTextBox({x:l.bbox.x0*width/tile.width,y:l.bbox.y0*height/tile.height,width:(l.bbox.x1-l.bbox.x0)*width/tile.width,height:(l.bbox.y1-l.bbox.y0)*height/tile.height},crop.width,crop.height,rotation);
+      return {text:l.text,source:'ocr' as const,confidence:l.confidence,box:{...box,x:box.x+crop.x,y:box.y+crop.y}};
+     });
+    }finally{tile.width=tile.height=0;}
+   });
    const score=(items:typeof labels)=>truth.regions.map((region:{value:number;box:{x:number;y:number;width:number;height:number}})=>({value:region.value,matched:items.some(l=>{const n=readPlanNumbers(l.text),x=l.box.x+l.box.width/2,y=l.box.y+l.box.height/2,b=region.box;return !l.numericConflict&&(l.confidence??0)>=90&&n.length===1&&n[0].values.length===1&&n[0].values[0]===region.value&&x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height;})}));
    const selectedTruth=sha256===truth.sha256&&file===truth.file&&number===truth.page&&canvas.width===truth.widthPx&&canvas.height===truth.heightPx?{scope:truth.scope,baseline:score(baselineLabels),enhanced:score(labels)}:undefined;
    const facilityScore=(items:typeof labels)=>facilityTruth.regions.map((r:{id:string;kind:string;box:{x:number;y:number;width:number;height:number}})=>({id:r.id,matched:items.some(l=>{const cx=l.box.x+l.box.width/2,cy=l.box.y+l.box.height/2;return l.kind===r.kind&&cx>=r.box.x&&cx<=r.box.x+r.box.width&&cy>=r.box.y&&cy<=r.box.y+r.box.height;})}));
    const selectedFacilityTruth=file===facilityTruth.file&&sha256===facilityTruth.sha256&&number===facilityTruth.page?{scope:facilityTruth.scope,baseline:facilityScore(baselineLabels),enhanced:facilityScore(labels)}:undefined;
-   report.push({embeddedSignCount:embeddedSigns.length,selectedFacilityTruth,shapeCrops,pdfTextQuality:assessPdfText(text.items),ceilingHeight:readCeilingHeight(labels),stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
+   report.push({recheckTargets,dimensionRechecks,embeddedSignCount:embeddedSigns.length,selectedFacilityTruth,shapeCrops,pdfTextQuality:assessPdfText(text.items),ceilingHeight:readCeilingHeight(labels),stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
    await writeFile(resolve(directory,`${file}-${number}.png`),canvas.toBuffer('image/png'));page.cleanup();
   }}finally{await loading.destroy();}
  }

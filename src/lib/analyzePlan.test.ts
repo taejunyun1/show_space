@@ -70,3 +70,14 @@ it('maps native image OCR to page positions and reuses identical sign images',as
  expect(result.labels?.filter(l=>l.kind==='fire-hydrant').map(l=>l.box)).toEqual([{x:205,y:310,width:25,height:5},{x:405,y:310,width:25,height:5}]);
  expect(vi.mocked(readPlanOcr).mock.calls.filter(c=>c[0]==='sign')).toHaveLength(1);
 });
+
+it('automatically re-reads conflicting number regions while preserving the source alternatives',async()=>{
+ const {input,lines}=closedPage();vi.mocked(detectPlanWalls).mockResolvedValue(lines);
+ const labels=[{...input.labels[0],numericConflict:true},{...input.labels[0],id:'alternative',text:'9000 mm',numericConflict:true},input.labels[1]];
+ vi.mocked(readPlanOcr).mockImplementation(async(_url,_signal,_progress,mode)=>mode==='numbers'?[{text:'8000 mm',source:'ocr',confidence:96,box:input.labels[0].box}]:[]);
+ const result=await analyzePlan({...input,labels},new AbortController().signal);
+ expect(result.dimensionRechecks?.map(r=>r.status)).toEqual(['reading-confirmed','reading-disagrees']);
+ expect(result.labels).toEqual(labels);expect(result.analysis?.selfCheck?.status).toBe('withheld');
+ expect(result.analysis?.issues.join(' ')).toContain('충돌 치수 2개');
+ expect(vi.mocked(readPlanOcr).mock.calls.filter(c=>c[3]==='numbers')).toHaveLength(4);
+});

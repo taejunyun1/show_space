@@ -14,6 +14,7 @@ export interface PlanPage {
   textRegions?:import('../domain/textStrokes').TextRegion[];
   embeddedSigns?:PdfSignImage[];
   resolvedVenue?:{project:import('../domain/types').Project;sourceImageUrl:string;sourceEvidenceKey:string};
+  dimensionRechecks?:import('../domain/dimensionRecheck').DimensionRecheckResult[];
   analysis?:PlanAnalysis;
   imageUrl: string;
   labels?: PlanLabel[];
