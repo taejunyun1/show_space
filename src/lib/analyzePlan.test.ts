@@ -1,4 +1,6 @@
 import {renderMappedPlan} from './renderMappedPlan';
+import {detectPlanSymbols} from './detectPlanSymbols';
+vi.mock('./detectPlanSymbols',()=>({detectPlanSymbols:vi.fn()}));
 import {buildAutomaticVenue} from '../domain/automaticVenue';
 import {parseProject} from '../domain/model';
 vi.mock('./renderMappedPlan',()=>({renderMappedPlan:vi.fn()}));
@@ -8,7 +10,7 @@ import{readPlanOcr}from'./readPlanOcr';
 import{detectPlanWalls}from'./detectPlanWalls';
 vi.mock('./readPlanOcr',()=>({readPlanOcr:vi.fn()}));vi.mock('./detectPlanWalls',()=>({detectPlanWalls:vi.fn()}));
 const page={imageUrl:'image',widthPx:100,heightPx:100,textSource:'none' as const};
-beforeEach(()=>{vi.resetAllMocks();vi.mocked(readPlanOcr).mockResolvedValue([{text:'3200',source:'ocr',box:{x:0,y:0,width:40,height:10}}]);vi.mocked(detectPlanWalls).mockResolvedValue([{id:'line',start:{x:0,y:0},end:{x:90,y:0},thicknessPx:1}]);});
+beforeEach(()=>{vi.resetAllMocks();vi.mocked(detectPlanSymbols).mockResolvedValue([]);vi.mocked(readPlanOcr).mockResolvedValue([{text:'3200',source:'ocr',box:{x:0,y:0,width:40,height:10}}]);vi.mocked(detectPlanWalls).mockResolvedValue([{id:'line',start:{x:0,y:0},end:{x:90,y:0},thicknessPx:1}]);});
 it('automatically combines OCR and line analysis without changing input',async()=>{const result=await analyzePlan(page,new AbortController().signal);expect(result.analysis).toMatchObject({numericCount:1,textState:'complete',lineState:'complete'});expect(result.analysis?.lines).toHaveLength(1);expect(result.labels?.[0].text).toBe('3200');expect(page).not.toHaveProperty('analysis');});
 it('preserves native PDF dimensions while supplementing image facilities',async()=>{const result=await analyzePlan({...page,textSource:'pdf-text',labels:[{id:'pdf-1',text:'8000 mm',source:'pdf-text',kind:'dimension',status:'unreviewed',note:'',box:{x:0,y:0,width:30,height:10}}]},new AbortController().signal);expect(readPlanOcr).toHaveBeenCalledTimes(5);expect(result.labels?.map(l=>l.text)).toEqual(['8000 mm']);expect(result.textSource).toBe('pdf-text');expect(detectPlanWalls).toHaveBeenCalledTimes(3);});
 it('preserves partial results and reports failed stages',async()=>{vi.mocked(readPlanOcr).mockRejectedValue(new Error('OCR failed'));const result=await analyzePlan(page,new AbortController().signal);expect(result.analysis?.textState).toBe('failed');expect(result.analysis?.lines).toHaveLength(1);expect(result.analysis?.issues.join(' ')).toContain('읽지 못');});
@@ -87,4 +89,13 @@ it('retains known symbol evidence when native-sign OCR cannot read a caption',as
  const result=await analyzePlan({...input,embeddedSigns:[{imageUrl:'sign',widthPx:290,heightPx:422,box:{x:200,y:300,width:40,height:60},symbol:{templateId:'paragon-hose-reel-v1',similarity:.95}}]},new AbortController().signal);
  expect(result.labels?.find(l=>l.kind==='fire-hydrant')).toMatchObject({source:'symbol',box:{x:200,y:300,width:40,height:60}});
  expect(result.labels?.find(l=>l.kind==='fire-hydrant')?.confidence).toBeUndefined();
+});
+it('finds page symbols without native PDF assets and retains analysis when symbol detection fails',async()=>{
+ const {input}=closedPage();vi.mocked(readPlanOcr).mockResolvedValue([]);
+ vi.mocked(detectPlanSymbols).mockResolvedValue([{box:{x:200,y:300,width:40,height:60},symbol:{templateId:'paragon-hose-reel-v1',similarity:.86}}]);
+ const result=await analyzePlan(input,new AbortController().signal);
+ expect(result.labels?.filter(l=>l.source==='symbol')).toHaveLength(1);
+ vi.mocked(detectPlanSymbols).mockRejectedValue(new Error('worker failed'));
+ const fallback=await analyzePlan(input,new AbortController().signal);
+ expect(fallback.labels).toEqual(input.labels);expect(fallback.analysis?.issues.join(' ')).toContain('표지 기호 분석을 완료하지 못');
 });

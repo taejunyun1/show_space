@@ -1,5 +1,6 @@
 import {mergePdfFacilityOcr} from '../domain/hybridPlanLabels';
 import {mergeSignSymbol} from '../domain/signSymbols';
+import {detectPlanSymbols} from './detectPlanSymbols';
 import {conflictingDimensionLabels,dimensionRecheckTargets,recheckDimensionReadings} from '../domain/dimensionRecheck';
 import {extractStructuralWalls} from '../domain/automaticVenue';
 import {resolvePlanOpenings} from '../domain/planOpenings';
@@ -24,9 +25,10 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  const abort=()=>{if(signal.aborted)throw new Error('자동 분석을 취소했습니다.');};abort();
  onStage('문자·숫자와 구조 선을 자동 분석하고 있습니다.');
  const reuseText=(page.textSource==='pdf-text'||page.textSource==='ocr')&&(page.labels?.length??0)>0;
- const [textResult,lineResult]=await Promise.allSettled([
+ const [textResult,lineResult,symbolResult]=await Promise.allSettled([
   reuseText?Promise.resolve(page.labels??[]):readPlanOcr(page.imageUrl,signal).then(detectPlanLabels),
   detectPlanWalls(page.imageUrl,155,0.008,signal,1,500),
+  detectPlanSymbols(page.imageUrl,signal),
  ]);abort();
  onStage('인식 근거와 구조 검증 결과를 정리하고 있습니다.');
  let labels=textResult.status==='fulfilled'?textResult.value:page.labels??[];
@@ -80,6 +82,8 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
   }catch{abort();issues.push('원본 설비 이미지의 문자 인식을 완료하지 못했습니다.');}
   labels=mergeSignSymbol(labels,sign.box,sign.symbol);
  }
+ if(symbolResult.status==='fulfilled')for(const sign of symbolResult.value)labels=mergeSignSymbol(labels,sign.box,sign.symbol);
+ else issues.push('페이지 표지 기호 분석을 완료하지 못했습니다. 문자와 원본 이미지 근거는 유지합니다.');
  const numeric=labels.filter(l=>l.kind==='dimension');
  if(numeric.some(l=>l.numericConflict))issues.push('회전 인식에서 서로 다른 값이 나온 숫자는 자동 치수 적용에서 제외했습니다.');
  if(textResult.status==='rejected')issues.push('문자를 읽지 못했습니다. 현재 입력에서 문자 근거를 확보하지 못했습니다.');

@@ -1,0 +1,251 @@
+{
+  "scope": "All 12 visible large red hose-reel sign boxes, visually annotated on the rendered page. These are sign positions, not physical hydrant footprints. Template reference comes from this corpus, so recall is an in-corpus integration measurement, not held-out accuracy.",
+  "tests": 369,
+  "buildPassed": true,
+  "browser": {
+    "input": "paragon-fire.pdf",
+    "route": "PDF import → background worker → editor markers",
+    "hydrantMarkers": 12,
+    "consoleErrors": 0,
+    "originalProjectRestored": true
+  },
+  "beforeDetected": 7,
+  "afterDetected": 12,
+  "matched": 12,
+  "total": 12,
+  "unmatchedDetections": 0,
+  "regions": [
+    {
+      "id": "hose-sign-01",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-02",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-03",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-04",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-05",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-06",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-07",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-08",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-09",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-10",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-11",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-12",
+      "matched": true
+    }
+  ],
+  "detections": [
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 242.4584382871537,
+        "y": 1349.8035264483626,
+        "width": 52.4735516372796,
+        "height": 76.4130982367758
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 242.4584382871537,
+        "y": 878.750629722922,
+        "width": 52.4735516372796,
+        "height": 76.1712846347607
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 1127.2544080604534,
+        "y": 853.8438287153654,
+        "width": 52.71536523929467,
+        "height": 76.1712846347607
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 1127.2544080604534,
+        "y": 1393.3299748110833,
+        "width": 52.71536523929467,
+        "height": 76.1712846347607
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 367.7178841309824,
+        "y": 1976.8261964735518,
+        "width": 52.47355163727957,
+        "height": 76.1712846347607
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 1127.2544080604534,
+        "y": 500.7959697732997,
+        "width": 52.71536523929467,
+        "height": 76.1712846347607
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 736.4836272040302,
+        "y": 2211.3853904282114,
+        "width": 52.71536523929467,
+        "height": 76.41309823677602
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 537,
+        "y": 72,
+        "width": 53,
+        "height": 77
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 1546,
+        "y": 313,
+        "width": 53,
+        "height": 77
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 486,
+        "y": 402,
+        "width": 53,
+        "height": 77
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 1325,
+        "y": 1363,
+        "width": 53,
+        "height": 77
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 314,
+        "y": 1852,
+        "width": 53,
+        "height": 77
+      }
+    }
+  ],
+  "cases": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "pageSymbols": 0,
+      "geometryUnchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "pageSymbols": 0,
+      "geometryUnchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "pageSymbols": 0,
+      "geometryUnchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "pageSymbols": 0,
+      "geometryUnchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    },
+    {
+      "file": "k2.pdf",
+      "page": 1,
+      "pageSymbols": 0,
+      "geometryUnchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "pageSymbols": 12,
+      "geometryUnchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    }
+  ]
+}
