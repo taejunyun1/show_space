@@ -14,3 +14,9 @@ it('withholds ambiguous crossings and thin witness support',()=>{
  expect(trimThinOverruns([thin,line('a',95,50,95,210),line('b',100,50,100,210)])[0]).toEqual(thin);
  expect(trimThinOverruns([thin,line('witness',100,50,100,210,1)])[0]).toEqual(thin);
 });
+
+it('trims a short thick cap against a long observed wall without following short nearby noise',()=>{
+ const cap=line('cap',92,100,210,100,6),long=line('boundary',100,100,40,300,10),noise=line('noise',94,90,94,125,4);
+ expect(trimThinOverruns([cap,long,noise],130)[0].start).toEqual({x:100,y:100});
+ expect(trimThinOverruns([cap,noise],130)[0]).toEqual(cap);
+});

@@ -1,3 +1,4 @@
+import {separateCoincidentStrokes} from './coincidentStrokes';
 import type {WallCandidate} from './wallCandidates';
 import {detectFurnitureOutlines} from './furnitureOutlines';
 import {readCeilingHeight} from './ceilingHeight';
@@ -36,7 +37,7 @@ export function extractStructuralWalls(page:PlanPage):Wall[]{
   if(horizontal){a.start.y=a.end.y=(low+high)/2;}else{a.start.x=a.end.x=(low+high)/2;}
   a.thicknessPx=high-low;bands.splice(j--,1);
  }
- const aligned=trimThinOverruns(alignRasterJunctions(alignRasterCorners(pairWallEdges(bands))));
+ const aligned=trimThinOverruns(alignRasterJunctions(alignRasterCorners(pairWallEdges(separateCoincidentStrokes(bands)))),minLength);
  const furnitureIds=new Set(detectFurnitureOutlines(page.labels??[],aligned).flatMap(f=>f.lineIds));
  const lines=selectStructuralLines(aligned.filter(l=>!furnitureIds.has(l.id)),minLength,page.labels??[]);
  // Only merge tiny raster endpoint discrepancies; never bridge doorway-sized gaps.
