@@ -1,3 +1,5 @@
+import {pageUnit} from './planUnits';
+import {readPlanNumbers} from './planNumbers';
 import type {Project,Wall} from './types';
 import type {PlanLabel} from './planLabels';
 import type {WallCandidate} from './wallCandidates';
@@ -53,4 +55,18 @@ export function checkDimensionSums(measurements:MeasuredSpan[]):{checked:number;
   if(count>=2&&Math.abs(cursor-whole.to)<1){checked++;if(Math.abs(sum/whole.mm-1)>.02)return {checked,conflict:true};}
  }
  return {checked,conflict:false};
+}
+
+/** Collect only unique, unit-bearing, sufficiently confident witness-supported spans. */
+export function readMeasuredSpans(project:Project,labels:PlanLabel[],lines:WallCandidate[]):MeasuredSpan[]{
+ const declared=pageUnit(labels);if(declared.conflict)return [];
+ return labels.flatMap(label=>{
+  if(label.numericConflict||label.status==='dismissed'||(label.source==='ocr'&&(label.confidence??0)<90))return [];
+  const numbers=readPlanNumbers(label.correctedText??label.text);
+  if(numbers.length!==1||numbers[0].values.length!==1)return [];
+  const n=numbers[0],unit=n.unit??declared.unit;if(!unit)return [];
+  const mm=n.values[0]*({mm:1,cm:10,m:1000}[unit]);if(!Number.isFinite(mm)||mm<=0||mm>200000)return [];
+  const matches=matchDimensionSpans(project,label,lines);
+  return matches.length===1?[{...matches[0],mm,labelId:label.id}]:[];
+ });
 }

@@ -27,3 +27,16 @@ it('handles reversed wall endpoints and rejects diagonal or invalid constraints'
  for(const mm of [NaN,Infinity,0,-1])expect(solveDimensionConstraints(walls,[{...dims[0],mm}]).rejected).toEqual(['a']);
  expect(solveDimensionConstraints([wall('a',0,0,100,100)],[dims[0]]).rejected).toEqual(['a']);
 });
+it('connects partial witness dimensions inside an unsplit wall to adjacent annotations',()=>{
+ const span={id:'partial',wallIds:['whole'],labelId:'partial',horizontal:true,cross:0,from:0,to:100,mm:1000};
+ const dimensions=[dims[2],{wallId:'whole',labelId:'whole',mm:3000,horizontal:true}];
+ const r=solveDimensionConstraints([walls[2],walls[3]],dimensions,[span]);
+ expect(r.status).toBe('determined');expect(r.axes[0].coordinates.map(n=>n.mm)).toEqual([0,1000,3000]);
+ expect(r.axes[1].coordinates.map(n=>n.pixel)).toEqual([0,100]);
+ expect(solveDimensionConstraints(walls,dims,[{...span,mm:1200}]).status).toBe('conflict');
+});
+it('rejects invalid spans without creating non-finite coordinates',()=>{
+ const span={id:'bad',wallIds:['whole'],labelId:'bad',horizontal:true,cross:0,from:NaN,to:100,mm:1000};
+ const r=solveDimensionConstraints(walls,dims,[span]);expect(r.rejected).toEqual(['bad']);
+ expect(r.axes.flatMap(a=>a.coordinates).every(n=>Number.isFinite(n.pixel)&&Number.isFinite(n.mm))).toBe(true);
+});

@@ -1,0 +1,232 @@
+[
+  {
+    "file": "anca.pdf",
+    "page": 1,
+    "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+    "runs": [
+      {
+        "threshold": 125,
+        "measuredSpans": [],
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 13,
+            "unresolvedOffsets": 12,
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "components": 20,
+            "unresolvedOffsets": 19,
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "rejected": [],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "measuredSpans": [],
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 14,
+            "unresolvedOffsets": 13,
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "components": 16,
+            "unresolvedOffsets": 15,
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "rejected": [],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "measuredSpans": [],
+        "status": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 16,
+            "unresolvedOffsets": 15,
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "components": 23,
+            "unresolvedOffsets": 22,
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "rejected": [
+          "label-18"
+        ],
+        "draftGenerated": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 1,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "measuredSpans": [],
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 14,
+            "unresolvedOffsets": 13,
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "components": 17,
+            "unresolvedOffsets": 16,
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "rejected": [],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "measuredSpans": [],
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 15,
+            "unresolvedOffsets": 14,
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "components": 18,
+            "unresolvedOffsets": 17,
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "rejected": [],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "measuredSpans": [],
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 15,
+            "unresolvedOffsets": 14,
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "components": 18,
+            "unresolvedOffsets": 17,
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "rejected": [],
+        "draftGenerated": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 2,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "measuredSpans": [],
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 26,
+            "unresolvedOffsets": 25,
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "components": 18,
+            "unresolvedOffsets": 17,
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "rejected": [],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "measuredSpans": [],
+        "status": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 24,
+            "unresolvedOffsets": 23,
+            "conflicts": [],
+            "reversed": true
+          },
+          {
+            "axis": "z",
+            "components": 18,
+            "unresolvedOffsets": 17,
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "rejected": [],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "measuredSpans": [],
+        "status": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 26,
+            "unresolvedOffsets": 25,
+            "conflicts": [],
+            "reversed": true
+          },
+          {
+            "axis": "z",
+            "components": 16,
+            "unresolvedOffsets": 15,
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "rejected": [],
+        "draftGenerated": false
+      }
+    ]
+  }
+]

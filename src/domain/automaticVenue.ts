@@ -10,8 +10,7 @@ import {selectStructuralLines} from './structuralLines';
 import type {PlanPage} from '../lib/planImport';
 import type {Project, Wall} from './types';
 import {classifyAutomaticWalls} from './automaticWallTopology';
-import {matchDimensionSpans,checkDimensionSums,type MeasuredSpan} from './dimensionSpans';
-import {readPlanNumbers} from './planNumbers';
+import {readMeasuredSpans,checkDimensionSums} from './dimensionSpans';
 
 export interface AutomaticVenue {project?:Project; reasons:string[]; wallCount:number}
 export function extractStructuralWalls(page:PlanPage):Wall[]{
@@ -60,20 +59,9 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  const base:Project={schemaVersion:1,id:'automatic-venue',name:'자동 공간 초안',venue:'도면에서 생성',walls,artworks:[],scenes:[],floorColor:'#f1f1ed',planImageUrl:page.imageUrl,planOpacity:.55,planLabels:page.labels??[],planAnalysis:page.analysis,planReference:{widthPx:page.widthPx,heightPx:page.heightPx,origin:{x:0,z:0},mmPerPixel:1,calibrated:true}};
  const declared=pageUnit(page.labels??[]);
  if(declared.conflict)return blocked('페이지 전체 단위 선언이 서로 충돌해 축척 적용을 보류했습니다.');
- const votes:{ratio:number;wallId:string}[]=[];
- const measurements:MeasuredSpan[]=[];
- for(const label of page.labels??[]){
-  if(label.numericConflict||label.status==='dismissed'||(label.source==='ocr'&&(label.confidence??0)<90))continue;
-  const numbers=readPlanNumbers(label.correctedText??label.text);
-  if(numbers.length!==1||numbers[0].values.length!==1||!(numbers[0].unit??declared.unit))continue;
-  // Dimensions refer to original spans, not the fragments created at room junctions.
-  const n=numbers[0],matches=matchDimensionSpans({...base,walls:candidates},label,page.analysis.lines);
-  if(matches.length!==1)continue;
-  const m=matches[0],mm=n.values[0]*({mm:1,cm:10,m:1000}[n.unit??declared.unit!]);
-  if(mm<=0||mm>200000)continue;
-  votes.push({ratio:mm/(m.to-m.from),wallId:m.id});
-  measurements.push({...m,mm,labelId:label.id});
- }
+ // Measure original spans before topology divides them into fragments.
+ const measurements=readMeasuredSpans({...base,walls:candidates},page.labels??[],page.analysis.lines);
+ const votes=measurements.map(m=>({ratio:m.mm/(m.to-m.from),wallId:m.id}));
  const annotations=wallAnnotationScale(candidates,page.labels??[]);
  if(new Set(votes.map(v=>v.wallId)).size<2){
   if(annotations.conflict)return blocked('벽 옆 치수 표기와 그림에서 계산한 비율이 서로 맞지 않아 단일 축척 적용을 보류했습니다.',walls.length);
