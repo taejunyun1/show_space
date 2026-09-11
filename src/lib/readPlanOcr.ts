@@ -14,7 +14,7 @@ export async function readPlanOcr(
   imageUrl: string,
   signal: AbortSignal,
   onProgress?: (progress: number) => void,
-  mode: 'general'|'numbers' = 'general',
+  mode: 'general'|'numbers'|'facilities' = 'general',
   rotation:0|90|180|270=0,
   region?:OcrRegion,
 ): Promise<PlanText[]> {
@@ -51,7 +51,7 @@ export async function readPlanOcr(
       const width = crop.width;
       const height = crop.height;
       if (!width || !height) throw new Error('문자 인식용 도면을 읽을 수 없습니다.');
-      const scale = Math.min(mode==='numbers'?2:1, (mode==='numbers'?3600:2400) / Math.max(width, height));
+      const scale = Math.min(mode!=='general'?2:1, (mode!=='general'?3600:2400) / Math.max(width, height));
       canvas = document.createElement('canvas');
       const rotatedWidth=rotation%180?height:width,rotatedHeight=rotation%180?width:height;
       canvas.width = Math.max(1, Math.round(rotatedWidth * scale));

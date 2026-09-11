@@ -1,0 +1,81 @@
+{
+  "file": "paragon-fire.pdf",
+  "sha256": "74a6b8e12008b2ecda6154d0cbb4ae3287a17d15860c8fb64593744f1b15a55b",
+  "page": 1,
+  "widthPx": 1696,
+  "heightPx": 2400,
+  "source": "https://dti9b28033c75.cloudfront.net/media/gallery/2025/09/29/06/15c9/1759128626.9001.floor%20plan%20paragon%20hall%202024%20-%20fire%20exit%20%26%20fire%20hose.pdf",
+  "scope": "Seven visually identified large green FIRE EXIT graphic panels. Approximate source-pixel boxes; not physical doorway locations, widths, evacuation compliance or every native annotation.",
+  "regions": [
+    {
+      "id": "graphic-exit-1",
+      "kind": "entrance",
+      "box": {
+        "x": 602,
+        "y": 86,
+        "width": 110,
+        "height": 65
+      }
+    },
+    {
+      "id": "graphic-exit-2",
+      "kind": "entrance",
+      "box": {
+        "x": 1425,
+        "y": 326,
+        "width": 110,
+        "height": 65
+      }
+    },
+    {
+      "id": "graphic-exit-3",
+      "kind": "entrance",
+      "box": {
+        "x": 235,
+        "y": 589,
+        "width": 110,
+        "height": 65
+      }
+    },
+    {
+      "id": "graphic-exit-4",
+      "kind": "entrance",
+      "box": {
+        "x": 1523,
+        "y": 1092,
+        "width": 110,
+        "height": 65
+      }
+    },
+    {
+      "id": "graphic-exit-5",
+      "kind": "entrance",
+      "box": {
+        "x": 235,
+        "y": 1510,
+        "width": 110,
+        "height": 65
+      }
+    },
+    {
+      "id": "graphic-exit-6",
+      "kind": "entrance",
+      "box": {
+        "x": 805,
+        "y": 2226,
+        "width": 110,
+        "height": 65
+      }
+    },
+    {
+      "id": "graphic-exit-7",
+      "kind": "entrance",
+      "box": {
+        "x": 1504,
+        "y": 2256,
+        "width": 110,
+        "height": 65
+      }
+    }
+  ]
+}

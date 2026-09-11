@@ -53,3 +53,8 @@ it('preserves corrected numeric text and rejects invalid persisted corrections',
  expect(transformPlanLabels([l],100,200,90)[0].correctedText).toBe('3200 mm');
  for(const correctedText of ['',42,'x'.repeat(2001)])expect(()=>validatePlanLabels([{...l,correctedText}],100,200)).toThrow();
 });
+
+it('recognizes explicit fire-hose signage without interpreting ordinary hoses as equipment',()=>{
+ expect(detectPlanLabels([text('FIRE HOSE REEL CABINET')]).map(l=>l.kind)).toEqual(['fire-hydrant']);
+ expect(detectPlanLabels([text('garden hose')])).toEqual([]);
+});

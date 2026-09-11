@@ -1,3 +1,4 @@
+import {mergePdfFacilityOcr} from '../src/domain/hybridPlanLabels';
 import {detectUnlabelledStairCandidates} from '../src/domain/unlabelledStairs';
 import {shapeLabelRegions} from '../src/domain/shapeLabelRegions';
 import {splitWallJunctions,peelOpenBranches,exteriorWallEdges} from '../src/domain/planarWalls';
@@ -39,6 +40,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
  const corpus=JSON.parse(await readFile(resolve('docs/validation/plan-corpus.json'),'utf8')) as {file:string;sha256:string;pages:number[]}[];
  const truth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-numbers.json'),'utf8'));
  const annotationTruth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-annotations.json'),'utf8'));
+ const facilityTruth=JSON.parse(await readFile(resolve('docs/validation/paragon-selected-facilities.json'),'utf8'));
  const structureTruth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-structure.json'),'utf8'));
  let ocr:Awaited<ReturnType<typeof createWorker>>|undefined,numbersOcr:Awaited<ReturnType<typeof createWorker>>|undefined;
  try{
@@ -59,6 +61,17 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
     labels=detectPlanLabels((result.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>({text:l.text,confidence:l.confidence,source:'ocr' as const,box:{x:l.bbox.x0,y:l.bbox.y0,width:l.bbox.x1-l.bbox.x0,height:l.bbox.y1-l.bbox.y0}})));
    }
    const baselineLabels=structuredClone(labels);
+   if(source==='pdf-text'){
+    if(!ocr){ocr=await createWorker('eng+kor',OEM.LSTM_ONLY,{langPath:resolve('public/ocr/lang'),cacheMethod:'none'});await ocr.setParameters({tessedit_pageseg_mode:PSM.SPARSE_TEXT,preserve_interword_spaces:'1',user_defined_dpi:'150'});}
+    const extra=await ocr.recognize(canvas.toBuffer('image/png'),{},{blocks:true});
+    labels=mergePdfFacilityOcr(labels,(extra.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>({text:l.text,confidence:l.confidence,source:'ocr' as const,box:{x:l.bbox.x0,y:l.bbox.y0,width:l.bbox.x1-l.bbox.x0,height:l.bbox.y1-l.bbox.y0}})));
+    for(const region of numericOcrRegions(canvas.width,canvas.height)){
+     const scale=Math.min(2,3600/Math.max(region.width,region.height)),tile=createCanvas(Math.round(region.width*scale),Math.round(region.height*scale));
+     tile.getContext('2d').drawImage(canvas,region.x,region.y,region.width,region.height,0,0,tile.width,tile.height);
+     const pass=await ocr.recognize(tile.toBuffer('image/png'),{},{blocks:true});
+     labels=mergePdfFacilityOcr(labels,(pass.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>({text:l.text,confidence:l.confidence,source:'ocr' as const,box:{x:region.x+l.bbox.x0*region.width/tile.width,y:region.y+l.bbox.y0*region.height/tile.height,width:(l.bbox.x1-l.bbox.x0)*region.width/tile.width,height:(l.bbox.y1-l.bbox.y0)*region.height/tile.height}})));
+    }
+   }
    if(source==='ocr'){
     if(!numbersOcr){numbersOcr=await createWorker('eng',OEM.LSTM_ONLY,{langPath:resolve('public/ocr/lang'),cacheMethod:'none'});await numbersOcr.setParameters({tessedit_pageseg_mode:PSM.SPARSE_TEXT,preserve_interword_spaces:'1',user_defined_dpi:'150'});}
     for(const rotation of [90,180,270] as const){
@@ -122,7 +135,9 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    });
    const score=(items:typeof labels)=>truth.regions.map((region:{value:number;box:{x:number;y:number;width:number;height:number}})=>({value:region.value,matched:items.some(l=>{const n=readPlanNumbers(l.text),x=l.box.x+l.box.width/2,y=l.box.y+l.box.height/2,b=region.box;return !l.numericConflict&&(l.confidence??0)>=90&&n.length===1&&n[0].values.length===1&&n[0].values[0]===region.value&&x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height;})}));
    const selectedTruth=sha256===truth.sha256&&file===truth.file&&number===truth.page&&canvas.width===truth.widthPx&&canvas.height===truth.heightPx?{scope:truth.scope,baseline:score(baselineLabels),enhanced:score(labels)}:undefined;
-   report.push({shapeCrops,pdfTextQuality:assessPdfText(text.items),ceilingHeight:readCeilingHeight(labels),stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
+   const facilityScore=(items:typeof labels)=>facilityTruth.regions.map((r:{id:string;kind:string;box:{x:number;y:number;width:number;height:number}})=>({id:r.id,matched:items.some(l=>{const cx=l.box.x+l.box.width/2,cy=l.box.y+l.box.height/2;return l.kind===r.kind&&cx>=r.box.x&&cx<=r.box.x+r.box.width&&cy>=r.box.y&&cy<=r.box.y+r.box.height;})}));
+   const selectedFacilityTruth=file===facilityTruth.file&&sha256===facilityTruth.sha256&&number===facilityTruth.page?{scope:facilityTruth.scope,baseline:facilityScore(baselineLabels),enhanced:facilityScore(labels)}:undefined;
+   report.push({selectedFacilityTruth,shapeCrops,pdfTextQuality:assessPdfText(text.items),ceilingHeight:readCeilingHeight(labels),stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
    await writeFile(resolve(directory,`${file}-${number}.png`),canvas.toBuffer('image/png'));page.cleanup();
   }}finally{await loading.destroy();}
  }

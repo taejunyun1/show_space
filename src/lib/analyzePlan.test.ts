@@ -10,7 +10,7 @@ vi.mock('./readPlanOcr',()=>({readPlanOcr:vi.fn()}));vi.mock('./detectPlanWalls'
 const page={imageUrl:'image',widthPx:100,heightPx:100,textSource:'none' as const};
 beforeEach(()=>{vi.resetAllMocks();vi.mocked(readPlanOcr).mockResolvedValue([{text:'3200',source:'ocr',box:{x:0,y:0,width:40,height:10}}]);vi.mocked(detectPlanWalls).mockResolvedValue([{id:'line',start:{x:0,y:0},end:{x:90,y:0},thicknessPx:1}]);});
 it('automatically combines OCR and line analysis without changing input',async()=>{const result=await analyzePlan(page,new AbortController().signal);expect(result.analysis).toMatchObject({numericCount:1,textState:'complete',lineState:'complete'});expect(result.analysis?.lines).toHaveLength(1);expect(result.labels?.[0].text).toBe('3200');expect(page).not.toHaveProperty('analysis');});
-it('uses existing PDF evidence instead of running redundant OCR',async()=>{const result=await analyzePlan({...page,textSource:'pdf-text',labels:[{id:'pdf-1',text:'8000 mm',source:'pdf-text',kind:'dimension',status:'unreviewed',note:'',box:{x:0,y:0,width:30,height:10}}]},new AbortController().signal);expect(readPlanOcr).not.toHaveBeenCalled();expect(result.textSource).toBe('pdf-text');expect(detectPlanWalls).toHaveBeenCalledTimes(3);});
+it('preserves native PDF dimensions while supplementing image facilities',async()=>{const result=await analyzePlan({...page,textSource:'pdf-text',labels:[{id:'pdf-1',text:'8000 mm',source:'pdf-text',kind:'dimension',status:'unreviewed',note:'',box:{x:0,y:0,width:30,height:10}}]},new AbortController().signal);expect(readPlanOcr).toHaveBeenCalledTimes(5);expect(result.labels?.map(l=>l.text)).toEqual(['8000 mm']);expect(result.textSource).toBe('pdf-text');expect(detectPlanWalls).toHaveBeenCalledTimes(3);});
 it('preserves partial results and reports failed stages',async()=>{vi.mocked(readPlanOcr).mockRejectedValue(new Error('OCR failed'));const result=await analyzePlan(page,new AbortController().signal);expect(result.analysis?.textState).toBe('failed');expect(result.analysis?.lines).toHaveLength(1);expect(result.analysis?.issues.join(' ')).toContain('읽지 못');});
 it('does not deliver a completed result after cancellation',async()=>{const c=new AbortController();vi.mocked(readPlanOcr).mockImplementation(async()=>{c.abort();return [];});await expect(analyzePlan(page,c.signal)).rejects.toThrow('취소');});
 
@@ -53,5 +53,13 @@ it('withholds a constrained project when rendering fails or cancellation arrives
  vi.mocked(renderMappedPlan).mockRejectedValue(new Error('render failed'));
  const result=await analyzePlan(input,new AbortController().signal);expect(result.analysis?.selfCheck?.status).toBe('withheld');expect(result.resolvedVenue).toBeUndefined();
  const c=new AbortController();vi.mocked(renderMappedPlan).mockImplementation(async()=>{c.abort();return 'data:image/png;base64,AA==';});
+ await expect(analyzePlan(input,c.signal)).rejects.toThrow('취소');
+});
+
+it('keeps native PDF evidence when supplemental facility OCR fails and honours cancellation',async()=>{
+ const {input}=closedPage();vi.mocked(readPlanOcr).mockRejectedValue(new Error('supplement failed'));
+ const result=await analyzePlan(input,new AbortController().signal);
+ expect(result.labels).toEqual(input.labels);expect(result.analysis?.textState).toBe('complete');expect(result.analysis?.issues.join(' ')).toContain('설비 표기 보완');
+ const c=new AbortController();vi.mocked(readPlanOcr).mockImplementation(async()=>{c.abort();return [];});
  await expect(analyzePlan(input,c.signal)).rejects.toThrow('취소');
 });

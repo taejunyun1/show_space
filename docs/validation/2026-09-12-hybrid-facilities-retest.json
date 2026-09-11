@@ -1,0 +1,374 @@
+{
+  "scope": "Mixed native-text and raster facility signage recognition. Text boxes identify signage only, not exact door/equipment footprints or complete venue geometry.",
+  "browser": {
+    "file": "paragon-fire.pdf",
+    "nativeEntranceAnnotations": 3,
+    "additionalImageEntranceAnnotations": 4,
+    "numericAnnotations": 2,
+    "allAnnotations": 9,
+    "fireHoseAnnotations": 0,
+    "venueGenerated": false,
+    "consoleWarnings": 0,
+    "consoleErrors": 0,
+    "restoredOriginalProject": true
+  },
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "source": "pdf-text",
+      "facilityEvidence": [],
+      "numericLabels": 22,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "source": "ocr",
+      "facilityEvidence": [],
+      "numericLabels": 2,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "source": "ocr",
+      "facilityEvidence": [
+        {
+          "kind": "window",
+          "text": "Back Window",
+          "box": {
+            "x": 72,
+            "y": 1100,
+            "width": 31.33333333333333,
+            "height": 232.66666666666674
+          },
+          "confidence": 96
+        },
+        {
+          "kind": "stairs",
+          "text": "Stairs",
+          "box": {
+            "x": 172.66666666666666,
+            "y": 490,
+            "width": 28,
+            "height": 92
+          },
+          "confidence": 96
+        },
+        {
+          "kind": "door",
+          "text": "Front Door",
+          "box": {
+            "x": 2226,
+            "y": 486,
+            "width": 28.666666666666515,
+            "height": 160
+          },
+          "confidence": 96
+        },
+        {
+          "kind": "window",
+          "text": "Glass Front Window",
+          "box": {
+            "x": 2246,
+            "y": 742,
+            "width": 31.333333333333485,
+            "height": 348
+          },
+          "confidence": 96
+        }
+      ],
+      "numericLabels": 24,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "source": "ocr",
+      "facilityEvidence": [
+        {
+          "kind": "door",
+          "text": "Back Door",
+          "box": {
+            "x": 52,
+            "y": 743,
+            "width": 157,
+            "height": 26
+          },
+          "confidence": 96
+        },
+        {
+          "kind": "furniture",
+          "text": "Bar",
+          "box": {
+            "x": 647.3185011709602,
+            "y": 1308.1812902591028,
+            "width": 26.936768149882873,
+            "height": 56.96933347568597
+          },
+          "confidence": 96
+        }
+      ],
+      "numericLabels": 30,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "sha256": "74a6b8e12008b2ecda6154d0cbb4ae3287a17d15860c8fb64593744f1b15a55b",
+      "source": "pdf-text",
+      "selectedFacilityTruth": {
+        "scope": "Seven visually identified large green FIRE EXIT graphic panels. Approximate source-pixel boxes; not physical doorway locations, widths, evacuation compliance or every native annotation.",
+        "baseline": [
+          {
+            "id": "graphic-exit-1",
+            "matched": false
+          },
+          {
+            "id": "graphic-exit-2",
+            "matched": false
+          },
+          {
+            "id": "graphic-exit-3",
+            "matched": false
+          },
+          {
+            "id": "graphic-exit-4",
+            "matched": false
+          },
+          {
+            "id": "graphic-exit-5",
+            "matched": false
+          },
+          {
+            "id": "graphic-exit-6",
+            "matched": false
+          },
+          {
+            "id": "graphic-exit-7",
+            "matched": false
+          }
+        ],
+        "enhanced": [
+          {
+            "id": "graphic-exit-1",
+            "matched": true
+          },
+          {
+            "id": "graphic-exit-2",
+            "matched": true
+          },
+          {
+            "id": "graphic-exit-3",
+            "matched": false
+          },
+          {
+            "id": "graphic-exit-4",
+            "matched": true
+          },
+          {
+            "id": "graphic-exit-5",
+            "matched": true
+          },
+          {
+            "id": "graphic-exit-6",
+            "matched": false
+          },
+          {
+            "id": "graphic-exit-7",
+            "matched": true
+          }
+        ]
+      },
+      "facilityEvidence": [
+        {
+          "kind": "entrance",
+          "text": "Fire Exit",
+          "box": {
+            "x": 222.01188916876595,
+            "y": 606.8618998488666,
+            "width": 3.519596977329911,
+            "height": 12.906362115868887
+          }
+        },
+        {
+          "kind": "entrance",
+          "text": "Fire Exit",
+          "box": {
+            "x": 1469.7700755667506,
+            "y": 1070.6603885138538,
+            "width": 3.519596977329911,
+            "height": 12.906362115869115
+          }
+        },
+        {
+          "kind": "entrance",
+          "text": "Fire Exit",
+          "box": {
+            "x": 222.25370277078105,
+            "y": 1533.975249974811,
+            "width": 3.519596977329911,
+            "height": 12.906362115869115
+          }
+        },
+        {
+          "kind": "entrance",
+          "text": "EXIT",
+          "box": {
+            "x": 613,
+            "y": 121,
+            "width": 44,
+            "height": 15
+          },
+          "confidence": 93
+        },
+        {
+          "kind": "entrance",
+          "text": "EXIT",
+          "box": {
+            "x": 1437,
+            "y": 362,
+            "width": 44,
+            "height": 15
+          },
+          "confidence": 95
+        },
+        {
+          "kind": "entrance",
+          "text": "EXIT",
+          "box": {
+            "x": 250,
+            "y": 1545,
+            "width": 44,
+            "height": 15
+          },
+          "confidence": 94
+        },
+        {
+          "kind": "entrance",
+          "text": "EXIT",
+          "box": {
+            "x": 1517,
+            "y": 2292,
+            "width": 44,
+            "height": 15
+          },
+          "confidence": 94
+        },
+        {
+          "kind": "entrance",
+          "text": "EXIT",
+          "box": {
+            "x": 1535,
+            "y": 1128,
+            "width": 44,
+            "height": 14.5
+          },
+          "confidence": 96
+        }
+      ],
+      "numericLabels": 2,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    }
+  ]
+}

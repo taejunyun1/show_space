@@ -23,7 +23,7 @@ const rules:{kind:PlanLabel['kind'];pattern:RegExp}[]=[
  {kind:'entrance',pattern:/\b(?:ENTRY|ENTRANCE|EXIT)\b|출입구|비상구/iu},
  {kind:'door',pattern:/\bDOOR\b|출입문|방화문|자동문/iu},
  {kind:'air-conditioner',pattern:/\bAIR[\s-]*CONDITION(?:ER|ING)\b|(?:^|[^\p{L}\p{N}])A\.?C\.?(?=$|[^\p{L}\p{N}])|에어컨|냉난방기/iu},
- {kind:'fire-hydrant',pattern:/\b(?:FIRE[\s-]*)?HYDRANT\b|소화전/iu},
+ {kind:'fire-hydrant',pattern:/\b(?:FIRE[\s-]*)?HYDRANT\b|\bFIRE[\s-]+HOSE(?:[\s-]+REEL)?\b|소화전/iu},
  {kind:'fire-extinguisher',pattern:/\b(?:FIRE[\s-]*)?EXTINGUISHER\b|소화기/iu},
  {kind:'stairs',pattern:/\b(?:STAIRS?|STAIRCASE)\b|계단|^(?:UP|DN)$/iu},
  {kind:'column',pattern:/\bCOLUMN\b|기둥/iu},

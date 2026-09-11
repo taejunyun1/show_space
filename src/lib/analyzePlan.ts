@@ -1,3 +1,4 @@
+import {mergePdfFacilityOcr} from '../domain/hybridPlanLabels';
 import {shapeLabelRegions} from '../domain/shapeLabelRegions';
 import {prepareConstrainedVenue} from '../domain/constrainedVenue';
 import {renderMappedPlan} from './renderMappedPlan';
@@ -26,6 +27,17 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  let labels=textResult.status==='fulfilled'?textResult.value:page.labels??[];
  let lines=lineResult.status==='fulfilled'?lineResult.value:[];
  const issues:string[]=[];
+ if(reuseText&&page.textSource==='pdf-text'){
+  onStage('PDF 이미지에 포함된 설비 표기를 추가 인식하고 있습니다.');
+  try{const extra=await readPlanOcr(page.imageUrl,signal);abort();labels=mergePdfFacilityOcr(labels,extra);}
+  catch{abort();issues.push('이미지 설비 표기 보완 인식을 완료하지 못했습니다. PDF 문자 근거는 보존했습니다.');}
+  const regions=numericOcrRegions(page.widthPx,page.heightPx);
+  for(let i=0;i<regions.length;i++){
+   onStage(`이미지 속 설비 표기를 확대 인식하고 있습니다 (${i+1}/${regions.length}).`);abort();
+   try{const extra=await readPlanOcr(page.imageUrl,signal,undefined,'facilities',0,regions[i]);abort();labels=mergePdfFacilityOcr(labels,extra);}
+   catch{abort();issues.push(`구역 ${i+1}의 설비 보완 인식을 완료하지 못했습니다.`);}
+  }
+ }
  if(!reuseText){
   for(const rotation of [90,180,270] as const){
    abort();onStage(`회전 숫자를 자동 인식하고 있습니다 (${rotation}°).`);

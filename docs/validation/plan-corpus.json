@@ -26,5 +26,14 @@
     "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
     "source": "https://www.coningsbygallery.com/contact/pdf/coningsby-gallery-map.pdf",
     "scope": "Axonometric exhibition drawing with two level views, selected page 7. Stress case for garbled PDF text and unsupported drawing type; excluded from planar-floor-plan success denominator. Page selection is not an automation test."
+  },
+  {
+    "file": "paragon-fire.pdf",
+    "pages": [
+      1
+    ],
+    "sha256": "74a6b8e12008b2ecda6154d0cbb4ae3287a17d15860c8fb64593744f1b15a55b",
+    "source": "https://dti9b28033c75.cloudfront.net/media/gallery/2025/09/29/06/15c9/1759128626.9001.floor%20plan%20paragon%20hall%202024%20-%20fire%20exit%20%26%20fire%20hose.pdf",
+    "scope": "Official large exhibition-hall fire-exit and fire-hose overlay. Facility symbols, dense identifiers and colored lines; not a dimension-complete reconstruction truth source."
   }
 ]
