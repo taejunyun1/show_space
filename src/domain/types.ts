@@ -34,6 +34,7 @@ export interface Opening {
 }
 
 export interface Project {
+  sourcePlan?:{imageUrl:string;widthPx:number;heightPx:number;labels:PlanLabel[]};
   openings?:Opening[];
   schemaVersion: 1; id: string; name: string; venue: string
   walls: Wall[]; artworks: Artwork[]; scenes: Scene[]

@@ -6,6 +6,7 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import type { RenderTask } from 'pdfjs-dist';
 
 export interface PlanPage {
+  resolvedVenue?:{project:import('../domain/types').Project;sourceImageUrl:string;sourceEvidenceKey:string};
   analysis?:PlanAnalysis;
   imageUrl: string;
   labels?: PlanLabel[];

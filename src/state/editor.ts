@@ -36,7 +36,7 @@ interface EditorState {
   patchArtwork(id: string, patch: Partial<Artwork>): void
   patchWall(id: string, patch: Partial<Wall>): void
   renameProject(name: string): void
-  patchProject(patch: Pick<Partial<Project>, 'floorColor' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis'>): void
+  patchProject(patch: Pick<Partial<Project>, 'floorColor' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan'>): void
   addArtwork(imageUrl?: string, name?: string): void
   addWall(): void
   duplicateSelected(): void

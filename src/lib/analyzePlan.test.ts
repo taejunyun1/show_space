@@ -1,3 +1,7 @@
+import {renderMappedPlan} from './renderMappedPlan';
+import {buildAutomaticVenue} from '../domain/automaticVenue';
+import {parseProject} from '../domain/model';
+vi.mock('./renderMappedPlan',()=>({renderMappedPlan:vi.fn()}));
 import{it,expect,vi,beforeEach}from'vitest';
 import{analyzePlan}from'./analyzePlan';
 import{readPlanOcr}from'./readPlanOcr';
@@ -30,4 +34,24 @@ it('merges newly recovered tile numbers and cancels before subsequent tiles',asy
  const c=new AbortController();vi.mocked(readPlanOcr).mockClear();
  vi.mocked(readPlanOcr).mockImplementation(async(_url,_signal,_progress,_mode,_rotation,region)=>{if(region)c.abort();return [];});
  await expect(analyzePlan(page,c.signal)).rejects.toThrow('취소');expect(readPlanOcr).toHaveBeenCalledTimes(5);
+});
+
+it('automatically reconstructs nonuniform dimensions and preserves the original after rendering',async()=>{
+ const {input,lines}=closedPage();input.imageUrl='data:image/png;base64,AA==';input.labels[1].text='9000 mm';
+ vi.mocked(detectPlanWalls).mockResolvedValue(lines);vi.mocked(renderMappedPlan).mockResolvedValue('data:image/png;base64,AQ==');
+ const result=await analyzePlan(input,new AbortController().signal);
+ expect(result.analysis?.selfCheck?.status).toBe('stable');expect(renderMappedPlan).toHaveBeenCalledOnce();
+ const project=buildAutomaticVenue(result).project!;expect(project).toBeDefined();
+ expect(project.planImageUrl).toBe('data:image/png;base64,AQ==');expect(project.sourcePlan?.imageUrl).toBe(input.imageUrl);
+ expect(Math.max(...project.walls.flatMap(w=>[w.start.x,w.end.x]))).toBe(8000);
+ expect(Math.max(...project.walls.flatMap(w=>[w.start.z,w.end.z]))).toBe(9000);
+ expect(parseProject(project).sourcePlan?.labels).toEqual(input.labels);
+ result.labels![1].text='10000 mm';expect(buildAutomaticVenue(result).project).toBeUndefined();
+});
+it('withholds a constrained project when rendering fails or cancellation arrives',async()=>{
+ const {input,lines}=closedPage();input.imageUrl='data:image/png;base64,AA==';input.labels[1].text='9000 mm';vi.mocked(detectPlanWalls).mockResolvedValue(lines);
+ vi.mocked(renderMappedPlan).mockRejectedValue(new Error('render failed'));
+ const result=await analyzePlan(input,new AbortController().signal);expect(result.analysis?.selfCheck?.status).toBe('withheld');expect(result.resolvedVenue).toBeUndefined();
+ const c=new AbortController();vi.mocked(renderMappedPlan).mockImplementation(async()=>{c.abort();return 'data:image/png;base64,AA==';});
+ await expect(analyzePlan(input,c.signal)).rejects.toThrow('취소');
 });

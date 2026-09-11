@@ -45,7 +45,7 @@ export function matchDimensionLines(project:Project,label:PlanLabel,lines:WallCa
    if(Math.abs(across(line.start)-across(line.end))>1)continue;
    const low=Math.min(along(line.start),along(line.end)),high=Math.max(along(line.start),along(line.end)),cross=across(line.start);
    const distance=Math.abs(across(px)-cross);
-   if(Math.abs(low-a)>tolerance||Math.abs(high-b)>tolerance||Math.abs(cross-wallCross)<8||Math.abs(cross-wallCross)>250||along(px)<low||along(px)>high||distance>Math.max(25,horizontal?label.box.height:label.box.width))continue;
+   if(Math.abs(low-a)>tolerance||Math.abs(high-b)>tolerance||Math.abs(cross-wallCross)<8||Math.abs(cross-wallCross)>250||along(px)<low||along(px)>high||distance>Math.max(25,Math.min(60,2*(horizontal?label.box.height:label.box.width))))continue;
    const witnesses=[a,b].map(position=>valid.find(l=>Math.abs(along(l.start)-along(l.end))<=1&&Math.abs(along(l.start)-position)<=tolerance&&Math.min(across(l.start),across(l.end))<=Math.min(cross,wallCross)+tolerance&&Math.max(across(l.start),across(l.end))>=Math.max(cross,wallCross)-tolerance));
    if(witnesses[0]&&witnesses[1]&&witnesses[0].id!==witnesses[1].id)matches.push({wallId:wall.id,start,end,distancePx:distance,evidence:[...support.parts,witnesses[0],witnesses[1]],...(support.gap?{gap:support.gap}:{})});
   }

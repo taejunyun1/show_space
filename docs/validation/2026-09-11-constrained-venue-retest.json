@@ -1,0 +1,77 @@
+[
+  {
+    "file": "anca.pdf",
+    "page": 1,
+    "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+    "runs": [
+      {
+        "threshold": 125,
+        "constrainedVenueReady": false,
+        "dimensionMapReady": false,
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "constrainedVenueReady": false,
+        "dimensionMapReady": false,
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "constrainedVenueReady": false,
+        "dimensionMapReady": false,
+        "draftGenerated": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 1,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "constrainedVenueReady": false,
+        "dimensionMapReady": false,
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "constrainedVenueReady": false,
+        "dimensionMapReady": false,
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "constrainedVenueReady": false,
+        "dimensionMapReady": false,
+        "draftGenerated": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 2,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "constrainedVenueReady": false,
+        "dimensionMapReady": false,
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "constrainedVenueReady": false,
+        "dimensionMapReady": false,
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "constrainedVenueReady": false,
+        "dimensionMapReady": false,
+        "draftGenerated": false
+      }
+    ]
+  }
+]

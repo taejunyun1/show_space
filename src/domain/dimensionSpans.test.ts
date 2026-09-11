@@ -17,3 +17,7 @@ it('collects only supported single-valued dimensions with reliable units and rea
  expect(readMeasuredSpans(p,[unit,{...label,text:'800'}],lines)[0].mm).toBe(8000);
  expect(readMeasuredSpans(p,[label],[lines[0]])).toEqual([]);
 });
+it('joins one-pixel raster end overhangs to unique supported wall ends',()=>{
+ const {p,label}=fixture();label.box={x:400,y:16,width:100,height:24};
+ expect(readMeasuredSpans(p,[label],[line('d',99,60,901,60),line('a',100,50,100,105),line('b',900,50,900,105)])).toMatchObject([{from:100,to:900,mm:8000}]);
+});

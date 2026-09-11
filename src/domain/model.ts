@@ -270,6 +270,11 @@ export function parseProject(input: unknown): Project {
     if (!raw.planImageUrl) throw new Error('도면 이미지가 필요합니다.')
     validatePlanReference(raw.planReference as Project['planReference'] & {})
   }
+  if(raw.sourcePlan!==undefined){
+    const source=object(raw.sourcePlan,'원본 도면');safeImage(source.imageUrl,'원본 도면');
+    for(const key of ['widthPx','heightPx'])if(typeof source[key]!=='number'||!Number.isFinite(source[key])||source[key]<1||source[key]>10000)throw new Error('원본 도면 크기가 올바르지 않습니다.');
+    validatePlanLabels(source.labels,source.widthPx as number,source.heightPx as number);
+  }
   const result=structuredClone(raw);
   if(raw.planLabels!==undefined){const r=raw.planReference as Project['planReference'];if(!r)throw new Error('표기 인식 결과에 도면 정보가 필요합니다.');result.planLabels=validatePlanLabels(raw.planLabels,r.widthPx,r.heightPx);}
   if(raw.planAnalysis!==undefined){

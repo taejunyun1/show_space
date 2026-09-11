@@ -14,6 +14,7 @@ import type {Project, Wall} from './types';
 import {classifyAutomaticWalls} from './automaticWallTopology';
 import {readMeasuredSpans,checkDimensionSums} from './dimensionSpans';
 
+export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines]);
 export interface AutomaticVenue {project?:Project; reasons:string[]; wallCount:number}
 export function extractStructuralWalls(page:PlanPage):Wall[]{
  if(!page.analysis)return [];
@@ -50,6 +51,7 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  const blocked=(reason:string,wallCount=0):AutomaticVenue=>({reasons:[reason],wallCount});
  if(!page.analysis)return blocked('도면 분석이 끝나면 공간 초안을 자동 생성합니다.');
  if(page.analysis.selfCheck?.status==='withheld')return blocked('자체 검증에서 공간 구조를 확정하지 못했습니다. 원본과 분석 결과를 보존했으며 자동 적용은 보류했습니다.');
+ if(page.resolvedVenue?.sourceImageUrl===page.imageUrl&&page.analysis.selfCheck?.status==='stable'&&page.resolvedVenue.sourceEvidenceKey===planEvidenceKey(page))return {project:page.resolvedVenue.project,wallCount:page.resolvedVenue.project.walls.length,reasons:['개별 치수에 맞춰 도면과 공간을 함께 변환했습니다. 원본을 프로젝트에 보존했습니다.','벽 높이와 두께의 임시값 여부는 각 벽 메모에 기록했습니다.']};
  if(page.analysis.lineState!=='complete'||page.analysis.textState!=='complete')return blocked('문자와 선 분석을 모두 완료해야 공간 초안을 만들 수 있습니다.');
  const candidates=extractStructuralWalls(page);
  const maxGap=Math.max(page.widthPx,page.heightPx)*.2;

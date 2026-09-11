@@ -24,8 +24,12 @@ export function matchDimensionSpans(project:Project,label:PlanLabel,lines:WallCa
   const center={x:label.box.x+label.box.width/2,y:label.box.y+label.box.height/2};
   for(const {line} of supports){
    if(Math.abs(across(line.start)-across(line.end))>=1)continue;
-   const from=Math.min(along(line.start),along(line.end)),to=Math.max(along(line.start),along(line.end));
-   if(to-from<10||along(center)<from||along(center)>to||Math.abs(across(center)-across(line.start))>Math.max(25,group.horizontal?label.box.height:label.box.width))continue;
+   const snapEndpoint=(value:number)=>{
+    const endpoints=[...new Set(group.segments.flatMap(s=>[s.from,s.to]))].filter(p=>Math.abs(p-value)<=1);
+    return endpoints.length===1?endpoints[0]:value;
+   };
+   const from=snapEndpoint(Math.min(along(line.start),along(line.end))),to=snapEndpoint(Math.max(along(line.start),along(line.end)));
+   if(to-from<10||along(center)<from||along(center)>to||Math.abs(across(center)-across(line.start))>Math.max(25,Math.min(60,2*(group.horizontal?label.box.height:label.box.width))))continue;
    const segments=group.segments.filter(s=>s.to>from&&s.from<to).sort((a,b)=>a.from-b.from);
    let covered=from;const used:string[]=[];
    for(const segment of segments){if(segment.from>covered+1)break;if(segment.to>covered){covered=segment.to;used.push(segment.wall.id);}}
