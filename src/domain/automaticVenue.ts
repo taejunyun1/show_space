@@ -1,6 +1,6 @@
 import type {PlanPage} from '../lib/planImport';
 import type {Project, Wall} from './types';
-import {deriveFloor} from './floor';
+import {classifyAutomaticWalls} from './automaticWallTopology';
 import {matchDimensionLines} from './dimensionLineEvidence';
 import {readPlanNumbers} from './planNumbers';
 
@@ -33,9 +33,9 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
   if(existing)return {...existing};
   const next={x:p.x,z:p.y};points.push(next);return {...next};
  };
- const walls:Wall[]=lines.map((l,i)=>({id:`auto-wall-${i+1}`,name:`자동 벽 ${i+1}`,role:'boundary',start:snap(l.start),end:snap(l.end),heightMm:3000,thicknessMm:150,color:'#ffffff',visible:true,locked:false,note:'자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.'}));
- const floor=deriveFloor(walls);
- if(!floor.surfaces.length||floor.invalidComponents)return blocked('닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다.',walls.length);
+ const candidates:Wall[]=lines.map((l,i)=>({id:`auto-wall-${i+1}`,name:`자동 벽 ${i+1}`,role:'boundary',start:snap(l.start),end:snap(l.end),heightMm:3000,thicknessMm:150,color:'#ffffff',visible:true,locked:false,note:'자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.'}));
+ const walls=classifyAutomaticWalls(candidates);
+ if(!walls)return blocked('닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다.',candidates.length);
  const base:Project={schemaVersion:1,id:'automatic-venue',name:'자동 공간 초안',venue:'도면에서 생성',walls,artworks:[],scenes:[],floorColor:'#f1f1ed',planImageUrl:page.imageUrl,planOpacity:.55,planLabels:page.labels??[],planAnalysis:page.analysis,planReference:{widthPx:page.widthPx,heightPx:page.heightPx,origin:{x:0,z:0},mmPerPixel:1,calibrated:true}};
  const votes:{ratio:number;wallId:string}[]=[];
  for(const label of page.labels??[]){
