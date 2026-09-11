@@ -1,4 +1,5 @@
 import {pageTextPanels} from '../src/lib/textPanels';
+import {mergeSignSymbol} from '../src/domain/signSymbols';
 import {conflictingDimensionLabels,dimensionRecheckTargets,recheckDimensionReadings} from '../src/domain/dimensionRecheck';
 import {venueDimensions} from '../src/domain/venueDimensions';
 import {pdfSignImages} from '../src/lib/pdfSignImages';
@@ -41,6 +42,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
  const corpus=JSON.parse(await readFile(resolve('docs/validation/plan-corpus.json'),'utf8')) as {file:string;sha256:string;pages:number[]}[];
  const truth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-numbers.json'),'utf8'));
  const annotationTruth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-annotations.json'),'utf8'));
+ const hoseTruth=JSON.parse(await readFile(resolve('docs/validation/paragon-hose-signs.json'),'utf8'));
  const facilityTruth=JSON.parse(await readFile(resolve('docs/validation/paragon-selected-facilities.json'),'utf8'));
  const structureTruth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-structure.json'),'utf8'));
  let ocr:Awaited<ReturnType<typeof createWorker>>|undefined,numbersOcr:Awaited<ReturnType<typeof createWorker>>|undefined;
@@ -127,6 +129,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
      texts=(reading.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>({text:l.text,confidence:l.confidence,source:'ocr' as const,box:{x:l.bbox.x0/2,y:l.bbox.y0/2,width:(l.bbox.x1-l.bbox.x0)/2,height:(l.bbox.y1-l.bbox.y0)/2}}));nativeSignCache.set(sign.imageUrl,texts);
     }
     labels=mergePdfFacilityOcr(labels,texts.map(t=>({...t,box:{x:sign.box.x+t.box.x*sign.box.width/sign.widthPx,y:sign.box.y+t.box.y*sign.box.height/sign.heightPx,width:t.box.width*sign.box.width/sign.widthPx,height:t.box.height*sign.box.height/sign.heightPx}})));
+    labels=mergeSignSymbol(labels,sign.box,sign.symbol);
    }
    const textPanels=source==='pdf-text'?pageTextPanels(canvas as never,nativeTexts.map(t=>t.box),labels):[];
    const runs=[125,155,190].map(threshold=>{
@@ -164,8 +167,9 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    const score=(items:typeof labels)=>truth.regions.map((region:{value:number;box:{x:number;y:number;width:number;height:number}})=>({value:region.value,matched:items.some(l=>{const n=readPlanNumbers(l.text),x=l.box.x+l.box.width/2,y=l.box.y+l.box.height/2,b=region.box;return !l.numericConflict&&(l.confidence??0)>=90&&n.length===1&&n[0].values.length===1&&n[0].values[0]===region.value&&x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height;})}));
    const selectedTruth=sha256===truth.sha256&&file===truth.file&&number===truth.page&&canvas.width===truth.widthPx&&canvas.height===truth.heightPx?{scope:truth.scope,baseline:score(baselineLabels),enhanced:score(labels)}:undefined;
    const facilityScore=(items:typeof labels)=>facilityTruth.regions.map((r:{id:string;kind:string;box:{x:number;y:number;width:number;height:number}})=>({id:r.id,matched:items.some(l=>{const cx=l.box.x+l.box.width/2,cy=l.box.y+l.box.height/2;return l.kind===r.kind&&cx>=r.box.x&&cx<=r.box.x+r.box.width&&cy>=r.box.y&&cy<=r.box.y+r.box.height;})}));
+   const selectedHoseTruth=file===hoseTruth.file&&sha256===hoseTruth.sha256&&number===hoseTruth.page?{scope:hoseTruth.scope,regions:hoseTruth.regions.map((r:{id:string;box:{x:number;y:number;width:number;height:number}})=>({id:r.id,matched:labels.some(l=>l.kind==='fire-hydrant'&&l.box.x+l.box.width/2>=r.box.x&&l.box.x+l.box.width/2<=r.box.x+r.box.width&&l.box.y+l.box.height/2>=r.box.y&&l.box.y+l.box.height/2<=r.box.y+r.box.height)}))}:undefined;
    const selectedFacilityTruth=file===facilityTruth.file&&sha256===facilityTruth.sha256&&number===facilityTruth.page?{scope:facilityTruth.scope,baseline:facilityScore(baselineLabels),enhanced:facilityScore(labels)}:undefined;
-   report.push({recheckTargets,dimensionRechecks,embeddedSignCount:embeddedSigns.length,selectedFacilityTruth,shapeCrops,pdfTextQuality:assessPdfText(text.items),ceilingHeight:readCeilingHeight(labels),stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
+   report.push({selectedHoseTruth,recheckTargets,dimensionRechecks,embeddedSignCount:embeddedSigns.length,selectedFacilityTruth,shapeCrops,pdfTextQuality:assessPdfText(text.items),ceilingHeight:readCeilingHeight(labels),stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,source:l.source,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
    await writeFile(resolve(directory,`${file}-${number}.png`),canvas.toBuffer('image/png'));page.cleanup();
   }}finally{await loading.destroy();}
  }

@@ -1,0 +1,182 @@
+{
+  "scope": "All 12 visible large red hose-reel sign boxes, visually annotated on the rendered page. These are sign positions, not physical hydrant footprints. Template reference comes from this corpus, so recall is an in-corpus integration measurement, not held-out accuracy.",
+  "tests": 363,
+  "knownSignRecall": {
+    "matched": 7,
+    "total": 12
+  },
+  "unmatchedDetections": 0,
+  "regions": [
+    {
+      "id": "hose-sign-01",
+      "matched": false
+    },
+    {
+      "id": "hose-sign-02",
+      "matched": false
+    },
+    {
+      "id": "hose-sign-03",
+      "matched": false
+    },
+    {
+      "id": "hose-sign-04",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-05",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-06",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-07",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-08",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-09",
+      "matched": false
+    },
+    {
+      "id": "hose-sign-10",
+      "matched": false
+    },
+    {
+      "id": "hose-sign-11",
+      "matched": true
+    },
+    {
+      "id": "hose-sign-12",
+      "matched": true
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 242.4584382871537,
+        "y": 1349.8035264483626,
+        "width": 52.4735516372796,
+        "height": 76.4130982367758
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 242.4584382871537,
+        "y": 878.750629722922,
+        "width": 52.4735516372796,
+        "height": 76.1712846347607
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 1127.2544080604534,
+        "y": 853.8438287153654,
+        "width": 52.71536523929467,
+        "height": 76.1712846347607
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 1127.2544080604534,
+        "y": 1393.3299748110833,
+        "width": 52.71536523929467,
+        "height": 76.1712846347607
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 367.7178841309824,
+        "y": 1976.8261964735518,
+        "width": 52.47355163727957,
+        "height": 76.1712846347607
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 1127.2544080604534,
+        "y": 500.7959697732997,
+        "width": 52.71536523929467,
+        "height": 76.1712846347607
+      }
+    },
+    {
+      "kind": "fire-hydrant",
+      "text": "소화전 · 호스 릴 표지",
+      "source": "symbol",
+      "box": {
+        "x": 736.4836272040302,
+        "y": 2211.3853904282114,
+        "width": 52.71536523929467,
+        "height": 76.41309823677602
+      }
+    }
+  ],
+  "geometry": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "unchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "unchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "unchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "unchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    },
+    {
+      "file": "k2.pdf",
+      "page": 1,
+      "unchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "unchanged": true,
+      "draftGenerated": false,
+      "constrainedVenueReady": false
+    }
+  ]
+}

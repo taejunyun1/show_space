@@ -4,7 +4,7 @@ import {readPlanNumbers} from './planNumbers';
 export interface PlanText {
  text:string;
  box:{x:number;y:number;width:number;height:number};
- source:'pdf-text'|'ocr';
+ source:'pdf-text'|'ocr'|'symbol';
  confidence?:number;
 }
 export interface PlanLabel extends PlanText {
@@ -61,7 +61,7 @@ export function validatePlanLabels(value:unknown,width:number,height:number):Pla
  return value.map(raw=>{
   if(!raw||typeof raw!=='object') return fail();
   const p=raw as PlanLabel;
-  if(typeof p.id!=='string'||!p.id.trim()||p.id.length>200||ids.has(p.id)||!kinds.includes(p.kind)||!['unreviewed','confirmed','dismissed'].includes(p.status)||!['pdf-text','ocr'].includes(p.source)||typeof p.text!=='string'||!p.text.trim()||p.text.length>2000||typeof p.note!=='string'||p.note.length>2000||!validBox(p.box)||p.box.x+p.box.width>width+1e-6||p.box.y+p.box.height>height+1e-6||(p.confidence!==undefined&&(!Number.isFinite(p.confidence)||p.confidence<0||p.confidence>100))) return fail();
+  if(typeof p.id!=='string'||!p.id.trim()||p.id.length>200||ids.has(p.id)||!kinds.includes(p.kind)||!['unreviewed','confirmed','dismissed'].includes(p.status)||!['pdf-text','ocr','symbol'].includes(p.source)||typeof p.text!=='string'||!p.text.trim()||p.text.length>2000||typeof p.note!=='string'||p.note.length>2000||!validBox(p.box)||p.box.x+p.box.width>width+1e-6||p.box.y+p.box.height>height+1e-6||(p.confidence!==undefined&&(!Number.isFinite(p.confidence)||p.confidence<0||p.confidence>100))) return fail();
   if(p.correctedText!==undefined&&(typeof p.correctedText!=='string'||!p.correctedText.trim()||p.correctedText.length>2000))return fail();
   if(p.numericConflict!==undefined&&typeof p.numericConflict!=='boolean')return fail();
   ids.add(p.id);

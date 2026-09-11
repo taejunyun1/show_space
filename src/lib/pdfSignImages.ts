@@ -1,8 +1,9 @@
 import type {PDFPageProxy} from 'pdfjs-dist';
 import {pdfImagePlacements,imagePlacementBox,type Matrix6} from '../domain/pdfImagePlacements';
 import {pageRasterProfile} from '../domain/pageRasterProfile';
+import {matchFireHoseSymbol} from '../domain/signSymbols';
 interface PdfRasterImage {width:number;height:number;kind?:number;data?:Uint8Array;bitmap?:ImageBitmap}
-export interface PdfSignImage {imageUrl:string;box:{x:number;y:number;width:number;height:number};widthPx:number;heightPx:number}
+export interface PdfSignImage {imageUrl:string;box:{x:number;y:number;width:number;height:number};widthPx:number;heightPx:number;symbol?:ReturnType<typeof matchFireHoseSymbol>}
 /** Recover native raster detail only for small colored signs visibly matching
  * the rendered page. Transform tracing alone does not establish visibility. */
 export async function pdfSignImages(page:PDFPageProxy,viewport:Matrix6,rendered:HTMLCanvasElement,codes:Record<string,number>):Promise<PdfSignImage[]>{
@@ -36,7 +37,7 @@ export async function pdfSignImages(page:PDFPageProxy,viewport:Matrix6,rendered:
     if((Math.abs(pixels[a]-visible[b])+Math.abs(pixels[a+1]-visible[b+1])+Math.abs(pixels[a+2]-visible[b+2]))/3<70)agreed++;total++;
    }
    if(agreed/total<.9)continue;
-   result.push({imageUrl:asset.toDataURL('image/png'),box,widthPx:asset.width,heightPx:asset.height});
+   result.push({imageUrl:asset.toDataURL('image/png'),box,widthPx:asset.width,heightPx:asset.height,symbol:matchFireHoseSymbol(pixels,asset.width,asset.height)});
    if(result.length===30)break;
   }finally{source.width=source.height=asset.width=asset.height=0;}
  }

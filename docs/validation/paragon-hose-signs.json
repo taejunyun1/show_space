@@ -1,0 +1,130 @@
+{
+  "file": "paragon-fire.pdf",
+  "sha256": "74a6b8e12008b2ecda6154d0cbb4ae3287a17d15860c8fb64593744f1b15a55b",
+  "page": 1,
+  "widthPx": 1696,
+  "heightPx": 2400,
+  "scope": "All 12 visible large red hose-reel sign boxes, visually annotated on the rendered page. These are sign positions, not physical hydrant footprints. Template reference comes from this corpus, so recall is an in-corpus integration measurement, not held-out accuracy.",
+  "regions": [
+    {
+      "id": "hose-sign-01",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 537,
+        "y": 72,
+        "width": 53,
+        "height": 76
+      }
+    },
+    {
+      "id": "hose-sign-02",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 486,
+        "y": 403,
+        "width": 53,
+        "height": 78
+      }
+    },
+    {
+      "id": "hose-sign-03",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 1546,
+        "y": 311,
+        "width": 53,
+        "height": 79
+      }
+    },
+    {
+      "id": "hose-sign-04",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 1127,
+        "y": 500,
+        "width": 53,
+        "height": 79
+      }
+    },
+    {
+      "id": "hose-sign-05",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 242,
+        "y": 878,
+        "width": 53,
+        "height": 78
+      }
+    },
+    {
+      "id": "hose-sign-06",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 1127,
+        "y": 853,
+        "width": 53,
+        "height": 79
+      }
+    },
+    {
+      "id": "hose-sign-07",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 242,
+        "y": 1349,
+        "width": 53,
+        "height": 79
+      }
+    },
+    {
+      "id": "hose-sign-08",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 1127,
+        "y": 1392,
+        "width": 53,
+        "height": 79
+      }
+    },
+    {
+      "id": "hose-sign-09",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 1324,
+        "y": 1364,
+        "width": 53,
+        "height": 79
+      }
+    },
+    {
+      "id": "hose-sign-10",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 313,
+        "y": 1852,
+        "width": 55,
+        "height": 79
+      }
+    },
+    {
+      "id": "hose-sign-11",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 366,
+        "y": 1975,
+        "width": 55,
+        "height": 80
+      }
+    },
+    {
+      "id": "hose-sign-12",
+      "kind": "fire-hydrant",
+      "box": {
+        "x": 735,
+        "y": 2211,
+        "width": 53,
+        "height": 79
+      }
+    }
+  ]
+}

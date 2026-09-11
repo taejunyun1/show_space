@@ -81,3 +81,10 @@ it('automatically re-reads conflicting number regions while preserving the sourc
  expect(result.analysis?.issues.join(' ')).toContain('충돌 치수 2개');
  expect(vi.mocked(readPlanOcr).mock.calls.filter(c=>c[3]==='numbers')).toHaveLength(4);
 });
+
+it('retains known symbol evidence when native-sign OCR cannot read a caption',async()=>{
+ const {input}=closedPage();vi.mocked(readPlanOcr).mockResolvedValue([]);
+ const result=await analyzePlan({...input,embeddedSigns:[{imageUrl:'sign',widthPx:290,heightPx:422,box:{x:200,y:300,width:40,height:60},symbol:{templateId:'paragon-hose-reel-v1',similarity:.95}}]},new AbortController().signal);
+ expect(result.labels?.find(l=>l.kind==='fire-hydrant')).toMatchObject({source:'symbol',box:{x:200,y:300,width:40,height:60}});
+ expect(result.labels?.find(l=>l.kind==='fire-hydrant')?.confidence).toBeUndefined();
+});

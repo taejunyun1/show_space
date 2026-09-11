@@ -11,3 +11,8 @@ it('does not duplicate native facilities or accept weak and unscored OCR',()=>{
  const native=detectPlanLabels([{text:'EXIT',source:'pdf-text',box}]);
  expect(mergePdfFacilityOcr(native,[{text:'FIRE EXIT',source:'ocr',confidence:98,box},{text:'HYDRANT',source:'ocr',confidence:70,box:{...box,y:100}},{text:'AIR CONDITIONER',source:'ocr',box:{...box,y:150}}])).toEqual(native);
 });
+it('does not resurrect a dismissed symbol through later caption OCR',()=>{
+ const native=detectPlanLabels([{text:'FIRE HOSE',source:'pdf-text',box}]).map(l=>({...l,source:'symbol' as const,status:'dismissed' as const}));
+ const result=mergePdfFacilityOcr(native,[{text:'FIRE HOSE REEL',source:'ocr',confidence:99,box},{text:'FIRE HOSE',source:'ocr',confidence:96,box:{...box,y:100}}]);
+ expect(result).toHaveLength(2);expect(result[0]).toEqual(native[0]);expect(result[1].box.y).toBe(100);
+});
