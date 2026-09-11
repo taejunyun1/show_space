@@ -90,5 +90,5 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  }
  base.planReference!.mmPerPixel=scale;
  base.walls=walls.map(w=>({...w,start:{x:w.start.x*scale,z:w.start.z*scale},end:{x:w.end.x*scale,z:w.end.z*scale}}));
- return {project:base,wallCount:walls.length,reasons:[...(sums.checked?[`전체·부분 치수 합계 ${sums.checked}건을 교차 검증했습니다.`]:[]),'벽 높이 3 m·두께 150 mm는 임시값입니다.','개구부의 높이·문짝·창틀과 설비·계단의 실제 영역 및 설치 불가 구역은 아직 자동 구성하지 않습니다. 이 초안에는 해당 영역이 아직 반영되지 않았습니다.']};
+ return {project:base,wallCount:walls.length,reasons:[...(sums.checked?[`전체·부분 치수 합계 ${sums.checked}건을 교차 검증했습니다.`]:[]),'벽 높이 3 m·두께 150 mm는 임시값입니다.','개구부의 높이·문짝·창틀과 설비의 실제 영역은 아직 자동 구성하지 않습니다. 계단은 검출된 범위만 표시하며 전체 크기·높이를 추정하지 않습니다.']};
 }

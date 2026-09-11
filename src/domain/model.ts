@@ -1,3 +1,4 @@
+import {installationZones,footprintOverlapsZone} from './installationZones';
 import {validateOpenings} from './openings';
 import {validatePlanLabels,type PlanLabel} from './planLabels'
 import { validatePlanReference } from './plan'
@@ -192,11 +193,17 @@ export function distributeArtworks(project: Project, ids: string[], spacingMm: n
   return { ...project, artworks: project.artworks.map(item => positions.has(item.id) ? { ...item, alongMm: positions.get(item.id)! } : item) }
 }
 
-export function artworkWarnings(artwork: Artwork, wall: Wall): string[] {
+export function artworkWarnings(artwork: Artwork, wall: Wall, project?:Project): string[] {
   const warnings: string[] = []
   if (artwork.alongMm - artwork.widthMm / 2 < 0 || artwork.alongMm + artwork.widthMm / 2 > wallLength(wall)) warnings.push('작품이 벽의 좌우 경계를 벗어납니다.')
   if (artwork.centerHeightMm - artwork.heightMm / 2 < 0) warnings.push('작품이 바닥 아래로 내려갑니다.')
   if (artwork.centerHeightMm + artwork.heightMm / 2 > wall.heightMm) warnings.push('작품이 벽 높이를 넘어갑니다.')
+  if(project){
+    const position=artworkPosition(artwork,wall),c=Math.cos(position.rotationY),s=Math.sin(position.rotationY);
+    const halfWidth=artwork.widthMm/2+(artwork.frame==='none'?0:22.5),halfDepth=artwork.depthMm/2;
+    const footprint=[[-halfWidth,-halfDepth],[halfWidth,-halfDepth],[halfWidth,halfDepth],[-halfWidth,halfDepth]].map(([x,z])=>({x:position.x+c*x+s*z,z:position.z-s*x+c*z}));
+    if(installationZones(project).some(zone=>footprintOverlapsZone(footprint,zone)))warnings.push('작품이 계단의 설치 제외 검출 범위와 겹칩니다.');
+  }
   return warnings
 }
 
