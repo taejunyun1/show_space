@@ -10,12 +10,23 @@ export function detectCornerDoors(lines:WallCandidate[],labels:PlanLabel[]){
   const matches:typeof proposals=[];
   for(let i=0;i<ends.length;i++)for(let j=i+1;j<ends.length;j++){
    const a=ends[i],b=ends[j],dx=b.p.x-a.p.x,dy=b.p.y-a.p.y,length=Math.hypot(dx,dy);
-   if(a.id===b.id||length<30||length>Math.max(label.box.width,label.box.height)*2+60||Math.min(Math.abs(dx),Math.abs(dy))>2)continue;
+   if(a.id===b.id||length<30||length>Math.max(label.box.width,label.box.height)*2+60)continue;
    const projection=(p:typeof a.p)=>((p.x-a.p.x)*dx+(p.y-a.p.y)*dy)/length;
    const ad=projection(a.q),bd=projection(b.q)-length;
    const cross=(p:typeof a.p)=>Math.abs((p.x-a.p.x)*dy-(p.y-a.p.y)*dx)/length;
    const aParallel=cross(a.q)<=2,bParallel=cross(b.q)<=2;
-   if(aParallel===bParallel||ad>2||bd< -2||(!aParallel&&Math.abs(ad)>2)||(!bParallel&&Math.abs(bd)>2))continue;
+   const axisCorner=Math.min(Math.abs(dx),Math.abs(dy))<=2&&aParallel!==bParallel&&ad<=2&&bd>=-2&&(aParallel||Math.abs(ad)<=2)&&(bParallel||Math.abs(bd)<=2);
+   const al=Math.hypot(a.q.x-a.p.x,a.q.y-a.p.y),bl=Math.hypot(b.q.x-b.p.x,b.q.y-b.p.y);
+   // A labelled door can join an oblique boundary to a slightly turning wall.
+   // One tangent must follow the gap within 5 degrees; both must point away.
+   const free=(e:typeof a)=>!lines.some(other=>{
+    if(other.id===e.id)return false;
+    const x=other.end.x-other.start.x,y=other.end.y-other.start.y,length2=x*x+y*y;
+    const t=length2?Math.max(0,Math.min(1,((e.p.x-other.start.x)*x+(e.p.y-other.start.y)*y)/length2)):0;
+    return Math.hypot(e.p.x-other.start.x-t*x,e.p.y-other.start.y-t*y)<=4;
+   });
+   const oblique=Math.min(Math.abs(dx),Math.abs(dy))>2&&-ad/al>=Math.SQRT1_2&&bd/bl>=Math.SQRT1_2&&(cross(a.q)/al<=Math.sin(Math.PI/36)||cross(b.q)/bl<=Math.sin(Math.PI/36))&&free(a)&&free(b);
+   if(!axisCorner&&!oblique)continue;
    const center={x:label.box.x+label.box.width/2,y:label.box.y+label.box.height/2};
    if(projection(center)<=0||projection(center)>=length||cross(center)>60)continue;
    // An observed segment along the proposed opening means this is not a gap.

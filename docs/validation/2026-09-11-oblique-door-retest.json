@@ -1,0 +1,242 @@
+{
+  "scope": "Observed labelled back-door regression; endpoint agreement is not independent metric-width truth. Three planar pages and one axonometric stress page.",
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "openings": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "openings": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "openings": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "page": 7,
+      "runs": [
+        {
+          "threshold": 125,
+          "openings": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "openings": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "openings": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "openings": [
+            {
+              "kind": "stair-access",
+              "labelId": "rotation-90-label-4",
+              "start": {
+                "x": 294,
+                "z": 640.5015166835187
+              },
+              "end": {
+                "x": 294,
+                "z": 430.4307381193124
+              }
+            },
+            {
+              "kind": "door",
+              "labelId": "rotation-90-label-7",
+              "start": {
+                "x": 2292,
+                "z": 648.2184024266936
+              },
+              "end": {
+                "x": 2292,
+                "z": 472.4448938321537
+              }
+            },
+            {
+              "kind": "window",
+              "labelId": "rotation-90-label-1",
+              "start": {
+                "x": 132.85714285714286,
+                "z": 1100.9423660262892
+              },
+              "end": {
+                "x": 132,
+                "z": 1346.1678463094033
+              }
+            }
+          ],
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "openings": [
+            {
+              "kind": "stair-access",
+              "labelId": "rotation-90-label-4",
+              "start": {
+                "x": 294,
+                "z": 640.5015166835187
+              },
+              "end": {
+                "x": 294,
+                "z": 430.4307381193124
+              }
+            },
+            {
+              "kind": "window",
+              "labelId": "rotation-90-label-1",
+              "start": {
+                "x": 132.85714285714286,
+                "z": 1099.2275025278059
+              },
+              "end": {
+                "x": 132,
+                "z": 1346.1678463094033
+              }
+            },
+            {
+              "kind": "door",
+              "labelId": "rotation-90-label-7",
+              "start": {
+                "x": 2292,
+                "z": 648.2184024266936
+              },
+              "end": {
+                "x": 2292,
+                "z": 473.30232558139534
+              }
+            }
+          ],
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "openings": [
+            {
+              "kind": "stair-access",
+              "labelId": "rotation-90-label-4",
+              "start": {
+                "x": 294,
+                "z": 640.5015166835187
+              },
+              "end": {
+                "x": 294.85714285714283,
+                "z": 430.4307381193124
+              }
+            },
+            {
+              "kind": "window",
+              "labelId": "rotation-90-label-1",
+              "start": {
+                "x": 132.85714285714286,
+                "z": 1100.0849342770475
+              },
+              "end": {
+                "x": 131.14285714285714,
+                "z": 1346.1678463094033
+              }
+            }
+          ],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 2,
+      "runs": [
+        {
+          "threshold": 125,
+          "openings": [
+            {
+              "kind": "door",
+              "labelId": "label-8",
+              "start": {
+                "x": 66,
+                "z": 826.5642062689585
+              },
+              "end": {
+                "x": 97.22396529188133,
+                "z": 731.89322350992
+              }
+            }
+          ],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "openings": [
+            {
+              "kind": "door",
+              "labelId": "label-8",
+              "start": {
+                "x": 66,
+                "z": 826.5642062689585
+              },
+              "end": {
+                "x": 97.19982342655128,
+                "z": 731.8876247541442
+              }
+            }
+          ],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "openings": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    }
+  ]
+}
