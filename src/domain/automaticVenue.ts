@@ -9,6 +9,7 @@ export interface AutomaticVenue {project?:Project; reasons:string[]; wallCount:n
 export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  const blocked=(reason:string,wallCount=0):AutomaticVenue=>({reasons:[reason],wallCount});
  if(!page.analysis)return blocked('도면 분석이 끝나면 공간 초안을 자동 생성합니다.');
+ if(page.analysis.selfCheck?.status==='withheld')return blocked('자체 검증에서 공간 구조를 확정하지 못했습니다. 원본과 분석 결과를 보존했으며 자동 적용은 보류했습니다.');
  if(page.analysis.lineState!=='complete'||page.analysis.textState!=='complete')return blocked('문자와 선 분석을 모두 완료해야 공간 초안을 만들 수 있습니다.');
  const minLength=Math.max(30,Math.min(page.widthPx,page.heightPx)*.08);
  // Witness lines can split a thick raster stripe into adjacent bands.
@@ -53,5 +54,5 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  if(ratios.some(r=>Math.abs(r/scale-1)>.02))return blocked('치수에서 계산한 축척이 서로 다릅니다. 자동 적용을 보류했습니다.',walls.length);
  base.planReference!.mmPerPixel=scale;
  base.walls=walls.map(w=>({...w,start:{x:w.start.x*scale,z:w.start.z*scale},end:{x:w.end.x*scale,z:w.end.z*scale}}));
- return {project:base,wallCount:walls.length,reasons:['벽 높이 3 m·두께 150 mm는 임시값입니다.','출입구·설비·계단의 실제 영역과 설치 불가 구역은 아직 자동 구성하지 않습니다. 해당 정보 확인 전 설치 계획을 확정하지 마세요.']};
+ return {project:base,wallCount:walls.length,reasons:['벽 높이 3 m·두께 150 mm는 임시값입니다.','출입구·설비·계단의 실제 영역과 설치 불가 구역은 아직 자동 구성하지 않습니다. 이 초안에는 해당 영역이 아직 반영되지 않았습니다.']};
 }

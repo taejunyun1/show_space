@@ -52,9 +52,9 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
       if (bitmap.width <= 0 || bitmap.height <= 0 || bitmap.width * bitmap.height > 60_000_000) {
         throw new Error('이미지는 6000만 픽셀 이하로 올려주세요.');
       }
-      if (Math.min(bitmap.width, bitmap.height) < 800) warnings.push('원본 해상도가 낮을 수 있습니다. 작은 숫자와 가는 선을 확대해서 확인해주세요.');
+      if (Math.min(bitmap.width, bitmap.height) < 800) warnings.push('원본 해상도가 낮을 수 있습니다. 작은 숫자와 가는 선은 자동 검증에서 확정되지 않을 수 있습니다.');
       const scale = Math.min(1, 4096 / Math.max(bitmap.width, bitmap.height));
-      if (scale < 1) warnings.push('작업용 도면을 최대 4096px로 축소했습니다. 작은 치수는 원본과 비교해주세요.');
+      if (scale < 1) warnings.push('작업용 도면을 최대 4096px로 축소했습니다. 원본 해상도 이상의 세부 정보는 복원하지 않습니다.');
       widthPx = canvas.width = Math.max(1, Math.floor(bitmap.width * scale));
       heightPx = canvas.height = Math.max(1, Math.floor(bitmap.height * scale));
       const context = canvas.getContext('2d');
@@ -120,10 +120,10 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
             if(items.length){textSource='pdf-text';labels=detectPlanLabels(pdfPlanTexts(items,viewport.transform??[scale,0,0,-scale,0,viewport.height],Math.floor(viewport.width),Math.floor(viewport.height)));}
             diagnostics.textItemCount = items.length;
             diagnostics.smallTextItemCount = items.filter(item => 'height' in item && Math.abs(item.height) * scale < 9).length;
-            if (!items.length) diagnostics.warnings.push('텍스트 레이어를 찾지 못했습니다. 스캔 이미지 또는 윤곽선 문자일 수 있으니 치수를 직접 확인해주세요.');
-            if (diagnostics.smallTextItemCount) diagnostics.warnings.push(`현재 해상도에서 9px 미만인 문자 항목이 ${diagnostics.smallTextItemCount}개 있습니다. 치수를 확대하고 원본과 비교해주세요.`);
+            if (!items.length) diagnostics.warnings.push('텍스트 레이어를 찾지 못했습니다. 로컬 OCR로 자동 분석합니다.');
+            if (diagnostics.smallTextItemCount) diagnostics.warnings.push(`현재 해상도에서 9px 미만인 문자 항목이 ${diagnostics.smallTextItemCount}개 있습니다. 작은 문자는 확정 가능한 인식 근거만 사용합니다.`);
           } catch {
-            diagnostics.warnings.push('텍스트 품질 점검을 완료하지 못했습니다. 도면의 작은 숫자를 직접 확인해주세요.');
+            diagnostics.warnings.push('텍스트 품질 점검을 완료하지 못했습니다. 문자 자동 분석 결과에 따라 생성을 보류할 수 있습니다.');
           }
           canvas.width = Math.max(1, Math.floor(viewport.width));
           canvas.height = Math.max(1, Math.floor(viewport.height));
