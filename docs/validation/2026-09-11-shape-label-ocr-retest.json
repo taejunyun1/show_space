@@ -1,0 +1,281 @@
+{
+  "scope": "Geometry-selected local OCR and observed furniture separation regression. Not whole-venue success or independent dimensional truth.",
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "page": 1,
+      "shapeCrops": [],
+      "furnitureLabels": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyDiagnostics": {
+            "splitSucceeded": false
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 16
+        },
+        {
+          "threshold": 155,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 17,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 13
+        },
+        {
+          "threshold": 190,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 24,
+            "cyclicCoreCount": 3,
+            "exteriorEdgeCount": 3
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 18
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "page": 7,
+      "shapeCrops": [],
+      "furnitureLabels": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 0,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 0
+        },
+        {
+          "threshold": 155,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 0,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 0
+        },
+        {
+          "threshold": 190,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 0,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 0
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 1,
+      "shapeCrops": [
+        {
+          "x": 235.71428571428572,
+          "y": 434.71587462082914,
+          "width": 34.28571428571428,
+          "height": 202.3579373104145,
+          "rotations": [
+            90,
+            270
+          ]
+        },
+        {
+          "x": 235.71428571428572,
+          "y": 434.71587462082914,
+          "width": 12,
+          "height": 202.3579373104145,
+          "rotations": [
+            90,
+            270
+          ]
+        }
+      ],
+      "furnitureLabels": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 37,
+            "cyclicCoreCount": 29,
+            "exteriorEdgeCount": 29
+          },
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 34
+        },
+        {
+          "threshold": 155,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 37,
+            "cyclicCoreCount": 29,
+            "exteriorEdgeCount": 29
+          },
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 37
+        },
+        {
+          "threshold": 190,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 38,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 36
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 2,
+      "shapeCrops": [
+        {
+          "x": 630.8571428571429,
+          "y": 1177.251769464105,
+          "width": 60.857142857142776,
+          "height": 321.8267610380856,
+          "rotations": [
+            90,
+            270
+          ]
+        },
+        {
+          "x": 482.57142857142856,
+          "y": 666.2224469160768,
+          "width": 66.85714285714289,
+          "height": 209.21739130434787,
+          "rotations": [
+            90,
+            270
+          ]
+        },
+        {
+          "x": 526.2857142857143,
+          "y": 666.2224469160768,
+          "width": 54,
+          "height": 209.78901247050896,
+          "rotations": [
+            90,
+            270
+          ]
+        },
+        {
+          "x": 561.4285714285714,
+          "y": 666.2224469160768,
+          "width": 47.14285714285711,
+          "height": 209.21739130434787,
+          "rotations": [
+            90,
+            270
+          ]
+        },
+        {
+          "x": 482.57142857142856,
+          "y": 666.2224469160768,
+          "width": 31.71428571428578,
+          "height": 209.21739130434787,
+          "rotations": [
+            90,
+            270
+          ]
+        },
+        {
+          "x": 526.2857142857143,
+          "y": 666.2224469160768,
+          "width": 23.14285714285711,
+          "height": 209.78901247050896,
+          "rotations": [
+            90,
+            270
+          ]
+        }
+      ],
+      "furnitureLabels": [
+        {
+          "kind": "furniture",
+          "text": "Bar",
+          "box": {
+            "x": 647.3185011709602,
+            "y": 1308.1812902591028,
+            "width": 26.936768149882873,
+            "height": 56.96933347568597
+          },
+          "confidence": 96
+        }
+      ],
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 59,
+            "cyclicCoreCount": 34
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 39
+        },
+        {
+          "threshold": 155,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 66,
+            "cyclicCoreCount": 55
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 44
+        },
+        {
+          "threshold": 190,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 67,
+            "cyclicCoreCount": 54,
+            "exteriorEdgeCount": 28
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "structuralCount": 45
+        }
+      ]
+    }
+  ]
+}

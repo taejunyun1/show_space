@@ -1,3 +1,4 @@
+import {shapeLabelRegions} from '../src/domain/shapeLabelRegions';
 import {splitWallJunctions,peelOpenBranches,exteriorWallEdges} from '../src/domain/planarWalls';
 import {assessPdfText} from '../src/lib/pdfTextQuality';
 import {prepareConstrainedVenue} from '../src/domain/constrainedVenue';
@@ -87,6 +88,19 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    }
    const small=createCanvas(Math.round(canvas.width*1400/Math.max(canvas.width,canvas.height)),Math.round(canvas.height*1400/Math.max(canvas.width,canvas.height)));small.getContext('2d').drawImage(canvas,0,0,small.width,small.height);
    const pixels=small.getContext('2d').getImageData(0,0,small.width,small.height).data;
+   const shapeCrops=shapeLabelRegions(detectWallCandidates(pixels,small.width,small.height,{threshold:155,maxCandidates:500,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)})),canvas.width,canvas.height);
+   if(source==='ocr'&&numbersOcr)for(let i=0;i<shapeCrops.length;i++)for(const rotation of shapeCrops[i].rotations){
+    const crop=shapeCrops[i],scale=2,tile=createCanvas(Math.round((rotation%180?crop.height:crop.width)*scale),Math.round((rotation%180?crop.width:crop.height)*scale)),ctx=tile.getContext('2d');
+    ctx.fillStyle='white';ctx.fillRect(0,0,tile.width,tile.height);
+    if(rotation===90)ctx.translate(tile.width,0);if(rotation===180)ctx.translate(tile.width,tile.height);if(rotation===270)ctx.translate(0,tile.height);ctx.rotate(rotation*Math.PI/180);
+    ctx.drawImage(canvas,crop.x,crop.y,crop.width,crop.height,0,0,rotation%180?tile.height:tile.width,rotation%180?tile.width:tile.height);
+    const result=await numbersOcr.recognize(tile.toBuffer('image/png'),{},{blocks:true});
+    const sx=(rotation%180?crop.height:crop.width)/tile.width,sy=(rotation%180?crop.width:crop.height)/tile.height;
+    const extra=detectPlanLabels((result.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>{
+     const box=unrotateTextBox({x:l.bbox.x0*sx,y:l.bbox.y0*sy,width:(l.bbox.x1-l.bbox.x0)*sx,height:(l.bbox.y1-l.bbox.y0)*sy},crop.width,crop.height,rotation);
+     return {text:l.text,confidence:l.confidence,source:'ocr' as const,box:{...box,x:box.x+crop.x,y:box.y+crop.y}};
+    })).filter(l=>l.kind==='furniture').map(l=>({...l,id:`shape-${i}-${rotation}-${l.id}`}));labels=mergeOrientedPlanLabels(labels,extra);
+   }
    const runs=[125,155,190].map(threshold=>{
     const lines=detectWallCandidates(pixels,small.width,small.height,{threshold,maxCandidates:500,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height),...(l.solidSupportThicknessPx===undefined?{}:{solidSupportThicknessPx:l.solidSupportThicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)})}));
     const input:PlanPage={imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
@@ -107,7 +121,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    });
    const score=(items:typeof labels)=>truth.regions.map((region:{value:number;box:{x:number;y:number;width:number;height:number}})=>({value:region.value,matched:items.some(l=>{const n=readPlanNumbers(l.text),x=l.box.x+l.box.width/2,y=l.box.y+l.box.height/2,b=region.box;return !l.numericConflict&&(l.confidence??0)>=90&&n.length===1&&n[0].values.length===1&&n[0].values[0]===region.value&&x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height;})}));
    const selectedTruth=sha256===truth.sha256&&file===truth.file&&number===truth.page&&canvas.width===truth.widthPx&&canvas.height===truth.heightPx?{scope:truth.scope,baseline:score(baselineLabels),enhanced:score(labels)}:undefined;
-   report.push({pdfTextQuality:assessPdfText(text.items),ceilingHeight:readCeilingHeight(labels),stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
+   report.push({shapeCrops,pdfTextQuality:assessPdfText(text.items),ceilingHeight:readCeilingHeight(labels),stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
    await writeFile(resolve(directory,`${file}-${number}.png`),canvas.toBuffer('image/png'));page.cleanup();
   }}finally{await loading.destroy();}
  }
