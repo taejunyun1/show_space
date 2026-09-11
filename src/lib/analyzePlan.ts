@@ -38,7 +38,7 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
    abort();onStage(`누락 숫자를 구역별로 확대 인식하고 있습니다 (${i+1}/${regions.length}, ${rotation}°).`);
    try{
     const texts=await readPlanOcr(page.imageUrl,signal,undefined,'numbers',rotation,regions[i]);abort();
-    const extra=detectPlanLabels(texts).filter(l=>l.kind==='dimension').map(l=>({...l,id:`region-${i}-${rotation}-${l.id}`}));
+    const extra=detectPlanLabels(texts).filter(l=>l.kind==='dimension'||l.kind==='furniture').map(l=>({...l,id:`region-${i}-${rotation}-${l.id}`}));
     labels=mergeOrientedPlanLabels(labels,extra);
    }catch{abort();issues.push(`구역 ${i+1}의 ${rotation}° 숫자 보완 인식을 완료하지 못했습니다.`);}
   }

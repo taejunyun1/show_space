@@ -81,7 +81,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
      const extra=detectPlanLabels((result.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>{
       const box=unrotateTextBox({x:l.bbox.x0*sx,y:l.bbox.y0*sy,width:(l.bbox.x1-l.bbox.x0)*sx,height:(l.bbox.y1-l.bbox.y0)*sy},region.width,region.height,rotation);
       return {text:l.text,confidence:l.confidence,source:'ocr' as const,box:{...box,x:box.x+region.x,y:box.y+region.y}};
-     })).filter(l=>l.kind==='dimension').map(l=>({...l,id:`region-${i}-${rotation}-${l.id}`}));
+     })).filter(l=>l.kind==='dimension'||l.kind==='furniture').map(l=>({...l,id:`region-${i}-${rotation}-${l.id}`}));
      labels=mergeOrientedPlanLabels(labels,extra);
     }
    }

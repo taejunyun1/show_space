@@ -3,7 +3,7 @@ import {readPlanNumbers,numberWarnings} from '../domain/planNumbers';
 import {useEffect,useRef} from 'react';
 import {useEditor} from '../state/editor';
 import type {PlanLabel} from '../domain/planLabels';
-export const labelNames:Record<PlanLabel['kind'],string>={entrance:'출입구',door:'문',window:'창문','air-conditioner':'에어컨','fire-hydrant':'소화전','fire-extinguisher':'소화기',stairs:'계단',column:'기둥',dimension:'치수 표기',unit:'전체 단위'};
+export const labelNames:Record<PlanLabel['kind'],string>={entrance:'출입구',door:'문',window:'창문','air-conditioner':'에어컨','fire-hydrant':'소화전','fire-extinguisher':'소화기',stairs:'계단',column:'기둥',dimension:'치수 표기',unit:'전체 단위',furniture:'가구'};
 export function PlanLabelReview({onClose}:{onClose:()=>void}){
  const {project,patchProject}=useEditor();const dialog=useRef<HTMLDialogElement>(null);useEffect(()=>dialog.current?.showModal(),[]);
  function update(id:string,patch:Partial<PlanLabel>){patchProject({planLabels:(project.planLabels??[]).map(l=>l.id===id?{...l,...patch}:l)});}
