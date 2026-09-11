@@ -63,3 +63,10 @@ it('keeps native PDF evidence when supplemental facility OCR fails and honours c
  const c=new AbortController();vi.mocked(readPlanOcr).mockImplementation(async()=>{c.abort();return [];});
  await expect(analyzePlan(input,c.signal)).rejects.toThrow('취소');
 });
+
+it('maps native image OCR to page positions and reuses identical sign images',async()=>{
+ const {input}=closedPage();vi.mocked(readPlanOcr).mockImplementation(async url=>url==='sign'?[{text:'FIRE HOSE REEL',source:'ocr',confidence:96,box:{x:10,y:20,width:50,height:10}}]:[]);
+ const result=await analyzePlan({...input,embeddedSigns:[{imageUrl:'sign',widthPx:100,heightPx:100,box:{x:200,y:300,width:50,height:50}},{imageUrl:'sign',widthPx:100,heightPx:100,box:{x:400,y:300,width:50,height:50}}]},new AbortController().signal);
+ expect(result.labels?.filter(l=>l.kind==='fire-hydrant').map(l=>l.box)).toEqual([{x:205,y:310,width:25,height:5},{x:405,y:310,width:25,height:5}]);
+ expect(vi.mocked(readPlanOcr).mock.calls.filter(c=>c[0]==='sign')).toHaveLength(1);
+});

@@ -1,3 +1,5 @@
+import {pdfSignImages} from '../src/lib/pdfSignImages';
+import type {Matrix6} from '../src/domain/pdfImagePlacements';
 import {mergePdfFacilityOcr} from '../src/domain/hybridPlanLabels';
 import {detectUnlabelledStairCandidates} from '../src/domain/unlabelledStairs';
 import {shapeLabelRegions} from '../src/domain/shapeLabelRegions';
@@ -23,11 +25,11 @@ import {readPlanNumbers} from '../src/domain/planNumbers';
 import {mergeOrientedPlanLabels,unrotateTextBox} from '../src/domain/orientedNumbers';
 import {pageUnit} from '../src/domain/planUnits';
 /** Opt-in local corpus runner: PLAN_CORPUS_DIR=/tmp/... npx vitest run scripts/benchmark-plans.test.ts */
-import {test} from 'vitest';
+import {test,vi} from 'vitest';
 import {readdir,readFile,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {createCanvas} from '@napi-rs/canvas';
-import {getDocument} from 'pdfjs-dist/legacy/build/pdf.mjs';
+import {getDocument,OPS} from 'pdfjs-dist/legacy/build/pdf.mjs';
 import {createWorker,OEM,PSM} from 'tesseract.js';
 import {pdfPlanTexts} from '../src/lib/pdfPlanTexts';
 import {detectPlanLabels} from '../src/domain/planLabels';
@@ -36,6 +38,7 @@ import {buildAutomaticVenue,extractStructuralWalls} from '../src/domain/automati
 import type {PlanPage} from '../src/lib/planImport';
 
 test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition without claiming ground-truth accuracy',async()=>{
+ vi.stubGlobal('document',{createElement:()=>createCanvas(1,1)});
  const directory=process.env.PLAN_CORPUS_DIR!,report=[];
  const corpus=JSON.parse(await readFile(resolve('docs/validation/plan-corpus.json'),'utf8')) as {file:string;sha256:string;pages:number[]}[];
  const truth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-numbers.json'),'utf8'));
@@ -115,6 +118,18 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
      return {text:l.text,confidence:l.confidence,source:'ocr' as const,box:{...box,x:box.x+crop.x,y:box.y+crop.y}};
     })).filter(l=>l.kind==='furniture').map(l=>({...l,id:`shape-${i}-${rotation}-${l.id}`}));labels=mergeOrientedPlanLabels(labels,extra);
    }
+   const embeddedSigns=await pdfSignImages(page as never,viewport.transform as Matrix6,canvas as never,OPS);
+   const nativeSignCache=new Map<string,import('../src/domain/planLabels').PlanText[]>();
+   for(const sign of embeddedSigns){
+    let texts=nativeSignCache.get(sign.imageUrl);
+    if(!texts){
+     if(!ocr){ocr=await createWorker('eng+kor',OEM.LSTM_ONLY,{langPath:resolve('public/ocr/lang'),cacheMethod:'none'});await ocr.setParameters({tessedit_pageseg_mode:PSM.SPARSE_TEXT,preserve_interword_spaces:'1',user_defined_dpi:'150'});}
+     const native=await (await import('@napi-rs/canvas')).loadImage(sign.imageUrl),scaled=createCanvas(sign.widthPx*2,sign.heightPx*2);scaled.getContext('2d').drawImage(native,0,0,scaled.width,scaled.height);
+     const reading=await ocr.recognize(scaled.toBuffer('image/png'),{},{blocks:true});
+     texts=(reading.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>({text:l.text,confidence:l.confidence,source:'ocr' as const,box:{x:l.bbox.x0/2,y:l.bbox.y0/2,width:(l.bbox.x1-l.bbox.x0)/2,height:(l.bbox.y1-l.bbox.y0)/2}}));nativeSignCache.set(sign.imageUrl,texts);
+    }
+    labels=mergePdfFacilityOcr(labels,texts.map(t=>({...t,box:{x:sign.box.x+t.box.x*sign.box.width/sign.widthPx,y:sign.box.y+t.box.y*sign.box.height/sign.heightPx,width:t.box.width*sign.box.width/sign.widthPx,height:t.box.height*sign.box.height/sign.heightPx}})));
+   }
    const runs=[125,155,190].map(threshold=>{
     const lines=detectWallCandidates(pixels,small.width,small.height,{threshold,maxCandidates:500,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height),...(l.solidSupportThicknessPx===undefined?{}:{solidSupportThicknessPx:l.solidSupportThicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)})}));
     const input:PlanPage={imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
@@ -137,10 +152,10 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    const selectedTruth=sha256===truth.sha256&&file===truth.file&&number===truth.page&&canvas.width===truth.widthPx&&canvas.height===truth.heightPx?{scope:truth.scope,baseline:score(baselineLabels),enhanced:score(labels)}:undefined;
    const facilityScore=(items:typeof labels)=>facilityTruth.regions.map((r:{id:string;kind:string;box:{x:number;y:number;width:number;height:number}})=>({id:r.id,matched:items.some(l=>{const cx=l.box.x+l.box.width/2,cy=l.box.y+l.box.height/2;return l.kind===r.kind&&cx>=r.box.x&&cx<=r.box.x+r.box.width&&cy>=r.box.y&&cy<=r.box.y+r.box.height;})}));
    const selectedFacilityTruth=file===facilityTruth.file&&sha256===facilityTruth.sha256&&number===facilityTruth.page?{scope:facilityTruth.scope,baseline:facilityScore(baselineLabels),enhanced:facilityScore(labels)}:undefined;
-   report.push({selectedFacilityTruth,shapeCrops,pdfTextQuality:assessPdfText(text.items),ceilingHeight:readCeilingHeight(labels),stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
+   report.push({embeddedSignCount:embeddedSigns.length,selectedFacilityTruth,shapeCrops,pdfTextQuality:assessPdfText(text.items),ceilingHeight:readCeilingHeight(labels),stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
    await writeFile(resolve(directory,`${file}-${number}.png`),canvas.toBuffer('image/png'));page.cleanup();
   }}finally{await loading.destroy();}
  }
- }finally{await ocr?.terminate();await numbersOcr?.terminate();}
+ }finally{await ocr?.terminate();await numbersOcr?.terminate();vi.unstubAllGlobals();}
  await writeFile(resolve(directory,'report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
 },180000);

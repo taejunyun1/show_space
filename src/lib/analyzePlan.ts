@@ -66,6 +66,14 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
    }catch{abort();issues.push(`도형 ${i+1} 표기 보완 인식을 완료하지 못했습니다.`);}
   }
  }
+ const signOcr=new Map<string,Awaited<ReturnType<typeof readPlanOcr>>>();
+ for(const sign of page.embeddedSigns??[]){
+  abort();onStage('PDF 원본 표지 이미지에서 설비를 인식하고 있습니다.');
+  try{
+   let texts=signOcr.get(sign.imageUrl);if(!texts){texts=await readPlanOcr(sign.imageUrl,signal,undefined,'facilities');abort();signOcr.set(sign.imageUrl,texts);}
+   labels=mergePdfFacilityOcr(labels,texts.map(t=>({...t,box:{x:sign.box.x+t.box.x*sign.box.width/sign.widthPx,y:sign.box.y+t.box.y*sign.box.height/sign.heightPx,width:t.box.width*sign.box.width/sign.widthPx,height:t.box.height*sign.box.height/sign.heightPx}})));
+  }catch{abort();issues.push('원본 설비 이미지의 문자 인식을 완료하지 못했습니다.');}
+ }
  const numeric=labels.filter(l=>l.kind==='dimension');
  if(numeric.some(l=>l.numericConflict))issues.push('회전 인식에서 서로 다른 값이 나온 숫자는 자동 치수 적용에서 제외했습니다.');
  if(textResult.status==='rejected')issues.push('문자를 읽지 못했습니다. 현재 입력에서 문자 근거를 확보하지 못했습니다.');

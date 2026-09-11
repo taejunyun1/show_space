@@ -1,3 +1,4 @@
+import {pdfSignImages,type PdfSignImage} from './pdfSignImages';
 import {pageRasterProfile,type PageRasterProfile} from '../domain/pageRasterProfile';
 import {assessPdfText} from './pdfTextQuality';
 import type {PlanAnalysis} from './analyzePlan';
@@ -8,6 +9,7 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import type { RenderTask } from 'pdfjs-dist';
 
 export interface PlanPage {
+  embeddedSigns?:PdfSignImage[];
   resolvedVenue?:{project:import('../domain/types').Project;sourceImageUrl:string;sourceEvidenceKey:string};
   analysis?:PlanAnalysis;
   imageUrl: string;
@@ -82,7 +84,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
     };
   }
 
-  const { getDocument, GlobalWorkerOptions } = await import('pdfjs-dist');
+  const { getDocument, GlobalWorkerOptions, OPS } = await import('pdfjs-dist');
   GlobalWorkerOptions.workerSrc = workerUrl;
   const loadingTask = getDocument({
     data: new Uint8Array(await file.arrayBuffer()),
@@ -138,6 +140,9 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           await renderTask.promise;
           if (destroyed) throw new Error('도면 파일이 닫혔습니다. 다시 불러와주세요.');
           diagnostics.rasterProfile=pageRasterProfile(context.getImageData(0,0,canvas.width,canvas.height).data);
+          let embeddedSigns:PdfSignImage[]=[];
+          if(!preview){try{embeddedSigns=await pdfSignImages(page,viewport.transform as import('../domain/pdfImagePlacements').Matrix6,canvas,OPS);}catch{diagnostics.warnings.push('PDF 원본 이미지 표기 추출을 완료하지 못했습니다. 페이지 OCR을 유지합니다.');}}
+          if (destroyed) throw new Error('도면 파일이 닫혔습니다. 다시 불러와주세요.');
           let imageUrl = canvas.toDataURL('image/png');
           if (imageUrl.length > MAX_IMAGE_URL_LENGTH) {
             imageUrl = canvas.toDataURL('image/jpeg', 0.92);
@@ -146,7 +151,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           validateImageSize(imageUrl);
           return {
             imageUrl,
-            labels,textSource,
+            labels,textSource,embeddedSigns,
             widthPx: canvas.width,
             heightPx: canvas.height,
             diagnostics,

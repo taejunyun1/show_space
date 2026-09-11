@@ -1,7 +1,8 @@
+vi.mock('./pdfSignImages',()=>({pdfSignImages:vi.fn().mockResolvedValue([])}));
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({ getDocument: vi.fn() }));
-vi.mock('pdfjs-dist', () => ({ getDocument: mocks.getDocument, GlobalWorkerOptions: {} }));
+vi.mock('pdfjs-dist', () => ({ getDocument: mocks.getDocument, GlobalWorkerOptions: {}, OPS: {} }));
 import { loadPlanFile } from './planImport';
 
 const file = { name: 'plan.pdf', type: 'application/pdf', size: 100, arrayBuffer: async () => new ArrayBuffer(10) } as File;
