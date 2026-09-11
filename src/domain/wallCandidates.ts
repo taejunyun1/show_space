@@ -1,3 +1,4 @@
+import {removeContainedSolidBands} from './containedBands';
 import {detectDiagonalLines} from './diagonalLines';
 import {mergeSolidStripes} from './solidStripes';
 /** Pixel coordinates describe image edges, with centers at n + 0.5. */
@@ -6,6 +7,7 @@ export interface WallCandidate {
   start: { x: number; y: number }
   end: { x: number; y: number }
   thicknessPx: number
+  solidSupportThicknessPx?: number
 }
 
 export interface WallCandidateOptions {
@@ -107,7 +109,7 @@ export function detectWallCandidates(
   scan(false)
   // Prefer the longest useful candidates if a dense page exceeds the review cap.
   const merged=mergeSolidStripes(result,dark,width,height);
-  return [...merged,...detectDiagonalLines(dark,width,height,merged,minLength,minThickness)].sort((a, b) => {
+  return [...removeContainedSolidBands(merged,dark,width,height),...detectDiagonalLines(dark,width,height,merged,minLength,minThickness)].sort((a, b) => {
     const difference = Math.hypot(b.end.x - b.start.x, b.end.y - b.start.y) - Math.hypot(a.end.x - a.start.x, a.end.y - a.start.y)
     return difference || a.start.y - b.start.y || a.start.x - b.start.x || a.id.localeCompare(b.id)
   }).slice(0, maxCandidates)

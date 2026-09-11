@@ -17,7 +17,7 @@ export function extractStructuralWalls(page:PlanPage):Wall[]{
  const minLength=Math.max(30,Math.min(page.widthPx,page.heightPx)*.08);
  // Witness lines can split a thick raster stripe into adjacent bands.
  const treads=interiorStairTreadIds(detectStairRegions(page.labels??[],page.analysis.lines),page.analysis.lines);
- const bands=page.analysis.lines.filter(l=>!treads.has(l.id)).map(l=>structuredClone(l));
+ const bands=page.analysis.lines.filter(l=>!treads.has(l.id)).map(l=>({...structuredClone(l),thicknessPx:Math.max(l.thicknessPx,l.solidSupportThicknessPx??0)}));
  for(let i=0;i<bands.length;i++)for(let j=i+1;j<bands.length;j++){
   const a=bands[i],b=bands[j],horizontal=Math.abs(a.start.y-a.end.y)<1;
   const along=(p:{x:number;y:number})=>horizontal?p.x:p.y;
