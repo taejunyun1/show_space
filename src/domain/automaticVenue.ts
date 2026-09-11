@@ -1,6 +1,6 @@
 import {separateCoincidentStrokes} from './coincidentStrokes';
 import type {WallCandidate} from './wallCandidates';
-import {detectFurnitureOutlines} from './furnitureOutlines';
+import {separateFurnitureLines} from './separateFurnitureLines';
 import {readCeilingHeight} from './ceilingHeight';
 import {readOpeningDimensions} from './openingDimensions';
 import {wallAnnotationScale} from './wallAnnotationScale';
@@ -40,8 +40,7 @@ export function extractStructuralWalls(page:PlanPage):Wall[]{
  const corners=alignRasterJunctions(alignRasterCorners(pairWallEdges(separateCoincidentStrokes(bands))));
  // One bounded follow-up uses endpoints established by the first cap pass.
  const aligned=trimThinOverruns(trimThinOverruns(corners,minLength),minLength);
- const furnitureIds=new Set(detectFurnitureOutlines(page.labels??[],aligned).flatMap(f=>f.lineIds));
- const lines=selectStructuralLines(aligned.filter(l=>!furnitureIds.has(l.id)),minLength,page.labels??[]);
+ const lines=selectStructuralLines(separateFurnitureLines(page.labels??[],aligned),minLength,page.labels??[]);
  // Only merge tiny raster endpoint discrepancies; never bridge doorway-sized gaps.
  const points:{x:number;z:number}[]=[];
  const snap=(p:{x:number;y:number},line:WallCandidate)=>{
