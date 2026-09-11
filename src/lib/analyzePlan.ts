@@ -111,7 +111,7 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  const stable=successes.length>=2&&successes.every(s=>venueDraftsAgree(successes[0].project,s.project));
  const selectedIndex=stable?successes[0].index:0,selected=candidates[selectedIndex];
  const structural=extractStructuralWalls(selected);
- const openings=resolvePlanOpenings(structural,labels,Math.max(page.widthPx,page.heightPx)*.2,selected.analysis!.stairRegions);
+ const openings=resolvePlanOpenings(structural,labels,Math.max(page.widthPx,page.heightPx)*.2,selected.analysis!.stairRegions,selected.analysis!.lines);
  const dimensions=venueDimensions(selected,structural,openings.structure,openings.gaps);
  const conflicts=[...conflictingDimensionLabels(dimensions.annotations.allMatches),...dimensions.solution.axes.flatMap(a=>a.conflicts.map(c=>c.labelId))];
  const targets=dimensionRecheckTargets(labels,page.widthPx,page.heightPx,conflicts);

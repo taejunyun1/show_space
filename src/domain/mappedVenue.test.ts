@@ -42,3 +42,8 @@ it('preserves unlabelled stair candidates and rail references through mapping an
  expect(installationZones(p)[0]).toMatchObject({x:1000,z:1200,width:200,depth:800});
  expect(prepareMappedVenue(input.map,{...input,labels:[],stairs:[shape]})).toBeUndefined();
 });
+it('maps observed door/window junctions and refuses points outside measured coordinates',()=>{
+ const input=fixture();const opening={id:'glass',kind:'window' as const,role:'boundary' as const,note:'',start:{point:{x:150,z:100}},end:{wallId:'b',endpoint:'end' as const}};
+ expect(prepareMappedVenue(input.map,{...input,openings:[opening]})!.layers.openings![0].start).toEqual({point:{x:1250,z:2000}});
+ expect(prepareMappedVenue(input.map,{...input,openings:[{...opening,start:{point:{x:400,z:100}}}]})).toBeUndefined();
+});

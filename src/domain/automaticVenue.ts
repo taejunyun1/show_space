@@ -1,3 +1,4 @@
+import {anchorOpeningPoint} from './openingAnchors';
 import {withoutTextStrokes} from './textStrokes';
 import {structureRegion} from './structureRegion';
 import {separateCoincidentStrokes} from './coincidentStrokes';
@@ -69,7 +70,7 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  if(page.analysis.lineState!=='complete'||page.analysis.textState!=='complete')return blocked('문자와 선 분석을 모두 완료해야 공간 초안을 만들 수 있습니다.');
  const candidates=extractStructuralWalls(page);
  const maxGap=Math.max(page.widthPx,page.heightPx)*.2;
- const {structure,gaps}=resolvePlanOpenings(candidates,page.labels??[],maxGap,(page.analysis.stairRegions??detectStairRegions(page.labels??[],page.analysis.lines)));
+ const {structure,gaps}=resolvePlanOpenings(candidates,page.labels??[],maxGap,(page.analysis.stairRegions??detectStairRegions(page.labels??[],page.analysis.lines)),page.analysis.lines);
  const classified=classifyAutomaticWalls([...structure,...gaps.map(g=>g.wall)]);
  const gapIds=new Set(gaps.map(g=>g.wall.id));
  const walls=classified?.filter(w=>!gapIds.has(w.id));
@@ -97,12 +98,11 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
   if(openingDimensions.some(m=>m.wallId===g.wall.id&&Math.abs(length/m.mm-1)>.02))return blocked('개구부에 적힌 폭과 계산된 길이가 달라 자동 적용을 보류했습니다.',walls.length);
   if(length<(g.kind==='door'?400:100)||length>(g.kind==='door'?4000:10000))return blocked('개구부의 실제 폭이 검증 범위를 벗어나 적용을 보류했습니다.');
  }
- const anchor=(p:{x:number;z:number})=>walls.flatMap(w=>(['start','end'] as const).map(endpoint=>({wallId:w.id,endpoint,point:w[endpoint]}))).find(a=>Math.hypot(a.point.x-p.x,a.point.z-p.z)<.001);
  base.openings=[];
  for(const g of gaps){
-  const start=anchor(g.wall.start),end=anchor(g.wall.end);
+  const start=anchorOpeningPoint(g.wall.start,walls,gaps,scale),end=anchorOpeningPoint(g.wall.end,walls,gaps,scale);
   if(!start||!end)return blocked('개구부의 벽 연결을 확정하지 못했습니다.');
-  base.openings.push({id:g.wall.id,kind:g.kind,role:classified!.find(w=>w.id===g.wall.id)!.role??'boundary',start:{wallId:start.wallId,endpoint:start.endpoint},end:{wallId:end.wallId,endpoint:end.endpoint},note:g.wall.note});
+  base.openings.push({id:g.wall.id,kind:g.kind,role:classified!.find(w=>w.id===g.wall.id)!.role??'boundary',start,end,note:g.wall.note});
  }
  base.planReference!.mmPerPixel=scale;
  base.walls=walls.map(w=>({...w,start:{x:w.start.x*scale,z:w.start.z*scale},end:{x:w.end.x*scale,z:w.end.z*scale}}));

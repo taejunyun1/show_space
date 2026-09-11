@@ -27,9 +27,12 @@ export interface PlanReference {
  widthPx:number; heightPx:number; origin:Point; mmPerPixel:number; calibrated:boolean
 }
 
+/** A source junction joins adjacent openings where no solid wall remains. */
+export type OpeningAnchor = {wallId:string;endpoint:'start'|'end';point?:never} | {point:Point;wallId?:never;endpoint?:never};
+
 export interface Opening {
  id:string;kind:'door'|'window'|'stair-access';role:'boundary'|'partition';
- start:{wallId:string;endpoint:'start'|'end'};end:{wallId:string;endpoint:'start'|'end'};
+ start:OpeningAnchor;end:OpeningAnchor;
  note:string;
 }
 

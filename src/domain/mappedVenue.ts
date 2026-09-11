@@ -1,5 +1,5 @@
 import type {WallCandidate} from './wallCandidates';
-import type {Project,Wall,Opening} from './types';
+import type {Project,Wall,Opening,OpeningAnchor} from './types';
 import type {PlanLabel} from './planLabels';
 import type {StairRegion} from './stairRegions';
 import type {createDimensionMap} from './dimensionMap';
@@ -17,8 +17,12 @@ export function prepareMappedVenue(map:DimensionMap,input:{walls:Wall[];openings
  if(mappedWalls.length>200||new Set(mappedWalls.map(w=>w.id)).size!==mappedWalls.length)return undefined;
  const openings:Opening[]=[];
  for(const opening of input.openings){
-  const a=wallEnds.get(opening.start.wallId),b=wallEnds.get(opening.end.wallId);if(!a||!b)return undefined;
-  openings.push({...opening,start:{wallId:a[opening.start.endpoint],endpoint:opening.start.endpoint},end:{wallId:b[opening.end.endpoint],endpoint:opening.end.endpoint}});
+  const transform=(ref:OpeningAnchor):OpeningAnchor|undefined=>{
+   if(ref.point){const point=map.toWorld(ref.point);return point?{point}:undefined;}
+   const ends=wallEnds.get(ref.wallId);return ends?{wallId:ends[ref.endpoint],endpoint:ref.endpoint}:undefined;
+  };
+  const start=transform(opening.start),end=transform(opening.end);if(!start||!end)return undefined;
+  openings.push({...opening,start,end});
  }
  const xs=map.axes.x,zs=map.axes.z;
  const origin={x:xs[0].mm,z:zs[0].mm},worldWidth=xs.at(-1)!.mm-origin.x,worldHeight=zs.at(-1)!.mm-origin.z;

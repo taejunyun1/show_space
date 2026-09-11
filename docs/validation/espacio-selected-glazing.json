@@ -1,0 +1,17 @@
+{
+  "file": "espacio.pdf",
+  "page": 1,
+  "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+  "widthPx": 2400,
+  "heightPx": 1696,
+  "scope": "One visually inspected Glass Front Window stroke. Pixel extent only; no inferred height, sill or real-world width.",
+  "tolerancePx": 4,
+  "start": {
+    "x": 2292,
+    "y": 650
+  },
+  "end": {
+    "x": 2292,
+    "y": 1198
+  }
+}

@@ -1,3 +1,4 @@
+import {removeWallOpenings} from './openingAnchors';
 import {installationZones,footprintOverlapsZone} from './installationZones';
 import {validateOpenings} from './openings';
 import {validatePlanLabels,type PlanLabel} from './planLabels'
@@ -169,7 +170,7 @@ export function deleteSelection(project: Project, selection: EntitySelection): P
     const wallVisibility = Object.fromEntries(Object.entries(scene.wallVisibility).filter(([id]) => id !== selection.id))
     return { ...scene, artworks: scene.artworks.filter(artwork => artwork.wallId !== selection.id), wallVisibility }
   })
-  return { ...project, walls: project.walls.filter(wall => wall.id !== selection.id), openings:project.openings?.filter(o=>o.start.wallId!==selection.id&&o.end.wallId!==selection.id), scenes }
+  return { ...project, walls: project.walls.filter(wall => wall.id !== selection.id), openings:removeWallOpenings(project.openings,selection.id), scenes }
 }
 
 export function distributeArtworks(project: Project, ids: string[], spacingMm: number): Project {

@@ -1,3 +1,4 @@
+import {anchorOpeningPoint} from './openingAnchors';
 import {venueDimensions} from './venueDimensions';
 import type {PlanPage} from '../lib/planImport';
 import type {Opening,Project} from './types';
@@ -13,14 +14,13 @@ import {parseProject} from './model';
 export function prepareConstrainedVenue(page:PlanPage){
  if(page.analysis?.textState!=='complete'||page.analysis.lineState!=='complete')return undefined;
  const labels=page.labels??[],lines=page.analysis.lines,candidates=extractStructuralWalls(page),stairs=page.analysis.stairRegions??detectStairRegions(labels,lines);
- const {structure,gaps}=resolvePlanOpenings(candidates,labels,Math.max(page.widthPx,page.heightPx)*.2,stairs);
+ const {structure,gaps}=resolvePlanOpenings(candidates,labels,Math.max(page.widthPx,page.heightPx)*.2,stairs,lines);
  const classified=classifyAutomaticWalls([...structure,...gaps.map(g=>g.wall)]);if(!classified)return undefined;
  const gapIds=new Set(gaps.map(g=>g.wall.id)),walls=classified.filter(w=>!gapIds.has(w.id));
  const openings:Opening[]=[];
  for(const gap of gaps){
   if(classified.filter(w=>w.id===gap.wall.id).length!==1)return undefined;
-  const anchor=(p:typeof gap.wall.start)=>walls.flatMap(w=>(['start','end'] as const).filter(e=>Math.hypot(w[e].x-p.x,w[e].z-p.z)<.001).map(endpoint=>({wallId:w.id,endpoint})))[0];
-  const start=anchor(gap.wall.start),end=anchor(gap.wall.end);if(!start||!end)return undefined;
+  const start=anchorOpeningPoint(gap.wall.start,walls,gaps),end=anchorOpeningPoint(gap.wall.end,walls,gaps);if(!start||!end)return undefined;
   openings.push({id:gap.wall.id,kind:gap.kind,role:classified.find(w=>w.id===gap.wall.id)!.role??'boundary',start,end,note:gap.wall.note});
  }
  const base:Project={schemaVersion:1,id:'automatic-venue',name:'자동 공간 초안',venue:'도면에서 생성',walls:candidates,artworks:[],scenes:[],floorColor:'#f1f1ed',planReference:{origin:{x:0,z:0},mmPerPixel:1,widthPx:page.widthPx,heightPx:page.heightPx,calibrated:true}};

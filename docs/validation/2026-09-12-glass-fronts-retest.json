@@ -1,0 +1,236 @@
+{
+  "description": "Labelled thin glazing adjoining a door. Espacio 1 detected in threshold 125 and 155, endpoints within selected 4px tolerance. Threshold 190 has no resolved door and is deliberately withheld. All other opening candidates and source walls unchanged.",
+  "scope": "One development case, not held-out accuracy. Full venue reconstruction remains 0/5 planar and 0/1 axonometric. No browser verification or deployment in this batch.",
+  "cases": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "runs": [
+        {
+          "threshold": 125,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "glass": [
+            {
+              "start": {
+                "x": 2292,
+                "z": 648.2184024266936
+              },
+              "end": {
+                "x": 2292,
+                "z": 1198.6895854398383
+              },
+              "labelId": "rotation-90-label-8",
+              "kind": "window",
+              "removedWallIds": [
+                "auto-wall-4"
+              ]
+            }
+          ],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "glass": [
+            {
+              "start": {
+                "x": 2292,
+                "z": 648.2184024266936
+              },
+              "end": {
+                "x": 2292,
+                "z": 1198.6895854398383
+              },
+              "labelId": "rotation-90-label-8",
+              "kind": "window",
+              "removedWallIds": [
+                "auto-wall-4"
+              ]
+            }
+          ],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "runs": [
+        {
+          "threshold": 125,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "k2.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "glass": [],
+          "otherOpeningsUnchanged": true,
+          "sourceStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    }
+  ]
+}
