@@ -1,3 +1,4 @@
+import {readOpeningDimensions} from './openingDimensions';
 import {wallAnnotationScale} from './wallAnnotationScale';
 import {alignRasterJunctions} from './rasterJunctions';
 import {resolvePlanOpenings} from './planOpenings';
@@ -72,8 +73,10 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  if(sums.conflict)return blocked('부분 치수 합계와 전체 치수가 맞지 않아 자동 적용을 보류했습니다.');
  const ratios=votes.map(v=>v.ratio).sort((a,b)=>a-b),scale=ratios[Math.floor(ratios.length/2)];
  if(ratios.some(r=>Math.abs(r/scale-1)>.02))return blocked('치수에서 계산한 축척이 서로 다릅니다. 자동 적용을 보류했습니다.',walls.length);
+ const openingDimensions=readOpeningDimensions(structure,gaps,page.labels??[]);
  for(const g of gaps){
   const length=Math.hypot(g.wall.start.x-g.wall.end.x,g.wall.start.z-g.wall.end.z)*scale;
+  if(openingDimensions.some(m=>m.wallId===g.wall.id&&Math.abs(length/m.mm-1)>.02))return blocked('개구부에 적힌 폭과 계산된 길이가 달라 자동 적용을 보류했습니다.',walls.length);
   if(length<(g.kind==='door'?400:100)||length>(g.kind==='door'?4000:10000))return blocked('개구부의 실제 폭이 검증 범위를 벗어나 적용을 보류했습니다.');
  }
  const anchor=(p:{x:number;z:number})=>walls.flatMap(w=>(['start','end'] as const).map(endpoint=>({wallId:w.id,endpoint,point:w[endpoint]}))).find(a=>Math.hypot(a.point.x-p.x,a.point.z-p.z)<.001);

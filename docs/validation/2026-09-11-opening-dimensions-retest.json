@@ -1,0 +1,222 @@
+[
+  {
+    "file": "anca.pdf",
+    "page": 1,
+    "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+    "runs": [
+      {
+        "threshold": 125,
+        "openingDimensions": [],
+        "constraintStatus": "underdetermined",
+        "conflicts": [
+          {
+            "axis": "x",
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "openingDimensions": [],
+        "constraintStatus": "underdetermined",
+        "conflicts": [
+          {
+            "axis": "x",
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "openingDimensions": [],
+        "constraintStatus": "conflict",
+        "conflicts": [
+          {
+            "axis": "x",
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "draftGenerated": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 1,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "openingDimensions": [
+          {
+            "wallId": "opening-gap:rotation-90-label-7",
+            "labelId": "rotation-90-label-10",
+            "mm": 960,
+            "lengthPx": 175.77350859453992,
+            "horizontal": false,
+            "ratio": 5.46157386102163,
+            "from": 472.4448938321537,
+            "to": 648.2184024266936
+          }
+        ],
+        "constraintStatus": "underdetermined",
+        "conflicts": [
+          {
+            "axis": "x",
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "openingDimensions": [
+          {
+            "wallId": "opening-gap:rotation-90-label-7",
+            "labelId": "rotation-90-label-10",
+            "mm": 960,
+            "lengthPx": 174.91607684529828,
+            "horizontal": false,
+            "ratio": 5.48834628190899,
+            "from": 473.30232558139534,
+            "to": 648.2184024266936
+          }
+        ],
+        "constraintStatus": "underdetermined",
+        "conflicts": [
+          {
+            "axis": "x",
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "openingDimensions": [],
+        "constraintStatus": "underdetermined",
+        "conflicts": [
+          {
+            "axis": "x",
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "conflicts": [],
+            "reversed": false
+          }
+        ],
+        "draftGenerated": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 2,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "openingDimensions": [],
+        "constraintStatus": "conflict",
+        "conflicts": [
+          {
+            "axis": "x",
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "conflicts": [
+              {
+                "labelId": "region-3-90-label-1",
+                "residualMm": 450
+              }
+            ],
+            "reversed": false
+          }
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "openingDimensions": [],
+        "constraintStatus": "conflict",
+        "conflicts": [
+          {
+            "axis": "x",
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "conflicts": [
+              {
+                "labelId": "rotation-90-label-6",
+                "residualMm": 50
+              }
+            ],
+            "reversed": false
+          }
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "openingDimensions": [],
+        "constraintStatus": "conflict",
+        "conflicts": [
+          {
+            "axis": "x",
+            "conflicts": [],
+            "reversed": false
+          },
+          {
+            "axis": "z",
+            "conflicts": [
+              {
+                "labelId": "rotation-90-label-6",
+                "residualMm": 50
+              }
+            ],
+            "reversed": true
+          }
+        ],
+        "draftGenerated": false
+      }
+    ]
+  }
+]

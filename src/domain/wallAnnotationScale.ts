@@ -47,5 +47,5 @@ export function wallAnnotationScale(walls:Wall[],labels:PlanLabel[]){
  const enough=new Set(unique.map(m=>m.wallId)).size>=3&&unique.some(m=>m.horizontal)&&unique.some(m=>!m.horizontal);
  const ratios=unique.map(m=>m.ratio).sort((a,b)=>a-b),median=ratios[Math.floor(ratios.length/2)];
  const conflict=conflictingWall||(enough&&ratios.some(r=>Math.abs(r/median-1)>.02));
- return {matches:unique,conflict,scale:enough&&!conflict?median:undefined};
+ return {matches:unique,allMatches:matches,conflict,scale:enough&&!conflict?median:undefined};
 }

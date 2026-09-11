@@ -92,3 +92,11 @@ it('reconstructs a proportional drawing from three consistent adjacent annotatio
  expect(result?.planReference?.mmPerPixel).toBe(10);expect(parseProject(result).walls).toHaveLength(4);
  p.labels![1].text='5000 mm';expect(buildAutomaticVenue(p).project).toBeUndefined();
 });
+it('cross-checks a labelled opening width against the inferred venue scale',()=>{
+ const p=fixture();p.analysis!.lines=p.analysis!.lines.filter(l=>l.id!=='c');
+ p.analysis!.lines.push(line('left-bottom',100,700,450,700,5),line('right-bottom',550,700,900,700,5));
+ p.labels!.push(...detectPlanLabels([{text:'Door',source:'pdf-text',box:{x:470,y:710,width:60,height:20}},{text:'1000 mm',source:'pdf-text',box:{x:470,y:745,width:60,height:20}}]).map((l,i)=>({...l,id:`door-width-${i}`})));
+ expect(buildAutomaticVenue(p).project?.openings).toHaveLength(1);
+ p.labels!.find(l=>l.id==='door-width-1')!.text='1500 mm';
+ const blocked=buildAutomaticVenue(p);expect(blocked.project).toBeUndefined();expect(blocked.reasons.join(' ')).toContain('개구부에 적힌 폭');
+});
