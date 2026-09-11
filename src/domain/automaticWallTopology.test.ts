@@ -27,9 +27,11 @@ it('splits crossing interior walls and attaches them to boundary midpoints',()=>
  const result=classifyAutomaticWalls([...box(),wall(50,0,50,100),wall(0,50,100,50)])!;
  expect(result).toBeDefined();expect(result.filter(w=>w.role==='boundary')).toHaveLength(8);expect(result.filter(w=>w.role==='partition')).toHaveLength(4);expect(deriveFloor(result).areaMm2).toBe(10000);
 });
-it('deduplicates reversed segments and rejects partially overlapping walls',()=>{
+it('deduplicates compatible reversed and partially overlapping wall evidence',()=>{
  expect(classifyAutomaticWalls([...box(),wall(100,0,0,0)])).toHaveLength(4);
- expect(classifyAutomaticWalls([...box(),wall(25,0,75,0)])).toBeUndefined();
+ expect(deriveFloor(classifyAutomaticWalls([...box(),wall(25,0,75,0)])!).areaMm2).toBe(10000);
+ expect(classifyAutomaticWalls([...box(),{...wall(25,0,75,0),heightMm:2500}])).toBeUndefined();
+ expect(classifyAutomaticWalls([...box(),{...wall(100,0,0,0),thicknessMm:200}])).toBeUndefined();
 });
 it('gives the same floor after reordering and reversing a shared-room graph',()=>{const input=[...loop([[0,0],[50,0],[100,0],[100,100],[50,100],[0,100]]),wall(50,0,50,100)];for(const candidate of [input,[...input].reverse().map(w=>({...w,start:w.end,end:w.start}))]){const result=classifyAutomaticWalls(candidate)!;expect(deriveFloor(result).areaMm2).toBe(10000);expect(result.filter(w=>w.role==='partition')).toHaveLength(1);}});
 it('withholds two closed spaces joined by an ambiguous bridge',()=>{expect(classifyAutomaticWalls([...box(),...loop([[200,0],[300,0],[300,100],[200,100]]),wall(100,0,200,0)])).toBeUndefined();});

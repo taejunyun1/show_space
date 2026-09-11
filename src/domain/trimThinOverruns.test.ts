@@ -20,3 +20,19 @@ it('trims a short thick cap against a long observed wall without following short
  expect(trimThinOverruns([cap,long,noise],130)[0].start).toEqual({x:100,y:100});
  expect(trimThinOverruns([cap,noise],130)[0]).toEqual(cap);
 });
+
+it('trims a thin cap to an observed thin endpoint without extending or moving the support',()=>{
+ const cap=line('cap',0,100,103,100,1),support=line('support',100,0,100,100,1);
+ const result=trimThinOverruns([cap,support]);
+ expect(result[0].end).toEqual({x:100,y:100});expect(result[1]).toEqual(support);
+ expect(trimThinOverruns([{...cap,end:{x:98,y:100}},support])[0].end.x).toBe(98);
+ expect(trimThinOverruns([{...cap,end:{x:105,y:100}},support])[0].end.x).toBe(105);
+ expect(trimThinOverruns([cap,{...support,end:{x:100,y:110}}])[0]).toEqual(cap);
+});
+
+it('uses an endpoint established in the first pass to remove the remaining cap',()=>{
+ const input=[line('long',0,100,203,100,3.5),line('short',200,0,200,102,5)];
+ const once=trimThinOverruns(input,130),twice=trimThinOverruns(once,130);
+ expect(once[0].end.x).toBe(203);expect(once[1].end.y).toBe(100);
+ expect(twice.map(l=>l.end)).toEqual([{x:200,y:100},{x:200,y:100}]);
+});

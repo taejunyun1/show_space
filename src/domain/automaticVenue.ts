@@ -37,7 +37,9 @@ export function extractStructuralWalls(page:PlanPage):Wall[]{
   if(horizontal){a.start.y=a.end.y=(low+high)/2;}else{a.start.x=a.end.x=(low+high)/2;}
   a.thicknessPx=high-low;bands.splice(j--,1);
  }
- const aligned=trimThinOverruns(alignRasterJunctions(alignRasterCorners(pairWallEdges(separateCoincidentStrokes(bands)))),minLength);
+ const corners=alignRasterJunctions(alignRasterCorners(pairWallEdges(separateCoincidentStrokes(bands))));
+ // One bounded follow-up uses endpoints established by the first cap pass.
+ const aligned=trimThinOverruns(trimThinOverruns(corners,minLength),minLength);
  const furnitureIds=new Set(detectFurnitureOutlines(page.labels??[],aligned).flatMap(f=>f.lineIds));
  const lines=selectStructuralLines(aligned.filter(l=>!furnitureIds.has(l.id)),minLength,page.labels??[]);
  // Only merge tiny raster endpoint discrepancies; never bridge doorway-sized gaps.

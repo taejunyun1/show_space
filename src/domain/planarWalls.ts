@@ -2,13 +2,16 @@ import type {Point,Wall} from './types';
 const key=(p:Point)=>`${p.x},${p.z}`;
 const sub=(a:Point,b:Point)=>({x:a.x-b.x,z:a.z-b.z});
 const cross=(a:Point,b:Point)=>a.x*b.z-a.z*b.x;
+const compatible=(a:Wall,b:Wall)=>a.heightMm===b.heightMm&&a.thicknessMm===b.thicknessMm&&a.role===b.role&&a.color===b.color&&a.visible===b.visible&&a.locked===b.locked;
 const round=(n:number)=>Math.round(n*1e6)/1e6;
 /** Split at actual intersections. No gap closing, wall extrusion or inferred connections. */
 export function splitWallJunctions(input:Wall[]):Wall[]|undefined{
  const walls:Wall[]=[];
  for(const wall of input){
   if(![wall.start,wall.end].every(p=>Number.isFinite(p.x)&&Number.isFinite(p.z))||key(wall.start)===key(wall.end))return undefined;
-  if(!walls.some(w=>(key(w.start)===key(wall.start)&&key(w.end)===key(wall.end))||(key(w.start)===key(wall.end)&&key(w.end)===key(wall.start))))walls.push(wall);
+  const duplicate=walls.find(w=>(key(w.start)===key(wall.start)&&key(w.end)===key(wall.end))||(key(w.start)===key(wall.end)&&key(w.end)===key(wall.start)));
+  if(duplicate&&!compatible(duplicate,wall))return undefined;
+  if(!duplicate)walls.push(wall);
  }
  const cuts=walls.map(()=>[0,1]);
  for(let i=0;i<walls.length;i++)for(let j=i+1;j<walls.length;j++){
@@ -16,7 +19,12 @@ export function splitWallJunctions(input:Wall[]):Wall[]|undefined{
   if(Math.abs(den)<1e-8){
    if(Math.abs(cross(delta,r))<1e-8){
     const length=r.x*r.x+r.z*r.z,t=(delta.x*r.x+delta.z*r.z)/length,end=sub(b.end,a.start),u=(end.x*r.x+end.z*r.z)/length;
-    if(Math.min(1,Math.max(t,u))-Math.max(0,Math.min(t,u))>1e-8)return undefined;
+    if(Math.min(1,Math.max(t,u))-Math.max(0,Math.min(t,u))>1e-8){
+     if(!compatible(a,b))return undefined;
+     for(const value of [t,u])if(value>0&&value<1)cuts[i].push(value);
+     const otherLength=s.x*s.x+s.z*s.z;
+     for(const p of [a.start,a.end]){const v=sub(p,b.start),value=(v.x*s.x+v.z*s.z)/otherLength;if(value>0&&value<1)cuts[j].push(value);}
+    }
    }
    continue;
   }
@@ -31,7 +39,8 @@ export function splitWallJunctions(input:Wall[]):Wall[]|undefined{
   if(points.length<2)return [{...w,start:point(0),end:point(1)}];
   return points.slice(1).map((end,j)=>({...w,id:points.length===2?w.id:`${w.id}:segment-${j+1}`,start:points[j],end}));
  });
- return result.length<=200&&result.every(w=>key(w.start)!==key(w.end))?result:undefined;
+ const unique=result.filter((w,i)=>!result.slice(0,i).some(other=>(key(w.start)===key(other.start)&&key(w.end)===key(other.end))||(key(w.start)===key(other.end)&&key(w.end)===key(other.start))));
+ return unique.length<=200&&unique.every(w=>key(w.start)!==key(w.end))?unique:undefined;
 }
 export function peelOpenBranches(walls:Wall[]):Set<number>{
  const core=new Set(walls.map((_,i)=>i));let changed=true;
