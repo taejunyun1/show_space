@@ -1,3 +1,4 @@
+import {venueDimensions} from '../src/domain/venueDimensions';
 import {pdfSignImages} from '../src/lib/pdfSignImages';
 import type {Matrix6} from '../src/domain/pdfImagePlacements';
 import {mergePdfFacilityOcr} from '../src/domain/hybridPlanLabels';
@@ -8,12 +9,7 @@ import {assessPdfText} from '../src/lib/pdfTextQuality';
 import {prepareConstrainedVenue} from '../src/domain/constrainedVenue';
 import {createDimensionMap} from '../src/domain/dimensionMap';
 import {readCeilingHeight} from '../src/domain/ceilingHeight';
-import {readOpeningDimensions} from '../src/domain/openingDimensions';
-import {openingAxisEvidence} from '../src/domain/openingAxisEvidence';
 import {numericOcrRegions} from '../src/domain/ocrRegions';
-import {readMeasuredSpans} from '../src/domain/dimensionSpans';
-import {createDemoProject} from '../src/domain/model';
-import {solveDimensionConstraints} from '../src/domain/dimensionConstraints';
 import {wallAnnotationScale} from '../src/domain/wallAnnotationScale';
 import {classifyAutomaticWalls} from '../src/domain/automaticWallTopology';
 import {scorePlanSegments} from './scorePlanSegments';
@@ -139,13 +135,10 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
     const split=splitWallJunctions([...resolved.structure,...resolved.gaps.map(g=>g.wall)]);
     const topologyDiagnostics={splitSucceeded:!!split,splitCount:split?.length,cyclicCoreCount:split?peelOpenBranches(split).size:undefined,exteriorEdgeCount:split?exteriorWallEdges(split)?.size:undefined};
     const topologyResolved=!!classifyAutomaticWalls([...resolved.structure,...resolved.gaps.map(g=>g.wall)]);
-    const measuredSpans=readMeasuredSpans({...createDemoProject(),walls:structural,planReference:{origin:{x:0,z:0},mmPerPixel:1,calibrated:true,widthPx:canvas.width,heightPx:canvas.height}},labels,lines);
-    const annotations=wallAnnotationScale(structural,labels);
+    const {measuredSpans,annotations,openingDimensions,solution:dimensionConstraints}=venueDimensions(input,structural,resolved.structure,resolved.gaps);
     const selectedAnnotationTruth=file===annotationTruth.file&&sha256===annotationTruth.sha256&&number===annotationTruth.page&&canvas.width===annotationTruth.widthPx&&canvas.height===annotationTruth.heightPx?annotationTruth.intervals.map((t:{id:string;mm:number;horizontal:boolean;from:number;to:number;cross:number})=>({id:t.id,matched:annotations.matches.some(m=>{
      const w=structural.find(w=>w.id===m.wallId);return w&&m.mm===t.mm&&m.horizontal===t.horizontal&&Math.abs(m.from-t.from)<=annotationTruth.tolerancePx&&Math.abs(m.to-t.to)<=annotationTruth.tolerancePx&&Math.abs((t.horizontal?w.start.z:w.start.x)-t.cross)<=annotationTruth.tolerancePx;
     })})):undefined;
-    const openingDimensions=readOpeningDimensions(resolved.structure,resolved.gaps,labels);
-    const dimensionConstraints=solveDimensionConstraints([...structural,...resolved.gaps.map(g=>g.wall)],[...wallAnnotationScale(structural,labels).allMatches,...openingDimensions],measuredSpans,openingAxisEvidence(resolved.structure,resolved.gaps));
     const draft=buildAutomaticVenue(input);return {unlabelledStairCandidates:detectUnlabelledStairCandidates(lines,labels),topologyDiagnostics,constrainedVenueReady:!!prepareConstrainedVenue(input),dimensionMapReady:!!createDimensionMap(dimensionConstraints),openingDimensions,selectedAnnotationTruth,measuredSpans,dimensionConstraints,annotationScale:wallAnnotationScale(structural,labels),topologyResolved,structureScore,openingCandidates:resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines)).gaps,framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
    });
    const score=(items:typeof labels)=>truth.regions.map((region:{value:number;box:{x:number;y:number;width:number;height:number}})=>({value:region.value,matched:items.some(l=>{const n=readPlanNumbers(l.text),x=l.box.x+l.box.width/2,y=l.box.y+l.box.height/2,b=region.box;return !l.numericConflict&&(l.confidence??0)>=90&&n.length===1&&n[0].values.length===1&&n[0].values[0]===region.value&&x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height;})}));

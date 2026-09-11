@@ -1,13 +1,10 @@
+import {venueDimensions} from './venueDimensions';
 import type {PlanPage} from '../lib/planImport';
 import type {Opening,Project} from './types';
 import {extractStructuralWalls} from './automaticVenue';
 import {resolvePlanOpenings} from './planOpenings';
 import {classifyAutomaticWalls} from './automaticWallTopology';
 import {detectStairRegions} from './stairRegions';
-import {readMeasuredSpans} from './dimensionSpans';
-import {wallAnnotationScale} from './wallAnnotationScale';
-import {readOpeningDimensions} from './openingDimensions';
-import {solveDimensionConstraints} from './dimensionConstraints';
 import {createDimensionMap} from './dimensionMap';
 import {prepareMappedVenue} from './mappedVenue';
 import {floorWithOpenings,openingSegments} from './openings';
@@ -27,8 +24,7 @@ export function prepareConstrainedVenue(page:PlanPage){
   openings.push({id:gap.wall.id,kind:gap.kind,role:classified.find(w=>w.id===gap.wall.id)!.role??'boundary',start,end,note:gap.wall.note});
  }
  const base:Project={schemaVersion:1,id:'automatic-venue',name:'자동 공간 초안',venue:'도면에서 생성',walls:candidates,artworks:[],scenes:[],floorColor:'#f1f1ed',planReference:{origin:{x:0,z:0},mmPerPixel:1,widthPx:page.widthPx,heightPx:page.heightPx,calibrated:true}};
- const measurements=readMeasuredSpans(base,labels,lines);
- const solution=solveDimensionConstraints([...candidates,...gaps.map(g=>g.wall)],[...wallAnnotationScale(candidates,labels).allMatches,...readOpeningDimensions(structure,gaps,labels)],measurements);
+ const {solution}=venueDimensions(page,candidates,structure,gaps);
  const map=createDimensionMap(solution);if(!map)return undefined;
  const prepared=prepareMappedVenue(map,{walls,openings,labels,lines,stairs});if(!prepared)return undefined;
  // Facility annotations outside the transform must not disappear from the editor.

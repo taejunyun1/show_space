@@ -27,3 +27,12 @@ it('does not create maps from incomplete or contradictory dimension solutions',(
  expect(createDimensionMap({...r,status:'conflict'})).toBeUndefined();
  r.axes[0].coordinates[1].mm=-100;expect(createDimensionMap(r)).toBeUndefined();
 });
+it('keeps evidenced jamb axes coincident when mapping wall endpoints',()=>{
+ const walls=[wall('top',100,50,300,50),wall('bottom',101,250,400,250),wall('side',100,50,100,250)];
+ const solution=solveDimensionConstraints(walls,[{wallId:'top',labelId:'top',mm:2000,horizontal:true},{wallId:'bottom',labelId:'bottom',mm:3000,horizontal:true},{wallId:'side',labelId:'side',mm:2000,horizontal:false}],[],[{axis:'x',from:100,to:101,sourceId:'gap'}]);
+ const map=createDimensionMap(solution)!;
+ expect(map.toWorld({x:101,z:250})).toEqual({x:0,z:2000});
+ expect(map.toWorld({x:100,z:50})).toEqual({x:0,z:0});
+ expect(map.toSource({x:0,z:2000})).toEqual({x:100,z:250});
+ expect(map.boxToWorld({x:100.5,y:50,width:.5,height:20})).toBeUndefined();
+});

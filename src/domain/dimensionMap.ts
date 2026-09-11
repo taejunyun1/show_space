@@ -16,6 +16,14 @@ export function createDimensionMap(solution:Solution){
  });
  const x=axes.find(a=>a?.axis==='x')?.knots,z=axes.find(a=>a?.axis==='z')?.knots;
  if(!x||!z)return undefined;
+ // The solver merges evidenced jamb axes. Preserve that merge on geometry
+ // endpoints too; interpolating an alias would reintroduce a false wall offset.
+ const canonical=solution.axes.map(a=>{
+  const aliases=new Map<number,number>(),round=(n:number)=>Math.round(n*1e6)/1e6;
+  const root=(n:number):number=>aliases.has(n)?root(aliases.get(n)!):n;
+  for(const e of a.appliedEqualities){const p=root(round(e.from)),q=root(round(e.to));if(p!==q)aliases.set(Math.max(p,q),Math.min(p,q));}
+  return {axis:a.axis,resolve:(n:number)=>aliases.has(round(n))?root(round(n)):n};
+ });
  const sample=(knots:Knot[],value:number,inverse=false):number|undefined=>{
   if(!Number.isFinite(value))return undefined;
   const from=inverse?'mm':'pixel',to=inverse?'pixel':'mm';
@@ -25,7 +33,7 @@ export function createDimensionMap(solution:Solution){
   }
  };
  const transform=(point:Point,inverse=false):Point|undefined=>{
-  const a=sample(x,point.x,inverse),b=sample(z,point.z,inverse);
+  const a=sample(x,inverse?point.x:canonical.find(a=>a.axis==='x')!.resolve(point.x),inverse),b=sample(z,inverse?point.z:canonical.find(a=>a.axis==='z')!.resolve(point.z),inverse);
   return a===undefined||b===undefined?undefined:{x:a,z:b};
  };
  return {
@@ -35,7 +43,7 @@ export function createDimensionMap(solution:Solution){
   boxToWorld:(box:PlanText['box'])=>{
    if(!Number.isFinite(box.width)||!Number.isFinite(box.height)||box.width<0||box.height<0)return undefined;
    const a=transform({x:box.x,z:box.y}),b=transform({x:box.x+box.width,z:box.y+box.height});
-   return a&&b?{x:a.x,z:a.z,width:b.x-a.x,depth:b.z-a.z}:undefined;
+   return a&&b&&b.x>=a.x&&b.z>=a.z?{x:a.x,z:a.z,width:b.x-a.x,depth:b.z-a.z}:undefined;
   },
   // A diagonal crossing scale knots bends under a piecewise map. Preserve its path.
   segmentToWorld:(a:Point,b:Point):Point[]|undefined=>{

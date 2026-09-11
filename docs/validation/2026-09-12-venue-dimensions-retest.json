@@ -1,0 +1,463 @@
+[
+  {
+    "file": "anca.pdf",
+    "page": 1,
+    "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+    "runs": [
+      {
+        "threshold": 125,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 13,
+            "unresolvedOffsets": 12,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 20,
+            "unresolvedOffsets": 19,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      },
+      {
+        "threshold": 155,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 14,
+            "unresolvedOffsets": 13,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 16,
+            "unresolvedOffsets": 15,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      },
+      {
+        "threshold": 190,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 16,
+            "unresolvedOffsets": 15,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "conflict",
+            "appliedEqualities": [],
+            "components": 24,
+            "unresolvedOffsets": 23,
+            "conflicts": [],
+            "orderConflict": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "coningsby.pdf",
+    "page": 7,
+    "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+    "runs": [
+      {
+        "threshold": 125,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 0,
+            "unresolvedOffsets": 0,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 0,
+            "unresolvedOffsets": 0,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      },
+      {
+        "threshold": 155,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 0,
+            "unresolvedOffsets": 0,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 0,
+            "unresolvedOffsets": 0,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      },
+      {
+        "threshold": 190,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 0,
+            "unresolvedOffsets": 0,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 0,
+            "unresolvedOffsets": 0,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 1,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "topologyResolved": true,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [
+              {
+                "axis": "x",
+                "from": 132.85714285714286,
+                "to": 132,
+                "sourceId": "opening-gap:rotation-90-label-1"
+              }
+            ],
+            "components": 9,
+            "unresolvedOffsets": 8,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 15,
+            "unresolvedOffsets": 14,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      },
+      {
+        "threshold": 155,
+        "topologyResolved": true,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [
+              {
+                "axis": "x",
+                "from": 132.85714285714286,
+                "to": 132,
+                "sourceId": "opening-gap:rotation-90-label-1"
+              }
+            ],
+            "components": 10,
+            "unresolvedOffsets": 9,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 16,
+            "unresolvedOffsets": 15,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      },
+      {
+        "threshold": 190,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [
+              {
+                "axis": "x",
+                "from": 132.85714285714286,
+                "to": 131.14285714285714,
+                "sourceId": "opening-gap:rotation-90-label-1"
+              }
+            ],
+            "components": 14,
+            "unresolvedOffsets": 13,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 18,
+            "unresolvedOffsets": 17,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 2,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 21,
+            "unresolvedOffsets": 20,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "conflict",
+            "appliedEqualities": [],
+            "components": 16,
+            "unresolvedOffsets": 15,
+            "conflicts": [
+              {
+                "labelId": "region-3-90-label-1",
+                "residualMm": 450
+              }
+            ],
+            "orderConflict": true
+          }
+        ]
+      },
+      {
+        "threshold": 155,
+        "topologyResolved": true,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 18,
+            "unresolvedOffsets": 17,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "conflict",
+            "appliedEqualities": [],
+            "components": 17,
+            "unresolvedOffsets": 16,
+            "conflicts": [
+              {
+                "labelId": "region-3-90-label-1",
+                "residualMm": 450
+              }
+            ],
+            "orderConflict": false
+          }
+        ]
+      },
+      {
+        "threshold": 190,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 21,
+            "unresolvedOffsets": 20,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "conflict",
+            "appliedEqualities": [],
+            "components": 15,
+            "unresolvedOffsets": 14,
+            "conflicts": [
+              {
+                "labelId": "region-3-90-label-1",
+                "residualMm": 450
+              }
+            ],
+            "orderConflict": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "paragon-fire.pdf",
+    "page": 1,
+    "sha256": "74a6b8e12008b2ecda6154d0cbb4ae3287a17d15860c8fb64593744f1b15a55b",
+    "runs": [
+      {
+        "threshold": 125,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 7,
+            "unresolvedOffsets": 6,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 17,
+            "unresolvedOffsets": 16,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      },
+      {
+        "threshold": 155,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 11,
+            "unresolvedOffsets": 10,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 23,
+            "unresolvedOffsets": 22,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      },
+      {
+        "threshold": 190,
+        "topologyResolved": false,
+        "constrainedVenueReady": false,
+        "dimensionStatus": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 28,
+            "unresolvedOffsets": 27,
+            "conflicts": [],
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "status": "underdetermined",
+            "appliedEqualities": [],
+            "components": 43,
+            "unresolvedOffsets": 42,
+            "conflicts": [],
+            "orderConflict": false
+          }
+        ]
+      }
+    ]
+  }
+]
