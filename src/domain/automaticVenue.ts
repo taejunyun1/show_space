@@ -1,3 +1,4 @@
+import {detectOpeningGaps} from './detectOpenings';
 import {selectStructuralLines} from './structuralLines';
 import type {PlanPage} from '../lib/planImport';
 import type {Project, Wall} from './types';
@@ -36,7 +37,11 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
   const next={x:p.x,z:p.y};points.push(next);return {...next};
  };
  const candidates:Wall[]=lines.map((l,i)=>({id:`auto-wall-${i+1}`,name:`자동 벽 ${i+1}`,role:'boundary',start:snap(l.start),end:snap(l.end),heightMm:3000,thicknessMm:150,color:'#ffffff',visible:true,locked:false,note:'자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.'}));
- const walls=classifyAutomaticWalls(candidates);
+ const gaps=detectOpeningGaps(candidates,page.labels??[],Math.max(page.widthPx,page.heightPx)*.2);
+ const classified=classifyAutomaticWalls([...candidates,...gaps.map(g=>g.wall)]);
+ const gapIds=new Set(gaps.map(g=>g.wall.id));
+ const walls=classified?.filter(w=>!gapIds.has(w.id));
+ if(classified&&gaps.some(g=>classified.filter(w=>w.id===g.wall.id).length!==1))return blocked('개구부와 다른 구조선이 교차해 자동 연결을 보류했습니다.');
  if(!walls)return blocked('닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다.',candidates.length);
  const base:Project={schemaVersion:1,id:'automatic-venue',name:'자동 공간 초안',venue:'도면에서 생성',walls,artworks:[],scenes:[],floorColor:'#f1f1ed',planImageUrl:page.imageUrl,planOpacity:.55,planLabels:page.labels??[],planAnalysis:page.analysis,planReference:{widthPx:page.widthPx,heightPx:page.heightPx,origin:{x:0,z:0},mmPerPixel:1,calibrated:true}};
  const votes:{ratio:number;wallId:string}[]=[];
@@ -54,7 +59,18 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  if(new Set(votes.map(v=>v.wallId)).size<2)return blocked('단위와 치수선이 명확한 서로 다른 벽 치수 2개가 필요합니다. 축척을 추측하지 않고 도면 배치를 유지합니다.',walls.length);
  const ratios=votes.map(v=>v.ratio).sort((a,b)=>a-b),scale=ratios[Math.floor(ratios.length/2)];
  if(ratios.some(r=>Math.abs(r/scale-1)>.02))return blocked('치수에서 계산한 축척이 서로 다릅니다. 자동 적용을 보류했습니다.',walls.length);
+ for(const g of gaps){
+  const length=Math.hypot(g.wall.start.x-g.wall.end.x,g.wall.start.z-g.wall.end.z)*scale;
+  if(length<(g.kind==='door'?400:100)||length>(g.kind==='door'?4000:10000))return blocked('개구부의 실제 폭이 검증 범위를 벗어나 적용을 보류했습니다.');
+ }
+ const anchor=(p:{x:number;z:number})=>walls.flatMap(w=>(['start','end'] as const).map(endpoint=>({wallId:w.id,endpoint,point:w[endpoint]}))).find(a=>Math.hypot(a.point.x-p.x,a.point.z-p.z)<.001);
+ base.openings=[];
+ for(const g of gaps){
+  const start=anchor(g.wall.start),end=anchor(g.wall.end);
+  if(!start||!end)return blocked('개구부의 벽 연결을 확정하지 못했습니다.');
+  base.openings.push({id:g.wall.id,kind:g.kind,role:classified!.find(w=>w.id===g.wall.id)!.role??'boundary',start:{wallId:start.wallId,endpoint:start.endpoint},end:{wallId:end.wallId,endpoint:end.endpoint},note:g.wall.note});
+ }
  base.planReference!.mmPerPixel=scale;
  base.walls=walls.map(w=>({...w,start:{x:w.start.x*scale,z:w.start.z*scale},end:{x:w.end.x*scale,z:w.end.z*scale}}));
- return {project:base,wallCount:walls.length,reasons:['벽 높이 3 m·두께 150 mm는 임시값입니다.','출입구·설비·계단의 실제 영역과 설치 불가 구역은 아직 자동 구성하지 않습니다. 이 초안에는 해당 영역이 아직 반영되지 않았습니다.']};
+ return {project:base,wallCount:walls.length,reasons:['벽 높이 3 m·두께 150 mm는 임시값입니다.','개구부의 높이·문짝·창틀과 설비·계단의 실제 영역 및 설치 불가 구역은 아직 자동 구성하지 않습니다. 이 초안에는 해당 영역이 아직 반영되지 않았습니다.']};
 }

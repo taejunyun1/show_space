@@ -154,3 +154,6 @@ it('adds reviewed walls as one undoable action and restores them with redo', asy
  useEditor.getState().undo();expect(useEditor.getState().project).toEqual(p);
  useEditor.getState().redo();expect(useEditor.getState().project.walls).toHaveLength(6);
 });
+it('restores opening attachments with undo and redo after a wall deletion',()=>{
+ reset();const p=createDemoProject();p.artworks=[];p.openings=[{id:'opening-test',kind:'door',role:'partition',start:{wallId:p.walls[0].id,endpoint:'start'},end:{wallId:p.walls[1].id,endpoint:'end'},note:'history test'}];useEditor.getState().commit(p);useEditor.getState().select({type:'wall',id:p.walls[0].id});useEditor.getState().deleteSelected();expect(useEditor.getState().project.openings).toHaveLength(0);useEditor.getState().undo();expect(useEditor.getState().project.openings).toEqual(p.openings);useEditor.getState().redo();expect(useEditor.getState().project.openings).toHaveLength(0);
+});

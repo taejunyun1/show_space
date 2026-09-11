@@ -8,13 +8,14 @@ export interface PlanText {
 }
 export interface PlanLabel extends PlanText {
  id:string;
- kind:'entrance'|'door'|'air-conditioner'|'fire-hydrant'|'fire-extinguisher'|'stairs'|'column'|'dimension';
+ kind:'entrance'|'door'|'window'|'air-conditioner'|'fire-hydrant'|'fire-extinguisher'|'stairs'|'column'|'dimension';
  status:'unreviewed'|'confirmed'|'dismissed';
  note:string;
  correctedText?:string;
 }
-const kinds:PlanLabel['kind'][]=['entrance','door','air-conditioner','fire-hydrant','fire-extinguisher','stairs','column','dimension'];
+const kinds:PlanLabel['kind'][]=['entrance','door','window','air-conditioner','fire-hydrant','fire-extinguisher','stairs','column','dimension'];
 const rules:{kind:PlanLabel['kind'];pattern:RegExp}[]=[
+ {kind:'window',pattern:/\bWINDOW\b|창문|창호/iu},
  {kind:'entrance',pattern:/\b(?:ENTRY|ENTRANCE|EXIT)\b|출입구|비상구/iu},
  {kind:'door',pattern:/\bDOOR\b|출입문|방화문|자동문/iu},
  {kind:'air-conditioner',pattern:/\bAIR[\s-]*CONDITION(?:ER|ING)\b|(?:^|[^\p{L}\p{N}])A\.?C\.?(?=$|[^\p{L}\p{N}])|에어컨|냉난방기/iu},

@@ -1,3 +1,4 @@
+import {validateOpenings} from './openings';
 import {validatePlanLabels} from './planLabels'
 import { validatePlanReference } from './plan'
 import type { Artwork, EntitySelection, Point, Project, Wall } from './types'
@@ -103,6 +104,7 @@ export function updateWall(project: Project, id: string, patch: Partial<Wall>): 
     validateWall(connected)
     return connected
   })
+  if(project.openings)validateOpenings(project.openings,walls)
   return { ...project, walls }
 }
 
@@ -166,7 +168,7 @@ export function deleteSelection(project: Project, selection: EntitySelection): P
     const wallVisibility = Object.fromEntries(Object.entries(scene.wallVisibility).filter(([id]) => id !== selection.id))
     return { ...scene, artworks: scene.artworks.filter(artwork => artwork.wallId !== selection.id), wallVisibility }
   })
-  return { ...project, walls: project.walls.filter(wall => wall.id !== selection.id), scenes }
+  return { ...project, walls: project.walls.filter(wall => wall.id !== selection.id), openings:project.openings?.filter(o=>o.start.wallId!==selection.id&&o.end.wallId!==selection.id), scenes }
 }
 
 export function distributeArtworks(project: Project, ids: string[], spacingMm: number): Project {
@@ -226,6 +228,7 @@ export function parseProject(input: unknown): Project {
     if (wallIds.has(wall.id)) throw new Error(`중복된 벽 ID가 있습니다: ${wall.id}`)
     wallIds.add(wall.id)
   }
+  if(raw.openings!==undefined)validateOpenings(raw.openings,walls);
   const validateArtworkRecord = (value: unknown, ids?: Set<string>) => {
     const artwork = object(value, '작품') as unknown as Artwork
     ;['id', 'name', 'artist', 'wallId', 'note'].forEach(key => text((artwork as unknown as Record<string, unknown>)[key], `작품 ${key}`))

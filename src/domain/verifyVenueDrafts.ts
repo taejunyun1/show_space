@@ -1,3 +1,4 @@
+import {openingSegments} from './openings';
 import type {Project} from './types';
 /** Independent raster passes must agree on topology, geometry and real-world scale. */
 export function venueDraftsAgree(a:Project,b:Project):boolean{
@@ -10,5 +11,9 @@ export function venueDraftsAgree(a:Project,b:Project):boolean{
   const match=[...remaining].find(i=>{const other=b.walls[i];return wall.role===other.role&&((near(wall.start,other.start)&&near(wall.end,other.end))||(near(wall.start,other.end)&&near(wall.end,other.start)));});
   if(match===undefined)return false;remaining.delete(match);
  }
+ const ao=openingSegments(a),bo=openingSegments(b);
+ if(ao.length!==bo.length)return false;
+ const unused=new Set(bo.map((_,i)=>i));
+ for(const o of ao){const match=[...unused].find(i=>o.kind===bo[i].kind&&o.role===bo[i].role&&((near(o.start,bo[i].start)&&near(o.end,bo[i].end))||(near(o.start,bo[i].end)&&near(o.end,bo[i].start))));if(match===undefined)return false;unused.delete(match);}
  return true;
 }

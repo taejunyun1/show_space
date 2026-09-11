@@ -1,0 +1,143 @@
+[
+  {
+    "file": "anca.pdf",
+    "page": 1,
+    "source": "pdf-text",
+    "textItems": 39,
+    "numericLabels": 22,
+    "sampleNumbers": [
+      "Floor to ceiling: 4m",
+      "Floor to ceiling: 7m",
+      "Double power point (7cm H \u001e 11cm W)",
+      "Digital exhibition title screen (1.24m wide)",
+      "11.86m",
+      "1.70m",
+      "15.25m",
+      "4.93m"
+    ],
+    "runs": [
+      {
+        "threshold": 125,
+        "lineCount": 100,
+        "wallCandidates": 11,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "threshold": 155,
+        "lineCount": 100,
+        "wallCandidates": 12,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "threshold": 190,
+        "lineCount": 100,
+        "wallCandidates": 13,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      }
+    ],
+    "elapsedMs": 134
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 1,
+    "source": "ocr",
+    "textItems": 0,
+    "numericLabels": 13,
+    "sampleNumbers": [
+      "Ceiling height: 275cm",
+      "428",
+      "225",
+      "275",
+      "190",
+      "11",
+      "75",
+      "40"
+    ],
+    "runs": [
+      {
+        "threshold": 125,
+        "lineCount": 100,
+        "wallCandidates": 23,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "threshold": 155,
+        "lineCount": 100,
+        "wallCandidates": 27,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "threshold": 190,
+        "lineCount": 100,
+        "wallCandidates": 30,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      }
+    ],
+    "elapsedMs": 1077
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 2,
+    "source": "ocr",
+    "textItems": 0,
+    "numericLabels": 16,
+    "sampleNumbers": [
+      "Ceiling height: 275cm",
+      "480",
+      "60",
+      "256",
+      "396",
+      "40",
+      "37",
+      "170"
+    ],
+    "runs": [
+      {
+        "threshold": 125,
+        "lineCount": 100,
+        "wallCandidates": 25,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "threshold": 155,
+        "lineCount": 100,
+        "wallCandidates": 31,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "threshold": 190,
+        "lineCount": 100,
+        "wallCandidates": 34,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      }
+    ],
+    "elapsedMs": 764
+  }
+]

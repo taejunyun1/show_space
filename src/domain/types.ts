@@ -27,7 +27,14 @@ export interface PlanReference {
  widthPx:number; heightPx:number; origin:Point; mmPerPixel:number; calibrated:boolean
 }
 
+export interface Opening {
+ id:string;kind:'door'|'window';role:'boundary'|'partition';
+ start:{wallId:string;endpoint:'start'|'end'};end:{wallId:string;endpoint:'start'|'end'};
+ note:string;
+}
+
 export interface Project {
+  openings?:Opening[];
   schemaVersion: 1; id: string; name: string; venue: string
   walls: Wall[]; artworks: Artwork[]; scenes: Scene[]
   planLabels?: PlanLabel[];
