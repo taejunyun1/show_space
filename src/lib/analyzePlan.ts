@@ -1,3 +1,4 @@
+import {mergeOrientedNumbers} from '../domain/orientedNumbers';
 import {buildAutomaticVenue} from '../domain/automaticVenue';
 import {venueDraftsAgree} from '../domain/verifyVenueDrafts';
 import type {PlanPage} from './planImport';
@@ -16,10 +17,18 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
   detectPlanWalls(page.imageUrl,155,0.008,signal,1,500),
  ]);abort();
  onStage('인식 근거와 구조 검증 결과를 정리하고 있습니다.');
- const labels=textResult.status==='fulfilled'?textResult.value:page.labels??[];
+ let labels=textResult.status==='fulfilled'?textResult.value:page.labels??[];
  let lines=lineResult.status==='fulfilled'?lineResult.value:[];
- const numeric=labels.filter(l=>l.kind==='dimension');
  const issues:string[]=[];
+ if(!reuseText){
+  for(const rotation of [90,180,270] as const){
+   abort();onStage(`회전 숫자를 자동 인식하고 있습니다 (${rotation}°).`);
+   try{const texts=await readPlanOcr(page.imageUrl,signal,undefined,'numbers',rotation);abort();labels=mergeOrientedNumbers(labels,detectPlanLabels(texts).map(l=>({...l,id:`rotation-${rotation}-${l.id}`})));}
+   catch{abort();issues.push(`${rotation}° 숫자 보완 인식을 완료하지 못했습니다.`);}
+  }
+ }
+ const numeric=labels.filter(l=>l.kind==='dimension');
+ if(numeric.some(l=>l.numericConflict))issues.push('회전 인식에서 서로 다른 값이 나온 숫자는 자동 치수 적용에서 제외했습니다.');
  if(textResult.status==='rejected')issues.push('문자를 읽지 못했습니다. 현재 입력에서 문자 근거를 확보하지 못했습니다.');
  if(lineResult.status==='rejected')issues.push('구조 선 분석에 실패했습니다. 다른 조건으로 자동 재시도합니다.');
  else if(!lines.length)issues.push('구조 선을 찾지 못했습니다. 원본 또는 다른 페이지가 필요할 수 있습니다.');

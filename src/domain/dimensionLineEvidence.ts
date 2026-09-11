@@ -26,7 +26,7 @@ function labelGapLines(lines:WallCandidate[],label:PlanLabel):SupportedLine[]{
 /** Requires a parallel line plus two perpendicular witnesses joining its ends to a wall. */
 export function matchDimensionLines(project:Project,label:PlanLabel,lines:WallCandidate[]):DimensionLineMatch[]{
  const r=project.planReference,number=readPlanNumbers(label.correctedText??label.text);
- if(!r?.calibrated||label.kind!=='dimension'||label.status==='dismissed'||number.length!==1||number[0].values.length!==1||number[0].axis==='height'||number[0].axis==='thickness'||/\d\s*[x×]\s*\d/i.test(label.correctedText??label.text))return [];
+ if(label.numericConflict||!r?.calibrated||label.kind!=='dimension'||label.status==='dismissed'||number.length!==1||number[0].values.length!==1||number[0].axis==='height'||number[0].axis==='thickness'||/\d\s*[x×]\s*\d/i.test(label.correctedText??label.text))return [];
  const px={x:label.box.x+label.box.width/2,y:label.box.y+label.box.height/2};
  const valid=lines.filter(l=>[l.start,l.end].every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>=0&&p.y>=0&&p.x<=r.widthPx&&p.y<=r.heightPx));
  const supported=labelGapLines(valid,label);

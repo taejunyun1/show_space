@@ -13,6 +13,7 @@ export interface PlanLabel extends PlanText {
  status:'unreviewed'|'confirmed'|'dismissed';
  note:string;
  correctedText?:string;
+ numericConflict?:boolean;
 }
 const kinds:PlanLabel['kind'][]=['entrance','door','window','air-conditioner','fire-hydrant','fire-extinguisher','stairs','column','dimension','unit'];
 const rules:{kind:PlanLabel['kind'];pattern:RegExp}[]=[
@@ -61,8 +62,9 @@ export function validatePlanLabels(value:unknown,width:number,height:number):Pla
   const p=raw as PlanLabel;
   if(typeof p.id!=='string'||!p.id.trim()||p.id.length>200||ids.has(p.id)||!kinds.includes(p.kind)||!['unreviewed','confirmed','dismissed'].includes(p.status)||!['pdf-text','ocr'].includes(p.source)||typeof p.text!=='string'||!p.text.trim()||p.text.length>2000||typeof p.note!=='string'||p.note.length>2000||!validBox(p.box)||p.box.x+p.box.width>width+1e-6||p.box.y+p.box.height>height+1e-6||(p.confidence!==undefined&&(!Number.isFinite(p.confidence)||p.confidence<0||p.confidence>100))) return fail();
   if(p.correctedText!==undefined&&(typeof p.correctedText!=='string'||!p.correctedText.trim()||p.correctedText.length>2000))return fail();
+  if(p.numericConflict!==undefined&&typeof p.numericConflict!=='boolean')return fail();
   ids.add(p.id);
-  return {id:p.id,kind:p.kind,text:p.text,box:{...p.box},source:p.source,...(p.confidence===undefined?{}:{confidence:p.confidence}),status:p.status,note:p.note,...(p.correctedText===undefined?{}:{correctedText:p.correctedText})};
+  return {...(p.numericConflict===undefined?{}:{numericConflict:p.numericConflict}),id:p.id,kind:p.kind,text:p.text,box:{...p.box},source:p.source,...(p.confidence===undefined?{}:{confidence:p.confidence}),status:p.status,note:p.note,...(p.correctedText===undefined?{}:{correctedText:p.correctedText})};
  });
 }
 /** Clockwise rotation, followed by a crop in rotated pixels. Partial text is excluded. */

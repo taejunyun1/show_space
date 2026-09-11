@@ -50,7 +50,7 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  if(declared.conflict)return blocked('페이지 전체 단위 선언이 서로 충돌해 축척 적용을 보류했습니다.');
  const votes:{ratio:number;wallId:string}[]=[];
  for(const label of page.labels??[]){
-  if(label.status==='dismissed'||(label.source==='ocr'&&(label.confidence??0)<90))continue;
+  if(label.numericConflict||label.status==='dismissed'||(label.source==='ocr'&&(label.confidence??0)<90))continue;
   const numbers=readPlanNumbers(label.correctedText??label.text);
   if(numbers.length!==1||numbers[0].values.length!==1||!(numbers[0].unit??declared.unit))continue;
   // Dimensions refer to original spans, not the fragments created at room junctions.

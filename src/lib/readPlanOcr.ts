@@ -1,3 +1,4 @@
+import {unrotateTextBox} from '../domain/orientedNumbers';
 import OcrWorker from './readPlanOcr.worker?worker';
 import type {PlanText} from '../domain/planLabels';
 
@@ -13,6 +14,7 @@ export async function readPlanOcr(
   signal: AbortSignal,
   onProgress?: (progress: number) => void,
   mode: 'general'|'numbers' = 'general',
+  rotation:0|90|180|270=0,
 ): Promise<PlanText[]> {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -47,15 +49,20 @@ export async function readPlanOcr(
       if (!width || !height) throw new Error('문자 인식용 도면을 읽을 수 없습니다.');
       const scale = Math.min(mode==='numbers'?2:1, (mode==='numbers'?3600:2400) / Math.max(width, height));
       canvas = document.createElement('canvas');
-      canvas.width = Math.max(1, Math.round(width * scale));
-      canvas.height = Math.max(1, Math.round(height * scale));
-      const xScale = width / canvas.width;
-      const yScale = height / canvas.height;
+      const rotatedWidth=rotation%180?height:width,rotatedHeight=rotation%180?width:height;
+      canvas.width = Math.max(1, Math.round(rotatedWidth * scale));
+      canvas.height = Math.max(1, Math.round(rotatedHeight * scale));
+      const xScale = rotatedWidth / canvas.width;
+      const yScale = rotatedHeight / canvas.height;
       const context = canvas.getContext('2d');
       if (!context) throw new Error('문자 인식용 이미지를 만들 수 없습니다.');
       context.fillStyle = 'white';
       context.fillRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      if(rotation===90)context.translate(canvas.width,0);
+      if(rotation===180)context.translate(canvas.width,canvas.height);
+      if(rotation===270)context.translate(0,canvas.height);
+      if(rotation)context.rotate(rotation*Math.PI/180);
+      context.drawImage(image,0,0,rotation%180?canvas.height:canvas.width,rotation%180?canvas.width:canvas.height);
       // The coordinator owns the nested Tesseract worker, allowing immediate cancellation
       // even while createWorker has not yet returned its public terminate handle.
       worker = new OcrWorker();
@@ -74,12 +81,12 @@ export async function readPlanOcr(
           const text = line.text.trim().replace(/\s+/g, ' ').slice(0, 1000);
           const {x0, y0, x1, y1} = line.bbox;
           if (!text || ![x0, y0, x1, y1, line.confidence].every(Number.isFinite)) continue;
-          const x = Math.max(0, Math.min(width, x0 * xScale));
-          const y = Math.max(0, Math.min(height, y0 * yScale));
-          const right = Math.max(0, Math.min(width, x1 * xScale));
-          const bottom = Math.max(0, Math.min(height, y1 * yScale));
+          const x = Math.max(0, Math.min(rotatedWidth, x0 * xScale));
+          const y = Math.max(0, Math.min(rotatedHeight, y0 * yScale));
+          const right = Math.max(0, Math.min(rotatedWidth, x1 * xScale));
+          const bottom = Math.max(0, Math.min(rotatedHeight, y1 * yScale));
           if (right <= x || bottom <= y) continue;
-          texts.push({text, box: {x, y, width: right - x, height: bottom - y}, source: 'ocr', confidence: Math.max(0, Math.min(100, line.confidence))});
+          texts.push({text, box: unrotateTextBox({x,y,width:right-x,height:bottom-y},width,height,rotation), source: 'ocr', confidence: Math.max(0, Math.min(100, line.confidence))});
         }
         if (!texts.length) {fail(new Error('도면에서 문자를 읽지 못했습니다. 설비가 없다는 뜻이 아닙니다. 영역을 확대해 다시 인식하거나 원본을 확인하세요.')); return;}
         settled = true;

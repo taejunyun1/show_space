@@ -16,7 +16,7 @@ vi.mock('./readPlanOcr.worker?worker', () => ({default: class {
 }}));
 
 describe('readPlanOcr', () => {
-  const canvas = {width: 0, height: 0, getContext: () => ({fillRect: vi.fn(), drawImage: vi.fn()}), toDataURL: () => 'data:image/png;base64,AAA'};
+  const canvas = {width: 0, height: 0, getContext: () => ({fillRect: vi.fn(), drawImage: vi.fn(),translate:vi.fn(),rotate:vi.fn()}), toDataURL: () => 'data:image/png;base64,AAA'};
   beforeEach(() => {
     workers.length = 0;
     vi.stubGlobal('Image', class {naturalWidth = 4800; naturalHeight = 2400; src = ''; decode = vi.fn().mockResolvedValue(undefined);});
@@ -49,6 +49,13 @@ describe('readPlanOcr', () => {
     expect(workers[0].postMessage.mock.calls[0][0].mode).toBe('numbers');
     workers[0].onmessage!({data:{lines:[{text:'3200',confidence:90,bbox:{x0:75,y0:150,x1:150,y1:180}}]}});
     expect((await result)[0].box).toEqual({x:100,y:200,width:100,height:40});
+  });
+
+  it('rotates the numeric raster and maps the worker box back to original coordinates',async()=>{
+    const result=readPlanOcr('image',new AbortController().signal,undefined,'numbers',90);
+    await vi.waitFor(()=>expect(workers).toHaveLength(1));expect(canvas.width).toBe(1800);expect(canvas.height).toBe(3600);
+    workers[0].onmessage!({data:{lines:[{text:'125',confidence:95,bbox:{x0:75,y0:150,x1:105,y1:225}}]}});
+    expect((await result)[0].box).toEqual({x:200,y:2260,width:100,height:40});
   });
 
   it('cancels during initialization without waiting for OCR worker startup', async () => {
