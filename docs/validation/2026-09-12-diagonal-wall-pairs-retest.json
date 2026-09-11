@@ -1,0 +1,203 @@
+{
+  "description": "Projection-based capped parallel outline pairing. Synthetic rotated-room reconstruction passes; no full real-plan success claimed.",
+  "cases": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 16,
+          "afterWalls": 16,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 13,
+          "afterWalls": 13,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 18,
+          "afterWalls": 18,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 0,
+          "afterWalls": 0,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 0,
+          "afterWalls": 0,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 0,
+          "afterWalls": 0,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 34,
+          "afterWalls": 34,
+          "geometryUnchanged": true,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 37,
+          "afterWalls": 37,
+          "geometryUnchanged": true,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 36,
+          "afterWalls": 36,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 36,
+          "afterWalls": 36,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 42,
+          "afterWalls": 42,
+          "geometryUnchanged": true,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 43,
+          "afterWalls": 43,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "k2.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 10,
+          "afterWalls": 10,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 23,
+          "afterWalls": 23,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 26,
+          "afterWalls": 26,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 9,
+          "afterWalls": 9,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 13,
+          "afterWalls": 13,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 31,
+          "afterWalls": 31,
+          "geometryUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    }
+  ]
+}
