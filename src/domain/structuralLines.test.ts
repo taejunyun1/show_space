@@ -31,3 +31,11 @@ it('preserves the observed Espacio upper notch through the full structural pipel
  expect(tiny).toBeDefined();
  for(const endpoint of [tiny!.start,tiny!.end])expect(walls.some(w=>w!==tiny&&[w.start,w.end].some(p=>Math.hypot(p.x-endpoint.x,p.z-endpoint.z)<.01))).toBe(true);
 });
+
+it('restores the observed brighter-threshold notch by trimming a real crossing cap',()=>{
+ const raw=[line('left',82,303.5,625,303.5),{...line('right',653,251.5,1017,251.5),thicknessPx:9},line('rise',655.5,247,655.5,310),{...line('step',621.833333,307,658,307),thicknessPx:6},{...line('tiny',623.5,298,623.5,310),thicknessPx:3}];
+ const lines=raw.map(l=>({...l,start:{x:l.start.x*2400/1400,y:l.start.y*1696/989},end:{x:l.end.x*2400/1400,y:l.end.y*1696/989},thicknessPx:l.thicknessPx*2400/1400}));
+ const walls=extractStructuralWalls({imageUrl:'data:image/png;base64,AA==',widthPx:2400,heightPx:1696,labels:[],analysis:{lines,issues:[],numericCount:0,textState:'complete',lineState:'complete'}});
+ expect(walls).toHaveLength(5);
+ expect(walls.some(w=>Math.abs(w.end.z-w.start.z)>5&&Math.abs(w.end.z-w.start.z)<7)).toBe(true);
+});

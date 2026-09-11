@@ -16,9 +16,16 @@ export function alignRasterCorners(input:WallCandidate[]):WallCandidate[]{
    const t=((b.start.x-a.start.x)*by-(b.start.y-a.start.y)*bx)/den;
    point={x:a.start.x+t*ax,y:a.start.y+t*ay};
   }
+  // A crossing already inside the observed stroke can trim a small cap. Gap
+  // extension still uses the other stroke's width, so this cannot fill a gap.
+  const trimTolerance=(line:WallCandidate,base:number,endpoint:'start'|'end')=>{
+   const dx=line.end.x-line.start.x,dy=line.end.y-line.start.y,length2=dx*dx+dy*dy;
+   const t=((point.x-line.start.x)*dx+(point.y-line.start.y)*dy)/length2;
+   return t>=0&&t<=1&&(endpoint==='start'?t<=.5:t>=.5)?12:base;
+  };
   const aTolerance=Math.min(12,Math.max(4,b.thicknessPx/2+2)),bTolerance=Math.min(12,Math.max(4,a.thicknessPx/2+2));
   for(const ae of ['start','end'] as const)for(const be of ['start','end'] as const){
-   if(Math.hypot(a[ae].x-point.x,a[ae].y-point.y)<=aTolerance&&Math.hypot(b[be].x-point.x,b[be].y-point.y)<=bTolerance)proposals.push({a:i,ae,b:j,be,point});
+   if(Math.hypot(a[ae].x-point.x,a[ae].y-point.y)<=trimTolerance(a,aTolerance,ae)&&Math.hypot(b[be].x-point.x,b[be].y-point.y)<=trimTolerance(b,bTolerance,be))proposals.push({a:i,ae,b:j,be,point});
   }
  }
  const targets=new Map<string,Set<string>>(),key=(p:{x:number;y:number})=>`${p.x},${p.y}`;
