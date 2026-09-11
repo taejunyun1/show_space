@@ -17,13 +17,13 @@ import type {Project, Wall} from './types';
 import {classifyAutomaticWalls} from './automaticWallTopology';
 import {readMeasuredSpans,checkDimensionSums} from './dimensionSpans';
 
-export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines]);
+export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines,page.analysis?.stairRegions]);
 export interface AutomaticVenue {project?:Project; reasons:string[]; wallCount:number}
 export function extractStructuralWalls(page:PlanPage):Wall[]{
  if(!page.analysis)return [];
  const minLength=Math.max(30,Math.min(page.widthPx,page.heightPx)*.08);
  // Witness lines can split a thick raster stripe into adjacent bands.
- const treads=interiorStairTreadIds(detectStairRegions(page.labels??[],page.analysis.lines),page.analysis.lines);
+ const treads=interiorStairTreadIds((page.analysis.stairRegions??detectStairRegions(page.labels??[],page.analysis.lines)),page.analysis.lines);
  const bands=page.analysis.lines.filter(l=>!treads.has(l.id)).map(l=>({...structuredClone(l),thicknessPx:Math.max(l.thicknessPx,l.solidSupportThicknessPx??0)}));
  for(let i=0;i<bands.length;i++)for(let j=i+1;j<bands.length;j++){
   const a=bands[i],b=bands[j],horizontal=Math.abs(a.start.y-a.end.y)<1;
@@ -65,7 +65,7 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  if(page.analysis.lineState!=='complete'||page.analysis.textState!=='complete')return blocked('문자와 선 분석을 모두 완료해야 공간 초안을 만들 수 있습니다.');
  const candidates=extractStructuralWalls(page);
  const maxGap=Math.max(page.widthPx,page.heightPx)*.2;
- const {structure,gaps}=resolvePlanOpenings(candidates,page.labels??[],maxGap,detectStairRegions(page.labels??[],page.analysis.lines));
+ const {structure,gaps}=resolvePlanOpenings(candidates,page.labels??[],maxGap,(page.analysis.stairRegions??detectStairRegions(page.labels??[],page.analysis.lines)));
  const classified=classifyAutomaticWalls([...structure,...gaps.map(g=>g.wall)]);
  const gapIds=new Set(gaps.map(g=>g.wall.id));
  const walls=classified?.filter(w=>!gapIds.has(w.id));

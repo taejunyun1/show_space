@@ -31,3 +31,18 @@ it('excludes only interior tread strokes while preserving enclosing walls and co
  expect([...interiorStairTreadIds(regions,extended)]).toEqual(['t1','t3']);
  expect(interiorStairTreadIds([],lines).size).toBe(0);
 });
+
+it('keeps unlabelled geometry provisional, requires cross-pass agreement and persists its rail evidence',()=>{
+ const treads=Array.from({length:6},(_,i)=>({id:`shape-t${i}`,start:{x:100+i*20,y:30},end:{x:100+i*20,y:150},thicknessPx:2}));
+ const rails=[30,150].map(y=>({id:`shape-r${y}`,start:{x:100,y},end:{x:200,y},thicknessPx:3}));
+ const shapeLines=[...treads,...rails],regions=detectStairRegions([],shapeLines),region=regions[0];
+ expect(region.evidence).toBe('shape');expect(region.labelId).toBeUndefined();
+ expect(stableStairRegions([regions,[]],0)).toEqual([]);
+ const other={...region,id:'other-pass',lineIds:region.lineIds.map(id=>id+'-pass'),box:{...region.box,x:102}};
+ expect(stableStairRegions([regions,[other]],0)).toEqual(regions);
+ expect(stableStairRegions([regions,[other],[{...other,box:{...other.box,x:130}}]],0)).toEqual([]);
+ const project={...createDemoProject(),planImageUrl:'data:image/png;base64,AA==',planReference:{widthPx:500,heightPx:500,origin:{x:0,z:0},mmPerPixel:10,calibrated:true},planLabels:[],planAnalysis:{lines:shapeLines,issues:[],numericCount:0,textState:'complete' as const,lineState:'complete' as const,stairRegions:regions}};
+ expect(parseProject(JSON.parse(JSON.stringify(project)))).toEqual(project);
+ const missing=structuredClone(project);missing.planAnalysis.stairRegions[0].railIds=['missing','shape-r150'];
+ expect(()=>parseProject(missing)).toThrow(/계단/);
+});

@@ -1,0 +1,253 @@
+{
+  "scope": "Unlabelled stair candidates remain provisional; no full stair dimensions or venue accuracy claim.",
+  "selectedTruth": {
+    "file": "espacio.pdf",
+    "page": 2,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "widthPx": 2400,
+    "heightPx": 1696,
+    "scope": "Manually located visible stair footprint in source raster, approximate pixel bounds only; not physical dimensions or complete corpus truth.",
+    "box": {
+      "x": 437,
+      "y": 662,
+      "width": 178,
+      "height": 220
+    }
+  },
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "stableStairRegions": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": []
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": []
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": []
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "stableStairRegions": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": []
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": []
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": []
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "stableStairRegions": [
+        {
+          "id": "stairs:rotation-90-label-4",
+          "kind": "stairs",
+          "box": {
+            "x": 229.71428571428572,
+            "y": 426.14357937310416,
+            "width": 46.28571428571428,
+            "height": 216.9302325581395
+          },
+          "labelId": "rotation-90-label-4",
+          "lineIds": [
+            "v-133-250.00-375.00",
+            "v-147-248.50-375.00",
+            "v-160-250.00-375.00"
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": []
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": []
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": []
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "stableStairRegions": [
+        {
+          "box": {
+            "x": 476.57142857142856,
+            "y": 660.2224469160768,
+            "width": 138,
+            "height": 222.0748230535895
+          },
+          "lineIds": [
+            "v-277-385.00-514.00",
+            "v-302-385.00-514.33",
+            "v-323-385.00-514.00",
+            "v-341-385.00-514.50",
+            "v-357-385.00-514.00"
+          ],
+          "railIds": [
+            "h-385-250.00-360.00",
+            "h-513-253.00-454.00"
+          ],
+          "id": "stairs-shape:v-277-385.00-514.00",
+          "kind": "stairs",
+          "evidence": "shape"
+        }
+      ],
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": [
+            {
+              "box": {
+                "x": 476.57142857142856,
+                "y": 660.2224469160768,
+                "width": 138.8571428571429,
+                "height": 222.0748230535895
+              },
+              "lineIds": [
+                "v-277-385.00-514.00",
+                "v-303-385.00-514.00",
+                "v-323-385.00-514.00",
+                "v-341-385.00-514.50",
+                "v-358-385.50-514.00"
+              ],
+              "railIds": [
+                "h-385-250.00-359.50",
+                "h-513-253.00-454.00"
+              ]
+            }
+          ],
+          "selectedFootprintCoverage": [
+            {
+              "coverage": 0.7776886035313002,
+              "iou": 0.7701680635248337
+            }
+          ]
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": [
+            {
+              "box": {
+                "x": 476.57142857142856,
+                "y": 660.2224469160768,
+                "width": 138,
+                "height": 222.0748230535895
+              },
+              "lineIds": [
+                "v-277-385.00-514.00",
+                "v-302-385.00-514.33",
+                "v-323-385.00-514.00",
+                "v-341-385.00-514.50",
+                "v-357-385.00-514.00"
+              ],
+              "railIds": [
+                "h-385-250.00-360.00",
+                "h-513-253.00-454.00"
+              ]
+            }
+          ],
+          "selectedFootprintCoverage": [
+            {
+              "coverage": 0.7752808988764045,
+              "iou": 0.7696534354601364
+            }
+          ]
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "shapeCandidates": [
+            {
+              "box": {
+                "x": 477.42857142857144,
+                "y": 660.2224469160768,
+                "width": 137.1428571428571,
+                "height": 223.7896865520728
+              },
+              "lineIds": [
+                "v-277-385.00-514.00",
+                "v-302-385.00-514.67",
+                "v-323-385.00-514.00",
+                "solid:v:342.50:385.00:342.50:515.50",
+                "v-357-385.00-514.00"
+              ],
+              "railIds": [
+                "h-385-249.00-360.00",
+                "h-513-253.00-455.00"
+              ]
+            }
+          ],
+          "selectedFootprintCoverage": [
+            {
+              "coverage": 0.770465489566613,
+              "iou": 0.7603738673757772
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

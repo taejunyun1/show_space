@@ -72,14 +72,15 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
    candidates.push({...result,analysis:{...result.analysis!,lines,lineState:'complete'}});
   }catch{abort();candidates.push({...result,analysis:{...result.analysis!,lines:[],lineState:'failed'}});}
  }
+ const regionPasses=candidates.map(p=>detectStairRegions(labels,p.analysis!.lines));
+ candidates.forEach((p,i)=>{p.analysis={...p.analysis!,stairRegions:stableStairRegions(regionPasses,i)};});
  const constrained=candidates.map(p=>prepareConstrainedVenue(p));
  const drafts=candidates.map((p,i)=>buildAutomaticVenue(p).project??constrained[i]?.project);
  // Any contradictory successful result vetoes automatic adoption, even if two others agree.
  const successes=drafts.flatMap((p,i)=>p?[{project:p,index:i}]:[]);
  const stable=successes.length>=2&&successes.every(s=>venueDraftsAgree(successes[0].project,s.project));
  const selectedIndex=stable?successes[0].index:0,selected=candidates[selectedIndex];
- const regionPasses=candidates.map(p=>detectStairRegions(labels,p.analysis!.lines));
- const stairRegions=stableStairRegions(regionPasses,selectedIndex);
+ const stairRegions=selected.analysis!.stairRegions??[];
  let resolvedVenue:PlanPage['resolvedVenue'];
  if(stable&&!buildAutomaticVenue(selected).project&&constrained[selectedIndex]){
   onStage('치수에 맞춘 도면 이미지를 만들고 있습니다.');

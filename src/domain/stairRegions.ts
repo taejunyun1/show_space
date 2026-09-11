@@ -1,6 +1,7 @@
+import {detectUnlabelledStairCandidates} from './unlabelledStairs';
 import type {PlanLabel} from './planLabels';
 import type {WallCandidate} from './wallCandidates';
-export interface StairRegion {id:string;kind:'stairs';box:{x:number;y:number;width:number;height:number};labelId:string;lineIds:string[]}
+export interface StairRegion {id:string;kind:'stairs';box:{x:number;y:number;width:number;height:number};labelId?:string;evidence?:'shape';railIds?:string[];lineIds:string[]}
 /** Footprint bounds come from repeated treads, never the annotation rectangle. */
 export function detectStairRegions(labels:PlanLabel[],lines:WallCandidate[]):StairRegion[]{
  const result:StairRegion[]=[];
@@ -25,14 +26,14 @@ export function detectStairRegions(labels:PlanLabel[],lines:WallCandidate[]):Sta
   proposals.sort((a,b)=>b.lineIds.length-a.lineIds.length);
   if(proposals.length&&(!proposals[1]||proposals[0].lineIds.length>proposals[1].lineIds.length))result.push(proposals[0]);
  }
- return result;
+ return [...result,...detectUnlabelledStairCandidates(lines,labels).filter(c=>!result.some(r=>r.lineIds.some(id=>c.lineIds.includes(id)))).map(c=>({...c,id:`stairs-shape:${c.lineIds[0]}`,kind:'stairs' as const,evidence:'shape' as const}))];
 }
-export function stairRegionsAgree(a:StairRegion,b:StairRegion){return a.labelId===b.labelId&&(['x','y','width','height'] as const).every(k=>Math.abs(a.box[k]-b.box[k])<=Math.max(4,Math.min(a.box.width,a.box.height)*.08));}
+export function stairRegionsAgree(a:StairRegion,b:StairRegion){return a.evidence===b.evidence&&a.labelId===b.labelId&&(['x','y','width','height'] as const).every(k=>Math.abs(a.box[k]-b.box[k])<=Math.max(4,Math.min(a.box.width,a.box.height)*.08));}
 
 /** Two agreeing passes are required; a contradictory detection vetoes adoption. */
 export function stableStairRegions(passes:StairRegion[][],selectedIndex:number):StairRegion[]{
  return (passes[selectedIndex]??[]).filter(region=>{
-  const others=passes.flatMap((pass,i)=>i===selectedIndex?[]:pass.filter(other=>other.labelId===region.labelId));
+  const others=passes.flatMap((pass,i)=>i===selectedIndex?[]:pass.filter(other=>region.evidence==='shape'?other.evidence==='shape'&&Math.abs(other.box.x-region.box.x)<Math.max(other.box.width,region.box.width)&&Math.abs(other.box.y-region.box.y)<Math.max(other.box.height,region.box.height):other.labelId===region.labelId));
   return others.length>0&&others.every(other=>stairRegionsAgree(region,other));
  });
 }

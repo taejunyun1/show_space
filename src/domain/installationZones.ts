@@ -2,7 +2,7 @@ import type {Project,Point} from './types';
 export function installationZones(project:Project){
  const ref=project.planReference;
  if(!ref?.calibrated)return [];
- return (project.planAnalysis?.stairRegions??[]).filter(region=>project.planLabels?.some(label=>label.id===region.labelId&&label.kind==='stairs'&&label.status!=='dismissed')).map(region=>({id:region.id,kind:'stairs' as const,x:ref.origin.x+region.box.x*ref.mmPerPixel,z:ref.origin.z+region.box.y*ref.mmPerPixel,width:region.box.width*ref.mmPerPixel,depth:region.box.height*ref.mmPerPixel}));
+ return (project.planAnalysis?.stairRegions??[]).filter(region=>region.evidence==='shape'||project.planLabels?.some(label=>label.id===region.labelId&&label.kind==='stairs'&&label.status!=='dismissed')).map(region=>({id:region.id,kind:'stairs' as const,x:ref.origin.x+region.box.x*ref.mmPerPixel,z:ref.origin.z+region.box.y*ref.mmPerPixel,width:region.box.width*ref.mmPerPixel,depth:region.box.height*ref.mmPerPixel}));
 }
 /** Separating-axis intersection against the actual artwork footprint; no
  * regulatory clearance or unobserved stair dimensions are added. */

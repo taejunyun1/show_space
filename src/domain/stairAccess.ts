@@ -6,6 +6,7 @@ export function detectStairAccess(walls:Wall[],regions:StairRegion[],maxGap:numb
  const proposals:{wall:Wall;kind:'stair-access';labelId:string;excludedWallIds:string[]}[]=[];
  const ends=walls.flatMap(w=>[{wall:w,p:w.start,q:w.end},{wall:w,p:w.end,q:w.start}]);
  for(const region of regions){
+  if(region.evidence==='shape')continue; // A possible stair footprint does not prove an entrance.
   const matches:typeof proposals=[];
   for(let i=0;i<ends.length;i++)for(let j=i+1;j<ends.length;j++){
    const a=ends[i],b=ends[j],vertical=Math.abs(a.p.x-b.p.x)<1;
@@ -21,7 +22,7 @@ export function detectStairAccess(walls:Wall[],regions:StairRegion[],maxGap:numb
    if(![from,to].every(t=>rails.some(w=>Math.abs(along(w.start)-t)<4)))continue;
    const outer=side<0?Math.min(rLow,...rails.flatMap(w=>[across(w.start),across(w.end)])):Math.max(rHigh,...rails.flatMap(w=>[across(w.start),across(w.end)]));
    const excludedWallIds=walls.filter(w=>![a.wall.id,b.wall.id].includes(w.id)&&[w.start,w.end].every(p=>along(p)>=from-4&&along(p)<=to+4&&across(p)>=Math.min(outer,cross)-1&&across(p)<=Math.max(outer,cross)+1)).map(w=>w.id);
-   matches.push({kind:'stair-access',labelId:region.labelId,excludedWallIds,wall:{...a.wall,id:`stair-access:${region.id}`,name:'계단 통로',start:a.p,end:b.p,note:'계단 단 선 및 양쪽 벽 끝점으로 검출한 통로. 실제 벽을 생성하지 않습니다.'}});
+   matches.push({kind:'stair-access',labelId:region.labelId!,excludedWallIds,wall:{...a.wall,id:`stair-access:${region.id}`,name:'계단 통로',start:a.p,end:b.p,note:'계단 단 선 및 양쪽 벽 끝점으로 검출한 통로. 실제 벽을 생성하지 않습니다.'}});
   }
   if(matches.length===1)proposals.push(matches[0]);
  }

@@ -15,3 +15,7 @@ it('requires matching tread extent, side rails and an unambiguous location',()=>
  expect(detectStairAccess(walls,regions.map(r=>({...r,box:{...r.box,height:80}})),300)).toEqual([]);
  expect(detectStairAccess(walls,[...regions,{...regions[0],id:'competing'}],300)).toEqual([]);
 });
+
+it('does not fabricate a stair entrance from an unlabelled footprint candidate',()=>{
+ expect(detectStairAccess(walls,regions.map(r=>({...r,labelId:undefined,evidence:'shape' as const,railIds:['a','b']})),300)).toEqual([]);
+});

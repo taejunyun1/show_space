@@ -1,0 +1,14 @@
+{
+  "file": "espacio.pdf",
+  "page": 2,
+  "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+  "widthPx": 2400,
+  "heightPx": 1696,
+  "scope": "Manually located visible stair footprint in source raster, approximate pixel bounds only; not physical dimensions or complete corpus truth.",
+  "box": {
+    "x": 437,
+    "y": 662,
+    "width": 178,
+    "height": 220
+  }
+}

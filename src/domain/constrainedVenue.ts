@@ -15,7 +15,7 @@ import {parseProject} from './model';
 /** Geometry-only preparation; raster rendering and cross-pass adoption happen in analyzePlan. */
 export function prepareConstrainedVenue(page:PlanPage){
  if(page.analysis?.textState!=='complete'||page.analysis.lineState!=='complete')return undefined;
- const labels=page.labels??[],lines=page.analysis.lines,candidates=extractStructuralWalls(page),stairs=detectStairRegions(labels,lines);
+ const labels=page.labels??[],lines=page.analysis.lines,candidates=extractStructuralWalls(page),stairs=page.analysis.stairRegions??detectStairRegions(labels,lines);
  const {structure,gaps}=resolvePlanOpenings(candidates,labels,Math.max(page.widthPx,page.heightPx)*.2,stairs);
  const classified=classifyAutomaticWalls([...structure,...gaps.map(g=>g.wall)]);if(!classified)return undefined;
  const gapIds=new Set(gaps.map(g=>g.wall.id)),walls=classified.filter(w=>!gapIds.has(w.id));

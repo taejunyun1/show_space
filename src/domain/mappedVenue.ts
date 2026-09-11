@@ -43,10 +43,11 @@ export function prepareMappedVenue(map:DimensionMap,input:{walls:Wall[];openings
  for(const region of input.stairs){
   const mapped=box(region.box);
   // Installation exclusions must never silently disappear or lose their identifying label.
-  if(!mapped||!labels.some(l=>l.id===region.labelId))return undefined;
+  if(!mapped||(region.evidence!=='shape'&&!labels.some(l=>l.id===region.labelId)))return undefined;
   if(region.lineIds.some(id=>!lineIds.has(id)))return undefined;
   const ids=region.lineIds.flatMap(id=>lineIds.get(id)!);if(ids.length<3||ids.length>30)return undefined;
-  stairs.push({...region,box:mapped,lineIds:ids});
+  if(region.railIds?.some(id=>!lineIds.has(id)))return undefined;
+  stairs.push({...region,box:mapped,lineIds:ids,...(region.railIds?{railIds:region.railIds.flatMap(id=>lineIds.get(id)!)}:{})});
  }
  const cells=xs.slice(1).flatMap((x,i)=>zs.slice(1).map((z,j)=>({
   source:{x:xs[i].pixel,y:zs[j].pixel,width:x.pixel-xs[i].pixel,height:z.pixel-zs[j].pixel},

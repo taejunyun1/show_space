@@ -202,7 +202,7 @@ export function artworkWarnings(artwork: Artwork, wall: Wall, project?:Project):
     const position=artworkPosition(artwork,wall),c=Math.cos(position.rotationY),s=Math.sin(position.rotationY);
     const halfWidth=artwork.widthMm/2+(artwork.frame==='none'?0:22.5),halfDepth=artwork.depthMm/2;
     const footprint=[[-halfWidth,-halfDepth],[halfWidth,-halfDepth],[halfWidth,halfDepth],[-halfWidth,halfDepth]].map(([x,z])=>({x:position.x+c*x+s*z,z:position.z-s*x+c*z}));
-    if(installationZones(project).some(zone=>footprintOverlapsZone(footprint,zone)))warnings.push('작품이 계단의 설치 제외 검출 범위와 겹칩니다.');
+    if(installationZones(project).some(zone=>footprintOverlapsZone(footprint,zone)))warnings.push('작품이 계단 또는 계단 추정 영역의 설치 제외 범위와 겹칩니다.');
   }
   return warnings
 }
@@ -284,7 +284,7 @@ export function parseProject(input: unknown): Project {
     if(a.stairRegions!==undefined){
       if(!Array.isArray(a.stairRegions)||a.stairRegions.length>50)throw new Error('계단 검출 영역이 올바르지 않습니다.');
       const regionIds=new Set<string>();
-      for(const region of a.stairRegions){const b=region?.box;if(!region||region.kind!=='stairs'||typeof region.id!=='string'||region.id.length>200||regionIds.has(region.id)||!Array.isArray(region.lineIds)||region.lineIds.length<3||region.lineIds.length>30||region.lineIds.some(id=>!a.lines.some(l=>l.id===id))||!result.planLabels||!(result.planLabels as PlanLabel[]).some(l=>l.id===region.labelId&&l.kind==='stairs')||!b||![b.x,b.y,b.width,b.height].every(Number.isFinite)||b.x<0||b.y<0||b.width<=0||b.height<=0||b.x+b.width>r.widthPx||b.y+b.height>r.heightPx)throw new Error('계단 검출 영역이 올바르지 않습니다.');regionIds.add(region.id);}
+      for(const region of a.stairRegions){const b=region?.box;if(!region||region.kind!=='stairs'||typeof region.id!=='string'||region.id.length>200||regionIds.has(region.id)||!Array.isArray(region.lineIds)||region.lineIds.length<3||region.lineIds.length>30||region.lineIds.some(id=>!a.lines.some(l=>l.id===id))||(region.evidence==='shape'?(region.labelId!==undefined||!Array.isArray(region.railIds)||region.railIds.length<2||region.railIds.length>30||region.railIds.some(id=>!a.lines.some(l=>l.id===id))):(region.evidence!==undefined||!result.planLabels||!(result.planLabels as PlanLabel[]).some(l=>l.id===region.labelId&&l.kind==='stairs')))||!b||![b.x,b.y,b.width,b.height].every(Number.isFinite)||b.x<0||b.y<0||b.width<=0||b.height<=0||b.x+b.width>r.widthPx||b.y+b.height>r.heightPx)throw new Error('계단 검출 영역이 올바르지 않습니다.');regionIds.add(region.id);}
     }
     const ids=new Set<string>();
     for(const line of a.lines){if(!line||typeof line.id!=='string'||line.id.length>200||ids.has(line.id)||!Number.isFinite(line.thicknessPx)||line.thicknessPx<=0||(line.solidSupportThicknessPx!==undefined&&(!Number.isFinite(line.solidSupportThicknessPx)||line.solidSupportThicknessPx<=0||line.solidSupportThicknessPx>Math.max(r.widthPx,r.heightPx)))||![line.start,line.end].every(p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>=0&&p.y>=0&&p.x<=r.widthPx&&p.y<=r.heightPx))throw new Error('자동 분석 선 정보가 올바르지 않습니다.');ids.add(line.id);}

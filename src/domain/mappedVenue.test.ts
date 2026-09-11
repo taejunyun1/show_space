@@ -32,3 +32,13 @@ it('returns out-of-range annotations but never silently drops an installation ex
  expect(prepareMappedVenue(input.map,{...input,stairs:[{...input.stairs[0],box:{x:280,y:60,width:40,height:40}}]})).toBeUndefined();
  expect(prepareMappedVenue(input.map,{...input,lines:input.lines.slice(1)})).toBeUndefined();
 });
+
+it('preserves unlabelled stair candidates and rail references through mapping and installation exclusions',()=>{
+ const input=fixture(),rails=[100,140].map(x=>({id:`rail-${x}`,start:{x,y:60},end:{x,y:100},thicknessPx:2}));
+ const shape={...input.stairs[0],labelId:undefined,evidence:'shape' as const,railIds:rails.map(l=>l.id)};
+ const prepared=prepareMappedVenue(input.map,{...input,labels:[],lines:[...input.lines,...rails],stairs:[shape]})!;
+ const p=parseProject({...createDemoProject(),...prepared.layers,planImageUrl:'data:image/png;base64,AA==',artworks:[],planAnalysis:{lines:prepared.lines,stairRegions:prepared.stairs,issues:[],numericCount:0,textState:'complete',lineState:'complete'}});
+ expect(p.planAnalysis!.stairRegions![0].evidence).toBe('shape');
+ expect(installationZones(p)[0]).toMatchObject({x:1000,z:1200,width:200,depth:800});
+ expect(prepareMappedVenue(input.map,{...input,labels:[],stairs:[shape]})).toBeUndefined();
+});
