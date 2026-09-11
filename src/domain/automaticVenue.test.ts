@@ -85,3 +85,10 @@ it('connects a raster-offset partition to a boundary interior before classifying
  expect(result?.walls.find(w=>w.role==='partition')?.start).toEqual({x:5000,z:1000});
  expect(result?.planReference?.mmPerPixel).toBe(10);expect(parseProject(result).walls).toHaveLength(7);
 });
+it('reconstructs a proportional drawing from three consistent adjacent annotations without witness lines',()=>{
+ const p=fixture();p.analysis!.lines=p.analysis!.lines.slice(0,4);
+ p.labels!.push(...detectPlanLabels([{text:'6000 mm',source:'pdf-text',box:{x:920,y:350,width:20,height:80}}]).map(l=>({...l,id:'right-height-span'})));
+ const result=buildAutomaticVenue(p).project;
+ expect(result?.planReference?.mmPerPixel).toBe(10);expect(parseProject(result).walls).toHaveLength(4);
+ p.labels![1].text='5000 mm';expect(buildAutomaticVenue(p).project).toBeUndefined();
+});

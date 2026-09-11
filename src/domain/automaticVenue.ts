@@ -1,3 +1,4 @@
+import {wallAnnotationScale} from './wallAnnotationScale';
 import {alignRasterJunctions} from './rasterJunctions';
 import {resolvePlanOpenings} from './planOpenings';
 import {trimThinOverruns} from './trimThinOverruns';
@@ -72,6 +73,11 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
   if(mm<=0||mm>200000)continue;
   votes.push({ratio:mm/(m.to-m.from),wallId:m.id});
   measurements.push({...m,mm,labelId:label.id});
+ }
+ const annotations=wallAnnotationScale(candidates,page.labels??[]);
+ if(new Set(votes.map(v=>v.wallId)).size<2){
+  if(annotations.conflict)return blocked('벽 옆 치수 표기와 그림에서 계산한 비율이 서로 맞지 않아 단일 축척 적용을 보류했습니다.',walls.length);
+  if(annotations.scale)votes.push(...annotations.matches.map(m=>({ratio:m.ratio,wallId:`annotation:${m.wallId}`})));
  }
  if(new Set(votes.map(v=>v.wallId)).size<2)return blocked('단위와 치수선이 명확한 서로 다른 치수 구간 2개가 필요합니다. 축척을 추측하지 않고 도면 배치를 유지합니다.',walls.length);
  const sums=checkDimensionSums(measurements);
