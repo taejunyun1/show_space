@@ -16,7 +16,7 @@ export function validateOpenings(value:unknown,walls:Wall[]):asserts value is Op
  if(!Array.isArray(value)||value.length>100)throw new Error('개구부 목록이 올바르지 않습니다.');
  const ids=new Set(walls.map(w=>w.id));
  for(const o of value){
-  if(!o||typeof o.id!=='string'||!o.id||o.id.length>200||ids.has(o.id)||!['door','window'].includes(o.kind)||!['boundary','partition'].includes(o.role)||typeof o.note!=='string'||o.note.length>2000)throw new Error('개구부 정보가 올바르지 않습니다.');ids.add(o.id);
+  if(!o||typeof o.id!=='string'||!o.id||o.id.length>200||ids.has(o.id)||!['door','window','stair-access'].includes(o.kind)||!['boundary','partition'].includes(o.role)||typeof o.note!=='string'||o.note.length>2000)throw new Error('개구부 정보가 올바르지 않습니다.');ids.add(o.id);
   for(const ref of [o.start,o.end])if(!ref||!['start','end'].includes(ref.endpoint)||!walls.some(w=>w.id===ref.wallId))throw new Error('개구부 벽 연결이 올바르지 않습니다.');
   const a=walls.find(w=>w.id===o.start.wallId)![o.start.endpoint as 'start'|'end'],b=walls.find(w=>w.id===o.end.wallId)![o.end.endpoint as 'start'|'end'];
   if(Math.hypot(a.x-b.x,a.z-b.z)<1)throw new Error('개구부 길이는 0보다 커야 합니다.');

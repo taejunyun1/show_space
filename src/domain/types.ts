@@ -28,7 +28,7 @@ export interface PlanReference {
 }
 
 export interface Opening {
- id:string;kind:'door'|'window';role:'boundary'|'partition';
+ id:string;kind:'door'|'window'|'stair-access';role:'boundary'|'partition';
  start:{wallId:string;endpoint:'start'|'end'};end:{wallId:string;endpoint:'start'|'end'};
  note:string;
 }

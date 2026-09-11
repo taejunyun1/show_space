@@ -71,3 +71,10 @@ it('creates a complete venue with a labelled door at a perpendicular corner',()=
  const result=buildAutomaticVenue(p).project;
  expect(result?.openings).toHaveLength(1);expect(result?.openings?.[0].kind).toBe('door');expect(result?.walls).toHaveLength(4);expect(parseProject(result).walls).toHaveLength(4);
 });
+it('closes floor topology at detected stairs without adding a physical wall across the passage',()=>{
+ const p=fixture();p.analysis!.lines=p.analysis!.lines.filter(l=>l.id!=='d');
+ p.analysis!.lines.push(line('left-upper',100,100,100,300,5),line('left-lower',100,500,100,700,5),line('rail-upper',20,300,100,300,5),line('rail-lower',20,500,100,500,5),...Array.from({length:3},(_,i)=>line(`step-${i}`,40+i*20,300,40+i*20,500,2)),line('bottom-dimension',100,740,900,740),line('bottom-witness-a',100,700,100,750),line('bottom-witness-b',900,700,900,750));
+ p.labels!.push(...detectPlanLabels([{text:'Stairs',source:'pdf-text',box:{x:45,y:370,width:20,height:50}},{text:'8000 mm',source:'pdf-text',box:{x:400,y:750,width:100,height:20}}]).map((l,i)=>({...l,id:`stair-label-${i}`})));
+ const result=buildAutomaticVenue(p).project;
+ expect(result?.openings?.[0].kind).toBe('stair-access');expect(result?.walls).toHaveLength(5);expect(parseProject(result).openings?.[0].kind).toBe('stair-access');
+});
