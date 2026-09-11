@@ -1,3 +1,4 @@
+import {splitWallJunctions,peelOpenBranches,exteriorWallEdges} from '../src/domain/planarWalls';
 import {assessPdfText} from '../src/lib/pdfTextQuality';
 import {prepareConstrainedVenue} from '../src/domain/constrainedVenue';
 import {createDimensionMap} from '../src/domain/dimensionMap';
@@ -92,6 +93,8 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
     const structural=extractStructuralWalls(input);
     const structureScore=sha256===structureTruth.sha256&&file===structureTruth.file&&number===structureTruth.page&&canvas.width===structureTruth.widthPx&&canvas.height===structureTruth.heightPx?{scope:structureTruth.scope,tolerancePx:structureTruth.tolerancePx,raw:scorePlanSegments(structureTruth.segments,lines,structureTruth.tolerancePx),selected:scorePlanSegments(structureTruth.segments,structural.map(w=>({start:{x:w.start.x,y:w.start.z},end:{x:w.end.x,y:w.end.z}})),structureTruth.tolerancePx)}:undefined;
     const resolved=resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines));
+    const split=splitWallJunctions([...resolved.structure,...resolved.gaps.map(g=>g.wall)]);
+    const topologyDiagnostics={splitSucceeded:!!split,splitCount:split?.length,cyclicCoreCount:split?peelOpenBranches(split).size:undefined,exteriorEdgeCount:split?exteriorWallEdges(split)?.size:undefined};
     const topologyResolved=!!classifyAutomaticWalls([...resolved.structure,...resolved.gaps.map(g=>g.wall)]);
     const measuredSpans=readMeasuredSpans({...createDemoProject(),walls:structural,planReference:{origin:{x:0,z:0},mmPerPixel:1,calibrated:true,widthPx:canvas.width,heightPx:canvas.height}},labels,lines);
     const annotations=wallAnnotationScale(structural,labels);
@@ -100,7 +103,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
     })})):undefined;
     const openingDimensions=readOpeningDimensions(resolved.structure,resolved.gaps,labels);
     const dimensionConstraints=solveDimensionConstraints([...structural,...resolved.gaps.map(g=>g.wall)],[...wallAnnotationScale(structural,labels).allMatches,...openingDimensions],measuredSpans,openingAxisEvidence(resolved.structure,resolved.gaps));
-    const draft=buildAutomaticVenue(input);return {constrainedVenueReady:!!prepareConstrainedVenue(input),dimensionMapReady:!!createDimensionMap(dimensionConstraints),openingDimensions,selectedAnnotationTruth,measuredSpans,dimensionConstraints,annotationScale:wallAnnotationScale(structural,labels),topologyResolved,structureScore,openingCandidates:resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines)).gaps,framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
+    const draft=buildAutomaticVenue(input);return {topologyDiagnostics,constrainedVenueReady:!!prepareConstrainedVenue(input),dimensionMapReady:!!createDimensionMap(dimensionConstraints),openingDimensions,selectedAnnotationTruth,measuredSpans,dimensionConstraints,annotationScale:wallAnnotationScale(structural,labels),topologyResolved,structureScore,openingCandidates:resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines)).gaps,framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
    });
    const score=(items:typeof labels)=>truth.regions.map((region:{value:number;box:{x:number;y:number;width:number;height:number}})=>({value:region.value,matched:items.some(l=>{const n=readPlanNumbers(l.text),x=l.box.x+l.box.width/2,y=l.box.y+l.box.height/2,b=region.box;return !l.numericConflict&&(l.confidence??0)>=90&&n.length===1&&n[0].values.length===1&&n[0].values[0]===region.value&&x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height;})}));
    const selectedTruth=sha256===truth.sha256&&file===truth.file&&number===truth.page&&canvas.width===truth.widthPx&&canvas.height===truth.heightPx?{scope:truth.scope,baseline:score(baselineLabels),enhanced:score(labels)}:undefined;

@@ -25,7 +25,11 @@ export function splitWallJunctions(input:Wall[]):Wall[]|undefined{
  }
  const result=walls.flatMap((w,i)=>{
   const sorted=[...new Set(cuts[i])].sort((a,b)=>a-b),point=(t:number):Point=>({x:round(w.start.x+(w.end.x-w.start.x)*t),z:round(w.start.z+(w.end.z-w.start.z)*t)});
-  return sorted.slice(1).map((t,j)=>({...w,id:sorted.length===2?w.id:`${w.id}:segment-${j+1}`,start:point(sorted[j]),end:point(t)}));
+  // Different intersection calculations may produce adjacent cuts that round
+  // to the same coordinate. They are one junction, not a zero-length wall.
+  const points=sorted.map(point).filter((p,j,all)=>!j||key(p)!==key(all[j-1]));
+  if(points.length<2)return [{...w,start:point(0),end:point(1)}];
+  return points.slice(1).map((end,j)=>({...w,id:points.length===2?w.id:`${w.id}:segment-${j+1}`,start:points[j],end}));
  });
  return result.length<=200&&result.every(w=>key(w.start)!==key(w.end))?result:undefined;
 }
