@@ -1,7 +1,7 @@
 import type {Wall} from './types';
 import type {MeasuredSpan} from './dimensionSpans';
 
-export interface WallDimensionConstraint {wallId:string;labelId:string;mm:number;horizontal:boolean}
+export interface WallDimensionConstraint {wallId:string;labelId:string;mm:number;horizontal:boolean;from?:number;to?:number}
 interface Coordinate {pixel:number;component:number;mm:number}
 /** Relative coordinates only: each disconnected component has its own origin.
  * Never interpolate unmeasured gaps or apply these coordinates to a scalar image reference. */
@@ -13,12 +13,15 @@ export function solveDimensionConstraints(walls:Wall[], constraints:WallDimensio
    const valid=[s.from,s.to,s.mm].every(Number.isFinite)&&s.to>s.from&&s.mm>0;
    if(!valid)rejected.push(s.labelId);return valid;
   });
-  const pixels=[...new Set([...walls.flatMap(w=>[key(w.start[axis]),key(w.end[axis])]),...validSpans.flatMap(s=>[key(s.from),key(s.to)])])].sort((a,b)=>a-b);
+  const intervals=constraints.filter(c=>c.horizontal===(axis==='x')&&Number.isFinite(c.from)&&Number.isFinite(c.to));
+  const pixels=[...new Set([...intervals.flatMap(c=>[key(c.from!),key(c.to!)]),...walls.flatMap(w=>[key(w.start[axis]),key(w.end[axis])]),...validSpans.flatMap(s=>[key(s.from),key(s.to)])])].sort((a,b)=>a-b);
   const edges=new Map<number,{to:number;delta:number;labelId:string}[]>(pixels.map(p=>[p,[]]));
   for(const c of constraints.filter(c=>c.horizontal===(axis==='x'))){
    const w=walls.find(w=>w.id===c.wallId),cross=axis==='x'?'z':'x';
    if(!w||!Number.isFinite(c.mm)||c.mm<=0||Math.abs(w.start[cross]-w.end[cross])>1e-6||key(w.start[axis])===key(w.end[axis])){rejected.push(c.labelId);continue;}
-   const a=Math.min(key(w.start[axis]),key(w.end[axis])),b=Math.max(key(w.start[axis]),key(w.end[axis]));
+   const low=Math.min(key(w.start[axis]),key(w.end[axis])),high=Math.max(key(w.start[axis]),key(w.end[axis]));
+   const a=key(c.from??low),b=key(c.to??high);
+   if(!Number.isFinite(a)||!Number.isFinite(b)||a<low||b>high||a>=b){rejected.push(c.labelId);continue;}
    edges.get(a)!.push({to:b,delta:c.mm,labelId:c.labelId});
    edges.get(b)!.push({to:a,delta:-c.mm,labelId:c.labelId});
   }

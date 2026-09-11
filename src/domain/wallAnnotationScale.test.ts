@@ -16,3 +16,14 @@ it('withholds inconsistent annotated drawing proportions and ambiguous wall targ
 it('rejects uncertain readings, height notes and missing units',()=>{
  for(const patch of [{numericConflict:true},{source:'ocr' as const,confidence:60},{text:'HEIGHT 6000 mm'},{text:'6000'}])expect(wallAnnotationScale(walls,labels.map(l=>({...l,...patch}))).scale).toBeUndefined();
 });
+it('matches a portion bounded by an actual T-junction, without assigning the full wall length',()=>{
+ const input=[wall('bottom',0,100,1000,100),wall('divider',400,0,400,100)];
+ const text=detectPlanLabels([{text:'3860 mm',source:'pdf-text',box:{x:170,y:120,width:60,height:20}}]);
+ expect(wallAnnotationScale(input,text).matches).toMatchObject([{wallId:'bottom',from:0,to:400,mm:3860,lengthPx:400}]);
+ expect(wallAnnotationScale([input[0],{...input[1],end:{x:400,z:95}}],text).matches).toEqual([]);
+});
+it('withholds a label when both whole and junction-bounded portion are plausible',()=>{
+ const input=[wall('bottom',0,100,1000,100),wall('divider',600,0,600,100)];
+ const text=detectPlanLabels([{text:'3860 mm',source:'pdf-text',box:{x:330,y:120,width:60,height:20}}]);
+ expect(wallAnnotationScale(input,text).matches).toEqual([]);
+});

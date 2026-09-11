@@ -1,0 +1,19 @@
+{
+  "file": "espacio.pdf",
+  "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+  "page": 1,
+  "widthPx": 2400,
+  "heightPx": 1696,
+  "scope": "One visually checked adjacent annotation interval; not whole-page geometry or physical measurement accuracy.",
+  "tolerancePx": 4,
+  "intervals": [
+    {
+      "id": "bottom-left-386",
+      "mm": 3860,
+      "horizontal": true,
+      "from": 132,
+      "to": 695,
+      "cross": 1493
+    }
+  ]
+}

@@ -1,0 +1,1126 @@
+[
+  {
+    "file": "anca.pdf",
+    "page": 1,
+    "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+    "runs": [
+      {
+        "threshold": 125,
+        "selectedAnnotationTruth": null,
+        "matches": [
+          {
+            "wallId": "auto-wall-2",
+            "labelId": "label-7",
+            "mm": 15250,
+            "lengthPx": 756.2548028311426,
+            "horizontal": false,
+            "ratio": 20.165161190262268,
+            "from": 507.59959555106167,
+            "to": 1263.8543983822042
+          },
+          {
+            "wallId": "auto-wall-3",
+            "labelId": "label-15",
+            "mm": 6320,
+            "lengthPx": 619.9231547017189,
+            "horizontal": false,
+            "ratio": 10.194811973172579,
+            "from": 366.1233569261881,
+            "to": 986.046511627907
+          },
+          {
+            "wallId": "auto-wall-12",
+            "labelId": "label-16",
+            "mm": 1800,
+            "lengthPx": 197.20930232558146,
+            "horizontal": false,
+            "ratio": 9.127358490566035,
+            "from": 447.5793731041456,
+            "to": 644.788675429727
+          },
+          {
+            "wallId": "auto-wall-10",
+            "labelId": "label-17",
+            "mm": 1800,
+            "lengthPx": 198.92416582406474,
+            "horizontal": false,
+            "ratio": 9.048674365647363,
+            "from": 739.1061678463094,
+            "to": 938.0303336703741
+          },
+          {
+            "wallId": "auto-wall-16",
+            "labelId": "label-18",
+            "mm": 1070,
+            "lengthPx": 81.88473205257839,
+            "horizontal": false,
+            "ratio": 13.067149066482264,
+            "from": 366.9807886754297,
+            "to": 448.8655207280081
+          },
+          {
+            "wallId": "auto-wall-14",
+            "labelId": "label-20",
+            "mm": 500,
+            "lengthPx": 128.61476238624869,
+            "horizontal": false,
+            "ratio": 3.8875786163522026,
+            "from": 926.026289180991,
+            "to": 1054.6410515672396
+          }
+        ],
+        "constraintStatus": "underdetermined",
+        "unresolvedOffsets": {
+          "x": 12,
+          "z": 19
+        },
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "selectedAnnotationTruth": null,
+        "matches": [
+          {
+            "wallId": "auto-wall-12",
+            "labelId": "label-6",
+            "mm": 1700,
+            "lengthPx": 181.77553083923146,
+            "horizontal": false,
+            "ratio": 9.35219384122464,
+            "from": 1004.0525783619818,
+            "to": 1185.8281092012132
+          },
+          {
+            "wallId": "auto-wall-1",
+            "labelId": "label-7",
+            "mm": 15250,
+            "lengthPx": 756.2548028311426,
+            "horizontal": false,
+            "ratio": 20.165161190262268,
+            "from": 507.59959555106167,
+            "to": 1263.8543983822042
+          },
+          {
+            "wallId": "auto-wall-2",
+            "labelId": "label-15",
+            "mm": 6320,
+            "lengthPx": 619.0657229524772,
+            "horizontal": false,
+            "ratio": 10.208932211362567,
+            "from": 366.9807886754297,
+            "to": 986.046511627907
+          },
+          {
+            "wallId": "auto-wall-11",
+            "labelId": "label-16",
+            "mm": 1800,
+            "lengthPx": 197.20930232558146,
+            "horizontal": false,
+            "ratio": 9.127358490566035,
+            "from": 447.5793731041456,
+            "to": 644.788675429727
+          },
+          {
+            "wallId": "auto-wall-9",
+            "labelId": "label-17",
+            "mm": 1800,
+            "lengthPx": 198.92416582406474,
+            "horizontal": false,
+            "ratio": 9.048674365647363,
+            "from": 739.1061678463094,
+            "to": 938.0303336703741
+          }
+        ],
+        "constraintStatus": "underdetermined",
+        "unresolvedOffsets": {
+          "x": 13,
+          "z": 15
+        },
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "selectedAnnotationTruth": null,
+        "matches": [
+          {
+            "wallId": "auto-wall-14",
+            "labelId": "label-6",
+            "mm": 1700,
+            "lengthPx": 182.6329625884731,
+            "horizontal": false,
+            "ratio": 9.308286827885558,
+            "from": 1003.1951466127401,
+            "to": 1185.8281092012132
+          },
+          {
+            "wallId": "auto-wall-2",
+            "labelId": "label-7",
+            "mm": 15250,
+            "lengthPx": 759.6845298281091,
+            "horizontal": false,
+            "ratio": 20.074122087823163,
+            "from": 505.8847320525784,
+            "to": 1265.5692618806875
+          },
+          {
+            "wallId": "auto-wall-3",
+            "labelId": "label-15",
+            "mm": 6320,
+            "lengthPx": 622.4954499494438,
+            "horizontal": false,
+            "ratio": 10.152684650969386,
+            "from": 365.2659251769464,
+            "to": 987.7613751263902
+          },
+          {
+            "wallId": "auto-wall-12",
+            "labelId": "label-16",
+            "mm": 1800,
+            "lengthPx": 200.63902932254803,
+            "horizontal": false,
+            "ratio": 8.97133526850508,
+            "from": 445.8645096056623,
+            "to": 646.5035389282103
+          },
+          {
+            "wallId": "auto-wall-13",
+            "labelId": "label-17",
+            "mm": 1800,
+            "lengthPx": 200.63902932254803,
+            "horizontal": false,
+            "ratio": 8.97133526850508,
+            "from": 739.1061678463094,
+            "to": 939.7451971688574
+          },
+          {
+            "wallId": "auto-wall-18",
+            "labelId": "label-18",
+            "mm": 1070,
+            "lengthPx": 82.31791058780152,
+            "horizontal": false,
+            "ratio": 12.998386285068811,
+            "from": 366.9807886754297,
+            "to": 449.2942366026289
+          },
+          {
+            "wallId": "auto-wall-16",
+            "labelId": "label-20",
+            "mm": 500,
+            "lengthPx": 128.61476238624869,
+            "horizontal": false,
+            "ratio": 3.8875786163522026,
+            "from": 926.026289180991,
+            "to": 1054.6410515672396
+          }
+        ],
+        "constraintStatus": "conflict",
+        "unresolvedOffsets": {
+          "x": 15,
+          "z": 22
+        },
+        "draftGenerated": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 1,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "selectedAnnotationTruth": [
+          {
+            "id": "bottom-left-386",
+            "matched": true
+          }
+        ],
+        "matches": [
+          {
+            "wallId": "auto-wall-2",
+            "labelId": "label-3",
+            "mm": 4280,
+            "lengthPx": 599.1428571428571,
+            "horizontal": true,
+            "ratio": 7.143538388173582,
+            "from": 294,
+            "to": 893.1428571428571
+          },
+          {
+            "wallId": "auto-wall-11",
+            "labelId": "label-4",
+            "mm": 2250,
+            "lengthPx": 320.57142857142867,
+            "horizontal": true,
+            "ratio": 7.018716577540105,
+            "from": 971.1428571428571,
+            "to": 1291.7142857142858
+          },
+          {
+            "wallId": "auto-wall-8",
+            "labelId": "label-5",
+            "mm": 2750,
+            "lengthPx": 409.71428571428555,
+            "horizontal": true,
+            "ratio": 6.711994421199445,
+            "from": 1291.7142857142858,
+            "to": 1701.4285714285713
+          },
+          {
+            "wallId": "auto-wall-9",
+            "labelId": "label-6",
+            "mm": 1900,
+            "lengthPx": 336.8571428571429,
+            "horizontal": true,
+            "ratio": 5.640373197625106,
+            "from": 1823.142857142857,
+            "to": 2160
+          },
+          {
+            "wallId": "auto-wall-26",
+            "labelId": "label-8",
+            "mm": 750,
+            "lengthPx": 121.71428571428578,
+            "horizontal": true,
+            "ratio": 6.161971830985912,
+            "from": 1701.4285714285713,
+            "to": 1823.142857142857
+          },
+          {
+            "wallId": "auto-wall-28",
+            "labelId": "label-9",
+            "mm": 400,
+            "lengthPx": 78,
+            "horizontal": true,
+            "ratio": 5.128205128205129,
+            "from": 893.1428571428571,
+            "to": 971.1428571428571
+          },
+          {
+            "wallId": "auto-wall-10",
+            "labelId": "label-11",
+            "mm": 2200,
+            "lengthPx": 336.8571428571429,
+            "horizontal": true,
+            "ratio": 6.530958439355385,
+            "from": 1044.857142857143,
+            "to": 1381.7142857142858
+          },
+          {
+            "wallId": "auto-wall-3",
+            "labelId": "label-13",
+            "mm": 3650,
+            "lengthPx": 602.5714285714287,
+            "horizontal": true,
+            "ratio": 6.05737316263632,
+            "from": 1689.4285714285713,
+            "to": 2292
+          },
+          {
+            "wallId": "auto-wall-1",
+            "labelId": "label-14",
+            "mm": 3860,
+            "lengthPx": 564,
+            "horizontal": true,
+            "ratio": 6.843971631205674,
+            "from": 132,
+            "to": 696
+          },
+          {
+            "wallId": "auto-wall-23",
+            "labelId": "rotation-90-label-2",
+            "mm": 500,
+            "lengthPx": 146.6208291203236,
+            "horizontal": false,
+            "ratio": 3.410156681010702,
+            "from": 1346.1678463094033,
+            "to": 1492.788675429727
+          },
+          {
+            "wallId": "auto-wall-12",
+            "labelId": "rotation-90-label-3",
+            "mm": 1350,
+            "lengthPx": 250.37007077856424,
+            "horizontal": false,
+            "ratio": 5.392018286378908,
+            "from": 850.5722952477249,
+            "to": 1100.9423660262892
+          },
+          {
+            "wallId": "auto-wall-6",
+            "labelId": "rotation-90-label-5",
+            "mm": 2300,
+            "lengthPx": 436.432760364004,
+            "horizontal": false,
+            "ratio": 5.26999851725544,
+            "from": 1056.355915065723,
+            "to": 1492.788675429727
+          },
+          {
+            "wallId": "auto-wall-4",
+            "labelId": "rotation-90-label-11",
+            "mm": 2850,
+            "lengthPx": 550.4711830131447,
+            "horizontal": false,
+            "ratio": 5.177382736730734,
+            "from": 648.2184024266936,
+            "to": 1198.6895854398383
+          }
+        ],
+        "constraintStatus": "underdetermined",
+        "unresolvedOffsets": {
+          "x": 14,
+          "z": 16
+        },
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "selectedAnnotationTruth": [
+          {
+            "id": "bottom-left-386",
+            "matched": true
+          }
+        ],
+        "matches": [
+          {
+            "wallId": "auto-wall-2",
+            "labelId": "label-3",
+            "mm": 4280,
+            "lengthPx": 600,
+            "horizontal": true,
+            "ratio": 7.133333333333334,
+            "from": 294,
+            "to": 894
+          },
+          {
+            "wallId": "auto-wall-11",
+            "labelId": "label-4",
+            "mm": 2250,
+            "lengthPx": 320.57142857142867,
+            "horizontal": true,
+            "ratio": 7.018716577540105,
+            "from": 971.1428571428571,
+            "to": 1291.7142857142858
+          },
+          {
+            "wallId": "auto-wall-8",
+            "labelId": "label-5",
+            "mm": 2750,
+            "lengthPx": 410.57142857142844,
+            "horizontal": true,
+            "ratio": 6.697981906750176,
+            "from": 1291.7142857142858,
+            "to": 1702.2857142857142
+          },
+          {
+            "wallId": "auto-wall-9",
+            "labelId": "label-6",
+            "mm": 1900,
+            "lengthPx": 336.8571428571429,
+            "horizontal": true,
+            "ratio": 5.640373197625106,
+            "from": 1823.142857142857,
+            "to": 2160
+          },
+          {
+            "wallId": "auto-wall-27",
+            "labelId": "label-8",
+            "mm": 750,
+            "lengthPx": 120.85714285714289,
+            "horizontal": true,
+            "ratio": 6.205673758865246,
+            "from": 1702.2857142857142,
+            "to": 1823.142857142857
+          },
+          {
+            "wallId": "auto-wall-29",
+            "labelId": "label-9",
+            "mm": 400,
+            "lengthPx": 77.14285714285711,
+            "horizontal": true,
+            "ratio": 5.185185185185188,
+            "from": 894,
+            "to": 971.1428571428571
+          },
+          {
+            "wallId": "auto-wall-10",
+            "labelId": "label-11",
+            "mm": 2200,
+            "lengthPx": 338.57142857142844,
+            "horizontal": true,
+            "ratio": 6.497890295358652,
+            "from": 1044.857142857143,
+            "to": 1383.4285714285713
+          },
+          {
+            "wallId": "auto-wall-3",
+            "labelId": "label-13",
+            "mm": 3650,
+            "lengthPx": 603.4285714285713,
+            "horizontal": true,
+            "ratio": 6.04876893939394,
+            "from": 1688.5714285714287,
+            "to": 2292
+          },
+          {
+            "wallId": "auto-wall-1",
+            "labelId": "label-14",
+            "mm": 3860,
+            "lengthPx": 563.1428571428571,
+            "horizontal": true,
+            "ratio": 6.854388635210554,
+            "from": 132,
+            "to": 695.1428571428571
+          },
+          {
+            "wallId": "auto-wall-24",
+            "labelId": "rotation-90-label-2",
+            "mm": 500,
+            "lengthPx": 146.6208291203236,
+            "horizontal": false,
+            "ratio": 3.410156681010702,
+            "from": 1346.1678463094033,
+            "to": 1492.788675429727
+          },
+          {
+            "wallId": "auto-wall-12",
+            "labelId": "rotation-90-label-3",
+            "mm": 1350,
+            "lengthPx": 249.5126390293226,
+            "horizontal": false,
+            "ratio": 5.410547558840691,
+            "from": 849.7148634984833,
+            "to": 1099.2275025278059
+          },
+          {
+            "wallId": "auto-wall-6",
+            "labelId": "rotation-90-label-5",
+            "mm": 2300,
+            "lengthPx": 436.1877798642206,
+            "horizontal": false,
+            "ratio": 5.272958359163476,
+            "from": 1056.6008955655063,
+            "to": 1492.788675429727
+          },
+          {
+            "wallId": "auto-wall-4",
+            "labelId": "rotation-90-label-11",
+            "mm": 2850,
+            "lengthPx": 550.4711830131447,
+            "horizontal": false,
+            "ratio": 5.177382736730734,
+            "from": 648.2184024266936,
+            "to": 1198.6895854398383
+          }
+        ],
+        "constraintStatus": "underdetermined",
+        "unresolvedOffsets": {
+          "x": 15,
+          "z": 17
+        },
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "selectedAnnotationTruth": [
+          {
+            "id": "bottom-left-386",
+            "matched": false
+          }
+        ],
+        "matches": [
+          {
+            "wallId": "auto-wall-2",
+            "labelId": "label-3",
+            "mm": 4280,
+            "lengthPx": 599.1428571428571,
+            "horizontal": true,
+            "ratio": 7.143538388173582,
+            "from": 294.85714285714283,
+            "to": 894
+          },
+          {
+            "wallId": "auto-wall-12",
+            "labelId": "label-4",
+            "mm": 2250,
+            "lengthPx": 321.42857142857156,
+            "horizontal": true,
+            "ratio": 6.999999999999997,
+            "from": 971.1428571428571,
+            "to": 1292.5714285714287
+          },
+          {
+            "wallId": "auto-wall-9",
+            "labelId": "label-5",
+            "mm": 2750,
+            "lengthPx": 409.71428571428555,
+            "horizontal": true,
+            "ratio": 6.711994421199445,
+            "from": 1292.5714285714287,
+            "to": 1702.2857142857142
+          },
+          {
+            "wallId": "auto-wall-10",
+            "labelId": "label-6",
+            "mm": 1900,
+            "lengthPx": 336.8571428571429,
+            "horizontal": true,
+            "ratio": 5.640373197625106,
+            "from": 1823.142857142857,
+            "to": 2160
+          },
+          {
+            "wallId": "auto-wall-27",
+            "labelId": "label-8",
+            "mm": 750,
+            "lengthPx": 120.85714285714289,
+            "horizontal": true,
+            "ratio": 6.205673758865246,
+            "from": 1702.2857142857142,
+            "to": 1823.142857142857
+          },
+          {
+            "wallId": "auto-wall-29",
+            "labelId": "label-9",
+            "mm": 400,
+            "lengthPx": 77.14285714285711,
+            "horizontal": true,
+            "ratio": 5.185185185185188,
+            "from": 894,
+            "to": 971.1428571428571
+          },
+          {
+            "wallId": "auto-wall-11",
+            "labelId": "label-11",
+            "mm": 2200,
+            "lengthPx": 338.57142857142844,
+            "horizontal": true,
+            "ratio": 6.497890295358652,
+            "from": 1044.857142857143,
+            "to": 1383.4285714285713
+          },
+          {
+            "wallId": "auto-wall-3",
+            "labelId": "label-13",
+            "mm": 3650,
+            "lengthPx": 601.714285714286,
+            "horizontal": true,
+            "ratio": 6.066001899335229,
+            "from": 1689.4285714285713,
+            "to": 2291.1428571428573
+          },
+          {
+            "wallId": "auto-wall-13",
+            "labelId": "rotation-90-label-3",
+            "mm": 1350,
+            "lengthPx": 250.37007077856424,
+            "horizontal": false,
+            "ratio": 5.392018286378908,
+            "from": 849.7148634984833,
+            "to": 1100.0849342770475
+          },
+          {
+            "wallId": "auto-wall-7",
+            "labelId": "rotation-90-label-5",
+            "mm": 2300,
+            "lengthPx": 434.47291636573755,
+            "horizontal": false,
+            "ratio": 5.293770712427721,
+            "from": 1054.8860320670228,
+            "to": 1489.3589484327604
+          },
+          {
+            "wallId": "auto-wall-5",
+            "labelId": "rotation-90-label-11",
+            "mm": 2850,
+            "lengthPx": 550.4711830131447,
+            "horizontal": false,
+            "ratio": 5.177382736730734,
+            "from": 648.2184024266936,
+            "to": 1198.6895854398383
+          }
+        ],
+        "constraintStatus": "underdetermined",
+        "unresolvedOffsets": {
+          "x": 17,
+          "z": 18
+        },
+        "draftGenerated": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 2,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "selectedAnnotationTruth": null,
+        "matches": [
+          {
+            "wallId": "auto-wall-4",
+            "labelId": "label-3",
+            "mm": 4800,
+            "lengthPx": 614.5714285714284,
+            "horizontal": true,
+            "ratio": 7.81032078103208,
+            "from": 1124.5714285714287,
+            "to": 1739.142857142857
+          },
+          {
+            "wallId": "auto-wall-5",
+            "labelId": "label-6",
+            "mm": 3960,
+            "lengthPx": 550.2857142857144,
+            "horizontal": true,
+            "ratio": 7.196261682242988,
+            "from": 1739.142857142857,
+            "to": 2289.4285714285716
+          },
+          {
+            "wallId": "auto-wall-35",
+            "labelId": "label-9",
+            "mm": 370,
+            "lengthPx": 87.42857142857156,
+            "horizontal": true,
+            "ratio": 4.2320261437908435,
+            "from": 2202,
+            "to": 2289.4285714285716
+          },
+          {
+            "wallId": "auto-wall-18",
+            "labelId": "label-10",
+            "mm": 1700,
+            "lengthPx": 268.2857142857143,
+            "horizontal": true,
+            "ratio": 6.336528221512247,
+            "from": 169.71428571428572,
+            "to": 438
+          },
+          {
+            "wallId": "auto-wall-37",
+            "labelId": "label-11",
+            "mm": 590,
+            "lengthPx": 83.14285714285711,
+            "horizontal": true,
+            "ratio": 7.096219931271481,
+            "from": 1080.857142857143,
+            "to": 1164
+          },
+          {
+            "wallId": "auto-wall-33",
+            "labelId": "label-14",
+            "mm": 400,
+            "lengthPx": 91.71428571428578,
+            "horizontal": true,
+            "ratio": 4.3613707165109,
+            "from": 2202,
+            "to": 2293.714285714286
+          },
+          {
+            "wallId": "auto-wall-1",
+            "labelId": "label-16",
+            "mm": 2850,
+            "lengthPx": 2055.428571428571,
+            "horizontal": true,
+            "ratio": 1.3865721434528777,
+            "from": 65.14285714285714,
+            "to": 2120.5714285714284
+          },
+          {
+            "wallId": "auto-wall-6",
+            "labelId": "label-18",
+            "mm": 4500,
+            "lengthPx": 548.5714285714287,
+            "horizontal": true,
+            "ratio": 8.203124999999998,
+            "from": 1571.142857142857,
+            "to": 2119.714285714286
+          },
+          {
+            "wallId": "auto-wall-3",
+            "labelId": "rotation-90-label-2",
+            "mm": 440,
+            "lengthPx": 58.30535894843274,
+            "horizontal": false,
+            "ratio": 7.546476137624864,
+            "from": 880.582406471183,
+            "to": 938.8877654196158
+          },
+          {
+            "wallId": "auto-wall-34",
+            "labelId": "rotation-90-label-4",
+            "mm": 560,
+            "lengthPx": 90.88776541961568,
+            "horizontal": false,
+            "ratio": 6.16144535421859,
+            "from": 1013.48432760364,
+            "to": 1104.3720930232557
+          },
+          {
+            "wallId": "auto-wall-38",
+            "labelId": "rotation-90-label-8",
+            "mm": 500,
+            "lengthPx": 66.02224469160774,
+            "horizontal": false,
+            "ratio": 7.573205096789996,
+            "from": 1431.0535894843276,
+            "to": 1497.0758341759354
+          },
+          {
+            "wallId": "auto-wall-9",
+            "labelId": "rotation-270-label-1",
+            "mm": 2020,
+            "lengthPx": 416.7118301314459,
+            "horizontal": false,
+            "ratio": 4.847474571007066,
+            "from": 507.59959555106167,
+            "to": 924.3114256825075
+          },
+          {
+            "wallId": "auto-wall-10",
+            "labelId": "rotation-270-label-2",
+            "mm": 2060,
+            "lengthPx": 415.8543983822043,
+            "horizontal": false,
+            "ratio": 4.953656876094144,
+            "from": 1015.1991911021233,
+            "to": 1431.0535894843276
+          },
+          {
+            "wallId": "auto-wall-32",
+            "labelId": "rotation-270-label-3",
+            "mm": 540,
+            "lengthPx": 90.88776541961579,
+            "horizontal": false,
+            "ratio": 5.941393734425061,
+            "from": 924.3114256825075,
+            "to": 1015.1991911021233
+          },
+          {
+            "wallId": "auto-wall-7",
+            "labelId": "rotation-270-label-4",
+            "mm": 1800,
+            "lengthPx": 440.71991911021246,
+            "horizontal": false,
+            "ratio": 4.084226561926436,
+            "from": 1056.355915065723,
+            "to": 1497.0758341759354
+          }
+        ],
+        "constraintStatus": "underdetermined",
+        "unresolvedOffsets": {
+          "x": 26,
+          "z": 18
+        },
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "selectedAnnotationTruth": null,
+        "matches": [
+          {
+            "wallId": "auto-wall-4",
+            "labelId": "label-3",
+            "mm": 4800,
+            "lengthPx": 615.4285714285713,
+            "horizontal": true,
+            "ratio": 7.799442896935934,
+            "from": 1123.7142857142858,
+            "to": 1739.142857142857
+          },
+          {
+            "wallId": "auto-wall-2",
+            "labelId": "label-5",
+            "mm": 2560,
+            "lengthPx": 291.42857142857144,
+            "horizontal": true,
+            "ratio": 8.784313725490195,
+            "from": 777.4285714285714,
+            "to": 1068.857142857143
+          },
+          {
+            "wallId": "auto-wall-5",
+            "labelId": "label-6",
+            "mm": 3960,
+            "lengthPx": 550.2857142857144,
+            "horizontal": true,
+            "ratio": 7.196261682242988,
+            "from": 1739.142857142857,
+            "to": 2289.4285714285716
+          },
+          {
+            "wallId": "auto-wall-37",
+            "labelId": "label-9",
+            "mm": 370,
+            "lengthPx": 87.42857142857156,
+            "horizontal": true,
+            "ratio": 4.2320261437908435,
+            "from": 2202,
+            "to": 2289.4285714285716
+          },
+          {
+            "wallId": "auto-wall-12",
+            "labelId": "label-10",
+            "mm": 1700,
+            "lengthPx": 366.85714285714283,
+            "horizontal": true,
+            "ratio": 4.6339563862928355,
+            "from": 70.28571428571429,
+            "to": 437.1428571428571
+          },
+          {
+            "wallId": "auto-wall-38",
+            "labelId": "label-11",
+            "mm": 590,
+            "lengthPx": 84.85714285714289,
+            "horizontal": true,
+            "ratio": 6.952861952861951,
+            "from": 1080,
+            "to": 1164.857142857143
+          },
+          {
+            "wallId": "auto-wall-34",
+            "labelId": "label-14",
+            "mm": 400,
+            "lengthPx": 90.85714285714266,
+            "horizontal": true,
+            "ratio": 4.40251572327045,
+            "from": 2202,
+            "to": 2292.8571428571427
+          },
+          {
+            "wallId": "auto-wall-3",
+            "labelId": "rotation-90-label-2",
+            "mm": 440,
+            "lengthPx": 62.59251769464106,
+            "horizontal": false,
+            "ratio": 7.029594210390281,
+            "from": 880.582406471183,
+            "to": 943.1749241658241
+          },
+          {
+            "wallId": "auto-wall-36",
+            "labelId": "rotation-90-label-4",
+            "mm": 560,
+            "lengthPx": 90.88776541961568,
+            "horizontal": false,
+            "ratio": 6.16144535421859,
+            "from": 1013.48432760364,
+            "to": 1104.3720930232557
+          },
+          {
+            "wallId": "auto-wall-8",
+            "labelId": "rotation-90-label-5",
+            "mm": 1750,
+            "lengthPx": 441.5773508594539,
+            "horizontal": false,
+            "ratio": 3.963065579776517,
+            "from": 1060.6430738119313,
+            "to": 1502.2204246713852
+          },
+          {
+            "wallId": "auto-wall-40",
+            "labelId": "rotation-90-label-8",
+            "mm": 500,
+            "lengthPx": 65.1648129423661,
+            "horizontal": false,
+            "ratio": 7.672852532274073,
+            "from": 1431.0535894843276,
+            "to": 1496.2184024266937
+          },
+          {
+            "wallId": "auto-wall-9",
+            "labelId": "rotation-270-label-1",
+            "mm": 2020,
+            "lengthPx": 417.5692618806875,
+            "horizontal": false,
+            "ratio": 4.837520824454691,
+            "from": 506.74216380182,
+            "to": 924.3114256825075
+          },
+          {
+            "wallId": "auto-wall-10",
+            "labelId": "rotation-270-label-2",
+            "mm": 2060,
+            "lengthPx": 415.8543983822043,
+            "horizontal": false,
+            "ratio": 4.953656876094144,
+            "from": 1015.1991911021233,
+            "to": 1431.0535894843276
+          },
+          {
+            "wallId": "auto-wall-35",
+            "labelId": "rotation-270-label-3",
+            "mm": 540,
+            "lengthPx": 90.88776541961579,
+            "horizontal": false,
+            "ratio": 5.941393734425061,
+            "from": 924.3114256825075,
+            "to": 1015.1991911021233
+          }
+        ],
+        "constraintStatus": "underdetermined",
+        "unresolvedOffsets": {
+          "x": 25,
+          "z": 18
+        },
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "selectedAnnotationTruth": null,
+        "matches": [
+          {
+            "wallId": "auto-wall-4",
+            "labelId": "label-3",
+            "mm": 4800,
+            "lengthPx": 614.5714285714284,
+            "horizontal": true,
+            "ratio": 7.81032078103208,
+            "from": 1123.7142857142858,
+            "to": 1738.2857142857142
+          },
+          {
+            "wallId": "auto-wall-2",
+            "labelId": "label-5",
+            "mm": 2560,
+            "lengthPx": 291.42857142857144,
+            "horizontal": true,
+            "ratio": 8.784313725490195,
+            "from": 777.4285714285714,
+            "to": 1068.857142857143
+          },
+          {
+            "wallId": "auto-wall-5",
+            "labelId": "label-6",
+            "mm": 3960,
+            "lengthPx": 551.1428571428573,
+            "horizontal": true,
+            "ratio": 7.185069984447898,
+            "from": 1738.2857142857142,
+            "to": 2289.4285714285716
+          },
+          {
+            "wallId": "auto-wall-37",
+            "labelId": "label-9",
+            "mm": 370,
+            "lengthPx": 86.5714285714289,
+            "horizontal": true,
+            "ratio": 4.273927392739258,
+            "from": 2202.8571428571427,
+            "to": 2289.4285714285716
+          },
+          {
+            "wallId": "auto-wall-38",
+            "labelId": "label-11",
+            "mm": 590,
+            "lengthPx": 84,
+            "horizontal": true,
+            "ratio": 7.023809523809524,
+            "from": 1080,
+            "to": 1164
+          },
+          {
+            "wallId": "auto-wall-34",
+            "labelId": "label-14",
+            "mm": 400,
+            "lengthPx": 90.85714285714312,
+            "horizontal": true,
+            "ratio": 4.402515723270428,
+            "from": 2202.8571428571427,
+            "to": 2293.714285714286
+          },
+          {
+            "wallId": "auto-wall-32",
+            "labelId": "rotation-90-label-1",
+            "mm": 400,
+            "lengthPx": 140.618806875632,
+            "horizontal": false,
+            "ratio": 2.8445697192820973,
+            "from": 802.5561172901921,
+            "to": 943.1749241658241
+          },
+          {
+            "wallId": "auto-wall-3",
+            "labelId": "rotation-90-label-2",
+            "mm": 440,
+            "lengthPx": 62.59251769464106,
+            "horizontal": false,
+            "ratio": 7.029594210390281,
+            "from": 880.582406471183,
+            "to": 943.1749241658241
+          },
+          {
+            "wallId": "auto-wall-36",
+            "labelId": "rotation-90-label-4",
+            "mm": 560,
+            "lengthPx": 90.88776541961568,
+            "horizontal": false,
+            "ratio": 6.16144535421859,
+            "from": 1013.48432760364,
+            "to": 1104.3720930232557
+          },
+          {
+            "wallId": "auto-wall-8",
+            "labelId": "rotation-90-label-5",
+            "mm": 1750,
+            "lengthPx": 441.5773508594539,
+            "horizontal": false,
+            "ratio": 3.963065579776517,
+            "from": 1060.6430738119313,
+            "to": 1502.2204246713852
+          },
+          {
+            "wallId": "auto-wall-40",
+            "labelId": "rotation-90-label-8",
+            "mm": 500,
+            "lengthPx": 66.02224469160774,
+            "horizontal": false,
+            "ratio": 7.573205096789996,
+            "from": 1430.196157735086,
+            "to": 1496.2184024266937
+          },
+          {
+            "wallId": "auto-wall-9",
+            "labelId": "rotation-270-label-1",
+            "mm": 2020,
+            "lengthPx": 417.5692618806875,
+            "horizontal": false,
+            "ratio": 4.837520824454691,
+            "from": 506.74216380182,
+            "to": 924.3114256825075
+          },
+          {
+            "wallId": "auto-wall-10",
+            "labelId": "rotation-270-label-2",
+            "mm": 2060,
+            "lengthPx": 414.99696663296265,
+            "horizontal": false,
+            "ratio": 4.963891704350537,
+            "from": 1015.1991911021233,
+            "to": 1430.196157735086
+          },
+          {
+            "wallId": "auto-wall-35",
+            "labelId": "rotation-270-label-3",
+            "mm": 540,
+            "lengthPx": 90.88776541961579,
+            "horizontal": false,
+            "ratio": 5.941393734425061,
+            "from": 924.3114256825075,
+            "to": 1015.1991911021233
+          }
+        ],
+        "constraintStatus": "conflict",
+        "unresolvedOffsets": {
+          "x": 28,
+          "z": 16
+        },
+        "draftGenerated": false
+      }
+    ]
+  }
+]

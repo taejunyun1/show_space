@@ -27,6 +27,7 @@ import type {PlanPage} from '../src/lib/planImport';
 test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition without claiming ground-truth accuracy',async()=>{
  const directory=process.env.PLAN_CORPUS_DIR!,report=[];
  const truth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-numbers.json'),'utf8'));
+ const annotationTruth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-annotations.json'),'utf8'));
  const structureTruth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-structure.json'),'utf8'));
  let ocr:Awaited<ReturnType<typeof createWorker>>|undefined,numbersOcr:Awaited<ReturnType<typeof createWorker>>|undefined;
  try{
@@ -65,7 +66,11 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
     const resolved=resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines));
     const topologyResolved=!!classifyAutomaticWalls([...resolved.structure,...resolved.gaps.map(g=>g.wall)]);
     const measuredSpans=readMeasuredSpans({...createDemoProject(),walls:structural,planReference:{origin:{x:0,z:0},mmPerPixel:1,calibrated:true,widthPx:canvas.width,heightPx:canvas.height}},labels,lines);
-    const draft=buildAutomaticVenue(input);return {measuredSpans,dimensionConstraints:solveDimensionConstraints(structural,wallAnnotationScale(structural,labels).matches,measuredSpans),annotationScale:wallAnnotationScale(structural,labels),topologyResolved,structureScore,openingCandidates:resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines)).gaps,framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
+    const annotations=wallAnnotationScale(structural,labels);
+    const selectedAnnotationTruth=file===annotationTruth.file&&sha256===annotationTruth.sha256&&number===annotationTruth.page&&canvas.width===annotationTruth.widthPx&&canvas.height===annotationTruth.heightPx?annotationTruth.intervals.map((t:{id:string;mm:number;horizontal:boolean;from:number;to:number;cross:number})=>({id:t.id,matched:annotations.matches.some(m=>{
+     const w=structural.find(w=>w.id===m.wallId);return w&&m.mm===t.mm&&m.horizontal===t.horizontal&&Math.abs(m.from-t.from)<=annotationTruth.tolerancePx&&Math.abs(m.to-t.to)<=annotationTruth.tolerancePx&&Math.abs((t.horizontal?w.start.z:w.start.x)-t.cross)<=annotationTruth.tolerancePx;
+    })})):undefined;
+    const draft=buildAutomaticVenue(input);return {selectedAnnotationTruth,measuredSpans,dimensionConstraints:solveDimensionConstraints(structural,wallAnnotationScale(structural,labels).matches,measuredSpans),annotationScale:wallAnnotationScale(structural,labels),topologyResolved,structureScore,openingCandidates:resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines)).gaps,framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
    });
    const score=(items:typeof labels)=>truth.regions.map((region:{value:number;box:{x:number;y:number;width:number;height:number}})=>({value:region.value,matched:items.some(l=>{const n=readPlanNumbers(l.text),x=l.box.x+l.box.width/2,y=l.box.y+l.box.height/2,b=region.box;return !l.numericConflict&&(l.confidence??0)>=90&&n.length===1&&n[0].values.length===1&&n[0].values[0]===region.value&&x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height;})}));
    const selectedTruth=sha256===truth.sha256&&file===truth.file&&number===truth.page&&canvas.width===truth.widthPx&&canvas.height===truth.heightPx?{scope:truth.scope,baseline:score(baselineLabels),enhanced:score(labels)}:undefined;

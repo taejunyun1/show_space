@@ -40,3 +40,9 @@ it('rejects invalid spans without creating non-finite coordinates',()=>{
  const r=solveDimensionConstraints(walls,dims,[span]);expect(r.rejected).toEqual(['bad']);
  expect(r.axes.flatMap(a=>a.coordinates).every(n=>Number.isFinite(n.pixel)&&Number.isFinite(n.mm))).toBe(true);
 });
+it('uses annotation interval endpoints instead of silently stretching the entire wall',()=>{
+ const r=solveDimensionConstraints([walls[2],walls[3]],[{...dims[0],wallId:'whole',from:0,to:100}]);
+ expect(r.status).toBe('underdetermined');expect(r.axes[0].coordinates.slice(0,2).map(n=>n.mm)).toEqual([0,1000]);
+ expect(r.axes[0].coordinates[2].component).not.toBe(r.axes[0].coordinates[0].component);
+ expect(solveDimensionConstraints(walls,[{...dims[0],from:-5,to:100}]).rejected).toEqual(['a']);
+});
