@@ -83,3 +83,4 @@ describe('raster line candidates', () => {
     }
   })
 })
+it('retains short structure beyond the manual 100-line cap in automatic mode',()=>{const image=raster(600,600);for(let y=0;y<550;y+=5)image.rect(10,y,580,2);image.rect(20,580,50,4);const old=detectWallCandidates(image.data,600,600,{minLengthPx:10}),expanded=detectWallCandidates(image.data,600,600,{minLengthPx:10,maxCandidates:500});expect(old.some(l=>l.start.y>550)).toBe(false);expect(expanded.some(l=>l.start.y>550)).toBe(true);expect(()=>detectWallCandidates(image.data,600,600,{maxCandidates:501})).toThrow();});

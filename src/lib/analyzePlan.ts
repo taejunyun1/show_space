@@ -13,7 +13,7 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  const reuseText=(page.textSource==='pdf-text'||page.textSource==='ocr')&&(page.labels?.length??0)>0;
  const [textResult,lineResult]=await Promise.allSettled([
   reuseText?Promise.resolve(page.labels??[]):readPlanOcr(page.imageUrl,signal).then(detectPlanLabels),
-  detectPlanWalls(page.imageUrl,155,0.008,signal,1),
+  detectPlanWalls(page.imageUrl,155,0.008,signal,1,500),
  ]);abort();
  onStage('인식 근거와 구조 검증 결과를 정리하고 있습니다.');
  const labels=textResult.status==='fulfilled'?textResult.value:page.labels??[];
@@ -32,7 +32,7 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  for(const threshold of [125,190]){
   abort();onStage(`구조를 자체 검증하고 있습니다 (${candidates.length+1}/3).`);
   try{
-   lines=await detectPlanWalls(page.imageUrl,threshold,.008,signal,1);abort();
+   lines=await detectPlanWalls(page.imageUrl,threshold,.008,signal,1,500);abort();
    candidates.push({...result,analysis:{...result.analysis!,lines,lineState:'complete'}});
   }catch{abort();candidates.push({...result,analysis:{...result.analysis!,lines:[],lineState:'failed'}});}
  }

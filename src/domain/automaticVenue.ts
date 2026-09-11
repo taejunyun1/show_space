@@ -1,3 +1,5 @@
+import {pageUnit} from './planUnits';
+import {pairWallEdges} from './pairWallEdges';
 import {detectOpeningGaps} from './detectOpenings';
 import {selectStructuralLines} from './structuralLines';
 import type {PlanPage} from '../lib/planImport';
@@ -28,7 +30,7 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
   if(horizontal){a.start.y=a.end.y=(low+high)/2;}else{a.start.x=a.end.x=(low+high)/2;}
   a.thicknessPx=high-low;bands.splice(j--,1);
  }
- const lines=selectStructuralLines(bands,minLength,page.labels??[]);
+ const lines=selectStructuralLines(pairWallEdges(bands),minLength,page.labels??[]);
  // Only merge tiny raster endpoint discrepancies; never bridge doorway-sized gaps.
  const points:{x:number;z:number}[]=[];
  const snap=(p:{x:number;y:number})=>{
@@ -44,15 +46,17 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  if(classified&&gaps.some(g=>classified.filter(w=>w.id===g.wall.id).length!==1))return blocked('개구부와 다른 구조선이 교차해 자동 연결을 보류했습니다.');
  if(!walls)return blocked('닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다.',candidates.length);
  const base:Project={schemaVersion:1,id:'automatic-venue',name:'자동 공간 초안',venue:'도면에서 생성',walls,artworks:[],scenes:[],floorColor:'#f1f1ed',planImageUrl:page.imageUrl,planOpacity:.55,planLabels:page.labels??[],planAnalysis:page.analysis,planReference:{widthPx:page.widthPx,heightPx:page.heightPx,origin:{x:0,z:0},mmPerPixel:1,calibrated:true}};
+ const declared=pageUnit(page.labels??[]);
+ if(declared.conflict)return blocked('페이지 전체 단위 선언이 서로 충돌해 축척 적용을 보류했습니다.');
  const votes:{ratio:number;wallId:string}[]=[];
  for(const label of page.labels??[]){
   if(label.status==='dismissed'||(label.source==='ocr'&&(label.confidence??0)<90))continue;
   const numbers=readPlanNumbers(label.correctedText??label.text);
-  if(numbers.length!==1||numbers[0].values.length!==1||!numbers[0].unit)continue;
+  if(numbers.length!==1||numbers[0].values.length!==1||!(numbers[0].unit??declared.unit))continue;
   // Dimensions refer to original spans, not the fragments created at room junctions.
   const n=numbers[0],matches=matchDimensionLines({...base,walls:candidates},label,page.analysis.lines);
   if(matches.length!==1)continue;
-  const m=matches[0],mm=n.values[0]*({mm:1,cm:10,m:1000}[n.unit!]);
+  const m=matches[0],mm=n.values[0]*({mm:1,cm:10,m:1000}[n.unit??declared.unit!]);
   if(mm<=0||mm>200000)continue;
   votes.push({ratio:mm/Math.hypot(m.end.x-m.start.x,m.end.y-m.start.y),wallId:m.wallId});
  }

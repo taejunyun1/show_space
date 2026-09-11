@@ -7,6 +7,7 @@ export interface WallCandidate {
 }
 
 export interface WallCandidateOptions {
+  maxCandidates?: number
   threshold?: number
   minLengthPx?: number
   minThicknessPx?: number
@@ -36,6 +37,8 @@ export function detectWallCandidates(
     || !(data instanceof Uint8ClampedArray) || data.length !== width * height * 4) {
     throw new Error('선 검출 이미지는 가로·세로 1600px 이하의 올바른 RGBA 데이터여야 합니다.')
   }
+  const maxCandidates=options.maxCandidates??100
+  if(!Number.isInteger(maxCandidates)||maxCandidates<1||maxCandidates>500)throw new Error('선 후보 한도는 1~500이어야 합니다.')
   const threshold = options.threshold ?? 145
   const minLength = options.minLengthPx ?? Math.max(24, Math.round(Math.min(width, height) * 0.04))
   const minThickness = options.minThicknessPx ?? 2
@@ -104,5 +107,5 @@ export function detectWallCandidates(
   return result.sort((a, b) => {
     const difference = Math.hypot(b.end.x - b.start.x, b.end.y - b.start.y) - Math.hypot(a.end.x - a.start.x, a.end.y - a.start.y)
     return difference || a.start.y - b.start.y || a.start.x - b.start.x || a.id.localeCompare(b.id)
-  }).slice(0, 100)
+  }).slice(0, maxCandidates)
 }

@@ -267,7 +267,7 @@ export function parseProject(input: unknown): Project {
   if(raw.planLabels!==undefined){const r=raw.planReference as Project['planReference'];if(!r)throw new Error('표기 인식 결과에 도면 정보가 필요합니다.');result.planLabels=validatePlanLabels(raw.planLabels,r.widthPx,r.heightPx);}
   if(raw.planAnalysis!==undefined){
     const a=raw.planAnalysis as Project['planAnalysis'],r=raw.planReference as Project['planReference'];
-    if(!a||!r||!Array.isArray(a.lines)||a.lines.length>100||!Array.isArray(a.issues)||a.issues.length>30||a.issues.some(v=>typeof v!=='string'||v.length>2000)||!['complete','failed'].includes(a.textState)||!['complete','failed'].includes(a.lineState)||!Number.isInteger(a.numericCount)||a.numericCount<0||a.numericCount>500)throw new Error('자동 도면 분석 정보가 올바르지 않습니다.');
+    if(!a||!r||!Array.isArray(a.lines)||a.lines.length>500||!Array.isArray(a.issues)||a.issues.length>30||a.issues.some(v=>typeof v!=='string'||v.length>2000)||!['complete','failed'].includes(a.textState)||!['complete','failed'].includes(a.lineState)||!Number.isInteger(a.numericCount)||a.numericCount<0||a.numericCount>500)throw new Error('자동 도면 분석 정보가 올바르지 않습니다.');
     if(a.selfCheck&&(!['stable','withheld'].includes(a.selfCheck.status)||!Number.isInteger(a.selfCheck.attempts)||a.selfCheck.attempts<2||a.selfCheck.attempts>3))throw new Error('자동 검증 정보가 올바르지 않습니다.');
     const ids=new Set<string>();
     for(const line of a.lines){if(!line||typeof line.id!=='string'||line.id.length>200||ids.has(line.id)||!Number.isFinite(line.thicknessPx)||line.thicknessPx<=0||![line.start,line.end].every(p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>=0&&p.y>=0&&p.x<=r.widthPx&&p.y<=r.heightPx))throw new Error('자동 분석 선 정보가 올바르지 않습니다.');ids.add(line.id);}

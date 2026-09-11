@@ -1,3 +1,4 @@
+import {readUnitDeclaration} from './planUnits';
 import {readPlanNumbers} from './planNumbers';
 /** Text boxes locate annotations, never physical equipment footprints or safe clearances. */
 export interface PlanText {
@@ -8,13 +9,14 @@ export interface PlanText {
 }
 export interface PlanLabel extends PlanText {
  id:string;
- kind:'entrance'|'door'|'window'|'air-conditioner'|'fire-hydrant'|'fire-extinguisher'|'stairs'|'column'|'dimension';
+ kind:'entrance'|'door'|'window'|'air-conditioner'|'fire-hydrant'|'fire-extinguisher'|'stairs'|'column'|'dimension'|'unit';
  status:'unreviewed'|'confirmed'|'dismissed';
  note:string;
  correctedText?:string;
 }
-const kinds:PlanLabel['kind'][]=['entrance','door','window','air-conditioner','fire-hydrant','fire-extinguisher','stairs','column','dimension'];
+const kinds:PlanLabel['kind'][]=['entrance','door','window','air-conditioner','fire-hydrant','fire-extinguisher','stairs','column','dimension','unit'];
 const rules:{kind:PlanLabel['kind'];pattern:RegExp}[]=[
+ {kind:'unit',pattern:/a^/},
  {kind:'window',pattern:/\bWINDOW\b|창문|창호/iu},
  {kind:'entrance',pattern:/\b(?:ENTRY|ENTRANCE|EXIT)\b|출입구|비상구/iu},
  {kind:'door',pattern:/\bDOOR\b|출입문|방화문|자동문/iu},
@@ -34,8 +36,8 @@ export function detectPlanLabels(texts:PlanText[]):PlanLabel[] {
   if(!value) continue;
   // A single annotation can name more than one facility; each remains a review candidate.
   for(const rule of rules) {
-   if(!rule.pattern.test(value)&&!(rule.kind==='dimension'&&readPlanNumbers(value).length)) continue;
-   labels.push({...item,text:value,box:{...item.box},id:`label-${labels.length+1}`,kind:rule.kind,status:'unreviewed',note:rule.kind==='dimension'
+   if(!rule.pattern.test(value)&&!(rule.kind==='dimension'&&readPlanNumbers(value).length)&&!(rule.kind==='unit'&&readUnitDeclaration(value))) continue;
+   labels.push({...item,text:value,box:{...item.box},id:`label-${labels.length+1}`,kind:rule.kind,status:'unreviewed',note:rule.kind==='unit'?'페이지 전체 단위 선언입니다. 서로 충돌하지 않는 명시된 단위만 자동 치수 해석에 사용합니다.':rule.kind==='dimension'
     ?'문자 위치의 치수 후보입니다. 단위와 대상 벽을 확인해야 하며 벽 길이·높이·두께로 자동 적용하지 않습니다.'
     :'문자 위치의 설비·구조 후보입니다. 실제 점유 범위·문 열림 방향·접근 여유 공간은 확인이 필요합니다.'});
    if(labels.length===500) return labels;

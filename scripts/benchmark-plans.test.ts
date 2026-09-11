@@ -1,3 +1,4 @@
+import {pageUnit} from '../src/domain/planUnits';
 /** Opt-in local corpus runner: PLAN_CORPUS_DIR=/tmp/... npx vitest run scripts/benchmark-plans.test.ts */
 import {test} from 'vitest';
 import {readdir,readFile,writeFile} from 'node:fs/promises';
@@ -30,11 +31,11 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    const small=createCanvas(Math.round(canvas.width*1400/Math.max(canvas.width,canvas.height)),Math.round(canvas.height*1400/Math.max(canvas.width,canvas.height)));small.getContext('2d').drawImage(canvas,0,0,small.width,small.height);
    const pixels=small.getContext('2d').getImageData(0,0,small.width,small.height).data;
    const runs=[125,155,190].map(threshold=>{
-    const lines=detectWallCandidates(pixels,small.width,small.height,{threshold,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)}));
+    const lines=detectWallCandidates(pixels,small.width,small.height,{threshold,maxCandidates:500,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)}));
     const input:PlanPage={imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
     const draft=buildAutomaticVenue(input);return {threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
    });
-   report.push({file,page:number,source,textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
+   report.push({file,page:number,source,declaredUnit:pageUnit(labels),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
    await writeFile(resolve(directory,`${file}-${number}.png`),canvas.toBuffer('image/png'));page.cleanup();
   }}finally{await loading.destroy();}
  }
