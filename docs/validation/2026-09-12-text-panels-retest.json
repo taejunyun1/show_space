@@ -1,0 +1,276 @@
+{
+  "scope": "Compact native-PDF color caption backgrounds, evaluated through the same pageTextPanels canvas wrapper used by PDF import. Not a general symbol classifier or full-plan ground truth.",
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "panels": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeCandidates": 16,
+          "afterCandidates": 16,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeCandidates": 13,
+          "afterCandidates": 13,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeCandidates": 18,
+          "afterCandidates": 18,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "panels": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeCandidates": 0,
+          "afterCandidates": 0,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeCandidates": 0,
+          "afterCandidates": 0,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeCandidates": 0,
+          "afterCandidates": 0,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "panels": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeCandidates": 34,
+          "afterCandidates": 34,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeCandidates": 37,
+          "afterCandidates": 37,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeCandidates": 36,
+          "afterCandidates": 36,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "panels": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeCandidates": 36,
+          "afterCandidates": 36,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeCandidates": 42,
+          "afterCandidates": 42,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeCandidates": 43,
+          "afterCandidates": 43,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "k2.pdf",
+      "page": 1,
+      "sha256": "f85b4a2166b3f68e4cbf9211e99b8782a1df766bd6b6b872a1363c658f6eb90b",
+      "panels": [
+        {
+          "x": 1033.45298281092,
+          "y": 574.2857142857142,
+          "width": 200.52072800808898,
+          "height": 56.57142857142857
+        },
+        {
+          "x": 519.2972699696663,
+          "y": 668.5714285714286,
+          "width": 287.92719919110215,
+          "height": 87.42857142857143
+        },
+        {
+          "x": 980.3235591506573,
+          "y": 918.8571428571428,
+          "width": 227.9423660262892,
+          "height": 56.57142857142857
+        },
+        {
+          "x": 742.098078867543,
+          "y": 1508.5714285714284,
+          "width": 293.06875631951465,
+          "height": 87.42857142857143
+        }
+      ],
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeCandidates": 72,
+          "afterCandidates": 10,
+          "removedCandidates": 62,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeCandidates": 90,
+          "afterCandidates": 23,
+          "removedCandidates": 67,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeCandidates": 100,
+          "afterCandidates": 26,
+          "removedCandidates": 74,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "sha256": "74a6b8e12008b2ecda6154d0cbb4ae3287a17d15860c8fb64593744f1b15a55b",
+      "panels": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeCandidates": 9,
+          "afterCandidates": 9,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeCandidates": 13,
+          "afterCandidates": 13,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeCandidates": 31,
+          "afterCandidates": 31,
+          "removedCandidates": 0,
+          "allRemovedWithinPanels": true,
+          "addedGeometry": 0,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    }
+  ]
+}

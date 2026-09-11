@@ -19,7 +19,7 @@ import type {Project, Wall} from './types';
 import {classifyAutomaticWalls} from './automaticWallTopology';
 import {readMeasuredSpans,checkDimensionSums} from './dimensionSpans';
 
-export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines,page.analysis?.stairRegions,page.textRegions]);
+export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines,page.analysis?.stairRegions,page.textRegions,page.textPanels]);
 export interface AutomaticVenue {project?:Project; reasons:string[]; wallCount:number}
 export function extractStructuralWalls(page:PlanPage):Wall[]{
  if(!page.analysis)return [];
@@ -42,7 +42,8 @@ export function extractStructuralWalls(page:PlanPage):Wall[]{
  const corners=alignRasterJunctions(alignRasterCorners(pairWallEdges(separateCoincidentStrokes(bands))));
  // One bounded follow-up uses endpoints established by the first cap pass.
  const aligned=trimThinOverruns(trimThinOverruns(corners,minLength),minLength);
- const structural=selectStructuralLines(withoutTextStrokes(separateFurnitureLines(page.labels??[],aligned),page.textRegions),minLength,page.labels??[]);
+ const withoutPanels=aligned.filter(l=>!(page.textPanels??[]).some(b=>[l.start,l.end].every(p=>p.x>=b.x&&p.x<=b.x+b.width&&p.y>=b.y&&p.y<=b.y+b.height)));
+ const structural=selectStructuralLines(withoutTextStrokes(separateFurnitureLines(page.labels??[],withoutPanels),page.textRegions),minLength,page.labels??[]);
  const region=structureRegion(structural,page.labels??[],page.widthPx,page.heightPx);
  const lines=region?structural.filter(l=>[l.start,l.end].every(p=>p.x>=region.x&&p.x<=region.x+region.width&&p.y>=region.y&&p.y<=region.y+region.height)):structural;
  // Only merge tiny raster endpoint discrepancies; never bridge doorway-sized gaps.

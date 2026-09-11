@@ -1,3 +1,4 @@
+vi.mock('./textPanels',()=>({pageTextPanels:vi.fn().mockReturnValue([])}));
 vi.mock('./pdfSignImages',()=>({pdfSignImages:vi.fn().mockResolvedValue([])}));
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

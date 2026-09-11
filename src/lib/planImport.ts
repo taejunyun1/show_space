@@ -1,3 +1,4 @@
+import {pageTextPanels} from './textPanels';
 import {pdfSignImages,type PdfSignImage} from './pdfSignImages';
 import {pageRasterProfile,type PageRasterProfile} from '../domain/pageRasterProfile';
 import {assessPdfText} from './pdfTextQuality';
@@ -9,6 +10,7 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import type { RenderTask } from 'pdfjs-dist';
 
 export interface PlanPage {
+  textPanels?:import('../domain/textStrokes').TextRegion[];
   textRegions?:import('../domain/textStrokes').TextRegion[];
   embeddedSigns?:PdfSignImage[];
   resolvedVenue?:{project:import('../domain/types').Project;sourceImageUrl:string;sourceEvidenceKey:string};
@@ -142,6 +144,8 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           await renderTask.promise;
           if (destroyed) throw new Error('도면 파일이 닫혔습니다. 다시 불러와주세요.');
           diagnostics.rasterProfile=pageRasterProfile(context.getImageData(0,0,canvas.width,canvas.height).data);
+          let textPanels:NonNullable<PlanPage['textPanels']>=[];
+          if(!preview){try{textPanels=pageTextPanels(canvas,textRegions,labels);}catch{diagnostics.warnings.push('안내 상자 배경을 분리하지 못해 기존 선 분석을 유지합니다.');}}
           let embeddedSigns:PdfSignImage[]=[];
           if(!preview){try{embeddedSigns=await pdfSignImages(page,viewport.transform as import('../domain/pdfImagePlacements').Matrix6,canvas,OPS);}catch{diagnostics.warnings.push('PDF 원본 이미지 표기 추출을 완료하지 못했습니다. 페이지 OCR을 유지합니다.');}}
           if (destroyed) throw new Error('도면 파일이 닫혔습니다. 다시 불러와주세요.');
@@ -153,7 +157,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           validateImageSize(imageUrl);
           return {
             imageUrl,
-            labels,textSource,embeddedSigns,textRegions,
+            labels,textSource,embeddedSigns,textRegions,textPanels,
             widthPx: canvas.width,
             heightPx: canvas.height,
             diagnostics,
