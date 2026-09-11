@@ -1,0 +1,227 @@
+[
+  {
+    "file": "anca.pdf",
+    "page": 1,
+    "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+    "runs": [
+      {
+        "threshold": 125,
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 13,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "components": 20,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          }
+        ],
+        "constrainedVenueReady": false
+      },
+      {
+        "threshold": 155,
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 14,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "components": 16,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          }
+        ],
+        "constrainedVenueReady": false
+      },
+      {
+        "threshold": 190,
+        "status": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 16,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "components": 23,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          }
+        ],
+        "constrainedVenueReady": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 1,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 13,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "components": 15,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          }
+        ],
+        "constrainedVenueReady": false
+      },
+      {
+        "threshold": 155,
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 14,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "components": 16,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          }
+        ],
+        "constrainedVenueReady": false
+      },
+      {
+        "threshold": 190,
+        "status": "underdetermined",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 16,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "components": 18,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          }
+        ],
+        "constrainedVenueReady": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 2,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "runs": [
+      {
+        "threshold": 125,
+        "status": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 27,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": true
+          },
+          {
+            "axis": "z",
+            "components": 19,
+            "conflicts": [
+              {
+                "labelId": "region-3-90-label-1",
+                "residualMm": 450
+              }
+            ],
+            "reversed": false,
+            "orderConflict": true
+          }
+        ],
+        "constrainedVenueReady": false
+      },
+      {
+        "threshold": 155,
+        "status": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 26,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "components": 19,
+            "conflicts": [
+              {
+                "labelId": "rotation-90-label-6",
+                "residualMm": 50
+              }
+            ],
+            "reversed": false,
+            "orderConflict": true
+          }
+        ],
+        "constrainedVenueReady": false
+      },
+      {
+        "threshold": 190,
+        "status": "conflict",
+        "axes": [
+          {
+            "axis": "x",
+            "components": 29,
+            "conflicts": [],
+            "reversed": false,
+            "orderConflict": false
+          },
+          {
+            "axis": "z",
+            "components": 17,
+            "conflicts": [
+              {
+                "labelId": "rotation-90-label-6",
+                "residualMm": 50
+              }
+            ],
+            "reversed": true,
+            "orderConflict": true
+          }
+        ],
+        "constrainedVenueReady": false
+      }
+    ]
+  }
+]

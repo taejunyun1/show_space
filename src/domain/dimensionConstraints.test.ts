@@ -46,3 +46,17 @@ it('uses annotation interval endpoints instead of silently stretching the entire
  expect(r.axes[0].coordinates[2].component).not.toBe(r.axes[0].coordinates[0].component);
  expect(solveDimensionConstraints(walls,[{...dims[0],from:-5,to:100}]).rejected).toEqual(['a']);
 });
+it('detects a measured inner span longer than its enclosing span across disconnected groups',()=>{
+ const input=[wall('outer',0,0,300,0),wall('inner',100,100,200,100)];
+ const dims=[{wallId:'outer',labelId:'outer',mm:1000,horizontal:true},{wallId:'inner',labelId:'inner',mm:2000,horizontal:true}];
+ const r=solveDimensionConstraints(input,dims);
+ expect(r.axes[0].conflicts).toEqual([]);expect(r.axes[0].reversed).toBe(false);
+ expect(r.axes[0].orderConflict).toBe(true);expect(r.status).toBe('conflict');
+});
+it('leaves compatible nested and overlapping dimensions unresolved without inventing offsets',()=>{
+ for(const end of [200,400]){
+  const input=[wall('outer',0,0,300,0),wall('other',100,100,end,100)];
+  const r=solveDimensionConstraints(input,[{wallId:'outer',labelId:'outer',mm:3000,horizontal:true},{wallId:'other',labelId:'other',mm:1000,horizontal:true}]);
+  expect(r.axes[0].orderConflict).toBe(false);expect(r.status).toBe('underdetermined');
+ }
+});

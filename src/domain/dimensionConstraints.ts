@@ -66,8 +66,24 @@ export function solveDimensionConstraints(walls:Wall[], constraints:WallDimensio
   const nodes=pixels.map(p=>coordinates.get(p)!);
   // A consistent equation graph can still reverse physical coordinate order.
   const reversed=nodes.some((n,i)=>nodes.slice(i+1).some(m=>m.component===n.component&&m.mm<=n.mm));
-  return {axis,status:conflicts.length||reversed?'conflict' as const:components===1?'determined' as const:'underdetermined' as const,
-   appliedEqualities,components,unresolvedOffsets:Math.max(0,components-1),coordinates:nodes,conflicts,reversed};
+  // Disconnected measured groups still share the drawing's coordinate order.
+  // For adjacent pixels i<j: offset[j]-offset[i] >= mm[i]-mm[j].
+  // A positive cycle proves no placement can satisfy all groups, even before
+  // requiring a strictly positive physical gap between different pixels.
+  const orderEdges=nodes.slice(1).map((node,i)=>({from:nodes[i].component,to:node.component,delta:nodes[i].mm-node.mm})).filter(e=>e.from!==e.to);
+  const offsets=Array(components).fill(0) as number[];
+  let orderConflict=false;
+  for(let pass=0;pass<components;pass++){
+   let changed=false;
+   for(const edge of orderEdges){
+    const lower=offsets[edge.from]+edge.delta;
+    if(offsets[edge.to]<lower-.001){offsets[edge.to]=lower;changed=true;}
+   }
+   if(!changed)break;
+   if(pass===components-1)orderConflict=true;
+  }
+  return {axis,status:conflicts.length||reversed||orderConflict?'conflict' as const:components===1?'determined' as const:'underdetermined' as const,
+   appliedEqualities,components,unresolvedOffsets:Math.max(0,components-1),coordinates:nodes,conflicts,reversed,orderConflict};
  });
  return {status:rejected.length||axes.some(a=>a.status==='conflict')?'conflict' as const:axes.every(a=>a.status==='determined')?'determined' as const:'underdetermined' as const,axes,rejected};
 }
