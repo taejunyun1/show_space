@@ -51,3 +51,9 @@ it('builds the whole venue when an existing thin outline connects two thick wall
  expect(result?.walls).toHaveLength(4);expect(result?.planReference?.mmPerPixel).toBe(10);
  expect(parseProject(result).walls).toHaveLength(4);
 });
+it('restores a closed venue from a thin edge with small raster cap overruns',()=>{
+ const p=fixture(),bottom=p.analysis!.lines.find(l=>l.id==='c')!;
+ bottom.thicknessPx=1.5;bottom.start.x+=8;bottom.end.x-=8;
+ const result=buildAutomaticVenue(p).project;
+ expect(result?.walls).toHaveLength(4);expect(result?.planReference?.mmPerPixel).toBe(10);expect(parseProject(result).walls).toHaveLength(4);
+});

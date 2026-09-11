@@ -1,3 +1,4 @@
+import {trimThinOverruns} from './trimThinOverruns';
 import {detectStairRegions,interiorStairTreadIds} from './stairRegions';
 import {alignRasterCorners} from './rasterCorners';
 import {pageUnit} from './planUnits';
@@ -29,7 +30,7 @@ export function extractStructuralWalls(page:PlanPage):Wall[]{
   if(horizontal){a.start.y=a.end.y=(low+high)/2;}else{a.start.x=a.end.x=(low+high)/2;}
   a.thicknessPx=high-low;bands.splice(j--,1);
  }
- const lines=selectStructuralLines(alignRasterCorners(pairWallEdges(bands)),minLength,page.labels??[]);
+ const lines=selectStructuralLines(trimThinOverruns(alignRasterCorners(pairWallEdges(bands))),minLength,page.labels??[]);
  // Only merge tiny raster endpoint discrepancies; never bridge doorway-sized gaps.
  const points:{x:number;z:number}[]=[];
  const snap=(p:{x:number;y:number})=>{
