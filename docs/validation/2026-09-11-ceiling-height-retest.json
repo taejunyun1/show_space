@@ -1,0 +1,113 @@
+[
+  {
+    "file": "anca.pdf",
+    "page": 1,
+    "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+    "ceilingHeight": {
+      "evidence": [],
+      "conflict": false,
+      "unresolved": false
+    },
+    "runs": [
+      {
+        "threshold": 125,
+        "wallHeightsMm": [
+          3000
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "wallHeightsMm": [
+          3000
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "wallHeightsMm": [
+          3000
+        ],
+        "draftGenerated": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 1,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "ceilingHeight": {
+      "heightMm": 2750,
+      "evidence": [
+        {
+          "labelId": "label-2",
+          "mm": 2750
+        }
+      ],
+      "conflict": false,
+      "unresolved": false
+    },
+    "runs": [
+      {
+        "threshold": 125,
+        "wallHeightsMm": [
+          2750
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "wallHeightsMm": [
+          2750
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "wallHeightsMm": [
+          2750
+        ],
+        "draftGenerated": false
+      }
+    ]
+  },
+  {
+    "file": "espacio.pdf",
+    "page": 2,
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "ceilingHeight": {
+      "heightMm": 2750,
+      "evidence": [
+        {
+          "labelId": "label-2",
+          "mm": 2750
+        }
+      ],
+      "conflict": false,
+      "unresolved": false
+    },
+    "runs": [
+      {
+        "threshold": 125,
+        "wallHeightsMm": [
+          2750
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 155,
+        "wallHeightsMm": [
+          2750
+        ],
+        "draftGenerated": false
+      },
+      {
+        "threshold": 190,
+        "wallHeightsMm": [
+          2750
+        ],
+        "draftGenerated": false
+      }
+    ]
+  }
+]

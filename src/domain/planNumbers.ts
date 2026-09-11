@@ -4,7 +4,7 @@ export function readPlanNumbers(input:string):PlanNumber[]{
  const text=input.normalize('NFKC').trim();
  // Drawing IDs, scales, dates, levels and angles must not become lengths.
  if(/\d\s*[:/°%]|\d\s*[-–]\s*\d|\b(?:FL|EL|LEVEL|SCALE|NO)\b/i.test(text)||/^[+-]/.test(text))return [];
- const axis=/\bH\s*=|높이|\bHEIGHT\b/i.test(text)?'height':/\bT\s*=|두께|\bTHICKNESS\b/i.test(text)?'thickness':/\b[WL]\s*=|길이|\bLENGTH\b/i.test(text)?'length':null;
+ const axis=/\bH\s*=|높이|층고|\bHEIGHT\b/i.test(text)?'height':/\bT\s*=|두께|\bTHICKNESS\b/i.test(text)?'thickness':/\b[WL]\s*=|길이|\bLENGTH\b/i.test(text)?'length':null;
  const numericOnly=/^[\d\s.,x×]+$/i.test(text);
  const results:PlanNumber[]=[];
  const pattern=/(?<![\p{L}\p{N}])\d+(?:[.,]\d+)*(?:\s*(mm|cm|m)(?![\p{L}\p{N}]))?/giu;

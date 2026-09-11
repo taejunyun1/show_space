@@ -1,3 +1,4 @@
+import {readCeilingHeight} from './ceilingHeight';
 import {readOpeningDimensions} from './openingDimensions';
 import {wallAnnotationScale} from './wallAnnotationScale';
 import {alignRasterJunctions} from './rasterJunctions';
@@ -40,7 +41,8 @@ export function extractStructuralWalls(page:PlanPage):Wall[]{
   if(existing)return {...existing};
   const next={x:p.x,z:p.y};points.push(next);return {...next};
  };
- const candidates:Wall[]=lines.map((l,i)=>({id:`auto-wall-${i+1}`,name:`자동 벽 ${i+1}`,role:'boundary',start:snap(l.start),end:snap(l.end),heightMm:3000,thicknessMm:150,color:'#ffffff',visible:true,locked:false,note:'자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.'}));
+ const ceiling=readCeilingHeight(page.labels??[]);
+ const candidates:Wall[]=lines.map((l,i)=>({id:`auto-wall-${i+1}`,name:`자동 벽 ${i+1}`,role:'boundary',start:snap(l.start),end:snap(l.end),heightMm:ceiling.heightMm??3000,thicknessMm:150,color:'#ffffff',visible:true,locked:false,note:ceiling.heightMm?`천장 높이 표기 ${ceiling.heightMm} mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다.`:'자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.'}));
  return candidates;
 }
 /** A conservative closed-outline draft, never a claim of complete venue recognition. */
@@ -88,5 +90,6 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  }
  base.planReference!.mmPerPixel=scale;
  base.walls=walls.map(w=>({...w,start:{x:w.start.x*scale,z:w.start.z*scale},end:{x:w.end.x*scale,z:w.end.z*scale}}));
- return {project:base,wallCount:walls.length,reasons:[...(sums.checked?[`전체·부분 치수 합계 ${sums.checked}건을 교차 검증했습니다.`]:[]),'벽 높이 3 m·두께 150 mm는 임시값입니다.','개구부의 높이·문짝·창틀과 설비의 실제 영역은 아직 자동 구성하지 않습니다. 계단은 검출된 범위만 표시하며 전체 크기·높이를 추정하지 않습니다.']};
+ const ceiling=readCeilingHeight(page.labels??[]);
+ return {project:base,wallCount:walls.length,reasons:[...(sums.checked?[`전체·부분 치수 합계 ${sums.checked}건을 교차 검증했습니다.`]:[]),ceiling.heightMm?`천장 높이 표기 ${ceiling.heightMm} mm를 벽 높이 초안에 반영했습니다. 개별 가벽 높이는 미확인이며 두께 150 mm는 임시값입니다.`:'벽 높이 3 m·두께 150 mm는 임시값입니다.','개구부의 높이·문짝·창틀과 설비의 실제 영역은 아직 자동 구성하지 않습니다. 계단은 검출된 범위만 표시하며 전체 크기·높이를 추정하지 않습니다.']};
 }

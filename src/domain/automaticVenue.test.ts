@@ -100,3 +100,11 @@ it('cross-checks a labelled opening width against the inferred venue scale',()=>
  p.labels!.find(l=>l.id==='door-width-1')!.text='1500 mm';
  const blocked=buildAutomaticVenue(p);expect(blocked.project).toBeUndefined();expect(blocked.reasons.join(' ')).toContain('개구부에 적힌 폭');
 });
+it('uses a declared ceiling for wall drafts without claiming measured partition heights',()=>{
+ const p=fixture();p.labels!.push(...detectPlanLabels([{text:'Ceiling height: 275cm',source:'pdf-text',box:{x:300,y:10,width:250,height:20}}]).map(l=>({...l,id:'ceiling'})));
+ const r=buildAutomaticVenue(p);expect(r.project?.walls.every(w=>w.heightMm===2750)).toBe(true);
+ expect(r.project?.walls[0].note).toContain('개별 벽 높이를 측정한 값이 아니');
+ expect(parseProject(r.project).walls[0].heightMm).toBe(2750);
+ p.labels!.push({...p.labels!.at(-1)!,id:'other-ceiling',text:'Ceiling height: 300cm'});
+ expect(buildAutomaticVenue(p).project?.walls[0].heightMm).toBe(3000);
+});
