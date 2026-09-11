@@ -1,0 +1,293 @@
+{
+  "scope": "All-page 900px preview ranking in local Node PDF renderer, not OCR runtime, page-type accuracy, multi-floor reconstruction or zero-intervention venue completion.",
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "pageCount": 1,
+      "elapsedMs": 91,
+      "ranking": [
+        {
+          "pageNumber": 1,
+          "rasterProfile": {
+            "lightFraction": 0.937362422345057,
+            "midToneFraction": 0.03363009343051411,
+            "coloredFraction": 0
+          },
+          "score": 34
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "pageCount": 2,
+      "elapsedMs": 325,
+      "ranking": [
+        {
+          "pageNumber": 2,
+          "rasterProfile": {
+            "lightFraction": 0.8909162060362961,
+            "midToneFraction": 0.08641099642909554,
+            "coloredFraction": 0.00014674949860587976
+          },
+          "score": 48
+        },
+        {
+          "pageNumber": 1,
+          "rasterProfile": {
+            "lightFraction": 0.9448221885241892,
+            "midToneFraction": 0.03436384092354351,
+            "coloredFraction": 0.00014674949860587976
+          },
+          "score": 38
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "pageCount": 25,
+      "elapsedMs": 3876,
+      "ranking": [
+        {
+          "pageNumber": 2,
+          "rasterProfile": {
+            "lightFraction": 0.8961258132368047,
+            "midToneFraction": 0.08655774592770141,
+            "coloredFraction": 0.002347991977694076
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 3,
+          "rasterProfile": {
+            "lightFraction": 0.8999413002005576,
+            "midToneFraction": 0.08249767646627207,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 7,
+          "rasterProfile": {
+            "lightFraction": 0.9599863033801301,
+            "midToneFraction": 0.039793572371961065,
+            "coloredFraction": 0.018955143569926135
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 8,
+          "rasterProfile": {
+            "lightFraction": 0.9537983661889156,
+            "midToneFraction": 0.04497872132270215,
+            "coloredFraction": 0.025436579758352493
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 9,
+          "rasterProfile": {
+            "lightFraction": 0.9164017022941838,
+            "midToneFraction": 0.0783153157560045,
+            "coloredFraction": 0.008609303918211613
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 10,
+          "rasterProfile": {
+            "lightFraction": 0.8960035219879665,
+            "midToneFraction": 0.08570170718583378,
+            "coloredFraction": 0.0009294134911705718
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 11,
+          "rasterProfile": {
+            "lightFraction": 0.9098958078559898,
+            "midToneFraction": 0.07501345203737221,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 12,
+          "rasterProfile": {
+            "lightFraction": 0.894169153255393,
+            "midToneFraction": 0.08521254219048086,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 13,
+          "rasterProfile": {
+            "lightFraction": 0.8993543022061341,
+            "midToneFraction": 0.08264442596487795,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 14,
+          "rasterProfile": {
+            "lightFraction": 0.9055422393973487,
+            "midToneFraction": 0.07667661302157218,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 15,
+          "rasterProfile": {
+            "lightFraction": 0.9209998532505014,
+            "midToneFraction": 0.07586949077923984,
+            "coloredFraction": 0.003864403463288167
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 16,
+          "rasterProfile": {
+            "lightFraction": 0.9403218705669423,
+            "midToneFraction": 0.05547131047302255,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 17,
+          "rasterProfile": {
+            "lightFraction": 0.9086484371178398,
+            "midToneFraction": 0.09125372988308957,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 18,
+          "rasterProfile": {
+            "lightFraction": 0.924693048965416,
+            "midToneFraction": 0.07058650882942817,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 19,
+          "rasterProfile": {
+            "lightFraction": 0.930856527906863,
+            "midToneFraction": 0.06425182213960769,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 20,
+          "rasterProfile": {
+            "lightFraction": 0.929266741671966,
+            "midToneFraction": 0.0663552316196253,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 21,
+          "rasterProfile": {
+            "lightFraction": 0.9254267964584454,
+            "midToneFraction": 0.06921684684243995,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 22,
+          "rasterProfile": {
+            "lightFraction": 0.9108496795969281,
+            "midToneFraction": 0.08398962970209851,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 23,
+          "rasterProfile": {
+            "lightFraction": 0.9295113241696424,
+            "midToneFraction": 0.059286797436775424,
+            "coloredFraction": 0.005258523700044025
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 24,
+          "rasterProfile": {
+            "lightFraction": 0.9455070195176833,
+            "midToneFraction": 0.04522330382037861,
+            "coloredFraction": 0
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 25,
+          "rasterProfile": {
+            "lightFraction": 0.9590568898889595,
+            "midToneFraction": 0.03610037665704642,
+            "coloredFraction": 0.006701560436335176
+          },
+          "score": 0
+        },
+        {
+          "pageNumber": 1,
+          "rasterProfile": {
+            "lightFraction": 0.013280829623832119,
+            "midToneFraction": 0.3633762167979259,
+            "coloredFraction": 0.15836716724551192
+          },
+          "score": -10
+        },
+        {
+          "pageNumber": 4,
+          "rasterProfile": {
+            "lightFraction": 0.3788827471506139,
+            "midToneFraction": 0.5762119062759868,
+            "coloredFraction": 0.15614146651665606
+          },
+          "score": -10
+        },
+        {
+          "pageNumber": 5,
+          "rasterProfile": {
+            "lightFraction": 0.34755172919825855,
+            "midToneFraction": 0.6440590911314387,
+            "coloredFraction": 0.25385217433840435
+          },
+          "score": -10
+        },
+        {
+          "pageNumber": 6,
+          "rasterProfile": {
+            "lightFraction": 0.3637675487942083,
+            "midToneFraction": 0.5798806437411339,
+            "coloredFraction": 0.29315658171501247
+          },
+          "score": -10
+        }
+      ]
+    }
+  ],
+  "browser": {
+    "file": "espacio.pdf",
+    "mode": "automatic",
+    "deepPages": 2,
+    "selectedPage": 2,
+    "verifiedVenue": false,
+    "numericLabels": 30,
+    "stairCandidates": 1,
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "projectModified": false
+  }
+}

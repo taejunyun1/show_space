@@ -1,3 +1,4 @@
+import {pageRasterProfile,type PageRasterProfile} from '../domain/pageRasterProfile';
 import {assessPdfText} from './pdfTextQuality';
 import type {PlanAnalysis} from './analyzePlan';
 import { detectPlanLabels } from '../domain/planLabels';
@@ -14,12 +15,13 @@ export interface PlanPage {
   textSource?: 'pdf-text'|'ocr'|'none';
   widthPx: number;
   heightPx: number;
-  diagnostics?: { warnings: string[]; textItemCount?: number; smallTextItemCount?: number };
+  diagnostics?: { rasterProfile?:PageRasterProfile; warnings: string[]; textItemCount?: number; smallTextItemCount?: number };
 }
 
 export interface PlanFile {
   pageCount: number;
   renderPage(pageNumber: number, detail?: boolean): Promise<PlanPage>;
+  previewPage?(pageNumber: number): Promise<PlanPage>;
   destroy(): Promise<void>;
 }
 
@@ -96,9 +98,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
     if (pdf.numPages > 200) throw new Error('PDF는 200페이지 이하로 나눠서 올려주세요.');
     let destroyed = false;
     const activeTasks = new Set<RenderTask>();
-    return {
-      pageCount: pdf.numPages,
-      async renderPage(pageNumber, detail = false) {
+    const renderPage = async (pageNumber:number, detail = false, preview = false):Promise<PlanPage> => {
         if (destroyed) throw new Error('도면 파일이 닫혔습니다. 다시 불러와주세요.');
         validatePage(pageNumber, pdf.numPages);
         const page = await pdf.getPage(pageNumber);
@@ -110,7 +110,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           if (!Number.isFinite(original.width) || !Number.isFinite(original.height) || original.width <= 0 || original.height <= 0) {
             throw new Error('PDF 페이지 크기를 읽을 수 없습니다.');
           }
-          const scale = Math.min((detail ? 4800 : 2400) / Math.max(original.width, original.height), Math.sqrt((detail ? 24_000_000 : 6_000_000) / (original.width * original.height)));
+          const scale = Math.min((preview ? 900 : detail ? 4800 : 2400) / Math.max(original.width, original.height), Math.sqrt((detail ? 24_000_000 : 6_000_000) / (original.width * original.height)));
           const viewport = page.getViewport({ scale });
           let labels:PlanLabel[]=[];
           let textSource:PlanPage['textSource']='none';
@@ -137,6 +137,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           activeTasks.add(renderTask);
           await renderTask.promise;
           if (destroyed) throw new Error('도면 파일이 닫혔습니다. 다시 불러와주세요.');
+          diagnostics.rasterProfile=pageRasterProfile(context.getImageData(0,0,canvas.width,canvas.height).data);
           let imageUrl = canvas.toDataURL('image/png');
           if (imageUrl.length > MAX_IMAGE_URL_LENGTH) {
             imageUrl = canvas.toDataURL('image/jpeg', 0.92);
@@ -155,7 +156,11 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           canvas.width = canvas.height = 0;
           page.cleanup();
         }
-      },
+      };
+    return {
+      pageCount:pdf.numPages,
+      renderPage,
+      previewPage:pageNumber=>renderPage(pageNumber,false,true),
       async destroy() {
         if (destroyed) return;
         destroyed = true;

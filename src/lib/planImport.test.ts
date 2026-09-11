@@ -38,7 +38,7 @@ describe('local plan PDF import', () => {
   });
 
   it('does not reuse a damaged nonempty PDF text layer as reliable plan evidence',async()=>{
-    const canvas={width:0,height:0,getContext:()=>({}),toDataURL:()=> 'data:image/png;base64,AA=='};
+    const canvas={width:0,height:0,getContext:()=>({getImageData:()=>({data:new Uint8ClampedArray([255,255,255,255])})}),toDataURL:()=> 'data:image/png;base64,AA=='};
     vi.stubGlobal('document',{createElement:()=>canvas});
     const page={getViewport:({scale}:{scale:number})=>({width:1000*scale,height:800*scale}),getTextContent:async()=>({items:[{str:'The Gallery'},{str:'\u0013\u008f\u009c\u0003 ABC'},{str:'195,,,'}]}),render:()=>({promise:Promise.resolve(),cancel:vi.fn()}),cleanup:vi.fn()};
     mocks.getDocument.mockReturnValue({promise:Promise.resolve({numPages:1,getPage:async()=>page}),destroy:vi.fn().mockResolvedValue(undefined)});
@@ -48,7 +48,7 @@ describe('local plan PDF import', () => {
   });
 
   it('limits a large page to 2400 pixels and releases its canvas and page data', async () => {
-    const canvas = { width: 0, height: 0, getContext: () => ({}), toDataURL: () => 'data:image/png;base64,AA==' };
+    const canvas = { width: 0, height: 0, getContext: () => ({getImageData:()=>({data:new Uint8ClampedArray([255,255,255,255])})}), toDataURL: () => 'data:image/png;base64,AA==' };
     vi.stubGlobal('document', { createElement: () => canvas });
     const cleanup = vi.fn();
     const page = {
@@ -62,12 +62,15 @@ describe('local plan PDF import', () => {
     expect(canvas.width).toBe(0);
     expect(canvas.height).toBe(0);
     expect(cleanup).toHaveBeenCalledOnce();
+    expect(await loaded.previewPage!(1)).toMatchObject({widthPx:900,heightPx:450});
+    expect(canvas.width).toBe(0);expect(canvas.height).toBe(0);
+    expect(cleanup).toHaveBeenCalledTimes(2);
     await loaded.destroy();
   });
 
   it('rejects a failed PDF render instead of returning an incomplete page', async () => {
     const toDataURL = vi.fn();
-    const canvas = { width: 0, height: 0, getContext: () => ({}), toDataURL };
+    const canvas = { width: 0, height: 0, getContext: () => ({getImageData:()=>({data:new Uint8ClampedArray([255,255,255,255])})}), toDataURL };
     vi.stubGlobal('document', { createElement: () => canvas });
     const cleanup = vi.fn();
     const page = {
@@ -92,7 +95,7 @@ describe('local plan PDF import', () => {
   it.each([false, true])('compresses oversized PNG data and rejects oversized JPEG data (%s)', async (oversizedJpeg) => {
     const oversized = 'A'.repeat(12 * 1024 * 1024 + 1);
     const toDataURL = vi.fn().mockReturnValueOnce(oversized).mockReturnValueOnce(oversizedJpeg ? oversized : 'data:image/jpeg;base64,AA==');
-    const canvas = { width: 0, height: 0, getContext: () => ({}), toDataURL };
+    const canvas = { width: 0, height: 0, getContext: () => ({getImageData:()=>({data:new Uint8ClampedArray([255,255,255,255])})}), toDataURL };
     vi.stubGlobal('document', { createElement: () => canvas });
     const cleanup = vi.fn();
     const page = {
@@ -161,7 +164,7 @@ describe('plan image fidelity and diagnostics', () => {
 describe('PDF quality assessment', () => {
   afterEach(() => vi.unstubAllGlobals());
   function pdfMock(getTextContent: () => Promise<unknown>) {
-    const canvas = { width: 0, height: 0, getContext: () => ({}), toDataURL: () => 'data:image/png;base64,AA==' };
+    const canvas = { width: 0, height: 0, getContext: () => ({getImageData:()=>({data:new Uint8ClampedArray([255,255,255,255])})}), toDataURL: () => 'data:image/png;base64,AA==' };
     vi.stubGlobal('document', { createElement: () => canvas });
     const page = { getViewport: ({ scale }: { scale: number }) => ({ width: 2400 * scale, height: 1200 * scale }), getTextContent,
       render: () => ({ promise: Promise.resolve(), cancel: vi.fn() }), cleanup: vi.fn() };
