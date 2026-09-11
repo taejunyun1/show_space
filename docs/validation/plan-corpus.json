@@ -1,0 +1,30 @@
+[
+  {
+    "file": "anca.pdf",
+    "pages": [
+      1
+    ],
+    "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+    "source": "https://www.anca.net.au/s/ANCA_floor-plan.pdf",
+    "scope": "Selected floor-plan pages for recognition regression; page selection here is not a product automation test."
+  },
+  {
+    "file": "espacio.pdf",
+    "pages": [
+      1,
+      2
+    ],
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "source": "https://www.espaciogallery.com/uploads/5/9/7/6/5976484/1_espacio_gallery_floor_plans_1-2.pdf",
+    "scope": "Selected floor-plan pages for recognition regression; page selection here is not a product automation test."
+  },
+  {
+    "file": "coningsby.pdf",
+    "pages": [
+      7
+    ],
+    "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+    "source": "https://www.coningsbygallery.com/contact/pdf/coningsby-gallery-map.pdf",
+    "scope": "Axonometric exhibition drawing with two level views, selected page 7. Stress case for garbled PDF text and unsupported drawing type; excluded from planar-floor-plan success denominator. Page selection is not an automation test."
+  }
+]

@@ -1,3 +1,4 @@
+import {assessPdfText} from './pdfTextQuality';
 import type {PlanAnalysis} from './analyzePlan';
 import { detectPlanLabels } from '../domain/planLabels';
 import type { PlanLabel } from '../domain/planLabels';
@@ -118,9 +119,11 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           try {
             const text = await page.getTextContent();
             const items = text.items.filter(item => 'str' in item && item.str.trim().length > 0);
-            if(items.length){textSource='pdf-text';labels=detectPlanLabels(pdfPlanTexts(items,viewport.transform??[scale,0,0,-scale,0,viewport.height],Math.floor(viewport.width),Math.floor(viewport.height)));}
+            const quality=assessPdfText(items);
+            if(quality.usable){textSource='pdf-text';labels=detectPlanLabels(pdfPlanTexts(items,viewport.transform??[scale,0,0,-scale,0,viewport.height],Math.floor(viewport.width),Math.floor(viewport.height)));}
             diagnostics.textItemCount = items.length;
             diagnostics.smallTextItemCount = items.filter(item => 'height' in item && Math.abs(item.height) * scale < 9).length;
+            if(items.length&&!quality.usable)diagnostics.warnings.push('PDF 문자 인코딩이 손상되어 로컬 OCR로 자동 분석합니다.');
             if (!items.length) diagnostics.warnings.push('텍스트 레이어를 찾지 못했습니다. 로컬 OCR로 자동 분석합니다.');
             if (diagnostics.smallTextItemCount) diagnostics.warnings.push(`현재 해상도에서 9px 미만인 문자 항목이 ${diagnostics.smallTextItemCount}개 있습니다. 작은 문자는 확정 가능한 인식 근거만 사용합니다.`);
           } catch {

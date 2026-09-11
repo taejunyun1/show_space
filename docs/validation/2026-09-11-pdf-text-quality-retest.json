@@ -1,0 +1,259 @@
+{
+  "scope": "Three planar pages plus one axonometric stress page. Selected pages, not end-to-end document selection or full numerical ground truth.",
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "page": 1,
+      "source": "pdf-text",
+      "pdfTextQuality": {
+        "usable": true,
+        "characters": 317,
+        "badCharacters": 1
+      },
+      "baselineNumbers": 22,
+      "numericLabels": 22,
+      "conflicts": 0,
+      "selectedTruth": null,
+      "drawingType": "floor-plan",
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+          ],
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+          ],
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+          ],
+          "dimensionStatus": "conflict"
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "page": 7,
+      "source": "ocr",
+      "pdfTextQuality": {
+        "usable": false,
+        "characters": 196,
+        "badCharacters": 52
+      },
+      "baselineNumbers": 2,
+      "numericLabels": 2,
+      "conflicts": 0,
+      "selectedTruth": null,
+      "drawingType": "axonometric-stress-case",
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+          ],
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+          ],
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+          ],
+          "dimensionStatus": "underdetermined"
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 1,
+      "source": "ocr",
+      "pdfTextQuality": {
+        "usable": false,
+        "characters": 0,
+        "badCharacters": 0
+      },
+      "baselineNumbers": 13,
+      "numericLabels": 24,
+      "conflicts": 3,
+      "selectedTruth": {
+        "scope": "Seven vertical dimension labels selected from visual inspection; not a full-page accuracy benchmark",
+        "baseline": [
+          {
+            "value": 50,
+            "matched": false
+          },
+          {
+            "value": 135,
+            "matched": false
+          },
+          {
+            "value": 230,
+            "matched": false
+          },
+          {
+            "value": 60,
+            "matched": false
+          },
+          {
+            "value": 125,
+            "matched": false
+          },
+          {
+            "value": 96,
+            "matched": false
+          },
+          {
+            "value": 285,
+            "matched": false
+          }
+        ],
+        "enhanced": [
+          {
+            "value": 50,
+            "matched": true
+          },
+          {
+            "value": 135,
+            "matched": true
+          },
+          {
+            "value": 230,
+            "matched": true
+          },
+          {
+            "value": 60,
+            "matched": false
+          },
+          {
+            "value": 125,
+            "matched": true
+          },
+          {
+            "value": 96,
+            "matched": true
+          },
+          {
+            "value": 285,
+            "matched": true
+          }
+        ]
+      },
+      "drawingType": "floor-plan",
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "벽 옆 치수 표기와 그림에서 계산한 비율이 서로 맞지 않아 단일 축척 적용을 보류했습니다."
+          ],
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "벽 옆 치수 표기와 그림에서 계산한 비율이 서로 맞지 않아 단일 축척 적용을 보류했습니다."
+          ],
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+          ],
+          "dimensionStatus": "conflict"
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 2,
+      "source": "ocr",
+      "pdfTextQuality": {
+        "usable": false,
+        "characters": 0,
+        "badCharacters": 0
+      },
+      "baselineNumbers": 16,
+      "numericLabels": 30,
+      "conflicts": 3,
+      "selectedTruth": null,
+      "drawingType": "floor-plan",
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+          ],
+          "dimensionStatus": "conflict"
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+          ],
+          "dimensionStatus": "conflict"
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "reasons": [
+            "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+          ],
+          "dimensionStatus": "conflict"
+        }
+      ]
+    }
+  ]
+}
