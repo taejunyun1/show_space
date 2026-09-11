@@ -1,0 +1,84 @@
+{
+  "file": "espacio.pdf",
+  "page": 1,
+  "widthPx": 2400,
+  "heightPx": 1696,
+  "source": "https://www.espaciogallery.com/uploads/5/9/7/6/5976484/1_espacio_gallery_floor_plans_1-2.pdf",
+  "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+  "scope": "Selected visible wall segments manually located on the source raster; not full-page ground truth or physical dimension accuracy",
+  "tolerancePx": 4,
+  "segments": [
+    {
+      "id": "top-main",
+      "description": "상단 긴 벽",
+      "start": {
+        "x": 294,
+        "y": 411
+      },
+      "end": {
+        "x": 894,
+        "y": 411
+      }
+    },
+    {
+      "id": "front-step",
+      "description": "정문 위 짧은 수직 연결",
+      "start": {
+        "x": 2160,
+        "y": 426
+      },
+      "end": {
+        "x": 2160,
+        "y": 473
+      }
+    },
+    {
+      "id": "front-top",
+      "description": "정문 위 얇은 수평 연결",
+      "start": {
+        "x": 2160,
+        "y": 473
+      },
+      "end": {
+        "x": 2292,
+        "y": 473
+      }
+    },
+    {
+      "id": "lower-right",
+      "description": "하단 우측 외곽",
+      "start": {
+        "x": 1687,
+        "y": 1199
+      },
+      "end": {
+        "x": 2292,
+        "y": 1199
+      }
+    },
+    {
+      "id": "lower-thin",
+      "description": "하단 얇은 외곽",
+      "start": {
+        "x": 701,
+        "y": 1493
+      },
+      "end": {
+        "x": 1262,
+        "y": 1493
+      }
+    },
+    {
+      "id": "office-divider",
+      "description": "사무실 얇은 내부 벽",
+      "start": {
+        "x": 1045,
+        "y": 1105
+      },
+      "end": {
+        "x": 1045,
+        "y": 1493
+      }
+    }
+  ]
+}
