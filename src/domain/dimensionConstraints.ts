@@ -1,3 +1,4 @@
+import type {AxisEquality} from './openingAxisEvidence';
 import type {Wall} from './types';
 import type {MeasuredSpan} from './dimensionSpans';
 
@@ -5,10 +6,21 @@ export interface WallDimensionConstraint {wallId:string;labelId:string;mm:number
 interface Coordinate {pixel:number;component:number;mm:number}
 /** Relative coordinates only: each disconnected component has its own origin.
  * Never interpolate unmeasured gaps or apply these coordinates to a scalar image reference. */
-export function solveDimensionConstraints(walls:Wall[], constraints:WallDimensionConstraint[], spans:MeasuredSpan[]=[]) {
+export function solveDimensionConstraints(walls:Wall[], constraints:WallDimensionConstraint[], spans:MeasuredSpan[]=[],equalities:AxisEquality[]=[]) {
  const rejected:string[]=[];
  const axes=(['x','z'] as const).map(axis=>{
-  const key=(n:number)=>Math.round(n*1e6)/1e6;
+  const round=(n:number)=>Math.round(n*1e6)/1e6;
+  const aliases=new Map<number,number>();
+  const key=(n:number):number=>{const p=round(n);return aliases.has(p)?key(aliases.get(p)!):p;};
+  const appliedEqualities:AxisEquality[]=[];
+  for(const e of equalities.filter(e=>e.axis===axis)){
+   if(![e.from,e.to].every(Number.isFinite)||Math.abs(e.from-e.to)>2){rejected.push(e.sourceId);continue;}
+   const a=key(e.from),b=key(e.to);if(a===b)continue;
+   // Prevent a chain of small adjustments from joining axes farther than 2 px.
+   const members=[...aliases.keys(),a,b,e.from,e.to].filter(p=>key(p)===a||key(p)===b);
+   if(Math.max(...members)-Math.min(...members)>2){rejected.push(e.sourceId);continue;}
+   aliases.set(Math.max(a,b),Math.min(a,b));appliedEqualities.push(e);
+  }
   const validSpans=spans.filter(s=>s.horizontal===(axis==='x')).filter(s=>{
    const valid=[s.from,s.to,s.mm].every(Number.isFinite)&&s.to>s.from&&s.mm>0;
    if(!valid)rejected.push(s.labelId);return valid;
@@ -55,7 +67,7 @@ export function solveDimensionConstraints(walls:Wall[], constraints:WallDimensio
   // A consistent equation graph can still reverse physical coordinate order.
   const reversed=nodes.some((n,i)=>nodes.slice(i+1).some(m=>m.component===n.component&&m.mm<=n.mm));
   return {axis,status:conflicts.length||reversed?'conflict' as const:components===1?'determined' as const:'underdetermined' as const,
-   components,unresolvedOffsets:Math.max(0,components-1),coordinates:nodes,conflicts,reversed};
+   appliedEqualities,components,unresolvedOffsets:Math.max(0,components-1),coordinates:nodes,conflicts,reversed};
  });
  return {status:rejected.length||axes.some(a=>a.status==='conflict')?'conflict' as const:axes.every(a=>a.status==='determined')?'determined' as const:'underdetermined' as const,axes,rejected};
 }
