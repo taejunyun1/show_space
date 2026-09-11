@@ -8,7 +8,7 @@ const box=()=>loop([[0,0],[100,0],[100,100],[0,100]]);
 it('retains freestanding and attached internal branches without changing the floor',()=>{
  const input=[...box(),wall(20,20,80,20),wall(0,0,30,30),wall(30,30,70,30)];
  const before=structuredClone(input),result=classifyAutomaticWalls(input)!;
- expect(result.filter(w=>w.role==='partition')).toHaveLength(3);expect(deriveFloor(result).areaMm2).toBe(10000);expect(input).toEqual(before);
+ expect(result.filter(w=>w.role==='partition')).toHaveLength(4);expect(deriveFloor(result).areaMm2).toBe(10000);expect(input).toEqual(before);
 });
 it('supports an internal wall touching the middle of an outer wall',()=>{expect(classifyAutomaticWalls([...box(),wall(50,0,50,70)])?.at(-1)?.role).toBe('partition');});
 it('withholds external branches and open perimeters',()=>{expect(classifyAutomaticWalls([...box(),wall(0,0,-50,0)])).toBeUndefined();expect(classifyAutomaticWalls(box().slice(1))).toBeUndefined();});
@@ -17,4 +17,19 @@ it('rejects a partition crossing a concave exterior even when both endpoints are
  expect(classifyAutomaticWalls([...boundary,wall(10,80,90,80)])).toBeUndefined();
 });
 it('preserves courtyards and rejects walls crossing them',()=>{const boundary=[...box(),...loop([[40,40],[60,40],[60,60],[40,60]])];expect(deriveFloor(classifyAutomaticWalls(boundary)!).areaMm2).toBe(9600);expect(classifyAutomaticWalls([...boundary,wall(10,50,90,50)])).toBeUndefined();});
-it('does not guess the outside cycle of ambiguous chorded loops',()=>{expect(classifyAutomaticWalls([...box(),wall(0,0,100,100)])).toBeUndefined();});
+it('separates a diagonal room divider from the outer floor boundary',()=>{const result=classifyAutomaticWalls([...box(),wall(0,0,100,100)])!;expect(result.at(-1)?.role).toBe('partition');expect(deriveFloor(result).areaMm2).toBe(10000);});
+it('splits T junctions and retains two adjacent rooms as one floor',()=>{
+ const input=[...loop([[0,0],[50,0],[100,0],[100,100],[50,100],[0,100]]),wall(50,0,50,100)];
+ const result=classifyAutomaticWalls(input)!;
+ expect(result).toBeDefined();expect(deriveFloor(result).areaMm2).toBe(10000);expect(result.filter(w=>w.role==='partition')).toHaveLength(1);
+});
+it('splits crossing interior walls and attaches them to boundary midpoints',()=>{
+ const result=classifyAutomaticWalls([...box(),wall(50,0,50,100),wall(0,50,100,50)])!;
+ expect(result).toBeDefined();expect(result.filter(w=>w.role==='boundary')).toHaveLength(8);expect(result.filter(w=>w.role==='partition')).toHaveLength(4);expect(deriveFloor(result).areaMm2).toBe(10000);
+});
+it('deduplicates reversed segments and rejects partially overlapping walls',()=>{
+ expect(classifyAutomaticWalls([...box(),wall(100,0,0,0)])).toHaveLength(4);
+ expect(classifyAutomaticWalls([...box(),wall(25,0,75,0)])).toBeUndefined();
+});
+it('gives the same floor after reordering and reversing a shared-room graph',()=>{const input=[...loop([[0,0],[50,0],[100,0],[100,100],[50,100],[0,100]]),wall(50,0,50,100)];for(const candidate of [input,[...input].reverse().map(w=>({...w,start:w.end,end:w.start}))]){const result=classifyAutomaticWalls(candidate)!;expect(deriveFloor(result).areaMm2).toBe(10000);expect(result.filter(w=>w.role==='partition')).toHaveLength(1);}});
+it('withholds two closed spaces joined by an ambiguous bridge',()=>{expect(classifyAutomaticWalls([...box(),...loop([[200,0],[300,0],[300,100],[200,100]]),wall(100,0,200,0)])).toBeUndefined();});
