@@ -1,0 +1,292 @@
+{
+  "scope": "Observed thin-corner cap regression; not full boundary correctness.",
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyDiagnostics": {
+            "splitSucceeded": false
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": []
+        },
+        {
+          "threshold": 155,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 17,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": []
+        },
+        {
+          "threshold": 190,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 24,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": []
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "page": 7,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 0,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": []
+        },
+        {
+          "threshold": 155,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 0,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": []
+        },
+        {
+          "threshold": 190,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 0,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": []
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 37,
+            "cyclicCoreCount": 29,
+            "exteriorEdgeCount": 29
+          },
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": []
+        },
+        {
+          "threshold": 155,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 37,
+            "cyclicCoreCount": 29,
+            "exteriorEdgeCount": 29
+          },
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": []
+        },
+        {
+          "threshold": 190,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 38,
+            "cyclicCoreCount": 0
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": []
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 2,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 57,
+            "cyclicCoreCount": 29
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": [
+            {
+              "start": {
+                "x": 66,
+                "z": 1503.0778564206269
+              },
+              "end": {
+                "x": 2120.5714285714284,
+                "z": 1503.0778564206269
+              }
+            },
+            {
+              "start": {
+                "x": 66,
+                "z": 826.5642062689585
+              },
+              "end": {
+                "x": 66,
+                "z": 1503.0778564206269
+              }
+            },
+            {
+              "start": {
+                "x": 1571.142857142857,
+                "z": 1497.0758341759354
+              },
+              "end": {
+                "x": 2119.714285714286,
+                "z": 1497.0758341759354
+              }
+            },
+            {
+              "start": {
+                "x": 2119.714285714286,
+                "z": 1431.0535894843276
+              },
+              "end": {
+                "x": 2119.714285714286,
+                "z": 1497.0758341759354
+              }
+            }
+          ]
+        },
+        {
+          "threshold": 155,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 65,
+            "cyclicCoreCount": 55,
+            "exteriorEdgeCount": 28
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": [
+            {
+              "start": {
+                "x": 66,
+                "z": 1502.2204246713852
+              },
+              "end": {
+                "x": 2123.1428571428573,
+                "z": 1502.2204246713852
+              }
+            },
+            {
+              "start": {
+                "x": 66,
+                "z": 826.5642062689585
+              },
+              "end": {
+                "x": 66,
+                "z": 1502.2204246713852
+              }
+            },
+            {
+              "start": {
+                "x": 1570.2857142857142,
+                "z": 1496.2184024266937
+              },
+              "end": {
+                "x": 2119.714285714286,
+                "z": 1496.2184024266937
+              }
+            },
+            {
+              "start": {
+                "x": 2119.714285714286,
+                "z": 1431.0535894843276
+              },
+              "end": {
+                "x": 2119.714285714286,
+                "z": 1502.2204246713852
+              }
+            }
+          ]
+        },
+        {
+          "threshold": 190,
+          "topologyDiagnostics": {
+            "splitSucceeded": true,
+            "splitCount": 71,
+            "cyclicCoreCount": 57,
+            "exteriorEdgeCount": 31
+          },
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "selectedBottomEdges": [
+            {
+              "start": {
+                "x": 66,
+                "z": 1502.2204246713852
+              },
+              "end": {
+                "x": 2123.1428571428573,
+                "z": 1502.2204246713852
+              }
+            },
+            {
+              "start": {
+                "x": 1570.2857142857142,
+                "z": 1496.2184024266937
+              },
+              "end": {
+                "x": 2119.714285714286,
+                "z": 1496.2184024266937
+              }
+            },
+            {
+              "start": {
+                "x": 2119.714285714286,
+                "z": 1430.196157735086
+              },
+              "end": {
+                "x": 2119.714285714286,
+                "z": 1502.2204246713852
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

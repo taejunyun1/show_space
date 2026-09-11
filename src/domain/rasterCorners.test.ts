@@ -12,3 +12,13 @@ it('trims a nearby interior crossing without widening gap extension tolerance',(
  const gap={...overrun,start:{x:100,y:109}};
  expect(alignRasterCorners([across,gap])).toEqual([across,gap]);
 });
+
+it('trims two thin observed crossing caps but never extends a thin gap',()=>{
+ const a={id:'a',start:{x:0,y:100},end:{x:103,y:100},thicknessPx:1};
+ const b={id:'b',start:{x:100,y:0},end:{x:100,y:102},thicknessPx:1};
+ expect(alignRasterCorners([a,b]).map(l=>l.end)).toEqual([{x:100,y:100},{x:100,y:100}]);
+ const gap={...a,end:{x:98,y:100}};
+ expect(alignRasterCorners([gap,b])).toEqual([gap,b]);
+ const large={...a,end:{x:105,y:100}};
+ expect(alignRasterCorners([large,b])).toEqual([large,b]);
+});
