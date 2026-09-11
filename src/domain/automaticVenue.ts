@@ -84,7 +84,7 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  const dimensionWalls=applyOverlaidDoors(candidates,activeOverlaidDoors(page.overlaidDoors??[],page.labels??[])).walls;
  const measurements=readMeasuredSpans({...base,walls:dimensionWalls},page.labels??[],page.analysis.lines);
  const votes=measurements.map(m=>({ratio:m.mm/(m.to-m.from),wallId:m.id}));
- const annotations=wallAnnotationScale(dimensionWalls,page.labels??[]);
+ const annotations=wallAnnotationScale(dimensionWalls,page.labels??[],dimensionWalls,new Set(dimensionWalls.filter(w=>!candidates.some(c=>c.id===w.id)).map(w=>w.id)));
  if(new Set(votes.map(v=>v.wallId)).size<2){
   if(annotations.conflict)return blocked('벽 옆 치수 표기와 그림에서 계산한 비율이 서로 맞지 않아 단일 축척 적용을 보류했습니다.',walls.length);
   if(annotations.scale)votes.push(...annotations.matches.map(m=>({ratio:m.ratio,wallId:`annotation:${m.wallId}`})));

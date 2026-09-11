@@ -11,10 +11,11 @@ import {solveDimensionConstraints} from './dimensionConstraints';
 /** Shared by venue preparation and corpus evaluation so the benchmark cannot
  * silently solve a stronger set of constraints than the application. */
 export function venueDimensions(page:PlanPage,candidates:Wall[],structure:Wall[],gaps:{wall:Wall;kind:string}[]){
+ const originalIds=new Set(candidates.map(w=>w.id));
  candidates=applyOverlaidDoors(candidates,activeOverlaidDoors(page.overlaidDoors??[],page.labels??[])).walls;
  const labels=page.labels??[];
  const measuredSpans=readMeasuredSpans({...createDemoProject(),walls:candidates,planReference:{origin:{x:0,z:0},mmPerPixel:1,calibrated:true,widthPx:page.widthPx,heightPx:page.heightPx}},labels,page.analysis?.lines??[]);
- const annotations=wallAnnotationScale(candidates,labels);
+ const annotations=wallAnnotationScale(candidates,labels,candidates,new Set(candidates.filter(w=>!originalIds.has(w.id)).map(w=>w.id)));
  const openingDimensions=readOpeningDimensions(structure,gaps,labels);
  const solution=solveDimensionConstraints([...candidates,...gaps.map(g=>g.wall)],[...annotations.allMatches,...openingDimensions],measuredSpans,openingAxisEvidence(structure,gaps));
  return {measuredSpans,annotations,openingDimensions,solution};

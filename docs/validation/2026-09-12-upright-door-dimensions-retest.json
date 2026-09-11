@@ -1,0 +1,207 @@
+{
+  "scope": "K2 B3=3050mm binds only to the wall above the door in thresholds 155/190. A4 remains withheld because the below-door span has an internal crossing wall. Associations do not prove full venue reconstruction or independently measured dimensional accuracy. Complete venue remains 0/5 planar, 0/1 axonometric.",
+  "cases": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "runs": [
+        {
+          "threshold": 125,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "runs": [
+        {
+          "threshold": 125,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "k2.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "addedBindings": [
+            {
+              "wallId": "auto-wall-4:before:overlaid-door:v-231-535.00-614.00",
+              "labelId": "label-4",
+              "mm": 3050,
+              "lengthPx": 509.99999999999994,
+              "horizontal": false,
+              "ratio": 5.980392156862746,
+              "from": 407.14285714285717,
+              "to": 917.1428571428571
+            }
+          ],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "addedBindings": [
+            {
+              "wallId": "auto-wall-7:before:overlaid-door:v-231-535.00-614.00",
+              "labelId": "label-4",
+              "mm": 3050,
+              "lengthPx": 509.99999999999994,
+              "horizontal": false,
+              "ratio": 5.980392156862746,
+              "from": 407.14285714285717,
+              "to": 917.1428571428571
+            }
+          ],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "addedBindings": [],
+          "structureUnchanged": true,
+          "openingsUnchanged": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    }
+  ]
+}

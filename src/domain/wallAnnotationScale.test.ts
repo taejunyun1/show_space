@@ -48,3 +48,17 @@ it('does not bind one value from a windowsill size pair to a wall length',()=>{
  const text=detectPlanLabels([{text:'Window sill: 2,68 x 0,38m',source:'pdf-text',box:{x:160,y:60,width:280,height:20}}]);
  expect(wallAnnotationScale(input,text).allMatches).toEqual([]);
 });
+it('binds an upright identifier only to explicitly door-split spans',()=>{
+ const text=detectPlanLabels([{text:'B3 = 3,05m',source:'pdf-text',box:{x:135,y:390,width:120,height:24}}]);
+ const spans=[wall('before',100,0,100,500),wall('after',100,650,100,900)];
+ expect(wallAnnotationScale(spans,text).matches).toEqual([]);
+ expect(wallAnnotationScale(spans,text,spans,new Set(['before','after'])).matches).toMatchObject([{wallId:'before',horizontal:false,mm:3050,from:0,to:500}]);
+});
+it('withholds upright identifiers across a return, closer wall or opening',()=>{
+ const text=detectPlanLabels([{text:'B3 = 3,05m',source:'pdf-text',box:{x:135,y:390,width:120,height:24}}]);
+ const base=wall('before',100,0,100,500),allowed=new Set(['before']);
+ const branched=[base,wall('return',100,200,300,200)];expect(wallAnnotationScale(branched,text,branched,allowed).matches).toEqual([]);
+ const crossingReturn=[base,wall('cross-return',80,200,300,200)];expect(wallAnnotationScale(crossingReturn,text,crossingReturn,allowed).matches).toEqual([]);
+ const hidden=[base,wall('near',120,0,120,500)];expect(wallAnnotationScale(hidden,text,hidden,allowed).matches).toEqual([]);
+ const crossing=detectPlanLabels([{text:'B3 = 3,05m',source:'pdf-text',box:{x:135,y:490,width:120,height:24}}]);expect(wallAnnotationScale([base],crossing,[base],allowed).matches).toEqual([]);
+});

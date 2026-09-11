@@ -4,7 +4,7 @@ import {readPlanNumbers} from './planNumbers';
 import {pageUnit} from './planUnits';
 /** Adjacent annotations are weaker than witness lines. Require unique placement,
  * three independent walls, both axes, and agreement before deriving one scale. */
-export function wallAnnotationScale(walls:Wall[],labels:PlanLabel[],occludingWalls:Wall[]=walls){
+export function wallAnnotationScale(walls:Wall[],labels:PlanLabel[],occludingWalls:Wall[]=walls,uprightWallIds:ReadonlySet<string>=new Set()){
  const declared=pageUnit(labels);
  // A T-junction can bound a labelled portion of an otherwise continuous wall.
  // Keep the whole as a competing target: text alone must not choose between both.
@@ -37,9 +37,9 @@ export function wallAnnotationScale(walls:Wall[],labels:PlanLabel[],occludingWal
   if(numbers.length!==1||numbers[0].values.length!==1||['height','thickness'].includes(numbers[0].axis??''))continue;
   const n=numbers[0],unit=n.unit??declared.unit;if(!unit||declared.conflict)continue;
   const mm=n.values[0]*({mm:1,cm:10,m:1000}[unit]);if(mm<10||mm>200000)continue;
-  const horizontal=label.box.width>label.box.height*1.2,vertical=label.box.height>label.box.width*1.2;if(!horizontal&&!vertical)continue;
+  let horizontal=label.box.width>label.box.height*1.2;const vertical=label.box.height>label.box.width*1.2;if(!horizontal&&!vertical)continue;
   const cx=label.box.x+label.box.width/2,cy=label.box.y+label.box.height/2;
-  const candidates=targets.filter(w=>{
+  let candidates=targets.filter(w=>{
    const dx=w.end.x-w.start.x,dy=w.end.z-w.start.z;
    const length=Math.hypot(dx,dy),drift=Math.min(2,length*.005);
    if((horizontal&&Math.abs(dy)>drift)||(vertical&&Math.abs(dx)>drift))return false;
@@ -58,6 +58,25 @@ export function wallAnnotationScale(walls:Wall[],labels:PlanLabel[],occludingWal
    if(obscured)return false;
    return to-from>=30&&cross>=8&&cross<=60&&along>from&&along<to&&Math.abs(along-(from+to)/2)<=Math.max((to-from)*.2,(horizontal?label.box.width:label.box.height)/2);
   });
+  // Upright identifier labels may name vertical wall spans. Only use this
+  // fallback on spans explicitly split at an observed door; never on the
+  // original continuous wall that would include the doorway itself.
+  if(!candidates.length&&horizontal&&/^[A-Z]{1,4}[1-9]\d{0,2}\s*=/i.test(label.correctedText??label.text)){
+   candidates=targets.filter(w=>{
+    if(!uprightWallIds.has(w.id)||Math.abs(w.start.x-w.end.x)>1e-6)return false;
+    const from=Math.min(w.start.z,w.end.z),to=Math.max(w.start.z,w.end.z),x=w.start.x;
+    const edge=x<label.box.x?label.box.x:x>label.box.x+label.box.width?label.box.x+label.box.width:undefined;
+    if(edge===undefined||Math.abs(x-edge)<8||Math.abs(x-edge)>60||label.box.y<=from||label.box.y+label.box.height>=to)return false;
+    const sourceWall=walls.find(original=>original.id===w.id)!;
+    if(occludingWalls.some(other=>{
+     if(other.id===w.id||Math.abs(other.end.x-other.start.x)<2)return false;
+     const t=(x-other.start.x)/(other.end.x-other.start.x),z=other.start.z+t*(other.end.z-other.start.z);
+     return t>=0&&t<=1&&z>Math.min(sourceWall.start.z,sourceWall.end.z)+1e-6&&z<Math.max(sourceWall.start.z,sourceWall.end.z)-1e-6;
+    }))return false;
+    return !occludingWalls.some(other=>other.id!==w.id&&Math.abs(other.end.x-other.start.x)<2&&cy>Math.min(other.start.z,other.end.z)&&cy<Math.max(other.start.z,other.end.z)&&other.start.x>Math.min(edge,x)&&other.start.x<Math.max(edge,x));
+   });
+   if(candidates.length)horizontal=false;
+  }
   if(candidates.length!==1||candidates[0].uncertain)continue;
   const wall=candidates[0],lengthPx=Math.hypot(wall.end.x-wall.start.x,wall.end.z-wall.start.z);
   const from=horizontal?Math.min(wall.start.x,wall.end.x):Math.min(wall.start.z,wall.end.z),to=horizontal?Math.max(wall.start.x,wall.end.x):Math.max(wall.start.z,wall.end.z);
