@@ -45,3 +45,9 @@ it('removes interior stair treads from wall reconstruction while retaining sourc
  for(const x of [300,380])expect(walls.some(w=>w.start.x===x&&w.end.x===x)).toBe(true);
  expect(p).toEqual(before);
 });
+it('builds the whole venue when an existing thin outline connects two thick walls',()=>{
+ const p=fixture();p.analysis!.lines.find(l=>l.id==='c')!.thicknessPx=1.5;
+ const result=buildAutomaticVenue(p).project;
+ expect(result?.walls).toHaveLength(4);expect(result?.planReference?.mmPerPixel).toBe(10);
+ expect(parseProject(result).walls).toHaveLength(4);
+});
