@@ -99,3 +99,10 @@ it('finds page symbols without native PDF assets and retains analysis when symbo
  const fallback=await analyzePlan(input,new AbortController().signal);
  expect(fallback.labels).toEqual(input.labels);expect(fallback.analysis?.issues.join(' ')).toContain('표지 기호 분석을 완료하지 못');
 });
+it('uses the darker retry to retain door symbols hidden in the main wall pass',async()=>{
+ const dark=[{id:'band',start:{x:100,y:100},end:{x:100,y:240},thicknessPx:30},{id:'leaf',start:{x:85,y:234},end:{x:250,y:234},thicknessPx:7},{id:'brace',start:{x:115,y:155},end:{x:180,y:234},thicknessPx:2}];
+ vi.mocked(readPlanOcr).mockResolvedValue([]);
+ vi.mocked(detectPlanWalls).mockImplementation(async(_url,threshold)=>threshold===125?dark:[{id:'wall',start:{x:100,y:0},end:{x:100,y:400},thicknessPx:30}]);
+ const result=await analyzePlan({...page,widthPx:500,heightPx:500},new AbortController().signal);
+ expect(result.overlaidDoors).toHaveLength(1);expect(result.labels?.filter(l=>l.kind==='door')).toHaveLength(1);expect(result.labels?.find(l=>l.kind==='door')?.source).toBe('symbol');expect(result.analysis?.selfCheck?.status).toBe('withheld');
+});

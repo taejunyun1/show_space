@@ -1,3 +1,4 @@
+import {applyOverlaidDoors,activeOverlaidDoors} from './overlaidDoors';
 import {anchorOpeningPoint} from './openingAnchors';
 import {withoutTextStrokes} from './textStrokes';
 import {structureRegion} from './structureRegion';
@@ -20,7 +21,7 @@ import type {Project, Wall} from './types';
 import {classifyAutomaticWalls} from './automaticWallTopology';
 import {readMeasuredSpans,checkDimensionSums} from './dimensionSpans';
 
-export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines,page.analysis?.stairRegions,page.textRegions,page.textPanels]);
+export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines,page.analysis?.stairRegions,page.textRegions,page.textPanels,page.overlaidDoors]);
 export interface AutomaticVenue {project?:Project; reasons:string[]; wallCount:number}
 export function extractStructuralWalls(page:PlanPage):Wall[]{
  if(!page.analysis)return [];
@@ -70,7 +71,7 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  if(page.analysis.lineState!=='complete'||page.analysis.textState!=='complete')return blocked('문자와 선 분석을 모두 완료해야 공간 초안을 만들 수 있습니다.');
  const candidates=extractStructuralWalls(page);
  const maxGap=Math.max(page.widthPx,page.heightPx)*.2;
- const {structure,gaps}=resolvePlanOpenings(candidates,page.labels??[],maxGap,(page.analysis.stairRegions??detectStairRegions(page.labels??[],page.analysis.lines)),page.analysis.lines);
+ const {structure,gaps}=resolvePlanOpenings(candidates,page.labels??[],maxGap,(page.analysis.stairRegions??detectStairRegions(page.labels??[],page.analysis.lines)),page.analysis.lines,page.overlaidDoors);
  const classified=classifyAutomaticWalls([...structure,...gaps.map(g=>g.wall)]);
  const gapIds=new Set(gaps.map(g=>g.wall.id));
  const walls=classified?.filter(w=>!gapIds.has(w.id));
@@ -80,9 +81,10 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  const declared=pageUnit(page.labels??[]);
  if(declared.conflict)return blocked('페이지 전체 단위 선언이 서로 충돌해 축척 적용을 보류했습니다.');
  // Measure original spans before topology divides them into fragments.
- const measurements=readMeasuredSpans({...base,walls:candidates},page.labels??[],page.analysis.lines);
+ const dimensionWalls=applyOverlaidDoors(candidates,activeOverlaidDoors(page.overlaidDoors??[],page.labels??[])).walls;
+ const measurements=readMeasuredSpans({...base,walls:dimensionWalls},page.labels??[],page.analysis.lines);
  const votes=measurements.map(m=>({ratio:m.mm/(m.to-m.from),wallId:m.id}));
- const annotations=wallAnnotationScale(candidates,page.labels??[]);
+ const annotations=wallAnnotationScale(dimensionWalls,page.labels??[]);
  if(new Set(votes.map(v=>v.wallId)).size<2){
   if(annotations.conflict)return blocked('벽 옆 치수 표기와 그림에서 계산한 비율이 서로 맞지 않아 단일 축척 적용을 보류했습니다.',walls.length);
   if(annotations.scale)votes.push(...annotations.matches.map(m=>({ratio:m.ratio,wallId:`annotation:${m.wallId}`})));

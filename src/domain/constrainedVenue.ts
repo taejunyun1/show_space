@@ -14,7 +14,7 @@ import {parseProject} from './model';
 export function prepareConstrainedVenue(page:PlanPage){
  if(page.analysis?.textState!=='complete'||page.analysis.lineState!=='complete')return undefined;
  const labels=page.labels??[],lines=page.analysis.lines,candidates=extractStructuralWalls(page),stairs=page.analysis.stairRegions??detectStairRegions(labels,lines);
- const {structure,gaps}=resolvePlanOpenings(candidates,labels,Math.max(page.widthPx,page.heightPx)*.2,stairs,lines);
+ const {structure,gaps}=resolvePlanOpenings(candidates,labels,Math.max(page.widthPx,page.heightPx)*.2,stairs,lines,page.overlaidDoors);
  const classified=classifyAutomaticWalls([...structure,...gaps.map(g=>g.wall)]);if(!classified)return undefined;
  const gapIds=new Set(gaps.map(g=>g.wall.id)),walls=classified.filter(w=>!gapIds.has(w.id));
  const openings:Opening[]=[];

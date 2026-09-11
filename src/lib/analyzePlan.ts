@@ -1,3 +1,4 @@
+import {detectOverlaidDoors,mergeDoorSymbols} from '../domain/overlaidDoors';
 import {mergePdfFacilityOcr} from '../domain/hybridPlanLabels';
 import {mergeSignSymbol} from '../domain/signSymbols';
 import {detectPlanSymbols} from './detectPlanSymbols';
@@ -21,7 +22,7 @@ import {readPlanOcr} from './readPlanOcr';
 import {detectPlanWalls} from './detectPlanWalls';
 export interface PlanAnalysis {stairRegions?:StairRegion[];lines:WallCandidate[];issues:string[];textState:'complete'|'failed';lineState:'complete'|'failed';numericCount:number;selfCheck?:{attempts:number;status:'stable'|'withheld'}}
 export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(message:string)=>void=()=>{}):Promise<PlanPage>{
- page={...page,resolvedVenue:undefined,dimensionRechecks:undefined};
+ page={...page,resolvedVenue:undefined,dimensionRechecks:undefined,overlaidDoors:undefined};
  const abort=()=>{if(signal.aborted)throw new Error('자동 분석을 취소했습니다.');};abort();
  onStage('문자·숫자와 구조 선을 자동 분석하고 있습니다.');
  const reuseText=(page.textSource==='pdf-text'||page.textSource==='ocr')&&(page.labels?.length??0)>0;
@@ -102,6 +103,9 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
    candidates.push({...result,analysis:{...result.analysis!,lines,lineState:'complete'}});
   }catch{abort();candidates.push({...result,analysis:{...result.analysis!,lines:[],lineState:'failed'}});}
  }
+ const overlaidDoors=detectOverlaidDoors(candidates[1].analysis!.lines);
+ labels=mergeDoorSymbols(labels,overlaidDoors);
+ candidates.forEach(p=>{p.overlaidDoors=overlaidDoors;p.labels=labels;});
  const regionPasses=candidates.map(p=>detectStairRegions(labels,p.analysis!.lines));
  candidates.forEach((p,i)=>{p.analysis={...p.analysis!,stairRegions:stableStairRegions(regionPasses,i)};});
  const constrained=candidates.map(p=>prepareConstrainedVenue(p));
@@ -111,7 +115,7 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  const stable=successes.length>=2&&successes.every(s=>venueDraftsAgree(successes[0].project,s.project));
  const selectedIndex=stable?successes[0].index:0,selected=candidates[selectedIndex];
  const structural=extractStructuralWalls(selected);
- const openings=resolvePlanOpenings(structural,labels,Math.max(page.widthPx,page.heightPx)*.2,selected.analysis!.stairRegions,selected.analysis!.lines);
+ const openings=resolvePlanOpenings(structural,labels,Math.max(page.widthPx,page.heightPx)*.2,selected.analysis!.stairRegions,selected.analysis!.lines,selected.overlaidDoors);
  const dimensions=venueDimensions(selected,structural,openings.structure,openings.gaps);
  const conflicts=[...conflictingDimensionLabels(dimensions.annotations.allMatches),...dimensions.solution.axes.flatMap(a=>a.conflicts.map(c=>c.labelId))];
  const targets=dimensionRecheckTargets(labels,page.widthPx,page.heightPx,conflicts);

@@ -1,0 +1,291 @@
+{
+  "scope": "K2 overlaid door-symbol development cases. Two symbol positions, one split doorway in thresholds 155 and 190. Dark-pass evidence is reused across wall passes, not counted as independent symbol confirmations. Full reconstruction remains 0/5 planar and 0/1 axonometric.",
+  "limits": "Bottom doorway still has overlapping parallel boundaries; no split is adopted there. No held-out door-symbol accuracy or browser UI verification is claimed.",
+  "cases": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "doorMarkers": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "doorMarkers": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "doorMarkers": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "doorMarkers": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "k2.pdf",
+      "page": 1,
+      "doorMarkers": [
+        {
+          "kind": "door",
+          "text": "출입문 · 문짝 기호",
+          "source": "symbol",
+          "box": {
+            "x": 1161.9919110212336,
+            "y": 2034.857142857143,
+            "width": 150.7333164812942,
+            "height": 34.285714285714285
+          }
+        },
+        {
+          "kind": "door",
+          "text": "출입문 · 문짝 기호",
+          "source": "symbol",
+          "box": {
+            "x": 395.8959988444316,
+            "y": 917.1428571428571,
+            "width": 30.857142857142854,
+            "height": 135.42857142857156
+          }
+        }
+      ],
+      "runs": [
+        {
+          "threshold": 125,
+          "symbolCount": 2,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": false,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "symbolCount": 2,
+          "splitDoors": [
+            {
+              "id": "overlaid-door:v-231-535.00-614.00",
+              "name": "문 기호 개구부",
+              "role": "boundary",
+              "start": {
+                "x": 411.324570273003,
+                "z": 917.1428571428571
+              },
+              "end": {
+                "x": 411.324570273003,
+                "z": 1052.5714285714287
+              },
+              "heightMm": 3000,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "짙은 닫힘 표시·직각 문짝·내부 사선과 연속 벽을 대조한 개구부. 실제 폭·높이는 치수 검증 전 미확정."
+            }
+          ],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": false,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "symbolCount": 2,
+          "splitDoors": [
+            {
+              "id": "overlaid-door:v-231-535.00-614.00",
+              "name": "문 기호 개구부",
+              "role": "boundary",
+              "start": {
+                "x": 411.324570273003,
+                "z": 917.1428571428571
+              },
+              "end": {
+                "x": 411.324570273003,
+                "z": 1052.5714285714287
+              },
+              "heightMm": 3000,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "짙은 닫힘 표시·직각 문짝·내부 사선과 연속 벽을 대조한 개구부. 실제 폭·높이는 치수 검증 전 미확정."
+            }
+          ],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "doorMarkers": [],
+      "runs": [
+        {
+          "threshold": 125,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 155,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        },
+        {
+          "threshold": 190,
+          "symbolCount": 0,
+          "splitDoors": [],
+          "otherOpeningsUnchanged": true,
+          "rawStructureUnchanged": true,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false
+        }
+      ]
+    }
+  ]
+}

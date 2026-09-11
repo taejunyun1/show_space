@@ -1,3 +1,4 @@
+import {detectOverlaidDoors,mergeDoorSymbols} from '../src/domain/overlaidDoors';
 import {pageTextPanels} from '../src/lib/textPanels';
 import {pageSignSymbols} from '../src/domain/pageSignSymbols';
 import {mergeSignSymbol} from '../src/domain/signSymbols';
@@ -14,7 +15,6 @@ import {prepareConstrainedVenue} from '../src/domain/constrainedVenue';
 import {createDimensionMap} from '../src/domain/dimensionMap';
 import {readCeilingHeight} from '../src/domain/ceilingHeight';
 import {numericOcrRegions} from '../src/domain/ocrRegions';
-import {wallAnnotationScale} from '../src/domain/wallAnnotationScale';
 import {classifyAutomaticWalls} from '../src/domain/automaticWallTopology';
 import {scorePlanSegments} from './scorePlanSegments';
 import {resolvePlanOpenings} from '../src/domain/planOpenings';
@@ -135,12 +135,14 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    const pageSymbols=pageSignSymbols(canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data,canvas.width,canvas.height);
    for(const sign of pageSymbols)labels=mergeSignSymbol(labels,sign.box,sign.symbol);
    const textPanels=source==='pdf-text'?pageTextPanels(canvas as never,nativeTexts.map(t=>t.box),labels):[];
+   const sourceLines=(threshold:number)=>detectWallCandidates(pixels,small.width,small.height,{threshold,maxCandidates:500,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height),...(l.solidSupportThicknessPx===undefined?{}:{solidSupportThicknessPx:l.solidSupportThicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)})}));
+   const overlaidDoors=detectOverlaidDoors(sourceLines(125));labels=mergeDoorSymbols(labels,overlaidDoors);
    const runs=[125,155,190].map(threshold=>{
-    const lines=detectWallCandidates(pixels,small.width,small.height,{threshold,maxCandidates:500,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height),...(l.solidSupportThicknessPx===undefined?{}:{solidSupportThicknessPx:l.solidSupportThicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)})}));
-    const input:PlanPage={imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,textPanels,textRegions:source==='pdf-text'?nativeTexts.map(t=>t.box):undefined,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
+    const lines=sourceLines(threshold);
+    const input:PlanPage={overlaidDoors,imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,textPanels,textRegions:source==='pdf-text'?nativeTexts.map(t=>t.box):undefined,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
     const structural=extractStructuralWalls(input);
     const structureScore=sha256===structureTruth.sha256&&file===structureTruth.file&&number===structureTruth.page&&canvas.width===structureTruth.widthPx&&canvas.height===structureTruth.heightPx?{scope:structureTruth.scope,tolerancePx:structureTruth.tolerancePx,raw:scorePlanSegments(structureTruth.segments,lines,structureTruth.tolerancePx),selected:scorePlanSegments(structureTruth.segments,structural.map(w=>({start:{x:w.start.x,y:w.start.z},end:{x:w.end.x,y:w.end.z}})),structureTruth.tolerancePx)}:undefined;
-    const resolved=resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines),lines);
+    const resolved=resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines),lines,overlaidDoors);
     const split=splitWallJunctions([...resolved.structure,...resolved.gaps.map(g=>g.wall)]);
     const topologyDiagnostics={splitSucceeded:!!split,splitCount:split?.length,cyclicCoreCount:split?peelOpenBranches(split).size:undefined,exteriorEdgeCount:split?exteriorWallEdges(split)?.size:undefined};
     const topologyResolved=!!classifyAutomaticWalls([...resolved.structure,...resolved.gaps.map(g=>g.wall)]);
@@ -148,7 +150,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
     const selectedAnnotationTruth=file===annotationTruth.file&&sha256===annotationTruth.sha256&&number===annotationTruth.page&&canvas.width===annotationTruth.widthPx&&canvas.height===annotationTruth.heightPx?annotationTruth.intervals.map((t:{id:string;mm:number;horizontal:boolean;from:number;to:number;cross:number})=>({id:t.id,matched:annotations.matches.some(m=>{
      const w=structural.find(w=>w.id===m.wallId);return w&&m.mm===t.mm&&m.horizontal===t.horizontal&&Math.abs(m.from-t.from)<=annotationTruth.tolerancePx&&Math.abs(m.to-t.to)<=annotationTruth.tolerancePx&&Math.abs((t.horizontal?w.start.z:w.start.x)-t.cross)<=annotationTruth.tolerancePx;
     })})):undefined;
-    const draft=buildAutomaticVenue(input);return {textPanels,unlabelledStairCandidates:detectUnlabelledStairCandidates(lines,labels),topologyDiagnostics,constrainedVenueReady:!!prepareConstrainedVenue(input),dimensionMapReady:!!createDimensionMap(dimensionConstraints),openingDimensions,selectedAnnotationTruth,measuredSpans,dimensionConstraints,annotationScale:wallAnnotationScale(structural,labels),topologyResolved,structureScore,openingCandidates:resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines),lines).gaps,framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
+    const draft=buildAutomaticVenue(input);return {overlaidDoors,textPanels,unlabelledStairCandidates:detectUnlabelledStairCandidates(lines,labels),topologyDiagnostics,constrainedVenueReady:!!prepareConstrainedVenue(input),dimensionMapReady:!!createDimensionMap(dimensionConstraints),openingDimensions,selectedAnnotationTruth,measuredSpans,dimensionConstraints,annotationScale:annotations,topologyResolved,structureScore,openingCandidates:resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines),lines,overlaidDoors).gaps,framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
    });
    const selected=runs[1],conflictIds=[...conflictingDimensionLabels(selected.annotationScale.allMatches),...selected.dimensionConstraints.axes.flatMap(a=>a.conflicts.map(c=>c.labelId))];
    const recheckTargets=dimensionRecheckTargets(labels,canvas.width,canvas.height,conflictIds);
