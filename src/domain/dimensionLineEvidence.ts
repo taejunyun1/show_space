@@ -5,7 +5,7 @@ import type {WallSuggestion} from './dimensionSuggestions';
 import {readPlanNumbers} from './planNumbers';
 export interface DimensionLineMatch extends WallSuggestion {evidence:WallCandidate[];gap?:WallCandidate}
 interface SupportedLine {line:WallCandidate;parts:WallCandidate[];gap?:WallCandidate}
-function labelGapLines(lines:WallCandidate[],label:PlanLabel):SupportedLine[]{
+export function labelGapLines(lines:WallCandidate[],label:PlanLabel):SupportedLine[]{
  const result:SupportedLine[]=lines.map(line=>({line,parts:[line]}));
  for(const horizontal of [true,false]){
   const along=(p:{x:number;y:number})=>horizontal?p.x:p.y,across=(p:{x:number;y:number})=>horizontal?p.y:p.x;

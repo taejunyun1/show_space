@@ -1,3 +1,4 @@
+import {alignRasterCorners} from './rasterCorners';
 import {pageUnit} from './planUnits';
 import {pairWallEdges} from './pairWallEdges';
 import {detectOpeningGaps} from './detectOpenings';
@@ -5,7 +6,7 @@ import {selectStructuralLines} from './structuralLines';
 import type {PlanPage} from '../lib/planImport';
 import type {Project, Wall} from './types';
 import {classifyAutomaticWalls} from './automaticWallTopology';
-import {matchDimensionLines} from './dimensionLineEvidence';
+import {matchDimensionSpans,checkDimensionSums,type MeasuredSpan} from './dimensionSpans';
 import {readPlanNumbers} from './planNumbers';
 
 export interface AutomaticVenue {project?:Project; reasons:string[]; wallCount:number}
@@ -30,7 +31,7 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
   if(horizontal){a.start.y=a.end.y=(low+high)/2;}else{a.start.x=a.end.x=(low+high)/2;}
   a.thicknessPx=high-low;bands.splice(j--,1);
  }
- const lines=selectStructuralLines(pairWallEdges(bands),minLength,page.labels??[]);
+ const lines=selectStructuralLines(alignRasterCorners(pairWallEdges(bands)),minLength,page.labels??[]);
  // Only merge tiny raster endpoint discrepancies; never bridge doorway-sized gaps.
  const points:{x:number;z:number}[]=[];
  const snap=(p:{x:number;y:number})=>{
@@ -49,18 +50,22 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  const declared=pageUnit(page.labels??[]);
  if(declared.conflict)return blocked('페이지 전체 단위 선언이 서로 충돌해 축척 적용을 보류했습니다.');
  const votes:{ratio:number;wallId:string}[]=[];
+ const measurements:MeasuredSpan[]=[];
  for(const label of page.labels??[]){
   if(label.numericConflict||label.status==='dismissed'||(label.source==='ocr'&&(label.confidence??0)<90))continue;
   const numbers=readPlanNumbers(label.correctedText??label.text);
   if(numbers.length!==1||numbers[0].values.length!==1||!(numbers[0].unit??declared.unit))continue;
   // Dimensions refer to original spans, not the fragments created at room junctions.
-  const n=numbers[0],matches=matchDimensionLines({...base,walls:candidates},label,page.analysis.lines);
+  const n=numbers[0],matches=matchDimensionSpans({...base,walls:candidates},label,page.analysis.lines);
   if(matches.length!==1)continue;
   const m=matches[0],mm=n.values[0]*({mm:1,cm:10,m:1000}[n.unit??declared.unit!]);
   if(mm<=0||mm>200000)continue;
-  votes.push({ratio:mm/Math.hypot(m.end.x-m.start.x,m.end.y-m.start.y),wallId:m.wallId});
+  votes.push({ratio:mm/(m.to-m.from),wallId:m.id});
+  measurements.push({...m,mm,labelId:label.id});
  }
- if(new Set(votes.map(v=>v.wallId)).size<2)return blocked('단위와 치수선이 명확한 서로 다른 벽 치수 2개가 필요합니다. 축척을 추측하지 않고 도면 배치를 유지합니다.',walls.length);
+ if(new Set(votes.map(v=>v.wallId)).size<2)return blocked('단위와 치수선이 명확한 서로 다른 치수 구간 2개가 필요합니다. 축척을 추측하지 않고 도면 배치를 유지합니다.',walls.length);
+ const sums=checkDimensionSums(measurements);
+ if(sums.conflict)return blocked('부분 치수 합계와 전체 치수가 맞지 않아 자동 적용을 보류했습니다.');
  const ratios=votes.map(v=>v.ratio).sort((a,b)=>a-b),scale=ratios[Math.floor(ratios.length/2)];
  if(ratios.some(r=>Math.abs(r/scale-1)>.02))return blocked('치수에서 계산한 축척이 서로 다릅니다. 자동 적용을 보류했습니다.',walls.length);
  for(const g of gaps){
@@ -76,5 +81,5 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
  }
  base.planReference!.mmPerPixel=scale;
  base.walls=walls.map(w=>({...w,start:{x:w.start.x*scale,z:w.start.z*scale},end:{x:w.end.x*scale,z:w.end.z*scale}}));
- return {project:base,wallCount:walls.length,reasons:['벽 높이 3 m·두께 150 mm는 임시값입니다.','개구부의 높이·문짝·창틀과 설비·계단의 실제 영역 및 설치 불가 구역은 아직 자동 구성하지 않습니다. 이 초안에는 해당 영역이 아직 반영되지 않았습니다.']};
+ return {project:base,wallCount:walls.length,reasons:[...(sums.checked?[`전체·부분 치수 합계 ${sums.checked}건을 교차 검증했습니다.`]:[]),'벽 높이 3 m·두께 150 mm는 임시값입니다.','개구부의 높이·문짝·창틀과 설비·계단의 실제 영역 및 설치 불가 구역은 아직 자동 구성하지 않습니다. 이 초안에는 해당 영역이 아직 반영되지 않았습니다.']};
 }

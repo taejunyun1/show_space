@@ -28,3 +28,10 @@ it('connects capped double wall edges through topology and scale inference',()=>
 });
 it('uses an explicit page unit for bare numbers while preserving original text',()=>{const p=fixture();p.labels!.forEach(l=>{l.text=l.text.replace(' mm','');});p.labels!.push(...detectPlanLabels([{text:'All measurements in mm',source:'pdf-text',box:{x:20,y:750,width:200,height:20}}]).map(l=>({...l,id:'page-unit'})));const result=buildAutomaticVenue(p).project;expect(result?.planReference?.mmPerPixel).toBe(10);expect(result?.planLabels?.[0].text).toBe('8000');expect(parseProject(result)).toBeDefined();});
 it('never uses conflicting orientation readings as scale evidence',()=>{const p=fixture();p.labels![0].numericConflict=true;expect(buildAutomaticVenue(p).project).toBeUndefined();});
+it('automatically cross-checks complete and partial dimension chains',()=>{
+ const p=fixture();p.labels![0].box={x:400,y:0,width:100,height:10};const d=p.analysis!.lines.find(l=>l.id==='dx')!;d.start.y=d.end.y=20;for(const id of ['wx1','wx2'])p.analysis!.lines.find(l=>l.id===id)!.start.y=10;
+ p.analysis!.lines.push(line('part-left',100,70,500,70),line('part-right',500,70,900,70),line('mid-witness',500,60,500,105));
+ p.labels!.push(...detectPlanLabels([{text:'4000 mm',source:'pdf-text',box:{x:250,y:45,width:100,height:10}},{text:'4000 mm',source:'pdf-text',box:{x:650,y:45,width:100,height:10}}]).map((l,i)=>({...l,id:`part-label-${i}`})));
+ const result=buildAutomaticVenue(p);expect(result.project?.planReference?.mmPerPixel).toBe(10);expect(result.reasons.join(' ')).toContain('전체·부분 치수 합계 1건');
+ p.labels!.at(-1)!.text='4500 mm';expect(buildAutomaticVenue(p).reasons.join(' ')).toContain('부분 치수 합계와 전체 치수');
+});
