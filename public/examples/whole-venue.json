@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "id": "venue-example",
+  "name": "전시장 전체 · 중정과 양면 가벽",
+  "venue": "합성 검증 예제",
+  "walls": [
+    {
+      "id": "외곽-1",
+      "name": "외곽-1",
+      "start": {
+        "x": 10000,
+        "z": 10000
+      },
+      "end": {
+        "x": 26000,
+        "z": 10000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "외곽-2",
+      "name": "외곽-2",
+      "start": {
+        "x": 26000,
+        "z": 10000
+      },
+      "end": {
+        "x": 26000,
+        "z": 22000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "외곽-3",
+      "name": "외곽-3",
+      "start": {
+        "x": 26000,
+        "z": 22000
+      },
+      "end": {
+        "x": 10000,
+        "z": 22000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "외곽-4",
+      "name": "외곽-4",
+      "start": {
+        "x": 10000,
+        "z": 22000
+      },
+      "end": {
+        "x": 10000,
+        "z": 10000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "중정-1",
+      "name": "중정-1",
+      "start": {
+        "x": 17000,
+        "z": 14000
+      },
+      "end": {
+        "x": 20000,
+        "z": 14000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "중정-2",
+      "name": "중정-2",
+      "start": {
+        "x": 20000,
+        "z": 14000
+      },
+      "end": {
+        "x": 20000,
+        "z": 18000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "중정-3",
+      "name": "중정-3",
+      "start": {
+        "x": 20000,
+        "z": 18000
+      },
+      "end": {
+        "x": 17000,
+        "z": 18000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "중정-4",
+      "name": "중정-4",
+      "start": {
+        "x": 17000,
+        "z": 18000
+      },
+      "end": {
+        "x": 17000,
+        "z": 14000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "전시실 공유벽",
+      "name": "전시실 공유벽",
+      "start": {
+        "x": 14000,
+        "z": 10000
+      },
+      "end": {
+        "x": 14000,
+        "z": 19000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "partition"
+    },
+    {
+      "id": "복도 가벽",
+      "name": "복도 가벽",
+      "start": {
+        "x": 10000,
+        "z": 19000
+      },
+      "end": {
+        "x": 14000,
+        "z": 19000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "partition"
+    },
+    {
+      "id": "양면 전시벽",
+      "name": "양면 전시벽",
+      "start": {
+        "x": 23000,
+        "z": 14000
+      },
+      "end": {
+        "x": 23000,
+        "z": 20000
+      },
+      "heightMm": 3600,
+      "thicknessMm": 180,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "partition"
+    }
+  ],
+  "artworks": [
+    {
+      "id": "art-0",
+      "name": "가벽 A면 작품",
+      "artist": "",
+      "widthMm": 1200,
+      "heightMm": 1600,
+      "depthMm": 40,
+      "wallId": "양면 전시벽",
+      "wallSide": "front",
+      "alongMm": 2800,
+      "centerHeightMm": 1700,
+      "frame": "natural",
+      "imageUrl": "/artworks/artwork-1.png",
+      "visible": true,
+      "locked": false,
+      "note": "합성 검증용 작품"
+    },
+    {
+      "id": "art-1",
+      "name": "가벽 B면 작품",
+      "artist": "",
+      "widthMm": 1200,
+      "heightMm": 1600,
+      "depthMm": 40,
+      "wallId": "양면 전시벽",
+      "wallSide": "back",
+      "alongMm": 2800,
+      "centerHeightMm": 1700,
+      "frame": "natural",
+      "imageUrl": "/artworks/artwork-2.png",
+      "visible": true,
+      "locked": false,
+      "note": "합성 검증용 작품"
+    }
+  ],
+  "scenes": [],
+  "floorColor": "#f1f1ed"
+}

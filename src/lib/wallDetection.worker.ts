@@ -1,0 +1,2 @@
+import {detectWallCandidates} from '../domain/wallCandidates';
+self.onmessage=(event:MessageEvent)=>{try{const {data,width,height,threshold,minLengthPx,minThicknessPx}=event.data;const candidates=detectWallCandidates(new Uint8ClampedArray(data),width,height,{threshold,minLengthPx,minThicknessPx});self.postMessage({candidates});}catch(error){self.postMessage({error:error instanceof Error?error.message:'도면 분석에 실패했습니다.'});}};

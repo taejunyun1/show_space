@@ -1,0 +1,23 @@
+import {DimensionEvidence} from './DimensionEvidence';
+import {suggestDimensionWalls} from '../domain/dimensionSuggestions';
+import {useState} from 'react';
+import type {PlanLabel} from '../domain/planLabels';
+import {readPlanNumbers} from '../domain/planNumbers';
+import {applyLinkedDimension,type DimensionField,type DimensionUnit} from '../domain/linkedDimensions';
+import {wallLength,artworkWarnings} from '../domain/model';
+import {useEditor} from '../state/editor';
+const names={length:'길이',height:'높이',thickness:'두께'};
+export function DimensionLink({label}:{label:PlanLabel}){
+ const {project,commit}=useEditor();
+ const suggestions=suggestDimensionWalls(project,label);
+ const reading=readPlanNumbers(label.correctedText??label.text);
+ const number=reading.length===1&&reading[0].values.length===1?reading[0]:null;
+ const [wallId,setWallId]=useState(''),[field,setField]=useState<DimensionField|''>(number?.axis??''),[unit,setUnit]=useState<DimensionUnit|''>(number?.unit??''),[message,setMessage]=useState('');
+ let next:typeof project|undefined,error='';
+ if(wallId&&field&&unit)try{next=applyLinkedDimension(project,label.id,wallId,field,unit);}catch(e){error=(e as Error).message;}
+ const wall=project.walls.find(w=>w.id===wallId),newWall=next?.walls.find(w=>w.id===wallId);
+ const value=(w:NonNullable<typeof wall>)=>field==='length'?wallLength(w):field==='height'?w.heightMm:w.thicknessMm;
+ const changed=next?.walls.filter((w,i)=>w.start.x!==project.walls[i].start.x||w.start.z!==project.walls[i].start.z||w.end.x!==project.walls[i].end.x||w.end.z!==project.walls[i].end.z).length??0;
+ const warnings=next?next.artworks.flatMap(a=>artworkWarnings(a,next.walls.find(w=>w.id===a.wallId)!)):[];
+ return <details className="dimension-link"><summary>벽 치수에 연결</summary><p>표기 확인 후 대상 벽·치수 종류·단위를 선택하세요. 여러 숫자나 모호한 값은 숫자 하나로 정정해야 합니다.</p><DimensionEvidence project={project} label={label} onSelect={id=>{setWallId(id);setField('length');setMessage('');}}/><section className="wall-suggestions"><strong>도면 위치로 찾은 벽</strong><p>{suggestions.message}</p>{suggestions.candidates.length>0&&project.planReference&&<svg role="img" aria-label="숫자와 추천 벽 위치" viewBox={`0 0 ${project.planReference.widthPx} ${project.planReference.heightPx}`} style={{width:'100%',maxHeight:240,background:'white'}}><image href={project.planImageUrl} width={project.planReference.widthPx} height={project.planReference.heightPx}/>{suggestions.candidates.map(c=><g key={c.wallId}><line x1={c.start.x} y1={c.start.y} x2={c.end.x} y2={c.end.y} stroke={wallId===c.wallId?'#16a36a':'#5157ef'} strokeWidth={Math.max(3,project.planReference!.widthPx/250)}/><text x={(c.start.x+c.end.x)/2} y={(c.start.y+c.end.y)/2+18} fontSize={Math.max(14,project.planReference!.widthPx/50)} fill="#222">{project.walls.find(w=>w.id===c.wallId)?.name}</text></g>)}<rect x={label.box.x} y={label.box.y} width={label.box.width} height={label.box.height} fill="none" stroke="#d27810" strokeWidth={3}/></svg>}{suggestions.candidates.map(c=>{const w=project.walls.find(w=>w.id===c.wallId)!;return <button key={c.wallId} className="button secondary" disabled={w.locked} aria-pressed={wallId===c.wallId} onClick={()=>{setWallId(c.wallId);setMessage('');}}>{w.name} 선택 · 표기에서 {Math.round(c.distancePx)}px{w.locked?' · 잠김':''}</button>;})}</section><label>대상 벽<select aria-label={`대상 벽 ${label.id}`} value={wallId} onChange={e=>{setWallId(e.target.value);setMessage('');}}><option value="">벽 선택</option>{project.walls.map(w=><option key={w.id} value={w.id}>{w.name}{w.locked?' (잠김)':''}</option>)}</select></label><label>치수 종류<select aria-label={`치수 종류 ${label.id}`} value={field} onChange={e=>{setField(e.target.value as DimensionField);setMessage('');}}><option value="">종류 선택</option>{Object.entries(names).map(([v,n])=><option key={v} value={v}>{n}</option>)}</select></label><label>단위<select aria-label={`치수 단위 ${label.id}`} value={unit} onChange={e=>{setUnit(e.target.value as DimensionUnit);setMessage('');}}><option value="">단위 선택</option>{['mm','cm','m'].map(v=><option key={v}>{v}</option>)}</select></label>{wall&&newWall&&<p>{wall.name} {field&&names[field]}: {Math.round(value(wall)*100)/100} → {Math.round(value(newWall)*100)/100} mm</p>}{field==='length'&&<p>시작점 고정 · 끝점 이동 · 연결된 모서리도 변경됩니다. 도면 축척은 유지됩니다.{next&&` 좌표가 바뀌는 벽 ${changed}개.`}</p>}{warnings.length>0&&<p className="plan-quality-warning">변경 후 작품 배치 경고 {warnings.length}건. 적용 후 작품 위치를 확인하세요.</p>}{error&&<p role="alert">{error}</p>}<button className="button primary" aria-label={`벽 치수 적용 ${label.id}`} disabled={!next} onClick={()=>{if(next){commit(next);setMessage('벽 치수에 적용했습니다. 되돌리기로 복원할 수 있습니다.');}}}>벽 치수 적용</button>{message&&<p role="status">{message}</p>}</details>;
+}

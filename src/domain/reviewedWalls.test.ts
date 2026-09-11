@@ -1,0 +1,8 @@
+import {expect,it} from 'vitest';
+import {createDemoProject,parseProject} from './model';
+import {addReviewedWalls} from './reviewedWalls';
+const ready=()=>({...createDemoProject(),planImageUrl:'data:image/png;base64,AAAA',planReference:{origin:{x:100,z:200},widthPx:1000,heightPx:800,mmPerPixel:10,calibrated:true}});
+const segment={start:{x:10,y:20},end:{x:210,y:20}};
+it('requires scale calibration and never changes original walls/artworks',()=>{const p=ready();expect(()=>addReviewedWalls({...p,planReference:{...p.planReference,calibrated:false}},[segment],3000,150)).toThrow();const n=addReviewedWalls(p,[segment],3000,150);expect(n.walls).toHaveLength(5);expect(n.walls[4].start).toEqual({x:200,z:400});expect(n.walls[4].end).toEqual({x:2200,z:400});expect(n.walls[4].role).toBe('partition');expect(p.walls).toHaveLength(4);expect(n.artworks).toEqual(p.artworks);expect(parseProject(n)).toEqual(n);});
+it('ignores exact and reversed duplicate segments',()=>{const p=ready();const n=addReviewedWalls(p,[segment,{start:segment.end,end:segment.start}],3000,150);expect(n.walls).toHaveLength(5);expect(()=>addReviewedWalls(n,[segment],3000,150)).toThrow('중복');});
+it('rejects empty, invalid, outside and zero-length selections and wall limits',()=>{const p=ready();for(const segments of [[],[{...segment,start:{x:-1,y:20}}],[{...segment,end:segment.start}],[{...segment,start:{x:NaN,y:0}}]])expect(()=>addReviewedWalls(p,segments,3000,150)).toThrow();expect(()=>addReviewedWalls(p,[segment],0,150)).toThrow();const crowded={...p,walls:Array.from({length:200},(_,i)=>({...p.walls[0],id:`w${i}`}))};expect(()=>addReviewedWalls(crowded,[segment],3000,150)).toThrow();});
