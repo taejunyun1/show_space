@@ -1,0 +1,291 @@
+{
+  "scope": "Selected observed Espacio upper-notch regression, not independent full shape truth. Three planar pages and one axonometric stress page.",
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": []
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": []
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": []
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "page": 7,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": []
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": []
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": []
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": []
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": true,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": []
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": []
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 2,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": [
+            {
+              "id": "auto-wall-2",
+              "name": "자동 벽 2",
+              "role": "boundary",
+              "start": {
+                "x": 436.2857142857143,
+                "z": 520.4610717896866
+              },
+              "end": {
+                "x": 1071.4285714285713,
+                "z": 520.4610717896866
+              },
+              "heightMm": 2750,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "천장 높이 표기 2750 mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다."
+            },
+            {
+              "id": "auto-wall-4",
+              "name": "자동 벽 4",
+              "role": "boundary",
+              "start": {
+                "x": 1124.5714285714287,
+                "z": 430.4307381193124
+              },
+              "end": {
+                "x": 1739.142857142857,
+                "z": 430.4307381193124
+              },
+              "heightMm": 2750,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "천장 높이 표기 2750 mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다."
+            }
+          ]
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": [
+            {
+              "id": "auto-wall-2",
+              "name": "자동 벽 2",
+              "role": "boundary",
+              "start": {
+                "x": 437.14285714285717,
+                "z": 517.0313447927199
+              },
+              "end": {
+                "x": 1068.857142857143,
+                "z": 517.0313447927199
+              },
+              "heightMm": 2750,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "천장 높이 표기 2750 mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다."
+            },
+            {
+              "id": "auto-wall-4",
+              "name": "자동 벽 4",
+              "role": "boundary",
+              "start": {
+                "x": 1123.7142857142858,
+                "z": 431.2881698685541
+              },
+              "end": {
+                "x": 1739.142857142857,
+                "z": 431.2881698685541
+              },
+              "heightMm": 2750,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "천장 높이 표기 2750 mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다."
+            },
+            {
+              "id": "auto-wall-33",
+              "name": "자동 벽 33",
+              "role": "boundary",
+              "start": {
+                "x": 1123.7142857142858,
+                "z": 431.2881698685541
+              },
+              "end": {
+                "x": 1123.7142857142858,
+                "z": 526.4630940343782
+              },
+              "heightMm": 2750,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "천장 높이 표기 2750 mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다."
+            },
+            {
+              "id": "auto-wall-43",
+              "name": "자동 벽 43",
+              "role": "boundary",
+              "start": {
+                "x": 1068.857142857143,
+                "z": 526.4630940343782
+              },
+              "end": {
+                "x": 1123.7142857142858,
+                "z": 526.4630940343782
+              },
+              "heightMm": 2750,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "천장 높이 표기 2750 mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다."
+            },
+            {
+              "id": "auto-wall-46",
+              "name": "자동 벽 46",
+              "role": "boundary",
+              "start": {
+                "x": 1068.857142857143,
+                "z": 517.0313447927199
+              },
+              "end": {
+                "x": 1068.857142857143,
+                "z": 526.4630940343782
+              },
+              "heightMm": 2750,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "천장 높이 표기 2750 mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다."
+            }
+          ]
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "draftGenerated": false,
+          "constrainedVenueReady": false,
+          "upperNotch": [
+            {
+              "id": "auto-wall-2",
+              "name": "자동 벽 2",
+              "role": "boundary",
+              "start": {
+                "x": 144,
+                "z": 520.4610717896866
+              },
+              "end": {
+                "x": 1068.857142857143,
+                "z": 520.4610717896866
+              },
+              "heightMm": 2750,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "천장 높이 표기 2750 mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다."
+            },
+            {
+              "id": "auto-wall-4",
+              "name": "자동 벽 4",
+              "role": "boundary",
+              "start": {
+                "x": 1123.7142857142858,
+                "z": 431.2881698685541
+              },
+              "end": {
+                "x": 1738.2857142857142,
+                "z": 431.2881698685541
+              },
+              "heightMm": 2750,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "천장 높이 표기 2750 mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

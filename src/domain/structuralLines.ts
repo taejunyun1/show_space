@@ -8,7 +8,7 @@ function distance(p:{x:number;y:number},line:WallCandidate){
 }
 /** Keep short connectors only when anchored to the structural network at both ends. */
 export function selectStructuralLines(lines:WallCandidate[],longLength:number,labels:PlanLabel[]):WallCandidate[]{
- const eligible=lines.filter(l=>l.thicknessPx>=1&&Math.hypot(l.end.x-l.start.x,l.end.y-l.start.y)>=10&&!labels.some(label=>label.status!=='dismissed'&&[l.start,l.end].every(p=>p.x>=label.box.x-2&&p.x<=label.box.x+label.box.width+2&&p.y>=label.box.y-2&&p.y<=label.box.y+label.box.height+2)));
+ const eligible=lines.filter(l=>l.thicknessPx>=1&&Math.hypot(l.end.x-l.start.x,l.end.y-l.start.y)>=1&&!labels.some(label=>label.status!=='dismissed'&&[l.start,l.end].every(p=>p.x>=label.box.x-2&&p.x<=label.box.x+label.box.width+2&&p.y>=label.box.y-2&&p.y<=label.box.y+label.box.height+2)));
  const doorEnds=new Set(detectCornerDoors(eligible,labels).flatMap(d=>[d.aId,d.bId]));
  const approaches=new Set(doorEnds);
  for(const id of doorEnds){
@@ -28,7 +28,14 @@ export function selectStructuralLines(lines:WallCandidate[],longLength:number,la
  const thick=eligible.filter(l=>l.thicknessPx>=3);
  // Thin ink is structural only with direct, independent support at both ends.
  // Do not let other thin strokes (such as dimension witnesses) bootstrap it.
- const candidates=eligible.filter(l=>l.thicknessPx>=3||approaches.has(l.id)||(Math.hypot(l.end.x-l.start.x,l.end.y-l.start.y)>=longLength&&thick.some(a=>distance(l.start,a)<=4&&thick.some(b=>a.id!==b.id&&distance(l.end,b)<=4))));
+ const candidates=eligible.filter(l=>{
+  const length=Math.hypot(l.end.x-l.start.x,l.end.y-l.start.y);
+  // Corner correction may shorten a real step below the detector's 10px floor.
+  // Require two distinct thick supports at 1px, not the general 4px proximity.
+  const supported=(tolerance:number)=>thick.some(a=>a.id!==l.id&&distance(l.start,a)<=tolerance&&thick.some(b=>b.id!==l.id&&a.id!==b.id&&distance(l.end,b)<=tolerance));
+  if(length<10&&!supported(1))return false;
+  return l.thicknessPx>=3||approaches.has(l.id)||(length>=longLength&&supported(4));
+ });
  const long=new Set(candidates.flatMap((l,i)=>l.thicknessPx>=3&&Math.hypot(l.end.x-l.start.x,l.end.y-l.start.y)>=longLength?[i]:[]));
  const live=new Set(candidates.map((_,i)=>i));
  const touches=(p:{x:number;y:number},i:number,j:number)=>i!==j&&distance(p,candidates[j])<=4;
