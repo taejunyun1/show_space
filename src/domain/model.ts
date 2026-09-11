@@ -1,5 +1,5 @@
 import {validateOpenings} from './openings';
-import {validatePlanLabels} from './planLabels'
+import {validatePlanLabels,type PlanLabel} from './planLabels'
 import { validatePlanReference } from './plan'
 import type { Artwork, EntitySelection, Point, Project, Wall } from './types'
 
@@ -269,6 +269,11 @@ export function parseProject(input: unknown): Project {
     const a=raw.planAnalysis as Project['planAnalysis'],r=raw.planReference as Project['planReference'];
     if(!a||!r||!Array.isArray(a.lines)||a.lines.length>500||!Array.isArray(a.issues)||a.issues.length>30||a.issues.some(v=>typeof v!=='string'||v.length>2000)||!['complete','failed'].includes(a.textState)||!['complete','failed'].includes(a.lineState)||!Number.isInteger(a.numericCount)||a.numericCount<0||a.numericCount>500)throw new Error('자동 도면 분석 정보가 올바르지 않습니다.');
     if(a.selfCheck&&(!['stable','withheld'].includes(a.selfCheck.status)||!Number.isInteger(a.selfCheck.attempts)||a.selfCheck.attempts<2||a.selfCheck.attempts>3))throw new Error('자동 검증 정보가 올바르지 않습니다.');
+    if(a.stairRegions!==undefined){
+      if(!Array.isArray(a.stairRegions)||a.stairRegions.length>50)throw new Error('계단 검출 영역이 올바르지 않습니다.');
+      const regionIds=new Set<string>();
+      for(const region of a.stairRegions){const b=region?.box;if(!region||region.kind!=='stairs'||typeof region.id!=='string'||region.id.length>200||regionIds.has(region.id)||!Array.isArray(region.lineIds)||region.lineIds.length<3||region.lineIds.length>30||region.lineIds.some(id=>!a.lines.some(l=>l.id===id))||!result.planLabels||!(result.planLabels as PlanLabel[]).some(l=>l.id===region.labelId&&l.kind==='stairs')||!b||![b.x,b.y,b.width,b.height].every(Number.isFinite)||b.x<0||b.y<0||b.width<=0||b.height<=0||b.x+b.width>r.widthPx||b.y+b.height>r.heightPx)throw new Error('계단 검출 영역이 올바르지 않습니다.');regionIds.add(region.id);}
+    }
     const ids=new Set<string>();
     for(const line of a.lines){if(!line||typeof line.id!=='string'||line.id.length>200||ids.has(line.id)||!Number.isFinite(line.thicknessPx)||line.thicknessPx<=0||![line.start,line.end].every(p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>=0&&p.y>=0&&p.x<=r.widthPx&&p.y<=r.heightPx))throw new Error('자동 분석 선 정보가 올바르지 않습니다.');ids.add(line.id);}
   }

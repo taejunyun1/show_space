@@ -1,7 +1,9 @@
 import {it,expect} from 'vitest';
-import {mergeOrientedNumbers,unrotateTextBox} from './orientedNumbers';
+import {mergeOrientedNumbers,mergeOrientedPlanLabels,unrotateTextBox} from './orientedNumbers';
 import {detectPlanLabels,validatePlanLabels} from './planLabels';
 const label=(text:string,id:string)=>({...detectPlanLabels([{text,source:'ocr',confidence:95,box:{x:20,y:40,width:40,height:20}}])[0],id});
 it('maps boxes back from every right-angle orientation',()=>{const original={x:20,y:40,width:40,height:20};expect(unrotateTextBox({x:140,y:20,width:20,height:40},100,200,90)).toEqual(original);expect(unrotateTextBox({x:40,y:140,width:40,height:20},100,200,180)).toEqual(original);expect(unrotateTextBox({x:40,y:40,width:20,height:40},100,200,270)).toEqual(original);});
 it('deduplicates identical readings and preserves conflicts without mutating input',()=>{const a=label('3200','a');expect(mergeOrientedNumbers([a],[label('3200','b')])).toHaveLength(1);const result=mergeOrientedNumbers([a],[label('8200','b')]);expect(result).toHaveLength(2);expect(result.every(l=>l.numericConflict)).toBe(true);expect(a.numericConflict).toBeUndefined();expect(validatePlanLabels(result,100,100).every(l=>l.numericConflict)).toBe(true);});
 it('does not admit low-confidence results or confuse nonoverlapping dimensions',()=>{expect(mergeOrientedNumbers([],[{...label('3200','a'),confidence:70}])).toEqual([]);const b={...label('8200','b'),box:{x:70,y:40,width:20,height:20}};expect(mergeOrientedNumbers([label('3200','a')],[b]).some(l=>l.numericConflict)).toBe(false);});
+
+it('keeps rotated facility names as annotations without inventing footprints',()=>{const extra=detectPlanLabels([{text:'STAIRS',source:'ocr',confidence:96,box:{x:10,y:20,width:20,height:60}},{text:'Window',source:'ocr',confidence:70,box:{x:70,y:20,width:20,height:60}}]);const result=mergeOrientedPlanLabels([],extra);expect(result.map(l=>l.kind)).toEqual(['stairs']);expect(result[0].box).toEqual(extra[0].box);expect(mergeOrientedPlanLabels(result,extra)).toHaveLength(1);});

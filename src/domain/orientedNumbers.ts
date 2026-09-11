@@ -25,3 +25,13 @@ export function mergeOrientedNumbers(base:PlanLabel[],extra:PlanLabel[]):PlanLab
  }
  return result.slice(0,500);
 }
+/** Preserve semantic labels discovered during the same rotated passes, not just their digits. */
+export function mergeOrientedPlanLabels(base:PlanLabel[],extra:PlanLabel[]):PlanLabel[]{
+ const result=mergeOrientedNumbers(base,extra);
+ for(const label of extra){
+  if(label.kind==='dimension'||(label.confidence??0)<90)continue;
+  if(result.some(l=>l.kind===label.kind&&l.status!=='dismissed'&&overlaps(l.box,label.box)))continue;
+  result.push({...label,box:{...label.box}});
+ }
+ return result.slice(0,500);
+}

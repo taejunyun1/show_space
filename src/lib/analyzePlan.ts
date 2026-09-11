@@ -1,4 +1,5 @@
-import {mergeOrientedNumbers} from '../domain/orientedNumbers';
+import {detectStairRegions,stableStairRegions,type StairRegion} from '../domain/stairRegions';
+import {mergeOrientedPlanLabels} from '../domain/orientedNumbers';
 import {buildAutomaticVenue} from '../domain/automaticVenue';
 import {venueDraftsAgree} from '../domain/verifyVenueDrafts';
 import type {PlanPage} from './planImport';
@@ -7,7 +8,7 @@ import {detectPlanLabels} from '../domain/planLabels';
 import {readPlanNumbers} from '../domain/planNumbers';
 import {readPlanOcr} from './readPlanOcr';
 import {detectPlanWalls} from './detectPlanWalls';
-export interface PlanAnalysis {lines:WallCandidate[];issues:string[];textState:'complete'|'failed';lineState:'complete'|'failed';numericCount:number;selfCheck?:{attempts:number;status:'stable'|'withheld'}}
+export interface PlanAnalysis {stairRegions?:StairRegion[];lines:WallCandidate[];issues:string[];textState:'complete'|'failed';lineState:'complete'|'failed';numericCount:number;selfCheck?:{attempts:number;status:'stable'|'withheld'}}
 export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(message:string)=>void=()=>{}):Promise<PlanPage>{
  const abort=()=>{if(signal.aborted)throw new Error('자동 분석을 취소했습니다.');};abort();
  onStage('문자·숫자와 구조 선을 자동 분석하고 있습니다.');
@@ -23,7 +24,7 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  if(!reuseText){
   for(const rotation of [90,180,270] as const){
    abort();onStage(`회전 숫자를 자동 인식하고 있습니다 (${rotation}°).`);
-   try{const texts=await readPlanOcr(page.imageUrl,signal,undefined,'numbers',rotation);abort();labels=mergeOrientedNumbers(labels,detectPlanLabels(texts).map(l=>({...l,id:`rotation-${rotation}-${l.id}`})));}
+   try{const texts=await readPlanOcr(page.imageUrl,signal,undefined,'numbers',rotation);abort();labels=mergeOrientedPlanLabels(labels,detectPlanLabels(texts).map(l=>({...l,id:`rotation-${rotation}-${l.id}`})));}
    catch{abort();issues.push(`${rotation}° 숫자 보완 인식을 완료하지 못했습니다.`);}
   }
  }
@@ -49,7 +50,9 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  // Any contradictory successful result vetoes automatic adoption, even if two others agree.
  const successes=drafts.flatMap((p,i)=>p?[{project:p,index:i}]:[]);
  const stable=successes.length>=2&&successes.every(s=>venueDraftsAgree(successes[0].project,s.project));
- const selected=stable?candidates[successes[0].index]:result;
+ const selectedIndex=stable?successes[0].index:0,selected=candidates[selectedIndex];
+ const regionPasses=candidates.map(p=>detectStairRegions(labels,p.analysis!.lines));
+ const stairRegions=stableStairRegions(regionPasses,selectedIndex);
  const message=stable?'서로 다른 선 검출 조건에서 구조와 축척이 일치했습니다.':'자동 재분석으로 구조·축척을 확정하지 못해 공간 생성을 보류했습니다. 원본과 분석 결과는 유지합니다.';
- return {...selected,analysis:{...selected.analysis!,issues:[...issues.filter(i=>!i.startsWith('닫힌 경계')),message],selfCheck:{attempts:candidates.length,status:stable?'stable':'withheld'}}};
+ return {...selected,analysis:{...selected.analysis!,stairRegions,issues:[...issues.filter(i=>!i.startsWith('닫힌 경계')),message],selfCheck:{attempts:candidates.length,status:stable?'stable':'withheld'}}};
 }

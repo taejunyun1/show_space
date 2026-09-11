@@ -10,12 +10,8 @@ import {matchDimensionSpans,checkDimensionSums,type MeasuredSpan} from './dimens
 import {readPlanNumbers} from './planNumbers';
 
 export interface AutomaticVenue {project?:Project; reasons:string[]; wallCount:number}
-/** A conservative closed-outline draft, never a claim of complete venue recognition. */
-export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
- const blocked=(reason:string,wallCount=0):AutomaticVenue=>({reasons:[reason],wallCount});
- if(!page.analysis)return blocked('도면 분석이 끝나면 공간 초안을 자동 생성합니다.');
- if(page.analysis.selfCheck?.status==='withheld')return blocked('자체 검증에서 공간 구조를 확정하지 못했습니다. 원본과 분석 결과를 보존했으며 자동 적용은 보류했습니다.');
- if(page.analysis.lineState!=='complete'||page.analysis.textState!=='complete')return blocked('문자와 선 분석을 모두 완료해야 공간 초안을 만들 수 있습니다.');
+export function extractStructuralWalls(page:PlanPage):Wall[]{
+ if(!page.analysis)return [];
  const minLength=Math.max(30,Math.min(page.widthPx,page.heightPx)*.08);
  // Witness lines can split a thick raster stripe into adjacent bands.
  const bands=page.analysis.lines.map(l=>structuredClone(l));
@@ -40,6 +36,15 @@ export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
   const next={x:p.x,z:p.y};points.push(next);return {...next};
  };
  const candidates:Wall[]=lines.map((l,i)=>({id:`auto-wall-${i+1}`,name:`자동 벽 ${i+1}`,role:'boundary',start:snap(l.start),end:snap(l.end),heightMm:3000,thicknessMm:150,color:'#ffffff',visible:true,locked:false,note:'자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.'}));
+ return candidates;
+}
+/** A conservative closed-outline draft, never a claim of complete venue recognition. */
+export function buildAutomaticVenue(page:PlanPage):AutomaticVenue {
+ const blocked=(reason:string,wallCount=0):AutomaticVenue=>({reasons:[reason],wallCount});
+ if(!page.analysis)return blocked('도면 분석이 끝나면 공간 초안을 자동 생성합니다.');
+ if(page.analysis.selfCheck?.status==='withheld')return blocked('자체 검증에서 공간 구조를 확정하지 못했습니다. 원본과 분석 결과를 보존했으며 자동 적용은 보류했습니다.');
+ if(page.analysis.lineState!=='complete'||page.analysis.textState!=='complete')return blocked('문자와 선 분석을 모두 완료해야 공간 초안을 만들 수 있습니다.');
+ const candidates=extractStructuralWalls(page);
  const gaps=detectOpeningGaps(candidates,page.labels??[],Math.max(page.widthPx,page.heightPx)*.2);
  const classified=classifyAutomaticWalls([...candidates,...gaps.map(g=>g.wall)]);
  const gapIds=new Set(gaps.map(g=>g.wall.id));

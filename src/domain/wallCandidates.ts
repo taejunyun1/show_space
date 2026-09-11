@@ -1,3 +1,4 @@
+import {mergeSolidStripes} from './solidStripes';
 /** Pixel coordinates describe image edges, with centers at n + 0.5. */
 export interface WallCandidate {
   id: string
@@ -104,7 +105,7 @@ export function detectWallCandidates(
   scan(true)
   scan(false)
   // Prefer the longest useful candidates if a dense page exceeds the review cap.
-  return result.sort((a, b) => {
+  return mergeSolidStripes(result,dark,width,height).sort((a, b) => {
     const difference = Math.hypot(b.end.x - b.start.x, b.end.y - b.start.y) - Math.hypot(a.end.x - a.start.x, a.end.y - a.start.y)
     return difference || a.start.y - b.start.y || a.start.x - b.start.x || a.id.localeCompare(b.id)
   }).slice(0, maxCandidates)

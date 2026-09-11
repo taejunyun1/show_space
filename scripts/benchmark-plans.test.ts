@@ -1,6 +1,7 @@
+import {detectStairRegions,stableStairRegions} from '../src/domain/stairRegions';
 import {createHash} from 'node:crypto';
 import {readPlanNumbers} from '../src/domain/planNumbers';
-import {mergeOrientedNumbers,unrotateTextBox} from '../src/domain/orientedNumbers';
+import {mergeOrientedPlanLabels,unrotateTextBox} from '../src/domain/orientedNumbers';
 import {pageUnit} from '../src/domain/planUnits';
 /** Opt-in local corpus runner: PLAN_CORPUS_DIR=/tmp/... npx vitest run scripts/benchmark-plans.test.ts */
 import {test} from 'vitest';
@@ -12,7 +13,7 @@ import {createWorker,OEM,PSM} from 'tesseract.js';
 import {pdfPlanTexts} from '../src/lib/pdfPlanTexts';
 import {detectPlanLabels} from '../src/domain/planLabels';
 import {detectWallCandidates} from '../src/domain/wallCandidates';
-import {buildAutomaticVenue} from '../src/domain/automaticVenue';
+import {buildAutomaticVenue,extractStructuralWalls} from '../src/domain/automaticVenue';
 import type {PlanPage} from '../src/lib/planImport';
 
 test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition without claiming ground-truth accuracy',async()=>{
@@ -42,7 +43,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
      if(rotation===90)ctx.translate(rotated.width,0);if(rotation===180)ctx.translate(rotated.width,rotated.height);if(rotation===270)ctx.translate(0,rotated.height);ctx.rotate(rotation*Math.PI/180);ctx.drawImage(canvas,0,0,canvas.width*scale,canvas.height*scale);
      const result=await numbersOcr.recognize(rotated.toBuffer('image/png'),{},{text:true,blocks:true});
      const extra=detectPlanLabels((result.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>({text:l.text,confidence:l.confidence,source:'ocr' as const,box:unrotateTextBox({x:l.bbox.x0/scale,y:l.bbox.y0/scale,width:(l.bbox.x1-l.bbox.x0)/scale,height:(l.bbox.y1-l.bbox.y0)/scale},canvas.width,canvas.height,rotation)}))).map(l=>({...l,id:`rotation-${rotation}-${l.id}`}));
-     labels=mergeOrientedNumbers(labels,extra);
+     labels=mergeOrientedPlanLabels(labels,extra);
     }
    }
    const small=createCanvas(Math.round(canvas.width*1400/Math.max(canvas.width,canvas.height)),Math.round(canvas.height*1400/Math.max(canvas.width,canvas.height)));small.getContext('2d').drawImage(canvas,0,0,small.width,small.height);
@@ -50,11 +51,11 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    const runs=[125,155,190].map(threshold=>{
     const lines=detectWallCandidates(pixels,small.width,small.height,{threshold,maxCandidates:500,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)}));
     const input:PlanPage={imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
-    const draft=buildAutomaticVenue(input);return {threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
+    const structural=extractStructuralWalls(input);const draft=buildAutomaticVenue(input);return {stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
    });
    const score=(items:typeof labels)=>truth.regions.map((region:{value:number;box:{x:number;y:number;width:number;height:number}})=>({value:region.value,matched:items.some(l=>{const n=readPlanNumbers(l.text),x=l.box.x+l.box.width/2,y=l.box.y+l.box.height/2,b=region.box;return !l.numericConflict&&(l.confidence??0)>=90&&n.length===1&&n[0].values.length===1&&n[0].values[0]===region.value&&x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height;})}));
    const selectedTruth=sha256===truth.sha256&&file===truth.file&&number===truth.page&&canvas.width===truth.widthPx&&canvas.height===truth.heightPx?{scope:truth.scope,baseline:score(baselineLabels),enhanced:score(labels)}:undefined;
-   report.push({file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
+   report.push({stableStairRegions:stableStairRegions(runs.map(r=>r.stairRegions),1),file,sha256,page:number,selectedTruth,source,declaredUnit:pageUnit(labels),baselineNumbers:baselineLabels.filter(l=>l.kind==='dimension').length,conflicts:labels.filter(l=>l.numericConflict).length,facilityEvidence:labels.filter(l=>!['dimension','unit'].includes(l.kind)).map(l=>({kind:l.kind,text:l.text,box:l.box,confidence:l.confidence})),numberEvidence:labels.filter(l=>l.kind==='dimension').map(l=>({text:l.text,box:l.box,confidence:l.confidence,conflict:l.numericConflict??false})),textItems:text.items.length,numericLabels:labels.filter(l=>l.kind==='dimension').length,sampleNumbers:labels.filter(l=>l.kind==='dimension').slice(0,8).map(l=>l.text),runs,elapsedMs:Date.now()-started});
    await writeFile(resolve(directory,`${file}-${number}.png`),canvas.toBuffer('image/png'));page.cleanup();
   }}finally{await loading.destroy();}
  }
