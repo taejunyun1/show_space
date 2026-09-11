@@ -1,0 +1,168 @@
+{
+  "scope": "Ink-supported raster junction recovery; not full geometry or dimension truth.",
+  "rasterComparison": {
+    "threshold": 155,
+    "maxDimensionPx": 1400,
+    "minLengthPx": 11,
+    "minThicknessPx": 1,
+    "pages": [
+      {
+        "file": "anca.pdf-1.png",
+        "changes": []
+      },
+      {
+        "file": "espacio.pdf-1.png",
+        "changes": []
+      },
+      {
+        "file": "espacio.pdf-2.png",
+        "changes": [
+          {
+            "before": {
+              "id": "solid:h:258.00:819.50:299.00:819.50",
+              "start": {
+                "x": 258,
+                "y": 819.5
+              },
+              "end": {
+                "x": 299,
+                "y": 819.5
+              },
+              "thicknessPx": 3
+            },
+            "after": {
+              "id": "solid:h:258.00:819.50:299.00:819.50",
+              "start": {
+                "x": 255,
+                "y": 819.5
+              },
+              "end": {
+                "x": 299,
+                "y": 819.5
+              },
+              "thicknessPx": 3
+            }
+          }
+        ]
+      },
+      {
+        "file": "coningsby.pdf-7.png",
+        "changes": []
+      }
+    ]
+  },
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "conflict"
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "page": 7,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "underdetermined"
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 1,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "underdetermined"
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "underdetermined"
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "page": 2,
+      "runs": [
+        {
+          "threshold": 125,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "conflict"
+        },
+        {
+          "threshold": 155,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "conflict"
+        },
+        {
+          "threshold": 190,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false,
+          "dimensionStatus": "conflict"
+        }
+      ]
+    }
+  ]
+}
