@@ -1,7 +1,7 @@
 import {createDemoProject,parseProject} from './model';
 import {it,expect} from 'vitest';
 import {detectPlanLabels} from './planLabels';
-import {detectStairRegions,stairRegionsAgree,stableStairRegions} from './stairRegions';
+import {detectStairRegions,stairRegionsAgree,stableStairRegions,interiorStairTreadIds} from './stairRegions';
 const label=detectPlanLabels([{text:'Stairs',source:'pdf-text',box:{x:80,y:50,width:15,height:40}}]);
 const lines=Array.from({length:5},(_,i)=>({id:`t${i}`,start:{x:100+i*20,y:30},end:{x:100+i*20,y:150},thicknessPx:2}));
 it('derives the region from regularly spaced treads beside a stair label',()=>{const region=detectStairRegions(label,lines)[0];expect(region.box).toEqual({x:100,y:30,width:80,height:120});expect(region.lineIds).toHaveLength(5);expect(region.box).not.toEqual(label[0].box);expect(stairRegionsAgree(region,{...region,box:{...region.box,x:102}})).toBe(true);});
@@ -22,4 +22,12 @@ it('round-trips detected regions and rejects missing geometry references and out
  expect(()=>parseProject(invalid)).toThrow(/계단/);
  const outside=structuredClone(project);outside.planAnalysis.stairRegions[0].box.width=1000;
  expect(()=>parseProject(outside)).toThrow(/계단/);
+});
+
+it('excludes only interior tread strokes while preserving enclosing walls and continuations',()=>{
+ const regions=detectStairRegions(label,lines);
+ expect([...interiorStairTreadIds(regions,lines)]).toEqual(['t1','t2','t3']);
+ const extended=[...lines,{id:'wall-extension',start:{x:140,y:150},end:{x:140,y:300},thicknessPx:5}];
+ expect([...interiorStairTreadIds(regions,extended)]).toEqual(['t1','t3']);
+ expect(interiorStairTreadIds([],lines).size).toBe(0);
 });

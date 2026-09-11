@@ -36,3 +36,27 @@ export function stableStairRegions(passes:StairRegion[][],selectedIndex:number):
   return others.length>0&&others.every(other=>stairRegionsAgree(region,other));
  });
 }
+
+/** Keep the two outer strokes: they may be stairwell walls. Remove only interior
+ * treads that do not continue into another structural segment. */
+export function interiorStairTreadIds(regions:StairRegion[],lines:WallCandidate[]):Set<string>{
+ const excluded=new Set<string>();
+ for(const region of regions){
+  const family=region.lineIds.flatMap(id=>lines.filter(l=>l.id===id));
+  if(family.length<3)continue;
+  const horizontal=Math.abs(family[0].start.y-family[0].end.y)<1;
+  family.sort((a,b)=>horizontal?a.start.y-b.start.y:a.start.x-b.start.x);
+  const familyIds=new Set(family.map(l=>l.id));
+  for(const tread of family.slice(1,-1)){
+   const dx=tread.end.x-tread.start.x,dy=tread.end.y-tread.start.y,length=Math.hypot(dx,dy);
+   const continuation=lines.some(other=>{
+    if(familyIds.has(other.id))return false;
+    const ox=other.end.x-other.start.x,oy=other.end.y-other.start.y,otherLength=Math.hypot(ox,oy);
+    if(!length||!otherLength||Math.abs(dx*oy-dy*ox)/(length*otherLength)>.02)return false;
+    return [tread.start,tread.end].some(p=>[other.start,other.end].some(q=>Math.hypot(p.x-q.x,p.y-q.y)<=4));
+   });
+   if(!continuation)excluded.add(tread.id);
+  }
+ }
+ return excluded;
+}

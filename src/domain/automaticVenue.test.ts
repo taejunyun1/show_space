@@ -1,5 +1,5 @@
 import {it,expect} from 'vitest';
-import {buildAutomaticVenue} from './automaticVenue';
+import {buildAutomaticVenue,extractStructuralWalls} from './automaticVenue';
 import {detectPlanLabels} from './planLabels';
 import {detectWallCandidates} from './wallCandidates';
 import {parseProject} from './model';
@@ -34,4 +34,14 @@ it('automatically cross-checks complete and partial dimension chains',()=>{
  p.labels!.push(...detectPlanLabels([{text:'4000 mm',source:'pdf-text',box:{x:250,y:45,width:100,height:10}},{text:'4000 mm',source:'pdf-text',box:{x:650,y:45,width:100,height:10}}]).map((l,i)=>({...l,id:`part-label-${i}`})));
  const result=buildAutomaticVenue(p);expect(result.project?.planReference?.mmPerPixel).toBe(10);expect(result.reasons.join(' ')).toContain('전체·부분 치수 합계 1건');
  p.labels!.at(-1)!.text='4500 mm';expect(buildAutomaticVenue(p).reasons.join(' ')).toContain('부분 치수 합계와 전체 치수');
+});
+
+it('removes interior stair treads from wall reconstruction while retaining source evidence',()=>{
+ const p=fixture();
+ p.labels!.push(...detectPlanLabels([{text:'Stairs',source:'pdf-text',box:{x:280,y:320,width:15,height:40}}]).map(l=>({...l,id:'stairs-label'})));
+ for(let i=0;i<5;i++)p.analysis!.lines.push(line(`tread-${i}`,300+i*20,300,300+i*20,450,5));
+ const before=structuredClone(p),walls=extractStructuralWalls(p);
+ for(const x of [320,340,360])expect(walls.some(w=>w.start.x===x&&w.end.x===x)).toBe(false);
+ for(const x of [300,380])expect(walls.some(w=>w.start.x===x&&w.end.x===x)).toBe(true);
+ expect(p).toEqual(before);
 });
