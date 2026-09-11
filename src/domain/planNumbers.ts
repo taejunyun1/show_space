@@ -1,15 +1,22 @@
 /** Numeric readings are evidence, never a wall measurement until linked and checked. */
 export interface PlanNumber { raw:string; values:number[]; unit:'mm'|'cm'|'m'|null; axis:'length'|'height'|'thickness'|null }
 export function readPlanNumbers(input:string):PlanNumber[]{
- const text=input.normalize('NFKC').trim();
+ const text=input.normalize('NFKC').trim().replace(/(\d(?:\s*(?:mm|cm|m))?)\s*[x×]\s*(?=\d)/giu,'$1 × ');
  // Drawing IDs, scales, dates, levels and angles must not become lengths.
  if(/\d\s*[:/°%]|\d\s*[-–]\s*\d|\b(?:FL|EL|LEVEL|SCALE|NO)\b/i.test(text)||/^[+-]/.test(text))return [];
  const axis=/\bH\s*=|높이|층고|\bHEIGHT\b/i.test(text)?'height':/\bT\s*=|두께|\bTHICKNESS\b/i.test(text)?'thickness':/\b[WL]\s*=|길이|\bLENGTH\b/i.test(text)?'length':null;
  const numericOnly=/^[\d\s.,x×]+$/i.test(text);
+ // In "2.68 × 0.38m" the final unit belongs to the whole size tuple.
+ // Preserve every value so consumers cannot mistake the last dimension for
+ // a single measured wall. Never propagate units across ordinary prose.
+ const tuples=[...text.matchAll(/(?<![\p{L}\p{N}])\d+(?:[.,]\d+)*(?:\s*[x×]\s*\d+(?:[.,]\d+)*)+\s*(mm|cm|m)(?![\p{L}\p{N}])/giu)];
+ const chains=[...text.matchAll(/(?<![\p{L}\p{N}])\d+(?:[.,]\d+)*(?:\s*(?:mm|cm|m))?(?:\s*[x×]\s*\d+(?:[.,]\d+)*(?:\s*(?:mm|cm|m))?)+(?![\p{L}\p{N}])/giu)];
  const results:PlanNumber[]=[];
  const pattern=/(?<![\p{L}\p{N}])\d+(?:[.,]\d+)*(?:\s*(mm|cm|m)(?![\p{L}\p{N}]))?/giu;
  for(const match of text.matchAll(pattern)){
-  if(!numericOnly&&!axis&&!match[1])continue;
+  const unit=match[1]??tuples.find(tuple=>match.index>=tuple.index&&match.index<tuple.index+tuple[0].length)?.[1];
+  const inChain=chains.some(chain=>match.index>=chain.index&&match.index<chain.index+chain[0].length);
+  if(!numericOnly&&!axis&&!unit&&!inChain)continue;
   const raw=match[0].trim(),token=raw.replace(/\s*(mm|cm|m)$/i,'');
   let values:number[]=[];
   if(/^\d+$/.test(token)||/^\d+\.\d+$/.test(token))values=[Number(token)];
@@ -19,7 +26,7 @@ export function readPlanNumbers(input:string):PlanNumber[]{
    if(token.split(',').length===2)values.push(Number(token.replace(',','.')));
   }else if(/^\d+,\d{1,2}$/.test(token))values=[Number(token.replace(',','.'))];
   values=[...new Set(values)].filter(n=>Number.isFinite(n)&&n>0&&n<=10000000);
-  if(values.length)results.push({raw,values,unit:(match[1]?.toLowerCase() as PlanNumber['unit'])??null,axis});
+  if(values.length)results.push({raw,values,unit:(unit?.toLowerCase() as PlanNumber['unit'])??null,axis});
  }
  return results.slice(0,50);
 }

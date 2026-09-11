@@ -43,3 +43,8 @@ it('does not assign a whole boundary when a nearby disconnected return suggests 
  const text=detectPlanLabels([{text:'2850 mm',source:'pdf-text',box:{x:470,y:120,width:60,height:20}}]);
  expect(wallAnnotationScale(input,text).allMatches).toEqual([]);
 });
+it('does not bind one value from a windowsill size pair to a wall length',()=>{
+ const input=[wall('sill-edge',100,100,500,100)];
+ const text=detectPlanLabels([{text:'Window sill: 2,68 x 0,38m',source:'pdf-text',box:{x:160,y:60,width:280,height:20}}]);
+ expect(wallAnnotationScale(input,text).allMatches).toEqual([]);
+});
