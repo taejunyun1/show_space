@@ -1,3 +1,4 @@
+import {numericOcrRegions} from '../src/domain/ocrRegions';
 import {readMeasuredSpans} from '../src/domain/dimensionSpans';
 import {createDemoProject} from '../src/domain/model';
 import {solveDimensionConstraints} from '../src/domain/dimensionConstraints';
@@ -53,6 +54,23 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
      if(rotation===90)ctx.translate(rotated.width,0);if(rotation===180)ctx.translate(rotated.width,rotated.height);if(rotation===270)ctx.translate(0,rotated.height);ctx.rotate(rotation*Math.PI/180);ctx.drawImage(canvas,0,0,canvas.width*scale,canvas.height*scale);
      const result=await numbersOcr.recognize(rotated.toBuffer('image/png'),{},{text:true,blocks:true});
      const extra=detectPlanLabels((result.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>({text:l.text,confidence:l.confidence,source:'ocr' as const,box:unrotateTextBox({x:l.bbox.x0/scale,y:l.bbox.y0/scale,width:(l.bbox.x1-l.bbox.x0)/scale,height:(l.bbox.y1-l.bbox.y0)/scale},canvas.width,canvas.height,rotation)}))).map(l=>({...l,id:`rotation-${rotation}-${l.id}`}));
+     labels=mergeOrientedPlanLabels(labels,extra);
+    }
+   }
+   if(source==='ocr'&&numbersOcr){
+    const regions=numericOcrRegions(canvas.width,canvas.height);
+    for(let i=0;i<regions.length;i++)for(const rotation of [0,90] as const){
+     const region=regions[i],scale=Math.min(2,3600/Math.max(region.width,region.height));
+     const tile=createCanvas(Math.round((rotation?region.height:region.width)*scale),Math.round((rotation?region.width:region.height)*scale)),ctx=tile.getContext('2d');
+     ctx.fillStyle='white';ctx.fillRect(0,0,tile.width,tile.height);
+     if(rotation){ctx.translate(tile.width,0);ctx.rotate(Math.PI/2);}
+     ctx.drawImage(canvas,region.x,region.y,region.width,region.height,0,0,rotation?tile.height:tile.width,rotation?tile.width:tile.height);
+     const result=await numbersOcr.recognize(tile.toBuffer('image/png'),{},{blocks:true});
+     const sx=(rotation?region.height:region.width)/tile.width,sy=(rotation?region.width:region.height)/tile.height;
+     const extra=detectPlanLabels((result.data.blocks??[]).flatMap(b=>b.paragraphs.flatMap(p=>p.lines)).map(l=>{
+      const box=unrotateTextBox({x:l.bbox.x0*sx,y:l.bbox.y0*sy,width:(l.bbox.x1-l.bbox.x0)*sx,height:(l.bbox.y1-l.bbox.y0)*sy},region.width,region.height,rotation);
+      return {text:l.text,confidence:l.confidence,source:'ocr' as const,box:{...box,x:box.x+region.x,y:box.y+region.y}};
+     })).filter(l=>l.kind==='dimension').map(l=>({...l,id:`region-${i}-${rotation}-${l.id}`}));
      labels=mergeOrientedPlanLabels(labels,extra);
     }
    }

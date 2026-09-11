@@ -10,7 +10,7 @@ it('uses existing PDF evidence instead of running redundant OCR',async()=>{const
 it('preserves partial results and reports failed stages',async()=>{vi.mocked(readPlanOcr).mockRejectedValue(new Error('OCR failed'));const result=await analyzePlan(page,new AbortController().signal);expect(result.analysis?.textState).toBe('failed');expect(result.analysis?.lines).toHaveLength(1);expect(result.analysis?.issues.join(' ')).toContain('읽지 못');});
 it('does not deliver a completed result after cancellation',async()=>{const c=new AbortController();vi.mocked(readPlanOcr).mockImplementation(async()=>{c.abort();return [];});await expect(analyzePlan(page,c.signal)).rejects.toThrow('취소');});
 
-it('automatically falls back to local OCR for an empty PDF text result',async()=>{const result=await analyzePlan({...page,textSource:'pdf-text',labels:[]},new AbortController().signal);expect(readPlanOcr).toHaveBeenCalledTimes(4);expect(result.textSource).toBe('ocr');});
+it('automatically falls back to local OCR for an empty PDF text result',async()=>{const result=await analyzePlan({...page,textSource:'pdf-text',labels:[]},new AbortController().signal);expect(readPlanOcr).toHaveBeenCalledTimes(12);expect(result.textSource).toBe('ocr');});
 it('withholds geometry that fails local reanalysis rather than requesting manual verification',async()=>{const result=await analyzePlan(page,new AbortController().signal);expect(result.analysis?.selfCheck).toEqual({attempts:3,status:'withheld'});expect(result.analysis?.issues.join(' ')).not.toContain('확인하세요');});
 it('stops automatic retries immediately when cancelled',async()=>{const c=new AbortController();vi.mocked(detectPlanWalls).mockImplementationOnce(async()=>[]).mockImplementationOnce(async()=>{c.abort();return [];});await expect(analyzePlan(page,c.signal)).rejects.toThrow('취소');expect(detectPlanWalls).toHaveBeenCalledTimes(2);});
 function closedPage(){
@@ -23,3 +23,11 @@ it('automatically accepts matching closed geometry after independent passes',asy
 it('vetoes a conflicting successful third pass instead of majority voting',async()=>{const {input,lines}=closedPage(),partition={id:'partition',start:{x:300,y:300},end:{x:700,y:300},thicknessPx:5};vi.mocked(detectPlanWalls).mockResolvedValueOnce(lines).mockResolvedValueOnce(lines).mockResolvedValueOnce([...lines,partition]);const result=await analyzePlan(input,new AbortController().signal);expect(result.analysis?.selfCheck?.status).toBe('withheld');});
 it('does not mistake a single successful pass for verified geometry',async()=>{const {input,lines}=closedPage();vi.mocked(detectPlanWalls).mockResolvedValueOnce(lines).mockResolvedValue([]);const result=await analyzePlan(input,new AbortController().signal);expect(result.analysis?.selfCheck?.status).toBe('withheld');});
 it('cancels during a rotated OCR pass without starting more orientations',async()=>{const c=new AbortController();vi.mocked(readPlanOcr).mockResolvedValueOnce([]).mockImplementationOnce(async()=>{c.abort();return [];});await expect(analyzePlan(page,c.signal)).rejects.toThrow('취소');expect(readPlanOcr).toHaveBeenCalledTimes(2);});
+
+it('merges newly recovered tile numbers and cancels before subsequent tiles',async()=>{
+ vi.mocked(readPlanOcr).mockImplementation(async(_url,_signal,_progress,_mode,_rotation,region)=>region?[{text:'125',source:'ocr',confidence:96,box:{x:40,y:50,width:10,height:30}}]:[]);
+ const r=await analyzePlan(page,new AbortController().signal);expect(r.labels?.filter(l=>l.text==='125')).toHaveLength(1);
+ const c=new AbortController();vi.mocked(readPlanOcr).mockClear();
+ vi.mocked(readPlanOcr).mockImplementation(async(_url,_signal,_progress,_mode,_rotation,region)=>{if(region)c.abort();return [];});
+ await expect(analyzePlan(page,c.signal)).rejects.toThrow('취소');expect(readPlanOcr).toHaveBeenCalledTimes(5);
+});

@@ -58,6 +58,18 @@ describe('readPlanOcr', () => {
     expect((await result)[0].box).toEqual({x:200,y:2260,width:100,height:40});
   });
 
+  it('maps a rotated crop back to the full source image',async()=>{
+    const result=readPlanOcr('image',new AbortController().signal,undefined,'numbers',90,{x:100,y:200,width:600,height:400});
+    await vi.waitFor(()=>expect(workers).toHaveLength(1));expect(canvas.width).toBe(800);expect(canvas.height).toBe(1200);
+    workers[0].onmessage!({data:{lines:[{text:'125',confidence:96,bbox:{x0:40,y0:60,x1:80,y1:100}}]}});
+    expect((await result)[0].box).toEqual({x:130,y:560,width:20,height:20});
+  });
+  it('allows blank supplemental regions and rejects out-of-bounds crops',async()=>{
+    await expect(readPlanOcr('image',new AbortController().signal,undefined,'numbers',0,{x:4700,y:0,width:200,height:100})).rejects.toThrow('범위');
+    const result=readPlanOcr('image',new AbortController().signal,undefined,'numbers',0,{x:0,y:0,width:200,height:100});
+    await vi.waitFor(()=>expect(workers).toHaveLength(1));workers[0].onmessage!({data:{lines:[]}});expect(await result).toEqual([]);
+  });
+
   it('cancels during initialization without waiting for OCR worker startup', async () => {
     const controller = new AbortController();
     const result = readPlanOcr('image', controller.signal);
