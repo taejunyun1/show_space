@@ -1,3 +1,4 @@
+import {detectDiagonalLines} from './diagonalLines';
 import {mergeSolidStripes} from './solidStripes';
 /** Pixel coordinates describe image edges, with centers at n + 0.5. */
 export interface WallCandidate {
@@ -23,8 +24,8 @@ interface Stripe {
 }
 
 /**
- * Finds axis-aligned dark stripes, not semantic walls. Text, furniture and
- * dimension lines may still qualify and require human review. No morphology
+ * Finds axis-aligned stripes and straight diagonal ink components, not semantic walls.
+ * Text, furniture and dimension lines may still qualify. No morphology
  * or gap closing is used: separate runs retain their openings.
  */
 export function detectWallCandidates(
@@ -105,7 +106,8 @@ export function detectWallCandidates(
   scan(true)
   scan(false)
   // Prefer the longest useful candidates if a dense page exceeds the review cap.
-  return mergeSolidStripes(result,dark,width,height).sort((a, b) => {
+  const merged=mergeSolidStripes(result,dark,width,height);
+  return [...merged,...detectDiagonalLines(dark,width,height,merged,minLength,minThickness)].sort((a, b) => {
     const difference = Math.hypot(b.end.x - b.start.x, b.end.y - b.start.y) - Math.hypot(a.end.x - a.start.x, a.end.y - a.start.y)
     return difference || a.start.y - b.start.y || a.start.x - b.start.x || a.id.localeCompare(b.id)
   }).slice(0, maxCandidates)

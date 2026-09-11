@@ -21,7 +21,7 @@ export function extractStructuralWalls(page:PlanPage):Wall[]{
   const a=bands[i],b=bands[j],horizontal=Math.abs(a.start.y-a.end.y)<1;
   const along=(p:{x:number;y:number})=>horizontal?p.x:p.y;
   const across=(p:{x:number;y:number})=>horizontal?p.y:p.x;
-  if(Math.abs(across(b.start)-across(b.end))>=1||Math.abs(along(a.start)-along(b.start))>1||Math.abs(along(a.end)-along(b.end))>1)continue;
+  if(Math.abs(across(a.start)-across(a.end))>=1||Math.abs(across(b.start)-across(b.end))>=1||Math.abs(along(a.start)-along(b.start))>1||Math.abs(along(a.end)-along(b.end))>1)continue;
   const distance=Math.abs(across(a.start)-across(b.start));
   if(distance>(a.thicknessPx+b.thicknessPx)/2+1||distance<.1)continue;
   const low=Math.min(across(a.start)-a.thicknessPx/2,across(b.start)-b.thicknessPx/2),high=Math.max(across(a.start)+a.thicknessPx/2,across(b.start)+b.thicknessPx/2);
