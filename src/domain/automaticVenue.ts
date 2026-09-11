@@ -1,3 +1,4 @@
+import type {WallCandidate} from './wallCandidates';
 import {detectFurnitureOutlines} from './furnitureOutlines';
 import {readCeilingHeight} from './ceilingHeight';
 import {readOpeningDimensions} from './openingDimensions';
@@ -40,13 +41,16 @@ export function extractStructuralWalls(page:PlanPage):Wall[]{
  const lines=selectStructuralLines(aligned.filter(l=>!furnitureIds.has(l.id)),minLength,page.labels??[]);
  // Only merge tiny raster endpoint discrepancies; never bridge doorway-sized gaps.
  const points:{x:number;z:number}[]=[];
- const snap=(p:{x:number;y:number})=>{
-  const existing=points.find(q=>Math.hypot(q.x-p.x,q.z-p.y)<=4);
+ const snap=(p:{x:number;y:number},line:WallCandidate)=>{
+  const horizontal=Math.abs(line.start.y-line.end.y)<.01,vertical=Math.abs(line.start.x-line.end.x)<.01;
+  // Joining nearby endpoints must not tilt an observed axis wall toward a
+  // distinct parallel stroke. True intersections were aligned above.
+  const existing=points.find(q=>Math.hypot(q.x-p.x,q.z-p.y)<=4&&(!horizontal||Math.abs(q.z-p.y)<.01)&&(!vertical||Math.abs(q.x-p.x)<.01));
   if(existing)return {...existing};
   const next={x:p.x,z:p.y};points.push(next);return {...next};
  };
  const ceiling=readCeilingHeight(page.labels??[]);
- const candidates:Wall[]=lines.map((l,i)=>({id:`auto-wall-${i+1}`,name:`자동 벽 ${i+1}`,role:'boundary',start:snap(l.start),end:snap(l.end),heightMm:ceiling.heightMm??3000,thicknessMm:150,color:'#ffffff',visible:true,locked:false,note:ceiling.heightMm?`천장 높이 표기 ${ceiling.heightMm} mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다.`:'자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.'}));
+ const candidates:Wall[]=lines.map((l,i)=>({id:`auto-wall-${i+1}`,name:`자동 벽 ${i+1}`,role:'boundary',start:snap(l.start,l),end:snap(l.end,l),heightMm:ceiling.heightMm??3000,thicknessMm:150,color:'#ffffff',visible:true,locked:false,note:ceiling.heightMm?`천장 높이 표기 ${ceiling.heightMm} mm에 맞춘 벽 높이 초안입니다. 개별 벽 높이를 측정한 값이 아니며 두께 150 mm는 임시값입니다.`:'자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.'}));
  return candidates;
 }
 /** A conservative closed-outline draft, never a claim of complete venue recognition. */

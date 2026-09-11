@@ -39,3 +39,10 @@ it('restores the observed brighter-threshold notch by trimming a real crossing c
  expect(walls).toHaveLength(5);
  expect(walls.some(w=>Math.abs(w.end.z-w.start.z)>5&&Math.abs(w.end.z-w.start.z)<7)).toBe(true);
 });
+
+it('does not tilt a partial parallel wall when only one endpoint is close to another wall',()=>{
+ const lines=[line('long',100,20,100,400),line('partial',102,100,102,400)];
+ const walls=extractStructuralWalls({imageUrl:'data:image/png;base64,AA==',widthPx:500,heightPx:500,labels:[],analysis:{lines,issues:[],numericCount:0,textState:'complete',lineState:'complete'}});
+ expect(walls).toHaveLength(2);
+ expect(walls.map(w=>[w.start.x,w.end.x])).toEqual([[100,100],[102,102]]);
+});
