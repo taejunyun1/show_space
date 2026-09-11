@@ -44,7 +44,18 @@ describe('local plan PDF import', () => {
     const page={getViewport:({scale}:{scale:number})=>({width:1000*scale,height:800*scale}),getTextContent:async()=>({items:[{str:'The Gallery'},{str:'\u0013\u008f\u009c\u0003 ABC'},{str:'195,,,'}]}),render:()=>({promise:Promise.resolve(),cancel:vi.fn()}),cleanup:vi.fn()};
     mocks.getDocument.mockReturnValue({promise:Promise.resolve({numPages:1,getPage:async()=>page}),destroy:vi.fn().mockResolvedValue(undefined)});
     const loaded=await loadPlanFile(file),result=await loaded.renderPage(1);
-    expect(result.textSource).toBe('none');expect(result.labels).toEqual([]);expect(result.diagnostics?.warnings.join(' ')).toContain('인코딩');
+    expect(result.textRegions).toEqual([]);expect(result.textSource).toBe('none');expect(result.labels).toEqual([]);expect(result.diagnostics?.warnings.join(' ')).toContain('인코딩');
+    await loaded.destroy();
+  });
+
+  it('retains native title text regions even when they are not semantic labels',async()=>{
+    const canvas={width:0,height:0,getContext:()=>({getImageData:()=>({data:new Uint8ClampedArray([255,255,255,255])})}),toDataURL:()=> 'data:image/png;base64,AA=='};
+    vi.stubGlobal('document',{createElement:()=>canvas});
+    const page={getViewport:({scale}:{scale:number})=>({width:1000*scale,height:800*scale}),getTextContent:async()=>({items:[{str:'Gallery Floorplan',transform:[20,0,0,20,100,600],width:200,height:20}]}),render:()=>({promise:Promise.resolve(),cancel:vi.fn()}),cleanup:vi.fn()};
+    mocks.getDocument.mockReturnValue({promise:Promise.resolve({numPages:1,getPage:async()=>page}),destroy:vi.fn().mockResolvedValue(undefined)});
+    const loaded=await loadPlanFile(file),result=await loaded.renderPage(1);
+    expect(result.labels).toEqual([]);expect(result.textSource).toBe('pdf-text');
+    expect(result.textRegions).toEqual([{x:240,y:432,width:480,height:48}]);
     await loaded.destroy();
   });
 

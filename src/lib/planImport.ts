@@ -9,6 +9,7 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import type { RenderTask } from 'pdfjs-dist';
 
 export interface PlanPage {
+  textRegions?:import('../domain/textStrokes').TextRegion[];
   embeddedSigns?:PdfSignImage[];
   resolvedVenue?:{project:import('../domain/types').Project;sourceImageUrl:string;sourceEvidenceKey:string};
   analysis?:PlanAnalysis;
@@ -115,6 +116,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           const scale = Math.min((preview ? 900 : detail ? 4800 : 2400) / Math.max(original.width, original.height), Math.sqrt((detail ? 24_000_000 : 6_000_000) / (original.width * original.height)));
           const viewport = page.getViewport({ scale });
           let labels:PlanLabel[]=[];
+          let textRegions:NonNullable<PlanPage['textRegions']>=[];
           let textSource:PlanPage['textSource']='none';
           const diagnostics: NonNullable<PlanPage['diagnostics']> = { warnings: [] };
           // A text-layer heuristic only: this neither performs OCR nor detects walls.
@@ -122,7 +124,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
             const text = await page.getTextContent();
             const items = text.items.filter(item => 'str' in item && item.str.trim().length > 0);
             const quality=assessPdfText(items);
-            if(quality.usable){textSource='pdf-text';labels=detectPlanLabels(pdfPlanTexts(items,viewport.transform??[scale,0,0,-scale,0,viewport.height],Math.floor(viewport.width),Math.floor(viewport.height)));}
+            if(quality.usable){textSource='pdf-text';const texts=pdfPlanTexts(items,viewport.transform??[scale,0,0,-scale,0,viewport.height],Math.floor(viewport.width),Math.floor(viewport.height));labels=detectPlanLabels(texts);textRegions=texts.map(t=>t.box);}
             diagnostics.textItemCount = items.length;
             diagnostics.smallTextItemCount = items.filter(item => 'height' in item && Math.abs(item.height) * scale < 9).length;
             if(items.length&&!quality.usable)diagnostics.warnings.push('PDF 문자 인코딩이 손상되어 로컬 OCR로 자동 분석합니다.');
@@ -151,7 +153,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           validateImageSize(imageUrl);
           return {
             imageUrl,
-            labels,textSource,embeddedSigns,
+            labels,textSource,embeddedSigns,textRegions,
             widthPx: canvas.width,
             heightPx: canvas.height,
             diagnostics,

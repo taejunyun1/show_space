@@ -1,0 +1,267 @@
+{
+  "scope": "Native PDF text masks and dominant structural analysis region. Source image and recognized annotations retained. Region is not a floor boundary; no browser UI cropping tested.",
+  "k2RegionAt155": {
+    "x": 284.48432760364005,
+    "y": 347.14285714285717,
+    "width": 1124.3174924165824,
+    "height": 1780.2857142857144
+  },
+  "pages": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 16,
+          "afterWalls": 16,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 13,
+          "afterWalls": 13,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 18,
+          "afterWalls": 18,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 0,
+          "afterWalls": 0,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 0,
+          "afterWalls": 0,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 0,
+          "afterWalls": 0,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 34,
+          "afterWalls": 34,
+          "removedSegments": [],
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 37,
+          "afterWalls": 37,
+          "removedSegments": [],
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 36,
+          "afterWalls": 36,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 36,
+          "afterWalls": 36,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 42,
+          "afterWalls": 42,
+          "removedSegments": [],
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 43,
+          "afterWalls": 43,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "k2.pdf",
+      "page": 1,
+      "sha256": "f85b4a2166b3f68e4cbf9211e99b8782a1df766bd6b6b872a1363c658f6eb90b",
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 72,
+          "afterWalls": 72,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 93,
+          "afterWalls": 89,
+          "removedSegments": [
+            {
+              "start": {
+                "x": 404.469160768453,
+                "z": 179.14285714285714
+              },
+              "end": {
+                "x": 566.428210313448,
+                "z": 179.14285714285714
+              }
+            },
+            {
+              "start": {
+                "x": 566.428210313448,
+                "z": 179.14285714285714
+              },
+              "end": {
+                "x": 566.428210313448,
+                "z": 342.85714285714283
+              }
+            },
+            {
+              "start": {
+                "x": 476.4509605662285,
+                "z": 179.14285714285714
+              },
+              "end": {
+                "x": 476.4509605662285,
+                "z": 205.71428571428572
+              }
+            },
+            {
+              "start": {
+                "x": 479.8786653185035,
+                "z": 179.14285714285714
+              },
+              "end": {
+                "x": 479.8786653185035,
+                "z": 205.71428571428572
+              }
+            }
+          ],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 100,
+          "afterWalls": 99,
+          "removedSegments": [
+            {
+              "start": {
+                "x": 1031.7391304347825,
+                "z": 939.4285714285714
+              },
+              "end": {
+                "x": 1045.4499494438828,
+                "z": 939.4285714285714
+              }
+            }
+          ],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "sha256": "74a6b8e12008b2ecda6154d0cbb4ae3287a17d15860c8fb64593744f1b15a55b",
+      "runs": [
+        {
+          "threshold": 125,
+          "beforeWalls": 9,
+          "afterWalls": 9,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 155,
+          "beforeWalls": 13,
+          "afterWalls": 13,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "threshold": 190,
+          "beforeWalls": 31,
+          "afterWalls": 31,
+          "removedSegments": [],
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    }
+  ]
+}

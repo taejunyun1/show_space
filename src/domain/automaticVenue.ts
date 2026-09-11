@@ -1,3 +1,5 @@
+import {withoutTextStrokes} from './textStrokes';
+import {structureRegion} from './structureRegion';
 import {separateCoincidentStrokes} from './coincidentStrokes';
 import type {WallCandidate} from './wallCandidates';
 import {separateFurnitureLines} from './separateFurnitureLines';
@@ -17,7 +19,7 @@ import type {Project, Wall} from './types';
 import {classifyAutomaticWalls} from './automaticWallTopology';
 import {readMeasuredSpans,checkDimensionSums} from './dimensionSpans';
 
-export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines,page.analysis?.stairRegions]);
+export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines,page.analysis?.stairRegions,page.textRegions]);
 export interface AutomaticVenue {project?:Project; reasons:string[]; wallCount:number}
 export function extractStructuralWalls(page:PlanPage):Wall[]{
  if(!page.analysis)return [];
@@ -40,7 +42,9 @@ export function extractStructuralWalls(page:PlanPage):Wall[]{
  const corners=alignRasterJunctions(alignRasterCorners(pairWallEdges(separateCoincidentStrokes(bands))));
  // One bounded follow-up uses endpoints established by the first cap pass.
  const aligned=trimThinOverruns(trimThinOverruns(corners,minLength),minLength);
- const lines=selectStructuralLines(separateFurnitureLines(page.labels??[],aligned),minLength,page.labels??[]);
+ const structural=selectStructuralLines(withoutTextStrokes(separateFurnitureLines(page.labels??[],aligned),page.textRegions),minLength,page.labels??[]);
+ const region=structureRegion(structural,page.labels??[],page.widthPx,page.heightPx);
+ const lines=region?structural.filter(l=>[l.start,l.end].every(p=>p.x>=region.x&&p.x<=region.x+region.width&&p.y>=region.y&&p.y<=region.y+region.height)):structural;
  // Only merge tiny raster endpoint discrepancies; never bridge doorway-sized gaps.
  const points:{x:number;z:number}[]=[];
  const snap=(p:{x:number;y:number},line:WallCandidate)=>{

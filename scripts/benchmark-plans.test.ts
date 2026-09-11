@@ -53,7 +53,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    const started=Date.now(),page=await pdf.getPage(number),original=page.getViewport({scale:1}),viewport=page.getViewport({scale:2400/Math.max(original.width,original.height)});
    const canvas=createCanvas(Math.floor(viewport.width),Math.floor(viewport.height));
    await page.render({canvas:canvas as never,canvasContext:canvas.getContext('2d') as never,viewport,background:'#ffffff'}).promise;
-   const text=await page.getTextContent();let labels=detectPlanLabels(pdfPlanTexts(text.items,viewport.transform,canvas.width,canvas.height));let source:'ocr'|'pdf-text'='pdf-text';
+   const text=await page.getTextContent();const nativeTexts=pdfPlanTexts(text.items,viewport.transform,canvas.width,canvas.height);let labels=detectPlanLabels(nativeTexts);let source:'ocr'|'pdf-text'='pdf-text';
    if(!assessPdfText(text.items).usable){
     source='ocr';if(!ocr){ocr=await createWorker('eng+kor',OEM.LSTM_ONLY,{langPath:resolve('public/ocr/lang'),cacheMethod:'none'});await ocr.setParameters({tessedit_pageseg_mode:PSM.SPARSE_TEXT,preserve_interword_spaces:'1',user_defined_dpi:'150'});}
     const result=await ocr.recognize(canvas.toBuffer('image/png'),{},{blocks:true,text:true});
@@ -128,7 +128,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    }
    const runs=[125,155,190].map(threshold=>{
     const lines=detectWallCandidates(pixels,small.width,small.height,{threshold,maxCandidates:500,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height),...(l.solidSupportThicknessPx===undefined?{}:{solidSupportThicknessPx:l.solidSupportThicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)})}));
-    const input:PlanPage={imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
+    const input:PlanPage={imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,textRegions:source==='pdf-text'?nativeTexts.map(t=>t.box):undefined,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
     const structural=extractStructuralWalls(input);
     const structureScore=sha256===structureTruth.sha256&&file===structureTruth.file&&number===structureTruth.page&&canvas.width===structureTruth.widthPx&&canvas.height===structureTruth.heightPx?{scope:structureTruth.scope,tolerancePx:structureTruth.tolerancePx,raw:scorePlanSegments(structureTruth.segments,lines,structureTruth.tolerancePx),selected:scorePlanSegments(structureTruth.segments,structural.map(w=>({start:{x:w.start.x,y:w.start.z},end:{x:w.end.x,y:w.end.z}})),structureTruth.tolerancePx)}:undefined;
     const resolved=resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines));
