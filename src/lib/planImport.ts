@@ -10,6 +10,7 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import type { RenderTask } from 'pdfjs-dist';
 
 export interface PlanPage {
+  dimensionTotals?:import('../domain/dimensionTotals').DimensionTotalCheck[];
   overlaidDoors?:import('../domain/overlaidDoors').OverlaidDoor[];
   textPanels?:import('../domain/textStrokes').TextRegion[];
   textRegions?:import('../domain/textStrokes').TextRegion[];

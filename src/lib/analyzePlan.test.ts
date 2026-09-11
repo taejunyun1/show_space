@@ -106,3 +106,10 @@ it('uses the darker retry to retain door symbols hidden in the main wall pass',a
  const result=await analyzePlan({...page,widthPx:500,heightPx:500},new AbortController().signal);
  expect(result.overlaidDoors).toHaveLength(1);expect(result.labels?.filter(l=>l.kind==='door')).toHaveLength(1);expect(result.labels?.find(l=>l.kind==='door')?.source).toBe('symbol');expect(result.analysis?.selfCheck?.status).toBe('withheld');
 });
+it('reports arithmetic total agreement separately from withheld venue reconstruction',async()=>{
+ vi.mocked(readPlanOcr).mockResolvedValue([]);
+ const {detectPlanLabels}=await import('../domain/planLabels');
+ const labels=detectPlanLabels(['A1 = 1m','A2 = 2m','Hanging Space = 3m'].map((text,i)=>({text,source:'pdf-text' as const,box:{x:0,y:i*20,width:100,height:15}})));
+ const result=await analyzePlan({...page,labels,textSource:'pdf-text'},new AbortController().signal);
+ expect(result.dimensionTotals?.[0].status).toBe('matched');expect(result.analysis?.issues.join(' ')).toContain('실제 벽 연결은 별도 검증');expect(result.analysis?.selfCheck?.status).toBe('withheld');
+});

@@ -1,0 +1,72 @@
+{
+  "scope": "Arithmetic agreement of numbered dimension groups and explicitly named total lengths. Labels have not thereby been bound to rooms or physical walls. Matching uses unique numeric equality, not independently established room identity.",
+  "limits": "Two K2 groups match. Other five target pages have no applicable group/total checks. These are not six failed checks or proof of complete numeric coverage. Complete venue reconstruction remains 0/5 planar and 0/1 axonometric.",
+  "cases": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "checks": [],
+      "fullVenue": false
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "checks": [],
+      "fullVenue": false
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "checks": [],
+      "fullVenue": false
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "checks": [],
+      "fullVenue": false
+    },
+    {
+      "file": "k2.pdf",
+      "page": 1,
+      "checks": [
+        {
+          "group": "B",
+          "partLabelIds": [
+            "label-2",
+            "label-3",
+            "label-4",
+            "label-12"
+          ],
+          "sumMm": 11160,
+          "totalLabelId": "label-13",
+          "totalMm": 11160,
+          "status": "matched"
+        },
+        {
+          "group": "A",
+          "partLabelIds": [
+            "label-5",
+            "label-6",
+            "label-7",
+            "label-8",
+            "label-9",
+            "label-10",
+            "label-11"
+          ],
+          "sumMm": 16370,
+          "totalLabelId": "label-14",
+          "totalMm": 16370.000000000002,
+          "status": "matched"
+        }
+      ],
+      "fullVenue": false
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "checks": [],
+      "fullVenue": false
+    }
+  ]
+}

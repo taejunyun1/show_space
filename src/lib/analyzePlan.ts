@@ -1,3 +1,4 @@
+import {checkDimensionTotals} from '../domain/dimensionTotals';
 import {detectOverlaidDoors,mergeDoorSymbols} from '../domain/overlaidDoors';
 import {mergePdfFacilityOcr} from '../domain/hybridPlanLabels';
 import {mergeSignSymbol} from '../domain/signSymbols';
@@ -22,7 +23,7 @@ import {readPlanOcr} from './readPlanOcr';
 import {detectPlanWalls} from './detectPlanWalls';
 export interface PlanAnalysis {stairRegions?:StairRegion[];lines:WallCandidate[];issues:string[];textState:'complete'|'failed';lineState:'complete'|'failed';numericCount:number;selfCheck?:{attempts:number;status:'stable'|'withheld'}}
 export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(message:string)=>void=()=>{}):Promise<PlanPage>{
- page={...page,resolvedVenue:undefined,dimensionRechecks:undefined,overlaidDoors:undefined};
+ page={...page,resolvedVenue:undefined,dimensionRechecks:undefined,dimensionTotals:undefined,overlaidDoors:undefined};
  const abort=()=>{if(signal.aborted)throw new Error('자동 분석을 취소했습니다.');};abort();
  onStage('문자·숫자와 구조 선을 자동 분석하고 있습니다.');
  const reuseText=(page.textSource==='pdf-text'||page.textSource==='ocr')&&(page.labels?.length??0)>0;
@@ -105,6 +106,10 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  }
  const overlaidDoors=detectOverlaidDoors(candidates[1].analysis!.lines);
  labels=mergeDoorSymbols(labels,overlaidDoors);
+ const dimensionTotals=checkDimensionTotals(labels);
+ const matchedTotals=dimensionTotals.filter(c=>c.status==='matched').length;
+ if(matchedTotals)issues.push(`식별번호별 부분 치수 합계 ${matchedTotals}건이 총 길이 표기와 일치합니다. 실제 벽 연결은 별도 검증합니다.`);
+ if(dimensionTotals.some(c=>c.status!=='matched'))issues.push('부분 치수와 총 길이의 대응을 확정하지 못한 묶음은 원래 숫자를 보존했습니다.');
  candidates.forEach(p=>{p.overlaidDoors=overlaidDoors;p.labels=labels;});
  const regionPasses=candidates.map(p=>detectStairRegions(labels,p.analysis!.lines));
  candidates.forEach((p,i)=>{p.analysis={...p.analysis!,stairRegions:stableStairRegions(regionPasses,i)};});
@@ -136,5 +141,5 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  }
  const adopted=stable&&(!!buildAutomaticVenue(selected).project||!!resolvedVenue);
  const message=adopted?'서로 다른 선 검출 조건에서 구조와 축척이 일치했습니다.':'자동 재분석으로 구조·축척을 확정하지 못해 공간 생성을 보류했습니다. 원본과 분석 결과는 유지합니다.';
- return {...selected,resolvedVenue,dimensionRechecks,analysis:{...selected.analysis!,stairRegions,issues:[...issues.filter(i=>!i.startsWith('닫힌 경계')),message],selfCheck:{attempts:candidates.length,status:adopted?'stable':'withheld'}}};
+ return {...selected,resolvedVenue,dimensionRechecks,dimensionTotals,analysis:{...selected.analysis!,stairRegions,issues:[...issues.filter(i=>!i.startsWith('닫힌 경계')),message],selfCheck:{attempts:candidates.length,status:adopted?'stable':'withheld'}}};
 }
