@@ -24,3 +24,12 @@ it('keeps the room boundary after separating a counter attached to it',()=>{
  expect(walls).toHaveLength(4);
  expect(walls.some(w=>w.start.z===250&&w.end.z===250&&Math.abs(w.end.x-w.start.x)===400)).toBe(true);
 });
+it('removes a glass table attached along a vertical wall while retaining the shared wall',()=>{
+ const input=[line('shared-left',100,0,100,400),line('top',100,100,300,100),line('bottom',100,200,300,200),line('right',300,100,300,200)];
+ const text=detectPlanLabels([{text:'Glass Table',source:'pdf-text',box:{x:150,y:140,width:100,height:20}}]);
+ const result=detectFurnitureOutlines(text,input);
+ expect(result).toHaveLength(1);
+ expect(result[0].box).toEqual({x:100,y:100,width:200,height:100});
+ expect(new Set(result[0].lineIds)).toEqual(new Set(['top','bottom','right']));
+ expect(detectPlanLabels([{text:'Glass Table Room',source:'pdf-text',box:{x:0,y:0,width:100,height:20}}]).some(l=>l.kind==='furniture')).toBe(false);
+});

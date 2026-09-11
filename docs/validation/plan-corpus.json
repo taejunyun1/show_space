@@ -35,5 +35,14 @@
     "sha256": "74a6b8e12008b2ecda6154d0cbb4ae3287a17d15860c8fb64593744f1b15a55b",
     "source": "https://dti9b28033c75.cloudfront.net/media/gallery/2025/09/29/06/15c9/1759128626.9001.floor%20plan%20paragon%20hall%202024%20-%20fire%20exit%20%26%20fire%20hose.pdf",
     "scope": "Official large exhibition-hall fire-exit and fire-hose overlay. Facility symbols, dense identifiers and colored lines; not a dimension-complete reconstruction truth source."
+  },
+  {
+    "file": "k2.pdf",
+    "pages": [
+      1
+    ],
+    "sha256": "f85b4a2166b3f68e4cbf9211e99b8782a1df766bd6b6b872a1363c658f6eb90b",
+    "source": "https://artspace-k2.com/artspace-k2/pdf/floorplan-k2-eng.pdf",
+    "scope": "Official gallery plan with labelled wall lengths using decimal commas, two rooms, glass table and door swings. Stress case; no claim of complete ground truth."
   }
 ]

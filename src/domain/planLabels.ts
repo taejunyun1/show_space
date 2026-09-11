@@ -18,7 +18,7 @@ export interface PlanLabel extends PlanText {
 const kinds:PlanLabel['kind'][]=['entrance','door','window','air-conditioner','fire-hydrant','fire-extinguisher','stairs','column','dimension','unit','furniture'];
 const rules:{kind:PlanLabel['kind'];pattern:RegExp}[]=[
  {kind:'unit',pattern:/a^/},
- {kind:'furniture',pattern:/^(?:BAR|COUNTER|DESK|TABLE|CHAIR|CABINET|카운터|책상|테이블|의자|캐비닛)$/iu},
+ {kind:'furniture',pattern:/^(?:BAR|COUNTER|DESK|(?:GLASS\s+)?TABLE|CHAIR|CABINET|카운터|책상|테이블|의자|캐비닛)$/iu},
  {kind:'window',pattern:/\bWINDOW\b|창문|창호/iu},
  {kind:'entrance',pattern:/\b(?:ENTRY|ENTRANCE|EXIT)\b|출입구|비상구/iu},
  {kind:'door',pattern:/\bDOOR\b|출입문|방화문|자동문/iu},

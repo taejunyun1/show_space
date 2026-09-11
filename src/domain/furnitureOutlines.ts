@@ -2,7 +2,7 @@ import type {PlanLabel} from './planLabels';
 import type {WallCandidate} from './wallCandidates';
 /** Exact furniture text plus four observed rectangle sides. Shared longer walls
  * are retained; the returned box is observed geometry, not the text footprint. */
-export function detectFurnitureOutlines(labels:PlanLabel[],lines:WallCandidate[]){
+function furnitureProposals(labels:PlanLabel[],lines:WallCandidate[]){
  const result:{labelId:string;box:{x:number;y:number;width:number;height:number};lineIds:string[]}[]=[];
  const vertical=lines.filter(l=>Math.abs(l.start.x-l.end.x)<1),horizontal=lines.filter(l=>Math.abs(l.start.y-l.end.y)<1);
  for(const label of labels){
@@ -24,7 +24,17 @@ export function detectFurnitureOutlines(labels:PlanLabel[],lines:WallCandidate[]
    const lineIds=edges.filter(l=>[l.start,l.end].every(p=>p.x>=x-4&&p.x<=x2+4&&p.y>=y-4&&p.y<=y2+4)).map(l=>l.id);
    proposals.push({labelId:label.id,box:{x,y,width:x2-x,height:y2-y},lineIds});
   }
-  if(proposals.length===1)result.push(proposals[0]);
+  result.push(...proposals);
  }
  return result;
+}
+
+/** Inspect both axes so a long shared vertical wall is treated like a long
+ * shared horizontal wall. Combine proposals before resolving ambiguity. */
+export function detectFurnitureOutlines(labels:PlanLabel[],lines:WallCandidate[]){
+ const transposedLabels=labels.map(l=>({...l,box:{x:l.box.y,y:l.box.x,width:l.box.height,height:l.box.width}}));
+ const transposedLines=lines.map(l=>({...l,start:{x:l.start.y,y:l.start.x},end:{x:l.end.y,y:l.end.x}}));
+ const proposals=[...furnitureProposals(labels,lines),...furnitureProposals(transposedLabels,transposedLines).map(p=>({...p,box:{x:p.box.y,y:p.box.x,width:p.box.height,height:p.box.width}}))];
+ const unique=proposals.filter((p,i)=>proposals.findIndex(q=>q.labelId===p.labelId&&q.box.x===p.box.x&&q.box.y===p.box.y&&q.box.width===p.box.width&&q.box.height===p.box.height&&[...q.lineIds].sort().join('|')===[...p.lineIds].sort().join('|'))===i);
+ return unique.filter(p=>unique.filter(q=>q.labelId===p.labelId).length===1);
 }
