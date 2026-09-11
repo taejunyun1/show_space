@@ -4,7 +4,7 @@ import {readPlanNumbers} from './planNumbers';
 import {pageUnit} from './planUnits';
 /** Adjacent annotations are weaker than witness lines. Require unique placement,
  * three independent walls, both axes, and agreement before deriving one scale. */
-export function wallAnnotationScale(walls:Wall[],labels:PlanLabel[]){
+export function wallAnnotationScale(walls:Wall[],labels:PlanLabel[],occludingWalls:Wall[]=walls){
  const declared=pageUnit(labels);
  // A T-junction can bound a labelled portion of an otherwise continuous wall.
  // Keep the whole as a competing target: text alone must not choose between both.
@@ -32,9 +32,21 @@ export function wallAnnotationScale(walls:Wall[],labels:PlanLabel[]){
   const cx=label.box.x+label.box.width/2,cy=label.box.y+label.box.height/2;
   const candidates=targets.filter(w=>{
    const dx=w.end.x-w.start.x,dy=w.end.z-w.start.z;
-   if((horizontal&&Math.abs(dy)>1)||(vertical&&Math.abs(dx)>1))return false;
+   const length=Math.hypot(dx,dy),drift=Math.min(2,length*.005);
+   if((horizontal&&Math.abs(dy)>drift)||(vertical&&Math.abs(dx)>drift))return false;
    const from=horizontal?Math.min(w.start.x,w.end.x):Math.min(w.start.z,w.end.z),to=horizontal?Math.max(w.start.x,w.end.x):Math.max(w.start.z,w.end.z),along=horizontal?cx:cy;
-   const cross=Math.abs((horizontal?cy:cx)-(horizontal?w.start.z:w.start.x));
+   const wallAlongStart=horizontal?w.start.x:w.start.z,wallAlongEnd=horizontal?w.end.x:w.end.z;
+   const crossAt=(horizontal?w.start.z:w.start.x)+((horizontal?w.end.z:w.end.x)-(horizontal?w.start.z:w.start.x))*(along-wallAlongStart)/(wallAlongEnd-wallAlongStart);
+   const labelCross=horizontal?cy:cx,cross=Math.abs(labelCross-crossAt);
+   const obscured=occludingWalls.some(other=>{
+    if(other.id===w.id)return false;
+    const a=horizontal?other.start.x:other.start.z,b=horizontal?other.end.x:other.end.z;
+    const c=horizontal?other.start.z:other.start.x,d=horizontal?other.end.z:other.end.x;
+    if(along<=Math.min(a,b)||along>=Math.max(a,b)||Math.abs(d-c)>Math.min(2,Math.abs(b-a)*.005))return false;
+    const position=c+(d-c)*(along-a)/(b-a);
+    return position>Math.min(labelCross,crossAt)+.001&&position<Math.max(labelCross,crossAt)-.001;
+   });
+   if(obscured)return false;
    return to-from>=30&&cross>=8&&cross<=60&&along>from&&along<to&&Math.abs(along-(from+to)/2)<=Math.max((to-from)*.2,(horizontal?label.box.width:label.box.height)/2);
   });
   if(candidates.length!==1)continue;

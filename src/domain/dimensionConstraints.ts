@@ -30,7 +30,7 @@ export function solveDimensionConstraints(walls:Wall[], constraints:WallDimensio
   const edges=new Map<number,{to:number;delta:number;labelId:string}[]>(pixels.map(p=>[p,[]]));
   for(const c of constraints.filter(c=>c.horizontal===(axis==='x'))){
    const w=walls.find(w=>w.id===c.wallId),cross=axis==='x'?'z':'x';
-   if(!w||!Number.isFinite(c.mm)||c.mm<=0||Math.abs(w.start[cross]-w.end[cross])>1e-6||key(w.start[axis])===key(w.end[axis])){rejected.push(c.labelId);continue;}
+   if(!w||!Number.isFinite(c.mm)||c.mm<=0||Math.abs(w.start[cross]-w.end[cross])>Math.min(2,Math.abs(w.start[axis]-w.end[axis])*.005)||key(w.start[axis])===key(w.end[axis])){rejected.push(c.labelId);continue;}
    const low=Math.min(key(w.start[axis]),key(w.end[axis])),high=Math.max(key(w.start[axis]),key(w.end[axis]));
    const a=key(c.from??low),b=key(c.to??high);
    if(!Number.isFinite(a)||!Number.isFinite(b)||a<low||b>high||a>=b){rejected.push(c.labelId);continue;}

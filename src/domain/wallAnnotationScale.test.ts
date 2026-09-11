@@ -27,3 +27,13 @@ it('withholds a label when both whole and junction-bounded portion are plausible
  const text=detectPlanLabels([{text:'3860 mm',source:'pdf-text',box:{x:330,y:120,width:60,height:20}}]);
  expect(wallAnnotationScale(input,text).matches).toEqual([]);
 });
+it('assigns opposite-face labels to the nearest visible wall despite slight raster endpoint drift',()=>{
+ const input=[wall('inside',200,100,200,500),wall('outside',198.5,150,200,500)];
+ const text=detectPlanLabels([{text:'1750 mm',source:'pdf-text',box:{x:150,y:280,width:20,height:60}},{text:'1800 mm',source:'pdf-text',box:{x:220,y:280,width:20,height:60}}]);
+ expect(wallAnnotationScale(input,text).allMatches.map(m=>[m.wallId,m.mm,m.from,m.to])).toEqual([['outside',1750,150,500],['inside',1800,100,500]]);
+});
+it('does not connect through a closer parallel wall or accept a materially slanted wall',()=>{
+ const text=detectPlanLabels([{text:'2000 mm',source:'pdf-text',box:{x:100,y:200,width:20,height:60}}]);
+ expect(wallAnnotationScale([wall('far',160,0,160,500),wall('near',130,180,130,280)],text).allMatches.every(m=>m.wallId!=='far')).toBe(true);
+ expect(wallAnnotationScale([wall('slanted',150,0,160,500)],text).matches).toEqual([]);
+});

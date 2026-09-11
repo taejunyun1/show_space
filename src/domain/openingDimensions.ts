@@ -5,5 +5,5 @@ import {wallAnnotationScale} from './wallAnnotationScale';
 export function readOpeningDimensions(walls:Wall[],gaps:{wall:Wall;kind:string}[],labels:PlanLabel[]){
  const eligible=gaps.filter(g=>g.kind==='door'||g.kind==='window');
  const ids=new Set(eligible.map(g=>g.wall.id));
- return wallAnnotationScale([...walls,...eligible.map(g=>g.wall)],labels).allMatches.filter(m=>ids.has(m.wallId));
+ return wallAnnotationScale([...walls,...eligible.map(g=>g.wall)],labels,walls).allMatches.filter(m=>ids.has(m.wallId));
 }
