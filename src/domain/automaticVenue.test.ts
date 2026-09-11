@@ -64,3 +64,10 @@ it('turns a labelled inset window frame into an opening without installation wal
  const result=buildAutomaticVenue(p).project;
  expect(result?.openings).toHaveLength(1);expect(result?.openings?.[0].kind).toBe('window');expect(result?.walls).toHaveLength(5);expect(parseProject(result).walls).toHaveLength(5);
 });
+
+it('creates a complete venue with a labelled door at a perpendicular corner',()=>{
+ const p=fixture();p.analysis!.lines.find(l=>l.id==='b')!.start.y=250;
+ p.labels!.push(...detectPlanLabels([{text:'Door',source:'pdf-text',box:{x:930,y:130,width:20,height:90}}]).map(l=>({...l,id:'corner-door'})));
+ const result=buildAutomaticVenue(p).project;
+ expect(result?.openings).toHaveLength(1);expect(result?.openings?.[0].kind).toBe('door');expect(result?.walls).toHaveLength(4);expect(parseProject(result).walls).toHaveLength(4);
+});

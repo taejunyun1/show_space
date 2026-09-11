@@ -1,0 +1,1647 @@
+[
+  {
+    "stableStairRegions": [],
+    "file": "anca.pdf",
+    "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+    "page": 1,
+    "source": "pdf-text",
+    "declaredUnit": {
+      "conflict": false
+    },
+    "baselineNumbers": 22,
+    "conflicts": 0,
+    "facilityEvidence": [],
+    "numberEvidence": [
+      {
+        "text": "Floor to ceiling: 4m",
+        "box": {
+          "x": 1151.8295264226917,
+          "y": 660.3809998930976,
+          "width": 206.84887574386198,
+          "height": 22.80582974022741
+        },
+        "conflict": false
+      },
+      {
+        "text": "Floor to ceiling: 7m",
+        "box": {
+          "x": 1151.8295264226917,
+          "y": 712.4236182874247,
+          "width": 205.16124434308517,
+          "height": 22.80582974022741
+        },
+        "conflict": false
+      },
+      {
+        "text": "Double power point (7cm H \u001e 11cm W)",
+        "box": {
+          "x": 145.153404839112,
+          "y": 1570.529451591063,
+          "width": 510.93325731390087,
+          "height": 28.50728717528409
+        },
+        "conflict": false
+      },
+      {
+        "text": "Digital exhibition title screen (1.24m wide)",
+        "box": {
+          "x": 145.153404839112,
+          "y": 1462.999964365891,
+          "width": 560.6214588604213,
+          "height": 28.50728717528409
+        },
+        "conflict": false
+      },
+      {
+        "text": "11.86m",
+        "box": {
+          "x": 1219.7823468624167,
+          "y": 831.740298613833,
+          "width": 73.98234959911633,
+          "height": 24.161116288351195
+        },
+        "conflict": false
+      },
+      {
+        "text": "1.70m",
+        "box": {
+          "x": 429.67922175106014,
+          "y": 1062.2838613120477,
+          "width": 22.805829740227296,
+          "height": 62.41955599900234
+        },
+        "conflict": false
+      },
+      {
+        "text": "15.25m",
+        "box": {
+          "x": 220.78266756939743,
+          "y": 832.4735060399814,
+          "width": 19.955101022698926,
+          "height": 67.08904963831378
+        },
+        "conflict": false
+      },
+      {
+        "text": "4.93m",
+        "box": {
+          "x": 1157.398995118127,
+          "y": 894.8904963831379,
+          "width": 69.16888144531958,
+          "height": 24.072171898941747
+        },
+        "conflict": false
+      },
+      {
+        "text": "2.01m",
+        "box": {
+          "x": 766.1379319388518,
+          "y": 885.4253398424972,
+          "width": 64.03846773331463,
+          "height": 23.977370915440247
+        },
+        "conflict": false
+      },
+      {
+        "text": "4.70m",
+        "box": {
+          "x": 1646.2485077147844,
+          "y": 905.1096723800022,
+          "width": 67.91478031571796,
+          "height": 24.04899832519675
+        },
+        "conflict": false
+      },
+      {
+        "text": "0.88m 0.60m",
+        "box": {
+          "x": 1840.4877802088156,
+          "y": 911.6869318319496,
+          "width": 151.32390635356114,
+          "height": 25.59025164807747
+        },
+        "conflict": false
+      },
+      {
+        "text": "7.60m",
+        "box": {
+          "x": 1461.4736842105262,
+          "y": 462.0888543633964,
+          "width": 67.99385810497893,
+          "height": 27.698267469622124
+        },
+        "conflict": false
+      },
+      {
+        "text": "13.09m",
+        "box": {
+          "x": 1323.5856465809072,
+          "y": 347.1785562484408,
+          "width": 80.52116737340975,
+          "height": 29.03068723942556
+        },
+        "conflict": false
+      },
+      {
+        "text": "2.05m",
+        "box": {
+          "x": 1884.9711007376259,
+          "y": 427.7500689163667,
+          "width": 69.76011745002324,
+          "height": 28.13875266364971
+        },
+        "conflict": false
+      },
+      {
+        "text": "6.32m",
+        "box": {
+          "x": 2128.5074297117203,
+          "y": 679.7397284680897,
+          "width": 22.805829740227182,
+          "height": 68.02979011509808
+        },
+        "conflict": false
+      },
+      {
+        "text": "1.80m",
+        "box": {
+          "x": 2076.9662544988064,
+          "y": 506.1873641449595,
+          "width": 22.805829740227182,
+          "height": 64.97380892990782
+        },
+        "conflict": false
+      },
+      {
+        "text": "1.80m",
+        "box": {
+          "x": 2076.9662544988064,
+          "y": 800.5878202615544,
+          "width": 22.805829740227182,
+          "height": 64.97380892990759
+        },
+        "conflict": false
+      },
+      {
+        "text": "1.07m",
+        "box": {
+          "x": 2042.027723336778,
+          "y": 373.27498841891475,
+          "width": 22.80582974022741,
+          "height": 62.53358514770321
+        },
+        "conflict": false
+      },
+      {
+        "text": "1.14m",
+        "box": {
+          "x": 2042.027723336778,
+          "y": 663.0686669279835,
+          "width": 22.80582974022741,
+          "height": 57.082991839788974
+        },
+        "conflict": false
+      },
+      {
+        "text": "0.50m",
+        "box": {
+          "x": 2040.1804511278197,
+          "y": 945.7469265581012,
+          "width": 22.805829740227182,
+          "height": 70.0138973024981
+        },
+        "conflict": false
+      },
+      {
+        "text": "3.22m",
+        "box": {
+          "x": 886.3457221252182,
+          "y": 510.5672952998609,
+          "width": 68.88090368100325,
+          "height": 27.517442611267597
+        },
+        "conflict": false
+      },
+      {
+        "text": "2.30m",
+        "box": {
+          "x": 720.7483162883511,
+          "y": 569.3667453942915,
+          "width": 37.749832020810345,
+          "height": 72.41553019990738
+        },
+        "conflict": false
+      }
+    ],
+    "textItems": 39,
+    "numericLabels": 22,
+    "sampleNumbers": [
+      "Floor to ceiling: 4m",
+      "Floor to ceiling: 7m",
+      "Double power point (7cm H \u001e 11cm W)",
+      "Digital exhibition title screen (1.24m wide)",
+      "11.86m",
+      "1.70m",
+      "15.25m",
+      "4.93m"
+    ],
+    "runs": [
+      {
+        "openingCandidates": [],
+        "framedWindows": [],
+        "stairRegions": [],
+        "threshold": 125,
+        "lineCount": 500,
+        "wallCandidates": 16,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "openingCandidates": [],
+        "framedWindows": [],
+        "stairRegions": [],
+        "threshold": 155,
+        "lineCount": 500,
+        "wallCandidates": 13,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "openingCandidates": [],
+        "framedWindows": [],
+        "stairRegions": [],
+        "threshold": 190,
+        "lineCount": 500,
+        "wallCandidates": 18,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      }
+    ],
+    "elapsedMs": 290
+  },
+  {
+    "stableStairRegions": [
+      {
+        "id": "stairs:rotation-90-label-4",
+        "kind": "stairs",
+        "box": {
+          "x": 229.71428571428572,
+          "y": 426.14357937310416,
+          "width": 46.28571428571428,
+          "height": 216.9302325581395
+        },
+        "labelId": "rotation-90-label-4",
+        "lineIds": [
+          "v-133-250.00-375.00",
+          "v-147-248.50-375.00",
+          "v-160-250.00-375.00"
+        ]
+      }
+    ],
+    "file": "espacio.pdf",
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "page": 1,
+    "selectedTruth": {
+      "scope": "Seven vertical dimension labels selected from visual inspection; not a full-page accuracy benchmark",
+      "baseline": [
+        {
+          "value": 50,
+          "matched": false
+        },
+        {
+          "value": 135,
+          "matched": false
+        },
+        {
+          "value": 230,
+          "matched": false
+        },
+        {
+          "value": 60,
+          "matched": false
+        },
+        {
+          "value": 125,
+          "matched": false
+        },
+        {
+          "value": 96,
+          "matched": false
+        },
+        {
+          "value": 285,
+          "matched": false
+        }
+      ],
+      "enhanced": [
+        {
+          "value": 50,
+          "matched": true
+        },
+        {
+          "value": 135,
+          "matched": true
+        },
+        {
+          "value": 230,
+          "matched": true
+        },
+        {
+          "value": 60,
+          "matched": false
+        },
+        {
+          "value": 125,
+          "matched": false
+        },
+        {
+          "value": 96,
+          "matched": true
+        },
+        {
+          "value": 285,
+          "matched": true
+        }
+      ]
+    },
+    "source": "ocr",
+    "declaredUnit": {
+      "unit": "cm",
+      "conflict": false
+    },
+    "baselineNumbers": 13,
+    "conflicts": 2,
+    "facilityEvidence": [
+      {
+        "kind": "window",
+        "text": "Back Window",
+        "box": {
+          "x": 72,
+          "y": 1100,
+          "width": 31.33333333333333,
+          "height": 232.66666666666674
+        },
+        "confidence": 96
+      },
+      {
+        "kind": "stairs",
+        "text": "Stairs",
+        "box": {
+          "x": 172.66666666666666,
+          "y": 490,
+          "width": 28,
+          "height": 92
+        },
+        "confidence": 96
+      },
+      {
+        "kind": "door",
+        "text": "Front Door",
+        "box": {
+          "x": 2226,
+          "y": 486,
+          "width": 28.666666666666515,
+          "height": 160
+        },
+        "confidence": 96
+      },
+      {
+        "kind": "window",
+        "text": "Glass Front Window",
+        "box": {
+          "x": 2246,
+          "y": 742,
+          "width": 31.333333333333485,
+          "height": 348
+        },
+        "confidence": 96
+      }
+    ],
+    "numberEvidence": [
+      {
+        "text": "Ceiling height: 275cm",
+        "box": {
+          "x": 1838,
+          "y": 155,
+          "width": 374,
+          "height": 36
+        },
+        "confidence": 93,
+        "conflict": false
+      },
+      {
+        "text": "428",
+        "box": {
+          "x": 554,
+          "y": 363,
+          "width": 64,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "225",
+        "box": {
+          "x": 1086,
+          "y": 411,
+          "width": 62,
+          "height": 27
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "275",
+        "box": {
+          "x": 1452,
+          "y": 377,
+          "width": 62,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "190",
+        "box": {
+          "x": 1952,
+          "y": 383,
+          "width": 61,
+          "height": 27
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "11",
+        "box": {
+          "x": 175,
+          "y": 432,
+          "width": 29,
+          "height": 28
+        },
+        "confidence": 81,
+        "conflict": false
+      },
+      {
+        "text": "75",
+        "box": {
+          "x": 1745,
+          "y": 416,
+          "width": 39,
+          "height": 27
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "40",
+        "box": {
+          "x": 912,
+          "y": 480,
+          "width": 40,
+          "height": 27
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "100",
+        "box": {
+          "x": 914,
+          "y": 1075,
+          "width": 61,
+          "height": 28
+        },
+        "confidence": 95,
+        "conflict": false
+      },
+      {
+        "text": "220",
+        "box": {
+          "x": 1187,
+          "y": 1123,
+          "width": 62,
+          "height": 27
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "145",
+        "box": {
+          "x": 1582,
+          "y": 1122,
+          "width": 60,
+          "height": 27
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "365",
+        "box": {
+          "x": 1934,
+          "y": 1212,
+          "width": 60,
+          "height": 27
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "386",
+        "box": {
+          "x": 388,
+          "y": 1504,
+          "width": 62,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "50",
+        "box": {
+          "x": 88.66666666666667,
+          "y": 1398.6666666666667,
+          "width": 28,
+          "height": 39.33333333333326
+        },
+        "confidence": 97,
+        "conflict": false
+      },
+      {
+        "text": "135",
+        "box": {
+          "x": 90,
+          "y": 944,
+          "width": 27.33333333333333,
+          "height": 59.33333333333337
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "230",
+        "box": {
+          "x": 651.3333333333334,
+          "y": 1228,
+          "width": 28,
+          "height": 62
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "60",
+        "box": {
+          "x": 852.6666666666666,
+          "y": 454,
+          "width": 27.33333333333337,
+          "height": 40.66666666666674
+        },
+        "confidence": 96,
+        "conflict": true
+      },
+      {
+        "text": "4",
+        "box": {
+          "x": 2260.6666666666665,
+          "y": 648,
+          "width": 34,
+          "height": 28.66666666666663
+        },
+        "confidence": 95,
+        "conflict": false
+      },
+      {
+        "text": "96",
+        "box": {
+          "x": 2269.3333333333335,
+          "y": 554.6666666666667,
+          "width": 28.666666666666515,
+          "height": 37.33333333333326
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "285",
+        "box": {
+          "x": 2301.3333333333335,
+          "y": 888,
+          "width": 28,
+          "height": 55.33333333333337
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "09",
+        "box": {
+          "x": 852.6666666666667,
+          "y": 454,
+          "width": 27.333333333333258,
+          "height": 40.666666666666686
+        },
+        "confidence": 96,
+        "conflict": true
+      }
+    ],
+    "textItems": 0,
+    "numericLabels": 21,
+    "sampleNumbers": [
+      "Ceiling height: 275cm",
+      "428",
+      "225",
+      "275",
+      "190",
+      "11",
+      "75",
+      "40"
+    ],
+    "runs": [
+      {
+        "structureScore": {
+          "scope": "Selected visible wall segments manually located on the source raster; not full-page ground truth or physical dimension accuracy",
+          "tolerancePx": 4,
+          "raw": [
+            {
+              "id": "top-main",
+              "description": "상단 긴 벽",
+              "lengthPx": 600,
+              "coveredPx": 600,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "front-step",
+              "description": "정문 위 짧은 수직 연결",
+              "lengthPx": 47,
+              "coveredPx": 47,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "front-top",
+              "description": "정문 위 얇은 수평 연결",
+              "lengthPx": 132,
+              "coveredPx": 132,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "lower-right",
+              "description": "하단 우측 외곽",
+              "lengthPx": 605,
+              "coveredPx": 603.4285714285713,
+              "coverage": 0.9974025974025973,
+              "matched": true
+            },
+            {
+              "id": "lower-thin",
+              "description": "하단 얇은 외곽",
+              "lengthPx": 561,
+              "coveredPx": 561,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "office-divider",
+              "description": "사무실 얇은 내부 벽",
+              "lengthPx": 388,
+              "coveredPx": 388,
+              "coverage": 1,
+              "matched": true
+            }
+          ],
+          "selected": [
+            {
+              "id": "top-main",
+              "description": "상단 긴 벽",
+              "lengthPx": 600,
+              "coveredPx": 599.1428571428571,
+              "coverage": 0.9985714285714286,
+              "matched": true
+            },
+            {
+              "id": "front-step",
+              "description": "정문 위 짧은 수직 연결",
+              "lengthPx": 47,
+              "coveredPx": 46.30131445904953,
+              "coverage": 0.9851343501925431,
+              "matched": true
+            },
+            {
+              "id": "front-top",
+              "description": "정문 위 얇은 수평 연결",
+              "lengthPx": 132,
+              "coveredPx": 132,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "lower-right",
+              "description": "하단 우측 외곽",
+              "lengthPx": 605,
+              "coveredPx": 603.4285714285713,
+              "coverage": 0.9974025974025973,
+              "matched": true
+            },
+            {
+              "id": "lower-thin",
+              "description": "하단 얇은 외곽",
+              "lengthPx": 561,
+              "coveredPx": 560.7142857142858,
+              "coverage": 0.9994907053730584,
+              "matched": true
+            },
+            {
+              "id": "office-divider",
+              "description": "사무실 얇은 내부 벽",
+              "lengthPx": 388,
+              "coveredPx": 388,
+              "coverage": 1,
+              "matched": true
+            }
+          ]
+        },
+        "openingCandidates": [
+          {
+            "kind": "door",
+            "labelId": "rotation-90-label-7",
+            "wall": {
+              "id": "opening-gap:rotation-90-label-7",
+              "name": "출입구",
+              "role": "boundary",
+              "start": {
+                "x": 2292,
+                "z": 648.2184024266936
+              },
+              "end": {
+                "x": 2292,
+                "z": 472.4448938321537
+              },
+              "heightMm": 3000,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "출입구 표기와 모서리 벽 끝점으로 검출. 높이·문짝 형태는 미확인."
+            }
+          },
+          {
+            "wall": {
+              "id": "opening-gap:rotation-90-label-1",
+              "name": "개구부",
+              "role": "boundary",
+              "start": {
+                "x": 132.85714285714286,
+                "z": 1100.9423660262892
+              },
+              "end": {
+                "x": 132,
+                "z": 1346.1678463094033
+              },
+              "heightMm": 3000,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "Back Window 표기와 벽 끝점 사이 틈으로 검출. 높이·문짝 형태는 미확인."
+            },
+            "kind": "window",
+            "labelId": "rotation-90-label-1"
+          }
+        ],
+        "framedWindows": [],
+        "stairRegions": [
+          {
+            "id": "stairs:rotation-90-label-4",
+            "kind": "stairs",
+            "box": {
+              "x": 230.57142857142858,
+              "y": 426.14357937310416,
+              "width": 45.428571428571416,
+              "height": 216.9302325581395
+            },
+            "labelId": "rotation-90-label-4",
+            "lineIds": [
+              "v-134-250.00-375.00",
+              "v-147-248.50-375.00",
+              "v-160-250.00-375.00"
+            ]
+          }
+        ],
+        "threshold": 125,
+        "lineCount": 394,
+        "wallCandidates": 34,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "structureScore": {
+          "scope": "Selected visible wall segments manually located on the source raster; not full-page ground truth or physical dimension accuracy",
+          "tolerancePx": 4,
+          "raw": [
+            {
+              "id": "top-main",
+              "description": "상단 긴 벽",
+              "lengthPx": 600,
+              "coveredPx": 600,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "front-step",
+              "description": "정문 위 짧은 수직 연결",
+              "lengthPx": 47,
+              "coveredPx": 47,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "front-top",
+              "description": "정문 위 얇은 수평 연결",
+              "lengthPx": 132,
+              "coveredPx": 132,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "lower-right",
+              "description": "하단 우측 외곽",
+              "lengthPx": 605,
+              "coveredPx": 605,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "lower-thin",
+              "description": "하단 얇은 외곽",
+              "lengthPx": 561,
+              "coveredPx": 561,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "office-divider",
+              "description": "사무실 얇은 내부 벽",
+              "lengthPx": 388,
+              "coveredPx": 388,
+              "coverage": 1,
+              "matched": true
+            }
+          ],
+          "selected": [
+            {
+              "id": "top-main",
+              "description": "상단 긴 벽",
+              "lengthPx": 600,
+              "coveredPx": 600,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "front-step",
+              "description": "정문 위 짧은 수직 연결",
+              "lengthPx": 47,
+              "coveredPx": 46.85642062689584,
+              "coverage": 0.996945119721188,
+              "matched": true
+            },
+            {
+              "id": "front-top",
+              "description": "정문 위 얇은 수평 연결",
+              "lengthPx": 132,
+              "coveredPx": 132,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "lower-right",
+              "description": "하단 우측 외곽",
+              "lengthPx": 605,
+              "coveredPx": 605,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "lower-thin",
+              "description": "하단 얇은 외곽",
+              "lengthPx": 561,
+              "coveredPx": 560.7142857142858,
+              "coverage": 0.9994907053730584,
+              "matched": true
+            },
+            {
+              "id": "office-divider",
+              "description": "사무실 얇은 내부 벽",
+              "lengthPx": 388,
+              "coveredPx": 388,
+              "coverage": 1,
+              "matched": true
+            }
+          ]
+        },
+        "openingCandidates": [
+          {
+            "wall": {
+              "id": "opening-gap:rotation-90-label-1",
+              "name": "창문 개구부",
+              "role": "boundary",
+              "start": {
+                "x": 132.85714285714286,
+                "z": 1099.2275025278059
+              },
+              "end": {
+                "x": 132,
+                "z": 1346.1678463094033
+              },
+              "heightMm": 3000,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "Back Window 표기와 평행 창틀·양끝 연결선으로 검출. 창턱 높이는 미확인."
+            },
+            "kind": "window",
+            "labelId": "rotation-90-label-1",
+            "frameIds": [
+              "auto-wall-36",
+              "auto-wall-13",
+              "auto-wall-37"
+            ]
+          },
+          {
+            "kind": "door",
+            "labelId": "rotation-90-label-7",
+            "wall": {
+              "id": "opening-gap:rotation-90-label-7",
+              "name": "출입구",
+              "role": "boundary",
+              "start": {
+                "x": 2292,
+                "z": 648.2184024266936
+              },
+              "end": {
+                "x": 2292,
+                "z": 473.30232558139534
+              },
+              "heightMm": 3000,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "출입구 표기와 모서리 벽 끝점으로 검출. 높이·문짝 형태는 미확인."
+            }
+          }
+        ],
+        "framedWindows": [
+          {
+            "wall": {
+              "id": "opening-gap:rotation-90-label-1",
+              "name": "창문 개구부",
+              "role": "boundary",
+              "start": {
+                "x": 132.85714285714286,
+                "z": 1099.2275025278059
+              },
+              "end": {
+                "x": 132,
+                "z": 1346.1678463094033
+              },
+              "heightMm": 3000,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "Back Window 표기와 평행 창틀·양끝 연결선으로 검출. 창턱 높이는 미확인."
+            },
+            "kind": "window",
+            "labelId": "rotation-90-label-1",
+            "frameIds": [
+              "auto-wall-36",
+              "auto-wall-13",
+              "auto-wall-37"
+            ]
+          }
+        ],
+        "stairRegions": [
+          {
+            "id": "stairs:rotation-90-label-4",
+            "kind": "stairs",
+            "box": {
+              "x": 229.71428571428572,
+              "y": 426.14357937310416,
+              "width": 46.28571428571428,
+              "height": 216.9302325581395
+            },
+            "labelId": "rotation-90-label-4",
+            "lineIds": [
+              "v-133-250.00-375.00",
+              "v-147-248.50-375.00",
+              "v-160-250.00-375.00"
+            ]
+          }
+        ],
+        "threshold": 155,
+        "lineCount": 445,
+        "wallCandidates": 37,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "structureScore": {
+          "scope": "Selected visible wall segments manually located on the source raster; not full-page ground truth or physical dimension accuracy",
+          "tolerancePx": 4,
+          "raw": [
+            {
+              "id": "top-main",
+              "description": "상단 긴 벽",
+              "lengthPx": 600,
+              "coveredPx": 600,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "front-step",
+              "description": "정문 위 짧은 수직 연결",
+              "lengthPx": 47,
+              "coveredPx": 47,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "front-top",
+              "description": "정문 위 얇은 수평 연결",
+              "lengthPx": 132,
+              "coveredPx": 132,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "lower-right",
+              "description": "하단 우측 외곽",
+              "lengthPx": 605,
+              "coveredPx": 605,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "lower-thin",
+              "description": "하단 얇은 외곽",
+              "lengthPx": 561,
+              "coveredPx": 561,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "office-divider",
+              "description": "사무실 얇은 내부 벽",
+              "lengthPx": 388,
+              "coveredPx": 388,
+              "coverage": 1,
+              "matched": true
+            }
+          ],
+          "selected": [
+            {
+              "id": "top-main",
+              "description": "상단 긴 벽",
+              "lengthPx": 600,
+              "coveredPx": 599.1428571428571,
+              "coverage": 0.9985714285714286,
+              "matched": true
+            },
+            {
+              "id": "front-step",
+              "description": "정문 위 짧은 수직 연결",
+              "lengthPx": 47,
+              "coveredPx": 0,
+              "coverage": 0,
+              "matched": false
+            },
+            {
+              "id": "front-top",
+              "description": "정문 위 얇은 수평 연결",
+              "lengthPx": 132,
+              "coveredPx": 0,
+              "coverage": 0,
+              "matched": false
+            },
+            {
+              "id": "lower-right",
+              "description": "하단 우측 외곽",
+              "lengthPx": 605,
+              "coveredPx": 604.1428571428573,
+              "coverage": 0.9985832349468716,
+              "matched": true
+            },
+            {
+              "id": "lower-thin",
+              "description": "하단 얇은 외곽",
+              "lengthPx": 561,
+              "coveredPx": 561,
+              "coverage": 1,
+              "matched": true
+            },
+            {
+              "id": "office-divider",
+              "description": "사무실 얇은 내부 벽",
+              "lengthPx": 388,
+              "coveredPx": 388,
+              "coverage": 1,
+              "matched": true
+            }
+          ]
+        },
+        "openingCandidates": [
+          {
+            "wall": {
+              "id": "opening-gap:rotation-90-label-1",
+              "name": "창문 개구부",
+              "role": "boundary",
+              "start": {
+                "x": 132.85714285714286,
+                "z": 1100.0849342770475
+              },
+              "end": {
+                "x": 131.14285714285714,
+                "z": 1346.1678463094033
+              },
+              "heightMm": 3000,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "Back Window 표기와 평행 창틀·양끝 연결선으로 검출. 창턱 높이는 미확인."
+            },
+            "kind": "window",
+            "labelId": "rotation-90-label-1",
+            "frameIds": [
+              "auto-wall-35",
+              "auto-wall-14",
+              "auto-wall-36"
+            ]
+          }
+        ],
+        "framedWindows": [
+          {
+            "wall": {
+              "id": "opening-gap:rotation-90-label-1",
+              "name": "창문 개구부",
+              "role": "boundary",
+              "start": {
+                "x": 132.85714285714286,
+                "z": 1100.0849342770475
+              },
+              "end": {
+                "x": 131.14285714285714,
+                "z": 1346.1678463094033
+              },
+              "heightMm": 3000,
+              "thicknessMm": 150,
+              "color": "#ffffff",
+              "visible": true,
+              "locked": false,
+              "note": "Back Window 표기와 평행 창틀·양끝 연결선으로 검출. 창턱 높이는 미확인."
+            },
+            "kind": "window",
+            "labelId": "rotation-90-label-1",
+            "frameIds": [
+              "auto-wall-35",
+              "auto-wall-14",
+              "auto-wall-36"
+            ]
+          }
+        ],
+        "stairRegions": [
+          {
+            "id": "stairs:rotation-90-label-4",
+            "kind": "stairs",
+            "box": {
+              "x": 229.71428571428572,
+              "y": 425.8577687900236,
+              "width": 46.28571428571428,
+              "height": 217.21604314122004
+            },
+            "labelId": "rotation-90-label-4",
+            "lineIds": [
+              "v-133-250.00-375.00",
+              "v-146-248.33-375.00",
+              "v-160-250.00-375.00"
+            ]
+          }
+        ],
+        "threshold": 190,
+        "lineCount": 500,
+        "wallCandidates": 36,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      }
+    ],
+    "elapsedMs": 3883
+  },
+  {
+    "stableStairRegions": [],
+    "file": "espacio.pdf",
+    "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+    "page": 2,
+    "source": "ocr",
+    "declaredUnit": {
+      "unit": "cm",
+      "conflict": false
+    },
+    "baselineNumbers": 16,
+    "conflicts": 2,
+    "facilityEvidence": [
+      {
+        "kind": "door",
+        "text": "Back Door",
+        "box": {
+          "x": 52,
+          "y": 743,
+          "width": 157,
+          "height": 26
+        },
+        "confidence": 96
+      }
+    ],
+    "numberEvidence": [
+      {
+        "text": "Ceiling height: 275cm",
+        "box": {
+          "x": 1872,
+          "y": 147,
+          "width": 338,
+          "height": 36
+        },
+        "confidence": 92,
+        "conflict": false
+      },
+      {
+        "text": "480",
+        "box": {
+          "x": 1411,
+          "y": 387,
+          "width": 63,
+          "height": 28
+        },
+        "confidence": 95,
+        "conflict": false
+      },
+      {
+        "text": "60",
+        "box": {
+          "x": 188,
+          "y": 477,
+          "width": 40,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": true
+      },
+      {
+        "text": "256",
+        "box": {
+          "x": 891,
+          "y": 474,
+          "width": 62,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "396",
+        "box": {
+          "x": 1972,
+          "y": 459,
+          "width": 62,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "40",
+        "box": {
+          "x": 1076,
+          "y": 537,
+          "width": 41,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "37",
+        "box": {
+          "x": 2220,
+          "y": 884,
+          "width": 37,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "170",
+        "box": {
+          "x": 277,
+          "y": 955,
+          "width": 60,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "59",
+        "box": {
+          "x": 1100,
+          "y": 971,
+          "width": 39,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "170",
+        "box": {
+          "x": 1227,
+          "y": 1014,
+          "width": 61,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "52",
+        "box": {
+          "x": 1504,
+          "y": 1014,
+          "width": 38,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "40",
+        "box": {
+          "x": 2229,
+          "y": 1029,
+          "width": 38,
+          "height": 27
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "140",
+        "box": {
+          "x": 1248,
+          "y": 1072,
+          "width": 49,
+          "height": 25
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "285",
+        "box": {
+          "x": 1307,
+          "y": 1461,
+          "width": 49,
+          "height": 26
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "300",
+        "box": {
+          "x": 876,
+          "y": 1515,
+          "width": 62,
+          "height": 27
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "450",
+        "box": {
+          "x": 1827,
+          "y": 1515,
+          "width": 63,
+          "height": 27
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "40",
+        "box": {
+          "x": 32,
+          "y": 860,
+          "width": 28,
+          "height": 41.33333333333337
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "44",
+        "box": {
+          "x": 401.3333333333333,
+          "y": 884,
+          "width": 27.333333333333314,
+          "height": 40.66666666666663
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "125",
+        "box": {
+          "x": 787.3333333333334,
+          "y": 950.6666666666666,
+          "width": 27.33333333333337,
+          "height": 59.33333333333337
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "56",
+        "box": {
+          "x": 1041.3333333333333,
+          "y": 1030.6666666666665,
+          "width": 27.333333333333258,
+          "height": 41.333333333333485
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "175",
+        "box": {
+          "x": 1067.3333333333333,
+          "y": 1248.6666666666667,
+          "width": 28,
+          "height": 59.33333333333326
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "180",
+        "box": {
+          "x": 1126.6666666666667,
+          "y": 1234,
+          "width": 26,
+          "height": 49.33333333333326
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "50",
+        "box": {
+          "x": 2128.6666666666665,
+          "y": 1445.3333333333333,
+          "width": 28,
+          "height": 40
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "09",
+        "box": {
+          "x": 188,
+          "y": 477.33333333333326,
+          "width": 40,
+          "height": 28
+        },
+        "confidence": 96,
+        "conflict": true
+      },
+      {
+        "text": "202",
+        "box": {
+          "x": 2306.6666666666665,
+          "y": 686.6666666666666,
+          "width": 28,
+          "height": 60.66666666666663
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "206",
+        "box": {
+          "x": 2312.6666666666665,
+          "y": 1187.3333333333333,
+          "width": 27.333333333333485,
+          "height": 61.33333333333326
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "54",
+        "box": {
+          "x": 2156.6666666666665,
+          "y": 956.6666666666666,
+          "width": 27.333333333333485,
+          "height": 37.33333333333337
+        },
+        "confidence": 96,
+        "conflict": false
+      },
+      {
+        "text": "180",
+        "box": {
+          "x": 1532,
+          "y": 1244,
+          "width": 25.333333333333485,
+          "height": 48
+        },
+        "confidence": 96,
+        "conflict": false
+      }
+    ],
+    "textItems": 0,
+    "numericLabels": 28,
+    "sampleNumbers": [
+      "Ceiling height: 275cm",
+      "480",
+      "60",
+      "256",
+      "396",
+      "40",
+      "37",
+      "170"
+    ],
+    "runs": [
+      {
+        "openingCandidates": [],
+        "framedWindows": [],
+        "stairRegions": [],
+        "threshold": 125,
+        "lineCount": 478,
+        "wallCandidates": 41,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "openingCandidates": [],
+        "framedWindows": [],
+        "stairRegions": [],
+        "threshold": 155,
+        "lineCount": 500,
+        "wallCandidates": 40,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      },
+      {
+        "openingCandidates": [],
+        "framedWindows": [],
+        "stairRegions": [],
+        "threshold": 190,
+        "lineCount": 500,
+        "wallCandidates": 46,
+        "draftGenerated": false,
+        "reasons": [
+          "닫힌 벽 경계를 확정하지 못했습니다. 끊긴 벽·이중선·가구 선이 있는 도면은 아직 자동 생성 대상이 아닙니다."
+        ]
+      }
+    ],
+    "elapsedMs": 3498
+  }
+]
