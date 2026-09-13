@@ -1,3 +1,4 @@
+import {pdfFilledRects,visibleFilledRects,type PdfFilledRect} from '../domain/pdfFilledRects';
 import {pageTextPanels} from './textPanels';
 import {pdfSignImages,type PdfSignImage} from './pdfSignImages';
 import {pageRasterProfile,type PageRasterProfile} from '../domain/pageRasterProfile';
@@ -10,6 +11,7 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import type { RenderTask } from 'pdfjs-dist';
 
 export interface PlanPage {
+  vectorRects?:PdfFilledRect[];
   dimensionTotals?:import('../domain/dimensionTotals').DimensionTotalCheck[];
   overlaidDoors?:import('../domain/overlaidDoors').OverlaidDoor[];
   textPanels?:import('../domain/textStrokes').TextRegion[];
@@ -106,6 +108,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
     if (pdf.numPages > 200) throw new Error('PDF는 200페이지 이하로 나눠서 올려주세요.');
     let destroyed = false;
     const activeTasks = new Set<RenderTask>();
+    const vectorSources=new Map<number,Promise<PdfFilledRect[]>>();
     const renderPage = async (pageNumber:number, detail = false, preview = false):Promise<PlanPage> => {
         if (destroyed) throw new Error('도면 파일이 닫혔습니다. 다시 불러와주세요.');
         validatePage(pageNumber, pdf.numPages);
@@ -142,11 +145,18 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           canvas.height = Math.max(1, Math.floor(viewport.height));
           const context = canvas.getContext('2d');
           if (!context) throw new Error('PDF를 이미지로 변환할 수 없습니다.');
+          let rawVectorRects:PdfFilledRect[]=[];
+          try{
+            let source=vectorSources.get(pageNumber);
+            if(!source){source=page.getOperatorList().then(ops=>pdfFilledRects(ops,OPS,original.transform as import('../domain/pdfImagePlacements').Matrix6));vectorSources.set(pageNumber,source);}
+            rawVectorRects=(await source).map(r=>({...r,x:r.x*scale,y:r.y*scale,width:r.width*scale,height:r.height*scale}));
+          }catch{diagnostics.warnings.push('PDF 원본 면 정보를 읽지 못해 이미지 분석을 유지합니다.');}
           renderTask = page.render({ canvas, canvasContext: context, viewport, background: '#ffffff' });
           activeTasks.add(renderTask);
           await renderTask.promise;
           if (destroyed) throw new Error('도면 파일이 닫혔습니다. 다시 불러와주세요.');
           diagnostics.rasterProfile=pageRasterProfile(context.getImageData(0,0,canvas.width,canvas.height).data);
+          const vectorRects=visibleFilledRects(rawVectorRects,context.getImageData(0,0,canvas.width,canvas.height).data,canvas.width,canvas.height);
           let textPanels:NonNullable<PlanPage['textPanels']>=[];
           if(!preview){try{textPanels=pageTextPanels(canvas,textRegions,labels);}catch{diagnostics.warnings.push('안내 상자 배경을 분리하지 못해 기존 선 분석을 유지합니다.');}}
           let embeddedSigns:PdfSignImage[]=[];
@@ -160,7 +170,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
           validateImageSize(imageUrl);
           return {
             imageUrl,
-            labels,textSource,embeddedSigns,textRegions,textPanels,
+            labels,textSource,embeddedSigns,textRegions,textPanels,vectorRects,
             widthPx: canvas.width,
             heightPx: canvas.height,
             diagnostics,
@@ -180,6 +190,7 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
         destroyed = true;
         for (const task of activeTasks) task.cancel();
         activeTasks.clear();
+        vectorSources.clear();
         await loadingTask.destroy();
       },
     };

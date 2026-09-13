@@ -3,7 +3,7 @@ vi.mock('./pdfSignImages',()=>({pdfSignImages:vi.fn().mockResolvedValue([])}));
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({ getDocument: vi.fn() }));
-vi.mock('pdfjs-dist', () => ({ getDocument: mocks.getDocument, GlobalWorkerOptions: {}, OPS: {} }));
+vi.mock('pdfjs-dist', () => ({ getDocument: mocks.getDocument, GlobalWorkerOptions: {}, OPS: {setFillRGBColor:4,constructPath:5,fill:22,eoFill:23} }));
 import { loadPlanFile } from './planImport';
 
 const file = { name: 'plan.pdf', type: 'application/pdf', size: 100, arrayBuffer: async () => new ArrayBuffer(10) } as File;
@@ -208,4 +208,17 @@ describe('PDF quality assessment', () => {
     expect(page.diagnostics?.textItemCount).toBeUndefined();
     expect(page.diagnostics?.warnings.join(' ')).toContain('점검');
   });
+});
+
+it('preserves raw rectangle coordinates across preview rendering and rescales them for the full page',async()=>{
+ const path=new Float32Array([0,10,20,1,50,20,1,50,60,1,10,60,4]);
+ const getOperatorList=vi.fn().mockResolvedValue({fnArray:[4,5],argsArray:[['#969696'],[22,[path]]]});
+ const canvas={width:0,height:0,getContext:()=>({getImageData:()=>{const data=new Uint8ClampedArray(canvas.width*canvas.height*4);for(let i=0;i<data.length;i+=4)data.set([150,150,150,255],i);return {data};}}),toDataURL:()=> 'data:image/png;base64,AA=='};
+ vi.stubGlobal('document',{createElement:()=>canvas});
+ const page={getOperatorList,getViewport:({scale}:{scale:number})=>({width:1000*scale,height:500*scale,transform:[scale,0,0,scale,0,0]}),getTextContent:async()=>({items:[]}),render:()=>{path.fill(0);return {promise:Promise.resolve(),cancel:vi.fn()};},cleanup:vi.fn()};
+ mocks.getDocument.mockReturnValue({promise:Promise.resolve({numPages:1,getPage:async()=>page}),destroy:vi.fn().mockResolvedValue(undefined)});
+ const loaded=await loadPlanFile(file);try{
+  const preview=await loaded.previewPage!(1),full=await loaded.renderPage(1);
+  expect(preview.vectorRects?.[0]).toMatchObject({x:9,y:18,width:36,height:36});expect(full.vectorRects?.[0]).toMatchObject({x:24,y:48,width:96,height:96});expect(getOperatorList).toHaveBeenCalledOnce();
+ }finally{await loaded.destroy();vi.unstubAllGlobals();}
 });

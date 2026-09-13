@@ -1,3 +1,5 @@
+import {pdfFilledRects,visibleFilledRects} from '../src/domain/pdfFilledRects';
+import {vectorWallBands} from '../src/domain/vectorWallBands';
 import {checkDimensionTotals} from '../src/domain/dimensionTotals';
 import {detectOverlaidDoors,mergeDoorSymbols} from '../src/domain/overlaidDoors';
 import {pageTextPanels} from '../src/lib/textPanels';
@@ -49,7 +51,9 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
  const structureTruth=JSON.parse(await readFile(resolve('docs/validation/espacio-selected-structure.json'),'utf8'));
  let ocr:Awaited<ReturnType<typeof createWorker>>|undefined,numbersOcr:Awaited<ReturnType<typeof createWorker>>|undefined;
  try{
- for(const file of (await readdir(directory)).filter(f=>f.endsWith('.pdf')).sort()){
+ const files=await readdir(directory);
+ for(const entry of corpus)if(!files.includes(entry.file))throw new Error(`Missing corpus source: ${entry.file}`);
+ for(const file of files.filter(f=>f.endsWith('.pdf')).sort()){
   const bytes=await readFile(resolve(directory,file)),sha256=createHash('sha256').update(bytes).digest('hex');
   const entry=corpus.find(c=>c.file===file);
   if(entry&&entry.sha256!==sha256)throw new Error(`Corpus source changed: ${file}`);
@@ -58,6 +62,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
   try{for(const number of selectedPages){
    const started=Date.now(),page=await pdf.getPage(number),original=page.getViewport({scale:1}),viewport=page.getViewport({scale:2400/Math.max(original.width,original.height)});
    const canvas=createCanvas(Math.floor(viewport.width),Math.floor(viewport.height));
+   const rawVectorRects=pdfFilledRects(await page.getOperatorList(),OPS,viewport.transform as Matrix6);
    await page.render({canvas:canvas as never,canvasContext:canvas.getContext('2d') as never,viewport,background:'#ffffff'}).promise;
    const text=await page.getTextContent();const nativeTexts=pdfPlanTexts(text.items,viewport.transform,canvas.width,canvas.height);let labels=detectPlanLabels(nativeTexts);let source:'ocr'|'pdf-text'='pdf-text';
    if(!assessPdfText(text.items).usable){
@@ -138,9 +143,10 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
    const textPanels=source==='pdf-text'?pageTextPanels(canvas as never,nativeTexts.map(t=>t.box),labels):[];
    const sourceLines=(threshold:number)=>detectWallCandidates(pixels,small.width,small.height,{threshold,maxCandidates:500,minLengthPx:Math.max(10,Math.round(1400*.008)),minThicknessPx:1}).map(l=>({...l,start:{x:l.start.x*canvas.width/small.width,y:l.start.y*canvas.height/small.height},end:{x:l.end.x*canvas.width/small.width,y:l.end.y*canvas.height/small.height},thicknessPx:l.thicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height),...(l.solidSupportThicknessPx===undefined?{}:{solidSupportThicknessPx:l.solidSupportThicknessPx*Math.max(canvas.width/small.width,canvas.height/small.height)})}));
    const overlaidDoors=detectOverlaidDoors(sourceLines(125));labels=mergeDoorSymbols(labels,overlaidDoors);
-   const runs=[125,155,190].map(threshold=>{
-    const lines=sourceLines(threshold);
-    const input:PlanPage={overlaidDoors,imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,textPanels,textRegions:source==='pdf-text'?nativeTexts.map(t=>t.box):undefined,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
+   const vectorRects=visibleFilledRects(rawVectorRects,canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data,canvas.width,canvas.height),vectorLines=vectorWallBands(vectorRects,Math.max(canvas.width,canvas.height));
+   const runs=[125,155,190,...(vectorLines.length?[0]:[])].map(threshold=>{
+    const lines=threshold===0?vectorLines:sourceLines(threshold);
+    const input:PlanPage={vectorRects,overlaidDoors,imageUrl:'data:image/png;base64,AA==',widthPx:canvas.width,heightPx:canvas.height,labels,textSource:source,textPanels,textRegions:source==='pdf-text'?nativeTexts.map(t=>t.box):undefined,analysis:{lines,issues:[],numericCount:labels.filter(l=>l.kind==='dimension').length,textState:'complete',lineState:'complete'}};
     const structural=extractStructuralWalls(input);
     const structureScore=sha256===structureTruth.sha256&&file===structureTruth.file&&number===structureTruth.page&&canvas.width===structureTruth.widthPx&&canvas.height===structureTruth.heightPx?{scope:structureTruth.scope,tolerancePx:structureTruth.tolerancePx,raw:scorePlanSegments(structureTruth.segments,lines,structureTruth.tolerancePx),selected:scorePlanSegments(structureTruth.segments,structural.map(w=>({start:{x:w.start.x,y:w.start.z},end:{x:w.end.x,y:w.end.z}})),structureTruth.tolerancePx)}:undefined;
     const resolved=resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines),lines,overlaidDoors);
@@ -151,7 +157,7 @@ test.skipIf(!process.env.PLAN_CORPUS_DIR)('reports local real-PDF recognition wi
     const selectedAnnotationTruth=file===annotationTruth.file&&sha256===annotationTruth.sha256&&number===annotationTruth.page&&canvas.width===annotationTruth.widthPx&&canvas.height===annotationTruth.heightPx?annotationTruth.intervals.map((t:{id:string;mm:number;horizontal:boolean;from:number;to:number;cross:number})=>({id:t.id,matched:annotations.matches.some(m=>{
      const w=structural.find(w=>w.id===m.wallId);return w&&m.mm===t.mm&&m.horizontal===t.horizontal&&Math.abs(m.from-t.from)<=annotationTruth.tolerancePx&&Math.abs(m.to-t.to)<=annotationTruth.tolerancePx&&Math.abs((t.horizontal?w.start.z:w.start.x)-t.cross)<=annotationTruth.tolerancePx;
     })})):undefined;
-    const draft=buildAutomaticVenue(input);return {dimensionTotals:checkDimensionTotals(labels),overlaidDoors,textPanels,unlabelledStairCandidates:detectUnlabelledStairCandidates(lines,labels),topologyDiagnostics,constrainedVenueReady:!!prepareConstrainedVenue(input),dimensionMapReady:!!createDimensionMap(dimensionConstraints),openingDimensions,selectedAnnotationTruth,measuredSpans,dimensionConstraints,annotationScale:annotations,topologyResolved,structureScore,openingCandidates:resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines),lines,overlaidDoors).gaps,framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
+    const draft=buildAutomaticVenue(input);return {vectorRectCount:vectorRects.length,vectorLineCount:vectorLines.length,dimensionTotals:checkDimensionTotals(labels),overlaidDoors,textPanels,unlabelledStairCandidates:detectUnlabelledStairCandidates(lines,labels),topologyDiagnostics,constrainedVenueReady:!!prepareConstrainedVenue(input),dimensionMapReady:!!createDimensionMap(dimensionConstraints),openingDimensions,selectedAnnotationTruth,measuredSpans,dimensionConstraints,annotationScale:annotations,topologyResolved,structureScore,openingCandidates:resolvePlanOpenings(structural,labels,Math.max(canvas.width,canvas.height)*.2,detectStairRegions(labels,lines),lines,overlaidDoors).gaps,framedWindows:detectFramedWindows(structural,labels,Math.max(canvas.width,canvas.height)*.2),stairRegions:detectStairRegions(labels,lines),structural,threshold,lineCount:lines.length,wallCandidates:draft.wallCount,draftGenerated:!!draft.project,reasons:draft.reasons};
    });
    const selected=runs[1],conflictIds=[...conflictingDimensionLabels(selected.annotationScale.allMatches),...selected.dimensionConstraints.axes.flatMap(a=>a.conflicts.map(c=>c.labelId))];
    const recheckTargets=dimensionRecheckTargets(labels,canvas.width,canvas.height,conflictIds);

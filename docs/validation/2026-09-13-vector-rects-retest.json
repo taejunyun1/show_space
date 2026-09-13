@@ -1,0 +1,248 @@
+{
+  "scope": "Simple filled PDF rectangles extracted before PDF.js Path2D mutation and corroborated by sampled rendered color. Repeated neutral fill style produces a separate candidate pass, not established wall semantics. Curves, compound paths, strokes, clipping and graphics-state effects remain unsupported.",
+  "verification": "All five source PDFs were downloaded again and matched existing SHA256 values. Previous benchmark code was rerun in this environment: all 18 raster geometry and opening comparisons agree. K2 produces 34 visible rectangles, 19 vector band lines, 11 selected walls, but no closed topology. Other selected pages produce no eligible vector band pass.",
+  "limits": "Full venue remains 0/5 planar and 0/1 axonometric. Sampled color visibility is not a proof of every pixel or physical wall. No standalone browser verification or deployment in this batch.",
+  "cases": [
+    {
+      "file": "anca.pdf",
+      "page": 1,
+      "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+      "visibleRectangleCount": 0,
+      "vectorLineCount": 0,
+      "runs": [
+        {
+          "mode": "raster",
+          "threshold": 125,
+          "structuralWallCount": 16,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 155,
+          "structuralWallCount": 13,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 190,
+          "structuralWallCount": 18,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "coningsby.pdf",
+      "page": 7,
+      "sha256": "17c5a461a3002f641aeb820dd1606ed6e74d66d6dd374908273dfa326ddfd553",
+      "visibleRectangleCount": 0,
+      "vectorLineCount": 0,
+      "runs": [
+        {
+          "mode": "raster",
+          "threshold": 125,
+          "structuralWallCount": 0,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 155,
+          "structuralWallCount": 0,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 190,
+          "structuralWallCount": 0,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 1,
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "visibleRectangleCount": 0,
+      "vectorLineCount": 0,
+      "runs": [
+        {
+          "mode": "raster",
+          "threshold": 125,
+          "structuralWallCount": 34,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 155,
+          "structuralWallCount": 37,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 190,
+          "structuralWallCount": 36,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "espacio.pdf",
+      "page": 2,
+      "sha256": "30a54aa721153177a15f9bfa682447f5c5f9908376272a86a1d9de220a6db77a",
+      "visibleRectangleCount": 0,
+      "vectorLineCount": 0,
+      "runs": [
+        {
+          "mode": "raster",
+          "threshold": 125,
+          "structuralWallCount": 36,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 155,
+          "structuralWallCount": 42,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": true,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 190,
+          "structuralWallCount": 43,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "k2.pdf",
+      "page": 1,
+      "sha256": "f85b4a2166b3f68e4cbf9211e99b8782a1df766bd6b6b872a1363c658f6eb90b",
+      "visibleRectangleCount": 34,
+      "vectorLineCount": 19,
+      "runs": [
+        {
+          "mode": "raster",
+          "threshold": 125,
+          "structuralWallCount": 9,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 155,
+          "structuralWallCount": 21,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 190,
+          "structuralWallCount": 26,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "vector-fill",
+          "structuralWallCount": 11,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    },
+    {
+      "file": "paragon-fire.pdf",
+      "page": 1,
+      "sha256": "74a6b8e12008b2ecda6154d0cbb4ae3287a17d15860c8fb64593744f1b15a55b",
+      "visibleRectangleCount": 0,
+      "vectorLineCount": 0,
+      "runs": [
+        {
+          "mode": "raster",
+          "threshold": 125,
+          "structuralWallCount": 9,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 155,
+          "structuralWallCount": 13,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        },
+        {
+          "mode": "raster",
+          "threshold": 190,
+          "structuralWallCount": 31,
+          "sameRasterGeometry": true,
+          "sameRasterOpenings": true,
+          "topologyResolved": false,
+          "constrainedVenueReady": false,
+          "draftGenerated": false
+        }
+      ]
+    }
+  ]
+}

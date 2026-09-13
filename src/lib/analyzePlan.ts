@@ -1,3 +1,4 @@
+import {vectorWallBands} from '../domain/vectorWallBands';
 import {checkDimensionTotals} from '../domain/dimensionTotals';
 import {detectOverlaidDoors,mergeDoorSymbols} from '../domain/overlaidDoors';
 import {mergePdfFacilityOcr} from '../domain/hybridPlanLabels';
@@ -111,6 +112,8 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  if(matchedTotals)issues.push(`식별번호별 부분 치수 합계 ${matchedTotals}건이 총 길이 표기와 일치합니다. 실제 벽 연결은 별도 검증합니다.`);
  if(dimensionTotals.some(c=>c.status!=='matched'))issues.push('부분 치수와 총 길이의 대응을 확정하지 못한 묶음은 원래 숫자를 보존했습니다.');
  candidates.forEach(p=>{p.overlaidDoors=overlaidDoors;p.labels=labels;});
+ const vectorLines=vectorWallBands(page.vectorRects??[],Math.max(page.widthPx,page.heightPx));
+ if(vectorLines.length){candidates.push({...result,labels,overlaidDoors,analysis:{...result.analysis!,lines:vectorLines,lineState:'complete'}});issues.push('PDF 원본 면 정보로 만든 구조 후보를 이미지 분석과 함께 검증했습니다.');}
  const regionPasses=candidates.map(p=>detectStairRegions(labels,p.analysis!.lines));
  candidates.forEach((p,i)=>{p.analysis={...p.analysis!,stairRegions:stableStairRegions(regionPasses,i)};});
  const constrained=candidates.map(p=>prepareConstrainedVenue(p));

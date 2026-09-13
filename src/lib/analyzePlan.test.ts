@@ -113,3 +113,8 @@ it('reports arithmetic total agreement separately from withheld venue reconstruc
  const result=await analyzePlan({...page,labels,textSource:'pdf-text'},new AbortController().signal);
  expect(result.dimensionTotals?.[0].status).toBe('matched');expect(result.analysis?.issues.join(' ')).toContain('실제 벽 연결은 별도 검증');expect(result.analysis?.selfCheck?.status).toBe('withheld');
 });
+it('evaluates a verified vector-fill candidate in addition to three raster passes',async()=>{
+ const rect=(id:string,x:number,y:number,width:number,height:number)=>({id,x,y,width,height,color:'#969696'});
+ const result=await analyzePlan({...page,widthPx:500,heightPx:500,vectorRects:[rect('top',100,100,200,10),rect('bottom',100,290,200,10),rect('left',100,100,10,200),rect('right',290,100,10,200)]},new AbortController().signal);
+ expect(result.analysis?.selfCheck?.attempts).toBe(4);expect(detectPlanWalls).toHaveBeenCalledTimes(3);expect(result.analysis?.issues.join(' ')).toContain('PDF 원본 면 정보');expect(result.analysis?.selfCheck?.status).toBe('withheld');
+});

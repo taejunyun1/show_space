@@ -21,7 +21,7 @@ import type {Project, Wall} from './types';
 import {classifyAutomaticWalls} from './automaticWallTopology';
 import {readMeasuredSpans,checkDimensionSums} from './dimensionSpans';
 
-export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines,page.analysis?.stairRegions,page.textRegions,page.textPanels,page.overlaidDoors]);
+export const planEvidenceKey=(page:PlanPage)=>JSON.stringify([page.widthPx,page.heightPx,page.labels,page.analysis?.lines,page.analysis?.stairRegions,page.textRegions,page.textPanels,page.overlaidDoors,page.vectorRects]);
 export interface AutomaticVenue {project?:Project; reasons:string[]; wallCount:number}
 export function extractStructuralWalls(page:PlanPage):Wall[]{
  if(!page.analysis)return [];
