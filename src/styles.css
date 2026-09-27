@@ -55,3 +55,4 @@
 .share-row>span{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}.share-row b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.share-row small{font-size:10px;color:#778598}
 .share-row>button{width:30px;height:30px;display:grid;place-items:center;border-radius:5px;color:#64758b}.share-row>button:hover{background:#f1f4f8}
 .rotation-buttons{display:flex;gap:8px;margin:4px 0 12px}.rotation-buttons .button{flex:1;min-width:0;padding:7px 5px;font-size:11px}
+.artwork-rotation-handle{cursor:grab;touch-action:none}.artwork-rotation-handle:active{cursor:grabbing}
