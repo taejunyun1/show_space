@@ -11,13 +11,20 @@ import {
   updateWall,
 } from '../domain/model'
 import type { Artwork, EntitySelection, Project, Wall } from '../domain/types'
+import type {Point} from '../domain/types'
+import {transformWall} from '../domain/wallTransform'
 import { readDraft, writeDraft } from '../lib/persistence'
 
 type View = '3d' | 'plan' | 'elevation'
 type SaveStatus = 'loading' | 'saved' | 'saving' | 'error'
+type EditTool = 'select' | 'move' | 'rotate'
+interface WallGesture {id:string;mode:'move'|'rotate';start:Point;base:Project}
 
 interface EditorState {
   project: Project
+  previewProject: Project | null
+  wallGesture: WallGesture | null
+  activeTool: EditTool
   selected: EntitySelection[]
   view: View
   activeWallId: string
@@ -28,6 +35,10 @@ interface EditorState {
   future: Project[]
   hydrated: boolean
   select(selection: EntitySelection, additive?: boolean): void
+  setTool(tool:EditTool):void
+  beginWallTransform(id:string,mode:'move'|'rotate',start:Point):void
+  updateWallTransform(point:Point):void
+  finishWallTransform(cancel?:boolean):void
   setView(view: View): void
   setActiveWall(id: string): void
   toggleDimensions(): void
@@ -80,6 +91,9 @@ export const useEditor = create<EditorState>((set, get) => {
   }
   return {
     project: initialProject,
+    previewProject: null,
+    wallGesture: null,
+    activeTool: 'select',
     selected: firstSelection(initialProject),
     view: '3d',
     activeWallId: 'wall-a',
@@ -98,12 +112,37 @@ export const useEditor = create<EditorState>((set, get) => {
       const artwork = selection.type === 'artwork' ? state.project.artworks.find((item) => item.id === selection.id) : undefined
       return { selected, activeWallId: selection.type === 'wall' ? selection.id : (artwork?.wallId ?? state.activeWallId) }
     }),
+    setTool: (activeTool) => set({activeTool,previewProject:null,wallGesture:null}),
+    beginWallTransform: (id,mode,start) => attempt(()=>{
+      const project=get().project,wall=project.walls.find(w=>w.id===id);
+      if(!wall)throw new Error('벽을 찾을 수 없습니다.');
+      if(wall.locked)throw new Error('잠긴 벽은 이동하거나 회전할 수 없습니다.');
+      if(!Number.isFinite(start.x)||!Number.isFinite(start.z))throw new Error('시작점이 올바르지 않습니다.');
+      set({wallGesture:{id,mode,start,base:project},previewProject:null,selected:[{type:'wall',id}],activeWallId:id});
+    }),
+    updateWallTransform: (point) => attempt(()=>{
+      const gesture=get().wallGesture;if(!gesture)return;
+      const wall=gesture.base.walls.find(w=>w.id===gesture.id)!;
+      const center={x:(wall.start.x+wall.end.x)/2,z:(wall.start.z+wall.end.z)/2};
+      const dx=point.x-gesture.start.x,dz=point.z-gesture.start.z;
+      const radians=Math.atan2(point.z-center.z,point.x-center.x)-Math.atan2(gesture.start.z-center.z,gesture.start.x-center.x);
+      const transform=gesture.mode==='move'?{kind:'move' as const,dx,dz}:{kind:'rotate' as const,radians};
+      set({previewProject:transformWall(gesture.base,gesture.id,transform)});
+    }),
+    finishWallTransform: (cancel=false) => {
+      const gesture=get().wallGesture,preview=get().previewProject;
+      set({wallGesture:null,previewProject:null});
+      if(!gesture||cancel||!preview)return;
+      const before=gesture.base.walls.find(w=>w.id===gesture.id),after=preview.walls.find(w=>w.id===gesture.id);
+      if(before&&after&&JSON.stringify([before.start,before.end])!==JSON.stringify([after.start,after.end]))attempt(()=>get().commit(parseProject(preview)));
+    },
     setView: (view) => set({ view }),
     setActiveWall: (activeWallId) => set({ activeWallId }),
     toggleDimensions: () => set((state) => ({ showDimensions: !state.showDimensions })),
     notify: (message) => set({ message }),
     commit: (next) => set((state) => ({
       project: clone(next),
+      previewProject:null,wallGesture:null,
       past: [...state.past, clone(state.project)].slice(-50),
       future: [],
       message: null,
@@ -150,17 +189,17 @@ export const useEditor = create<EditorState>((set, get) => {
       const previous = state.past[state.past.length - 1]
       if (!previous) return state
       const project = clone(previous)
-      return { project, past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project, previewProject:null,wallGesture:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     redo: () => set((state) => {
       const next = state.future[0]
       if (!next) return state
       const project = clone(next)
-      return { project, past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project,previewProject:null,wallGesture:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     loadProject: (project) => attempt(() => {
       const parsed = parseProject(project)
-      set({ project: parsed, selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
+      set({ project: parsed, previewProject:null,wallGesture:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
     }),
     saveScene: (name) => attempt(() => {
       const project = get().project

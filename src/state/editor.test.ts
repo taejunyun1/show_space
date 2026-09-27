@@ -6,6 +6,9 @@ const reset = () => {
   const project = createDemoProject()
   useEditor.setState({
     project,
+    previewProject: null,
+    wallGesture: null,
+    activeTool: 'select',
     selected: [{ type: 'artwork', id: project.artworks[0].id }],
     activeWallId: project.walls[0].id,
     past: [],
@@ -31,6 +34,42 @@ describe('editor history and commands', () => {
     expect(state.future).toEqual([])
     expect(state.project.artworks[0].name).toBe('새 작품')
   })
+
+  it('previews a wall drag without saving until one final undoable commit', () => {
+    const state=useEditor.getState();
+    state.beginWallTransform('wall-a','move',{x:0,z:0});
+    useEditor.getState().updateWallTransform({x:600,z:0});
+    expect(useEditor.getState().project.walls[0].start.x).toBe(-4000);
+    expect(useEditor.getState().previewProject?.walls[0].start.x).toBe(-3400);
+    expect(useEditor.getState().past).toHaveLength(0);
+    useEditor.getState().finishWallTransform();
+    expect(useEditor.getState().project.walls[0].start.x).toBe(-3400);
+    expect(useEditor.getState().past).toHaveLength(1);
+    useEditor.getState().undo();
+    expect(useEditor.getState().project.walls[0].start.x).toBe(-4000);
+  });
+
+  it('cancels a wall drag without changing the project or history',()=>{
+    useEditor.getState().beginWallTransform('wall-a','rotate',{x:4000,z:-3000});
+    useEditor.getState().updateWallTransform({x:0,z:1000});
+    useEditor.getState().finishWallTransform(true);
+    expect(useEditor.getState().project.walls[0].start).toEqual({x:-4000,z:-3000});
+    expect(useEditor.getState().previewProject).toBeNull();
+    expect(useEditor.getState().past).toHaveLength(0);
+  });
+
+  it('keeps a geometric preview but rejects an opening collapsed at commit',()=>{
+    const project=createDemoProject();
+    project.openings=[{id:'door-1',kind:'door',role:'boundary',start:{wallId:'wall-a',endpoint:'start'},end:{wallId:'wall-b',endpoint:'start'},note:''}];
+    useEditor.setState({project});
+    useEditor.getState().beginWallTransform('wall-a','move',{x:0,z:0});
+    useEditor.getState().updateWallTransform({x:8000,z:0});
+    expect(useEditor.getState().previewProject).not.toBeNull();
+    useEditor.getState().finishWallTransform();
+    expect(useEditor.getState().project).toBe(project);
+    expect(useEditor.getState().past).toHaveLength(0);
+    expect(useEditor.getState().message).toMatch(/개구부 길이/);
+  });
 
   it('keeps only the latest fifty undo snapshots', () => {
     for (let index = 0; index < 55; index += 1) useEditor.getState().renameProject(`수정 ${index}`)
