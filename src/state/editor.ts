@@ -12,19 +12,21 @@ import {
 } from '../domain/model'
 import type { Artwork, EntitySelection, Project, Wall } from '../domain/types'
 import type {Point} from '../domain/types'
-import {transformWall} from '../domain/wallTransform'
+import {transformWalls} from '../domain/wallTransform'
+import {addWallBetween,updateWallEndpoint} from '../domain/wallEditing'
 import { readDraft, writeDraft } from '../lib/persistence'
 
 type View = '3d' | 'plan' | 'elevation'
 type SaveStatus = 'loading' | 'saved' | 'saving' | 'error'
-type EditTool = 'select' | 'move' | 'rotate'
-interface WallGesture {id:string;mode:'move'|'rotate';start:Point;base:Project}
+type EditTool = 'select' | 'move' | 'rotate' | 'draw'
+interface WallGesture {id:string;ids:string[];mode:'move'|'rotate';start:Point;base:Project}
 
 interface EditorState {
   project: Project
   previewProject: Project | null
   wallGesture: WallGesture | null
   activeTool: EditTool
+  linkedCorners: boolean
   selected: EntitySelection[]
   view: View
   activeWallId: string
@@ -36,6 +38,7 @@ interface EditorState {
   hydrated: boolean
   select(selection: EntitySelection, additive?: boolean): void
   setTool(tool:EditTool):void
+  setLinkedCorners(linked:boolean):void
   beginWallTransform(id:string,mode:'move'|'rotate',start:Point):void
   updateWallTransform(point:Point):void
   finishWallTransform(cancel?:boolean):void
@@ -46,11 +49,14 @@ interface EditorState {
   commit(next: Project): void
   patchArtwork(id: string, patch: Partial<Artwork>): void
   patchWall(id: string, patch: Partial<Wall>): void
+  moveWallEndpoint(id:string,endpoint:'start'|'end',point:Point):void
   renameProject(name: string): void
   patchProject(patch: Pick<Partial<Project>, 'floorColor' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan'>): void
   addArtwork(imageUrl?: string, name?: string): void
   addWall(): void
+  drawWall(start:Point,end:Point):void
   duplicateSelected(): void
+  lockSelected(locked:boolean):void
   deleteSelected(): void
   spaceSelected(gap: number): void
   undo(): void
@@ -94,6 +100,7 @@ export const useEditor = create<EditorState>((set, get) => {
     previewProject: null,
     wallGesture: null,
     activeTool: 'select',
+    linkedCorners: true,
     selected: firstSelection(initialProject),
     view: '3d',
     activeWallId: 'wall-a',
@@ -113,30 +120,37 @@ export const useEditor = create<EditorState>((set, get) => {
       return { selected, activeWallId: selection.type === 'wall' ? selection.id : (artwork?.wallId ?? state.activeWallId) }
     }),
     setTool: (activeTool) => set({activeTool,previewProject:null,wallGesture:null}),
+    setLinkedCorners: (linkedCorners) => set({linkedCorners}),
     beginWallTransform: (id,mode,start) => attempt(()=>{
       const project=get().project,wall=project.walls.find(w=>w.id===id);
       if(!wall)throw new Error('벽을 찾을 수 없습니다.');
-      if(wall.locked)throw new Error('잠긴 벽은 이동하거나 회전할 수 없습니다.');
+      const selected=get().selected;
+      const ids=selected.some(item=>item.type==='wall'&&item.id===id)
+        ? selected.filter(item=>item.type==='wall').map(item=>item.id) : [id];
+      if(project.walls.some(w=>ids.includes(w.id)&&w.locked))throw new Error('잠긴 벽은 이동하거나 회전할 수 없습니다.');
       if(!Number.isFinite(start.x)||!Number.isFinite(start.z))throw new Error('시작점이 올바르지 않습니다.');
-      set({wallGesture:{id,mode,start,base:project},previewProject:null,selected:[{type:'wall',id}],activeWallId:id});
+      set({wallGesture:{id,ids,mode,start,base:project},previewProject:null,selected:ids.map(id=>({type:'wall',id})),activeWallId:id});
     }),
     updateWallTransform: (point) => attempt(()=>{
       const gesture=get().wallGesture;if(!gesture)return;
-      const wall=gesture.base.walls.find(w=>w.id===gesture.id)!;
-      const center={x:(wall.start.x+wall.end.x)/2,z:(wall.start.z+wall.end.z)/2};
+      const points=gesture.base.walls.filter(w=>gesture.ids.includes(w.id)).flatMap(w=>[w.start,w.end]);
+      const center={x:(Math.min(...points.map(p=>p.x))+Math.max(...points.map(p=>p.x)))/2,z:(Math.min(...points.map(p=>p.z))+Math.max(...points.map(p=>p.z)))/2};
       const dx=point.x-gesture.start.x,dz=point.z-gesture.start.z;
       const radians=Math.atan2(point.z-center.z,point.x-center.x)-Math.atan2(gesture.start.z-center.z,gesture.start.x-center.x);
       const transform=gesture.mode==='move'?{kind:'move' as const,dx,dz}:{kind:'rotate' as const,radians};
-      set({previewProject:transformWall(gesture.base,gesture.id,transform)});
+      set({previewProject:transformWalls(gesture.base,gesture.ids,transform)});
     }),
     finishWallTransform: (cancel=false) => {
       const gesture=get().wallGesture,preview=get().previewProject;
       set({wallGesture:null,previewProject:null});
       if(!gesture||cancel||!preview)return;
-      const before=gesture.base.walls.find(w=>w.id===gesture.id),after=preview.walls.find(w=>w.id===gesture.id);
-      if(before&&after&&JSON.stringify([before.start,before.end])!==JSON.stringify([after.start,after.end]))attempt(()=>get().commit(parseProject(preview)));
+      const changed=gesture.ids.some(id=>{
+        const before=gesture.base.walls.find(w=>w.id===id),after=preview.walls.find(w=>w.id===id);
+        return before&&after&&JSON.stringify([before.start,before.end])!==JSON.stringify([after.start,after.end]);
+      });
+      if(changed)attempt(()=>get().commit(parseProject(preview)));
     },
-    setView: (view) => set({ view }),
+    setView: (view) => set(state=>({view,activeTool:view!=='plan'&&state.activeTool==='draw'?'select':state.activeTool})),
     setActiveWall: (activeWallId) => set({ activeWallId }),
     toggleDimensions: () => set((state) => ({ showDimensions: !state.showDimensions })),
     notify: (message) => set({ message }),
@@ -151,6 +165,7 @@ export const useEditor = create<EditorState>((set, get) => {
     })),
     patchArtwork: (id, patch) => attempt(() => get().commit(updateArtwork(get().project, id, patch))),
     patchWall: (id, patch) => attempt(() => get().commit(updateWall(get().project, id, patch))),
+    moveWallEndpoint: (id,endpoint,point) => attempt(()=>get().commit(updateWallEndpoint(get().project,id,endpoint,point,get().linkedCorners))),
     renameProject: (name) => get().commit({ ...get().project, name }),
     patchProject: (patch) => get().commit({ ...get().project, ...patch }),
     addArtwork: (imageUrl, name) => attempt(() => {
@@ -165,14 +180,26 @@ export const useEditor = create<EditorState>((set, get) => {
       get().commit(next)
       set({ selected: [{ type: 'wall', id: created.id }], activeWallId: created.id })
     }),
+    drawWall: (start,end) => attempt(()=>{
+      const next=addWallBetween(get().project,start,end);
+      const created=next.walls[next.walls.length-1];
+      get().commit(next);
+      set({selected:[{type:'wall',id:created.id}],activeWallId:created.id});
+    }),
     duplicateSelected: () => attempt(() => {
-      const selection = get().selected[0]
-      if (!selection) throw new Error('복제할 항목을 선택해 주세요.')
-      const result = duplicateSelection(get().project, selection)
-      get().commit(result.project)
-      set({ selected: [result.selection], activeWallId: result.selection.type === 'wall'
-        ? result.selection.id
-        : result.project.artworks.find((item) => item.id === result.selection.id)?.wallId ?? get().activeWallId })
+      const selections=get().selected;
+      if(!selections.length)throw new Error('복제할 항목을 선택해 주세요.');
+      let next=get().project;
+      const copied:EntitySelection[]=[];
+      for(const selection of selections){const result=duplicateSelection(next,selection);next=result.project;copied.push(result.selection);}
+      get().commit(next);
+      set({selected:copied,activeWallId:copied[0].type==='wall'?copied[0].id:next.artworks.find(item=>item.id===copied[0].id)?.wallId??get().activeWallId});
+    }),
+    lockSelected: (locked) => attempt(()=>{
+      if(!get().selected.length)throw new Error('잠글 항목을 선택해 주세요.');
+      let next=get().project;
+      for(const selection of get().selected)next=selection.type==='wall'?updateWall(next,selection.id,{locked}):updateArtwork(next,selection.id,{locked});
+      get().commit(next);
     }),
     deleteSelected: () => attempt(() => {
       const selections = get().selected

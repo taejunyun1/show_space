@@ -9,6 +9,7 @@ const reset = () => {
     previewProject: null,
     wallGesture: null,
     activeTool: 'select',
+    linkedCorners: true,
     selected: [{ type: 'artwork', id: project.artworks[0].id }],
     activeWallId: project.walls[0].id,
     past: [],
@@ -56,6 +57,57 @@ describe('editor history and commands', () => {
     expect(useEditor.getState().project.walls[0].start).toEqual({x:-4000,z:-3000});
     expect(useEditor.getState().previewProject).toBeNull();
     expect(useEditor.getState().past).toHaveLength(0);
+  });
+
+  it('preserves a selected wall group during a drag and commits once',()=>{
+    useEditor.getState().select({type:'wall',id:'wall-a'});
+    useEditor.getState().select({type:'wall',id:'wall-b'},true);
+    useEditor.getState().beginWallTransform('wall-a','move',{x:0,z:0});
+    useEditor.getState().updateWallTransform({x:500,z:200});
+    const state=useEditor.getState();
+    expect(state.selected.map(item=>item.id)).toEqual(['wall-a','wall-b']);
+    expect(state.previewProject?.walls[0].start).toEqual({x:-3500,z:-2800});
+    expect(state.previewProject?.walls[1].start).toEqual({x:4500,z:-2800});
+    expect(state.project.walls[0].start.x).toBe(-4000);
+    state.finishWallTransform();
+    expect(useEditor.getState().past).toHaveLength(1);
+  });
+
+  it('adds a drawn wall as one undoable action',()=>{
+    useEditor.getState().drawWall({x:100,z:100},{x:1500,z:1100});
+    expect(useEditor.getState().project.walls).toHaveLength(5);
+    expect(useEditor.getState().selected[0]).toMatchObject({type:'wall'});
+    useEditor.getState().undo();
+    expect(useEditor.getState().project.walls).toHaveLength(4);
+  });
+
+  it('duplicates and locks a multi-wall selection in single undo steps',()=>{
+    useEditor.getState().select({type:'wall',id:'wall-c'});
+    useEditor.getState().select({type:'wall',id:'wall-d'},true);
+    useEditor.getState().duplicateSelected();
+    expect(useEditor.getState().project.walls).toHaveLength(6);
+    expect(useEditor.getState().selected).toHaveLength(2);
+    useEditor.getState().lockSelected(true);
+    expect(useEditor.getState().selected.every(item=>useEditor.getState().project.walls.find(w=>w.id===item.id)?.locked)).toBe(true);
+    expect(useEditor.getState().past).toHaveLength(2);
+    useEditor.getState().undo();
+    expect(useEditor.getState().selected.every(item=>!useEditor.getState().project.walls.find(w=>w.id===item.id)?.locked)).toBe(true);
+    useEditor.getState().undo();
+    expect(useEditor.getState().project.walls).toHaveLength(4);
+  });
+
+  it('detaches a corner when connection editing is off',()=>{
+    useEditor.getState().setLinkedCorners(false);
+    useEditor.getState().moveWallEndpoint('wall-c','start',{x:4200,z:3100});
+    expect(useEditor.getState().project.walls[2].start).toEqual({x:4200,z:3100});
+    expect(useEditor.getState().project.walls[1].end).toEqual({x:4000,z:3000});
+  });
+
+  it('leaves drawing mode when opening a non-plan view',()=>{
+    useEditor.getState().setView('plan');
+    useEditor.getState().setTool('draw');
+    useEditor.getState().setView('3d');
+    expect(useEditor.getState().activeTool).toBe('select');
   });
 
   it('keeps a geometric preview but rejects an opening collapsed at commit',()=>{

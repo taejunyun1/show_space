@@ -38,8 +38,7 @@ function GalleryWall({ wall, artworks, cutaway }: { wall: Wall; artworks: Artwor
   function begin(e:ThreeEvent<PointerEvent>,mode:'move'|'rotate'){
     if(e.button!==0)return;e.stopPropagation();
     if(e.shiftKey){useEditor.getState().select({type:'wall',id:wall.id},true);return;}
-    useEditor.getState().select({type:'wall',id:wall.id});
-    if(wall.locked)return;
+    if(wall.locked){useEditor.getState().select({type:'wall',id:wall.id});return;}
     const p=groundPoint(e);if(!p)return;
     (e.target as Element).setPointerCapture(e.pointerId);
     useEditor.getState().beginWallTransform(wall.id,mode,p);
