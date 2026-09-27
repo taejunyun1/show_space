@@ -40,4 +40,17 @@ describe('read-only public drawings',()=>{
     expect(first).toContain('3,000 mm');
     expect(other).not.toContain('3,000 mm');
   });
+
+  it('shows a temporary ruler only on links that disclose dimensions',()=>{
+    const points=[{x:-3000,y:1000,z:-3000},{x:-1000,y:1000,z:-3000}];
+    const plan=renderToStaticMarkup(<SharedPlan snapshot={measured} selectedId={null} onSelect={()=>{}} measuring measurePoints={points}/>);
+    const elevation=renderToStaticMarkup(<SharedElevation snapshot={measured} wallId={measured.walls[0].id} side="front" selectedId={null} onSelect={()=>{}} measuring measurePoints={points}/>);
+    const privatePlan=renderToStaticMarkup(<SharedPlan snapshot={bare} selectedId={null} onSelect={()=>{}} measuring measurePoints={points}/>);
+    expect(plan).toContain('임시 측정');
+    expect(plan).toContain('2,000 mm');
+    expect(elevation).toContain('임시 측정');
+    expect(elevation).toContain('2,000 mm');
+    expect(privatePlan).not.toContain('임시 측정');
+    expect(privatePlan).not.toContain('2,000 mm');
+  });
 });
