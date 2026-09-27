@@ -7,10 +7,13 @@ import { Inspector } from './components/Inspector';
 import { Workspace } from './components/Workspace';
 import { ExportDialog } from './components/ExportDialog';
 import { IconButton } from './components/Controls';
+import {ShareDialog} from './components/ShareDialog';
+import type {CameraView3D} from './components/cameraView3d';
 export default function App() {
   const { project, selected, undo, redo, past, future, message, notify } = useEditor();
-  const [exportOpen, setExportOpen] = useState(false), [help, setHelp] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false), [help, setHelp] = useState(false),[shareOpen,setShareOpen]=useState(false);
   const capture = useRef<(() => void) | null>(null);
+  const cameraGetter=useRef<(()=>CameraView3D)|null>(null);
   useEffect(() => { const stop = startAutosave(); void hydrateEditor(); return stop; }, []);
   useEffect(() => {
     function keyboard(e: KeyboardEvent) {
@@ -34,5 +37,5 @@ export default function App() {
   function exportPng() {
     capture.current?.();
   }
-  return <div className="app"><Header onExport={() => setExportOpen(true)} /><div className="editor-body"><Outliner /><Workspace captureRef={capture} /><Inspector /></div><footer className="status-bar"><div><span>{selected.length}개 객체 선택됨</span><span className="status-divider" /><span>{project.planDraft&&!project.planReference?.calibrated?'도면 축척 미정 · 벽 길이 px':'실제 치수 기준 · mm'}</span></div><div className="footer-actions"><span className="local-version">로컬 편집기 0.3</span><IconButton label="되돌리기" disabled={past.length === 0} onClick={undo}><Undo2 size={16} /></IconButton><IconButton label="다시 실행" disabled={future.length === 0} onClick={redo}><Redo2 size={16} /></IconButton><span className="status-divider" /><IconButton label="사용 방법" active={help} onClick={() => setHelp(!help)}><CircleHelp size={16} /></IconButton></div></footer>{help && <div className="help-popover"><strong>빠르게 시작하기</strong><p>1. 작품을 선택하고 오른쪽에서 실제 크기를 입력하세요.</p><p>2. 벽면도에서 작품을 끌어 배치하세요.</p><p>3. Shift로 여러 벽을 선택해 함께 이동·회전하세요.</p><p>4. 평면도에서 W로 벽을 그리고 끝점을 맞추세요.</p><small>⌘ / Ctrl + Z 되돌리기 · D 복제 · S 내보내기<br />M 이동 · Q 회전 · W 벽 그리기 · T 줄자 · V 선택 · Esc 취소<br />빈 3D 공간 드래그 시점 회전 / 휠 확대</small></div>}{message && <div className="toast" role="status"><span>{message}</span><button className="icon-button" aria-label="알림 닫기" onClick={() => notify(null)}><X size={15} /></button></div>}{exportOpen && <ExportDialog onClose={() => setExportOpen(false)} onPng={exportPng} />}</div>;
+  return <div className="app"><Header onExport={() => setExportOpen(true)} onShare={()=>setShareOpen(true)}/><div className="editor-body"><Outliner /><Workspace captureRef={capture} cameraGetterRef={cameraGetter}/><Inspector /></div><footer className="status-bar"><div><span>{selected.length}개 객체 선택됨</span><span className="status-divider" /><span>{project.planDraft&&!project.planReference?.calibrated?'도면 축척 미정 · 벽 길이 px':'실제 치수 기준 · mm'}</span></div><div className="footer-actions"><span className="local-version">로컬 편집기 0.3</span><IconButton label="되돌리기" disabled={past.length === 0} onClick={undo}><Undo2 size={16} /></IconButton><IconButton label="다시 실행" disabled={future.length === 0} onClick={redo}><Redo2 size={16} /></IconButton><span className="status-divider" /><IconButton label="사용 방법" active={help} onClick={() => setHelp(!help)}><CircleHelp size={16} /></IconButton></div></footer>{help && <div className="help-popover"><strong>빠르게 시작하기</strong><p>1. 작품을 선택하고 오른쪽에서 실제 크기를 입력하세요.</p><p>2. 벽면도에서 작품을 끌어 배치하세요.</p><p>3. Shift로 여러 벽을 선택해 함께 이동·회전하세요.</p><p>4. 평면도에서 W로 벽을 그리고 끝점을 맞추세요.</p><small>⌘ / Ctrl + Z 되돌리기 · D 복제 · S 내보내기<br />M 이동 · Q 회전 · W 벽 그리기 · T 줄자 · V 선택 · Esc 취소<br />빈 3D 공간 드래그 시점 회전 / 휠 확대</small></div>}{message && <div className="toast" role="status"><span>{message}</span><button className="icon-button" aria-label="알림 닫기" onClick={() => notify(null)}><X size={15} /></button></div>}{exportOpen && <ExportDialog onClose={() => setExportOpen(false)} onPng={exportPng} />}{shareOpen&&<ShareDialog project={project} onClose={()=>setShareOpen(false)} getCamera={()=>cameraGetter.current?.()??null}/>}</div>;
 }
