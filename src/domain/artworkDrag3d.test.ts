@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {createDemoProject} from './model';
-import {projectArtworkRay,draggedArtworkPlacement} from './artworkDrag3d';
+import {projectArtworkRay,projectArtworkWallRay,draggedArtworkPlacement} from './artworkDrag3d';
 
 const project=createDemoProject();
 const wall=project.walls[0];
@@ -27,5 +27,14 @@ describe('3D artwork drag projection',()=>{
   it('keeps a rotated painting fully inside the wall while dragging',()=>{
     const rotated={...artwork,rotationDeg:90};
     expect(draggedArtworkPlacement(rotated,wall,{alongMm:0,centerHeightMm:0},{alongMm:0,centerHeightMm:0})).toEqual({alongMm:600,centerHeightMm:450});
+  });
+
+  it('finds the wall and visible face under a 3D drag ray',()=>{
+    const wallB=project.walls[1];
+    const front=projectArtworkWallRay([wall,wallB],artwork,{origin:{x:1000,y:1600,z:1000},direction:{x:1,y:0,z:0}});
+    expect(front).toEqual({wallId:wallB.id,wallSide:'front',alongMm:4000,centerHeightMm:1600});
+    const back=projectArtworkWallRay([wall,wallB],artwork,{origin:{x:7000,y:1600,z:1000},direction:{x:-1,y:0,z:0}});
+    expect(back).toEqual({wallId:wallB.id,wallSide:'back',alongMm:4000,centerHeightMm:1600});
+    expect(projectArtworkWallRay([wallB],artwork,{origin:{x:1000,y:1600,z:8000},direction:{x:1,y:0,z:0}})).toBeNull();
   });
 });

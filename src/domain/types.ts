@@ -30,6 +30,8 @@ export interface Artwork {
   imageUrl: string; visible: boolean; locked: boolean; note: string
 }
 
+export type UnplacedArtwork = Omit<Artwork,'wallId'>
+
 export interface Scene {
   id: string; name: string; artworks: Artwork[]
   wallVisibility: Record<string, boolean>
@@ -55,7 +57,7 @@ export interface Project {
   sourcePlan?:{imageUrl:string;widthPx:number;heightPx:number;labels:PlanLabel[]};
   openings?:Opening[];
   schemaVersion: 1; id: string; name: string; venue: string
-  walls: Wall[]; artworks: Artwork[]; scenes: Scene[]
+  walls: Wall[]; artworks: Artwork[]; unplacedArtworks?:UnplacedArtwork[]; scenes: Scene[]
   planLabels?: PlanLabel[];
   planAnalysis?:PlanAnalysis;
   floorColor: string; planImageUrl?: string; planOpacity?: number; planReference?: PlanReference

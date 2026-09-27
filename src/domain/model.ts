@@ -4,7 +4,7 @@ import {validateOpenings} from './openings';
 import {validateDimensions} from './measurements';
 import {validatePlanLabels,type PlanLabel} from './planLabels'
 import { validatePlanReference } from './plan'
-import type { Artwork, EntitySelection, Point, Project, Wall } from './types'
+import type { Artwork, EntitySelection, Point, Project, UnplacedArtwork, Wall } from './types'
 
 const frames = new Set<Artwork['frame']>(['black', 'natural', 'white', 'none'])
 const imageLimit = 12 * 1024 * 1024
@@ -140,7 +140,7 @@ export function updateArtwork(project: Project, id: string, patch: Partial<Artwo
 
 export function addWall(project: Project): Project {
   if (project.walls.length >= wallLimit) throw new Error(`벽은 최대 ${wallLimit}개까지 만들 수 있습니다.`)
-  const id = uniqueId('wall', [...project.walls, ...project.artworks].map(item => item.id))
+  const id = uniqueId('wall', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[])].map(item => item.id))
   const z = project.walls.length * 400
   const wall: Wall = { id, role: 'partition', name: `새 벽 ${project.walls.length + 1}`, start: { x: 0, z }, end: { x: 3000, z }, heightMm: 3200, thicknessMm: 160, color: '#ffffff', visible: true, locked: false, note: '' }
   return { ...project, walls: [...project.walls, wall] }
@@ -148,8 +148,8 @@ export function addWall(project: Project): Project {
 
 export function addArtwork(project: Project, imageUrl = '/artworks/artwork-1.png', name = '새 작품'): Project {
   if (!project.walls.length) throw new Error('작품을 배치할 벽이 없습니다.')
-  if (project.artworks.length >= artworkLimit) throw new Error(`작품은 최대 ${artworkLimit}개까지 만들 수 있습니다.`)
-  const id = uniqueId('artwork', [...project.walls, ...project.artworks].map(item => item.id))
+  if (project.artworks.length+(project.unplacedArtworks?.length??0) >= artworkLimit) throw new Error(`작품은 최대 ${artworkLimit}개까지 만들 수 있습니다.`)
+  const id = uniqueId('artwork', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[])].map(item => item.id))
   const artwork: Artwork = { id, name, artist: '', widthMm: 900, heightMm: 1200, depthMm: 30, wallId: project.walls[0].id, alongMm: 450, centerHeightMm: 1500, frame: 'natural', imageUrl, visible: true, locked: false, note: '' }
   validateArtwork(artwork, new Set(project.walls.map(wall => wall.id)))
   return { ...project, artworks: [...project.artworks, artwork] }
@@ -159,15 +159,15 @@ export function duplicateSelection(project: Project, selection: EntitySelection)
   if (selection.type === 'artwork') {
     const source = project.artworks.find(item => item.id === selection.id)
     if (!source) throw new Error('복제할 작품을 찾을 수 없습니다.')
-    if (project.artworks.length >= artworkLimit) throw new Error(`작품은 최대 ${artworkLimit}개까지 만들 수 있습니다.`)
-    const id = uniqueId('artwork', [...project.walls, ...project.artworks].map(item => item.id))
+    if (project.artworks.length+(project.unplacedArtworks?.length??0) >= artworkLimit) throw new Error(`작품은 최대 ${artworkLimit}개까지 만들 수 있습니다.`)
+    const id = uniqueId('artwork', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[])].map(item => item.id))
     const copy = { ...source, id, name: `${source.name} 복사본`, alongMm: source.alongMm + 200, locked: false }
     return { project: { ...project, artworks: [...project.artworks, copy] }, selection: { type: 'artwork', id } }
   }
   const source = project.walls.find(item => item.id === selection.id)
   if (!source) throw new Error('복제할 벽을 찾을 수 없습니다.')
   if (project.walls.length >= wallLimit) throw new Error(`벽은 최대 ${wallLimit}개까지 만들 수 있습니다.`)
-  const id = uniqueId('wall', [...project.walls, ...project.artworks].map(item => item.id))
+  const id = uniqueId('wall', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[])].map(item => item.id))
   const copy = { ...source, id, name: `${source.name} 복사본`, start: { x: source.start.x, z: source.start.z + 400 }, end: { x: source.end.x, z: source.end.z + 400 }, locked: false }
   return { project: { ...project, walls: [...project.walls, copy] }, selection: { type: 'wall', id } }
 }
@@ -183,12 +183,31 @@ export function deleteSelection(project: Project, selection: EntitySelection): P
   if (!item) return project
   if (item.locked) throw new Error('잠긴 벽은 삭제할 수 없습니다.')
   if (project.walls.length === 1) throw new Error('마지막 벽은 삭제할 수 없습니다.')
-  if (project.artworks.some(artwork => artwork.wallId === selection.id)) throw new Error('이 벽의 작품을 다른 벽으로 먼저 이동해 주세요.')
+  const attached=project.artworks.filter(artwork=>artwork.wallId===selection.id)
+  if(attached.some(artwork=>artwork.locked))throw new Error('이 벽의 잠긴 작품을 먼저 잠금 해제해 주세요.')
+  const unplaced:UnplacedArtwork[]=attached.map(({wallId:_,...artwork})=>artwork)
   const scenes = project.scenes.map(scene => {
     const wallVisibility = Object.fromEntries(Object.entries(scene.wallVisibility).filter(([id]) => id !== selection.id))
     return { ...scene, artworks: scene.artworks.filter(artwork => artwork.wallId !== selection.id), wallVisibility }
   })
-  return { ...project, walls: project.walls.filter(wall => wall.id !== selection.id), openings:removeWallOpenings(project.openings,selection.id), scenes }
+  return { ...project, walls: project.walls.filter(wall => wall.id !== selection.id), artworks:project.artworks.filter(artwork=>artwork.wallId!==selection.id), unplacedArtworks:[...(project.unplacedArtworks??[]),...unplaced], openings:removeWallOpenings(project.openings,selection.id), scenes }
+}
+
+export function placeUnplacedArtwork(project:Project,id:string,wallId:string):Project{
+  const artwork=project.unplacedArtworks?.find(item=>item.id===id)
+  if(!artwork)throw new Error('미배치 작품을 찾을 수 없습니다.')
+  const wall=project.walls.find(item=>item.id===wallId)
+  if(!wall)throw new Error('배치할 벽을 찾을 수 없습니다.')
+  const size=rotatedArtworkSize({...artwork,wallId})
+  const clampCenter=(value:number,extent:number,container:number)=>{
+    const margin=Math.min(extent/2,container/2)
+    return Math.max(margin,Math.min(container-margin,value))
+  }
+  const alongMm=clampCenter(artwork.alongMm,size.widthMm,wallLength(wall))
+  const centerHeightMm=clampCenter(artwork.centerHeightMm,size.heightMm,wall.heightMm)
+  const placed:Artwork={...artwork,wallId,alongMm,centerHeightMm}
+  validateArtwork(placed,new Set(project.walls.map(item=>item.id)))
+  return {...project,artworks:[...project.artworks,placed],unplacedArtworks:project.unplacedArtworks!.filter(item=>item.id!==id)}
 }
 
 export function distributeArtworks(project: Project, ids: string[], spacingMm: number): Project {
@@ -246,7 +265,8 @@ export function parseProject(input: unknown): Project {
   ;['id', 'name', 'venue', 'floorColor'].forEach(key => text(raw[key], `프로젝트 ${key}`))
   if (!Array.isArray(raw.walls) || !Array.isArray(raw.artworks) || !Array.isArray(raw.scenes)) throw new Error('벽, 작품, 장면 목록 형식이 올바르지 않습니다.')
   if (raw.walls.length === 0) throw new Error('프로젝트에는 벽이 하나 이상 있어야 합니다.')
-  if (raw.walls.length > wallLimit || raw.artworks.length > artworkLimit) throw new Error('프로젝트 객체 수 제한을 초과했습니다.')
+  if (raw.unplacedArtworks!==undefined&&!Array.isArray(raw.unplacedArtworks))throw new Error('미배치 작품 목록 형식이 올바르지 않습니다.')
+  if (raw.walls.length > wallLimit || raw.artworks.length+(raw.unplacedArtworks?.length??0) > artworkLimit) throw new Error('프로젝트 객체 수 제한을 초과했습니다.')
   const walls = raw.walls as Wall[]
   const wallIds = new Set<string>()
   for (const value of walls) {
@@ -269,6 +289,11 @@ export function parseProject(input: unknown): Project {
   }
   const artworkIds = new Set<string>()
   for (const value of raw.artworks) validateArtworkRecord(value, artworkIds)
+  for(const value of raw.unplacedArtworks??[]){
+    const unplaced=object(value,'미배치 작품')
+    if('wallId' in unplaced)throw new Error('미배치 작품에는 설치 벽이 없어야 합니다.')
+    validateArtworkRecord({...unplaced,wallId:walls[0].id},artworkIds)
+  }
   for (const id of artworkIds) if (wallIds.has(id)) throw new Error(`서로 다른 객체에 중복된 ID가 있습니다: ${id}`)
   const sceneIds = new Set<string>()
   for (const value of raw.scenes) {

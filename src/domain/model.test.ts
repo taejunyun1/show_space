@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   addArtwork, addWall, artworkPosition, artworkWarnings, createDemoProject, deleteSelection,
-  distributeArtworks, duplicateSelection, mmToMeters, normalizeArtworkAngle, parseProject, rotatedArtworkSize, updateArtwork, updateWall, wallLength,
+  distributeArtworks, duplicateSelection, mmToMeters, normalizeArtworkAngle, parseProject, placeUnplacedArtwork, rotatedArtworkSize, updateArtwork, updateWall, wallLength,
 } from './model'
 
 describe('exhibition domain model', () => {
@@ -100,6 +100,28 @@ describe('exhibition domain model', () => {
     expect(deleted.scenes[0].artworks.map(item => item.id)).toEqual(['artwork-2'])
     expect(parseProject(deleted)).toEqual(deleted)
   })
+
+  it('keeps artworks from a deleted wall in an importable unplaced list and reattaches them',()=>{
+    const demo=createDemoProject();
+    const deleted=deleteSelection(demo,{type:'wall',id:'wall-a'});
+    expect(deleted.artworks.map(art=>art.id)).toEqual(['artwork-5']);
+    expect(deleted.unplacedArtworks?.map(art=>art.id)).toEqual(['artwork-1','artwork-2','artwork-3','artwork-4']);
+    expect(deleted.unplacedArtworks?.[0].imageUrl).toBe(demo.artworks[0].imageUrl);
+    expect(parseProject(deleted)).toEqual(deleted);
+    const placed=placeUnplacedArtwork(deleted,'artwork-1','wall-b');
+    expect(placed.artworks.find(art=>art.id==='artwork-1')).toMatchObject({wallId:'wall-b',name:demo.artworks[0].name});
+    expect(placed.unplacedArtworks?.map(art=>art.id)).toEqual(['artwork-2','artwork-3','artwork-4']);
+    expect(parseProject(placed)).toEqual(placed);
+  });
+
+  it('prevents deletion of a wall with locked artwork and rejects malformed unplaced entries',()=>{
+    const demo=updateArtwork(createDemoProject(),'artwork-1',{locked:true});
+    expect(()=>deleteSelection(demo,{type:'wall',id:'wall-a'})).toThrow(/잠긴 작품/);
+    const unplaced={...demo.artworks[0],id:'unplaced-1'};
+    expect(()=>parseProject({...demo,unplacedArtworks:[unplaced]})).toThrow(/설치 벽/);
+    const {wallId:_,...withoutWall}=unplaced;
+    expect(()=>parseProject({...demo,unplacedArtworks:[{...withoutWall,id:'artwork-1'}]})).toThrow(/중복/);
+  });
 
   it('rejects empty rooms and IDs shared across entity kinds', () => {
     const demo = createDemoProject()

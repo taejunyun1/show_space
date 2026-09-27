@@ -56,3 +56,11 @@
 .share-row>button{width:30px;height:30px;display:grid;place-items:center;border-radius:5px;color:#64758b}.share-row>button:hover{background:#f1f4f8}
 .rotation-buttons{display:flex;gap:8px;margin:4px 0 12px}.rotation-buttons .button{flex:1;min-width:0;padding:7px 5px;font-size:11px}
 .artwork-rotation-handle{cursor:grab;touch-action:none}.artwork-rotation-handle:active{cursor:grabbing}
+.unplaced-target{display:flex;flex-direction:column;gap:5px;margin:0 6px 9px;font-size:10px;color:#67768a}
+.unplaced-target select{width:100%;min-height:28px;padding:3px 6px;border:1px solid #dce2eb;border-radius:4px;background:#fff;font-size:11px}
+.unplaced-row{display:flex;align-items:center;gap:8px;min-width:0;padding:5px 3px}
+.unplaced-row .entity-text{flex:1;min-width:0}
+.unplaced-row .entity-text strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.unplaced-row>button{flex-shrink:0;padding:5px 7px;border:1px solid #cad6fb;border-radius:4px;background:#f6f8ff;color:var(--blue);font-size:10px}
+.unplaced-row>button:hover{background:#e8eeff}
+@media(max-width:700px){.unplaced-row{gap:4px}.unplaced-row>button{padding:4px;font-size:9px}.unplaced-row .entity-text small{display:none}}

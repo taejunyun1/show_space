@@ -9,6 +9,7 @@ const reset = () => {
     previewProject: null,
     wallGesture: null,
     artworkGesture:null,
+    rotatingArtworkId:null,
     activeTool: 'select',
     linkedCorners: true,
     selected: [{ type: 'artwork', id: project.artworks[0].id }],
@@ -72,6 +73,20 @@ describe('editor history and commands', () => {
     expect(useEditor.getState().past).toHaveLength(1);
     useEditor.getState().undo();
     expect(useEditor.getState().project.artworks[0].alongMm).toBe(1400);
+  });
+
+  it('moves a 3D artwork onto another wall face in one undoable drop',()=>{
+    const original=useEditor.getState().project.artworks[0];
+    useEditor.getState().beginArtworkDrag(original.id,{alongMm:1400,centerHeightMm:1500});
+    useEditor.getState().updateArtworkDrag({wallId:'wall-b',wallSide:'back',alongMm:2800,centerHeightMm:1600});
+    expect(useEditor.getState().project.artworks[0].wallId).toBe('wall-a');
+    expect(useEditor.getState().previewProject?.artworks[0]).toMatchObject({wallId:'wall-b',wallSide:'back',alongMm:2800,centerHeightMm:1600});
+    useEditor.getState().finishArtworkDrag();
+    expect(useEditor.getState().project.artworks[0]).toMatchObject({wallId:'wall-b',wallSide:'back'});
+    expect(useEditor.getState().activeWallId).toBe('wall-b');
+    expect(useEditor.getState().past).toHaveLength(1);
+    useEditor.getState().undo();
+    expect(useEditor.getState().project.artworks[0]).toMatchObject({wallId:'wall-a',alongMm:1400});
   });
 
   it('cancels an artwork drag and rejects a locked artwork',()=>{
@@ -201,6 +216,21 @@ describe('editor history and commands', () => {
     useEditor.getState().select({ type: 'wall', id: 'wall-b' })
     useEditor.getState().deleteSelected()
     expect(useEditor.getState().project.walls.some((wall) => wall.id === useEditor.getState().activeWallId)).toBe(true)
+  })
+
+  it('stores artworks when deleting their wall and restores one onto the active wall with undo', () => {
+    useEditor.getState().select({ type: 'wall', id: 'wall-a' })
+    useEditor.getState().deleteSelected()
+    expect(useEditor.getState().project.unplacedArtworks?.map(art => art.id)).toEqual(['artwork-1', 'artwork-2', 'artwork-3', 'artwork-4'])
+    useEditor.getState().setActiveWall('wall-b')
+    useEditor.getState().placeUnplaced('artwork-1')
+    expect(useEditor.getState().project.artworks.find(art => art.id === 'artwork-1')?.wallId).toBe('wall-b')
+    expect(useEditor.getState().selected).toEqual([{ type: 'artwork', id: 'artwork-1' }])
+    useEditor.getState().undo()
+    expect(useEditor.getState().project.unplacedArtworks).toHaveLength(4)
+    useEditor.getState().undo()
+    expect(useEditor.getState().project.walls.some(wall => wall.id === 'wall-a')).toBe(true)
+    expect(useEditor.getState().project.artworks.find(art => art.id === 'artwork-1')?.wallId).toBe('wall-a')
   })
 
   it('sanitizes selection through undo and redo', () => {
