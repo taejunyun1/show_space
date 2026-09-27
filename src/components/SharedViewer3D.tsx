@@ -63,7 +63,7 @@ function PublicArtwork({art,wall,shareId,selected,onSelect,measuring,onMeasure}:
   const offset=wall.thicknessMm/2+art.depthMm/2+5;
   const x=(wall.start.x+dx/length*art.alongMm+nx*offset)/1000,z=(wall.start.z+dz/length*art.alongMm+nz*offset)/1000;
   const width=art.widthMm/1000,height=art.heightMm/1000,depth=art.depthMm/1000;
-  return <group position={[x,art.centerHeightMm/1000,z]} rotation={[0,Math.atan2(nx,nz),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'artwork',id:art.id});}}>
+  return <group position={[x,art.centerHeightMm/1000,z]} rotation={[0,Math.atan2(nx,nz),(art.rotationDeg??0)*Math.PI/180]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'artwork',id:art.id});}}>
     <mesh><boxGeometry args={[width+(art.frame==='none'?0:.045),height+(art.frame==='none'?0:.045),depth]}/><meshStandardMaterial color={selected?'#365cf5':frameColors[art.frame]} roughness={.8}/></mesh>
     <ArtworkLoadBoundary key={`${shareId}:${art.imageId}`} width={width} height={height} depth={depth}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} depth={depth}/>}><ArtworkImage url={`/api/public/${shareId}/images/${art.imageId}`} art={art} width={width} height={height} depth={depth}/></Suspense></ArtworkLoadBoundary>
   </group>;

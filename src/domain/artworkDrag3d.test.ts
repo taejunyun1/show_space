@@ -23,4 +23,9 @@ describe('3D artwork drag projection',()=>{
     const hit=projectArtworkRay(wall,{...artwork,wallSide:'back'},{origin:{x:-1000,y:1700,z:-9000},direction:{x:0,y:0,z:1}});
     expect(hit).toEqual({alongMm:3000,centerHeightMm:1700});
   });
+
+  it('keeps a rotated painting fully inside the wall while dragging',()=>{
+    const rotated={...artwork,rotationDeg:90};
+    expect(draggedArtworkPlacement(rotated,wall,{alongMm:0,centerHeightMm:0},{alongMm:0,centerHeightMm:0})).toEqual({alongMm:600,centerHeightMm:450});
+  });
 });

@@ -21,6 +21,8 @@ export interface Wall {
 
 export interface Artwork {
   wallSide?: 'front' | 'back'
+  /** Counterclockwise rotation within the wall plane, in degrees. */
+  rotationDeg?: number
   id: string; name: string; artist: string
   widthMm: number; heightMm: number; depthMm: number
   wallId: string; alongMm: number; centerHeightMm: number

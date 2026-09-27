@@ -47,6 +47,15 @@ describe('public share snapshot',()=>{
     expect(snapshot.walls[0].id).toBe('auto-wall:segment-1');
   });
 
+  it('preserves validated artwork rotation in a public snapshot',()=>{
+    const project=createDemoProject();
+    project.artworks[0].rotationDeg=30;
+    const snapshot=createPublicShare(project,{includeDimensions:false}).snapshot;
+    expect(snapshot.artworks[0].rotationDeg).toBe(30);
+    expect(parsePublicShare(snapshot).artworks[0].rotationDeg).toBe(30);
+    expect(()=>parsePublicShare({...snapshot,artworks:[{...snapshot.artworks[0],rotationDeg:Infinity},...snapshot.artworks.slice(1)]})).toThrow(/치수/);
+  });
+
   it('keeps an elevation measurement attached only to its public wall',()=>{
     const project=createDemoProject();
     const wallId=project.walls[0].id;

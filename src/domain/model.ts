@@ -38,6 +38,10 @@ function validateWall(wall: Wall) {
 
 function validateArtwork(artwork: Artwork, wallIds: Set<string>) {
   if (artwork.wallSide !== undefined && !['front','back'].includes(artwork.wallSide)) throw new Error('설치 면이 올바르지 않습니다.')
+  if (artwork.rotationDeg !== undefined) {
+    finite(artwork.rotationDeg, '작품 회전 각도')
+    if (artwork.rotationDeg < -180 || artwork.rotationDeg > 180) throw new Error('작품 회전 각도는 -180°에서 180° 사이여야 합니다.')
+  }
   positive(artwork.widthMm, '작품 너비')
   positive(artwork.heightMm, '작품 높이')
   positive(artwork.depthMm, '작품 깊이')
@@ -74,6 +78,19 @@ export function createDemoProject(): Project {
 
 export function wallLength(wall: Wall): number { return Math.hypot(wall.end.x - wall.start.x, wall.end.z - wall.start.z) }
 export function mmToMeters(value: number): number { return value / 1000 }
+
+export function normalizeArtworkAngle(value: number): number {
+  finite(value, '작품 회전 각도')
+  const angle = ((value + 180) % 360 + 360) % 360 - 180
+  return angle === -180 ? 180 : angle
+}
+
+export function rotatedArtworkSize(artwork: Artwork): { widthMm: number; heightMm: number } {
+  const radians = (artwork.rotationDeg ?? 0) * Math.PI / 180
+  const cosine = Math.abs(Math.cos(radians)), sine = Math.abs(Math.sin(radians))
+  const c = cosine < 1e-10 ? 0 : cosine, s = sine < 1e-10 ? 0 : sine
+  return { widthMm: artwork.widthMm * c + artwork.heightMm * s, heightMm: artwork.widthMm * s + artwork.heightMm * c }
+}
 
 export function artworkPosition(artwork: Artwork, wall: Wall) {
   const length = wallLength(wall)
@@ -186,23 +203,25 @@ export function distributeArtworks(project: Project, ids: string[], spacingMm: n
   if (new Set(artworks.map(item => item.wallSide ?? 'front')).size !== 1) throw new Error('같은 벽의 같은 면에 있는 작품을 선택해 주세요.')
   if (artworks.some(item => item.locked)) throw new Error('잠긴 작품은 간격을 변경할 수 없습니다.')
   const sorted = [...artworks].sort((a, b) => a.alongMm - b.alongMm)
-  let left = sorted[0].alongMm - sorted[0].widthMm / 2
+  let left = sorted[0].alongMm - rotatedArtworkSize(sorted[0]).widthMm / 2
   const positions = new Map<string, number>()
   for (const item of sorted) {
-    positions.set(item.id, left + item.widthMm / 2)
-    left += item.widthMm + spacingMm
+    const width=rotatedArtworkSize(item).widthMm
+    positions.set(item.id, left + width / 2)
+    left += width + spacingMm
   }
   return { ...project, artworks: project.artworks.map(item => positions.has(item.id) ? { ...item, alongMm: positions.get(item.id)! } : item) }
 }
 
 export function artworkWarnings(artwork: Artwork, wall: Wall, project?:Project): string[] {
   const warnings: string[] = []
-  if (artwork.alongMm - artwork.widthMm / 2 < 0 || artwork.alongMm + artwork.widthMm / 2 > wallLength(wall)) warnings.push('작품이 벽의 좌우 경계를 벗어납니다.')
-  if (artwork.centerHeightMm - artwork.heightMm / 2 < 0) warnings.push('작품이 바닥 아래로 내려갑니다.')
-  if (artwork.centerHeightMm + artwork.heightMm / 2 > wall.heightMm) warnings.push('작품이 벽 높이를 넘어갑니다.')
+  const size=rotatedArtworkSize(artwork)
+  if (artwork.alongMm - size.widthMm / 2 < 0 || artwork.alongMm + size.widthMm / 2 > wallLength(wall)) warnings.push('작품이 벽의 좌우 경계를 벗어납니다.')
+  if (artwork.centerHeightMm - size.heightMm / 2 < 0) warnings.push('작품이 바닥 아래로 내려갑니다.')
+  if (artwork.centerHeightMm + size.heightMm / 2 > wall.heightMm) warnings.push('작품이 벽 높이를 넘어갑니다.')
   if(project){
     const position=artworkPosition(artwork,wall),c=Math.cos(position.rotationY),s=Math.sin(position.rotationY);
-    const halfWidth=artwork.widthMm/2+(artwork.frame==='none'?0:22.5),halfDepth=artwork.depthMm/2;
+    const halfWidth=size.widthMm/2+(artwork.frame==='none'?0:22.5),halfDepth=artwork.depthMm/2;
     const footprint=[[-halfWidth,-halfDepth],[halfWidth,-halfDepth],[halfWidth,halfDepth],[-halfWidth,halfDepth]].map(([x,z])=>({x:position.x+c*x+s*z,z:position.z-s*x+c*z}));
     if(installationZones(project).some(zone=>footprintOverlapsZone(footprint,zone)))warnings.push('작품이 계단 또는 계단 추정 영역의 설치 제외 범위와 겹칩니다.');
   }

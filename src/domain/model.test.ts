@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   addArtwork, addWall, artworkPosition, artworkWarnings, createDemoProject, deleteSelection,
-  distributeArtworks, duplicateSelection, mmToMeters, parseProject, updateArtwork, updateWall, wallLength,
+  distributeArtworks, duplicateSelection, mmToMeters, normalizeArtworkAngle, parseProject, rotatedArtworkSize, updateArtwork, updateWall, wallLength,
 } from './model'
 
 describe('exhibition domain model', () => {
@@ -39,10 +39,36 @@ describe('exhibition domain model', () => {
     expect((b.alongMm - b.widthMm / 2) - (a.alongMm + a.widthMm / 2)).toBe(100)
   })
 
+  it('spaces rotated artworks using their visible widths', () => {
+    const project = updateArtwork(createDemoProject(), 'artwork-1', { rotationDeg: 90 })
+    const distributed = distributeArtworks(project, ['artwork-1', 'artwork-2'], 100)
+    const [first, second] = distributed.artworks
+    const gap = second.alongMm - rotatedArtworkSize(second).widthMm / 2 - first.alongMm - rotatedArtworkSize(first).widthMm / 2
+    expect(gap).toBe(100)
+  })
+
   it('reports all physical-boundary warnings', () => {
     const wall = createDemoProject().walls[0]
     const artwork = { ...createDemoProject().artworks[0], alongMm: 50, centerHeightMm: 200, heightMm: 1000 }
     expect(artworkWarnings(artwork, wall)).toHaveLength(2)
+  })
+
+  it('rotates artwork around its center and checks the visible wall footprint', () => {
+    const project = createDemoProject()
+    const original = project.artworks[0]
+    const rotated = updateArtwork(project, original.id, { alongMm: 500, rotationDeg: 90 }).artworks[0]
+    expect(rotatedArtworkSize(rotated)).toEqual({ widthMm: 1200, heightMm: 900 })
+    expect(artworkWarnings({ ...rotated, rotationDeg: 0 }, project.walls[0])).not.toContain('작품이 벽의 좌우 경계를 벗어납니다.')
+    expect(artworkWarnings(rotated, project.walls[0])).toContain('작품이 벽의 좌우 경계를 벗어납니다.')
+    expect(parseProject({ ...project, artworks: [{ ...original, rotationDeg: 90 }] }).artworks[0].rotationDeg).toBe(90)
+    expect(() => updateArtwork(project, original.id, { rotationDeg: Number.NaN })).toThrow(/회전/)
+    expect(() => updateArtwork(project, original.id, { rotationDeg: 181 })).toThrow(/회전/)
+  })
+
+  it('wraps repeated quarter turns to a stable signed angle', () => {
+    expect(normalizeArtworkAngle(180 + 90)).toBe(-90)
+    expect(normalizeArtworkAngle(-90 - 90)).toBe(180)
+    expect(normalizeArtworkAngle(45)).toBe(45)
   })
 
   it('rejects malformed projects and unsafe URLs', () => {

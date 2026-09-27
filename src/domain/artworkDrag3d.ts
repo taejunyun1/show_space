@@ -1,4 +1,4 @@
-import {wallLength} from './model';
+import {rotatedArtworkSize,wallLength} from './model';
 import type {Artwork,Wall,WorldPoint} from './types';
 
 type Ray={origin:WorldPoint;direction:WorldPoint};
@@ -21,8 +21,9 @@ export function projectArtworkRay(wall:Wall,artwork:Artwork,ray:Ray):ArtworkFace
 
 export function draggedArtworkPlacement(artwork:Artwork,wall:Wall,grab:ArtworkFacePoint,hit:ArtworkFacePoint):ArtworkFacePoint{
   const length=wallLength(wall);
-  const minAlong=Math.min(artwork.widthMm/2,length/2);
-  const minHeight=Math.min(artwork.heightMm/2,wall.heightMm/2);
+  const size=rotatedArtworkSize(artwork);
+  const minAlong=Math.min(size.widthMm/2,length/2);
+  const minHeight=Math.min(size.heightMm/2,wall.heightMm/2);
   const clamp=(value:number,min:number,max:number)=>Math.max(min,Math.min(max,value));
   const snap=(value:number)=>Math.round(value/10)*10;
   return {
