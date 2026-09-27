@@ -203,6 +203,32 @@ describe('editor history and commands', () => {
     expect(useEditor.getState().hydrated).toBe(true)
   })
 
+  it('restores an uncalibrated wall draft in plan view instead of a misleading 3D view',async()=>{
+    const base=createDemoProject();
+    const project={...base,planImageUrl:'data:image/png;base64,AA==',planReference:{widthPx:1000,heightPx:800,origin:{x:0,z:0},mmPerPixel:1,calibrated:false},planDraft:{kind:'partial' as const,sourceEvidenceHash:'00000000',originalWalls:structuredClone(base.walls)}};
+    useEditor.setState({view:'3d'});
+    await hydrateEditor(async()=>project);
+    expect(useEditor.getState().view).toBe('plan');
+    expect(useEditor.getState().project.planDraft).toEqual(project.planDraft);
+    useEditor.getState().setView('3d');
+    expect(useEditor.getState().view).toBe('plan');
+  });
+
+  it('adds and duplicates walls at drawing-pixel scale before calibration',()=>{
+    const base=createDemoProject();
+    const walls=[{...base.walls[0],start:{x:100,z:100},end:{x:900,z:100},role:'partition' as const}];
+    const project={...base,walls,artworks:[],scenes:[],planImageUrl:'data:image/png;base64,AA==',planReference:{widthPx:1000,heightPx:800,origin:{x:0,z:0},mmPerPixel:1,calibrated:false},planDraft:{kind:'partial' as const,sourceEvidenceHash:'00000000',originalWalls:structuredClone(walls)}};
+    useEditor.getState().loadProject(project);
+    useEditor.getState().addWall();
+    const added=useEditor.getState().project.walls.at(-1)!;
+    expect(Math.hypot(added.end.x-added.start.x,added.end.z-added.start.z)).toBeLessThan(500);
+    expect(added.start.x).toBeGreaterThanOrEqual(0);
+    useEditor.getState().select({type:'wall',id:walls[0].id});
+    useEditor.getState().duplicateSelected();
+    const copy=useEditor.getState().project.walls.at(-1)!;
+    expect(copy.start.z-walls[0].start.z).toBeLessThan(100);
+  });
+
   it('does not overwrite an edit made while hydration is pending', async () => {
     let resolveRead!: (value: unknown) => void
     const hydration = hydrateEditor(() => new Promise((resolve) => { resolveRead = resolve }))

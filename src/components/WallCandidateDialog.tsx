@@ -3,9 +3,9 @@ import type {WallCandidate} from '../domain/wallCandidates';
 import {detectPlanWalls} from '../lib/detectPlanWalls';
 import {useEditor} from '../state/editor';
 import {addReviewedWalls} from '../domain/reviewedWalls';
-import {calibratePlan} from '../domain/plan';
+import {calibrateEditableDraft} from '../domain/editablePlanDraft';
 export function WallCandidateDialog({onClose}:{onClose:()=>void}){
- const {project,commit,patchProject,notify}=useEditor();const reference=project.planReference;const imageUrl=project.planImageUrl;
+ const {project,commit,notify}=useEditor();const reference=project.planReference;const imageUrl=project.planImageUrl;
  const dialog=useRef<HTMLDialogElement>(null),abort=useRef<AbortController|null>(null),revision=useRef(0);
  const initial=useRef({id:project.id,image:imageUrl});
  const [candidates,setCandidates]=useState<WallCandidate[]>([]),[chosen,setChosen]=useState<string[]>([]),[busy,setBusy]=useState(false),[error,setError]=useState('');
@@ -17,7 +17,7 @@ export function WallCandidateDialog({onClose}:{onClose:()=>void}){
  if(!reference||!imageUrl)return null;
  function toggle(id:string){setChosen(ids=>ids.includes(id)?ids.filter(x=>x!==id):[...ids,id]);}
  const selected=candidates.filter(c=>chosen.includes(c.id));
- function calibrate(){try{if(!reference||selected.length!==1)return;const c=selected[0];patchProject({planReference:calibratePlan(reference,{x:c.start.x,z:c.start.y},{x:c.end.x,z:c.end.y},Number(knownLength))});setError('');}catch(e){setError((e as Error).message);}}
+ function calibrate(){try{if(!reference||selected.length!==1)return;const c=selected[0];commit(calibrateEditableDraft(project,{x:c.start.x,z:c.start.y},{x:c.end.x,z:c.end.y},Number(knownLength)));setError('');}catch(e){setError((e as Error).message);}}
  function add(){try{const latest=useEditor.getState().project;if(latest.planImageUrl!==imageUrl||latest.id!==project.id)throw new Error('도면이 변경되었습니다. 다시 분석하세요.');const next=addReviewedWalls(latest,selected,Number(height),Number(thickness));const added=next.walls.length-latest.walls.length;commit(next);useEditor.getState().select({type:'wall',id:next.walls[latest.walls.length].id});notify(`${added}개의 벽을 추가했습니다. 끝점·높이·두께를 확인하세요.`);onClose();}catch(e){setError((e as Error).message);}}
  return <dialog ref={dialog} className="export-dialog wall-candidates-dialog" onCancel={onClose} aria-label="벽 후보 검토"><h2>벽 후보 검토 <small>실험 기능</small></h2><p>수평·수직의 긴 선을 찾습니다. 치수선·표제란도 포함될 수 있으며, 이중 벽선은 두 후보로 나올 수 있습니다. 맞는 선만 선택하세요.</p>
  <div className="candidate-settings"><label>선 대비<select aria-label="후보 선 대비" value={threshold} disabled={busy} onChange={e=>setThreshold(Number(e.target.value))}><option value={80}>진한 선만</option><option value={150}>보통</option><option value={210}>흐린 선 포함</option></select></label><label>최소 선 길이<select aria-label="후보 최소 길이" value={minRatio} disabled={busy} onChange={e=>setMinRatio(Number(e.target.value))}><option value={0.03}>짧게</option><option value={0.05}>보통</option><option value={0.1}>길게</option></select></label><button className="button secondary" disabled={busy} onClick={()=>void analyze()}>다시 분석</button></div>

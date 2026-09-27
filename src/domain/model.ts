@@ -273,6 +273,12 @@ export function parseProject(input: unknown): Project {
     if (!raw.planImageUrl) throw new Error('도면 이미지가 필요합니다.')
     validatePlanReference(raw.planReference as Project['planReference'] & {})
   }
+  if(raw.planDraft!==undefined){
+    const draft=object(raw.planDraft,'도면 편집 초안');
+    if(draft.kind!=='partial'||typeof draft.sourceEvidenceHash!=='string'||!/^[0-9a-f]{8}$/.test(draft.sourceEvidenceHash)||!raw.planImageUrl||!raw.planReference||!Array.isArray(draft.originalWalls)||draft.originalWalls.length<1||draft.originalWalls.length>wallLimit)throw new Error('도면 편집 초안 정보가 올바르지 않습니다.');
+    const originalIds=new Set<string>();
+    for(const value of draft.originalWalls){const wall=object(value,'원본 벽 후보') as unknown as Wall;for(const key of ['id','name','color','note'])text((wall as unknown as Record<string,unknown>)[key],`원본 벽 ${key}`);bool(wall.visible,'원본 벽 표시 여부');bool(wall.locked,'원본 벽 잠금 여부');validateWall(wall);if(originalIds.has(wall.id))throw new Error('중복된 원본 벽 후보가 있습니다.');originalIds.add(wall.id);}
+  }
   if(raw.sourcePlan!==undefined){
     const source=object(raw.sourcePlan,'원본 도면');safeImage(source.imageUrl,'원본 도면');
     for(const key of ['widthPx','heightPx'])if(typeof source[key]!=='number'||!Number.isFinite(source[key])||source[key]<1||source[key]>10000)throw new Error('원본 도면 크기가 올바르지 않습니다.');

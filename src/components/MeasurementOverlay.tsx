@@ -12,12 +12,14 @@ function Segment({a,b,label,color,offset,scale=1,dashed=false}:{a:Point;b:Point;
 
 export function PlanMeasurements({project,draft,showDimensions,scale}:{project:Project;draft:Draft|null;showDimensions:boolean;scale:number}){
  const uncertain=!!project.planImageUrl&&!project.planReference?.calibrated;
- return <g aria-label="평면 치수선">{showDimensions&&(project.dimensions??[]).filter(item=>item.view==='plan').map(item=>{const r=resolveMeasurement(project,item);return <Segment key={item.id} a={r.start} b={r.end} offset={item.offsetMm} scale={scale} color={r.detached?'#b54437':'#365cf5'} label={`${r.detached?'연결 끊김 · ':uncertain?'모델상 · ':''}${mm(r.distanceMm)}`}/>;})}{draft?.view==='plan'&&<g data-capture-draft="true">{draft.end?<DraftPlanSegment project={project} start={draft.start} end={draft.end} scale={scale}/>:<circle cx={resolveAnchor(project,draft.start).point.x} cy={resolveAnchor(project,draft.start).point.z} r={Math.max(35,scale/240)} fill="#365cf5" pointerEvents="none"/>}</g>}</g>;
+ const provisional=!!project.planDraft&&!project.planReference?.calibrated;
+ const distance=(value:number)=>`${Math.round(value).toLocaleString()} ${provisional?'px':'mm'}`;
+ return <g aria-label="평면 치수선">{showDimensions&&(project.dimensions??[]).filter(item=>item.view==='plan').map(item=>{const r=resolveMeasurement(project,item);return <Segment key={item.id} a={r.start} b={r.end} offset={item.offsetMm} scale={scale} color={r.detached?'#b54437':'#365cf5'} label={`${r.detached?'연결 끊김 · ':uncertain&&!provisional?'모델상 · ':''}${distance(r.distanceMm)}`}/>;})}{draft?.view==='plan'&&<g data-capture-draft="true">{draft.end?<DraftPlanSegment project={project} start={draft.start} end={draft.end} scale={scale}/>:<circle cx={resolveAnchor(project,draft.start).point.x} cy={resolveAnchor(project,draft.start).point.z} r={Math.max(35,scale/240)} fill="#365cf5" pointerEvents="none"/>}</g>}</g>;
 }
 
 function DraftPlanSegment({project,start,end,scale}:{project:Project;start:MeasurementAnchor;end:MeasurementAnchor;scale:number}){
  const a=resolveAnchor(project,start).point,b=resolveAnchor(project,end).point;
- return <Segment a={a} b={b} offset={0} scale={scale} color="#16816b" dashed label={mm(Math.hypot(b.x-a.x,b.z-a.z))}/>;
+ return <Segment a={a} b={b} offset={0} scale={scale} color="#16816b" dashed label={`${Math.round(Math.hypot(b.x-a.x,b.z-a.z)).toLocaleString()} ${project.planDraft&&!project.planReference?.calibrated?'px':'mm'}`}/>;
 }
 
 function onWall(point:WorldPoint,wall:{start:Point;end:Point;heightMm:number},back:boolean):Point{

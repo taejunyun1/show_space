@@ -47,6 +47,8 @@ export interface Opening {
 }
 
 export interface Project {
+  /** The detector's untouched geometry; current walls can be edited independently. */
+  planDraft?:{kind:'partial';sourceEvidenceHash:string;originalWalls:Wall[]};
   dimensions?:SavedDimension[];
   sourcePlan?:{imageUrl:string;widthPx:number;heightPx:number;labels:PlanLabel[]};
   openings?:Opening[];

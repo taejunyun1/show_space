@@ -37,3 +37,4 @@
 .dimension-link label {display:flex;justify-content:space-between;align-items:center;gap:12px;margin:10px 0}
 .dimension-link select {min-width:130px;padding:6px}
 .capture-options{display:flex;flex-direction:column;gap:15px;padding:4px 0 24px;font-size:12px;color:#4a5b71}.capture-options label{display:flex;align-items:center;gap:9px}.capture-options label:first-child{justify-content:space-between}.capture-options select{border:1px solid #d5dce7;border-radius:5px;background:white;padding:7px 10px;min-width:120px}.capture-options input{accent-color:var(--blue)}.capture-error{font-size:11px;color:#aa4038;margin-bottom:13px}
+.plan-draft-warning{position:absolute;top:145px;left:20px;max-width:230px;z-index:1;padding:9px 12px;background:#fff4dfed;color:#704c13;border:1px solid #efd6a6;border-radius:6px;font-size:11px;line-height:1.5;pointer-events:none}

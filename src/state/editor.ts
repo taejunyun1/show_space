@@ -62,7 +62,7 @@ interface EditorState {
   patchWall(id: string, patch: Partial<Wall>): void
   moveWallEndpoint(id:string,endpoint:'start'|'end',point:Point):void
   renameProject(name: string): void
-  patchProject(patch: Pick<Partial<Project>, 'floorColor' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan'>): void
+  patchProject(patch: Pick<Partial<Project>, 'floorColor' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan' | 'planDraft'>): void
   addArtwork(imageUrl?: string, name?: string): void
   addWall(): void
   drawWall(start:Point,end:Point):void
@@ -94,6 +94,10 @@ function validSelection(project: Project, selected: EntitySelection[]) {
 
 function validWall(project: Project, preferred: string) {
   return project.walls.some((wall) => wall.id === preferred) ? preferred : (project.walls[0]?.id ?? '')
+}
+
+function safeView(project:Project,view:View):View {
+  return project.planDraft&&!project.planReference?.calibrated?'plan':view
 }
 
 function errorMessage(error: unknown) {
@@ -189,13 +193,17 @@ export const useEditor = create<EditorState>((set, get) => {
       });
       if(changed)attempt(()=>get().commit(parseProject(preview)));
     },
-    setView: (view) => set(state=>({view,measurementDraft:state.view===view?state.measurementDraft:null,activeTool:view!=='plan'&&state.activeTool==='draw'?'select':state.activeTool})),
+    setView: (view) => set(state=>{
+      if(view!=='plan'&&state.project.planDraft&&!state.project.planReference?.calibrated)return {view:'plan',message:'두 점 축척 보정 후 3D와 벽면도를 열 수 있습니다.'};
+      return {view,measurementDraft:state.view===view?state.measurementDraft:null,activeTool:view!=='plan'&&state.activeTool==='draw'?'select':state.activeTool};
+    }),
     setActiveWall: (activeWallId) => set({ activeWallId }),
     toggleDimensions: () => set((state) => ({ showDimensions: !state.showDimensions })),
     setCaptureMode: (captureClean,captureDimensions=true) => set({captureClean,captureDimensions}),
     notify: (message) => set({ message }),
     commit: (next) => set((state) => ({
       project: clone(next),
+      view:safeView(next,state.view),
       previewProject:null,wallGesture:null,
       past: [...state.past, clone(state.project)].slice(-50),
       future: [],
@@ -209,13 +217,21 @@ export const useEditor = create<EditorState>((set, get) => {
     renameProject: (name) => get().commit({ ...get().project, name }),
     patchProject: (patch) => get().commit({ ...get().project, ...patch }),
     addArtwork: (imageUrl, name) => attempt(() => {
+      if(get().project.planDraft&&!get().project.planReference?.calibrated)throw new Error('실제 작품 크기를 배치하려면 도면의 두 점 축척을 먼저 보정하세요.');
       const next = addArtworkToProject(get().project, imageUrl, name)
       const created = next.artworks[next.artworks.length - 1]
       get().commit(next)
       set({ selected: [{ type: 'artwork', id: created.id }], activeWallId: created.wallId })
     }),
     addWall: () => attempt(() => {
-      const next = addWallToProject(get().project)
+      const current=get().project;
+      let next = addWallToProject(current)
+      if(current.planDraft&&!current.planReference?.calibrated){
+        const reference=current.planReference!,index=next.walls.length-1;
+        const start={x:reference.widthPx*.2,z:reference.heightPx*(.3+(index%4)*.08)};
+        const end={x:start.x+reference.widthPx*.3,z:start.z};
+        next={...next,walls:next.walls.map((w,i)=>i===index?{...w,start,end,note:'사용자가 추가한 벽 · 축척 미정. 실제 길이는 두 점 축척 보정 후 결정됩니다.'}:w)};
+      }
       const created = next.walls[next.walls.length - 1]
       get().commit(next)
       set({ selected: [{ type: 'wall', id: created.id }], activeWallId: created.id })
@@ -231,7 +247,15 @@ export const useEditor = create<EditorState>((set, get) => {
       if(!selections.length)throw new Error('복제할 항목을 선택해 주세요.');
       let next=get().project;
       const copied:EntitySelection[]=[];
-      for(const selection of selections){const result=duplicateSelection(next,selection);next=result.project;copied.push(result.selection);}
+      for(const selection of selections){
+        const result=duplicateSelection(next,selection);next=result.project;
+        if(selection.type==='wall'&&next.planDraft&&!next.planReference?.calibrated){
+          const source=next.walls.find(w=>w.id===selection.id),copyId=result.selection.id;
+          const shift=Math.max(10,Math.min(next.planReference!.widthPx,next.planReference!.heightPx)*.025);
+          if(source)next={...next,walls:next.walls.map(w=>w.id===copyId?{...w,start:{x:source.start.x,z:source.start.z+shift},end:{x:source.end.x,z:source.end.z+shift}}:w)};
+        }
+        copied.push(result.selection);
+      }
       get().commit(next);
       set({selected:copied,activeWallId:copied[0].type==='wall'?copied[0].id:next.artworks.find(item=>item.id===copied[0].id)?.wallId??get().activeWallId});
     }),
@@ -256,17 +280,17 @@ export const useEditor = create<EditorState>((set, get) => {
       const previous = state.past[state.past.length - 1]
       if (!previous) return state
       const project = clone(previous)
-      return { project, previewProject:null,wallGesture:null,measurementDraft:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project, view:safeView(project,state.view),previewProject:null,wallGesture:null,measurementDraft:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     redo: () => set((state) => {
       const next = state.future[0]
       if (!next) return state
       const project = clone(next)
-      return { project,previewProject:null,wallGesture:null,measurementDraft:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project,view:safeView(project,state.view),previewProject:null,wallGesture:null,measurementDraft:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     loadProject: (project) => attempt(() => {
       const parsed = parseProject(project)
-      set({ project: parsed, previewProject:null,wallGesture:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
+      set({ project: parsed, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
     }),
     saveScene: (name) => attempt(() => {
       const project = get().project
@@ -301,7 +325,7 @@ export async function hydrateEditor(reader: () => Promise<unknown> = readDraft):
       return
     }
     const project = parseProject(raw)
-    useEditor.setState({ project, selected: firstSelection(project), activeWallId: validWall(project, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
+    useEditor.setState({ project,view:safeView(project,useEditor.getState().view),selected: firstSelection(project), activeWallId: validWall(project, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
   } catch (error) {
     useEditor.setState({ hydrated: true, saveStatus: 'error', message: `저장된 프로젝트를 불러오지 못했습니다. ${errorMessage(error)}` })
   }
