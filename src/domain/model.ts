@@ -1,6 +1,7 @@
 import {removeWallOpenings} from './openingAnchors';
 import {installationZones,footprintOverlapsZone} from './installationZones';
 import {validateOpenings} from './openings';
+import {validateDimensions} from './measurements';
 import {validatePlanLabels,type PlanLabel} from './planLabels'
 import { validatePlanReference } from './plan'
 import type { Artwork, EntitySelection, Point, Project, Wall } from './types'
@@ -237,6 +238,7 @@ export function parseProject(input: unknown): Project {
     wallIds.add(wall.id)
   }
   if(raw.openings!==undefined)validateOpenings(raw.openings,walls);
+  if(raw.dimensions!==undefined)validateDimensions(raw.dimensions);
   const validateArtworkRecord = (value: unknown, ids?: Set<string>) => {
     const artwork = object(value, '작품') as unknown as Artwork
     ;['id', 'name', 'artist', 'wallId', 'note'].forEach(key => text((artwork as unknown as Record<string, unknown>)[key], `작품 ${key}`))

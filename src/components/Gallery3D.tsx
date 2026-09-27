@@ -3,15 +3,20 @@ import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import type {ThreeEvent} from '@react-three/fiber';
 import { OrbitControls, Html, Line, useTexture } from '@react-three/drei';
-import { Group, Path, Shape, SRGBColorSpace, Plane, Vector3 } from 'three';
-import type { Artwork, Wall } from '../domain/types';
+import { Group, Path, Shape, SRGBColorSpace, Plane, Vector2, Vector3 } from 'three';
+import type {Object3D} from 'three';
+import type { Artwork, Project, Wall } from '../domain/types';
 import { artworkPosition, artworkWarnings, wallLength } from '../domain/model';
 import {floorWithOpenings,openingSegments} from '../domain/openings';
 import { useEditor } from '../state/editor';
+import {fixedAnchor,resolveMeasurement,wallAnchor} from '../domain/measurements';
+import {capturePixelSize,type CaptureOptions} from '../lib/captureSvg';
 import { artPanel } from '../lib/art';
 const frameColors = { black: '#282827', natural: '#b9a383', white: '#f5f4ef', none: '#eee8dc' };
+function modelPoint(point:Vector3){return {x:Math.round(point.x*1000),y:Math.round(point.y*1000),z:Math.round(point.z*1000)};}
 function Painting({ artwork, wall }: { artwork: Artwork; wall: Wall }) {
   const project=useEditor(s=>s.project);
+  const activeTool=useEditor(s=>s.activeTool);
   const installationConflict=artworkWarnings(artwork,wall,project).some(w=>w.includes('계단'));
   const source = useTexture(artwork.imageUrl);
   const texture = useMemo(() => {
@@ -22,21 +27,24 @@ function Painting({ artwork, wall }: { artwork: Artwork; wall: Wall }) {
   }, [source, artwork.imageUrl]);
   useEffect(() => () => texture.dispose(), [texture]);
   const selected = useEditor(s => s.selected.some(x => x.id === artwork.id));
+  const captureClean=useEditor(s=>s.captureClean);
   const { x, y, z, rotationY } = artworkPosition(artwork, wall);
   const w = artwork.widthMm / 1000, h = artwork.heightMm / 1000, d = artwork.depthMm / 1000;
-  return <group position={[x / 1000, y / 1000, z / 1000]} rotation={[0, rotationY, 0]} onClick={e => { e.stopPropagation(); useEditor.getState().select({ type: 'artwork', id: artwork.id }, e.shiftKey); }} onPointerOver={e => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = 'auto'; }}><mesh castShadow receiveShadow><boxGeometry args={[w + (artwork.frame === 'none' ? 0 : 0.045), h + (artwork.frame === 'none' ? 0 : 0.045), d]} /><meshStandardMaterial color={frameColors[artwork.frame]} roughness={0.75} /></mesh><mesh position={[0, 0, d / 2 + 0.002]}><planeGeometry args={[w, h]} /><meshStandardMaterial map={texture} roughness={0.9} /></mesh>{installationConflict&&<Html position={[0,h/2+.15,0]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#a22'}}>계단·추정 범위와 겹침</span></Html>}{selected && <Line points={[[-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008]]} color="#365cf5" lineWidth={2} />}</group>;
+  return <group name={`artwork-${artwork.id}`} position={[x / 1000, y / 1000, z / 1000]} rotation={[0, rotationY, 0]} onClick={e => { e.stopPropagation(); if(activeTool==='measure'){useEditor.getState().pickMeasurement(wallAnchor(project,wall.id,modelPoint(e.point)),'3d');return;} useEditor.getState().select({ type: 'artwork', id: artwork.id }, e.shiftKey); }} onPointerOver={e => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = 'auto'; }}><mesh castShadow receiveShadow><boxGeometry args={[w + (artwork.frame === 'none' ? 0 : 0.045), h + (artwork.frame === 'none' ? 0 : 0.045), d]} /><meshStandardMaterial color={frameColors[artwork.frame]} roughness={0.75} /></mesh><mesh position={[0, 0, d / 2 + 0.002]}><planeGeometry args={[w, h]} /><meshStandardMaterial map={texture} roughness={0.9} /></mesh>{installationConflict&&<Html position={[0,h/2+.15,0]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#a22'}}>계단·추정 범위와 겹침</span></Html>}{selected && !captureClean && <Line points={[[-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008]]} color="#365cf5" lineWidth={2} />}</group>;
 }
 const ground=new Plane(new Vector3(0,1,0),0);
 function groundPoint(e:ThreeEvent<PointerEvent>){const hit=e.ray.intersectPlane(ground,new Vector3());return hit?{x:Math.round(hit.x*100)*10,z:Math.round(hit.z*100)*10}:null;}
 function GalleryWall({ wall, artworks, cutaway }: { wall: Wall; artworks: Artwork[]; cutaway: boolean }) {
   const group = useRef<Group>(null);
   const selected = useEditor(s => s.selected.some(x => x.id === wall.id));
+  const captureClean=useEditor(s=>s.captureClean);
   const activeTool=useEditor(s=>s.activeTool);
   const length = wallLength(wall);
   const midX = (wall.start.x + wall.end.x) / 2000, midZ = (wall.start.z + wall.end.z) / 2000;
   const dx = wall.end.x - wall.start.x, dz = wall.end.z - wall.start.z;
   function begin(e:ThreeEvent<PointerEvent>,mode:'move'|'rotate'){
     if(e.button!==0)return;e.stopPropagation();
+    if(activeTool==='measure'){useEditor.getState().pickMeasurement(wallAnchor(useEditor.getState().project,wall.id,modelPoint(e.point)),'3d');return;}
     if(e.shiftKey){useEditor.getState().select({type:'wall',id:wall.id},true);return;}
     if(wall.locked){useEditor.getState().select({type:'wall',id:wall.id});return;}
     const p=groundPoint(e);if(!p)return;
@@ -54,9 +62,36 @@ function GalleryWall({ wall, artworks, cutaway }: { wall: Wall; artworks: Artwor
   useFrame(({ camera }) => {
     if (group.current) group.current.visible = wall.visible && (!cutaway || wall.role === 'partition' || (-dz * (camera.position.x - midX) + dx * (camera.position.z - midZ)) > 0);
   });
-  return <group ref={group}><mesh position={[midX, wall.heightMm / 2000, midZ]} rotation={[0, -Math.atan2(dz, dx), 0]} castShadow receiveShadow onPointerDown={e=>begin(e,activeTool==='rotate'?'rotate':'move')} onPointerMove={moving} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)}><boxGeometry args={[length / 1000, wall.heightMm / 1000, wall.thicknessMm / 1000]} /><meshStandardMaterial color={selected ? '#e6edff' : wall.color} roughness={0.92} /></mesh>{selected&&!wall.locked&&<mesh position={[midX-dz/length*.45,wall.heightMm/2000,midZ+dx/length*.45]} onPointerDown={e=>begin(e,'rotate')} onPointerMove={moving} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)}><sphereGeometry args={[.12,12,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh>}{artworks.filter(a => a.visible && a.imageUrl).map(a => <Suspense key={a.id} fallback={null}><Painting artwork={a} wall={wall} /></Suspense>)}</group>;
+  return <group ref={group}><mesh position={[midX, wall.heightMm / 2000, midZ]} rotation={[0, -Math.atan2(dz, dx), 0]} castShadow receiveShadow onPointerDown={e=>begin(e,activeTool==='rotate'?'rotate':'move')} onPointerMove={moving} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)}><boxGeometry args={[length / 1000, wall.heightMm / 1000, wall.thicknessMm / 1000]} /><meshStandardMaterial color={selected && !captureClean ? '#e6edff' : wall.color} roughness={0.92} /></mesh>{selected&&!captureClean&&!wall.locked&&activeTool!=='measure'&&<mesh position={[midX-dz/length*.45,wall.heightMm/2000,midZ+dx/length*.45]} onPointerDown={e=>begin(e,'rotate')} onPointerMove={moving} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)}><sphereGeometry args={[.12,12,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh>}{artworks.filter(a => a.visible && a.imageUrl).map(a => <Suspense key={a.id} fallback={null}><Painting artwork={a} wall={wall} /></Suspense>)}</group>;
 }
-function CameraSetup({ reset, hydrated, projectId, onReady, centerX, centerZ, span, maxHeight }: { reset: number; hydrated:boolean; projectId:string; onReady: (capture: () => void) => void; centerX:number; centerZ:number; span:number; maxHeight:number }) {
+function captureCanvas(canvas:HTMLCanvasElement):Promise<Blob>{return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('3D PNG를 만들지 못했습니다.')),'image/png'));}
+function waitForArtworks(scene:Object3D,project:Project):Promise<void>{
+ const wallIds=new Set(project.walls.map(wall=>wall.id));
+ const names=project.artworks.filter(art=>art.visible&&art.imageUrl&&wallIds.has(art.wallId)).map(art=>`artwork-${art.id}`);
+ return new Promise((resolve,reject)=>{
+  const deadline=Date.now()+10000;
+  function check(){
+   if(names.every(name=>scene.getObjectByName(name))){resolve();return;}
+   if(Date.now()>deadline){reject(new Error('일부 작품 이미지가 아직 준비되지 않았습니다. 다시 시도해 주세요.'));return;}
+   setTimeout(check,60);
+  }
+  check();
+ });
+}
+function drawHtmlLabels(context:CanvasRenderingContext2D,source:HTMLCanvasElement,pixelScale:number){
+ const canvasBox=source.getBoundingClientRect();
+ context.save();context.scale(pixelScale,pixelScale);context.font='11px "Noto Sans KR", sans-serif';context.textBaseline='middle';
+ for(const label of document.querySelectorAll<HTMLElement>('.viewport-stage .dimension-label')){
+  const box=label.getBoundingClientRect(),x=box.left-canvasBox.left,y=box.top-canvasBox.top;
+  if(x+box.width<0||y+box.height<0||x>canvasBox.width||y>canvasBox.height)continue;
+  const message=label.textContent?.trim();if(!message)continue;
+  const width=context.measureText(message).width;
+  context.fillStyle='#ffffffeb';context.fillRect(x-4,y-2,width+8,18);
+  context.fillStyle='#37475e';context.fillText(message,x,y+7);
+ }
+ context.restore();
+}
+function CameraSetup({ reset, hydrated, projectId, onReady, centerX, centerZ, span, maxHeight }: { reset: number; hydrated:boolean; projectId:string; onReady: (capture: (options:CaptureOptions) => Promise<Blob>) => void; centerX:number; centerZ:number; span:number; maxHeight:number }) {
   const { camera, gl, scene, size } = useThree();
   useEffect(() => {
     camera.position.set(centerX-span, maxHeight+span, centerZ+span); camera.lookAt(centerX, maxHeight/3, centerZ);
@@ -64,12 +99,25 @@ function CameraSetup({ reset, hydrated, projectId, onReady, centerX, centerZ, sp
     if ('zoom' in camera) camera.zoom = Math.min(size.width / (span*1.2+2), size.height / (span+maxHeight+2));
     camera.updateProjectionMatrix();
   }, [camera, size.width, size.height, reset, hydrated, projectId]);
-  useEffect(() => onReady(() => {
-    gl.render(scene, camera);
-    gl.domElement.toBlob(blob => {
-      if (!blob) { useEditor.getState().notify('이미지를 만들지 못했습니다.'); return; }
-      import('../lib/art').then(({ downloadBlob }) => downloadBlob(blob, `${useEditor.getState().project.name}.png`));
-    });
+  useEffect(() => onReady(async (options) => {
+    const editor=useEditor.getState(),oldPixelRatio=gl.getPixelRatio(),cssSize=gl.getSize(new Vector2());
+    const target=capturePixelSize(cssSize.x,cssSize.y,options.longEdge);
+    const max=Math.min(gl.getContext().getParameter(gl.getContext().MAX_RENDERBUFFER_SIZE) as number,gl.getContext().getParameter(gl.getContext().MAX_TEXTURE_SIZE) as number);
+    if(target.width>max||target.height>max)throw new Error('이 브라우저에서는 선택한 고해상도를 지원하지 않습니다. 낮은 해상도로 저장해 주세요.');
+    const grid=scene.getObjectByName('capture-grid'),gridWasVisible=grid?.visible;
+    try{
+      await waitForArtworks(scene,editor.previewProject??editor.project);
+      await document.fonts.ready;
+      editor.setCaptureMode(true,options.includeDimensions);
+      await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
+      if(grid)grid.visible=options.includeGrid;
+      gl.setPixelRatio(target.width/cssSize.x);gl.render(scene,camera);
+      const canvas=document.createElement('canvas');canvas.width=gl.domElement.width;canvas.height=gl.domElement.height;
+      const context=canvas.getContext('2d');if(!context)throw new Error('3D 캡처 캔버스를 만들 수 없습니다.');
+      context.drawImage(gl.domElement,0,0,canvas.width,canvas.height);
+      if(options.includeDimensions)drawHtmlLabels(context,gl.domElement,canvas.width/cssSize.x);
+      return await captureCanvas(canvas);
+    }finally{if(grid&&gridWasVisible!==undefined)grid.visible=gridWasVisible;gl.setPixelRatio(oldPixelRatio);editor.setCaptureMode(false);gl.render(scene,camera);}
   }), [gl, scene, camera, onReady]);
   return null;
 }
@@ -78,8 +126,16 @@ function Dimension({ from, to, label }: { from: [number, number, number]; to: [n
   const across = Math.abs(from[0] - to[0]) > Math.abs(from[2] - to[2]);
   return <group><Line points={[from, to]} color="#748193" lineWidth={1} />{[from, to].map((p, i) => <Line key={i} points={across ? [[p[0], p[1], p[2] - 0.10], [p[0], p[1], p[2] + 0.10]] : [[p[0] - 0.10, p[1], p[2]], [p[0] + 0.10, p[1], p[2]]]} color="#748193" lineWidth={1} />)}<Html position={mid} center style={{ pointerEvents: 'none' }}><span className="dimension-label">{label}</span></Html></group>;
 }
-export function Gallery3D({ reset, onCaptureReady, cutaway }: { reset: number; onCaptureReady: (capture: () => void) => void; cutaway: boolean }) {
-  const { project, previewProject, wallGesture, showDimensions, hydrated } = useEditor();
+function MeasuredDimensions3D(){
+ const {project,measurementDraft,showDimensions,captureClean,captureDimensions}=useEditor();
+ const visible=showDimensions&&(!captureClean||captureDimensions);
+ const items=visible?(project.dimensions??[]).filter(item=>item.view==='3d'):[];
+ const all=items.map(item=>({id:item.id,offsetMm:item.offsetMm,...resolveMeasurement(project,item)}));
+ if(!captureClean&&measurementDraft?.view==='3d'&&measurementDraft.end)all.push({id:'draft',offsetMm:0,...resolveMeasurement(project,{id:'draft',view:'3d',start:measurementDraft.start,end:measurementDraft.end,offsetMm:0})});
+ return <>{all.map(item=>{const from:[number,number,number]=[item.start.x/1000,item.start.y/1000,item.start.z/1000],to:[number,number,number]=[item.end.x/1000,item.end.y/1000,item.end.z/1000];return <group key={item.id}><Line points={[from,to]} color={item.detached?'#b54437':item.id==='draft'?'#16816b':'#365cf5'} lineWidth={2}/><Html position={[(from[0]+to[0])/2,(from[1]+to[1])/2+item.offsetMm/1000,(from[2]+to[2])/2]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label">{item.detached?'연결 끊김 · ':''}{Math.round(item.distanceMm).toLocaleString()} mm</span></Html></group>;})}{!captureClean&&measurementDraft?.view==='3d'&&!measurementDraft.end&&<mesh position={[measurementDraft.start.fallback.x/1000,measurementDraft.start.fallback.y/1000,measurementDraft.start.fallback.z/1000]}><sphereGeometry args={[.055,12,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh>}</>;
+}
+export function Gallery3D({ reset, onCaptureReady, cutaway }: { reset: number; onCaptureReady: (capture: (options:CaptureOptions)=>Promise<Blob>) => void; cutaway: boolean }) {
+  const { project, previewProject, wallGesture, showDimensions, hydrated, activeTool, captureClean,captureDimensions } = useEditor();
   const displayed=previewProject??project;
   const floor = useMemo(() => floorWithOpenings(displayed), [displayed.walls,displayed.openings]);
   const floorShapes = useMemo(() => floor.surfaces.map(({ outer: points, holes }) => {
@@ -106,5 +162,10 @@ export function Gallery3D({ reset, onCaptureReady, cutaway }: { reset: number; o
   const cameraFrame=useRef<{key:string;target:[number,number,number]}>({key:'',target:[centerX,maxHeight/3,centerZ]});
   const frameKey=`${reset}:${hydrated}:${project.id}`;
   if(cameraFrame.current.key!==frameKey)cameraFrame.current={key:frameKey,target:[centerX,maxHeight/3,centerZ]};
-  return <Canvas orthographic shadows dpr={[1, 1.75]} gl={{ antialias: true, preserveDrawingBuffer: true }} camera={{ position: [-9, 10.5, 13], zoom: 65, near: 0.1, far: 200 }}><color attach="background" args={['#e9edf1']} /><ambientLight intensity={0.65} /><hemisphereLight args={['#ffffff', '#cad0d6', 0.7]} /><directionalLight position={[-3, 12, 6]} intensity={2.3} castShadow shadow-mapSize={[2048, 2048]} shadow-camera-left={-12} shadow-camera-right={12} shadow-camera-top={12} shadow-camera-bottom={-12} shadow-bias={-0.001} /><CameraSetup reset={reset} hydrated={hydrated} projectId={project.id} onReady={onCaptureReady} centerX={centerX} centerZ={centerZ} span={span} maxHeight={maxHeight} /><gridHelper args={[60, 60, '#cbd3db', '#dce2e8']} position={[0, -0.105, 0]} />{floorShapes.map((shape, index) => <mesh key={index} rotation={[Math.PI / 2, 0, 0]} receiveShadow><extrudeGeometry args={[shape, { depth: 0.16, bevelEnabled: false, steps: 1 }]} /><meshStandardMaterial color={displayed.floorColor} roughness={0.96} /></mesh>)}{floorShapes.length === 0 && <Html position={[0, 0.1, 0]} center style={{ pointerEvents: 'none', whiteSpace: 'nowrap' }}><span className="dimension-label">벽 끝점을 연결해 닫힌 외곽선을 만들면 바닥이 생성됩니다.</span></Html>}{openingSegments(displayed).map(o=><group key={o.id}><Line points={[[o.start.x/1000,.03,o.start.z/1000],[o.end.x/1000,.03,o.end.z/1000]]} color={o.kind==='door'?'#16816b':'#2785b8'} dashed dashSize={.1} gapSize={.08}/><Html position={[(o.start.x+o.end.x)/2000,.12,(o.start.z+o.end.z)/2000]} center style={{pointerEvents:'none'}}><span className="dimension-label">{o.kind==='door'?'출입구':o.kind==='stair-access'?'계단 통로':'창문'} · 개구부</span></Html></group>)}{installationZones(displayed).map(zone=><group key={zone.id}><mesh position={[(zone.x+zone.width/2)/1000,.025,(zone.z+zone.depth/2)/1000]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[zone.width/1000,zone.depth/1000]}/><meshBasicMaterial color="#e44b4b" transparent opacity={.3} depthWrite={false}/></mesh><Html position={[(zone.x+zone.width/2)/1000,.08,(zone.z+zone.depth/2)/1000]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#a22'}}>계단·추정 · 설치 제외 검출 범위</span></Html></group>)}{displayed.walls.map(wall => <GalleryWall key={wall.id} wall={wall} artworks={displayed.artworks.filter(a => a.wallId === wall.id)} cutaway={cutaway} />)}{showDimensions && <><Dimension from={[minX, 0, maxZ + 0.65]} to={[maxX, 0, maxZ + 0.65]} label={`${Math.round((maxX - minX) * 1000).toLocaleString()} mm`} /><Dimension from={[minX - 0.65, 0, minZ]} to={[minX - 0.65, 0, maxZ]} label={`${Math.round((maxZ - minZ) * 1000).toLocaleString()} mm`} /></>}<OrbitControls key={reset} enabled={!wallGesture} makeDefault target={cameraFrame.current.target} minZoom={0.1} maxZoom={240} maxPolarAngle={Math.PI / 2.08} enableDamping /></Canvas>;
+  function measureFloor(e:ThreeEvent<PointerEvent>){
+    if(activeTool!=='measure')return;
+    e.stopPropagation();const point=modelPoint(e.point);
+    useEditor.getState().pickMeasurement(fixedAnchor({x:point.x,y:0,z:point.z}),'3d');
+  }
+  return <Canvas orthographic shadows dpr={[1, 1.75]} gl={{ antialias: true, preserveDrawingBuffer: true }} camera={{ position: [-9, 10.5, 13], zoom: 65, near: 0.1, far: 200 }}><color attach="background" args={['#e9edf1']} /><ambientLight intensity={0.65} /><hemisphereLight args={['#ffffff', '#cad0d6', 0.7]} /><directionalLight position={[-3, 12, 6]} intensity={2.3} castShadow shadow-mapSize={[2048, 2048]} shadow-camera-left={-12} shadow-camera-right={12} shadow-camera-top={12} shadow-camera-bottom={-12} shadow-bias={-0.001} /><CameraSetup reset={reset} hydrated={hydrated} projectId={project.id} onReady={onCaptureReady} centerX={centerX} centerZ={centerZ} span={span} maxHeight={maxHeight} /><gridHelper name="capture-grid" args={[60, 60, '#cbd3db', '#dce2e8']} position={[0, -0.105, 0]} />{activeTool==='measure'&&<mesh rotation={[-Math.PI/2,0,0]} position={[centerX,-.15,centerZ]} onPointerDown={measureFloor}><planeGeometry args={[Math.max(100,span*3),Math.max(100,span*3)]}/><meshBasicMaterial transparent opacity={0} depthWrite={false}/></mesh>}{floorShapes.map((shape, index) => <mesh key={index} rotation={[Math.PI / 2, 0, 0]} receiveShadow onPointerDown={measureFloor}><extrudeGeometry args={[shape, { depth: 0.16, bevelEnabled: false, steps: 1 }]} /><meshStandardMaterial color={displayed.floorColor} roughness={0.96} /></mesh>)}{floorShapes.length === 0 && <Html position={[0, 0.1, 0]} center style={{ pointerEvents: 'none', whiteSpace: 'nowrap' }}><span className="dimension-label">벽 끝점을 연결해 닫힌 외곽선을 만들면 바닥이 생성됩니다.</span></Html>}{openingSegments(displayed).map(o=><group key={o.id}><Line points={[[o.start.x/1000,.03,o.start.z/1000],[o.end.x/1000,.03,o.end.z/1000]]} color={o.kind==='door'?'#16816b':'#2785b8'} dashed dashSize={.1} gapSize={.08}/><Html position={[(o.start.x+o.end.x)/2000,.12,(o.start.z+o.end.z)/2000]} center style={{pointerEvents:'none'}}><span className="dimension-label">{o.kind==='door'?'출입구':o.kind==='stair-access'?'계단 통로':'창문'} · 개구부</span></Html></group>)}{installationZones(displayed).map(zone=><group key={zone.id}><mesh position={[(zone.x+zone.width/2)/1000,.025,(zone.z+zone.depth/2)/1000]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[zone.width/1000,zone.depth/1000]}/><meshBasicMaterial color="#e44b4b" transparent opacity={.3} depthWrite={false}/></mesh><Html position={[(zone.x+zone.width/2)/1000,.08,(zone.z+zone.depth/2)/1000]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#a22'}}>계단·추정 · 설치 제외 검출 범위</span></Html></group>)}{displayed.walls.map(wall => <GalleryWall key={wall.id} wall={wall} artworks={displayed.artworks.filter(a => a.wallId === wall.id)} cutaway={cutaway} />)}{showDimensions&&(!captureClean||captureDimensions) && <><Dimension from={[minX, 0, maxZ + 0.65]} to={[maxX, 0, maxZ + 0.65]} label={`${Math.round((maxX - minX) * 1000).toLocaleString()} mm`} /><Dimension from={[minX - 0.65, 0, minZ]} to={[minX - 0.65, 0, maxZ]} label={`${Math.round((maxZ - minZ) * 1000).toLocaleString()} mm`} /></>}<MeasuredDimensions3D/><OrbitControls key={reset} enabled={!wallGesture} makeDefault target={cameraFrame.current.target} minZoom={0.1} maxZoom={240} maxPolarAngle={Math.PI / 2.08} enableDamping /></Canvas>;
 }

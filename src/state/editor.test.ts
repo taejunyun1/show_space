@@ -110,6 +110,20 @@ describe('editor history and commands', () => {
     expect(useEditor.getState().activeTool).toBe('select');
   });
 
+  it('saves a two-point measurement once and restores it with undo',()=>{
+    useEditor.getState().setView('plan');
+    useEditor.getState().setTool('measure');
+    useEditor.getState().pickMeasurement({kind:'fixed',fallback:{x:0,y:0,z:0}},'plan');
+    useEditor.getState().pickMeasurement({kind:'fixed',fallback:{x:3000,y:0,z:4000}},'plan');
+    expect(useEditor.getState().measurementDraft?.end).toBeDefined();
+    expect(useEditor.getState().project.dimensions).toBeUndefined();
+    useEditor.getState().saveMeasurement();
+    expect(useEditor.getState().project.dimensions).toHaveLength(1);
+    expect(useEditor.getState().past).toHaveLength(1);
+    useEditor.getState().undo();
+    expect(useEditor.getState().project.dimensions).toBeUndefined();
+  });
+
   it('keeps a geometric preview but rejects an opening collapsed at commit',()=>{
     const project=createDemoProject();
     project.openings=[{id:'door-1',kind:'door',role:'boundary',start:{wallId:'wall-a',endpoint:'start'},end:{wallId:'wall-b',endpoint:'start'},note:''}];

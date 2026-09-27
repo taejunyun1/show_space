@@ -1,6 +1,16 @@
 import type {PlanAnalysis} from '../lib/analyzePlan';
 import type {PlanLabel} from './planLabels';
 export interface Point { x: number; z: number }
+export interface WorldPoint extends Point { y:number }
+
+export type MeasurementAnchor =
+  | {kind:'fixed';fallback:WorldPoint}
+  | {kind:'wall';wallId:string;t:number;heightRatio:number;offsetMm:number;fallback:WorldPoint}
+
+export interface SavedDimension {
+  id:string;view:'plan'|'elevation'|'3d';elevationWallId?:string
+  start:MeasurementAnchor;end:MeasurementAnchor;offsetMm:number
+}
 
 export interface Wall {
   role?: 'boundary' | 'partition'
@@ -37,6 +47,7 @@ export interface Opening {
 }
 
 export interface Project {
+  dimensions?:SavedDimension[];
   sourcePlan?:{imageUrl:string;widthPx:number;heightPx:number;labels:PlanLabel[]};
   openings?:Opening[];
   schemaVersion: 1; id: string; name: string; venue: string

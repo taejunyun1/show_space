@@ -10,27 +10,32 @@ import {
   updateArtwork,
   updateWall,
 } from '../domain/model'
-import type { Artwork, EntitySelection, Project, Wall } from '../domain/types'
+import type { Artwork, EntitySelection, MeasurementAnchor, Project, SavedDimension, Wall } from '../domain/types'
 import type {Point} from '../domain/types'
 import {transformWalls} from '../domain/wallTransform'
 import {addWallBetween,updateWallEndpoint} from '../domain/wallEditing'
+import {addMeasurement,measureDistance,resolveAnchor} from '../domain/measurements'
 import { readDraft, writeDraft } from '../lib/persistence'
 
-type View = '3d' | 'plan' | 'elevation'
+export type View = '3d' | 'plan' | 'elevation'
 type SaveStatus = 'loading' | 'saved' | 'saving' | 'error'
-type EditTool = 'select' | 'move' | 'rotate' | 'draw'
+type EditTool = 'select' | 'move' | 'rotate' | 'draw' | 'measure'
 interface WallGesture {id:string;ids:string[];mode:'move'|'rotate';start:Point;base:Project}
+interface MeasurementDraft {view:View; elevationWallId?:string;start:MeasurementAnchor;end?:MeasurementAnchor}
 
 interface EditorState {
   project: Project
   previewProject: Project | null
   wallGesture: WallGesture | null
   activeTool: EditTool
+  measurementDraft:MeasurementDraft|null
   linkedCorners: boolean
   selected: EntitySelection[]
   view: View
   activeWallId: string
   showDimensions: boolean
+  captureClean:boolean
+  captureDimensions:boolean
   saveStatus: SaveStatus
   message: string | null
   past: Project[]
@@ -38,6 +43,11 @@ interface EditorState {
   hydrated: boolean
   select(selection: EntitySelection, additive?: boolean): void
   setTool(tool:EditTool):void
+  pickMeasurement(anchor:MeasurementAnchor,view:View,elevationWallId?:string):void
+  saveMeasurement():void
+  clearMeasurement():void
+  deleteMeasurement(id:string):void
+  patchMeasurement(id:string,patch:Pick<Partial<SavedDimension>,'offsetMm'>):void
   setLinkedCorners(linked:boolean):void
   beginWallTransform(id:string,mode:'move'|'rotate',start:Point):void
   updateWallTransform(point:Point):void
@@ -45,6 +55,7 @@ interface EditorState {
   setView(view: View): void
   setActiveWall(id: string): void
   toggleDimensions(): void
+  setCaptureMode(clean:boolean,includeDimensions?:boolean):void
   notify(message: string | null): void
   commit(next: Project): void
   patchArtwork(id: string, patch: Partial<Artwork>): void
@@ -100,11 +111,14 @@ export const useEditor = create<EditorState>((set, get) => {
     previewProject: null,
     wallGesture: null,
     activeTool: 'select',
+    measurementDraft:null,
     linkedCorners: true,
     selected: firstSelection(initialProject),
     view: '3d',
     activeWallId: 'wall-a',
     showDimensions: true,
+    captureClean:false,
+    captureDimensions:true,
     saveStatus: 'loading',
     message: null,
     past: [],
@@ -119,7 +133,32 @@ export const useEditor = create<EditorState>((set, get) => {
       const artwork = selection.type === 'artwork' ? state.project.artworks.find((item) => item.id === selection.id) : undefined
       return { selected, activeWallId: selection.type === 'wall' ? selection.id : (artwork?.wallId ?? state.activeWallId) }
     }),
-    setTool: (activeTool) => set({activeTool,previewProject:null,wallGesture:null}),
+    setTool: (activeTool) => set({activeTool,measurementDraft:null,previewProject:null,wallGesture:null}),
+    pickMeasurement: (anchor,view,elevationWallId) => attempt(()=>{
+      const state=get(),current=state.measurementDraft;
+      const next:MeasurementDraft= !current||current.end||current.view!==view||current.elevationWallId!==elevationWallId
+        ? {view,elevationWallId,start:anchor}:{...current,end:anchor};
+      if(next.end&&measureDistance(resolveAnchor(state.project,next.start).point,resolveAnchor(state.project,next.end).point)<1)throw new Error('서로 다른 두 점을 선택해 주세요.');
+      set({measurementDraft:next,message:null});
+    }),
+    saveMeasurement: () => attempt(()=>{
+      const draft=get().measurementDraft;
+      if(!draft?.end)throw new Error('줄자로 두 점을 먼저 선택해 주세요.');
+      get().commit(addMeasurement(get().project,draft.view,draft.start,draft.end,draft.elevationWallId));
+      set({measurementDraft:null});
+    }),
+    clearMeasurement: () => set({measurementDraft:null}),
+    deleteMeasurement: (id) => attempt(()=>{
+      const project=get().project;
+      if(!project.dimensions?.some(item=>item.id===id))throw new Error('치수선을 찾을 수 없습니다.');
+      get().commit({...project,dimensions:project.dimensions.filter(item=>item.id!==id)});
+    }),
+    patchMeasurement: (id,patch) => attempt(()=>{
+      const project=get().project;
+      if(!project.dimensions?.some(item=>item.id===id))throw new Error('치수선을 찾을 수 없습니다.');
+      const next={...project,dimensions:project.dimensions.map(item=>item.id===id?{...item,...patch}:item)};
+      get().commit(parseProject(next));
+    }),
     setLinkedCorners: (linkedCorners) => set({linkedCorners}),
     beginWallTransform: (id,mode,start) => attempt(()=>{
       const project=get().project,wall=project.walls.find(w=>w.id===id);
@@ -150,9 +189,10 @@ export const useEditor = create<EditorState>((set, get) => {
       });
       if(changed)attempt(()=>get().commit(parseProject(preview)));
     },
-    setView: (view) => set(state=>({view,activeTool:view!=='plan'&&state.activeTool==='draw'?'select':state.activeTool})),
+    setView: (view) => set(state=>({view,measurementDraft:state.view===view?state.measurementDraft:null,activeTool:view!=='plan'&&state.activeTool==='draw'?'select':state.activeTool})),
     setActiveWall: (activeWallId) => set({ activeWallId }),
     toggleDimensions: () => set((state) => ({ showDimensions: !state.showDimensions })),
+    setCaptureMode: (captureClean,captureDimensions=true) => set({captureClean,captureDimensions}),
     notify: (message) => set({ message }),
     commit: (next) => set((state) => ({
       project: clone(next),
@@ -216,17 +256,17 @@ export const useEditor = create<EditorState>((set, get) => {
       const previous = state.past[state.past.length - 1]
       if (!previous) return state
       const project = clone(previous)
-      return { project, previewProject:null,wallGesture:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project, previewProject:null,wallGesture:null,measurementDraft:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     redo: () => set((state) => {
       const next = state.future[0]
       if (!next) return state
       const project = clone(next)
-      return { project,previewProject:null,wallGesture:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project,previewProject:null,wallGesture:null,measurementDraft:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     loadProject: (project) => attempt(() => {
       const parsed = parseProject(project)
-      set({ project: parsed, previewProject:null,wallGesture:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
+      set({ project: parsed, previewProject:null,wallGesture:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
     }),
     saveScene: (name) => attempt(() => {
       const project = get().project
