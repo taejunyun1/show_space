@@ -8,6 +8,7 @@ const reset = () => {
     project,
     previewProject: null,
     wallGesture: null,
+    artworkGesture:null,
     activeTool: 'select',
     linkedCorners: true,
     selected: [{ type: 'artwork', id: project.artworks[0].id }],
@@ -57,6 +58,48 @@ describe('editor history and commands', () => {
     expect(useEditor.getState().project.walls[0].start).toEqual({x:-4000,z:-3000});
     expect(useEditor.getState().previewProject).toBeNull();
     expect(useEditor.getState().past).toHaveLength(0);
+  });
+
+  it('previews a 3D artwork drag and commits it in one undo step',()=>{
+    const original=useEditor.getState().project.artworks[0];
+    useEditor.getState().beginArtworkDrag(original.id,{alongMm:1500,centerHeightMm:1520});
+    useEditor.getState().updateArtworkDrag({alongMm:2600,centerHeightMm:1900});
+    expect(useEditor.getState().project.artworks[0].alongMm).toBe(1400);
+    expect(useEditor.getState().previewProject?.artworks[0]).toMatchObject({alongMm:2500,centerHeightMm:1880});
+    expect(useEditor.getState().past).toHaveLength(0);
+    useEditor.getState().finishArtworkDrag();
+    expect(useEditor.getState().project.artworks[0]).toMatchObject({alongMm:2500,centerHeightMm:1880});
+    expect(useEditor.getState().past).toHaveLength(1);
+    useEditor.getState().undo();
+    expect(useEditor.getState().project.artworks[0].alongMm).toBe(1400);
+  });
+
+  it('cancels an artwork drag and rejects a locked artwork',()=>{
+    const original=useEditor.getState().project;
+    useEditor.getState().beginArtworkDrag('artwork-1',{alongMm:1400,centerHeightMm:1500});
+    useEditor.getState().updateArtworkDrag({alongMm:2800,centerHeightMm:2000});
+    useEditor.getState().finishArtworkDrag(true);
+    expect(useEditor.getState().project).toBe(original);
+    expect(useEditor.getState().past).toHaveLength(0);
+    useEditor.getState().patchArtwork('artwork-1',{locked:true});
+    useEditor.getState().beginArtworkDrag('artwork-1',{alongMm:1400,centerHeightMm:1500});
+    expect(useEditor.getState().artworkGesture).toBeNull();
+    expect(useEditor.getState().message).toMatch(/잠긴 작품/);
+  });
+
+  it('drops a transform preview when changing views',()=>{
+    useEditor.getState().beginWallTransform('wall-a','move',{x:0,z:0});
+    useEditor.getState().updateWallTransform({x:500,z:0});
+    useEditor.getState().setView('plan');
+    expect(useEditor.getState().wallGesture).toBeNull();
+    expect(useEditor.getState().previewProject).toBeNull();
+    expect(useEditor.getState().project.walls[0].start.x).toBe(-4000);
+    useEditor.getState().beginArtworkDrag('artwork-1',{alongMm:1400,centerHeightMm:1500});
+    useEditor.getState().updateArtworkDrag({alongMm:2400,centerHeightMm:1800});
+    useEditor.getState().setView('3d');
+    expect(useEditor.getState().artworkGesture).toBeNull();
+    expect(useEditor.getState().previewProject).toBeNull();
+    expect(useEditor.getState().project.artworks[0].alongMm).toBe(1400);
   });
 
   it('preserves a selected wall group during a drag and commits once',()=>{
