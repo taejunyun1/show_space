@@ -83,6 +83,16 @@ describe('editor history and commands', () => {
     expect(useEditor.getState().project.walls).toEqual(damaged.walls);
   });
 
+  it('stores a 3D camera view with a Scene and restores its project snapshot',()=>{
+    const cameraView={position:[-9,7,11] as [number,number,number],target:[1,1,2] as [number,number,number],zoom:75};
+    useEditor.getState().saveScene('시점 A',cameraView);
+    expect(useEditor.getState().project.scenes[0].cameraView).toEqual(cameraView);
+    useEditor.getState().patchArtwork('artwork-1',{alongMm:2000});
+    useEditor.getState().restoreScene('scene-1');
+    expect(useEditor.getState().project.artworks[0].alongMm).toBe(createDemoProject().artworks[0].alongMm);
+    expect(useEditor.getState().project.scenes[0].cameraView).toEqual(cameraView);
+  });
+
   it('cancels a wall drag without changing the project or history',()=>{
     useEditor.getState().beginWallTransform('wall-a','rotate',{x:4000,z:-3000});
     useEditor.getState().updateWallTransform({x:0,z:1000});

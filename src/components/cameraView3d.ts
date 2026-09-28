@@ -1,10 +1,7 @@
 import type { Camera, Vector3 } from 'three';
+import type {CameraView} from '../domain/types';
 
-export interface CameraView3D {
-  position: [number, number, number];
-  target: [number, number, number];
-  zoom: number;
-}
+export type CameraView3D=CameraView;
 
 export function createCameraViewGetter(camera: Camera, getTarget: () => Vector3): () => CameraView3D {
   return () => {

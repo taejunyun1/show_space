@@ -25,6 +25,9 @@
 .plan-pan-toggle.active{background:#e6eeff;color:#365cf5}
 .plan-svg.pan-mode,.plan-svg.pan-mode .selectable,.plan-svg.pan-mode .drag-handle{cursor:grab}
 .plan-svg.is-panning,.plan-svg.is-panning .selectable,.plan-svg.is-panning .drag-handle{cursor:grabbing}
+.elevation svg.pan-view,.elevation svg.pan-view .selectable,.elevation svg.pan-view .draggable-art{cursor:grab}
+.elevation svg.pan-view.is-panning,.elevation svg.pan-view.is-panning .selectable,.elevation svg.pan-view.is-panning .draggable-art{cursor:grabbing}
+@media(max-width:700px){.viewport-toolbar{max-width:calc(100% - 10px);overflow-x:auto;scrollbar-width:none;justify-content:flex-start}.viewport-toolbar::-webkit-scrollbar{display:none}.viewport-toolbar .icon-button{flex:0 0 27px}}
 .plan-drawing .calibration-panel{top:149px}
 @media(max-width:700px){.plan-navigation{top:105px;gap:0;padding:3px}.plan-navigation .icon-button{width:27px;height:27px}.plan-navigation output{min-width:35px;font-size:9px}.plan-pan-toggle{font-size:9px;gap:3px;padding:5px}.plan-drawing .calibration-panel{top:145px}}
 .detail-toggle{display:flex;align-items:center;gap:8px;margin:12px 0;font-size:12px}.preview-actions{display:flex;justify-content:space-between;align-items:center;margin:12px 0;color:#6b788a;font-size:11px}.plan-preview-scroll{max-height:40vh;overflow:auto;border:1px solid #dce1e7;background:#e9edf1}.plan-preview-scroll img{display:block}.plan-import-dialog .plan-quality-warning{padding:9px 11px;background:#fff4df;color:#815b20;border-radius:5px;font-size:11px}.plan-import-dialog .quality-disclaimer{font-size:10px;line-height:1.6}

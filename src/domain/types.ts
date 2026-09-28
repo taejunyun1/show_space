@@ -32,9 +32,14 @@ export interface Artwork {
 
 export type UnplacedArtwork = Omit<Artwork,'wallId'>
 
+export interface CameraView {
+  position:[number,number,number];target:[number,number,number];zoom:number
+}
+
 export interface Scene {
   id: string; name: string; artworks: Artwork[]
   wallVisibility: Record<string, boolean>
+  cameraView?:CameraView
 }
 
 export interface PlanReference {

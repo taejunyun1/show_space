@@ -4,11 +4,13 @@
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
 - 최신 배포일: 2026-09-28
-- 최신 버전: 5b8eaa2a-03de-4e86-a643-5c32a59ae855
+- 최신 버전: 9b10ada1-4fa9-4c71-8ad1-1516316dc53e
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
 재배포: `npm run deploy` (빌드 후 Wrangler 배포). 해당 계정 로그인이 필요하다. `gonggan-exhibition-shares` R2 버킷을 `SHARES`로 연결했다. 공개 URL에서 R2 원본 객체 주소를 직접 노출하지 않고 Worker가 활성 링크 상태를 확인한 뒤 이미지와 스냅샷을 반환한다.
+
+2026-09-28 손 도구·Scene 시점 배포 검증: 자동 테스트 485개 통과·선택형 벤치마크 2개 제외, 빌드 통과. 로컬 브라우저에서 3D·평면도·벽면도 드래그가 객체 수정 없이 시점만 이동하고, Scene 저장·복원이 새로고침 후에도 작동함을 확인했다. 공개 HTTPS에서 새 손 도구와 3D 작품 렌더를 확인했고 콘솔 경고·오류는 없었다. 공개 주소의 편집 초안은 변경하지 않았다.
 
 공유 링크 생성·목록·중단에는 Worker 비밀 변수 `OWNER_TOKEN`이 필요하다. 이 작업에서 생성한 키는 저장소의 Git 무시 파일 `.env.share-owner-token`에 0600 권한으로 보관하며, 공유 창의 **작성자 키**에 붙여 넣는다. 소스나 GitHub에는 포함되지 않는다. 다른 기기에서 작성자 기능을 쓰려면 키를 안전하게 옮겨야 한다. 현재는 단일 작성자 키 방식이며 계정별 로그인·소유권 분리는 후속 단계다.
 

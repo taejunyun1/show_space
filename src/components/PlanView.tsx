@@ -5,6 +5,7 @@ import { ImagePlus, X, ZoomIn, ZoomOut, Hand, Maximize } from 'lucide-react';
 import { useEditor } from '../state/editor';
 import { wallLength, artworkPosition } from '../domain/model';
 import { fitPlan } from '../domain/plan';
+import {panViewport} from '../lib/viewportPan';
 import {calibrateEditableDraft,draftEditSummary,refreshPlanEvidence} from '../domain/editablePlanDraft';
 import type { Point } from '../domain/types';
 import {snapPlanPoint,type SnapKind} from '../domain/wallEditing';
@@ -13,7 +14,7 @@ import {PlanMeasurements} from './MeasurementOverlay';
 import { WallCandidateDialog } from './WallCandidateDialog';
 import { PlanImportDialog } from './PlanImportDialog';
 export function PlanView() {
-  const { project, previewProject, wallGesture, activeTool, measurementDraft, pickMeasurement, selected, select, moveWallEndpoint, drawWall, patchProject, commit, notify, showDimensions, beginWallTransform, updateWallTransform, finishWallTransform } = useEditor();
+  const { project, previewProject, wallGesture, activeTool, setTool, measurementDraft, pickMeasurement, selected, select, moveWallEndpoint, drawWall, patchProject, commit, notify, showDimensions, beginWallTransform, updateWallTransform, finishWallTransform } = useEditor();
   const displayed=previewProject??project;
   const svg = useRef<SVGSVGElement>(null), file = useRef<HTMLInputElement>(null);
   const [drag, setDrag] = useState<{ id: string; endpoint: 'start' | 'end'; x: number; z: number; snap:SnapKind } | null>(null);
@@ -21,7 +22,7 @@ export function PlanView() {
   const [drawStart,setDrawStart]=useState<Point|null>(null);
   const [drawHover,setDrawHover]=useState<{point:Point;kind:SnapKind}|null>(null);
   const [viewport, setViewport] = useState<{x:number;z:number;width:number;height:number}|null>(null);
-  const [panMode,setPanMode] = useState(false);
+  const panMode=activeTool==='pan';
   const pan = useRef<{pointerId:number;clientX:number;clientY:number;x:number;z:number;scale:number;width:number;height:number}|null>(null);
   const [panning,setPanning] = useState(false);
   const [reviewLabels,setReviewLabels]=useState(false);
@@ -35,6 +36,7 @@ export function PlanView() {
   const provisional=!!project.planDraft&&!reference?.calibrated;
   const draftEdits=useMemo(()=>project.planDraft?draftEditSummary(project):null,[project]);
   useEffect(()=>{if(activeTool!=='draw'){setDrawStart(null);setDrawHover(null);}},[activeTool]);
+  useEffect(()=>{if(activeTool!=='pan'){pan.current=null;setPanning(false);}else{dragRef.current=null;setDrag(null);}},[activeTool]);
   useEffect(()=>{setCalibrating(false);setAnchors([]);setViewport(null);pan.current=null;setPanning(false);dragRef.current=null;setDrag(null);},[reference?.origin.x,reference?.origin.z,reference?.widthPx,reference?.heightPx,reference?.mmPerPixel,reference?.calibrated,project.planImageUrl]);
   const bounds=[...points];
   if(project.planImageUrl&&reference) bounds.push(reference.origin,{x:reference.origin.x+reference.widthPx*reference.mmPerPixel,z:reference.origin.z+reference.heightPx*reference.mmPerPixel});
@@ -106,7 +108,7 @@ export function PlanView() {
     pickCalibration(e);
   }} onPointerMove={e => {
     const activePan=pan.current;
-    if(activePan&&activePan.pointerId===e.pointerId){setViewport({x:activePan.x-(e.clientX-activePan.clientX)/activePan.scale,z:activePan.z-(e.clientY-activePan.clientY)/activePan.scale,width:activePan.width,height:activePan.height});return;}
+    if(activePan&&activePan.pointerId===e.pointerId){setViewport(panViewport({x:activePan.x,z:activePan.z,width:activePan.width,height:activePan.height},{x:e.clientX-activePan.clientX,y:e.clientY-activePan.clientY},activePan.scale));return;}
     if(activeTool==='draw'&&!panMode&&!calibrating){const hit=snapped(e,drawStart??undefined);if(hit)setDrawHover(hit);}
     if(dragRef.current){const current=dragRef.current;const wall=project.walls.find(w=>w.id===current.id);const hit=snapped(e,wall?.[current.endpoint==='start'?'end':'start'],current.id);if(hit){const next={...current,x:hit.point.x,z:hit.point.z,snap:hit.kind};dragRef.current=next;setDrag(next);}}
     if(wallGesture){const p=pointer(e);if(p)updateWallTransform(p);}
@@ -120,13 +122,13 @@ export function PlanView() {
     <output aria-label="도면 확대 비율">{Math.round(zoom*100)}%</output>
     <button className="icon-button" aria-label="도면 확대" title="도면 확대" disabled={zoom>=16} onClick={()=>changeZoom(1.5)}><ZoomIn size={16}/></button>
     <button className="icon-button" aria-label="도면 전체 맞춤" title="도면 전체 맞춤" onClick={()=>setViewport(null)}><Maximize size={16}/></button>
-    <button className={`plan-pan-toggle${panMode?' active':''}`} aria-pressed={panMode} onClick={()=>{setPanMode(!panMode);setDrag(null);}}><Hand size={15}/>{panMode?'이동 중':'화면 이동'}</button>
+    <button className={`plan-pan-toggle${panMode?' active':''}`} aria-pressed={panMode} onClick={()=>{setTool(panMode?'select':'pan');setDrag(null);}}><Hand size={15}/>{panMode?'이동 중':'화면 이동'}</button>
   </div>
   <div className="plan-tools"><button className="button secondary" onClick={()=>file.current?.click()}><ImagePlus size={15}/>도면 불러오기</button>
   {project.planImageUrl&&<><label>투명도<input aria-label="도면 투명도" type="range" min="0" max="1" step="0.05" value={project.planOpacity??0.4} onChange={e=>patchProject({planOpacity:Number(e.target.value)})}/></label>
   {reference&&<button className="button secondary" onClick={()=>setReviewLabels(true)}>설비 표기 ({project.planLabels?.filter(l=>l.status!=='dismissed').length??0})</button>}
   {reference&&<button className="button secondary" onClick={()=>{setReviewCandidates(true);setCalibrating(false);}}>벽 후보 찾기</button>}
-  {reference&&<button className="button secondary" onClick={()=>{setCalibrating(!calibrating);setAnchors([]);setPanMode(false);}}>{calibrating?'보정 취소':'두 점 축척 보정'}</button>}
+  {reference&&<button className="button secondary" onClick={()=>{setCalibrating(!calibrating);setAnchors([]);if(panMode)setTool('select');}}>{calibrating?'보정 취소':'두 점 축척 보정'}</button>}
   {project.sourcePlan&&<a className="button secondary" href={project.sourcePlan.imageUrl} download="원본-도면.png">변환 전 원본 저장</a>}
   <button className="icon-button" aria-label="참고 도면 제거" disabled={provisional} title={provisional?'축척 보정 후 도면을 제거할 수 있습니다.':undefined} onClick={()=>{patchProject({sourcePlan:undefined,planImageUrl:undefined,planReference:undefined,planLabels:undefined,planAnalysis:undefined,planDraft:undefined});setCalibrating(false);setAnchors([]);}}><X size={15}/></button></>}
   <input ref={file} hidden type="file" accept="application/pdf,image/png,image/jpeg,image/webp" onChange={e=>{const f=e.target.files?.[0];if(f){setImportFile(f);setCalibrating(false);setAnchors([]);}e.currentTarget.value='';}}/></div>

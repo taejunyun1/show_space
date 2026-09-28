@@ -327,6 +327,14 @@ export function parseProject(input: unknown): Project {
       if (!wallIds.has(id)) throw new Error(`장면이 존재하지 않는 벽을 참조합니다: ${id}`)
       bool(visible, '장면 벽 표시 여부')
     }
+    if(scene.cameraView!==undefined){
+      const camera=object(scene.cameraView,'장면 시점')
+      for(const key of ['position','target'] as const){
+        const point=camera[key]
+        if(!Array.isArray(point)||point.length!==3||point.some(value=>!Number.isFinite(value)))throw new Error('장면 시점 좌표가 올바르지 않습니다.')
+      }
+      if(!Number.isFinite(camera.zoom)||Number(camera.zoom)<=0)throw new Error('장면 시점 확대율이 올바르지 않습니다.')
+    }
   }
   if ('planImageUrl' in raw && raw.planImageUrl !== undefined) safeImage(raw.planImageUrl, '도면')
   if ('planOpacity' in raw && raw.planOpacity !== undefined) { finite(raw.planOpacity, '도면 투명도'); if (raw.planOpacity < 0 || raw.planOpacity > 1) throw new Error('도면 투명도는 0에서 1 사이여야 합니다.') }

@@ -12,7 +12,7 @@ import {
   updateArtwork,
   updateWall,
 } from '../domain/model'
-import type { Artwork, EntitySelection, MeasurementAnchor, Project, SavedDimension, Wall } from '../domain/types'
+import type { Artwork, CameraView, EntitySelection, MeasurementAnchor, Project, SavedDimension, Wall } from '../domain/types'
 import type {Point} from '../domain/types'
 import {snapWallTranslation,transformWalls} from '../domain/wallTransform'
 import {addWallBetween,updateWallEndpoint} from '../domain/wallEditing'
@@ -22,7 +22,7 @@ import {draggedArtworkPlacement,type ArtworkFacePoint} from '../domain/artworkDr
 
 export type View = '3d' | 'plan' | 'elevation'
 type SaveStatus = 'loading' | 'saved' | 'saving' | 'error'
-type EditTool = 'select' | 'move' | 'rotate' | 'draw' | 'measure'
+type EditTool = 'select' | 'pan' | 'move' | 'rotate' | 'draw' | 'measure'
 interface WallGesture {id:string;ids:string[];mode:'move'|'rotate';start:Point;base:Project}
 interface ArtworkGesture {id:string;grab:ArtworkFacePoint;base:Project}
 type ArtworkDragHit=ArtworkFacePoint&{wallId?:string;wallSide?:'front'|'back'}
@@ -86,7 +86,7 @@ interface EditorState {
   undo(): void
   redo(): void
   loadProject(project: Project): void
-  saveScene(name: string): void
+  saveScene(name: string,cameraView?:CameraView): void
   restoreScene(id: string): void
   deleteScene(id: string): void
 }
@@ -339,12 +339,12 @@ export const useEditor = create<EditorState>((set, get) => {
       const parsed = parseProject(project)
       set({ project: parsed, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,artworkGesture:null,rotatingArtworkId:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
     }),
-    saveScene: (name) => attempt(() => {
+    saveScene: (name,cameraView) => attempt(() => {
       const project = get().project
       const used = new Set(project.scenes.map((scene) => scene.id))
       let index = 1
       while (used.has(`scene-${index}`)) index += 1
-      get().commit({ ...project, scenes: [...project.scenes, { id: `scene-${index}`, name, artworks: clone(project.artworks), wallVisibility: Object.fromEntries(project.walls.map((wall) => [wall.id, wall.visible])) }] })
+      get().commit({ ...project, scenes: [...project.scenes, { id: `scene-${index}`, name, artworks: clone(project.artworks), wallVisibility: Object.fromEntries(project.walls.map((wall) => [wall.id, wall.visible])),...(cameraView?{cameraView:clone(cameraView)}:{}) }] })
     }),
     restoreScene: (id) => attempt(() => {
       const project = get().project

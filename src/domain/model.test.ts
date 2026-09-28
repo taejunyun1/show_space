@@ -99,6 +99,12 @@ describe('exhibition domain model', () => {
     expect(edited.walls[2].start).toEqual({x:4580,z:5060});
   });
 
+  it('rejects an invalid saved Scene camera view',()=>{
+    const project=createDemoProject();
+    project.scenes=[{id:'scene-1',name:'시점',artworks:[],wallVisibility:{},cameraView:{position:[1,2,3],target:[0,0,0],zoom:0}}];
+    expect(()=>parseProject(project)).toThrow(/시점/);
+  });
+
   it('adds a renderable default artwork that remains importable', () => {
     const project = addArtwork(createDemoProject())
     expect(project.artworks.at(-1)?.imageUrl).toBe('/artworks/artwork-1.png')
