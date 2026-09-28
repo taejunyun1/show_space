@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
-  addArtwork, addWall, artworkPosition, artworkWarnings, createDemoProject, deleteSelection,
-  distributeArtworks, duplicateSelection, mmToMeters, normalizeArtworkAngle, parseProject, placeUnplacedArtwork, rotatedArtworkSize, updateArtwork, updateWall, wallLength,
+  addArtwork, addWall, artworkPosition, artworkWarnings, canRestoreDemoBoundary, createDemoProject, deleteSelection,
+  distributeArtworks, duplicateSelection, mmToMeters, normalizeArtworkAngle, parseProject, placeUnplacedArtwork, restoreDemoBoundary, rotatedArtworkSize, updateArtwork, updateWall, wallLength,
 } from './model'
+import {deriveFloor} from './floor'
 
 describe('exhibition domain model', () => {
   it('calculates wall lengths and converts millimetres', () => {
@@ -84,6 +85,19 @@ describe('exhibition domain model', () => {
     expect(parsed).toEqual(demo)
     expect(parsed).not.toBe(demo)
   })
+
+  it('restores a damaged demo boundary without discarding artwork edits',()=>{
+    const demo=createDemoProject();
+    const edited=updateArtwork({...demo,walls:demo.walls.map(wall=>wall.id==='wall-c'?{...wall,start:{x:4580,z:5060},end:{x:-3420,z:5060}}:wall)},'artwork-1',{name:'수정한 작품'});
+    expect(deriveFloor(edited.walls).surfaces).toHaveLength(0);
+    expect(canRestoreDemoBoundary(edited)).toBe(true);
+    expect(canRestoreDemoBoundary({...edited,planImageUrl:'data:image/png;base64,AA=='})).toBe(false);
+    const restored=restoreDemoBoundary(edited);
+    expect(deriveFloor(restored.walls).surfaces).toHaveLength(1);
+    expect(restored.artworks).toEqual(edited.artworks);
+    expect(restored.walls.find(wall=>wall.id==='wall-c')?.start).toEqual(demo.walls[2].start);
+    expect(edited.walls[2].start).toEqual({x:4580,z:5060});
+  });
 
   it('adds a renderable default artwork that remains importable', () => {
     const project = addArtwork(createDemoProject())

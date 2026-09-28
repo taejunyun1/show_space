@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createDemoProject, updateArtwork } from '../domain/model'
+import {deriveFloor} from '../domain/floor'
 import { hydrateEditor, startAutosave, useEditor } from './editor'
 
 const reset = () => {
@@ -50,6 +51,36 @@ describe('editor history and commands', () => {
     expect(useEditor.getState().past).toHaveLength(1);
     useEditor.getState().undo();
     expect(useEditor.getState().project.walls[0].start.x).toBe(-4000);
+  });
+
+  it('keeps the floor closed when dragging a boundary wall with connected corners enabled',()=>{
+    useEditor.getState().beginWallTransform('wall-c','move',{x:0,z:0});
+    useEditor.getState().updateWallTransform({x:580,z:2060});
+    const preview=useEditor.getState().previewProject;
+    expect(preview).not.toBeNull();
+    expect(deriveFloor(preview!.walls).surfaces).toHaveLength(1);
+    useEditor.getState().finishWallTransform();
+    expect(deriveFloor(useEditor.getState().project.walls).surfaces).toHaveLength(1);
+    useEditor.getState().undo();
+    expect(useEditor.getState().project.walls).toEqual(createDemoProject().walls);
+  });
+
+  it('uses precision snapping for a 3D wall drag',()=>{
+    useEditor.getState().beginWallTransform('wall-c','move',{x:0,z:0});
+    useEditor.getState().updateWallTransform({x:80,z:70},true);
+    expect(useEditor.getState().previewProject?.walls[2].start).toEqual({x:4100,z:3100});
+  });
+
+  it('restores a damaged sample boundary as one undoable edit',()=>{
+    const demo=createDemoProject();
+    const damaged={...demo,walls:demo.walls.map(wall=>wall.id==='wall-c'?{...wall,start:{x:4580,z:5060},end:{x:-3420,z:5060}}:wall)};
+    useEditor.setState({project:damaged});
+    useEditor.getState().restoreDemoSpace();
+    expect(deriveFloor(useEditor.getState().project.walls).surfaces).toHaveLength(1);
+    expect(useEditor.getState().project.artworks).toEqual(damaged.artworks);
+    expect(useEditor.getState().past).toHaveLength(1);
+    useEditor.getState().undo();
+    expect(useEditor.getState().project.walls).toEqual(damaged.walls);
   });
 
   it('cancels a wall drag without changing the project or history',()=>{
@@ -186,6 +217,7 @@ describe('editor history and commands', () => {
     const project=createDemoProject();
     project.openings=[{id:'door-1',kind:'door',role:'boundary',start:{wallId:'wall-a',endpoint:'start'},end:{wallId:'wall-b',endpoint:'start'},note:''}];
     useEditor.setState({project});
+    useEditor.getState().setLinkedCorners(false);
     useEditor.getState().beginWallTransform('wall-a','move',{x:0,z:0});
     useEditor.getState().updateWallTransform({x:8000,z:0});
     expect(useEditor.getState().previewProject).not.toBeNull();

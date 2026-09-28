@@ -64,3 +64,7 @@
 .unplaced-row>button{flex-shrink:0;padding:5px 7px;border:1px solid #cad6fb;border-radius:4px;background:#f6f8ff;color:var(--blue);font-size:10px}
 .unplaced-row>button:hover{background:#e8eeff}
 @media(max-width:700px){.unplaced-row{gap:4px}.unplaced-row>button{padding:4px;font-size:9px}.unplaced-row .entity-text small{display:none}}
+.floor-empty-state{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;max-width:min(90vw,430px);padding:9px 12px;border:1px solid #d6deea;border-radius:7px;background:#fffffff0;box-shadow:0 3px 12px #26324414;color:#52647c;font-size:11px;line-height:1.5;text-align:center;white-space:normal}
+.floor-empty-state button{padding:5px 8px;border-radius:4px;background:#365cf5;color:#fff;font-size:10px}
+.floor-empty-state button:hover{background:#2449e0}
+@media(max-width:700px){.floor-empty-state{max-width:230px;font-size:9px;gap:6px}}

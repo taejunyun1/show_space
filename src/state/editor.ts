@@ -8,12 +8,13 @@ import {
   duplicateSelection,
   parseProject,
   placeUnplacedArtwork,
+  restoreDemoBoundary,
   updateArtwork,
   updateWall,
 } from '../domain/model'
 import type { Artwork, EntitySelection, MeasurementAnchor, Project, SavedDimension, Wall } from '../domain/types'
 import type {Point} from '../domain/types'
-import {transformWalls} from '../domain/wallTransform'
+import {snapWallTranslation,transformWalls} from '../domain/wallTransform'
 import {addWallBetween,updateWallEndpoint} from '../domain/wallEditing'
 import {addMeasurement,measureDistance,resolveAnchor} from '../domain/measurements'
 import { readDraft, writeDraft } from '../lib/persistence'
@@ -56,7 +57,7 @@ interface EditorState {
   patchMeasurement(id:string,patch:Pick<Partial<SavedDimension>,'offsetMm'>):void
   setLinkedCorners(linked:boolean):void
   beginWallTransform(id:string,mode:'move'|'rotate',start:Point):void
-  updateWallTransform(point:Point):void
+  updateWallTransform(point:Point,snap?:boolean):void
   finishWallTransform(cancel?:boolean):void
   beginArtworkDrag(id:string,hit:ArtworkFacePoint):void
   updateArtworkDrag(hit:ArtworkDragHit):void
@@ -75,6 +76,7 @@ interface EditorState {
   patchProject(patch: Pick<Partial<Project>, 'floorColor' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan' | 'planDraft'>): void
   addArtwork(imageUrl?: string, name?: string): void
   placeUnplaced(id:string):void
+  restoreDemoSpace():void
   addWall(): void
   drawWall(start:Point,end:Point):void
   duplicateSelected(): void
@@ -187,14 +189,15 @@ export const useEditor = create<EditorState>((set, get) => {
       if(!Number.isFinite(start.x)||!Number.isFinite(start.z))throw new Error('시작점이 올바르지 않습니다.');
       set({wallGesture:{id,ids,mode,start,base:project},artworkGesture:null,rotatingArtworkId:null,previewProject:null,selected:ids.map(id=>({type:'wall',id})),activeWallId:id});
     }),
-    updateWallTransform: (point) => attempt(()=>{
+    updateWallTransform: (point,snap=false) => attempt(()=>{
       const gesture=get().wallGesture;if(!gesture)return;
       const points=gesture.base.walls.filter(w=>gesture.ids.includes(w.id)).flatMap(w=>[w.start,w.end]);
       const center={x:(Math.min(...points.map(p=>p.x))+Math.max(...points.map(p=>p.x)))/2,z:(Math.min(...points.map(p=>p.z))+Math.max(...points.map(p=>p.z)))/2};
-      const dx=point.x-gesture.start.x,dz=point.z-gesture.start.z;
+      const raw={x:point.x-gesture.start.x,z:point.z-gesture.start.z};
+      const offset=gesture.mode==='move'&&snap?snapWallTranslation(gesture.base,gesture.ids,raw,get().linkedCorners):raw;
       const radians=Math.atan2(point.z-center.z,point.x-center.x)-Math.atan2(gesture.start.z-center.z,gesture.start.x-center.x);
-      const transform=gesture.mode==='move'?{kind:'move' as const,dx,dz}:{kind:'rotate' as const,radians};
-      set({previewProject:transformWalls(gesture.base,gesture.ids,transform)});
+      const transform=gesture.mode==='move'?{kind:'move' as const,dx:offset.x,dz:offset.z}:{kind:'rotate' as const,radians};
+      set({previewProject:transformWalls(gesture.base,gesture.ids,transform,get().linkedCorners)});
     }),
     finishWallTransform: (cancel=false) => {
       const gesture=get().wallGesture,preview=get().previewProject;
@@ -266,6 +269,7 @@ export const useEditor = create<EditorState>((set, get) => {
       get().commit(next)
       set({selected:[{type:'artwork',id}],activeWallId:wallId})
     }),
+    restoreDemoSpace: () => attempt(() => get().commit(restoreDemoBoundary(get().project))),
     addWall: () => attempt(() => {
       const current=get().project;
       let next = addWallToProject(current)

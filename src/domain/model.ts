@@ -76,6 +76,23 @@ export function createDemoProject(): Project {
   return { schemaVersion: 1, id: 'project-1', name: '여백의 기록', venue: '성수 갤러리', walls, artworks, scenes: [], floorColor: '#f1f1ed' }
 }
 
+export function canRestoreDemoBoundary(project:Project):boolean{
+  if(project.id!=='project-1'||project.planImageUrl||project.planReference||project.sourcePlan||project.planDraft)return false
+  return createDemoProject().walls.every(base=>project.walls.some(wall=>wall.id===base.id))
+}
+
+/** Explicit recovery of the sample room; all artwork and non-sample walls stay untouched. */
+export function restoreDemoBoundary(project:Project):Project{
+  if(!canRestoreDemoBoundary(project))throw new Error('기본 공간의 네 벽이 있어야 배치를 복원할 수 있습니다.')
+  const base=new Map(createDemoProject().walls.map(wall=>[wall.id,wall]))
+  if(project.walls.some(wall=>base.has(wall.id)&&wall.locked))throw new Error('잠긴 벽의 잠금을 먼저 해제해 주세요.')
+  const walls=project.walls.map(wall=>{
+    const original=base.get(wall.id)
+    return original?{...wall,role:'boundary' as const,start:{...original.start},end:{...original.end}}:wall
+  })
+  return parseProject({...project,walls})
+}
+
 export function wallLength(wall: Wall): number { return Math.hypot(wall.end.x - wall.start.x, wall.end.z - wall.start.z) }
 export function mmToMeters(value: number): number { return value / 1000 }
 
