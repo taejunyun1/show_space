@@ -36,10 +36,15 @@ export interface CameraView {
   position:[number,number,number];target:[number,number,number];zoom:number
 }
 
+export interface SceneStructure {
+  walls:Wall[];openings:Opening[];dimensions:SavedDimension[];unplacedArtworks:UnplacedArtwork[]
+}
+
 export interface Scene {
   id: string; name: string; artworks: Artwork[]
   wallVisibility: Record<string, boolean>
   cameraView?:CameraView
+  structure?:SceneStructure
 }
 
 export interface PlanReference {

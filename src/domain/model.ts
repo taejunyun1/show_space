@@ -204,6 +204,7 @@ export function deleteSelection(project: Project, selection: EntitySelection): P
   if(attached.some(artwork=>artwork.locked))throw new Error('이 벽의 잠긴 작품을 먼저 잠금 해제해 주세요.')
   const unplaced:UnplacedArtwork[]=attached.map(({wallId:_,...artwork})=>artwork)
   const scenes = project.scenes.map(scene => {
+    if(scene.structure)return scene
     const wallVisibility = Object.fromEntries(Object.entries(scene.wallVisibility).filter(([id]) => id !== selection.id))
     return { ...scene, artworks: scene.artworks.filter(artwork => artwork.wallId !== selection.id), wallVisibility }
   })
@@ -295,11 +296,11 @@ export function parseProject(input: unknown): Project {
   }
   if(raw.openings!==undefined)validateOpenings(raw.openings,walls);
   if(raw.dimensions!==undefined)validateDimensions(raw.dimensions);
-  const validateArtworkRecord = (value: unknown, ids?: Set<string>) => {
+  const validateArtworkRecord = (value: unknown, ids?: Set<string>,allowedWalls=wallIds) => {
     const artwork = object(value, '작품') as unknown as Artwork
     ;['id', 'name', 'artist', 'wallId', 'note'].forEach(key => text((artwork as unknown as Record<string, unknown>)[key], `작품 ${key}`))
     bool(artwork.visible, '작품 표시 여부'); bool(artwork.locked, '작품 잠금 여부')
-    validateArtwork(artwork, wallIds)
+    validateArtwork(artwork, allowedWalls)
     if (ids?.has(artwork.id)) throw new Error(`중복된 작품 ID가 있습니다: ${artwork.id}`)
     ids?.add(artwork.id)
     return artwork
@@ -319,12 +320,39 @@ export function parseProject(input: unknown): Project {
     text(sceneId, '장면 ID'); text(scene.name, '장면 이름')
     if (sceneIds.has(sceneId)) throw new Error(`중복된 장면 ID가 있습니다: ${sceneId}`)
     sceneIds.add(sceneId)
+    let sceneWallIds=wallIds
+    if(scene.structure!==undefined){
+      const structure=object(scene.structure,'장면 구조')
+      if(!Array.isArray(structure.walls)||structure.walls.length<1||structure.walls.length>wallLimit)throw new Error('장면 벽 목록이 올바르지 않습니다.')
+      sceneWallIds=new Set<string>()
+      for(const value of structure.walls){
+        const wall=object(value,'장면 벽') as unknown as Wall
+        for(const key of ['id','name','color','note'])text((wall as unknown as Record<string,unknown>)[key],`장면 벽 ${key}`)
+        bool(wall.visible,'장면 벽 표시 여부');bool(wall.locked,'장면 벽 잠금 여부');validateWall(wall)
+        if(sceneWallIds.has(wall.id))throw new Error(`장면에 중복된 벽 ID가 있습니다: ${wall.id}`)
+        sceneWallIds.add(wall.id)
+      }
+      validateOpenings(structure.openings,structure.walls as Wall[])
+      validateDimensions(structure.dimensions)
+      if(!Array.isArray(structure.unplacedArtworks))throw new Error('장면 미배치 작품 목록이 올바르지 않습니다.')
+    }
     if (!Array.isArray(scene.artworks) || scene.artworks.length > 500) throw new Error('장면 작품 목록이 올바르지 않습니다.')
     const snapshotIds = new Set<string>()
-    for (const artwork of scene.artworks) validateArtworkRecord(artwork, snapshotIds)
+    for (const artwork of scene.artworks) validateArtworkRecord(artwork, snapshotIds,sceneWallIds)
+    if(scene.structure!==undefined){
+      const structure=scene.structure as Record<string,unknown>
+      if(scene.artworks.length+(structure.unplacedArtworks as unknown[]).length>artworkLimit)throw new Error('장면 작품 수 제한을 초과했습니다.')
+      const firstWall=(structure.walls as Wall[])[0].id
+      for(const value of structure.unplacedArtworks as unknown[]){
+        const unplaced=object(value,'장면 미배치 작품')
+        if('wallId' in unplaced)throw new Error('장면 미배치 작품에는 설치 벽이 없어야 합니다.')
+        validateArtworkRecord({...unplaced,wallId:firstWall},snapshotIds,sceneWallIds)
+      }
+      for(const id of snapshotIds)if(sceneWallIds.has(id))throw new Error(`장면에 중복된 객체 ID가 있습니다: ${id}`)
+    }
     const visibility = object(scene.wallVisibility, '장면 벽 표시 설정')
     for (const [id, visible] of Object.entries(visibility)) {
-      if (!wallIds.has(id)) throw new Error(`장면이 존재하지 않는 벽을 참조합니다: ${id}`)
+      if (!sceneWallIds.has(id)) throw new Error(`장면이 존재하지 않는 벽을 참조합니다: ${id}`)
       bool(visible, '장면 벽 표시 여부')
     }
     if(scene.cameraView!==undefined){

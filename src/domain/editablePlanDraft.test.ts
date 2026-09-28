@@ -1,6 +1,6 @@
 import {expect,it} from 'vitest';
 import {buildEditablePlanDraft,calibrateEditableDraft,refreshPlanEvidence,draftEditSummary} from './editablePlanDraft';
-import {parseProject} from './model';
+import {createDemoProject,parseProject} from './model';
 import {updateWallEndpoint} from './wallEditing';
 import type {PlanPage} from '../lib/planImport';
 
@@ -68,5 +68,18 @@ it('converts saved pixel measurements with the edited draft',()=>{
  expect(next.dimensions?.[0].start.fallback.x).toBe(100);
  expect(next.dimensions?.[0].end.fallback.x).toBe(8100);
  expect(next.dimensions?.[0].offsetMm).toBe(200);
+ expect(parseProject(next)).toEqual(next);
+});
+
+it('converts saved Scene structure with the same drawing scale',()=>{
+ const base=buildEditablePlanDraft(partialPage()).project!;
+ const span={id:'span',view:'plan' as const,start:{kind:'fixed' as const,fallback:{x:100,y:0,z:100}},end:{kind:'fixed' as const,fallback:{x:900,y:0,z:100}},offsetMm:20};
+ const {wallId:_,...unplaced}=createDemoProject().artworks[0];
+ base.scenes=[{id:'scene-1',name:'픽셀 배치안',artworks:[],wallVisibility:Object.fromEntries(base.walls.map(w=>[w.id,w.visible])),structure:{walls:structuredClone(base.walls),openings:[{id:'door-a',kind:'door',role:'partition',start:{wallId:base.walls[0].id,endpoint:'end'},end:{point:{x:500,z:100}},note:''},{id:'door-b',kind:'door',role:'partition',start:{point:{x:500,z:100}},end:{wallId:base.walls[1].id,endpoint:'end'},note:''}],dimensions:[span],unplacedArtworks:[{...unplaced,alongMm:500}]}}];
+ const next=calibrateEditableDraft(base,{x:100,z:100},{x:200,z:100},1000);
+ expect(next.scenes[0].structure?.walls[0].end.x).toBe(8100);
+ expect(next.scenes[0].structure?.dimensions[0].end.fallback.x).toBe(8100);
+ expect(next.scenes[0].structure?.openings[0].end.point?.x).toBe(4100);
+ expect(next.scenes[0].structure?.unplacedArtworks[0].alongMm).toBe(5000);
  expect(parseProject(next)).toEqual(next);
 });

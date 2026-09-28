@@ -344,16 +344,21 @@ export const useEditor = create<EditorState>((set, get) => {
       const used = new Set(project.scenes.map((scene) => scene.id))
       let index = 1
       while (used.has(`scene-${index}`)) index += 1
-      get().commit({ ...project, scenes: [...project.scenes, { id: `scene-${index}`, name, artworks: clone(project.artworks), wallVisibility: Object.fromEntries(project.walls.map((wall) => [wall.id, wall.visible])),...(cameraView?{cameraView:clone(cameraView)}:{}) }] })
+      const structure={walls:clone(project.walls),openings:clone(project.openings??[]),dimensions:clone(project.dimensions??[]),unplacedArtworks:clone(project.unplacedArtworks??[])}
+      get().commit({ ...project, scenes: [...project.scenes, { id: `scene-${index}`, name, artworks: clone(project.artworks), wallVisibility: Object.fromEntries(project.walls.map((wall) => [wall.id, wall.visible])),structure,...(cameraView?{cameraView:clone(cameraView)}:{}) }] })
     }),
     restoreScene: (id) => attempt(() => {
       const project = get().project
       const scene = project.scenes.find((item) => item.id === id)
       if (!scene) throw new Error('장면을 찾을 수 없습니다.')
-      const wallIds = new Set(project.walls.map((wall) => wall.id))
-      const artworks = clone(scene.artworks.filter((artwork) => wallIds.has(artwork.wallId)))
-      const walls = project.walls.map((wall) => ({ ...wall, visible: scene.wallVisibility[wall.id] ?? wall.visible }))
-      get().commit({ ...project, artworks, walls })
+      if(scene.structure){
+        get().commit(parseProject({...project,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
+      }else{
+        const wallIds = new Set(project.walls.map((wall) => wall.id))
+        const artworks = clone(scene.artworks.filter((artwork) => wallIds.has(artwork.wallId)))
+        const walls = project.walls.map((wall) => ({ ...wall, visible: scene.wallVisibility[wall.id] ?? wall.visible }))
+        get().commit({ ...project, artworks, walls })
+      }
     }),
     deleteScene: (id) => get().commit({ ...get().project, scenes: get().project.scenes.filter((scene) => scene.id !== id) }),
   }

@@ -121,6 +121,20 @@ describe('exhibition domain model', () => {
     expect(parseProject(deleted)).toEqual(deleted)
   })
 
+  it('preserves a structured Scene when its wall is deleted and validates its own references',()=>{
+    const demo=createDemoProject();
+    const scene={id:'scene-1',name:'원래 전시장',artworks:structuredClone(demo.artworks),wallVisibility:Object.fromEntries(demo.walls.map(w=>[w.id,w.visible])),structure:{walls:structuredClone(demo.walls),openings:[],dimensions:[],unplacedArtworks:[]}};
+    const deleted=deleteSelection({...demo,scenes:[scene]},{type:'wall',id:'wall-a'});
+    expect(deleted.scenes[0]).toEqual(scene);
+    expect(parseProject(JSON.parse(JSON.stringify(deleted)))).toEqual(deleted);
+    const missing=structuredClone(deleted);
+    missing.scenes[0].structure!.walls=missing.scenes[0].structure!.walls.filter(w=>w.id!=='wall-a');
+    expect(()=>parseProject(missing)).toThrow(/벽/);
+    const malformed=structuredClone(deleted);
+    malformed.scenes[0].structure!.walls[0].heightMm=Infinity;
+    expect(()=>parseProject(malformed)).toThrow(/벽 높이/);
+  });
+
   it('keeps artworks from a deleted wall in an importable unplaced list and reattaches them',()=>{
     const demo=createDemoProject();
     const deleted=deleteSelection(demo,{type:'wall',id:'wall-a'});

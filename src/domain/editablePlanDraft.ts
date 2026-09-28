@@ -1,7 +1,7 @@
 import {buildAutomaticVenue,extractStructuralWalls,planEvidenceKey} from './automaticVenue';
 import {calibratePlan} from './plan';
 import type {PlanPage} from '../lib/planImport';
-import type {MeasurementAnchor,Point,Project,Wall} from './types';
+import type {MeasurementAnchor,Opening,Point,Project,SavedDimension,SceneStructure,Wall} from './types';
 
 export interface EditablePlanDraft {kind:'verified'|'partial'|'none';project?:Project;reasons:string[];wallCount:number}
 
@@ -45,5 +45,8 @@ export function calibrateEditableDraft(project:Project,a:Point,b:Point,lengthMm:
  const point=(p:Point):Point=>({x:anchor.x+(p.x-anchor.x)*ratio,z:anchor.z+(p.z-anchor.z)*ratio});
  const wall=(w:Wall):Wall=>({...w,start:point(w.start),end:point(w.end),note:w.note.startsWith('축척 미정 · 구조선 후보입니다. 실제 벽인지와 길이를 확정하지 않았습니다.')?w.note.replace('축척 미정 · 구조선 후보입니다. 실제 벽인지와 길이를 확정하지 않았습니다.','축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요.'):w.note});
  const measurement=(v:MeasurementAnchor):MeasurementAnchor=>({...v,fallback:{...v.fallback,...point(v.fallback)},...(v.kind==='wall'?{offsetMm:v.offsetMm*ratio}:{})});
- return {...project,planReference:nextReference,walls:project.walls.map(wall),artworks:project.artworks.map(art=>({...art,alongMm:art.alongMm*ratio})),scenes:project.scenes.map(scene=>({...scene,artworks:scene.artworks.map(art=>({...art,alongMm:art.alongMm*ratio}))})),openings:project.openings?.map(o=>({...o,start:o.start.point?{point:point(o.start.point)}:o.start,end:o.end.point?{point:point(o.end.point)}:o.end})),dimensions:project.dimensions?.map(d=>({...d,start:measurement(d.start),end:measurement(d.end),offsetMm:d.offsetMm*ratio})),planDraft:{...project.planDraft,originalWalls:project.planDraft.originalWalls.map(wall)}};
+ const opening=(o:Opening):Opening=>({...o,start:o.start.point?{point:point(o.start.point)}:o.start,end:o.end.point?{point:point(o.end.point)}:o.end});
+ const dimension=(d:SavedDimension):SavedDimension=>({...d,start:measurement(d.start),end:measurement(d.end),offsetMm:d.offsetMm*ratio});
+ const structure=(s:SceneStructure):SceneStructure=>({...s,walls:s.walls.map(wall),openings:s.openings.map(opening),dimensions:s.dimensions.map(dimension),unplacedArtworks:s.unplacedArtworks.map(art=>({...art,alongMm:art.alongMm*ratio}))});
+ return {...project,planReference:nextReference,walls:project.walls.map(wall),artworks:project.artworks.map(art=>({...art,alongMm:art.alongMm*ratio})),...(project.unplacedArtworks?{unplacedArtworks:project.unplacedArtworks.map(art=>({...art,alongMm:art.alongMm*ratio}))}:{}),scenes:project.scenes.map(scene=>({...scene,artworks:scene.artworks.map(art=>({...art,alongMm:art.alongMm*ratio})),...(scene.structure?{structure:structure(scene.structure)}:{})})),openings:project.openings?.map(opening),dimensions:project.dimensions?.map(dimension),planDraft:{...project.planDraft,originalWalls:project.planDraft.originalWalls.map(wall)}};
 }

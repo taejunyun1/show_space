@@ -93,6 +93,42 @@ describe('editor history and commands', () => {
     expect(useEditor.getState().project.scenes[0].cameraView).toEqual(cameraView);
   });
 
+  it('restores a saved venue after its wall and attached artworks were deleted, then undoes once',()=>{
+    const demo=createDemoProject();
+    const {wallId:_,...unplaced}=demo.artworks[4];
+    const project={...demo,artworks:demo.artworks.slice(0,4),unplacedArtworks:[unplaced],openings:[{id:'door-1',kind:'door' as const,role:'boundary' as const,start:{wallId:'wall-a',endpoint:'start' as const},end:{wallId:'wall-b',endpoint:'end' as const},note:''}],dimensions:[{id:'span-1',view:'plan' as const,start:{kind:'fixed' as const,fallback:{x:0,y:0,z:0}},end:{kind:'fixed' as const,fallback:{x:100,y:0,z:0}},offsetMm:100}]};
+    useEditor.getState().loadProject(project);
+    useEditor.getState().saveScene('전체 공간 A');
+    const scene=useEditor.getState().project.scenes[0];
+    expect(scene.structure?.walls).toEqual(demo.walls);
+    useEditor.getState().select({type:'wall',id:'wall-a'});
+    useEditor.getState().deleteSelected();
+    const deleted=structuredClone(useEditor.getState().project);
+    expect(deleted.walls).toHaveLength(3);
+    expect(deleted.scenes[0].structure?.walls).toEqual(demo.walls);
+    useEditor.getState().restoreScene(scene.id);
+    const restored=useEditor.getState().project;
+    expect(restored.walls).toEqual(project.walls);
+    expect(restored.artworks).toEqual(project.artworks);
+    expect(restored.unplacedArtworks).toEqual(project.unplacedArtworks);
+    expect(restored.openings).toEqual(project.openings);
+    expect(restored.dimensions).toEqual(project.dimensions);
+    useEditor.getState().undo();
+    expect(useEditor.getState().project).toEqual(deleted);
+  });
+
+  it('switches between two saved wall layouts without losing either snapshot',()=>{
+    useEditor.getState().saveScene('A');
+    const original=structuredClone(useEditor.getState().project.walls);
+    useEditor.getState().addWall();
+    const expanded=structuredClone(useEditor.getState().project.walls);
+    useEditor.getState().saveScene('B');
+    useEditor.getState().restoreScene('scene-1');
+    expect(useEditor.getState().project.walls).toEqual(original);
+    useEditor.getState().restoreScene('scene-2');
+    expect(useEditor.getState().project.walls).toEqual(expanded);
+  });
+
   it('cancels a wall drag without changing the project or history',()=>{
     useEditor.getState().beginWallTransform('wall-a','rotate',{x:4000,z:-3000});
     useEditor.getState().updateWallTransform({x:0,z:1000});
