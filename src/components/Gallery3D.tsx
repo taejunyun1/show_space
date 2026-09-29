@@ -9,6 +9,7 @@ import type { Artwork, CameraView, Project, Wall } from '../domain/types';
 import { artworkPosition, artworkWarnings, canRestoreDemoBoundary, wallLength } from '../domain/model';
 import {floorWithOpenings,openingSegments} from '../domain/openings';
 import { useEditor } from '../state/editor';
+import {snapMeasurementCorner} from './measurementSnap3d';
 import {fixedAnchor,resolveMeasurement,wallAnchor} from '../domain/measurements';
 import {capturePixelSize,type CaptureOptions} from '../lib/captureSvg';
 import { artPanel } from '../lib/art';
@@ -20,8 +21,19 @@ import type { CameraView3D } from './cameraView3d';
 export type { CameraView3D } from './cameraView3d';
 const frameColors = { black: '#282827', natural: '#b9a383', white: '#f5f4ef', none: '#eee8dc' };
 function modelPoint(point:Vector3){return {x:Math.round(point.x*1000),y:Math.round(point.y*1000),z:Math.round(point.z*1000)};}
+function useMeasurementSnap(){
+ const {camera,size}=useThree();
+ const [hint,setHint]=useState<Vector3|null>(null);
+ const active=useEditor(s=>s.activeTool==='measure'&&!s.captureClean);
+ const snap=(event:ThreeEvent<PointerEvent|MouseEvent>)=>event.altKey?null:snapMeasurementCorner(event.object,event.point,event.face?.normal,camera,size);
+ return {point:(event:ThreeEvent<PointerEvent|MouseEvent>)=>snap(event)??event.point,
+ hover:(event:ThreeEvent<PointerEvent>)=>{if(active){event.stopPropagation();setHint(snap(event));}},
+ clear:()=>setHint(null),
+ marker:active&&hint?<Html position={hint.toArray()} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#16816b'}}>⊙ 모서리</span></Html>:null};
+}
 function Painting({ artwork, wall, groups }: { artwork: Artwork; wall: Wall; groups:Map<string,Group> }) {
   const project=useEditor(s=>s.project);
+  const measurementSnap=useMeasurementSnap();
   const activeTool=useEditor(s=>s.activeTool);
   const installationConflict=artworkWarnings(artwork,wall,project).some(w=>w.includes('계단'));
   const source = useTexture(artwork.imageUrl);
@@ -105,11 +117,12 @@ function Painting({ artwork, wall, groups }: { artwork: Artwork; wall: Wall; gro
     event.stopPropagation();(event.target as Element).releasePointerCapture(event.pointerId);
     useEditor.getState().finishArtworkDrag(cancel);
   }
-  return <group name={`artwork-${artwork.id}`} position={[x / 1000, y / 1000, z / 1000]} rotation={[0, rotationY, (previewAngle??artwork.rotationDeg??0)*Math.PI/180]} onPointerDown={begin} onPointerMove={moving} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)} onClick={e => { if(activeTool==='pan')return; e.stopPropagation(); if(activeTool==='measure'){useEditor.getState().pickMeasurement(wallAnchor(project,wall.id,modelPoint(e.point)),'3d');return;} if(e.delta<4)useEditor.getState().select({ type: 'artwork', id: artwork.id }, e.shiftKey); }} onPointerOver={e => { if(activeTool==='pan')return; e.stopPropagation(); document.body.style.cursor = artwork.locked?'pointer':'grab'; }} onPointerOut={() => { if(!dragging)document.body.style.cursor = 'auto'; }}><mesh castShadow receiveShadow><boxGeometry args={[w + (artwork.frame === 'none' ? 0 : 0.045), h + (artwork.frame === 'none' ? 0 : 0.045), d]} /><meshStandardMaterial color={frameColors[artwork.frame]} roughness={0.75} /></mesh><mesh position={[0, 0, d / 2 + 0.002]}><planeGeometry args={[w, h]} /><meshStandardMaterial map={texture} roughness={0.9} /></mesh>{installationConflict&&<Html position={[0,h/2+.15,0]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#a22'}}>계단·추정 범위와 겹침</span></Html>}{selected && !captureClean && <Line points={[[-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008]]} color="#365cf5" lineWidth={2} />}{selected&&singleSelection&&!artwork.locked&&activeTool==='select'&&!captureClean&&<group><Line points={[[0,h/2+.045,d/2+.05],[0,h/2+.24,d/2+.05]]} color="#365cf5" lineWidth={3}/><mesh position={[0,h/2+.24,d/2+.05]} onPointerDown={beginRotation} onPointerMove={moveRotation} onPointerUp={e=>finishRotation(e)} onPointerCancel={e=>finishRotation(e,true)} onClick={e=>e.stopPropagation()} onPointerOver={e=>{e.stopPropagation();document.body.style.cursor='grab';}} onPointerOut={()=>{document.body.style.cursor='auto';}}><sphereGeometry args={[.115,16,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh></group>}</group>;
+  return <>{measurementSnap.marker}<group name={`artwork-${artwork.id}`} position={[x / 1000, y / 1000, z / 1000]} rotation={[0, rotationY, (previewAngle??artwork.rotationDeg??0)*Math.PI/180]} onPointerDown={begin} onPointerMove={e=>{measurementSnap.hover(e);moving(e);}} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)} onClick={e => { if(activeTool==='pan')return; e.stopPropagation(); if(activeTool==='measure'){useEditor.getState().pickMeasurement(wallAnchor(project,wall.id,modelPoint(measurementSnap.point(e))),'3d');return;} if(e.delta<4)useEditor.getState().select({ type: 'artwork', id: artwork.id }, e.shiftKey); }} onPointerOver={e => { if(activeTool==='pan')return; e.stopPropagation(); document.body.style.cursor = artwork.locked?'pointer':'grab'; }} onPointerOut={() => { measurementSnap.clear();if(!dragging)document.body.style.cursor = 'auto'; }}><mesh castShadow receiveShadow><boxGeometry args={[w + (artwork.frame === 'none' ? 0 : 0.045), h + (artwork.frame === 'none' ? 0 : 0.045), d]} /><meshStandardMaterial color={frameColors[artwork.frame]} roughness={0.75} /></mesh><mesh position={[0, 0, d / 2 + 0.002]}><planeGeometry args={[w, h]} /><meshStandardMaterial map={texture} roughness={0.9} /></mesh>{installationConflict&&<Html position={[0,h/2+.15,0]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#a22'}}>계단·추정 범위와 겹침</span></Html>}{selected && !captureClean && <Line points={[[-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008]]} color="#365cf5" lineWidth={2} />}{selected&&singleSelection&&!artwork.locked&&activeTool==='select'&&!captureClean&&<group><Line points={[[0,h/2+.045,d/2+.05],[0,h/2+.24,d/2+.05]]} color="#365cf5" lineWidth={3}/><mesh position={[0,h/2+.24,d/2+.05]} onPointerDown={beginRotation} onPointerMove={moveRotation} onPointerUp={e=>finishRotation(e)} onPointerCancel={e=>finishRotation(e,true)} onClick={e=>e.stopPropagation()} onPointerOver={e=>{e.stopPropagation();document.body.style.cursor='grab';}} onPointerOut={()=>{document.body.style.cursor='auto';}}><sphereGeometry args={[.115,16,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh></group>}</group></>;
 }
 const ground=new Plane(new Vector3(0,1,0),0);
 function groundPoint(e:ThreeEvent<PointerEvent>){const hit=e.ray.intersectPlane(ground,new Vector3());return hit?{x:Math.round(hit.x*100)*10,z:Math.round(hit.z*100)*10}:null;}
 function GalleryWall({ wall, artworks, groups, allWalls }: { wall: Wall; artworks: Artwork[]; groups:Map<string,Group>; allWalls:Wall[] }) {
+  const measurementSnap=useMeasurementSnap();
   const register=useCallback((group:Group|null)=>{if(group)groups.set(wall.id,group);else groups.delete(wall.id);},[groups,wall.id]);
   const selected = useEditor(s => s.selected.some(x => x.id === wall.id));
   const captureClean=useEditor(s=>s.captureClean);
@@ -119,7 +132,7 @@ function GalleryWall({ wall, artworks, groups, allWalls }: { wall: Wall; artwork
   const dx = wall.end.x - wall.start.x, dz = wall.end.z - wall.start.z;
   function begin(e:ThreeEvent<PointerEvent>,mode:'move'|'rotate'){
     if(e.button!==0||activeTool==='pan'||useEditor.getState().artworkGesture)return;e.stopPropagation();
-    if(activeTool==='measure'){useEditor.getState().pickMeasurement(wallAnchor(useEditor.getState().project,wall.id,modelPoint(e.point)),'3d');return;}
+    if(activeTool==='measure'){useEditor.getState().pickMeasurement(wallAnchor(useEditor.getState().project,wall.id,modelPoint(measurementSnap.point(e))),'3d');return;}
     if(e.shiftKey){useEditor.getState().select({type:'wall',id:wall.id},true);return;}
     if(wall.locked){useEditor.getState().select({type:'wall',id:wall.id});return;}
     const p=groundPoint(e);if(!p)return;
@@ -134,7 +147,7 @@ function GalleryWall({ wall, artworks, groups, allWalls }: { wall: Wall; artwork
     if(useEditor.getState().wallGesture?.id!==wall.id)return;
     e.stopPropagation();useEditor.getState().finishWallTransform(cancel);
   }
-  return <group ref={register}><mesh position={[midX, wall.heightMm / 2000, midZ]} rotation={[0, -Math.atan2(dz, dx), 0]} castShadow receiveShadow onPointerDown={e=>begin(e,activeTool==='rotate'?'rotate':'move')} onPointerMove={moving} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)}><boxGeometry args={[length / 1000, wall.heightMm / 1000, wall.thicknessMm / 1000]} /><meshStandardMaterial color={selected && !captureClean ? '#e6edff' : wall.color} roughness={0.92} /></mesh>{selected&&!captureClean&&!wall.locked&&activeTool!=='measure'&&activeTool!=='pan'&&<mesh position={[midX-dz/length*.45,wall.heightMm/2000,midZ+dx/length*.45]} onPointerDown={e=>begin(e,'rotate')} onPointerMove={moving} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)}><sphereGeometry args={[.12,12,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh>}{artworks.filter(a => a.visible && a.imageUrl).map(a => <Suspense key={a.id} fallback={null}><Painting artwork={a} wall={allWalls.find(candidate=>candidate.id===a.wallId)??wall} groups={groups}/></Suspense>)}</group>;
+  return <group ref={register}>{measurementSnap.marker}<mesh onPointerOut={measurementSnap.clear} position={[midX, wall.heightMm / 2000, midZ]} rotation={[0, -Math.atan2(dz, dx), 0]} castShadow receiveShadow onPointerDown={e=>begin(e,activeTool==='rotate'?'rotate':'move')} onPointerMove={e=>{measurementSnap.hover(e);moving(e);}} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)}><boxGeometry args={[length / 1000, wall.heightMm / 1000, wall.thicknessMm / 1000]} /><meshStandardMaterial color={selected && !captureClean ? '#e6edff' : wall.color} roughness={0.92} /></mesh>{selected&&!captureClean&&!wall.locked&&activeTool!=='measure'&&activeTool!=='pan'&&<mesh position={[midX-dz/length*.45,wall.heightMm/2000,midZ+dx/length*.45]} onPointerDown={e=>begin(e,'rotate')} onPointerMove={moving} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)}><sphereGeometry args={[.12,12,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh>}{artworks.filter(a => a.visible && a.imageUrl).map(a => <Suspense key={a.id} fallback={null}><Painting artwork={a} wall={allWalls.find(candidate=>candidate.id===a.wallId)??wall} groups={groups}/></Suspense>)}</group>;
 }
 function CutawayVisibility({walls,groups,cutaway}:{walls:readonly Wall[];groups:ReadonlyMap<string,Group>;cutaway:boolean}){
   useFrame(({camera})=>applyWallVisibility(walls,groups,camera.position,cutaway));
