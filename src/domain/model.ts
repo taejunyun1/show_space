@@ -38,6 +38,7 @@ function validateWall(wall: Wall) {
 }
 
 function validateArtwork(artwork: Artwork, wallIds: Set<string>) {
+  if (artwork.groupId !== undefined && (typeof artwork.groupId !== 'string' || !artwork.groupId.trim() || artwork.groupId.length > 100)) throw new Error('작품 그룹이 올바르지 않습니다.')
   if (artwork.wallSide !== undefined && !['front','back'].includes(artwork.wallSide)) throw new Error('설치 면이 올바르지 않습니다.')
   if (artwork.rotationDeg !== undefined) {
     finite(artwork.rotationDeg, '작품 회전 각도')
@@ -51,6 +52,16 @@ function validateArtwork(artwork: Artwork, wallIds: Set<string>) {
   if (!wallIds.has(artwork.wallId)) throw new Error(`존재하지 않는 벽을 참조합니다: ${artwork.wallId}`)
   if (!frames.has(artwork.frame)) throw new Error('작품 프레임 값이 올바르지 않습니다.')
   safeImage(artwork.imageUrl, '작품')
+}
+
+function validateArtworkGroups(artworks:Artwork[]) {
+  const faces=new Map<string,string>();
+  for(const artwork of artworks){
+    if(!artwork.groupId)continue;
+    const face=JSON.stringify([artwork.wallId,artwork.wallSide??'front']);
+    if(faces.has(artwork.groupId)&&faces.get(artwork.groupId)!==face)throw new Error('작품 그룹은 같은 벽·같은 면에 있어야 합니다.');
+    faces.set(artwork.groupId,face);
+  }
 }
 
 function uniqueId(prefix: string, ids: Iterable<string>) {
@@ -179,7 +190,7 @@ export function duplicateSelection(project: Project, selection: EntitySelection)
     if (!source) throw new Error('복제할 작품을 찾을 수 없습니다.')
     if (project.artworks.length+(project.unplacedArtworks?.length??0) >= artworkLimit) throw new Error(`작품은 최대 ${artworkLimit}개까지 만들 수 있습니다.`)
     const id = uniqueId('artwork', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[])].map(item => item.id))
-    const copy = { ...source, id, name: `${source.name} 복사본`, alongMm: source.alongMm + 200, locked: false }
+    const copy = { ...source, groupId: undefined, id, name: `${source.name} 복사본`, alongMm: source.alongMm + 200, locked: false }
     return { project: { ...project, artworks: [...project.artworks, copy] }, selection: { type: 'artwork', id } }
   }
   const source = project.walls.find(item => item.id === selection.id)
@@ -203,7 +214,7 @@ export function deleteSelection(project: Project, selection: EntitySelection): P
   if (project.walls.length === 1) throw new Error('마지막 벽은 삭제할 수 없습니다.')
   const attached=project.artworks.filter(artwork=>artwork.wallId===selection.id)
   if(attached.some(artwork=>artwork.locked))throw new Error('이 벽의 잠긴 작품을 먼저 잠금 해제해 주세요.')
-  const unplaced:UnplacedArtwork[]=attached.map(({wallId:_,...artwork})=>artwork)
+  const unplaced:UnplacedArtwork[]=attached.map(({wallId:_,groupId:__,...artwork})=>artwork)
   const scenes = project.scenes.map(scene => {
     if(scene.structure)return scene
     const wallVisibility = Object.fromEntries(Object.entries(scene.wallVisibility).filter(([id]) => id !== selection.id))
@@ -224,7 +235,7 @@ export function placeUnplacedArtwork(project:Project,id:string,wallId:string):Pr
   }
   const alongMm=clampCenter(artwork.alongMm,size.widthMm,wallLength(wall))
   const centerHeightMm=clampCenter(artwork.centerHeightMm,size.heightMm,wall.heightMm)
-  const placed:Artwork={...artwork,wallId,alongMm,centerHeightMm}
+  const placed:Artwork={...artwork,groupId:undefined,wallId,alongMm,centerHeightMm}
   validateArtwork(placed,new Set(project.walls.map(item=>item.id)))
   return {...project,artworks:[...project.artworks,placed],unplacedArtworks:project.unplacedArtworks!.filter(item=>item.id!==id)}
 }
@@ -308,6 +319,7 @@ export function parseProject(input: unknown): Project {
   }
   const artworkIds = new Set<string>()
   for (const value of raw.artworks) validateArtworkRecord(value, artworkIds)
+  validateArtworkGroups(raw.artworks as Artwork[])
   for(const value of raw.unplacedArtworks??[]){
     const unplaced=object(value,'미배치 작품')
     if('wallId' in unplaced)throw new Error('미배치 작품에는 설치 벽이 없어야 합니다.')
@@ -340,6 +352,7 @@ export function parseProject(input: unknown): Project {
     if (!Array.isArray(scene.artworks) || scene.artworks.length > 500) throw new Error('장면 작품 목록이 올바르지 않습니다.')
     const snapshotIds = new Set<string>()
     for (const artwork of scene.artworks) validateArtworkRecord(artwork, snapshotIds,sceneWallIds)
+    validateArtworkGroups(scene.artworks as Artwork[])
     if(scene.structure!==undefined){
       const structure=scene.structure as Record<string,unknown>
       if(scene.artworks.length+(structure.unplacedArtworks as unknown[]).length>artworkLimit)throw new Error('장면 작품 수 제한을 초과했습니다.')

@@ -483,3 +483,34 @@ describe('persistent wall groups',()=>{
     s.ungroupSelectedWalls();expect(useEditor.getState().message).toMatch(/잠긴/);expect(useEditor.getState().past).toHaveLength(count);
   });
 });
+
+describe('artwork group commands',()=>{
+  beforeEach(reset);
+  function grouped(){
+    const s=useEditor.getState(),ids=s.project.artworks.slice(0,2).map(a=>a.id);
+    s.select({type:'artwork',id:ids[0]});s.select({type:'artwork',id:ids[1]},true);s.groupSelectedArtworks();return ids;
+  }
+  it('selects the group, previews a 3D group move, cancels, commits and undoes once',()=>{
+    const ids=grouped(),s=useEditor.getState(),before=s.project;
+    s.select({type:'wall',id:'wall-c'});s.beginArtworkDrag(ids[1],{alongMm:before.artworks[1].alongMm,centerHeightMm:1500});
+    expect(useEditor.getState().selected).toHaveLength(2);
+    s.updateArtworkDrag({alongMm:before.artworks[1].alongMm+100,centerHeightMm:1700});
+    expect(useEditor.getState().previewProject?.artworks[0].alongMm).toBe(before.artworks[0].alongMm+100);
+    s.finishArtworkDrag(true);expect(useEditor.getState().project).toEqual(before);
+    s.beginArtworkDrag(ids[0],{alongMm:before.artworks[0].alongMm,centerHeightMm:1500});
+    s.updateArtworkDrag({alongMm:before.artworks[0].alongMm+100,centerHeightMm:1700});s.finishArtworkDrag();
+    expect(useEditor.getState().project.artworks[1].centerHeightMm).toBe(1700);
+    s.undo();expect(useEditor.getState().project).toEqual(before);
+  });
+  it('duplicates as an independent group and restores Scene, deletion and ungrouping',()=>{
+    const ids=grouped(),s=useEditor.getState(),group=s.project.artworks[0].groupId;
+    s.saveScene('grouped art');const scene=useEditor.getState().project.scenes.at(-1)!;
+    s.duplicateSelected();const copies=useEditor.getState().project.artworks.slice(-2);
+    expect(copies[0].groupId).toBeTruthy();expect(copies[0].groupId).toBe(copies[1].groupId);expect(copies[0].groupId).not.toBe(group);
+    s.deleteSelected();expect(useEditor.getState().project.artworks).toHaveLength(5);
+    s.undo();expect(useEditor.getState().project.artworks).toHaveLength(7);
+    s.restoreScene(scene.id);s.loadProject(useEditor.getState().project);expect(useEditor.getState().selected).toHaveLength(2);s.select({type:'artwork',id:ids[0]});expect(useEditor.getState().selected).toHaveLength(2);
+    s.ungroupSelectedArtworks();s.select({type:'artwork',id:ids[0]});expect(useEditor.getState().selected).toHaveLength(1);
+    s.undo();s.select({type:'artwork',id:ids[1]});expect(useEditor.getState().selected).toHaveLength(2);
+  });
+});

@@ -1,3 +1,4 @@
+import {artworkGroupMembers,groupArtworks,ungroupArtworks,patchGroupedArtwork} from '../domain/artworkGroups'
 import { create } from 'zustand'
 import {
   addArtwork as addArtworkToProject,
@@ -79,6 +80,8 @@ interface EditorState {
   restoreDemoSpace():void
   addWall(): void
   drawWall(start:Point,end:Point):void
+  groupSelectedArtworks(): void
+  ungroupSelectedArtworks(): void
   groupSelectedWalls(): void
   ungroupSelectedWalls(): void
   duplicateSelected(): void
@@ -96,7 +99,7 @@ interface EditorState {
 const clone = <T,>(value: T): T => structuredClone(value)
 
 function firstSelection(project: Project): EntitySelection[] {
-  if (project.artworks[0]) return [{ type: 'artwork', id: project.artworks[0].id }]
+  if (project.artworks[0]) return artworkGroupMembers(project,project.artworks[0].id).map(a=>({type:'artwork',id:a.id}))
   if (project.walls[0]) return [{ type: 'wall', id: project.walls[0].id }]
   return []
 }
@@ -151,7 +154,7 @@ export const useEditor = create<EditorState>((set, get) => {
     future: [],
     hydrated: false,
     select: (selection, additive = false) => set((state) => {
-      const members=selection.type==='wall'?groupMembers(state.project,selection.id):[selection];
+      const members=selection.type==='wall'?groupMembers(state.project,selection.id):artworkGroupMembers(state.project,selection.id).map(a=>({type:'artwork' as const,id:a.id}));
       const matches=(item:EntitySelection)=>members.some(member=>member.type===item.type&&member.id===item.id);
       const selected = !additive ? members : members.every(member=>state.selected.some(item=>item.type===member.type&&item.id===member.id))
         ? state.selected.filter(item=>!matches(item)) : [...state.selected.filter(item=>!matches(item)),...members];
@@ -218,9 +221,9 @@ export const useEditor = create<EditorState>((set, get) => {
     beginArtworkDrag: (id,hit) => attempt(()=>{
       const project=get().project,artwork=project.artworks.find(item=>item.id===id);
       if(!artwork)throw new Error('작품을 찾을 수 없습니다.');
-      if(artwork.locked)throw new Error('잠긴 작품은 이동할 수 없습니다.');
+      if(artworkGroupMembers(project,id).some(a=>a.locked))throw new Error('잠긴 작품은 이동할 수 없습니다.');
       if(!Number.isFinite(hit.alongMm)||!Number.isFinite(hit.centerHeightMm))throw new Error('작품 시작점이 올바르지 않습니다.');
-      set({artworkGesture:{id,base:project,grab:{alongMm:artwork.alongMm-hit.alongMm,centerHeightMm:artwork.centerHeightMm-hit.centerHeightMm}},wallGesture:null,rotatingArtworkId:null,previewProject:null,selected:[{type:'artwork',id}],activeWallId:artwork.wallId,message:null});
+      set({artworkGesture:{id,base:project,grab:{alongMm:artwork.alongMm-hit.alongMm,centerHeightMm:artwork.centerHeightMm-hit.centerHeightMm}},wallGesture:null,rotatingArtworkId:null,previewProject:null,selected:artworkGroupMembers(project,id).map(a=>({type:'artwork',id:a.id})),activeWallId:artwork.wallId,message:null});
     }),
     updateArtworkDrag: (hit) => attempt(()=>{
       const gesture=get().artworkGesture;if(!gesture)return;
@@ -229,7 +232,8 @@ export const useEditor = create<EditorState>((set, get) => {
       if(!Number.isFinite(hit.alongMm)||!Number.isFinite(hit.centerHeightMm))return;
       const wallSide=hit.wallSide??artwork.wallSide;
       const placement=draggedArtworkPlacement({...artwork,wallId:wall.id,wallSide},wall,gesture.grab,hit);
-      set({previewProject:updateArtwork(gesture.base,gesture.id,{...placement,wallId:wall.id,wallSide})});
+      set({previewProject:null});
+      set({previewProject:patchGroupedArtwork(gesture.base,gesture.id,{...placement,wallId:wall.id,wallSide},true)});
     }),
     finishArtworkDrag: (cancel=false) => {
       const gesture=get().artworkGesture,preview=get().previewProject;
@@ -257,7 +261,7 @@ export const useEditor = create<EditorState>((set, get) => {
       selected: validSelection(next, state.selected),
       activeWallId: validWall(next, state.activeWallId),
     })),
-    patchArtwork: (id, patch) => attempt(() => get().commit(updateArtwork(get().project, id, patch))),
+    patchArtwork: (id, patch) => attempt(() => get().commit(patchGroupedArtwork(get().project, id, patch))),
     patchWall: (id, patch) => attempt(() => get().commit(updateWall(get().project, id, patch))),
     moveWallEndpoint: (id,endpoint,point) => attempt(()=>get().commit(updateWallEndpoint(get().project,id,endpoint,point,get().linkedCorners))),
     renameProject: (name) => get().commit({ ...get().project, name }),
@@ -295,6 +299,17 @@ export const useEditor = create<EditorState>((set, get) => {
       get().commit(next);
       set({selected:[{type:'wall',id:created.id}],activeWallId:created.id});
     }),
+    groupSelectedArtworks: () => attempt(()=>{
+      const {project,selected}=get();
+      if(selected.some(item=>item.type!=='artwork'))throw new Error('작품만 선택해 주세요.');
+      const next=groupArtworks(project,selected.map(item=>item.id));
+      get().commit(next);
+      set({selected:artworkGroupMembers(next,selected[0].id).map(a=>({type:'artwork',id:a.id}))});
+    }),
+    ungroupSelectedArtworks: () => attempt(()=>{
+      const {project,selected}=get();
+      get().commit(ungroupArtworks(project,selected.filter(item=>item.type==='artwork').map(item=>item.id)));
+    }),
     groupSelectedWalls: () => attempt(()=>{
       const {project,selected}=get();
       if(selected.length<2||selected.some(item=>item.type!=='wall'))throw new Error('묶을 벽을 두 개 이상 선택해 주세요.');
@@ -323,6 +338,14 @@ export const useEditor = create<EditorState>((set, get) => {
           const source=next.walls.find(w=>w.id===selection.id),copyId=result.selection.id;
           const shift=Math.max(10,Math.min(next.planReference!.widthPx,next.planReference!.heightPx)*.025);
           if(source)next={...next,walls:next.walls.map(w=>w.id===copyId?{...w,start:{x:source.start.x,z:source.start.z+shift},end:{x:source.end.x,z:source.end.z+shift}}:w)};
+        }
+        if(selection.type==='artwork'){
+          const groupId=next.artworks.find(a=>a.id===selection.id)?.groupId;
+          if(groupId){
+            const key=`artwork:${groupId}`;
+            if(!copiedGroups.has(key))copiedGroups.set(key,crypto.randomUUID());
+            next={...next,artworks:next.artworks.map(a=>a.id===result.selection.id?{...a,groupId:copiedGroups.get(key)}:a)};
+          }
         }
         if(selection.type==='wall'){
           const groupId=next.walls.find(w=>w.id===selection.id)?.groupId;

@@ -1,4 +1,4 @@
-import type { Group } from 'three';
+import type { Group, Object3D } from 'three';
 import type { Wall } from '../domain/types';
 
 export function applyWallVisibility(walls: readonly Wall[], groups: ReadonlyMap<string, Group>, camera: { x: number; z: number }, cutaway: boolean): void {
@@ -11,4 +11,9 @@ export function applyWallVisibility(walls: readonly Wall[], groups: ReadonlyMap<
     const midZ = (wall.start.z + wall.end.z) / 2000;
     group.visible = wall.visible && (!cutaway || wall.role === 'partition' || -dz * (camera.x - midX) + dx * (camera.z - midZ) > 0);
   }
+}
+
+export function isObjectVisible(object:Object3D):boolean {
+  for(let node:Object3D|null=object;node;node=node.parent)if(!node.visible)return false;
+  return true;
 }

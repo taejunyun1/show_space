@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Group } from 'three';
 import type { Wall } from '../domain/types';
-import { applyWallVisibility } from './wallVisibility3d';
+import { applyWallVisibility, isObjectVisible } from './wallVisibility3d';
 
 function wall(id: string, overrides: Partial<Wall> = {}): Wall {
   return {
@@ -38,4 +38,11 @@ describe('applyWallVisibility', () => {
     applyWallVisibility([wall('a')], new Map([['a', group]]), { x: 0, z: -1 }, false);
     expect(group.visible).toBe(true);
   });
+});
+
+it('excludes a mesh inside a hidden cutaway group from pointer picking',()=>{
+  const group=new Group(),child=new Group();group.add(child);group.visible=false;
+  expect(isObjectVisible(child)).toBe(false);
+  group.visible=true;expect(isObjectVisible(child)).toBe(true);
+  child.visible=false;expect(isObjectVisible(child)).toBe(false);
 });
