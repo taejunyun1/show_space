@@ -13,6 +13,7 @@ export interface SavedDimension {
 }
 
 export interface Wall {
+  groupId?: string
   role?: 'boundary' | 'partition'
   id: string; name: string; start: Point; end: Point
   heightMm: number; thicknessMm: number; color: string

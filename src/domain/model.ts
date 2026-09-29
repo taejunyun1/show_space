@@ -29,6 +29,7 @@ function isPoint(value: unknown): value is Point {
 function samePoint(a: Point, b: Point) { return a.x === b.x && a.z === b.z }
 
 function validateWall(wall: Wall) {
+  if (wall.groupId !== undefined && (typeof wall.groupId !== 'string' || !wall.groupId.trim() || wall.groupId.length > 100)) throw new Error('벽 그룹이 올바르지 않습니다.')
   if (wall.role !== undefined && !['boundary','partition'].includes(wall.role)) throw new Error('벽 용도가 올바르지 않습니다.')
   if (!isPoint(wall.start) || !isPoint(wall.end)) throw new Error('벽 좌표는 유한한 숫자여야 합니다.')
   positive(wall.heightMm, '벽 높이')
@@ -185,7 +186,7 @@ export function duplicateSelection(project: Project, selection: EntitySelection)
   if (!source) throw new Error('복제할 벽을 찾을 수 없습니다.')
   if (project.walls.length >= wallLimit) throw new Error(`벽은 최대 ${wallLimit}개까지 만들 수 있습니다.`)
   const id = uniqueId('wall', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[])].map(item => item.id))
-  const copy = { ...source, id, name: `${source.name} 복사본`, start: { x: source.start.x, z: source.start.z + 400 }, end: { x: source.end.x, z: source.end.z + 400 }, locked: false }
+  const copy = { ...source, groupId: undefined, id, name: `${source.name} 복사본`, start: { x: source.start.x, z: source.start.z + 400 }, end: { x: source.end.x, z: source.end.z + 400 }, locked: false }
   return { project: { ...project, walls: [...project.walls, copy] }, selection: { type: 'wall', id } }
 }
 

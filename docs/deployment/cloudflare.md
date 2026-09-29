@@ -3,12 +3,14 @@
 - 계정: taejun.foto@gmail.com (Wrangler whoami로 확인)
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
-- 최신 배포일: 2026-09-28
-- 최신 버전: 7554628d-f98f-4bcd-9b54-736aa7d4031c
+- 최신 배포일: 2026-09-29
+- 최신 버전: 7c9abf25-d3e7-4728-b5f7-635d9f36f184
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
 재배포: `npm run deploy` (빌드 후 Wrangler 배포). 해당 계정 로그인이 필요하다. `gonggan-exhibition-shares` R2 버킷을 `SHARES`로 연결했다. 공개 URL에서 R2 원본 객체 주소를 직접 노출하지 않고 Worker가 활성 링크 상태를 확인한 뒤 이미지와 스냅샷을 반환한다.
+
+2026-09-29 벽 그룹 배포 검증: 자동 테스트 494개 통과·선택형 벤치마크 2개 제외, 빌드 통과(기존 3D 번들 크기 경고 유지). 로컬 브라우저에서 그룹 생성·재선택·새로고침 유지·해제·Undo를 확인했다. 공개 HTTPS에서 두 벽 선택 후 그룹 버튼이 활성화되고 오류 로그가 없음을 확인했다. 공개 초안은 수정하지 않았다. 그룹 이동·회전·복제·삭제·잠금·Scene·JSON 왕복은 자동 테스트로 검증했다.
 
 2026-09-28 구조 Scene 배포 검증: 자동 테스트 489개 통과·선택형 벤치마크 2개 제외, 빌드 통과. 독립 로컬 브라우저에서 4벽 A와 5벽 B Scene 저장·복원, 한 번의 Undo, 새로고침 후 복원을 확인했다. 공개 HTTPS에서 새 Scene 설명과 3D 작품 렌더가 열리고 콘솔 경고·오류가 없었다. 공개 주소의 편집 초안은 변경하지 않았다.
 

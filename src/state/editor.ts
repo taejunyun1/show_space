@@ -79,6 +79,8 @@ interface EditorState {
   restoreDemoSpace():void
   addWall(): void
   drawWall(start:Point,end:Point):void
+  groupSelectedWalls(): void
+  ungroupSelectedWalls(): void
   duplicateSelected(): void
   lockSelected(locked:boolean):void
   deleteSelected(): void
@@ -97,6 +99,11 @@ function firstSelection(project: Project): EntitySelection[] {
   if (project.artworks[0]) return [{ type: 'artwork', id: project.artworks[0].id }]
   if (project.walls[0]) return [{ type: 'wall', id: project.walls[0].id }]
   return []
+}
+
+function groupMembers(project:Project,id:string):EntitySelection[] {
+  const wall=project.walls.find(w=>w.id===id);
+  return project.walls.filter(w=>w.id===id || !!wall?.groupId && w.groupId===wall.groupId).map(w=>({type:'wall',id:w.id}));
 }
 
 function validSelection(project: Project, selected: EntitySelection[]) {
@@ -144,11 +151,10 @@ export const useEditor = create<EditorState>((set, get) => {
     future: [],
     hydrated: false,
     select: (selection, additive = false) => set((state) => {
-      const selected = additive
-        ? state.selected.some((item) => item.type === selection.type && item.id === selection.id)
-          ? state.selected.filter((item) => item.type !== selection.type || item.id !== selection.id)
-          : [...state.selected, selection]
-        : [selection]
+      const members=selection.type==='wall'?groupMembers(state.project,selection.id):[selection];
+      const matches=(item:EntitySelection)=>members.some(member=>member.type===item.type&&member.id===item.id);
+      const selected = !additive ? members : members.every(member=>state.selected.some(item=>item.type===member.type&&item.id===member.id))
+        ? state.selected.filter(item=>!matches(item)) : [...state.selected.filter(item=>!matches(item)),...members];
       const artwork = selection.type === 'artwork' ? state.project.artworks.find((item) => item.id === selection.id) : undefined
       return { selected, activeWallId: selection.type === 'wall' ? selection.id : (artwork?.wallId ?? state.activeWallId) }
     }),
@@ -184,7 +190,7 @@ export const useEditor = create<EditorState>((set, get) => {
       if(!wall)throw new Error('벽을 찾을 수 없습니다.');
       const selected=get().selected;
       const ids=selected.some(item=>item.type==='wall'&&item.id===id)
-        ? selected.filter(item=>item.type==='wall').map(item=>item.id) : [id];
+        ? [...new Set(selected.filter(item=>item.type==='wall').flatMap(item=>groupMembers(project,item.id).map(w=>w.id)))] : groupMembers(project,id).map(w=>w.id);
       if(project.walls.some(w=>ids.includes(w.id)&&w.locked))throw new Error('잠긴 벽은 이동하거나 회전할 수 없습니다.');
       if(!Number.isFinite(start.x)||!Number.isFinite(start.z))throw new Error('시작점이 올바르지 않습니다.');
       set({wallGesture:{id,ids,mode,start,base:project},artworkGesture:null,rotatingArtworkId:null,previewProject:null,selected:ids.map(id=>({type:'wall',id})),activeWallId:id});
@@ -289,17 +295,41 @@ export const useEditor = create<EditorState>((set, get) => {
       get().commit(next);
       set({selected:[{type:'wall',id:created.id}],activeWallId:created.id});
     }),
+    groupSelectedWalls: () => attempt(()=>{
+      const {project,selected}=get();
+      if(selected.length<2||selected.some(item=>item.type!=='wall'))throw new Error('묶을 벽을 두 개 이상 선택해 주세요.');
+      const ids=new Set(selected.flatMap(item=>groupMembers(project,item.id).map(w=>w.id)));
+      if(project.walls.some(w=>ids.has(w.id)&&w.locked))throw new Error('잠긴 벽은 그룹을 변경할 수 없습니다.');
+      const groupId=crypto.randomUUID();
+      get().commit({...project,walls:project.walls.map(w=>ids.has(w.id)?{...w,groupId}:w)});
+      set({selected:[...ids].map(id=>({type:'wall',id}))});
+    }),
+    ungroupSelectedWalls: () => attempt(()=>{
+      const {project,selected}=get();
+      const groups=new Set(project.walls.filter(w=>selected.some(item=>item.type==='wall'&&item.id===w.id)).map(w=>w.groupId).filter(Boolean));
+      if(!groups.size)return;
+      if(project.walls.some(w=>groups.has(w.groupId)&&w.locked))throw new Error('잠긴 벽은 그룹을 변경할 수 없습니다.');
+      get().commit({...project,walls:project.walls.map(w=>groups.has(w.groupId)?{...w,groupId:undefined}:w)});
+    }),
     duplicateSelected: () => attempt(() => {
       const selections=get().selected;
       if(!selections.length)throw new Error('복제할 항목을 선택해 주세요.');
       let next=get().project;
       const copied:EntitySelection[]=[];
+      const copiedGroups=new Map<string,string>();
       for(const selection of selections){
         const result=duplicateSelection(next,selection);next=result.project;
         if(selection.type==='wall'&&next.planDraft&&!next.planReference?.calibrated){
           const source=next.walls.find(w=>w.id===selection.id),copyId=result.selection.id;
           const shift=Math.max(10,Math.min(next.planReference!.widthPx,next.planReference!.heightPx)*.025);
           if(source)next={...next,walls:next.walls.map(w=>w.id===copyId?{...w,start:{x:source.start.x,z:source.start.z+shift},end:{x:source.end.x,z:source.end.z+shift}}:w)};
+        }
+        if(selection.type==='wall'){
+          const groupId=next.walls.find(w=>w.id===selection.id)?.groupId;
+          if(groupId){
+            if(!copiedGroups.has(groupId))copiedGroups.set(groupId,crypto.randomUUID());
+            next={...next,walls:next.walls.map(w=>w.id===result.selection.id?{...w,groupId:copiedGroups.get(groupId)}:w)};
+          }
         }
         copied.push(result.selection);
       }

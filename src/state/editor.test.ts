@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createDemoProject, updateArtwork } from '../domain/model'
+import { createDemoProject, parseProject, updateArtwork } from '../domain/model'
 import {deriveFloor} from '../domain/floor'
 import { hydrateEditor, startAutosave, useEditor } from './editor'
 
@@ -438,4 +438,48 @@ it('adds reviewed walls as one undoable action and restores them with redo', asy
 });
 it('restores opening attachments with undo and redo after a wall deletion',()=>{
  reset();const p=createDemoProject();p.artworks=[];p.openings=[{id:'opening-test',kind:'door',role:'partition',start:{wallId:p.walls[0].id,endpoint:'start'},end:{wallId:p.walls[1].id,endpoint:'end'},note:'history test'}];useEditor.getState().commit(p);useEditor.getState().select({type:'wall',id:p.walls[0].id});useEditor.getState().deleteSelected();expect(useEditor.getState().project.openings).toHaveLength(0);useEditor.getState().undo();expect(useEditor.getState().project.openings).toEqual(p.openings);useEditor.getState().redo();expect(useEditor.getState().project.openings).toHaveLength(0);
+});
+
+describe('persistent wall groups',()=>{
+  beforeEach(reset)
+  function group(){
+    const s=useEditor.getState();s.select({type:'wall',id:'wall-a'});s.select({type:'wall',id:'wall-b'},true);s.groupSelectedWalls();
+  }
+  it('selects and toggles the entire group, including direct drag from another selection',()=>{
+    group();const s=useEditor.getState();s.select({type:'wall',id:'wall-c'});s.select({type:'wall',id:'wall-a'},true);
+    expect(useEditor.getState().selected).toHaveLength(3);
+    s.select({type:'wall',id:'wall-b'},true);expect(useEditor.getState().selected.map(x=>x.id)).toEqual(['wall-c']);
+    s.setLinkedCorners(false);s.beginWallTransform('wall-a','move',{x:0,z:0});s.updateWallTransform({x:100,z:200});s.finishWallTransform();
+    expect(useEditor.getState().project.walls[1].start).toEqual({x:4100,z:-2800});
+    s.undo();expect(useEditor.getState().project.walls[1].start).toEqual({x:4000,z:-3000});
+  });
+  it('copies into an independent group and restores grouping through Scene and history',()=>{
+    group();const s=useEditor.getState(),original=s.project.walls[0].groupId;
+    s.saveScene('group');const scene=useEditor.getState().project.scenes.at(-1)!;
+    s.duplicateSelected();const copies=useEditor.getState().project.walls.slice(-2);
+    expect(copies[0].groupId).toBeTruthy();expect(copies[0].groupId).toBe(copies[1].groupId);expect(copies[0].groupId).not.toBe(original);
+    s.ungroupSelectedWalls();expect(useEditor.getState().project.walls.at(-1)?.groupId).toBeUndefined();
+    s.undo();expect(useEditor.getState().project.walls.at(-1)?.groupId).toBe(copies[0].groupId);
+    s.restoreScene(scene.id);s.select({type:'wall',id:'wall-a'});expect(useEditor.getState().selected).toHaveLength(2);
+  });
+  it('rotates a group rigidly and preserves it through JSON',()=>{
+    group();const s=useEditor.getState();s.setLinkedCorners(false);
+    s.beginWallTransform('wall-b','rotate',{x:1000,z:0});s.updateWallTransform({x:0,z:1000});s.finishWallTransform();
+    const restored=parseProject(JSON.parse(JSON.stringify(useEditor.getState().project)));
+    expect(restored.walls[0].end.x).toBeCloseTo(3000);expect(restored.walls[0].end.z).toBeCloseTo(4000);
+    expect(restored.walls[0].groupId).toBe(restored.walls[1].groupId);
+    expect(()=>parseProject({...restored,walls:restored.walls.map((w,i)=>i? w : {...w,groupId:123})})).toThrow(/그룹/);
+    s.undo();expect(useEditor.getState().project.walls[0].end).toEqual({x:4000,z:-3000});
+  });
+  it('deletes a group atomically and restores its attached artworks on undo',()=>{
+    group();const s=useEditor.getState(),before=s.project;s.deleteSelected();
+    expect(useEditor.getState().project.walls.map(w=>w.id)).toEqual(['wall-c','wall-d']);
+    s.undo();expect(useEditor.getState().project).toEqual(before);
+    s.select({type:'wall',id:'wall-a'});s.patchWall('wall-b',{locked:true});const locked=useEditor.getState().project;
+    s.deleteSelected();expect(useEditor.getState().project).toEqual(locked);
+  });
+  it('rejects locked group changes without a history entry',()=>{
+    group();const s=useEditor.getState();s.patchWall('wall-a',{locked:true});const count=useEditor.getState().past.length;
+    s.ungroupSelectedWalls();expect(useEditor.getState().message).toMatch(/잠긴/);expect(useEditor.getState().past).toHaveLength(count);
+  });
 });
