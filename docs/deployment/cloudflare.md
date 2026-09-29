@@ -4,7 +4,7 @@
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
 - 최신 배포일: 2026-09-30
-- 최신 버전: 79ac2b99-f146-4d48-bccb-97fa0081cefa
+- 최신 버전: 008eb1c0-846b-4457-ba65-5a2a9b51ac14
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
@@ -45,3 +45,5 @@
 ## 소스 관리
 
 GitHub: https://github.com/taejunyun1/show_space · 기본 브랜치 main. Cloudflare 배포는 현재 로컬 `npm run deploy`로 실행한다. GitHub push만으로 자동 배포되도록 연결한 상태는 아니다.
+
+2026-09-30 줄자 보조 배포: 직선거리·수평거리·높이차 및 패널 mm/cm/m 전환. 507개 테스트 통과, 선택 벤치마크 2개 제외, 빌드 통과. 로컬 측정·단위 전환·저장 및 공개 HTTPS 패널 표시·콘솔 오류 없음 확인. 버전 `008eb1c0-846b-4457-ba65-5a2a9b51ac14`.

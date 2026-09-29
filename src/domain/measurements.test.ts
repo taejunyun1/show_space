@@ -1,6 +1,6 @@
 import {expect,it} from 'vitest';
 import {createDemoProject,parseProject} from './model';
-import {addMeasurement,fixedAnchor,measureDistance,resolveMeasurement,wallAnchor} from './measurements';
+import {addMeasurement,formatMeasurement,measurementComponents,fixedAnchor,measureDistance,resolveMeasurement,wallAnchor} from './measurements';
 
 it('measures a known 3-4-5 triangle in model millimetres',()=>{
  expect(measureDistance({x:0,y:0,z:0},{x:3000,y:4000,z:0})).toBe(5000);
@@ -32,4 +32,19 @@ it('rejects malformed persisted measurement coordinates',()=>{
  const next=addMeasurement(project,'plan',fixedAnchor({x:0,y:0,z:0}),fixedAnchor({x:1000,y:0,z:0}));
  next.dimensions![0].start.fallback.x=Number.NaN;
  expect(()=>parseProject(next)).toThrow(/치수/);
+});
+
+it('separates floor distance and height difference independently of endpoint order',()=>{
+ const a={x:0,y:1000,z:0},b={x:3000,y:13000,z:4000};
+ expect(measurementComponents(a,b)).toEqual({horizontalMm:5000,verticalMm:12000});
+ expect(measurementComponents(b,a)).toEqual(measurementComponents(a,b));
+ expect(measureDistance(a,b)).toBe(13000);
+});
+
+it('formats physical units with millimetre precision and leaves pixels unscaled',()=>{
+ expect(formatMeasurement(1234,'mm')).toBe('1,234 mm');
+ expect(formatMeasurement(1234,'cm')).toBe('123.4 cm');
+ expect(formatMeasurement(1234,'m')).toBe('1.234 m');
+ expect(formatMeasurement(1234.4,'px')).toBe('1,234 px');
+ expect(formatMeasurement(0,'m')).toBe('0 m');
 });

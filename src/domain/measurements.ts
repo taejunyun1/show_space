@@ -29,9 +29,19 @@ export function measureDistance(a:WorldPoint,b:WorldPoint):number{
  return Math.hypot(b.x-a.x,b.y-a.y,b.z-a.z);
 }
 
+export type MeasurementUnit='mm'|'cm'|'m'|'px';
+export function formatMeasurement(value:number,unit:MeasurementUnit):string{
+ const divisor=unit==='m'?1000:unit==='cm'?10:1;
+ const digits=unit==='m'?3:unit==='cm'?1:0;
+ return `${(Math.round(value)/divisor).toLocaleString('ko-KR',{maximumFractionDigits:digits})} ${unit}`;
+}
+export function measurementComponents(a:WorldPoint,b:WorldPoint){
+ return {horizontalMm:Math.hypot(b.x-a.x,b.z-a.z),verticalMm:Math.abs(b.y-a.y)};
+}
+
 export function resolveMeasurement(project:Project,dimension:SavedDimension){
  const start=resolveAnchor(project,dimension.start),end=resolveAnchor(project,dimension.end);
- return {start:start.point,end:end.point,distanceMm:measureDistance(start.point,end.point),detached:start.detached||end.detached};
+ return {start:start.point,end:end.point,distanceMm:measureDistance(start.point,end.point),...measurementComponents(start.point,end.point),detached:start.detached||end.detached};
 }
 
 export function addMeasurement(project:Project,view:SavedDimension['view'],start:MeasurementAnchor,end:MeasurementAnchor,elevationWallId?:string):Project{
