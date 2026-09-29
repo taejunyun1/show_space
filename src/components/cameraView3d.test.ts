@@ -1,7 +1,7 @@
 import {createDemoProject,parseProject} from '../domain/model';
 import { expect, it } from 'vitest';
 import { OrthographicCamera, PerspectiveCamera, Vector3 } from 'three';
-import { createCameraViewGetter, createEyeLevelView } from './cameraView3d';
+import { createCameraViewGetter, createEyeLevelView, createStandardView, rotateCameraView } from './cameraView3d';
 
 it('reads the live camera and orbit target each time a view is requested', () => {
   const camera = new OrthographicCamera();
@@ -26,4 +26,20 @@ it('places an eye-level camera facing the selected wall with a finite direction'
   project.scenes=[{id:'eye',name:'eye',artworks:[],wallVisibility:{},cameraView:view}];
   expect(parseProject(JSON.parse(JSON.stringify(project))).scenes[0].cameraView).toEqual(view);
   expect(()=>parseProject({...project,scenes:[{...project.scenes[0],cameraView:{...view,fov:180}}]})).toThrow();
+});
+
+it('creates fitted front, side and bird views without changing geometry',()=>{
+  const p=createDemoProject(),before=JSON.stringify(p);
+  const front=createStandardView(p,'front',{width:800,height:600});
+  expect(front.position[0]).toBe(front.target[0]);expect(front.position[1]).toBe(front.target[1]);expect(front.position[2]).toBeGreaterThan(front.target[2]);
+  const left=createStandardView(p,'left',{width:800,height:600}),right=createStandardView(p,'right',{width:800,height:600});
+  expect(left.position[0]).toBeLessThan(left.target[0]);expect(right.position[0]).toBeGreaterThan(right.target[0]);
+  expect(createStandardView(p,'bird',{width:800,height:600}).position[1]).toBeGreaterThan(front.position[1]);
+  expect(front.zoom).toBeGreaterThan(0);expect(JSON.stringify(p)).toBe(before);
+});
+it('rotates around the current target by 15 degrees and reverses exactly',()=>{
+  const view={position:[0,4,10] as [number,number,number],target:[0,1,0] as [number,number,number],zoom:42};
+  const rotated=rotateCameraView(view,15),back=rotateCameraView(rotated,-15);
+  expect(rotated.position[0]).toBeCloseTo(10*Math.sin(Math.PI/12));expect(rotated.position[1]).toBe(4);expect(rotated.zoom).toBe(42);
+  back.position.forEach((v,i)=>expect(v).toBeCloseTo(view.position[i]));expect(rotated.target).toEqual(view.target);
 });

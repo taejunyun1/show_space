@@ -3,12 +3,14 @@
 - 계정: taejun.foto@gmail.com (Wrangler whoami로 확인)
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
-- 최신 배포일: 2026-09-29
-- 최신 버전: b16cd5fc-373f-40a1-a8c5-c15d50fa6c3f
+- 최신 배포일: 2026-09-30
+- 최신 버전: 79ac2b99-f146-4d48-bccb-97fa0081cefa
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
 재배포: `npm run deploy` (빌드 후 Wrangler 배포). 해당 계정 로그인이 필요하다. `gonggan-exhibition-shares` R2 버킷을 `SHARES`로 연결했다. 공개 URL에서 R2 원본 객체 주소를 직접 노출하지 않고 Worker가 활성 링크 상태를 확인한 뒤 이미지와 스냅샷을 반환한다.
+
+2026-09-30 시점 UI 단순화 검증: 테스트 505개 통과·선택형 벤치마크 2개 제외, 빌드 통과. 로컬 브라우저에서 정면·좌측면·우측면·버드아이뷰와 15도 회전, 실제 PNG 파일 출력·선택 표시 제외 확인. 공개 HTTPS에서 새 시점 버튼과 정면 전환을 확인했고 오류 로그 없음. 공개 초안은 변경하지 않았다.
 
 2026-09-29 눈높이 투시 배포 검증: 테스트 503개 통과·선택형 벤치마크 2개 제외, 빌드 통과(기존 번들 경고 유지). 로컬에서 120/160cm 시점, 기본 시점 복귀, 재로딩 후 Scene 투시 복원, 1920×1519 PNG 저장 및 선택 테두리 제거 확인. 공개 HTTPS 180cm 전환과 오류 로그 없음을 확인했다. 공개 초안은 변경하지 않았다. 공유 카메라 투시 허용 목록은 자동 테스트로 확인했고 새 공유 링크의 수신자 검증은 실행하지 않았다.
 
