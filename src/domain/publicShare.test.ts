@@ -65,3 +65,9 @@ describe('public share snapshot',()=>{
     expect(()=>parsePublicShare({...snapshot,dimensions:[{...snapshot.dimensions?.[0],elevationWallId:'absent-wall'}]})).toThrow();
   });
 });
+
+it('preserves only validated perspective camera fields in public snapshots',()=>{
+  const result=createPublicShare(createDemoProject(),{includeDimensions:false,camera:{projection:'perspective',fov:50,position:[0,1.6,0],target:[0,1.6,-3],zoom:1}});
+  expect(parsePublicShare(result.snapshot).camera?.projection).toBe('perspective');
+  expect(()=>parsePublicShare({...result.snapshot,camera:{...result.snapshot.camera,fov:180}})).toThrow();
+});

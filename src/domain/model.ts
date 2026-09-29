@@ -371,6 +371,8 @@ export function parseProject(input: unknown): Project {
     }
     if(scene.cameraView!==undefined){
       const camera=object(scene.cameraView,'장면 시점')
+      if(camera.projection!==undefined&&!['orthographic','perspective'].includes(String(camera.projection)))throw new Error('장면 투영 방식이 올바르지 않습니다.')
+      if(camera.fov!==undefined&&(!Number.isFinite(camera.fov)||Number(camera.fov)<20||Number(camera.fov)>100))throw new Error('장면 화각이 올바르지 않습니다.')
       for(const key of ['position','target'] as const){
         const point=camera[key]
         if(!Array.isArray(point)||point.length!==3||point.some(value=>!Number.isFinite(value)))throw new Error('장면 시점 좌표가 올바르지 않습니다.')

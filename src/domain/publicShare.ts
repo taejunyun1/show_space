@@ -2,7 +2,7 @@ import {installationZones} from './installationZones';
 import {resolveMeasurement} from './measurements';
 import {openingSegments} from './openings';
 import {artPanel} from '../lib/art';
-import type {Point,Project,WorldPoint} from './types';
+import type {Point,Project,WorldPoint,CameraView} from './types';
 
 export interface PublicShareSnapshot {
   schemaVersion:1;
@@ -14,7 +14,7 @@ export interface PublicShareSnapshot {
   openings:Array<{id:string;kind:'door'|'window'|'stair-access';start:Point;end:Point}>;
   zones:Array<{id:string;kind:'stairs';x:number;z:number;width:number;depth:number}>;
   dimensions?:Array<{id:string;view:'plan'|'elevation'|'3d';elevationWallId?:string;start:WorldPoint;end:WorldPoint;distanceMm:number}>;
-  camera?:{position:[number,number,number];target:[number,number,number];zoom:number};
+  camera?:CameraView;
 }
 
 export interface PublicShareOptions {
@@ -61,6 +61,6 @@ export function parsePublicShare(input:unknown):PublicShareSnapshot{
   const openings=list(raw.openings,100).map(value=>{const o=record(value);return {id:id(o.id),kind:oneOf(o.kind,['door','window','stair-access'] as const),start:point(o.start),end:point(o.end)};});
   const zones=list(raw.zones,50).map(value=>{const z=record(value);return {id:id(z.id),kind:oneOf(z.kind,['stairs'] as const),x:num(z.x),z:num(z.z),width:num(z.width,1),depth:num(z.depth,1)};});
   const dimensions=raw.dimensions===undefined?undefined:list(raw.dimensions,500).map(value=>{const d=record(value);const elevationWallId=d.elevationWallId===undefined?undefined:id(d.elevationWallId);if(elevationWallId&&!wallIds.has(elevationWallId))throw new Error('공유 치수선의 벽 연결이 올바르지 않습니다.');return {id:id(d.id),view:oneOf(d.view,['plan','elevation','3d'] as const),...(elevationWallId?{elevationWallId}:{}),start:world(d.start),end:world(d.end),distanceMm:num(d.distanceMm,0)};});
-  const camera=raw.camera===undefined?undefined:(()=>{const c=record(raw.camera);const vec=(value:unknown):[number,number,number]=>{if(!Array.isArray(value)||value.length!==3)throw new Error('공유 카메라가 올바르지 않습니다.');return [num(value[0],-1e5,1e5),num(value[1],-1e5,1e5),num(value[2],-1e5,1e5)];};return {position:vec(c.position),target:vec(c.target),zoom:num(c.zoom,0.001,10000)};})();
+  const camera=raw.camera===undefined?undefined:(()=>{const c=record(raw.camera);const vec=(value:unknown):[number,number,number]=>{if(!Array.isArray(value)||value.length!==3)throw new Error('공유 카메라가 올바르지 않습니다.');return [num(value[0],-1e5,1e5),num(value[1],-1e5,1e5),num(value[2],-1e5,1e5)];};if(c.projection!==undefined&&!['orthographic','perspective'].includes(String(c.projection)))throw new Error('공유 투영 방식이 올바르지 않습니다.');return {position:vec(c.position),target:vec(c.target),zoom:num(c.zoom,0.001,10000),...(c.projection==='perspective'?{projection:'perspective' as const,fov:num(c.fov??50,20,100)}:{})};})();
   return {schemaVersion:1,name:str(raw.name),venue:str(raw.venue),floorColor:color(raw.floorColor),walls,artworks,openings,zones,...(dimensions?{dimensions}:{}),...(camera?{camera}:{})};
 }

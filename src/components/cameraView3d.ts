@@ -1,5 +1,5 @@
 import type { Camera, Vector3 } from 'three';
-import type {CameraView} from '../domain/types';
+import type {CameraView,Project} from '../domain/types';
 
 export type CameraView3D=CameraView;
 
@@ -7,9 +7,24 @@ export function createCameraViewGetter(camera: Camera, getTarget: () => Vector3)
   return () => {
     const target = getTarget();
     return {
+      ...('isPerspectiveCamera' in camera&&camera.isPerspectiveCamera ? {projection:'perspective' as const,fov:Number('fov' in camera?camera.fov:50)} : {}),
       position: [camera.position.x, camera.position.y, camera.position.z],
       target: [target.x, target.y, target.z],
       zoom: 'zoom' in camera && typeof camera.zoom === 'number' ? camera.zoom : 1,
     };
   };
+}
+
+export function createEyeLevelView(project:Project,wallId:string,heightMm=1600):CameraView {
+  const wall=project.walls.find(w=>w.id===wallId)??project.walls[0];
+  const points=project.walls.flatMap(w=>[w.start,w.end]);
+  const x=(Math.min(...points.map(p=>p.x))+Math.max(...points.map(p=>p.x)))/2000;
+  const z=(Math.min(...points.map(p=>p.z))+Math.max(...points.map(p=>p.z)))/2000;
+  const target:[number,number,number]=[(wall.start.x+wall.end.x)/2000,heightMm/1000,(wall.start.z+wall.end.z)/2000];
+  const position:[number,number,number]=[x,heightMm/1000,z];
+  if(Math.hypot(x-target[0],z-target[2])<.1){
+    const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz)||1;
+    position[0]-=dz/length*2;position[2]+=dx/length*2;
+  }
+  return {projection:'perspective',fov:50,zoom:1,position,target};
 }

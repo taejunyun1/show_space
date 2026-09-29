@@ -71,3 +71,10 @@
 .floor-empty-state button{padding:5px 8px;border-radius:4px;background:#365cf5;color:#fff;font-size:10px}
 .floor-empty-state button:hover{background:#2449e0}
 @media(max-width:700px){.floor-empty-state{max-width:230px;font-size:9px;gap:6px}}
+
+.eye-level-controls { position:absolute;left:22px;top:86px;z-index:4;display:flex;align-items:center;gap:10px;font-size:11px;color:#546173; }
+.eye-level-controls .button { padding:7px 10px; }
+.eye-level-controls label { display:flex;align-items:center;gap:5px; }
+.eye-level-controls select { border:1px solid #d6dce5;border-radius:5px;padding:5px;background:white;color:#37475e; }
+.eye-level-controls span { background:#ffffffdc;padding:5px;border-radius:4px; }
+@media(max-width:900px){.eye-level-controls span{display:none;}}

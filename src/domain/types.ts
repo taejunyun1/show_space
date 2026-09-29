@@ -35,6 +35,7 @@ export interface Artwork {
 export type UnplacedArtwork = Omit<Artwork,'wallId'>
 
 export interface CameraView {
+  projection?:'orthographic'|'perspective';fov?:number
   position:[number,number,number];target:[number,number,number];zoom:number
 }
 
