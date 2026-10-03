@@ -1,5 +1,7 @@
+import {parseNoteDetails,type NoteDetails} from './notes';
 import type {Project,WorldPoint} from './types';
 export interface ExhibitionLight {
+ noteDetails?:NoteDetails
  id:string;name:string;kind:'spot'|'area';position:WorldPoint;target:WorldPoint;
  intensity:number;kelvin:number;beamDeg:number;penumbra:number;distanceMm:number;
  widthMm:number;heightMm:number;shadow:boolean;visible:boolean;locked:boolean;note:string;
@@ -16,7 +18,7 @@ function point(v:unknown):WorldPoint{const p=record(v);return {x:number(p.x,-1e6
 export function parseLight(v:unknown):ExhibitionLight{
  const p=record(v),id=text(p.id,100);if(!/^[a-zA-Z0-9_.:-]+$/.test(id)||!['spot','area'].includes(String(p.kind)))throw new Error('조명 ID/종류가 올바르지 않습니다.');
  const position=point(p.position),target=point(p.target);if(Math.hypot(position.x-target.x,position.y-target.y,position.z-target.z)<1)throw new Error('조명과 조준점을 서로 다르게 지정해주세요.');
- return {id,name:text(p.name,200),kind:p.kind as 'spot'|'area',position,target,intensity:number(p.intensity,0,100000),kelvin:number(p.kelvin,2700,6500),beamDeg:number(p.beamDeg,1,150),penumbra:number(p.penumbra,0,1),distanceMm:number(p.distanceMm,0,100000),widthMm:number(p.widthMm,1,20000),heightMm:number(p.heightMm,1,20000),shadow:bool(p.shadow),visible:bool(p.visible),locked:bool(p.locked),note:text(p.note,5000)};
+ return {id,name:text(p.name,200),kind:p.kind as 'spot'|'area',position,target,intensity:number(p.intensity,0,100000),kelvin:number(p.kelvin,2700,6500),beamDeg:number(p.beamDeg,1,150),penumbra:number(p.penumbra,0,1),distanceMm:number(p.distanceMm,0,100000),widthMm:number(p.widthMm,1,20000),heightMm:number(p.heightMm,1,20000),shadow:bool(p.shadow),visible:bool(p.visible),locked:bool(p.locked),note:text(p.note,20000),...(p.noteDetails!==undefined?{noteDetails:parseNoteDetails(p.noteDetails)}:{})};
 }
 export function parseLights(v:unknown,otherIds:Iterable<string>=[]){
  if(!Array.isArray(v)||v.length>MAX_LIGHTS)throw new Error(`조명은 최대 ${MAX_LIGHTS}개까지 만들 수 있습니다.`);

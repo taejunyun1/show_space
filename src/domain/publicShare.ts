@@ -12,11 +12,13 @@ import type {Point,Project,WorldPoint,CameraView,ModelArtwork,ReferenceModel} fr
 export type PublicSurfaceMaterial=Omit<SurfaceMaterial,'texture'>&{texture?:{imageId:string;widthMm:number;heightMm:number}};
 export type PublicModelArtwork=Pick<ModelArtwork,'id'|'name'|'artist'|'year'|'kind'|'widthMm'|'heightMm'|'depthMm'|'position'|'rotation'>&{modelId:string;sizeMm:[number,number,number];sourceOffsetM:[number,number,number]};
 export type PublicReferenceModel=Pick<ReferenceModel,'sizeMm'|'sourceOffsetM'|'positionMm'|'rotationDeg'|'scale'>&{modelId:string};
+export type PublicLight=Pick<ExhibitionLight,'id'|'name'|'kind'|'position'|'target'|'intensity'|'kelvin'|'beamDeg'|'penumbra'|'distanceMm'|'widthMm'|'heightMm'|'shadow'|'visible'>;
+function publicLight(l:ExhibitionLight):PublicLight{return {id:l.id,name:l.name,kind:l.kind,position:{...l.position},target:{...l.target},intensity:l.intensity,kelvin:l.kelvin,beamDeg:l.beamDeg,penumbra:l.penumbra,distanceMm:l.distanceMm,widthMm:l.widthMm,heightMm:l.heightMm,shadow:l.shadow,visible:l.visible};}
 export interface PublicShareSnapshot {
   referenceModel?:PublicReferenceModel;
   modelArtworks?:PublicModelArtwork[]
   outdoor?:OutdoorSettings
-  lights?:Array<Omit<ExhibitionLight,'locked'|'note'>>
+  lights?:PublicLight[]
   lighting?:LightingSettings
   importedFloor?:Point[][];
   schemaVersion:1;
@@ -51,7 +53,7 @@ export function createPublicShare(project:Project,options:PublicShareOptions){
   const uploads=artworks.map((art,index)=>({imageId:String(index),sourceUrl:art.imageUrl})),textureIds=new Map<string,string>();
   const material=(m:SurfaceMaterial):PublicSurfaceMaterial=>{const parsed=parseSurfaceMaterial(m),{texture,...finish}=parsed;if(!texture)return finish;let imageId=textureIds.get(texture.imageUrl);if(!imageId){imageId=String(uploads.length);textureIds.set(texture.imageUrl,imageId);uploads.push({imageId,sourceUrl:texture.imageUrl});}return {...finish,texture:{imageId,widthMm:texture.widthMm,heightMm:texture.heightMm}};};
   const snapshot:PublicShareSnapshot={
-    ...(referenceModel?{referenceModel}:{}),...(modelArtworks.length?{modelArtworks}:{}),schemaVersion:1,...(project.outdoor?{outdoor:parseOutdoor(project.outdoor)}:{}),name:project.name,venue:project.venue,...(project.lights!==undefined?{lights:project.lights.filter(l=>l.visible).map(({locked:_,note:__,...light})=>light)}:{}),...(project.lighting?{lighting:project.lighting}:{}),floorColor:project.floorColor,...(project.floorMaterial?{floorMaterial:material(project.floorMaterial)}:{}),...(project.importedFloor?{importedFloor:structuredClone(project.importedFloor)}:{}),
+    ...(referenceModel?{referenceModel}:{}),...(modelArtworks.length?{modelArtworks}:{}),schemaVersion:1,...(project.outdoor?{outdoor:parseOutdoor(project.outdoor)}:{}),name:project.name,venue:project.venue,...(project.lights!==undefined?{lights:project.lights.filter(l=>l.visible).map(publicLight)}:{}),...(project.lighting?{lighting:project.lighting}:{}),floorColor:project.floorColor,...(project.floorMaterial?{floorMaterial:material(project.floorMaterial)}:{}),...(project.importedFloor?{importedFloor:structuredClone(project.importedFloor)}:{}),
     walls:visibleWalls.map(wall=>({id:wall.id,name:wall.name,start:{...wall.start},end:{...wall.end},heightMm:wall.heightMm,thicknessMm:wall.thicknessMm,color:wall.color,...(wall.material?{material:material(wall.material)}:{}),...(wall.role?{role:wall.role}:{})})),
     artworks:artworks.map((art,index)=>({id:art.id,name:art.name,artist:art.artist,wallId:art.wallId,wallSide:art.wallSide??'front',widthMm:art.widthMm,heightMm:art.heightMm,depthMm:art.depthMm,alongMm:art.alongMm,centerHeightMm:art.centerHeightMm,...(art.rotationDeg===undefined?{}:{rotationDeg:art.rotationDeg}),frame:art.frame,...(art.material?{material:material(art.material)}:{}),imageId:String(index),...(artPanel(art.imageUrl)!==null?{spritePanel:artPanel(art.imageUrl)!}:{})})),
     openings:openingSegments({walls:project.walls,openings:(project.openings??[]).filter(opening=>[opening.start,opening.end].every(anchor=>!anchor.wallId||wallIds.has(anchor.wallId)))}).map(opening=>({id:opening.id,kind:opening.kind,start:{...opening.start},end:{...opening.end}})),
@@ -99,7 +101,7 @@ export function parsePublicShare(input:unknown):PublicShareSnapshot{
   const importedFloor=raw.importedFloor===undefined?undefined:list(raw.importedFloor,40).map(loop=>list(loop,1000).map(point));
   if(importedFloor)validateImportedFloor(importedFloor);
   const camera=raw.camera===undefined?undefined:(()=>{const c=record(raw.camera);const vec=(value:unknown):[number,number,number]=>{if(!Array.isArray(value)||value.length!==3)throw new Error('공유 카메라가 올바르지 않습니다.');return [num(value[0],-1e5,1e5),num(value[1],-1e5,1e5),num(value[2],-1e5,1e5)];};if(c.projection!==undefined&&!['orthographic','perspective'].includes(String(c.projection)))throw new Error('공유 투영 방식이 올바르지 않습니다.');return {position:vec(c.position),target:vec(c.target),zoom:num(c.zoom,0.001,10000),...(c.projection==='perspective'?{projection:'perspective' as const,fov:num(c.fov??50,20,100)}:{})};})();
-  const lights=raw.lights===undefined?undefined:parseLights(list(raw.lights,20).map(value=>({...record(value),locked:false,note:''})),entityIds).filter(l=>l.visible).map(({locked:_,note:__,...l})=>l);
+  const lights=raw.lights===undefined?undefined:parseLights(list(raw.lights,20).map(value=>({...record(value),locked:false,note:'',noteDetails:undefined})),entityIds).filter(l=>l.visible).map(publicLight);
   const lighting=raw.lighting===undefined?undefined:parseLighting(raw.lighting);
   return {...(referenceModel?{referenceModel}:{}),...(modelArtworks?{modelArtworks}:{}),...(raw.outdoor===undefined?{}:{outdoor:parseOutdoor(raw.outdoor)}),...(lights?{lights}:{}),...(lighting?{lighting}:{}),schemaVersion:1,name:str(raw.name),venue:str(raw.venue),floorColor:color(raw.floorColor),...(raw.floorMaterial===undefined?{}:{floorMaterial:publicMaterial(raw.floorMaterial)}),walls,artworks,openings,zones,...(importedFloor?{importedFloor}:{}),...(dimensions?{dimensions}:{}),...(camera?{camera}:{})};
 }

@@ -101,3 +101,19 @@
 .import-divider{border:0;border-top:1px solid var(--border);margin:20px 0}.dialog-footnote a{color:var(--blue);text-decoration:underline}
 
 .outdoor-field{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;font-size:12px}.outdoor-field input,.outdoor-field select{border:1px solid var(--border);border-radius:5px;padding:8px;min-width:0;width:220px;max-width:65%;color:var(--ink);background:white}.outdoor-status{font-size:12px;line-height:1.7;padding:12px;background:#f2f6fc;border-radius:6px;margin:14px 0}.outdoor-presets{display:flex;gap:6px;margin:18px 0 8px}.outdoor-presets button{border:1px solid var(--border);border-radius:5px;padding:8px 12px;font-size:12px}.outdoor-presets .active{background:#e9efff;border-color:var(--blue);color:var(--blue)}.outdoor-timebar{position:absolute;bottom:88px;left:20px;right:20px;z-index:2;padding:10px 14px;background:#ffffffed;border:1px solid var(--border);border-radius:9px;max-width:650px;margin:auto;box-shadow:0 3px 12px #15213410}.outdoor-timebar>div{display:flex;align-items:center;gap:12px;font-size:10px;color:#68788b;flex-wrap:wrap}.outdoor-timebar strong{font-size:15px;color:var(--ink)}.outdoor-timebar label{display:flex;align-items:center;gap:10px;font-size:9px;color:#7e8a9c;margin-top:7px}.outdoor-timebar input{flex:1;min-width:0;accent-color:var(--blue)}@media(max-width:900px){.outdoor-timebar{bottom:132px;left:12px;right:12px;padding:8px}.outdoor-timebar>div{gap:5px;font-size:8px}.outdoor-timebar strong{font-size:12px}}
+
+/* Private installation notes, shared by entity and project inspectors. */
+.note-editor {display:grid;gap:10px;margin:12px 0;min-width:0;}
+.note-editor textarea {width:100%;min-height:100px;resize:vertical;padding:10px;border:1px solid var(--border,#d8dfec);border-radius:6px;font:inherit;box-sizing:border-box;}
+.note-check-heading {display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-top:10px;}
+.note-check-heading span {color:#7a869b;}
+.note-check-row {display:flex;align-items:center;gap:7px;min-width:0;}
+.note-check-row input[type=text],.note-check-row input:not([type]) {min-width:0;width:100%;padding:8px;border:1px solid #d8dfec;border-radius:5px;font:inherit;font-size:12px;}
+.note-check-row input[type=checkbox] {flex:none;accent-color:#365cf5;}
+.note-check-row:has(input:checked) input:not([type=checkbox]) {text-decoration:line-through;color:#7a869b;}
+.note-images {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.note-images figure {margin:0;min-width:0;border:1px solid #d8dfec;border-radius:6px;overflow:hidden;background:#f4f6fa;}
+.note-images img {display:block;width:100%;height:100px;object-fit:contain;}
+.note-images figcaption {display:flex;align-items:center;justify-content:space-between;gap:4px;padding:3px 5px;font-size:10px;}
+.note-images figcaption span {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.notes-dialog {max-height:85vh;overflow-y:auto;}

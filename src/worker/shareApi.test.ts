@@ -133,3 +133,10 @@ it('allows 51 public model assets including the venue, then rejects another new 
  for(let i=0;i<50;i++)await bucket.put(`shares/${id}/models/${String(i).padStart(64,'0')}.glb`,new ArrayBuffer(4));expect((await call('PUT',`/api/shares/${id}/models/${hash}`,bytes,true)).status).toBe(204);expect((await call('PUT',`/api/shares/${id}/models/${hash}`,bytes,true)).status).toBe(204);
  const {artworkTestGlb}=await import('../lib/modelArtworkTestFixture'),other=publicModelBytes(artworkTestGlb()),otherHash=await publicModelHash(other);expect((await call('PUT',`/api/shares/${id}/models/${otherHash}`,other,true)).status).toBe(413);
 });
+
+it('discards note text, checklists and private photo fields at the server publication boundary',async()=>{
+ const {newLight}=await import('../domain/lighting'),{call,bucket}=setup(),p=createDemoProject();p.artworks=[];p.lights=[newLight(p,'spot')];const {snapshot}=createPublicShare(p,{includeDimensions:false}),created=await call('POST','/api/shares',undefined,true),{id}=await created.json() as {id:string};
+ const details={checklist:[{id:'secret-check',text:'PRIVATE_SERVER_CHECK',done:true}],images:[{id:'secret-photo',name:'PRIVATE_SERVER_PHOTO.png',imageUrl:'https://private.example/photo.png'}]};
+ const dirty={...snapshot,note:'PRIVATE_SERVER_NOTE',noteDetails:details,floorNoteDetails:details,walls:snapshot.walls.map(w=>({...w,noteDetails:details})),lights:snapshot.lights!.map(l=>({...l,note:'PRIVATE_SERVER_LIGHT',noteDetails:details}))};
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(dirty),true)).status).toBe(201);const response=await call('GET',`/api/public/${id}`);expect(response.status).toBe(200);expect(await response.text()).not.toMatch(/PRIVATE_SERVER|noteDetails|checklist|private.example/);expect([...bucket.data.keys()].some(k=>k.includes('/images/'))).toBe(false);
+});

@@ -49,7 +49,7 @@ export function inspectStaticArtworkGlb(bytes:ArrayBuffer){
  return doc;
 }
 /** Header-only dimension checks happen before the browser allocates decoded pixels. */
-function textureHeaderSize(b:Uint8Array,mime:string):[number,number]{
+export function textureHeaderSize(b:Uint8Array,mime:string):[number,number]{
  const view=new DataView(b.buffer,b.byteOffset,b.byteLength),str=(start:number,end:number)=>new TextDecoder().decode(b.subarray(start,end));
  if(mime==='image/png'&&b.length>=24&&[137,80,78,71,13,10,26,10].every((n,i)=>b[i]===n)&&str(12,16)==='IHDR')return [view.getUint32(16),view.getUint32(20)];
  if(mime==='image/jpeg'&&b.length>=4&&b[0]===255&&b[1]===216){let i=2;while(i+4<=b.length){if(b[i++]!==255)break;while(b[i]===255)i++;const marker=b[i++];if(marker===217||marker===218)break;const len=view.getUint16(i);if(len<2||i+len>b.length)break;if([192,193,194,195,197,198,199,201,202,203,205,206,207].includes(marker)&&len>=8)return [view.getUint16(i+5),view.getUint16(i+3)];i+=len;}}

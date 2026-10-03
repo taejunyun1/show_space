@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-04",
+  "scope": "Private installation notes with checklist and reference images",
+  "tests": {
+    "passed": 659,
+    "optionalBenchmarksSkipped": 2,
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "entry": "/assets/index-NsyYVh7n.js"
+  },
+  "browser": {
+    "origin": "http://localhost:8798",
+    "artworkTextChecklistPhoto": true,
+    "projectTextChecklistPhoto": true,
+    "floorText": true,
+    "lightTextChecklistPhoto": true,
+    "undoRedoPhoto": true,
+    "reloadPersistence": true,
+    "survivingEntityNotesAfterSceneRestore": true,
+    "decodedImageSize": [
+      320,
+      180
+    ],
+    "textMaxLength": 20000,
+    "editorConsoleWarningsErrors": [],
+    "revokedViewerCleared": true
+  },
+  "backup": {
+    "filename": "여백의 기록.gonggan (5).zip",
+    "bytes": 3556276,
+    "CRCAndAllAssetHashesMatch": true,
+    "deduplicatedNoteImagePointer": "gonggan-asset:assets/images/ad7cd69f006c2b298d2abd44103a88dff8c4c2316ccbcce745eb352ecf05502a.webp",
+    "assets": 9,
+    "projectNoteRestoredInArchive": true,
+    "artworkChecklistChecked": true,
+    "actualDownloadedPackageRestored": true,
+    "restoredNoteTargets": [
+      "project",
+      "artwork",
+      "light",
+      "floor"
+    ],
+    "restoredImagesEmbedded": true
+  },
+  "publicApi": {
+    "publicJsonPrivateFieldsAbsent": true,
+    "visibleLights": 1,
+    "visibleVenue": true,
+    "visibleImageArtworks": 0,
+    "snapshotSha256": "18d8998abe002420956c96fdcef1fd26f22d3be11bce270c8bf63753229b7cf8",
+    "modelShaMatches": true,
+    "testShareRevoked": true,
+    "snapshotAndModelStatusAfterRevocation": 410
+  },
+  "limitations": [
+    "No account or cloud project save yet",
+    "No new actual SketchUp or physical mobile/large-venue performance validation",
+    "Downloaded backup restored through actual package importer, not a second browser upload in this increment",
+    "A download-event observation timed out during generation; completed ZIP was subsequently obtained and checked",
+    "Vite SSR verification emitted a sandbox WebSocket EPERM diagnostic; package restoration completed with exit 0"
+  ],
+  "screenshots": [
+    "2026-10-04-notes-artwork.png",
+    "2026-10-04-notes-project.png",
+    "2026-10-04-notes-public.png"
+  ],
+  "deployment": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "665241d9-dbfa-49df-893f-3f37d0ef4644",
+    "verifiedBrowserEntry": "/assets/index-NsyYVh7n.js",
+    "projectNotesDialogVisible": true,
+    "consoleWarningsErrors": [],
+    "publicDraftUnchanged": true
+  }
+}

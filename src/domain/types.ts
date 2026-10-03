@@ -1,3 +1,4 @@
+import type {NoteDetails} from './notes';
 import type {OutdoorSettings} from './outdoor';
 import type {ExhibitionLight,LightingSettings} from './lighting';
 import type {PlanAnalysis} from '../lib/analyzePlan';
@@ -16,6 +17,7 @@ export interface SavedDimension {
 }
 
 export interface Wall {
+  noteDetails?:NoteDetails
   material?:SurfaceMaterial
   groupId?: string
   role?: 'boundary' | 'partition'
@@ -25,6 +27,7 @@ export interface Wall {
 }
 
 export interface Artwork {
+  noteDetails?:NoteDetails
   material?:SurfaceMaterial
   groupId?: string
   wallSide?: 'front' | 'back'
@@ -45,12 +48,15 @@ export interface CameraView {
 }
 
 export interface ReferenceModel {
+  noteDetails?:NoteDetails
+  note?:string
  name:string;dataUrl:string;visible:boolean;sizeMm:[number,number,number];sourceOffsetM:[number,number,number];positionMm:[number,number,number];rotationDeg:number;scale:number
 }
 
 /** A floor-space artwork. Physical dimensions change only through numeric fields.
  * Position is the source bounding box's bottom centre; rotation is XYZ Euler degrees. */
 export interface ModelArtwork {
+  noteDetails?:NoteDetails
  id:string;name:string;artist:string;year:string
  kind:'sculpture'|'installation'|'object'|'custom'
  model:Pick<ReferenceModel,'name'|'dataUrl'|'sizeMm'|'sourceOffsetM'>
@@ -92,6 +98,9 @@ export interface Opening {
 }
 
 export interface Project {
+  noteDetails?:NoteDetails
+  note?:string
+  floorNote?:string;floorNoteDetails?:NoteDetails
   modelArtworks?:ModelArtwork[]
   outdoor?:OutdoorSettings
   lights?:ExhibitionLight[]

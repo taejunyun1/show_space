@@ -1,3 +1,4 @@
+import {validateProjectNotes} from './notes';
 import {parseModelArtworks,parseModelArtwork,MAX_MODEL_ARTWORKS} from './modelArtworks';
 import {parseOutdoor} from './outdoor';
 import {parseLight,parseLights,parseLighting,translatedLight,MAX_LIGHTS} from './lighting';
@@ -315,6 +316,7 @@ function safeImage(value: unknown, label: string) {
 
 export function parseProject(input: unknown): Project {
   const raw = object(input, '프로젝트')
+  validateProjectNotes(raw)
   if(raw.floorMaterial!==undefined)parseSurfaceMaterial(raw.floorMaterial)
   if(raw.lighting!==undefined)parseLighting(raw.lighting)
   if(raw.outdoor!==undefined)parseOutdoor(raw.outdoor)

@@ -12,20 +12,22 @@ export interface PackageAsset {path:string;mime:string;bytes:number;sha256:strin
 interface Manifest {format:'gonggan-project-backup';version:1;project:{path:'project.json';bytes:number;sha256:string};assets:PackageAsset[]}
 type Slot={object:Record<string,unknown>;key:string;kind:'image'|'model'};
 
-/** Only schema-defined asset fields are rewritten. Notes and arbitrary strings stay intact. */
+/** Only schema-defined asset fields are rewritten. Text notes and arbitrary strings stay intact; note image fields are packed. */
 function assetSlots(input:unknown):Slot[]{
  const slots:Slot[]=[];
  const object=(value:unknown):Record<string,unknown>=>{if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('백업 프로젝트 구조가 올바르지 않습니다.');return value as Record<string,unknown>;};
  const list=(value:unknown):unknown[]=>{if(!Array.isArray(value))throw new Error('백업 작품/Scene 목록이 올바르지 않습니다.');return value;};
+ const note=(value:unknown)=>{const n=object(value);if(n.noteDetails!==undefined)for(const i of list(object(n.noteDetails).images))slots.push({object:object(i),key:'imageUrl',kind:'image'});};
+ const lights=(value:unknown)=>{if(value!==undefined)for(const l of list(value))note(l);};
  const material=(value:unknown)=>{if(value!==undefined){const m=object(value);if(m.texture!==undefined)slots.push({object:object(m.texture),key:'imageUrl',kind:'image'});}};
- const walls=(value:unknown)=>{for(const item of list(value))material(object(item).material);};
- const artworks=(value:unknown)=>{for(const item of list(value)){const a=object(item);slots.push({object:a,key:'imageUrl',kind:'image'});material(a.material);}};
- const model=(value:unknown)=>{if(value!==undefined)slots.push({object:object(value),key:'dataUrl',kind:'model'});};
- const models=(value:unknown)=>{if(value!==undefined)for(const a of list(value))model(object(a).model);};
- const project=object(input);models(project.modelArtworks);walls(project.walls);material(project.floorMaterial);artworks(project.artworks);if(project.unplacedArtworks!==undefined)artworks(project.unplacedArtworks);model(project.referenceModel);
+ const walls=(value:unknown)=>{for(const item of list(value)){const w=object(item);note(w);material(w.material);}};
+ const artworks=(value:unknown)=>{for(const item of list(value)){const a=object(item);note(a);slots.push({object:a,key:'imageUrl',kind:'image'});material(a.material);}};
+ const model=(value:unknown)=>{if(value!==undefined){note(value);slots.push({object:object(value),key:'dataUrl',kind:'model'});}};
+ const models=(value:unknown)=>{if(value!==undefined)for(const a of list(value)){note(a);model(object(a).model);}};
+ const project=object(input);note(project);note({noteDetails:project.floorNoteDetails});lights(project.lights);if(project.planDraft!==undefined)walls(object(project.planDraft).originalWalls);models(project.modelArtworks);walls(project.walls);material(project.floorMaterial);artworks(project.artworks);if(project.unplacedArtworks!==undefined)artworks(project.unplacedArtworks);model(project.referenceModel);
  if(project.planImageUrl!==undefined)slots.push({object:project,key:'planImageUrl',kind:'image'});
  if(project.sourcePlan!==undefined)slots.push({object:object(project.sourcePlan),key:'imageUrl',kind:'image'});
- for(const value of list(project.scenes)){const scene=object(value);artworks(scene.artworks);if(scene.structure!==undefined){const structure=object(scene.structure);models(structure.modelArtworks);walls(structure.walls);material(structure.floorMaterial);artworks(structure.unplacedArtworks);model(structure.referenceModel);}}
+ for(const value of list(project.scenes)){const scene=object(value);artworks(scene.artworks);if(scene.structure!==undefined){const structure=object(scene.structure);lights(structure.lights);models(structure.modelArtworks);walls(structure.walls);material(structure.floorMaterial);artworks(structure.unplacedArtworks);model(structure.referenceModel);}}
  const seen=new WeakMap<object,Set<string>>();return slots.filter(slot=>{let keys=seen.get(slot.object);if(!keys){keys=new Set();seen.set(slot.object,keys);}if(keys.has(slot.key))return false;keys.add(slot.key);return true;});
 }
 async function sha256(bytes:Uint8Array){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes.slice().buffer as ArrayBuffer))].map(n=>n.toString(16).padStart(2,'0')).join('');}

@@ -1,3 +1,4 @@
+import {updateNote,preserveCurrentNotes,validateProjectNotes,type NoteTarget,type NoteDetails} from '../domain/notes';
 import {addModelArtwork as addModelArtworkToProject,patchModelArtwork as updateModelArtwork,modelArtworkMembers,groupModelArtworks,transformModelArtworks,modelArtworkBounds} from '../domain/modelArtworks';
 import {parseOutdoor,DEFAULT_OUTDOOR,type OutdoorSettings} from '../domain/outdoor';
 import {newLight,patchLight as updateLight,parseLighting,translatedLight,CUSTOM_LIGHTING,DEFAULT_LIGHTING,type ExhibitionLight,type LightingSettings} from '../domain/lighting';
@@ -97,6 +98,7 @@ interface EditorState {
   patchArtwork(id: string, patch: Partial<Artwork>): void
   patchWall(id: string, patch: Partial<Wall>): void
   moveWallEndpoint(id:string,endpoint:'start'|'end',point:Point):void
+  patchNote(target:NoteTarget,patch:{text?:string;details?:NoteDetails}):void
   renameProject(name: string): void
   patchProject(patch: Pick<Partial<Project>, 'referenceModel' | 'floorColor' | 'floorMaterial' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan' | 'planDraft'>): void
   addArtwork(imageUrl?: string, name?: string): void
@@ -291,6 +293,7 @@ export const useEditor = create<EditorState>((set, get) => {
       activeWallId: validWall(next, state.activeWallId),
     })),
     addLight: kind=>attempt(()=>{const project=get().project;if(project.planDraft&&!project.planReference?.calibrated)throw new Error('도면 축척을 먼저 보정해주세요.');const light=newLight(project,kind);get().commit({...project,lights:[...(project.lights??[]),light],lighting:project.lighting??CUSTOM_LIGHTING});set({selected:[{type:'light',id:light.id}],view:'3d',activeTool:'select'});}),
+    patchNote:(target,patch)=>attempt(()=>{const next=updateNote(get().project,target,patch);validateProjectNotes(next);get().commit(next);}),
     patchLight:(id,patch)=>attempt(()=>get().commit(updateLight(get().project,id,patch))),
     patchOutdoor: outdoor=>attempt(()=>get().commit({...get().project,outdoor:parseOutdoor(outdoor)})),
     beginOutdoorTime:()=>{const s=get();if(s.project.outdoor?.mode!=='outdoor'||s.wallGesture||s.artworkGesture||s.lightGesture||s.modelArtworkGesture)return;set({outdoorGesture:{base:s.project},previewProject:null});},
@@ -455,13 +458,14 @@ export const useEditor = create<EditorState>((set, get) => {
       const project = get().project
       const scene = project.scenes.find((item) => item.id === id)
       if (!scene) throw new Error('장면을 찾을 수 없습니다.')
+      const commitScene=(next:Project)=>get().commit(preserveCurrentNotes(project,next));
       if(scene.structure){
-        get().commit(parseProject({...project,...(scene.structure.modelArtworks!==undefined?{modelArtworks:clone(scene.structure.modelArtworks)}:{}),...(scene.structure.outdoor?{outdoor:clone(scene.structure.outdoor)}:{}),...(scene.structure.lights!==undefined?{lights:clone(scene.structure.lights),lighting:clone(scene.structure.lighting)}:{}),...(scene.structure.floorColor!==undefined?{floorColor:scene.structure.floorColor,floorMaterial:scene.structure.floorMaterial?clone(scene.structure.floorMaterial):undefined}:{}),importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
+        commitScene(parseProject({...project,...(scene.structure.modelArtworks!==undefined?{modelArtworks:clone(scene.structure.modelArtworks)}:{}),...(scene.structure.outdoor?{outdoor:clone(scene.structure.outdoor)}:{}),...(scene.structure.lights!==undefined?{lights:clone(scene.structure.lights),lighting:clone(scene.structure.lighting)}:{}),...(scene.structure.floorColor!==undefined?{floorColor:scene.structure.floorColor,floorMaterial:scene.structure.floorMaterial?clone(scene.structure.floorMaterial):undefined}:{}),importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
       }else{
         const wallIds = new Set(project.walls.map((wall) => wall.id))
         const artworks = clone(scene.artworks.filter((artwork) => wallIds.has(artwork.wallId)))
         const walls = project.walls.map((wall) => ({ ...wall, visible: scene.wallVisibility[wall.id] ?? wall.visible }))
-        get().commit({ ...project, artworks, walls })
+        commitScene({ ...project, artworks, walls })
       }
     }),
     deleteScene: (id) => get().commit({ ...get().project, scenes: get().project.scenes.filter((scene) => scene.id !== id) }),

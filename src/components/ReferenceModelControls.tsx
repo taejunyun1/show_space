@@ -1,3 +1,4 @@
+import {NoteEditor} from './NoteEditor';
 import {useState} from 'react';
 import {downloadBlob} from '../lib/art';
 import {adoptModelSpace,sameModelGeometry} from '../domain/modelSpace';
@@ -27,6 +28,7 @@ export function ReferenceModelControls(){
  </details>
  <button className="button secondary" disabled={busy} onClick={()=>void convert()}>{busy?'벽 형상 분석 중…':'모델 벽으로 공간 만들기'}</button>
  <small>닫힌 직선 벽과 바닥을 추출해 작품 설치 공간으로 만듭니다. 기존 작업은 JSON으로 백업하고 원본 모델은 숨겨 보관합니다. 곡면·문이 뚫린 벽·설비 등은 자동 변환하지 않습니다. 모델 줄자 점은 고정 좌표입니다.</small>
+ <details><summary>전시장 모델 메모</summary><NoteEditor key={project.id+"-reference-note"} target={{type:"referenceModel"}} label="전시장 NOTE"/></details>
  <button className="button secondary" onClick={()=>patchProject({referenceModel:undefined})}>참고 모델 제거</button>
  </section>;
 }
