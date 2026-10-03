@@ -1,10 +1,10 @@
-import {X,FileJson,Image,Download,Box,LoaderCircle} from 'lucide-react';
+import {X,FileJson,FileText,Image,Download,Box,LoaderCircle} from 'lucide-react';
 import {useEffect,useRef,useState} from 'react';
 import {useEditor} from '../state/editor';
 import {downloadBlob} from '../lib/art';
 import {MODEL_MAX_BYTES} from '../lib/glbPayload';
 
-export function ExportDialog({onClose,onPng}:{onClose:()=>void;onPng:()=>void}){
+export function ExportDialog({onClose,onPng,onPdf}:{onClose:()=>void;onPng:()=>void;onPdf:()=>void}){
  const project=useEditor(s=>s.project),ref=useRef<HTMLDialogElement>(null);
  const [busy,setBusy]=useState(false),[progress,setProgress]=useState(''),[error,setError]=useState('');
  const exporting=useRef(false);
@@ -22,6 +22,7 @@ export function ExportDialog({onClose,onPng}:{onClose:()=>void;onPng:()=>void}){
   <div className="dialog-header"><div><h2>전시안 내보내기</h2><p>작업을 보관하거나 이미지·3D 모델로 남기세요.</p></div><button className="icon-button" disabled={busy} onClick={onClose} aria-label="닫기"><X size={18}/></button></div>
   <button className="export-option" disabled={busy} onClick={()=>{downloadBlob(new Blob([JSON.stringify(project,null,2)],{type:'application/json'}),`${project.name}.json`);onClose();}}><FileJson size={25}/><span><strong>프로젝트 파일</strong><small>작품 이미지, 치수, 메모, Scene을 함께 저장 · JSON</small></span><Download size={18}/></button>
   <button className="export-option" disabled={busy} onClick={()=>{onClose();onPng();}}><Image size={25}/><span><strong>현재 화면 이미지</strong><small>3D·평면도·벽면도를 옵션과 해상도로 저장 · PNG</small></span><Download size={18}/></button>
+  <button className="export-option" disabled={busy} onClick={()=>{onClose();onPdf();}}><FileText size={25}/><span><strong>전시안 PDF</strong><small>배치안 선택 · 3D·평면·벽면도 · 한글 · 치수 목록</small></span><Download size={18}/></button>
   <button className="export-option" disabled={busy} onClick={()=>void exportModel()}><Box size={25}/><span><strong>3D 모델</strong><small>표시 중인 벽·바닥·작품·원본 모델 · 실제 크기 · GLB</small><small>작품 이미지 포함 · 이미지 긴 변 최대 1,024px</small></span>{busy?<LoaderCircle className="spin" size={18}/>:<Download size={18}/>}</button>
   {busy&&<p className="dialog-footnote" role="status" aria-live="polite">{progress}</p>}
   {error&&<p className="warning" role="alert">{error}</p>}

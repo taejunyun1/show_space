@@ -1,0 +1,7 @@
+{
+  "source": "https://github.com/notofonts/noto-cjk/blob/main/Sans/Variable/TTF/Subset/NotoSansKR-VF.ttf",
+  "sourceSha256": "9e1d729e7e2b36f9ef439da102f8c134c10aabe46f1c843bf0aca5c043b86f76",
+  "outputSha256": "8fcc2cadf9083ee60267e3718683e74558477e700832c7b31721bb02b4648aef",
+  "derivation": "fonttools 4.66.1 varLib.instancer, wght=400, updateFontNames=True; static TrueType; no glyph subsetting",
+  "license": "OFL-NotoSansKR.txt"
+}

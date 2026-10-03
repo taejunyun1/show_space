@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-03",
+  "version": "dda7df52-ad24-4c12-8f1d-975faab5243e",
+  "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+  "publicPdf": {
+    "pages": 5,
+    "bytes": 6103732,
+    "sha256": "49cadebc061a80515857e020f16da80496c2114c3361fe1cecbb15c3dfedb012",
+    "koreanAndDimensionsExtracted": true,
+    "pageTitles": [
+      "3D 공간",
+      "평면도",
+      "벽 A · A면 벽면도",
+      "벽 B · A면 벽면도",
+      "치수 목록 · 표시 중인 벽과 배치 작품"
+    ]
+  },
+  "localPdf": {
+    "currentPages": 4,
+    "currentAndStructuralSceneAllFacesPages": 20
+  },
+  "tests": {
+    "passed": 546,
+    "skipped": 2
+  },
+  "build": "passed",
+  "browserWarnings": 0,
+  "browserErrors": 0,
+  "remaining": [
+    "raw SKP import",
+    "separate glTF and project asset package",
+    "large/complex model and long-label PDF readability",
+    "mobile device verification"
+  ]
+}

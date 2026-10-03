@@ -6,7 +6,7 @@ import {artPanel} from './art';
 import type {Project} from '../domain/types';
 
 /** Embed the displayed artwork panel; a missing image fails export instead of making a blank model. */
-async function artworkTexture(url:string):Promise<Texture>{
+export async function artworkTexture(url:string):Promise<Texture>{
  const image=await new Promise<HTMLImageElement>((resolve,reject)=>{const img=new Image();img.crossOrigin='anonymous';const fail=()=>{clearTimeout(timeout);img.onload=null;img.onerror=null;img.src='';reject(new Error('작품 이미지를 읽지 못했습니다. 잠시 후 다시 내보내세요.'));};const timeout=setTimeout(fail,15000);img.onload=()=>{clearTimeout(timeout);resolve(img);};img.onerror=fail;img.src=url;});
  const panel=artPanel(url),width=panel===null?image.naturalWidth:image.naturalWidth/5,height=image.naturalHeight;
  const scale=Math.min(1,1024/Math.max(width,height)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(width*scale));canvas.height=Math.max(1,Math.round(height*scale));
@@ -15,7 +15,7 @@ async function artworkTexture(url:string):Promise<Texture>{
  const texture=new CanvasTexture(canvas);texture.colorSpace=SRGBColorSpace;return texture;
 }
 
-export async function exportProjectGlb(project:Project,onProgress:(message:string)=>void=()=>{}):Promise<Blob>{
+export async function prepareExportScene(project:Project,onProgress:(message:string)=>void=()=>{}){
  if(project.planReference&&!project.planReference.calibrated)throw new Error('도면 축척을 설정한 뒤 3D 모델을 내보내세요.');
  const textures=new Map<string,Texture>(),cache=new Map<string,Texture>();let referenceScene:Object3D|undefined,scene:Object3D|undefined;
  try{
@@ -30,12 +30,19 @@ export async function exportProjectGlb(project:Project,onProgress:(message:strin
   }
   scene=buildExportScene(project,textures,referenceScene);
   if(!scene.children.length)throw new Error('내보낼 벽·바닥·작품 또는 3D 모델이 없습니다.');
+  return scene;
+ }catch(error){
+  if(scene)disposeExportScene(scene);else{if(referenceScene)disposeExportScene(referenceScene);new Set(textures.values()).forEach(texture=>texture.dispose());}
+  throw error;
+ }
+}
+export async function exportProjectGlb(project:Project,onProgress:(message:string)=>void=()=>{}):Promise<Blob>{
+ const scene=await prepareExportScene(project,onProgress);
+ try{
   onProgress('3D 모델 파일 만드는 중');
   const bytes=await new GLTFExporter().parseAsync(scene,{binary:true,onlyVisible:true,maxTextureSize:1024});
   if(!(bytes instanceof ArrayBuffer))throw new Error('3D 모델 파일을 만들지 못했습니다.');
   // A generic binary download also works in embedded WebKit browsers.
   return new Blob([bytes],{type:'application/octet-stream'});
- }finally{
-  if(scene)disposeExportScene(scene);else{if(referenceScene)disposeExportScene(referenceScene);new Set(textures.values()).forEach(texture=>texture.dispose());}
- }
+ }finally{disposeExportScene(scene);}
 }
