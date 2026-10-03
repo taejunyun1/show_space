@@ -1,4 +1,5 @@
 import type {Opening,OpeningAnchor,Project,Wall} from './types';
+import {floorFromLoops} from './importedFloor';
 import {deriveFloor} from './floor';
 export function openingAnchorPoint(anchor:OpeningAnchor,walls:Wall[]){
  return anchor.point??walls.find(w=>w.id===anchor.wallId)?.[anchor.endpoint!];
@@ -10,7 +11,8 @@ export function openingSegments(project:Pick<Project,'walls'|'openings'>){
   return start&&end?[{...opening,start,end}]:[];
  });
 }
-export function floorWithOpenings(project:Pick<Project,'walls'|'openings'>){
+export function floorWithOpenings(project:Pick<Project,'walls'|'openings'|'importedFloor'>){
+ if(project.importedFloor)return floorFromLoops(project.importedFloor);
  const virtual:Wall[]=openingSegments(project).map(o=>({id:`floor-opening:${o.id}`,name:'개구부 경계',start:o.start,end:o.end,role:o.role,heightMm:1,thicknessMm:1,color:'#000',note:'',visible:false,locked:true}));
  return deriveFloor([...project.walls,...virtual]);
 }

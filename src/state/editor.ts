@@ -1,3 +1,4 @@
+import {adoptModelSpace,sameModelGeometry} from '../domain/modelSpace'
 import {artworkGroupMembers,groupArtworks,ungroupArtworks,patchGroupedArtwork} from '../domain/artworkGroups'
 import { create } from 'zustand'
 import {
@@ -13,7 +14,7 @@ import {
   updateArtwork,
   updateWall,
 } from '../domain/model'
-import type { Artwork, CameraView, EntitySelection, MeasurementAnchor, Project, SavedDimension, Wall } from '../domain/types'
+import type { Artwork, CameraView, EntitySelection, MeasurementAnchor, Project, ReferenceModel, SavedDimension, Wall } from '../domain/types'
 import type {Point} from '../domain/types'
 import {snapWallTranslation,transformWalls} from '../domain/wallTransform'
 import {addWallBetween,updateWallEndpoint} from '../domain/wallEditing'
@@ -77,6 +78,7 @@ interface EditorState {
   patchProject(patch: Pick<Partial<Project>, 'referenceModel' | 'floorColor' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan' | 'planDraft'>): void
   addArtwork(imageUrl?: string, name?: string): void
   placeUnplaced(id:string):void
+  adoptModelWalls(walls:Wall[],expected:ReferenceModel,importedFloor?:Point[][]):void
   restoreDemoSpace():void
   addWall(): void
   drawWall(start:Point,end:Point):void
@@ -279,6 +281,10 @@ export const useEditor = create<EditorState>((set, get) => {
       get().commit(next)
       set({selected:[{type:'artwork',id}],activeWallId:wallId})
     }),
+    adoptModelWalls: (walls,expected,importedFloor) => attempt(()=>{
+      const project=get().project;if(!sameModelGeometry(project.referenceModel,expected))throw new Error('모델이 변경되어 벽 추출을 취소했습니다. 다시 시도해주세요.');
+      get().commit(adoptModelSpace(project,walls,importedFloor));set({view:'3d',activeTool:'select',selected:[{type:'wall',id:get().project.walls[0].id}],activeWallId:get().project.walls[0].id});
+    }),
     restoreDemoSpace: () => attempt(() => get().commit(restoreDemoBoundary(get().project))),
     addWall: () => attempt(() => {
       const current=get().project;
@@ -397,7 +403,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const used = new Set(project.scenes.map((scene) => scene.id))
       let index = 1
       while (used.has(`scene-${index}`)) index += 1
-      const structure={...(project.referenceModel?{referenceModel:clone(project.referenceModel)}:{}),walls:clone(project.walls),openings:clone(project.openings??[]),dimensions:clone(project.dimensions??[]),unplacedArtworks:clone(project.unplacedArtworks??[])}
+      const structure={...(project.importedFloor?{importedFloor:clone(project.importedFloor)}:{}),...(project.referenceModel?{referenceModel:clone(project.referenceModel)}:{}),walls:clone(project.walls),openings:clone(project.openings??[]),dimensions:clone(project.dimensions??[]),unplacedArtworks:clone(project.unplacedArtworks??[])}
       get().commit(parseProject({ ...project, scenes: [...project.scenes, { id: `scene-${index}`, name, artworks: clone(project.artworks), wallVisibility: Object.fromEntries(project.walls.map((wall) => [wall.id, wall.visible])),structure,...(cameraView?{cameraView:clone(cameraView)}:{}) }] }))
     }),
     restoreScene: (id) => attempt(() => {
@@ -405,7 +411,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const scene = project.scenes.find((item) => item.id === id)
       if (!scene) throw new Error('장면을 찾을 수 없습니다.')
       if(scene.structure){
-        get().commit(parseProject({...project,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
+        get().commit(parseProject({...project,importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
       }else{
         const wallIds = new Set(project.walls.map((wall) => wall.id))
         const artworks = clone(scene.artworks.filter((artwork) => wallIds.has(artwork.wallId)))

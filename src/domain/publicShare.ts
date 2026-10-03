@@ -1,3 +1,4 @@
+import {validateImportedFloor} from './importedFloor';
 import {installationZones} from './installationZones';
 import {resolveMeasurement} from './measurements';
 import {openingSegments} from './openings';
@@ -5,6 +6,7 @@ import {artPanel} from '../lib/art';
 import type {Point,Project,WorldPoint,CameraView} from './types';
 
 export interface PublicShareSnapshot {
+  importedFloor?:Point[][];
   schemaVersion:1;
   name:string;
   venue:string;
@@ -28,7 +30,7 @@ export function createPublicShare(project:Project,options:PublicShareOptions){
   const wallIds=new Set(visibleWalls.map(wall=>wall.id));
   const artworks=project.artworks.filter(art=>art.visible&&wallIds.has(art.wallId)&&!!art.imageUrl);
   const snapshot:PublicShareSnapshot={
-    schemaVersion:1,name:project.name,venue:project.venue,floorColor:project.floorColor,
+    schemaVersion:1,name:project.name,venue:project.venue,floorColor:project.floorColor,...(project.importedFloor?{importedFloor:structuredClone(project.importedFloor)}:{}),
     walls:visibleWalls.map(wall=>({id:wall.id,name:wall.name,start:{...wall.start},end:{...wall.end},heightMm:wall.heightMm,thicknessMm:wall.thicknessMm,color:wall.color,...(wall.role?{role:wall.role}:{})})),
     artworks:artworks.map((art,index)=>({id:art.id,name:art.name,artist:art.artist,wallId:art.wallId,wallSide:art.wallSide??'front',widthMm:art.widthMm,heightMm:art.heightMm,depthMm:art.depthMm,alongMm:art.alongMm,centerHeightMm:art.centerHeightMm,...(art.rotationDeg===undefined?{}:{rotationDeg:art.rotationDeg}),frame:art.frame,imageId:String(index),...(artPanel(art.imageUrl)!==null?{spritePanel:artPanel(art.imageUrl)!}:{})})),
     openings:openingSegments({walls:project.walls,openings:(project.openings??[]).filter(opening=>[opening.start,opening.end].every(anchor=>!anchor.wallId||wallIds.has(anchor.wallId)))}).map(opening=>({id:opening.id,kind:opening.kind,start:{...opening.start},end:{...opening.end}})),
@@ -61,6 +63,8 @@ export function parsePublicShare(input:unknown):PublicShareSnapshot{
   const openings=list(raw.openings,100).map(value=>{const o=record(value);return {id:id(o.id),kind:oneOf(o.kind,['door','window','stair-access'] as const),start:point(o.start),end:point(o.end)};});
   const zones=list(raw.zones,50).map(value=>{const z=record(value);return {id:id(z.id),kind:oneOf(z.kind,['stairs'] as const),x:num(z.x),z:num(z.z),width:num(z.width,1),depth:num(z.depth,1)};});
   const dimensions=raw.dimensions===undefined?undefined:list(raw.dimensions,500).map(value=>{const d=record(value);const elevationWallId=d.elevationWallId===undefined?undefined:id(d.elevationWallId);if(elevationWallId&&!wallIds.has(elevationWallId))throw new Error('공유 치수선의 벽 연결이 올바르지 않습니다.');return {id:id(d.id),view:oneOf(d.view,['plan','elevation','3d'] as const),...(elevationWallId?{elevationWallId}:{}),start:world(d.start),end:world(d.end),distanceMm:num(d.distanceMm,0)};});
+  const importedFloor=raw.importedFloor===undefined?undefined:list(raw.importedFloor,40).map(loop=>list(loop,1000).map(point));
+  if(importedFloor)validateImportedFloor(importedFloor);
   const camera=raw.camera===undefined?undefined:(()=>{const c=record(raw.camera);const vec=(value:unknown):[number,number,number]=>{if(!Array.isArray(value)||value.length!==3)throw new Error('공유 카메라가 올바르지 않습니다.');return [num(value[0],-1e5,1e5),num(value[1],-1e5,1e5),num(value[2],-1e5,1e5)];};if(c.projection!==undefined&&!['orthographic','perspective'].includes(String(c.projection)))throw new Error('공유 투영 방식이 올바르지 않습니다.');return {position:vec(c.position),target:vec(c.target),zoom:num(c.zoom,0.001,10000),...(c.projection==='perspective'?{projection:'perspective' as const,fov:num(c.fov??50,20,100)}:{})};})();
-  return {schemaVersion:1,name:str(raw.name),venue:str(raw.venue),floorColor:color(raw.floorColor),walls,artworks,openings,zones,...(dimensions?{dimensions}:{}),...(camera?{camera}:{})};
+  return {schemaVersion:1,name:str(raw.name),venue:str(raw.venue),floorColor:color(raw.floorColor),walls,artworks,openings,zones,...(importedFloor?{importedFloor}:{}),...(dimensions?{dimensions}:{}),...(camera?{camera}:{})};
 }

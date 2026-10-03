@@ -44,6 +44,7 @@ export interface ReferenceModel {
 }
 
 export interface SceneStructure {
+  importedFloor?:Point[][]
   referenceModel?:ReferenceModel
   walls:Wall[];openings:Opening[];dimensions:SavedDimension[];unplacedArtworks:UnplacedArtwork[]
 }
@@ -69,6 +70,7 @@ export interface Opening {
 }
 
 export interface Project {
+  importedFloor?:Point[][]
   referenceModel?:ReferenceModel
   /** The detector's untouched geometry; current walls can be edited independently. */
   planDraft?:{kind:'partial';sourceEvidenceHash:string;originalWalls:Wall[]};

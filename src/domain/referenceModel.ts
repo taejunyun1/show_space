@@ -10,7 +10,7 @@ export function validateReferenceModel(value:unknown):asserts value is Reference
  try{const bytes=Uint8Array.from(atob(m.dataUrl.slice(prefix.length)),c=>c.charCodeAt(0));inspectGlb(bytes.buffer);}catch(e){throw new Error(e instanceof Error?e.message:'3D 모델을 읽을 수 없습니다.');}
 }
 export function projectSpatialBounds(project:Project){
- const points=project.walls.flatMap(w=>[w.start,w.end]);
+ const points=[...project.walls.flatMap(w=>[w.start,w.end]),...(project.importedFloor?.flat()??[])];
  const m=project.referenceModel;
  let maxY=Math.max(...project.walls.map(w=>w.heightMm)),minY=0;
  if(m?.visible){

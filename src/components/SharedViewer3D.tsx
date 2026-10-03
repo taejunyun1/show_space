@@ -5,6 +5,7 @@ import type {ThreeEvent} from '@react-three/fiber';
 import {OrbitControls,Html,Line,useTexture} from '@react-three/drei';
 import {Path,Shape,SRGBColorSpace} from 'three';
 import type {Group} from 'three';
+import {floorFromLoops} from '../domain/importedFloor';
 import {deriveFloor} from '../domain/floor';
 import type {PublicShareSnapshot} from '../domain/publicShare';
 import type {Wall,WorldPoint} from '../domain/types';
@@ -23,7 +24,7 @@ function Floor({snapshot,measuring,onMeasure}:{snapshot:PublicShareSnapshot;meas
   const shapes=useMemo(()=>{
     const walls:Wall[]=snapshot.walls.map(wall=>({...wall,visible:true,locked:true,note:''}));
     const virtual:Wall[]=snapshot.openings.map(opening=>({id:`opening-${opening.id}`,name:'',start:opening.start,end:opening.end,heightMm:1,thicknessMm:1,color:'#000000',role:'boundary',visible:false,locked:true,note:''}));
-    return deriveFloor([...walls,...virtual]).surfaces.map(surface=>{
+    return (snapshot.importedFloor?floorFromLoops(snapshot.importedFloor):deriveFloor([...walls,...virtual])).surfaces.map(surface=>{
       const shape=new Shape();
       surface.outer.forEach((point,i)=>i===0?shape.moveTo(point.x/1000,-point.z/1000):shape.lineTo(point.x/1000,-point.z/1000));
       shape.closePath();
@@ -100,7 +101,7 @@ export default function SharedViewer3D({snapshot,shareId,selectedId,onSelect,res
   const cutawayWalls=useMemo<Wall[]>(()=>snapshot.walls.map(wall=>({...wall,visible:true,locked:true,note:''})),[snapshot.walls]);
   const frame=useMemo<NonNullable<PublicShareSnapshot['camera']>>(()=>{
     if(snapshot.camera)return snapshot.camera;
-    const points=snapshot.walls.flatMap(wall=>[wall.start,wall.end]);
+    const points=[...snapshot.walls.flatMap(wall=>[wall.start,wall.end]),...(snapshot.importedFloor?.flat()??[])];
     const minX=Math.min(...points.map(point=>point.x))/1000,maxX=Math.max(...points.map(point=>point.x))/1000;
     const minZ=Math.min(...points.map(point=>point.z))/1000,maxZ=Math.max(...points.map(point=>point.z))/1000;
     const span=Math.max(maxX-minX,maxZ-minZ,4),height=Math.max(...snapshot.walls.map(wall=>wall.heightMm))/1000;

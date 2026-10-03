@@ -1,3 +1,4 @@
+import {floorSvgPath} from '../domain/importedFloor';
 import {lazy,Suspense,useEffect,useMemo,useState} from 'react';
 import type {PointerEvent as ReactPointerEvent} from 'react';
 import {parsePublicShare,type PublicShareSnapshot} from '../domain/publicShare';
@@ -33,7 +34,7 @@ function SharedArtworkImage({url,x,y,width,height,spritePanel}:{url:string;x:num
 }
 
 function bounds(snapshot:PublicShareSnapshot){
-  const points=snapshot.walls.flatMap(wall=>[wall.start,wall.end]);
+  const points=[...snapshot.walls.flatMap(wall=>[wall.start,wall.end]),...(snapshot.importedFloor?.flat()??[])];
   const minX=Math.min(...points.map(point=>point.x)),maxX=Math.max(...points.map(point=>point.x));
   const minZ=Math.min(...points.map(point=>point.z)),maxZ=Math.max(...points.map(point=>point.z));
   const span=Math.max(maxX-minX,maxZ-minZ,1000),pad=span*.12;
@@ -50,6 +51,7 @@ export function SharedPlan({snapshot,selectedId,onSelect,measuring=false,measure
     event.preventDefault();onMeasurePoint({x:point.x,y:0,z:point.y});
   }
   return <div className="shared-drawing" aria-label="평면도"><svg className={active?'shared-measuring':''} onPointerDown={pick} viewBox={`${box.minX-box.pad} ${box.minZ-box.pad} ${box.maxX-box.minX+box.pad*2} ${box.maxZ-box.minZ+box.pad*2}`} role="img" aria-label="공유된 전시장 평면도">
+    {snapshot.importedFloor&&<path aria-label="모델 바닥" d={floorSvgPath(snapshot.importedFloor)} fill={snapshot.floorColor} fillRule="evenodd" pointerEvents="none"/>}
     {snapshot.zones.map(zone=><rect key={zone.id} x={zone.x} y={zone.z} width={zone.width} height={zone.depth} fill="#eec9c1" stroke="#bb6b58" strokeWidth={box.span/500} pointerEvents="none"/>)}
     {snapshot.walls.map(wall=><g key={wall.id} onClick={()=>{if(!active)onSelect({kind:'wall',id:wall.id});}} className="shared-selectable"><line x1={wall.start.x} y1={wall.start.z} x2={wall.end.x} y2={wall.end.z} stroke={selectedId===wall.id?'#365cf5':wall.color} strokeWidth={Math.max(wall.thicknessMm,box.span/250)} strokeLinecap="square"/><line x1={wall.start.x} y1={wall.start.z} x2={wall.end.x} y2={wall.end.z} stroke="transparent" strokeWidth={Math.max(wall.thicknessMm*3,box.span/65)}/>{snapshot.dimensions&&<text x={(wall.start.x+wall.end.x)/2} y={(wall.start.z+wall.end.z)/2-box.span/75} textAnchor="middle" fontSize={box.span/90} fill="#536176" stroke="#fff" strokeWidth={box.span/500} paintOrder="stroke">{formatMm(length(wall))}</text>}</g>)}
     {snapshot.openings.map(opening=><g key={opening.id} pointerEvents="none"><line x1={opening.start.x} y1={opening.start.z} x2={opening.end.x} y2={opening.end.z} stroke="#16816b" strokeWidth={box.span/330} strokeDasharray={`${box.span/100} ${box.span/140}`}/></g>)}

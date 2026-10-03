@@ -44,7 +44,7 @@ export function Outliner() {
         <label className="unplaced-target">배치할 벽<select aria-label="미배치 작품을 배치할 벽" value={activeWallId} onChange={e => setActiveWall(e.target.value)}>{project.walls.map(wall => <option key={wall.id} value={wall.id}>{wall.name}</option>)}</select></label>
         {unplaced.map(art => <div className="unplaced-row" key={art.id}>
           <span className="art-thumbnail" style={artStyle(art.imageUrl)} />
-          <span className="entity-text"><strong>{art.name}</strong><small>벽 삭제로 보관됨</small></span>
+          <span className="entity-text"><strong>{art.name}</strong><small>설치 벽 미지정</small></span>
           <button aria-label={`${art.name} ${project.walls.find(wall => wall.id === activeWallId)?.name ?? '선택한 벽'}에 배치`} onClick={() => placeUnplaced(art.id)}>배치</button>
         </div>)}
       </section>}
