@@ -1,3 +1,4 @@
+import {rotatedArtworkOuterSize} from './artworkPresentation';
 import { describe, expect, it } from 'vitest'
 import {
   addArtwork, addWall, artworkPosition, artworkWarnings, canRestoreDemoBoundary, createDemoProject, deleteSelection,
@@ -37,14 +38,14 @@ describe('exhibition domain model', () => {
     project = updateArtwork(project, 'artwork-2', { widthMm: 1200 })
     project = distributeArtworks(project, ['artwork-2', 'artwork-1'], 100)
     const [a, b] = project.artworks
-    expect((b.alongMm - b.widthMm / 2) - (a.alongMm + a.widthMm / 2)).toBe(100)
+    expect((b.alongMm - rotatedArtworkOuterSize(b).widthMm / 2) - (a.alongMm + rotatedArtworkOuterSize(a).widthMm / 2)).toBe(100)
   })
 
   it('spaces rotated artworks using their visible widths', () => {
     const project = updateArtwork(createDemoProject(), 'artwork-1', { rotationDeg: 90 })
     const distributed = distributeArtworks(project, ['artwork-1', 'artwork-2'], 100)
     const [first, second] = distributed.artworks
-    const gap = second.alongMm - rotatedArtworkSize(second).widthMm / 2 - first.alongMm - rotatedArtworkSize(first).widthMm / 2
+    const gap = second.alongMm - rotatedArtworkOuterSize(second).widthMm / 2 - first.alongMm - rotatedArtworkOuterSize(first).widthMm / 2
     expect(gap).toBe(100)
   })
 

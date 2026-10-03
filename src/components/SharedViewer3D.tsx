@@ -1,3 +1,5 @@
+import {artworkPresentation} from '../domain/artworkPresentation';
+import {ArtworkPresentationShell} from './ArtworkPresentationShell';
 import {PublicReferenceModel3D} from './PublicReferenceModel3D';
 import {PublicModelArtworks3D} from './PublicModelArtworks3D';
 import {projectSpatialBounds} from '../domain/referenceModel';
@@ -25,7 +27,6 @@ import {fitSharedCameraZoom} from './sharedCamera';
 type Selection={kind:'wall'|'artwork'|'modelArtwork'|'referenceModel';id:string};
 type Art=PublicShareSnapshot['artworks'][number];
 type PublicWall=PublicShareSnapshot['walls'][number];
-const frameColors={black:'#282827',natural:'#b9a383',white:'#f5f4ef',none:'#eee8dc'};
 
 function finish(m?:PublicSurfaceMaterial){return m?{...m,texture:undefined}:undefined;}
 function publicTexture(m:PublicSurfaceMaterial|undefined,shareId:string){return m?.texture?{imageUrl:`/api/public/${shareId}/images/${m.texture.imageId}`,widthMm:m.texture.widthMm,heightMm:m.texture.heightMm}:undefined;}
@@ -47,7 +48,7 @@ function Floor({snapshot,shareId,measuring,onMeasure}:{snapshot:PublicShareSnaps
   return <>{shapes.map((shape,index)=><mesh receiveShadow key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><FloorSurfaceGeometry shape={shape} flat/><SurfaceFinish color={snapshot.floorColor} material={finish(snapshot.floorMaterial)} texture={publicTexture(snapshot.floorMaterial,shareId)} side={2} roughness={.96}/></mesh>)}</>;
 }
 
-function ArtworkImage({url,art,width,height,depth}:{url:string;art:Art;width:number;height:number;depth:number}){
+function ArtworkImage({url,art,width,height}:{url:string;art:Art;width:number;height:number}){
   const source=useTexture(url);
   const texture=useMemo(()=>{
     const copy=source.clone();
@@ -57,28 +58,29 @@ function ArtworkImage({url,art,width,height,depth}:{url:string;art:Art;width:num
     return copy;
   },[source,art.spritePanel]);
   useEffect(()=>()=>texture.dispose(),[texture]);
-  return <mesh position={[0,0,depth/2+.002]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={finish(art.material)} map={texture} roughness={.9}/></mesh>;
+  return <mesh position={[0,0,artworkPresentation(art).imageZMm/1000]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={finish(art.material)} map={texture} roughness={.9}/></mesh>;
 }
 
-function ArtworkPlaceholder({width,height,depth,failed=false}:{width:number;height:number;depth:number;failed?:boolean}){
-  return <><mesh position={[0,0,depth/2+.002]}><planeGeometry args={[width,height]}/><meshStandardMaterial color="#ddd6cb" roughness={.9}/></mesh>{failed&&<Html center position={[0,0,depth/2+.015]} style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="shared-image-error">이미지를 불러올 수 없습니다</span></Html>}</>;
+function ArtworkPlaceholder({width,height,imageZ,failed=false}:{width:number;height:number;imageZ:number;failed?:boolean}){
+  return <><mesh position={[0,0,imageZ]}><planeGeometry args={[width,height]}/><meshStandardMaterial color="#ddd6cb" roughness={.9}/></mesh>{failed&&<Html center position={[0,0,imageZ+.015]} style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="shared-image-error">이미지를 불러올 수 없습니다</span></Html>}</>;
 }
 
-class ArtworkLoadBoundary extends Component<{children:ReactNode;width:number;height:number;depth:number},{failed:boolean}>{
+class ArtworkLoadBoundary extends Component<{children:ReactNode;width:number;height:number;imageZ:number},{failed:boolean}>{
   state={failed:false};
   static getDerivedStateFromError(){return {failed:true};}
-  render(){return this.state.failed?<ArtworkPlaceholder width={this.props.width} height={this.props.height} depth={this.props.depth} failed/>:this.props.children;}
+  render(){return this.state.failed?<ArtworkPlaceholder width={this.props.width} height={this.props.height} imageZ={this.props.imageZ} failed/>:this.props.children;}
 }
 
 function PublicArtwork({art,wall,shareId,selected,onSelect,measuring,onMeasure}:{art:Art;wall:PublicWall;shareId:string;selected:boolean;onSelect:(selection:Selection)=>void;measuring:boolean;onMeasure:MeasurePick}){
   const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz)||1;
   const side=art.wallSide==='back'?-1:1,nx=-dz/length*side,nz=dx/length*side;
-  const offset=wall.thicknessMm/2+art.depthMm/2+5;
+  const offset=wall.thicknessMm/2+artworkPresentation(art).depthMm/2+5;
   const x=(wall.start.x+dx/length*art.alongMm+nx*offset)/1000,z=(wall.start.z+dz/length*art.alongMm+nz*offset)/1000;
-  const width=art.widthMm/1000,height=art.heightMm/1000,depth=art.depthMm/1000;
+  const width=art.widthMm/1000,height=art.heightMm/1000,imageZ=artworkPresentation(art).imageZMm/1000;
   return <group position={[x,art.centerHeightMm/1000,z]} rotation={[0,Math.atan2(nx,nz),(art.rotationDeg??0)*Math.PI/180]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'artwork',id:art.id});}}>
-    <mesh castShadow receiveShadow><boxGeometry args={[width+(art.frame==='none'?0:.045),height+(art.frame==='none'?0:.045),depth]}/><meshStandardMaterial color={selected?'#365cf5':frameColors[art.frame]} roughness={.8}/></mesh>
-    <ArtworkLoadBoundary key={`${shareId}:${art.imageId}`} width={width} height={height} depth={depth}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} depth={depth}/>}><ArtworkImage url={`/api/public/${shareId}/images/${art.imageId}`} art={art} width={width} height={height} depth={depth}/></Suspense></ArtworkLoadBoundary>
+    <ArtworkPresentationShell artwork={art}/>
+    {selected&&<Line points={(()=>{const p=artworkPresentation(art),w=p.widthMm/2000+.02,h=p.heightMm/2000+.02,z=p.depthMm/2000+.005;return [[-w,-h,z],[w,-h,z],[w,h,z],[-w,h,z],[-w,-h,z]];})()} color="#365cf5" lineWidth={2}/>}
+    <ArtworkLoadBoundary key={`${shareId}:${art.imageId}`} width={width} height={height} imageZ={imageZ}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} imageZ={imageZ}/>}><ArtworkImage url={`/api/public/${shareId}/images/${art.imageId}`} art={art} width={width} height={height}/></Suspense></ArtworkLoadBoundary>
   </group>;
 }
 

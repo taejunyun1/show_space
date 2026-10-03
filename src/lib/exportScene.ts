@@ -1,3 +1,5 @@
+import {artworkPresentation} from '../domain/artworkPresentation';
+import {artworkFrameGeometry,artworkFrameMaterial,artworkCoverMaterial} from './artworkPresentationGeometry';
 import {placeModelArtwork,checkModelArtworkBounds} from './modelArtworkGeometry';
 import {createExportLighting,disposeLighting} from './sceneLighting';
 import {wallMetricUv,floorMetricUv,repeatingSurfaceTexture} from './surfaceUv';
@@ -7,7 +9,6 @@ import {artworkPosition,wallLength} from '../domain/model';
 import {floorWithOpenings} from '../domain/openings';
 import type {Project} from '../domain/types';
 
-const frameColors={black:'#282827',natural:'#b9a383',white:'#f5f4ef',none:'#eee8dc'};
 
 /** Build from stored geometry, independent of the editor camera, grid and selection. */
 export function buildExportScene(project:Project,textures=new Map<string,Texture>(),referenceScene?:Object3D,materialTextures=new Map<string,Texture>(),artworkModels=new Map<string,Object3D>()):Scene{
@@ -30,11 +31,15 @@ export function buildExportScene(project:Project,textures=new Map<string,Texture
  }
  for(const artwork of project.artworks){
   const wall=project.walls.find(w=>w.id===artwork.wallId);if(!artwork.visible||!wall?.visible||!artwork.imageUrl)continue;
-  const group=new Group(),pose=artworkPosition(artwork,wall),w=artwork.widthMm/1000,h=artwork.heightMm/1000,d=artwork.depthMm/1000,padding=artwork.frame==='none'?0:.045;
+  const group=new Group(),pose=artworkPosition(artwork,wall),w=artwork.widthMm/1000,h=artwork.heightMm/1000,p=artworkPresentation(artwork),d=p.depthMm/1000;
   group.name=`artwork-${artwork.id}`;group.position.set(pose.x/1000,pose.y/1000,pose.z/1000);group.rotation.set(0,pose.rotationY,(artwork.rotationDeg??0)*Math.PI/180);
   group.userData={gonggan:{kind:'artwork',id:artwork.id}};
-  const frame=new Mesh(new BoxGeometry(w+padding,h+padding,d),new MeshStandardMaterial({color:frameColors[artwork.frame],roughness:.75}));frame.name='frame';group.add(frame);
-  const image=new Mesh(new PlaneGeometry(w,h),Object.assign(createSurfaceMaterial('#ffffff',artwork.material,.9),{map:textures.get(artwork.id)??null}));image.name='image';image.position.z=d/2+.002;group.add(image);scene.add(group);
+  const frame=new Mesh(artworkFrameGeometry(artwork),artworkFrameMaterial(artwork));frame.name='frame';group.add(frame);
+  const iw=p.innerWidthMm/1000,ih=p.innerHeightMm/1000,back=Math.min(2,p.depthMm/2)/1000;
+  if(p.framed){const backing=new Mesh(new BoxGeometry(iw,ih,back),new MeshStandardMaterial({color:'#eee8dc',roughness:.95}));backing.name='backing';backing.position.z=-d/2+back/2;group.add(backing);}
+  if(p.framed&&p.settings.matWidthMm>0){const mat=new Mesh(new PlaneGeometry(iw,ih),new MeshStandardMaterial({color:p.settings.matColor,roughness:.95}));mat.name='mat';mat.position.z=(p.imageZMm-.05)/1000;group.add(mat);}
+  if(p.coverThicknessMm>0){const cover=new Mesh(new BoxGeometry(iw,ih,p.coverThicknessMm/1000),artworkCoverMaterial(artwork));cover.name='front-cover';cover.position.z=d/2-p.coverThicknessMm/2000;group.add(cover);}
+  const image=new Mesh(new PlaneGeometry(w,h),Object.assign(createSurfaceMaterial('#ffffff',artwork.material,.9),{map:textures.get(artwork.id)??null}));image.name='image';image.position.z=p.imageZMm/1000;group.add(image);scene.add(group);
  }
  for(const a of project.modelArtworks??[])if(a.visible){const source=artworkModels.get(a.id);if(!source)throw new Error('3D 작품 모델을 준비하지 못했습니다.');const root=placeModelArtwork(a,source);root.traverse(o=>{if(o!==root)o.userData={};if(o instanceof Mesh){o.castShadow=true;o.receiveShadow=true;for(const material of Array.isArray(o.material)?o.material:[o.material])material.userData={};}});scene.add(root);}
  if(project.referenceModel?.visible&&referenceScene){

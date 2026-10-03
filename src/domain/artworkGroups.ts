@@ -1,5 +1,6 @@
+import {rotatedArtworkOuterSize} from './artworkPresentation';
 import type {Artwork,Project} from './types';
-import {rotatedArtworkSize,updateArtwork,wallLength} from './model';
+import {updateArtwork,wallLength} from './model';
 
 export function artworkGroupMembers(project:Project,id:string):Artwork[]{
   const source=project.artworks.find(a=>a.id===id);
@@ -35,7 +36,7 @@ export function patchGroupedArtwork(project:Project,id:string,patch:Partial<Artw
   if(!wall)throw new Error('설치 벽을 찾을 수 없습니다.');
   let dx=(patch.alongMm??source.alongMm)-source.alongMm,dy=(patch.centerHeightMm??source.centerHeightMm)-source.centerHeightMm;
   if(constrain){
-    const bounds=members.map(a=>{const size=rotatedArtworkSize(a);return {left:a.alongMm-size.widthMm/2,right:a.alongMm+size.widthMm/2,bottom:a.centerHeightMm-size.heightMm/2,top:a.centerHeightMm+size.heightMm/2};});
+    const bounds=members.map(a=>{const size=rotatedArtworkOuterSize(a);return {left:a.alongMm-size.widthMm/2,right:a.alongMm+size.widthMm/2,bottom:a.centerHeightMm-size.heightMm/2,top:a.centerHeightMm+size.heightMm/2};});
     const minX=-Math.min(...bounds.map(b=>b.left)),maxX=wallLength(wall)-Math.max(...bounds.map(b=>b.right));
     const minY=-Math.min(...bounds.map(b=>b.bottom)),maxY=wall.heightMm-Math.max(...bounds.map(b=>b.top));
     if(minX>maxX||minY>maxY)throw new Error('작품 그룹이 이 벽보다 큽니다.');

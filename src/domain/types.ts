@@ -1,3 +1,4 @@
+import type {FrameSettings} from './artworkPresentation';
 import type {ArtworkInformation} from './artworkInformation';
 import type {NoteDetails} from './notes';
 import type {OutdoorSettings} from './outdoor';
@@ -28,6 +29,7 @@ export interface Wall {
 }
 
 export interface Artwork extends ArtworkInformation {
+  frameSettings?:FrameSettings
   noteDetails?:NoteDetails
   material?:SurfaceMaterial
   groupId?: string

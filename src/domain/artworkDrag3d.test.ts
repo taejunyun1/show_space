@@ -16,7 +16,7 @@ describe('3D artwork drag projection',()=>{
   it('keeps the grabbed point under the pointer and snaps within the wall',()=>{
     const grab={alongMm:-100,centerHeightMm:-20};
     expect(draggedArtworkPlacement(artwork,wall,grab,{alongMm:2616,centerHeightMm:1853})).toEqual({alongMm:2520,centerHeightMm:1830});
-    expect(draggedArtworkPlacement(artwork,wall,grab,{alongMm:99999,centerHeightMm:-200})).toEqual({alongMm:7550,centerHeightMm:600});
+    expect(draggedArtworkPlacement(artwork,wall,grab,{alongMm:99999,centerHeightMm:-200})).toEqual({alongMm:7527.5,centerHeightMm:622.5});
   });
 
   it('projects an artwork on the reverse face from the other side',()=>{
@@ -26,7 +26,7 @@ describe('3D artwork drag projection',()=>{
 
   it('keeps a rotated painting fully inside the wall while dragging',()=>{
     const rotated={...artwork,rotationDeg:90};
-    expect(draggedArtworkPlacement(rotated,wall,{alongMm:0,centerHeightMm:0},{alongMm:0,centerHeightMm:0})).toEqual({alongMm:600,centerHeightMm:450});
+    expect(draggedArtworkPlacement(rotated,wall,{alongMm:0,centerHeightMm:0},{alongMm:0,centerHeightMm:0})).toEqual({alongMm:622.5,centerHeightMm:472.5});
   });
 
   it('finds the wall and visible face under a 3D drag ray',()=>{

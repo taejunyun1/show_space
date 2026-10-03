@@ -1,0 +1,325 @@
+{
+  "date": "2026-10-04",
+  "scope": "액자·매트·앞면 보호 및 외곽 치수",
+  "tests": {
+    "passed": 726,
+    "optionalBenchmarksSkipped": 2,
+    "filesPassed": 133
+  },
+  "build": {
+    "typescript": true,
+    "vite": true,
+    "largeChunkWarning": true
+  },
+  "browser": {
+    "fixture": "synthetic venue, actual file chooser import",
+    "imageBodyMm": [
+      900,
+      1200,
+      30
+    ],
+    "frameSettings": {
+      "widthMm": 30,
+      "depthMm": 70,
+      "material": "metal",
+      "matWidthMm": 60,
+      "matColor": "#f5f4ef",
+      "cover": "glass"
+    },
+    "outerMm": [
+      1080,
+      1380,
+      70
+    ],
+    "bottomMm": 810,
+    "undoRedo": true,
+    "allFrameControlsLocked": true,
+    "frameOffBodyOnly": true,
+    "sceneRestore": true,
+    "reload": true,
+    "backupReupload": true,
+    "oneInformationEditorAfterProjectSwitch": true,
+    "sharedEditableInputs": 0,
+    "mobile": {
+      "viewportWidth": 390,
+      "scrollWidth": 390
+    },
+    "consoleWarningsErrors": []
+  },
+  "exports": {
+    "glb": {
+      "bytes": 753332,
+      "images": 1,
+      "cover": {
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0,
+          "roughnessFactor": 0.025
+        },
+        "extensions": {
+          "KHR_materials_transmission": {
+            "transmissionFactor": 1
+          },
+          "KHR_materials_volume": {
+            "thicknessFactor": 0.002,
+            "attenuationColor": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "nodes": [
+        "wall-wall-a",
+        "wall-wall-b",
+        "wall-wall-c",
+        "wall-wall-d",
+        "floor-1",
+        "artwork-artwork-1",
+        "frame",
+        "backing",
+        "mat",
+        "front-cover",
+        "image"
+      ]
+    },
+    "gltfEntries": [
+      "buffers/",
+      "buffers/buffer-1.bin",
+      "textures/",
+      "textures/image-1.png",
+      "scene.gltf",
+      "export-report.json",
+      "읽어주세요.txt"
+    ],
+    "gltf.zip": {
+      "bytes": 738835,
+      "images": 1,
+      "cover": {
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0,
+          "roughnessFactor": 0.025
+        },
+        "extensions": {
+          "KHR_materials_transmission": {
+            "transmissionFactor": 1
+          },
+          "KHR_materials_volume": {
+            "thicknessFactor": 0.002,
+            "attenuationColor": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "nodes": [
+        "wall-wall-a",
+        "wall-wall-b",
+        "wall-wall-c",
+        "wall-wall-d",
+        "floor-1",
+        "artwork-artwork-1",
+        "frame",
+        "backing",
+        "mat",
+        "front-cover",
+        "image"
+      ]
+    }
+  },
+  "actualGlbDimensions": {
+    "frame": {
+      "sizeMm": [
+        1080.0,
+        1380.0,
+        70.0
+      ],
+      "vertices": 96
+    },
+    "image": {
+      "sizeMm": [
+        900.0,
+        1200.0,
+        0.0
+      ],
+      "vertices": 4
+    },
+    "mat": {
+      "sizeMm": [
+        1020.0,
+        1320.0,
+        0.0
+      ],
+      "vertices": 4
+    },
+    "front-cover": {
+      "sizeMm": [
+        1020.0,
+        1320.0,
+        2.0
+      ],
+      "vertices": 24
+    }
+  },
+  "pdf": {
+    "pages": 4,
+    "bytes": 0,
+    "outerDimensions": true,
+    "bodyDimensions": true,
+    "privateNotesExcluded": true
+  },
+  "png": {
+    "width": 1920,
+    "height": 1519,
+    "bytes": 334917
+  },
+  "json": {
+    "bytes": 36210
+  },
+  "backup": {
+    "bytes": 1414245,
+    "entries": 7,
+    "CRC": true,
+    "appRestored": true
+  },
+  "sharing": {
+    "local": {
+      "origin": "http://localhost:8798",
+      "id": "f16612dbdb877a3f65233285688ddd5e5448ae35bea4886d",
+      "url": "http://localhost:8798/s/f16612dbdb877a3f65233285688ddd5e5448ae35bea4886d",
+      "dimensions": false,
+      "frameSettings": {
+        "widthMm": 30,
+        "depthMm": 70,
+        "matWidthMm": 60,
+        "material": "metal",
+        "cover": "glass",
+        "matColor": "#f5f4ef"
+      },
+      "sceneNames": [
+        "액자·매트 Scene",
+        "3D 정보 Scene"
+      ],
+      "assets": [
+        {
+          "path": "/api/public/f16612dbdb877a3f65233285688ddd5e5448ae35bea4886d/images/0",
+          "kind": "images",
+          "key": "0",
+          "status": 200,
+          "bytes": 2781018
+        },
+        {
+          "path": "/api/public/f16612dbdb877a3f65233285688ddd5e5448ae35bea4886d/models/d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+          "kind": "models",
+          "key": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+          "status": 200,
+          "bytes": 2116
+        },
+        {
+          "path": "/api/public/f16612dbdb877a3f65233285688ddd5e5448ae35bea4886d/models/2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+          "kind": "models",
+          "key": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+          "status": 200,
+          "bytes": 3312
+        }
+      ],
+      "privateExcluded": true,
+      "revoked": [
+        {
+          "path": "/api/public/f16612dbdb877a3f65233285688ddd5e5448ae35bea4886d",
+          "status": 410
+        },
+        {
+          "path": "/api/public/f16612dbdb877a3f65233285688ddd5e5448ae35bea4886d/images/0",
+          "status": 410
+        },
+        {
+          "path": "/api/public/f16612dbdb877a3f65233285688ddd5e5448ae35bea4886d/models/d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+          "status": 410
+        },
+        {
+          "path": "/api/public/f16612dbdb877a3f65233285688ddd5e5448ae35bea4886d/models/2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+          "status": 410
+        }
+      ]
+    },
+    "production": {
+      "origin": "https://gonggan-exhibition-preview.taejunyun.workers.dev",
+      "id": "82abb9330e7561bce5dad9d4d68ba477e56584bfbe3f2171",
+      "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/s/82abb9330e7561bce5dad9d4d68ba477e56584bfbe3f2171",
+      "dimensions": false,
+      "frameSettings": {
+        "widthMm": 30,
+        "depthMm": 70,
+        "matWidthMm": 60,
+        "material": "metal",
+        "cover": "glass",
+        "matColor": "#f5f4ef"
+      },
+      "sceneNames": [
+        "액자·매트 Scene",
+        "3D 정보 Scene"
+      ],
+      "assets": [
+        {
+          "path": "/api/public/82abb9330e7561bce5dad9d4d68ba477e56584bfbe3f2171/images/0",
+          "kind": "images",
+          "key": "0",
+          "status": 200,
+          "bytes": 2781018
+        },
+        {
+          "path": "/api/public/82abb9330e7561bce5dad9d4d68ba477e56584bfbe3f2171/models/d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+          "kind": "models",
+          "key": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+          "status": 200,
+          "bytes": 2116
+        },
+        {
+          "path": "/api/public/82abb9330e7561bce5dad9d4d68ba477e56584bfbe3f2171/models/2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+          "kind": "models",
+          "key": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+          "status": 200,
+          "bytes": 3312
+        }
+      ],
+      "privateExcluded": true,
+      "revoked": [
+        {
+          "path": "/api/public/82abb9330e7561bce5dad9d4d68ba477e56584bfbe3f2171",
+          "status": 410
+        },
+        {
+          "path": "/api/public/82abb9330e7561bce5dad9d4d68ba477e56584bfbe3f2171/images/0",
+          "status": 410
+        },
+        {
+          "path": "/api/public/82abb9330e7561bce5dad9d4d68ba477e56584bfbe3f2171/models/d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+          "status": 410
+        },
+        {
+          "path": "/api/public/82abb9330e7561bce5dad9d4d68ba477e56584bfbe3f2171/models/2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+          "status": 410
+        }
+      ]
+    }
+  },
+  "deployment": {
+    "version": "f4180d5d-12e7-4c04-ba2b-ae9d99c1b114",
+    "initialVerificationVersion": "cdc6662c-b229-413d-b77b-bd6aeee42ff8",
+    "entry": "/assets/index-CWDMlRR7.js",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "keepVars": true,
+    "existingProductionDraftUnchanged": true,
+    "selectedSharedOutlineCount": 1
+  },
+  "limitations": [
+    "not calibrated optical materials",
+    "SVG/PDF cover is an overlay, not reflection simulation",
+    "real authentication and multi-account/device gates pending",
+    "real user SketchUp, SKP conversion, large-model and hardware performance not verified",
+    "entire product goal remains active"
+  ]
+}

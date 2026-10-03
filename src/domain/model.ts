@@ -1,3 +1,4 @@
+import {parseFrameSettings,artworkPresentation,rotatedArtworkOuterSize} from './artworkPresentation';
 import {parseArtworkInformation} from './artworkInformation';
 import {validateProjectNotes} from './notes';
 import {parseModelArtworks,parseModelArtwork,MAX_MODEL_ARTWORKS} from './modelArtworks';
@@ -48,6 +49,7 @@ function validateWall(wall: Wall) {
 
 function validateArtwork(artwork: Artwork, wallIds: Set<string>) {
   parseArtworkInformation(artwork)
+  if(artwork.frameSettings!==undefined)parseFrameSettings(artwork.frameSettings)
   if(artwork.material!==undefined){parseSurfaceMaterial(artwork.material);if(artwork.material.texture)throw new Error('작품 표면은 원본 이미지를 사용하며 별도 반복 텍스처를 지원하지 않습니다.');}
   if (artwork.groupId !== undefined && (typeof artwork.groupId !== 'string' || !artwork.groupId.trim() || artwork.groupId.length > 100)) throw new Error('작품 그룹이 올바르지 않습니다.')
   if (artwork.wallSide !== undefined && !['front','back'].includes(artwork.wallSide)) throw new Error('설치 면이 올바르지 않습니다.')
@@ -140,7 +142,7 @@ export function artworkPosition(artwork: Artwork, wall: Wall) {
   const side = artwork.wallSide === 'back' ? -1 : 1
   const nx = -dz * side
   const nz = dx * side
-  const offset = wall.thicknessMm / 2 + artwork.depthMm / 2 + 5
+  const offset = wall.thicknessMm / 2 + artworkPresentation(artwork).depthMm / 2 + 5
   return { x: wall.start.x + dx * artwork.alongMm + nx * offset, y: artwork.centerHeightMm, z: wall.start.z + dz * artwork.alongMm + nz * offset, rotationY: Math.atan2(nx, nz) }
 }
 
@@ -191,6 +193,7 @@ export function addArtwork(project: Project, imageUrl = '/artworks/artwork-1.png
   if (project.artworks.length+(project.unplacedArtworks?.length??0) >= artworkLimit) throw new Error(`작품은 최대 ${artworkLimit}개까지 만들 수 있습니다.`)
   const id = uniqueId('artwork', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[]),...(project.lights??[]),...(project.modelArtworks??[])].map(item => item.id))
   const artwork: Artwork = { id, name, artist: '', widthMm: 900, heightMm: 1200, depthMm: 30, wallId: project.walls[0].id, alongMm: 450, centerHeightMm: 1500, frame: 'natural', imageUrl, visible: true, locked: false, note: '' }
+  artwork.alongMm = Math.min(rotatedArtworkOuterSize(artwork).widthMm / 2, wallLength(project.walls[0]) / 2)
   validateArtwork(artwork, new Set(project.walls.map(wall => wall.id)))
   return { ...project, artworks: [...project.artworks, artwork] }
 }
@@ -255,7 +258,7 @@ export function placeUnplacedArtwork(project:Project,id:string,wallId:string):Pr
   if(!artwork)throw new Error('미배치 작품을 찾을 수 없습니다.')
   const wall=project.walls.find(item=>item.id===wallId)
   if(!wall)throw new Error('배치할 벽을 찾을 수 없습니다.')
-  const size=rotatedArtworkSize({...artwork,wallId})
+  const size=rotatedArtworkOuterSize(artwork)
   const clampCenter=(value:number,extent:number,container:number)=>{
     const margin=Math.min(extent/2,container/2)
     return Math.max(margin,Math.min(container-margin,value))
@@ -279,10 +282,10 @@ export function distributeArtworks(project: Project, ids: string[], spacingMm: n
   if (new Set(artworks.map(item => item.wallSide ?? 'front')).size !== 1) throw new Error('같은 벽의 같은 면에 있는 작품을 선택해 주세요.')
   if (artworks.some(item => item.locked)) throw new Error('잠긴 작품은 간격을 변경할 수 없습니다.')
   const sorted = [...artworks].sort((a, b) => a.alongMm - b.alongMm)
-  let left = sorted[0].alongMm - rotatedArtworkSize(sorted[0]).widthMm / 2
+  let left = sorted[0].alongMm - rotatedArtworkOuterSize(sorted[0]).widthMm / 2
   const positions = new Map<string, number>()
   for (const item of sorted) {
-    const width=rotatedArtworkSize(item).widthMm
+    const width=rotatedArtworkOuterSize(item).widthMm
     positions.set(item.id, left + width / 2)
     left += width + spacingMm
   }
@@ -291,13 +294,13 @@ export function distributeArtworks(project: Project, ids: string[], spacingMm: n
 
 export function artworkWarnings(artwork: Artwork, wall: Wall, project?:Project): string[] {
   const warnings: string[] = []
-  const size=rotatedArtworkSize(artwork)
+  const size=rotatedArtworkOuterSize(artwork)
   if (artwork.alongMm - size.widthMm / 2 < 0 || artwork.alongMm + size.widthMm / 2 > wallLength(wall)) warnings.push('작품이 벽의 좌우 경계를 벗어납니다.')
   if (artwork.centerHeightMm - size.heightMm / 2 < 0) warnings.push('작품이 바닥 아래로 내려갑니다.')
   if (artwork.centerHeightMm + size.heightMm / 2 > wall.heightMm) warnings.push('작품이 벽 높이를 넘어갑니다.')
   if(project){
     const position=artworkPosition(artwork,wall),c=Math.cos(position.rotationY),s=Math.sin(position.rotationY);
-    const halfWidth=size.widthMm/2+(artwork.frame==='none'?0:22.5),halfDepth=artwork.depthMm/2;
+    const halfWidth=size.widthMm/2,halfDepth=artworkPresentation(artwork).depthMm/2;
     const footprint=[[-halfWidth,-halfDepth],[halfWidth,-halfDepth],[halfWidth,halfDepth],[-halfWidth,halfDepth]].map(([x,z])=>({x:position.x+c*x+s*z,z:position.z-s*x+c*z}));
     if(installationZones(project).some(zone=>footprintOverlapsZone(footprint,zone)))warnings.push('작품이 계단 또는 계단 추정 영역의 설치 제외 범위와 겹칩니다.');
   }

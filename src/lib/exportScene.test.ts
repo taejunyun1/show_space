@@ -17,8 +17,8 @@ it('retains back-face artwork transforms, frames, textures and rotation without 
  const texture=new Texture(),scene=buildExportScene(project,new Map([[project.artworks[0].id,texture]]));
  const art=scene.getObjectByName('artwork-artwork-1')!,pose=artworkPosition(project.artworks[0],project.walls[0]);
  expect(art.position.toArray()).toEqual([pose.x/1000,pose.y/1000,pose.z/1000]);expect(art.rotation.y).toBeCloseTo(pose.rotationY);expect(art.rotation.z).toBeCloseTo(Math.PI/6);
- const image=art.getObjectByName('image') as Mesh;expect((image.material as MeshStandardMaterial).map).toBe(texture);expect(image.position.z).toBeCloseTo(.017);
- const frame=art.getObjectByName('frame') as Mesh<BoxGeometry>;expect(frame.geometry.parameters.width).toBeCloseTo(.945);
+ const image=art.getObjectByName('image') as Mesh;expect((image.material as MeshStandardMaterial).map).toBe(texture);expect(image.position.z).toBeCloseTo(.014,5);
+ const frame=art.getObjectByName('frame') as Mesh;frame.geometry.computeBoundingBox();expect(frame.geometry.boundingBox!.getSize(new Vector3()).x).toBeCloseTo(.945);
  expect(JSON.stringify(scene.toJSON())).not.toContain('PRIVATE');disposeExportScene(scene);
 });
 it('omits explicitly hidden walls and their artworks but retains the floor boundary',()=>{

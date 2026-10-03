@@ -206,3 +206,22 @@ it('honors the publication-wide details flag on server input and excludes privat
   await call('DELETE',`/api/shares/${id}`,undefined,true);
  }
 });
+
+it('validates frame settings on direct publication including Scenes and preserves only public geometry fields',async()=>{
+ const {call}=setup(),p=createDemoProject();p.artworks=p.artworks.slice(0,1);
+ const settings={widthMm:30,depthMm:70,material:'metal',matWidthMm:60,matColor:'#f5f4ef',cover:'glass'};
+ const base=createPublicShare(p,{includeDimensions:false,includeArtworkDetails:false}).snapshot;
+ const nested={...base,artworks:[{...base.artworks[0],frameSettings:{...settings,note:'PRIVATE',imageUrl:'SECRET'}}]};
+ const raw={...nested,scenes:[{id:'framed-scene',name:'액자 Scene',snapshot:nested}]};
+ const {id}=await (await call('POST','/api/shares',undefined,true)).json() as {id:string};
+ await call('PUT',`/api/shares/${id}/images/0`,png.buffer,true);
+ const bad=structuredClone(raw);bad.scenes[0].snapshot.artworks[0].frameSettings.matWidthMm=-1;
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(bad),true)).status).toBe(400);
+ expect((await call('GET',`/api/public/${id}`)).status).toBe(404);
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(raw),true)).status).toBe(201);
+ const snapshot=await (await call('GET',`/api/public/${id}`)).json() as import('../domain/publicShare').PublicShareSnapshot;
+ for(const layout of [snapshot,snapshot.scenes![0].snapshot])expect(layout.artworks[0].frameSettings).toEqual(settings);
+ expect(JSON.stringify(snapshot)).not.toMatch(/PRIVATE|SECRET/);
+ await call('DELETE',`/api/shares/${id}`,undefined,true);
+ expect((await call('GET',`/api/public/${id}`)).status).toBe(410);
+});

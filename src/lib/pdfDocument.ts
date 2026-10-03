@@ -1,3 +1,4 @@
+import {artworkPresentation,frameColors} from '../domain/artworkPresentation';
 import {modelArtworkFootprint} from '../domain/modelArtworks';
 import fontkit from '@pdf-lib/fontkit';
 import {PDFDocument,PDFDict,PDFName,PDFRawStream,PDFRef,decodePDFRawStream,degrees,rgb,type PDFFont,type PDFImage,type PDFPage} from 'pdf-lib';
@@ -57,9 +58,11 @@ function elevation(page:PDFPage,font:PDFFont,section:PdfSection,images:Map<strin
  for(const art of artworks){
   const pose=elevationArtPlacement(art,wall,side),angle=pose.angle*Math.PI/180,cx=fit.x(pose.x),cy=fit.y(pose.y),width=art.widthMm*fit.scale,h=art.heightMm*fit.scale;
   const lower=(w:number,h:number)=>({x:cx-w/2*Math.cos(angle)+h/2*Math.sin(angle),y:cy-w/2*Math.sin(angle)-h/2*Math.cos(angle)});
-  const pad=art.frame==='none'?0:45*fit.scale,frame=lower(width+pad,h+pad),image=images.get(art.imageUrl);if(!image)throw new Error('벽면도 작품 이미지를 준비하지 못했습니다.');
-  page.drawRectangle({...frame,width:width+pad,height:h+pad,rotate:degrees(pose.angle),color:color({black:'#282827',natural:'#b9a383',white:'#f5f4ef',none:'#eee8dc'}[art.frame])});
+  const presentation=artworkPresentation(art),outerW=presentation.widthMm*fit.scale,outerH=presentation.heightMm*fit.scale,frame=lower(outerW,outerH),image=images.get(art.imageUrl);if(!image)throw new Error('벽면도 작품 이미지를 준비하지 못했습니다.');
+  page.drawRectangle({...frame,width:outerW,height:outerH,rotate:degrees(pose.angle),color:color(frameColors[art.frame])});
+  if(presentation.framed&&presentation.settings.matWidthMm>0){const iw=presentation.innerWidthMm*fit.scale,ih=presentation.innerHeightMm*fit.scale;page.drawRectangle({...lower(iw,ih),width:iw,height:ih,rotate:degrees(pose.angle),color:color(presentation.settings.matColor)});}
   page.drawImage(image,{...lower(width,h),width,height:h,rotate:degrees(pose.angle)});
+  if(presentation.coverThicknessMm>0){const iw=presentation.innerWidthMm*fit.scale,ih=presentation.innerHeightMm*fit.scale;page.drawRectangle({...lower(iw,ih),width:iw,height:ih,rotate:degrees(pose.angle),color:color('#e6f0f5'),opacity:.055});}
   text(page,font,`${section.project.artworks.indexOf(art)+1}`,cx-3,cy-h/2-14,8);
  }
  dimension(page,font,fit.x(0),fit.y(0)+17,fit.x(length),fit.y(0)+17,`${mm(length)} mm`);
@@ -75,7 +78,7 @@ function schedules(doc:PDFDocument,font:PDFFont,section:PdfSection){
  for(const [i,w] of section.project.walls.entries())if(w.visible)row(`${i+1}. ${w.name} / ${mm(wallLength(w))} × ${mm(w.heightMm)} × ${mm(w.thicknessMm)}`);
  for(const [i,a] of (section.project.modelArtworks??[]).entries())if(a.visible)row(`3D ${i+1}. ${a.name} / ${mm(a.widthMm)}×${mm(a.heightMm)}×${mm(a.depthMm)} mm · 위치 ${mm(a.position.x)}, ${mm(a.position.y)}, ${mm(a.position.z)} mm · 회전 ${a.rotation.x.toFixed(1)}, ${a.rotation.y.toFixed(1)}, ${a.rotation.z.toFixed(1)}°`);
  y-=12;row('작품 번호 · 이름 / 크기 · 설치 벽/면 · 시작점 거리 · 중심 높이 · 회전',11);
- for(const [i,a] of section.project.artworks.entries()){const w=section.project.walls.find(w=>w.id===a.wallId);if(a.visible&&w?.visible)row(`${i+1}. ${a.name} / ${mm(a.widthMm)}×${mm(a.heightMm)}×${mm(a.depthMm)} mm · ${w.name} ${a.wallSide==='back'?'B':'A'}면 · ${mm(a.alongMm)} mm · ${mm(a.centerHeightMm)} mm · ${a.rotationDeg??0}°`);}
+ for(const [i,a] of section.project.artworks.entries()){const w=section.project.walls.find(w=>w.id===a.wallId);if(a.visible&&w?.visible)row(`${i+1}. ${a.name} / ${mm(a.widthMm)}×${mm(a.heightMm)}×${mm(a.depthMm)} mm · ${w.name} ${a.wallSide==='back'?'B':'A'}면 · ${mm(a.alongMm)} mm · ${mm(a.centerHeightMm)} mm · ${a.rotationDeg??0}°${a.frame!=='none'?(()=>{const p=artworkPresentation(a);return ` · 액자 외곽 ${mm(p.widthMm)}×${mm(p.heightMm)}×${mm(p.depthMm)} mm`;})():''}`);}
 }
 
 export async function buildExhibitionPdf(sections:PdfSection[],options:PdfOptions,assets:PdfAssets):Promise<Uint8Array>{
