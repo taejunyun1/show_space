@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-04",
+  "tests": {
+    "passed": 781,
+    "optionalSkipped": 2,
+    "build": "passed"
+  },
+  "pdf": {
+    "pages": 3,
+    "file": "/Users/taejun-yun/Downloads/설치 치수 출력 검증 20261004-전시안 (1).pdf",
+    "bytes": 5460092,
+    "sha256": "83889750299d1844523a089d571ec7b21feaacce682d06f1f46aee82b845e20f",
+    "privateNoteExcluded": true,
+    "frontVerticalGapMm": 250,
+    "backHorizontalGapMm": 250
+  },
+  "shared": {
+    "dimensionPublic": {
+      "gapMm": 250,
+      "floorMm": 1260,
+      "visibleLeftMm": 2830,
+      "visibleRightMm": 4390,
+      "automaticBackFaceSelection": true,
+      "readableInformationList": true,
+      "nativeDragLeavesArtworkImageRectanglesAndDistancesUnchanged": true
+    },
+    "dimensionPrivate": {
+      "automaticLines": 0,
+      "automaticList": 0,
+      "mmText": false,
+      "editInputs": 0
+    },
+    "mobile": {
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "installationListPresent": true
+    },
+    "consoleWarningsErrors": []
+  },
+  "limits": [
+    "Axis gaps of rotated outer bounds; not diagonal polygon shortest distance",
+    "Separate GLB object snapping pending",
+    "Actual auth/model/mobile hardware validation pending"
+  ],
+  "localShareCleanup": [
+    {
+      "id": "9c532df580bacb99cf48be840713e899ec03ef880d6a9ea6",
+      "deleted": 204,
+      "publicStatus": 410,
+      "imageStatus": 410,
+      "privateNoteExcluded": true
+    },
+    {
+      "id": "f7b07aadc03fb24e81adc248d6cc2036aa73929d032babb2",
+      "deleted": 204,
+      "publicStatus": 410,
+      "imageStatus": 410,
+      "privateNoteExcluded": true
+    }
+  ],
+  "production": {
+    "version": "73beba89-986c-42dd-9b3e-b515e37aac5a",
+    "entry": "/assets/index-C-dErE1K.js",
+    "sharedViewerAssetStatus": 200,
+    "pdfExportAssetStatus": 200,
+    "keepVars": true,
+    "bindings": [
+      "PROJECTS_DB",
+      "SHARES",
+      "PRIVATE_PROJECTS",
+      "ASSETS"
+    ],
+    "authEnabled": false,
+    "editorElevationDimensions": [
+      {
+        "kind": "gap",
+        "mm": 755
+      },
+      {
+        "kind": "floor",
+        "mm": 877.5
+      },
+      {
+        "kind": "left",
+        "mm": 927.5
+      },
+      {
+        "kind": "right",
+        "mm": 6127.5
+      }
+    ],
+    "consoleWarningsErrors": [],
+    "userProjectUnmodified": true,
+    "newPublicShareNotCreated": true
+  }
+}

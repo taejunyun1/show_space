@@ -30,3 +30,6 @@ export function rotatedArtworkOuterSize(a:PresentedArtwork){
 }
 /** Wall-mounted footprint uses the rotated outer width and real framing depth. */
 export function artworkPlanSize(a:PresentedArtwork){return {...rotatedArtworkOuterSize(a),depthMm:artworkPresentation(a).depthMm};}
+
+/** Physical bounds on a wall face, including rotation, frame and mat. */
+export function artworkFaceBounds(a:PresentedArtwork&{alongMm:number;centerHeightMm:number}){const size=rotatedArtworkOuterSize(a);return {left:a.alongMm-size.widthMm/2,right:a.alongMm+size.widthMm/2,bottom:a.centerHeightMm-size.heightMm/2,top:a.centerHeightMm+size.heightMm/2,cx:a.alongMm,cy:a.centerHeightMm};}

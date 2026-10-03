@@ -1,11 +1,11 @@
 import {artworkGroupMembers} from './artworkGroups';
-import {rotatedArtworkOuterSize} from './artworkPresentation';
+import {artworkFaceBounds} from './artworkPresentation';
+export {artworkFaceBounds} from './artworkPresentation';
 import {wallLength} from './model';
-import type {Artwork,Project} from './types';
+import type {Project} from './types';
 import type {ArtworkFacePoint} from './artworkDrag3d';
 export interface ArtworkSnapGuide {axis:'along'|'height';atMm:number;kind:'edge'|'center'|'wall';targetId?:string}
 export interface ArtworkSnapOptions {toleranceMm:{alongMm:number;centerHeightMm:number};bypass?:boolean}
-export function artworkFaceBounds(a:Artwork){const size=rotatedArtworkOuterSize(a);return {left:a.alongMm-size.widthMm/2,right:a.alongMm+size.widthMm/2,bottom:a.centerHeightMm-size.heightMm/2,top:a.centerHeightMm+size.heightMm/2,cx:a.alongMm,cy:a.centerHeightMm};}
 const EPS=1e-6;
 /** Apply a rigid group translation, then acquire wall/artwork anchors within a screen-derived radius. */
 export function snapArtworkPlacement(project:Project,id:string,wallId:string,wallSide:'front'|'back',point:ArtworkFacePoint,options:ArtworkSnapOptions={toleranceMm:{alongMm:0,centerHeightMm:0}}){

@@ -1,4 +1,5 @@
-import {artworkPresentation,frameColors} from '../domain/artworkPresentation';
+import {artworkElevationDimensions,installationDimensionLabel} from '../domain/artworkElevationDimensions';
+import {artworkPresentation,frameColors,rotatedArtworkOuterSize} from '../domain/artworkPresentation';
 import {modelArtworkFootprint} from '../domain/modelArtworks';
 import fontkit from '@pdf-lib/fontkit';
 import {PDFDocument,PDFDict,PDFName,PDFRawStream,PDFRef,decodePDFRawStream,degrees,rgb,type PDFFont,type PDFImage,type PDFPage} from 'pdf-lib';
@@ -12,6 +13,7 @@ import type {Point,Project} from '../domain/types';
 export interface PdfAssets {fontBytes:Uint8Array;images:Map<string,Uint8Array>;previews:Map<number,Uint8Array>}
 const W=841.89,H=595.28,ink=rgb(.14,.19,.25),muted=rgb(.36,.42,.49),blue=rgb(.21,.36,.8),light=rgb(.78,.82,.87);
 const mm=(n:number)=>Math.round(n).toLocaleString('en-US');
+const installationMm=(n:number)=>n.toLocaleString('en-US',{maximumFractionDigits:1});
 const color=(hex:string)=>{const m=/^#([0-9a-f]{6})$/i.exec(hex);return m?rgb(parseInt(m[1].slice(0,2),16)/255,parseInt(m[1].slice(2,4),16)/255,parseInt(m[1].slice(4,6),16)/255):rgb(.9,.9,.9);};
 function text(page:PDFPage,font:PDFFont,value:string,x:number,y:number,size=10,maxWidth=W-80){
  const str=value.normalize('NFC').replace(/[\r\n\t]/g,' '),width=font.widthOfTextAtSize(str,size);
@@ -63,7 +65,11 @@ function elevation(page:PDFPage,font:PDFFont,section:PdfSection,images:Map<strin
   if(presentation.framed&&presentation.settings.matWidthMm>0){const iw=presentation.innerWidthMm*fit.scale,ih=presentation.innerHeightMm*fit.scale;page.drawRectangle({...lower(iw,ih),width:iw,height:ih,rotate:degrees(pose.angle),color:color(presentation.settings.matColor)});}
   page.drawImage(image,{...lower(width,h),width,height:h,rotate:degrees(pose.angle)});
   if(presentation.coverThicknessMm>0){const iw=presentation.innerWidthMm*fit.scale,ih=presentation.innerHeightMm*fit.scale;page.drawRectangle({...lower(iw,ih),width:iw,height:ih,rotate:degrees(pose.angle),color:color('#e6f0f5'),opacity:.055});}
-  text(page,font,`${section.project.artworks.indexOf(art)+1}`,cx-3,cy-h/2-14,8);
+  const bounds=rotatedArtworkOuterSize(art);text(page,font,`${section.project.artworks.indexOf(art)+1}`,cx-bounds.widthMm*fit.scale/2,cy+bounds.heightMm*fit.scale/2+5,8);
+ }
+ for(const d of artworkElevationDimensions(section.project,wall.id,side,artworks.map(a=>a.id))){
+  const x=(value:number)=>fit.x(side==='back'?length-value:value),y=(value:number)=>fit.y(height-value);
+  dimension(page,font,x(d.start.x),y(d.start.y),x(d.end.x),y(d.end.y),`${installationMm(d.distanceMm)} mm`);
  }
  dimension(page,font,fit.x(0),fit.y(0)+17,fit.x(length),fit.y(0)+17,`${mm(length)} mm`);
  text(page,font,`높이 ${mm(height)} mm · 두께 ${mm(wall.thicknessMm)} mm`,52,91,9);
@@ -73,12 +79,32 @@ function elevation(page:PDFPage,font:PDFFont,section:PdfSection,images:Map<strin
 }
 function schedules(doc:PDFDocument,font:PDFFont,section:PdfSection){
  let page=header(doc,font,section,'치수 목록 · 표시 중인 벽과 배치 작품'),y=H-126;
- const row=(value:string,size=9)=>{if(y<65){page=header(doc,font,section,'치수 목록 · 계속');y=H-126;}text(page,font,value,42,y,size,W-84);y-=19;};
+ const row=(value:string,size=9)=>{
+  const lines:string[]=[];let current='',width=0;
+  for(const char of value.normalize('NFC').replace(/[\r\n\t]/g,' ')){const next=font.widthOfTextAtSize(char,size);if(current&&width+next>W-84){lines.push(current);current='';width=0;}current+=char;width+=next;}
+  lines.push(current);
+  for(const value of lines){if(y<65){page=header(doc,font,section,'치수 목록 · 계속');y=H-126;}text(page,font,value,42,y,size,W-84);y-=19;}
+ };
  row('벽 번호 · 이름 / 길이 × 높이 × 두께 (mm)',11);
  for(const [i,w] of section.project.walls.entries())if(w.visible)row(`${i+1}. ${w.name} / ${mm(wallLength(w))} × ${mm(w.heightMm)} × ${mm(w.thicknessMm)}`);
  for(const [i,a] of (section.project.modelArtworks??[]).entries())if(a.visible)row(`3D ${i+1}. ${a.name} / ${mm(a.widthMm)}×${mm(a.heightMm)}×${mm(a.depthMm)} mm · 위치 ${mm(a.position.x)}, ${mm(a.position.y)}, ${mm(a.position.z)} mm · 회전 ${a.rotation.x.toFixed(1)}, ${a.rotation.y.toFixed(1)}, ${a.rotation.z.toFixed(1)}°`);
  y-=12;row('작품 번호 · 이름 / 크기 · 설치 벽/면 · 시작점 거리 · 중심 높이 · 회전',11);
  for(const [i,a] of section.project.artworks.entries()){const w=section.project.walls.find(w=>w.id===a.wallId);if(a.visible&&w?.visible)row(`${i+1}. ${a.name} / ${mm(a.widthMm)}×${mm(a.heightMm)}×${mm(a.depthMm)} mm · ${w.name} ${a.wallSide==='back'?'B':'A'}면 · ${mm(a.alongMm)} mm · ${mm(a.centerHeightMm)} mm · ${a.rotationDeg??0}°${a.frame!=='none'?(()=>{const p=artworkPresentation(a);return ` · 액자 외곽 ${mm(p.widthMm)}×${mm(p.heightMm)}×${mm(p.depthMm)} mm`;})():''}`);}
+ y-=12;row('작품 설치 치수 · 회전한 액자 외곽 기준 / 단위 mm',11);
+ row('벽 왼쪽·오른쪽은 해당 A/B면에서 보이는 방향입니다. 간격은 가로/세로 축 기준이며 대각선 최단 거리가 아닙니다.',8);
+ for(const wall of section.project.walls.filter(w=>w.visible))for(const side of ['front','back'] as const){
+  const artworks=section.project.artworks.filter(a=>a.visible&&a.imageUrl&&a.wallId===wall.id&&(a.wallSide??'front')===side);if(!artworks.length)continue;
+  row(`${wall.name} · ${side==='back'?'B':'A'}면`,10);
+  for(const art of artworks){
+   const ds=artworkElevationDimensions(section.project,wall.id,side,[art.id]).filter(d=>d.kind!=='gap');
+   row(`${section.project.artworks.indexOf(art)+1}. ${art.name} / ${ds.map(d=>`${installationDimensionLabel(d)} ${installationMm(d.distanceMm)}`).join(' · ')}`);
+  }
+  for(const d of artworkElevationDimensions(section.project,wall.id,side,artworks.map(a=>a.id)).filter(d=>d.kind==='gap')){
+   const names=d.artworkIds.map(id=>{const a=artworks.find(a=>a.id===id)!;return `${section.project.artworks.indexOf(a)+1}. ${a.name}`;});
+   row(`${names.join(' ↔ ')} / ${installationDimensionLabel(d)} ${installationMm(d.distanceMm)} mm`);
+  }
+ }
+
 }
 
 export async function buildExhibitionPdf(sections:PdfSection[],options:PdfOptions,assets:PdfAssets):Promise<Uint8Array>{

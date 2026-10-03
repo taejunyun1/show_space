@@ -2,7 +2,7 @@ import {describe,expect,it} from 'vitest';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {createDemoProject} from '../domain/model';
 import {createPublicShare} from '../domain/publicShare';
-import {SharedPlan,SharedElevation} from './SharedViewer';
+import {SharedPlan,SharedElevation,SharedInstallationInformation} from './SharedViewer';
 
 describe('read-only public drawings',()=>{
   const bare=createPublicShare(createDemoProject(),{includeDimensions:false}).snapshot;
@@ -70,4 +70,22 @@ it('shows read-only Scene navigation including current layout and the active sav
  const {SharedScenes}=await import('./SharedViewer');const snapshot=createPublicShare(createDemoProject(),{includeDimensions:false}).snapshot;
  const html=renderToStaticMarkup(<SharedScenes scenes={[{id:'a',name:'설치안 A',snapshot},{id:'b',name:'설치안 B',snapshot}]} selectedId="b" onChange={()=>{}}/>);
  expect(html).toContain('aria-label="전시 Scene"');expect(html).toContain('현재 배치');expect(html).toContain('aria-pressed="true">설치안 B');expect(html).not.toMatch(/저장|삭제|input/);
+});
+
+it('shares frame-aware installation distances only on a selected artwork and dimension-enabled link',()=>{
+ const p=createDemoProject();p.artworks=p.artworks.slice(0,2).map((a,i)=>({...a,wallSide:'back',rotationDeg:90,widthMm:i?700:500,heightMm:i?900:600,alongMm:i?3600:4780,centerHeightMm:1600,frame:'natural',frameSettings:{widthMm:30,depthMm:70,matWidthMm:60,matColor:'#ffffff',material:'metal',cover:'glass'}}));
+ const snapshot=createPublicShare(p,{includeDimensions:true}).snapshot,before=JSON.stringify(snapshot);
+ const selected=renderToStaticMarkup(<SharedElevation snapshot={snapshot} wallId="wall-a" side="back" selectedId={p.artworks[0].id} onSelect={()=>{}}/>);
+ for(const label of ['외곽 가로 간격 250 mm','바닥 1,260 mm','벽 왼쪽 2,830 mm','벽 오른쪽 4,390 mm'])expect(selected).toContain(label);
+ expect(selected).not.toMatch(/draggable-art|스냅|<input|onpointermove|삭제/);expect(JSON.stringify(snapshot)).toBe(before);
+ const unselected=renderToStaticMarkup(<SharedElevation snapshot={snapshot} wallId="wall-a" side="back" selectedId={null} onSelect={()=>{}}/>);expect(unselected).not.toContain('작품 설치 치수');
+ const opposite=renderToStaticMarkup(<SharedElevation snapshot={snapshot} wallId="wall-a" side="front" selectedId={p.artworks[0].id} onSelect={()=>{}}/>);expect(opposite).not.toContain('data-artwork-dimension');
+ const bare=createPublicShare(p,{includeDimensions:false}).snapshot,privateView=renderToStaticMarkup(<SharedElevation snapshot={bare} wallId="wall-a" side="back" selectedId={p.artworks[0].id} onSelect={()=>{}}/>);expect(privateView).not.toContain(' mm');expect(privateView).not.toContain('작품 설치 치수');
+});
+
+it('keeps the public installation list readable and absent from dimension-private links',()=>{
+ const p=createDemoProject();p.artworks=p.artworks.slice(0,2).map((a,i)=>({...a,name:`작품 ${i+1}`,frame:'none',widthMm:500,heightMm:600,alongMm:1000+i*750,centerHeightMm:1500}));
+ const snapshot=createPublicShare(p,{includeDimensions:true}).snapshot,html=renderToStaticMarkup(<SharedInstallationInformation snapshot={snapshot} artworkId={p.artworks[0].id}/>);
+ expect(html).toContain('외곽 가로 간격 · 작품 2');expect(html).toContain('250 mm');expect(html).toContain('1,200 mm');expect(html).not.toMatch(/<input|<button|이동|삭제/);
+ expect(renderToStaticMarkup(<SharedInstallationInformation snapshot={createPublicShare(p,{includeDimensions:false}).snapshot} artworkId={p.artworks[0].id}/>)).toBe('');
 });

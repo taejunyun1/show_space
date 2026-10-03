@@ -40,3 +40,5 @@
 .shared-scenes span{color:#627187;font-size:11px;margin-right:6px}.shared-scenes button{flex:none;max-width:260px;overflow:hidden;text-overflow:ellipsis;border:1px solid #dce2e9;border-radius:5px;padding:7px 11px;font-size:12px}.shared-scenes button[aria-pressed=true]{background:#2d3747;color:#fff;border-color:#2d3747}.shared-scenes button:hover{border-color:#365cf5}
 
 .shared-info .shared-medium,.shared-info .shared-description{white-space:pre-wrap;overflow-wrap:anywhere;color:#596a80;line-height:1.7}.shared-info .shared-description{margin-top:16px}
+
+.shared-installation-info{margin-top:24px;border-top:1px solid #e0e5ed;padding-top:16px}.shared-installation-info h3{font-size:12px;margin:0 0 12px}.shared-installation-info dl{margin:0;font-size:12px;line-height:1.6}.shared-installation-info dl>div{margin-bottom:10px}.shared-installation-info dt{color:#637080;overflow-wrap:anywhere}.shared-installation-info dd{margin:0;font-weight:600;color:#16816b}.shared-installation-info p{font-size:10px;line-height:1.6}

@@ -1,3 +1,5 @@
+import {wallLength} from './wallGeometry';
+export {wallLength} from './wallGeometry';
 import {parseFrameSettings,artworkPresentation,rotatedArtworkOuterSize} from './artworkPresentation';
 import {parseArtworkInformation} from './artworkInformation';
 import {validateProjectNotes} from './notes';
@@ -118,7 +120,6 @@ export function restoreDemoBoundary(project:Project):Project{
   return parseProject({...project,walls})
 }
 
-export function wallLength(wall: Wall): number { return Math.hypot(wall.end.x - wall.start.x, wall.end.z - wall.start.z) }
 export function mmToMeters(value: number): number { return value / 1000 }
 
 export function normalizeArtworkAngle(value: number): number {
