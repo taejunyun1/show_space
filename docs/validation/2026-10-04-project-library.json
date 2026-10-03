@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-04",
+  "scope": "Project management and local storage portion of T2",
+  "tests": {
+    "passed": 669,
+    "optionalBenchmarksSkipped": 2,
+    "typecheck": "passed",
+    "build": "passed",
+    "targetedTestsAfterLastCompatibilityChange": 53
+  },
+  "browser": {
+    "origin": "http://localhost:8798/",
+    "legacyDraftMigration": true,
+    "legacyArtworkNotePhoto": {
+      "width": 320,
+      "height": 180,
+      "text": "설치 메모 검증 · PRIVATE_NOTE_UI"
+    },
+    "legacy3DArtworkVisible": true,
+    "newRoomMm": [
+      14000,
+      9000,
+      4500
+    ],
+    "duplicate": true,
+    "search": true,
+    "archiveAndRestore": true,
+    "switch": true,
+    "twoTabsStaleSaveRejected": true,
+    "recoveryCopyAndLatestOriginalBothPresent": true,
+    "recoveryCopyReloaded": true,
+    "jsonImportAddsNewProject": true,
+    "projectCountAfterJsonImport": 5,
+    "previousProjectsPreserved": 4,
+    "editorConsoleWarningsErrors": []
+  },
+  "regressionFoundAndFixed": "Hydration unnecessarily rewrote loaded projects and incremented revisions; saved snapshots no longer trigger autosave",
+  "screenshots": [
+    "2026-10-04-projects-list.png",
+    "2026-10-04-projects-conflict.png",
+    "2026-10-04-projects-public.png"
+  ],
+  "limitations": [
+    "No account login or cloud project save connected yet",
+    "No automatic conflict merge or persistent unsaved conflict recovery journal",
+    "No physical mobile or large-library performance validation",
+    "Local library remains specific to browser and origin"
+  ],
+  "activeGoal": "최종 구현까지 진행",
+  "goalComplete": false,
+  "deployment": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "277397ad-9948-4651-84cf-7725c9240c94",
+    "entry": "/assets/index-DkN1ccRr.js",
+    "projectListVisible": true,
+    "originalProjectContentUnchanged": true,
+    "legacyDraftMigratedToLibrary": true,
+    "consoleWarningsErrors": []
+  }
+}

@@ -3,8 +3,8 @@
 - 계정: taejun.foto@gmail.com (Wrangler whoami로 확인)
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
-- 최신 배포일: 2026-10-03
-- 최신 버전: eee3d2f4-46a3-4e5e-bba7-0f2560be236b
+- 최신 배포일: 2026-10-04
+- 최신 버전: 277397ad-9948-4651-84cf-7725c9240c94
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
@@ -70,3 +70,5 @@ GitHub: https://github.com/taejunyun1/show_space · 기본 브랜치 main. Cloud
 2026-10-03 야외 환경 배포: 버전 eee3d2f4-46a3-4e5e-bba7-0f2560be236b, 605개 테스트 통과·선택 벤치마크 2개 제외·빌드 통과. 위도/경도/시간대/날짜/시간/북쪽, 날씨 연출·일몰/야간, 시간 슬라이더, Scene·백업·공유·PNG/PDF·GLB/glTF 연계. 실제 PNG·2쪽 한글 PDF·ZIP 자산 해시·태양 directional GLB 검증. 공개 HTTPS의 야외 환경 메뉴·정밀 좌표·날짜/시간·태양 계산 표시와 콘솔 오류/경고 없음을 확인했다. 공개 초안은 변경하지 않았고 공유 게시 검증은 가짜 키의 별도 로컬 R2로 실행했다. 실제 날씨·GPS·정밀 일조 해석과 모바일 실기기·대형 모델 성능 검증은 포함하지 않는다.
 
 2026-10-04 독립 3D 작품 배포: 최종 버전 `6515a4a3-5bf2-4fc6-b324-87dbfea7ef3b`. 정적 GLB/glTF/자산 ZIP 입력, 실제 형상·UV/PBR 유지, 숫자 W/H/D·XYZ 위치/회전·3D 축 핸들·평면 드래그·그룹/잠금·Scene/JSON/백업·PNG/PDF/GLB/glTF 출력 연결. 627개 테스트 통과·선택 벤치마크 2개 제외, TypeScript/빌드 통과. 별도 로컬 origin의 실제 백업 복원과 내려받은 출력의 원본 모델·치수/재질·자산 SHA/CRC·메모 제외를 검증했다. 공개 HTTPS의 입력 메뉴·3D 작품 버튼·최종 JS entry 확인, 콘솔 오류/경고 없음·공개 편집 초안 불변. 기록: `docs/validation/2026-10-03-model-artworks.json`. 첫 검증 배포 bdddc758-f8b5-4604-b3dc-aa0356477447 후 최종판에는 그룹 없는 Shift 선택의 숫자 이동 범위를 맞췄다. 3D 작품 링크 공유·원본 SKP·실제 사용자 SketchUp/대형 모델/모바일·계정 저장 및 전체 제품 완료는 남아 있다.
+
+2026-10-04 프로젝트 관리 배포: 버전 `277397ad-9948-4651-84cf-7725c9240c94`. 프로젝트 목록·생성·복제·전환·검색·보관/복구, 기존 단일 초안 이전, IndexedDB 원자적 저장·revision 검사, 두 탭 충돌 복사본 복구, JSON/백업 복원의 새 항목 추가. 테스트 669개 통과·선택 벤치마크 2개 제외, TypeScript/빌드 통과. 공개 HTTPS의 목록·기존 프로젝트 이전·최종 JS entry 확인, 콘솔 경고/오류 없음. 기존 전시 내용은 수정하지 않았다. 로컬 두 탭·새로고침·전시장 전체 JSON 입력·원래 3D 작품/메모 사진 보존 확인. 계정/클라우드 프로젝트 저장은 아직 미연결. 기록: `docs/validation/2026-10-04-project-library.json`.

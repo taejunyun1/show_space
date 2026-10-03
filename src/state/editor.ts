@@ -117,7 +117,7 @@ interface EditorState {
   spaceSelected(gap: number): void
   undo(): void
   redo(): void
-  loadProject(project: Project): void
+  loadProject(project: Project, alreadySaved?:boolean): void
   saveScene(name: string,cameraView?:CameraView): void
   restoreScene(id: string): void
   deleteScene(id: string): void
@@ -158,6 +158,7 @@ function errorMessage(error: unknown) {
 }
 
 const initialProject = createDemoProject()
+let savedSnapshot:Project|undefined;
 
 export const useEditor = create<EditorState>((set, get) => {
   const attempt = (operation: () => void) => {
@@ -442,8 +443,9 @@ export const useEditor = create<EditorState>((set, get) => {
       const project = clone(next)
       return { project,view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
-    loadProject: (project) => attempt(() => {
+    loadProject: (project,alreadySaved=false) => attempt(() => {
       const parsed = parseProject(project)
+      if(alreadySaved)savedSnapshot=parsed;
       set({ project: parsed, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
     }),
     saveScene: (name,cameraView) => attempt(() => {
@@ -485,12 +487,15 @@ export async function hydrateEditor(reader: () => Promise<unknown> = readDraft):
       return
     }
     const project = parseProject(raw)
+    savedSnapshot=project;
     useEditor.setState({ project,view:safeView(project,useEditor.getState().view),selected: firstSelection(project), activeWallId: validWall(project, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
   } catch (error) {
     useEditor.setState({ hydrated: true, saveStatus: 'error', message: `저장된 프로젝트를 불러오지 못했습니다. ${errorMessage(error)}` })
   }
 }
 
+let flushCurrentAutosave:()=>Promise<void>=async()=>{};
+export const flushAutosave=()=>flushCurrentAutosave();
 export function startAutosave(
   writer: (project: Project) => Promise<void> = writeDraft,
   debounceMs = 250,
@@ -499,21 +504,26 @@ export function startAutosave(
   let lastProject = useEditor.getState().project
   let queued = Promise.resolve()
   let revision = 0
+  let pending:Project|undefined,error:unknown;
+  const schedule=()=>{
+    if(timer)clearTimeout(timer);timer=undefined;
+    if(!pending)return;
+    const snapshot=pending;pending=undefined;const scheduledRevision=revision;
+    queued=queued.then(()=>writer(snapshot)).then(()=>{
+      error=undefined;
+      if(scheduledRevision===revision&&useEditor.getState().project.id===snapshot.id)useEditor.setState({saveStatus:'saved'});
+    },(failure:unknown)=>{error=failure;if(useEditor.getState().project.id===snapshot.id)useEditor.setState({saveStatus:'error',message:`프로젝트를 저장하지 못했습니다. ${errorMessage(failure)}`});});
+  };
+  const flush=async()=>{schedule();await queued;if(error)throw error;};
+  flushCurrentAutosave=flush;
   const unsubscribe = useEditor.subscribe((state) => {
     if (!state.hydrated || state.project === lastProject) return
     lastProject = state.project
+    if(state.project===savedSnapshot){error=undefined;return;}
     if (timer) clearTimeout(timer)
     useEditor.setState({ saveStatus: 'saving' })
-    const scheduledRevision = ++revision
-    timer = setTimeout(() => {
-      const snapshot = state.project
-      queued = queued.then(() => writer(snapshot)).then(
-        () => {
-          if (scheduledRevision === revision) useEditor.setState({ saveStatus: 'saved' })
-        },
-        (error: unknown) => useEditor.setState({ saveStatus: 'error', message: `프로젝트를 저장하지 못했습니다. ${errorMessage(error)}` }),
-      )
-    }, debounceMs)
+    revision++;pending=state.project;
+    timer = setTimeout(schedule, debounceMs)
   })
-  return () => { if (timer) clearTimeout(timer); unsubscribe() }
+  return () => { if (timer) clearTimeout(timer); unsubscribe();if(flushCurrentAutosave===flush)flushCurrentAutosave=async()=>{}; }
 }

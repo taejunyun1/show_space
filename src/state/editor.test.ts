@@ -415,6 +415,13 @@ describe('editor history and commands', () => {
     stop()
     vi.useRealTimers()
   })
+
+  it('does not rewrite hydrated or explicitly saved library documents, but saves subsequent edits',async()=>{
+    vi.useFakeTimers();const writer=vi.fn<(project:ReturnType<typeof createDemoProject>)=>Promise<void>>(async()=>{}),stop=startAutosave(writer,10);
+    await hydrateEditor(async()=>({...createDemoProject(),name:'목록에서 읽은 프로젝트'}));await vi.advanceTimersByTimeAsync(20);expect(writer).not.toHaveBeenCalled();
+    useEditor.getState().loadProject({...createDemoProject(),id:'saved-project',name:'새 프로젝트'},true);await vi.advanceTimersByTimeAsync(20);expect(writer).not.toHaveBeenCalled();
+    useEditor.getState().renameProject('사용자가 수정');await vi.advanceTimersByTimeAsync(20);expect(writer).toHaveBeenCalledTimes(1);expect(writer.mock.calls[0][0]).toEqual(expect.objectContaining({name:'사용자가 수정'}));stop();vi.useRealTimers();
+  });
 })
 
 it('preserves calibrated plan through undo and redo without scaling artwork', () => {
