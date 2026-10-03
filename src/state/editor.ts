@@ -1,3 +1,4 @@
+import {snapModelArtworkTransform,type ModelArtworkSnapGuide,type ModelArtworkSnapOptions} from '../domain/modelArtworkSnap';
 import {installArtworkTemplate,type ArtworkTemplate} from '../domain/artworkLibrary';
 import {layoutArtworks,type ArtworkLayout} from '../domain/artworkLayout';
 import {updateNote,preserveCurrentNotes,validateProjectNotes,type NoteTarget,type NoteDetails} from '../domain/notes';
@@ -87,12 +88,12 @@ interface EditorState {
   beginOutdoorTime():void
   updateOutdoorTime(time:string):void
   finishOutdoorTime(cancel?:boolean):void
-  modelArtworkGesture:{id:string;ids:string[];base:Project}|null
+  modelArtworkGesture:{id:string;ids:string[];base:Project;guides?:ModelArtworkSnapGuide[]}|null
   addModelArtwork(model:ReferenceModel,expectedProjectId:string):void
   patchModelArtwork(id:string,patch:Partial<ModelArtwork>):void
   groupSelectedModelArtworks(ungroup?:boolean):void
   beginModelArtworkTransform(id:string):void
-  updateModelArtworkTransform(position:WorldPoint,rotation:WorldPoint):void
+  updateModelArtworkTransform(position:WorldPoint,rotation:WorldPoint,options?:ModelArtworkSnapOptions):void
   finishModelArtworkTransform(cancel?:boolean):void
   floorSelectedModelArtwork():void
   lightGesture:{id:string;base:Project}|null
@@ -184,7 +185,7 @@ export const useEditor = create<EditorState>((set, get) => {
     view: '3d',
     activeWallId: 'wall-a',
     artworkSnapping:true,
-    toggleArtworkSnapping:()=>set(s=>({artworkSnapping:!s.artworkSnapping,artworkGesture:s.artworkGesture?{...s.artworkGesture,guides:[]}:null})),
+    toggleArtworkSnapping:()=>set(s=>({artworkSnapping:!s.artworkSnapping,artworkGesture:s.artworkGesture?{...s.artworkGesture,guides:[]}:null,modelArtworkGesture:s.modelArtworkGesture?{...s.modelArtworkGesture,guides:[]}:null})),
     showDimensions: true,
     captureClean:false,
     captureDimensions:true,
@@ -315,8 +316,8 @@ export const useEditor = create<EditorState>((set, get) => {
     patchModelArtwork:(id,patch)=>attempt(()=>{const p=get().project,a=p.modelArtworks?.find(a=>a.id===id);if(!a)throw new Error('3D 작품을 찾을 수 없습니다.');let next=updateModelArtwork(p,id,patch);if(patch.position||patch.rotation){next=transformModelArtworks(p,selectedModelArtworkIds(p,get().selected,id),id,patch.position??a.position,patch.rotation??a.rotation);const {position:_,rotation:__,...other}=patch;if(Object.keys(other).length)next=updateModelArtwork(next,id,other);}get().commit(next);}),
     groupSelectedModelArtworks:(ungroup=false)=>attempt(()=>{const s=get();if(s.selected.some(i=>i.type!=='modelArtwork'))throw new Error('3D 작품만 선택하세요.');get().commit(groupModelArtworks(s.project,s.selected.map(i=>i.id),ungroup));}),
     beginModelArtworkTransform:id=>attempt(()=>{const s=get(),p=s.project,a=p.modelArtworks?.find(a=>a.id===id);if(!a)throw new Error('3D 작품이 없습니다.');const ids=selectedModelArtworkIds(p,s.selected,id);if(p.modelArtworks?.some(a=>ids.includes(a.id)&&a.locked))throw new Error('잠긴 3D 작품이 포함되어 이동·회전할 수 없습니다.');set({modelArtworkGesture:{id,ids,base:p},wallGesture:null,artworkGesture:null,lightGesture:null,outdoorGesture:null,rotatingArtworkId:null,previewProject:null,selected:ids.map(id=>({type:'modelArtwork',id}))});}),
-    updateModelArtworkTransform:(position,rotation)=>attempt(()=>{const g=get().modelArtworkGesture;if(g)set({previewProject:transformModelArtworks(g.base,g.ids,g.id,position,rotation)});}),
-    finishModelArtworkTransform:(cancel=false)=>{const s=get(),g=s.modelArtworkGesture,preview=s.previewProject;set({modelArtworkGesture:null,previewProject:null});if(!cancel&&g&&preview&&JSON.stringify(g.base.modelArtworks?.map(a=>[a.position,a.rotation]))!==JSON.stringify(preview.modelArtworks?.map(a=>[a.position,a.rotation])))attempt(()=>get().commit(parseProject(preview)));},
+    updateModelArtworkTransform:(position,rotation,options)=>attempt(()=>{const g=get().modelArtworkGesture;if(!g)return;const result=options?snapModelArtworkTransform(g.base,g.ids,g.id,position,rotation,{...options,bypass:options.bypass||!get().artworkSnapping}):{project:transformModelArtworks(g.base,g.ids,g.id,position,rotation),guides:[]};set({previewProject:result.project,modelArtworkGesture:{...g,guides:result.guides}});}),
+    finishModelArtworkTransform:(cancel=false)=>{const s=get(),g=s.modelArtworkGesture,preview=s.previewProject;set({modelArtworkGesture:null,previewProject:null});if(!cancel&&g&&preview&&preview.modelArtworks?.some(a=>{const before=g.base.modelArtworks?.find(b=>b.id===a.id);return !before||(['x','y','z'] as const).some(axis=>Math.abs(a.position[axis]-before.position[axis])>1e-6||Math.abs(((a.rotation[axis]-before.rotation[axis]+540)%360)-180)>1e-8);}))attempt(()=>get().commit(parseProject(preview)));},
     floorSelectedModelArtwork:()=>attempt(()=>{const s=get(),id=s.selected.find(i=>i.type==='modelArtwork')?.id;if(!id)throw new Error('3D 작품을 선택하세요.');const a=s.project.modelArtworks!.find(a=>a.id===id)!;const ids=selectedModelArtworkIds(s.project,s.selected,id),members=s.project.modelArtworks!.filter(a=>ids.includes(a.id));if(members.some(a=>a.locked))throw new Error('잠긴 3D 작품은 이동할 수 없습니다.');const minY=Math.min(...members.map(a=>modelArtworkBounds(a).minY));s.patchModelArtwork(id,{position:{...a.position,y:a.position.y-minY}});}),
     patchArtwork: (id, patch) => attempt(() => get().commit(patchGroupedArtwork(get().project, id, patch))),
     patchWall: (id, patch) => attempt(() => get().commit(updateWall(get().project, id, patch))),

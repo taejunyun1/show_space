@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-04",
+  "tests": {
+    "passed": 792,
+    "optionalBenchmarksSkipped": 2
+  },
+  "build": "passed",
+  "fixture": "local synthetic multipart GLB, two 400x500x200mm artworks",
+  "fixtureSha256": "2a5484fe07c49d86e5bc50a57beb06563b3f78c65cf63c9935f8430b1a7a0d80",
+  "ui": {
+    "planSnap": [
+      1600,
+      0,
+      1000
+    ],
+    "planBypassDisplayed": [
+      1548.51,
+      0,
+      1095.39
+    ],
+    "frontAxisSnap": [
+      1600,
+      0,
+      1000
+    ],
+    "rotated45AxisDisplayed": [
+      1312.13,
+      0,
+      1312.13
+    ],
+    "mobile": [
+      390,
+      390
+    ],
+    "consoleWarningsErrors": 0
+  },
+  "limits": [
+    "physical Alt drag not verified",
+    "mobile hardware not verified",
+    "synthetic model only",
+    "no arbitrary mesh contact or collision detection"
+  ],
+  "deployment": {
+    "version": "2d404023-0d3c-4adc-9af1-42196dfa1b86",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entry": "/assets/index-5kVoaYzA.js",
+    "consoleWarningsErrors": 0,
+    "keepVars": true
+  }
+}
