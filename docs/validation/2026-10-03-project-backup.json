@@ -1,0 +1,145 @@
+{
+  "date": "2026-10-03",
+  "deploymentVersion": "696a1043-bfd4-4438-9dd6-4b33c7036361",
+  "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+  "tests": {
+    "passed": 560,
+    "skipped": 2,
+    "typescript": "passed",
+    "build": "passed"
+  },
+  "downloads": [
+    {
+      "file": "여백의 기록.gonggan.zip",
+      "bytes": 3552234,
+      "sha256": "c34b99b9755d67b8a6b7e77b6b1604f783cfa04cf993f67d195d7dad64fccee5",
+      "assets": 6,
+      "assetMimes": [
+        "image/png",
+        "image/png",
+        "image/png",
+        "image/png",
+        "image/png",
+        "model/gltf-binary"
+      ],
+      "pngPixels": [
+        [
+          397,
+          793
+        ],
+        [
+          397,
+          793
+        ],
+        [
+          397,
+          793
+        ],
+        [
+          397,
+          793
+        ],
+        [
+          397,
+          793
+        ]
+      ],
+      "walls": 3,
+      "artworks": 1,
+      "unplaced": 4,
+      "scenes": 3,
+      "referenceModel": true,
+      "crc": "passed",
+      "manifestHashesAndBytes": "passed"
+    },
+    {
+      "file": "여백의 기록.gonggan (1).zip",
+      "bytes": 3550230,
+      "sha256": "def0222fad3a5895175c522673d4d26154ce5d8043b54d8d35399488941ad901",
+      "assets": 5,
+      "assetMimes": [
+        "image/png",
+        "image/png",
+        "image/png",
+        "image/png",
+        "image/png"
+      ],
+      "pngPixels": [
+        [
+          397,
+          793
+        ],
+        [
+          397,
+          793
+        ],
+        [
+          397,
+          793
+        ],
+        [
+          397,
+          793
+        ],
+        [
+          397,
+          793
+        ]
+      ],
+      "walls": 4,
+      "artworks": 5,
+      "unplaced": 0,
+      "scenes": 0,
+      "referenceModel": false,
+      "crc": "passed",
+      "manifestHashesAndBytes": "passed"
+    }
+  ],
+  "independentRestore": {
+    "sourceOrigin": "http://127.0.0.1:5187",
+    "targetOrigin": "http://localhost:5187",
+    "targetBefore": "default demo; no stored project",
+    "comparison": {
+      "restoredJson": "여백의 기록 (3).json",
+      "restoredJsonBytes": 18938494,
+      "entireProjectEquality": true,
+      "sceneArtworkCounts": [
+        5,
+        5,
+        1
+      ]
+    },
+    "refreshPersistence": "passed",
+    "oldSceneRestore": {
+      "walls": 4,
+      "artworks": 5,
+      "referenceModelVisible": true,
+      "textures": "rendered",
+      "group": "preserved",
+      "verificationChangeUndo": "passed"
+    },
+    "consoleWarningsAndErrors": 0,
+    "fileChooserToolDelaySeconds": 2522.6
+  },
+  "publicDraftUnchanged": true,
+  "scope": [
+    "current schema project editing data",
+    "all Scenes/structures",
+    "hidden and unplaced artwork",
+    "stored plan images",
+    "notes and measurements",
+    "reference GLB bytes/transforms"
+  ],
+  "excluded": [
+    "unstored original upload PDF/JPG bytes",
+    "Undo history",
+    "share management tokens",
+    "UI state"
+  ],
+  "remaining": [
+    "raw SKP input",
+    "account/server storage",
+    "3D artwork, advanced materials/lights and full product requirements",
+    "large model and mobile device validation"
+  ]
+}
