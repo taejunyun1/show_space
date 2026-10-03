@@ -1,0 +1,94 @@
+{
+  "snapshotStatus": 200,
+  "models": 3,
+  "uniqueModelAssets": 2,
+  "internalNoteExcluded": true,
+  "modelAssets": [
+    {
+      "sha": "6e6fe8d470f89a9e7c09fed434164d8e63bceb20b649177275644378243f11cf",
+      "size": 2496,
+      "hashMatches": true,
+      "mime": "model/gltf-binary",
+      "cacheControl": "no-store",
+      "nodeCount": 3,
+      "meshCount": 2,
+      "images": 1,
+      "metadataRemoved": true
+    },
+    {
+      "sha": "dae7a10f1bc215d5d4538e578f6771f364d554cf4c027dc65c5ebda9712f7fcc",
+      "size": 1780,
+      "hashMatches": true,
+      "mime": "model/gltf-binary",
+      "cacheControl": "no-store",
+      "nodeCount": 3,
+      "meshCount": 2,
+      "images": 0,
+      "metadataRemoved": true
+    }
+  ],
+  "PUT:1824e06be815e98dae88f6b227befab5862595c7fe1e1ca3": 405,
+  "GET:0000000000000000000000000000000000000000000000000000000000000000": 404,
+  "revocation": [
+    {
+      "deleteStatus": 204,
+      "assetStatuses": [
+        410,
+        410,
+        410
+      ]
+    },
+    {
+      "deleteStatus": 204,
+      "assetStatuses": [
+        410,
+        410,
+        410
+      ]
+    }
+  ],
+  "date": "2026-10-04",
+  "scope": "Independent 3D artworks in immutable read-only shares",
+  "environment": "Local Wrangler and local R2; synthetic owned fixtures only",
+  "tests": {
+    "passed": 637,
+    "skipped": 2
+  },
+  "build": "passed with existing >500kB chunk warnings",
+  "browser": {
+    "modelCount": 3,
+    "texturedModelVisible": true,
+    "poseLockedNoEditControls": true,
+    "planFootprintsVisible": true,
+    "dimensionsEnabledVisible": true,
+    "dimensionsDisabledHidden": true,
+    "orbitAndPlanSwitch": true,
+    "consoleWarnings": 0,
+    "consoleErrors": 0,
+    "openViewerRevocationPollCleared": true
+  },
+  "screenshots": [
+    "2026-10-04-import-menu.png",
+    "2026-10-04-model-artwork-sharing-3d.png",
+    "2026-10-04-model-artwork-sharing-plan.png",
+    "2026-10-04-model-artwork-sharing-no-dimensions.png",
+    "2026-10-04-model-artwork-sharing-revoked.png",
+    "2026-10-04-import-menu-public.png"
+  ],
+  "limitations": [
+    "Reference venue model share not implemented",
+    "Raw SKP not supported",
+    "Actual SketchUp/large models/mobile device performance not verified",
+    "Binary image metadata and unused BIN bytes preserved",
+    "Locked viewer does not prevent file extraction"
+  ],
+  "deployment": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "f6108821-2038-4099-948c-2ebe4bfec0f3",
+    "entryScript": "/assets/index-DfGDSUXR.js",
+    "publicImportMenuVerified": true,
+    "publicConsoleErrors": 0,
+    "publicConsoleWarnings": 0,
+    "publicShareCreation": "not exercised on production; real publish/view/revoke flow verified with local R2"
+  }
+}

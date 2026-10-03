@@ -1,4 +1,6 @@
-import {parsePublicShare,publicImageIds,type PublicShareSnapshot} from '../domain/publicShare';
+import {MODEL_MAX_BYTES} from '../lib/glbPayload';
+import {publicModelBytes,publicModelHash,PUBLIC_MODELS_MAX_BYTES} from '../lib/publicModelAsset';
+import {parsePublicShare,publicModelIds,publicImageIds,type PublicShareSnapshot} from '../domain/publicShare';
 
 export interface ShareBucket {
   put(key:string,value:string|ArrayBuffer|ReadableStream,options?:{httpMetadata?:{contentType?:string}}):Promise<unknown>;
@@ -15,6 +17,7 @@ const error=(status:number,message:string)=>json({error:message},status);
 const validImageId=(value:string)=>/^(0|[1-9][0-9]{0,3})$/.test(value);
 const metaKey=(id:string)=>`meta/${id}.json`;
 const snapshotKey=(id:string)=>`shares/${id}/snapshot.json`;
+const modelKey=(id:string,hash:string)=>`shares/${id}/models/${hash}.glb`;
 const imageKey=(id:string,imageId:string)=>`shares/${id}/images/${imageId}`;
 
 function ownerAuthorized(request:Request,token?:string){
@@ -45,16 +48,18 @@ async function boundedJson(request:Request):Promise<unknown>{
 export async function handleShareRequest(request:Request,env:ShareEnv):Promise<Response>{
   const {pathname}=new URL(request.url),method=request.method;
   if(!pathname.startsWith('/api/'))return error(404,'주소를 찾을 수 없습니다.');
-  const publicMatch=pathname.match(/^\/api\/public\/([0-9a-f]{48})(?:\/images\/(\d{1,4}))?$/);
+  const publicMatch=pathname.match(/^\/api\/public\/([0-9a-f]{48})(?:\/(images|models)\/(\d{1,4}|[0-9a-f]{64}))?$/);
   if(publicMatch){
     if(method!=='GET')return error(405,'읽기 전용 링크입니다.');
-    const [,id,imageId]=publicMatch,entry=await meta(env.SHARES,id);
+    const [,id,assetKind,assetId]=publicMatch,entry=await meta(env.SHARES,id);
     if(!entry)return error(404,'공유 링크를 찾을 수 없습니다.');
     if(entry.status==='revoked')return error(410,'중단된 공유 링크입니다.');
     if(entry.status!=='active')return error(404,'공유 링크를 찾을 수 없습니다.');
     const snapshot=await readSnapshot(env.SHARES,id);
     if(!snapshot)return error(404,'공유 화면을 찾을 수 없습니다.');
-    if(imageId===undefined)return json(snapshot);
+    if(assetId===undefined)return json(snapshot);
+    if(assetKind==='models'){if(!publicModelIds(snapshot).includes(assetId))return error(404,'3D 작품 모델을 찾을 수 없습니다.');const model=await env.SHARES.get(modelKey(id,assetId));if(!model)return error(404,'3D 작품 모델을 찾을 수 없습니다.');return new Response(model.body,{headers:{...noStore,'content-type':'model/gltf-binary'}});}
+    const imageId=assetId;
     if(!validImageId(imageId)||!publicImageIds(snapshot).includes(imageId))return error(404,'작품 이미지를 찾을 수 없습니다.');
     const image=await env.SHARES.get(imageKey(id,imageId));
     if(!image)return error(404,'작품 이미지를 찾을 수 없습니다.');
@@ -76,6 +81,16 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
       return json({items,truncated:listing.truncated});
     }
     return error(405,'지원하지 않는 요청입니다.');
+  }
+  const modelUpload=pathname.match(/^\/api\/shares\/([0-9a-f]{48})\/models\/([0-9a-f]{64})$/);
+  if(modelUpload){
+    if(method!=='PUT')return error(405,'지원하지 않는 요청입니다.');
+    const [,id,hash]=modelUpload,entry=await meta(env.SHARES,id);if(!entry)return error(404,'공유 작업을 찾을 수 없습니다.');if(entry.status!=='draft')return error(409,'발행된 공유는 변경할 수 없습니다.');
+    if(Number(request.headers.get('content-length'))>MODEL_MAX_BYTES)return error(413,'공유 3D 작품은 12MiB 이하여야 합니다.');
+    let bytes:ArrayBuffer;
+    try{const reader=request.body?.getReader();if(!reader)throw new Error('3D 작품 모델이 없습니다.');const chunks:Uint8Array[]=[];let length=0;try{while(true){const {done,value}=await reader.read();if(done)break;length+=value.length;if(length>MODEL_MAX_BYTES){await reader.cancel();return error(413,'공유 3D 작품은 12MiB 이하여야 합니다.');}chunks.push(value);}}finally{reader.releaseLock();}const raw=new Uint8Array(length);let offset=0;for(const chunk of chunks){raw.set(chunk,offset);offset+=chunk.length;}bytes=publicModelBytes(raw.buffer);if(await publicModelHash(bytes)!==hash)throw new Error('공유 모델의 해시·공개 자산 데이터가 일치하지 않습니다.');}catch(e){return error(400,(e as Error).message);}
+    const key=modelKey(id,hash);if(!(await env.SHARES.head(key))){const listing=await env.SHARES.list({prefix:`shares/${id}/models/`,limit:51});let total=bytes.byteLength;for(const item of listing.objects)total+=(await env.SHARES.head(item.key))?.size??0;if(listing.truncated||listing.objects.length>=50||total>PUBLIC_MODELS_MAX_BYTES)return error(413,'공유 모델은 50개·자산 총합 80MiB 이하여야 합니다.');await env.SHARES.put(key,bytes,{httpMetadata:{contentType:'model/gltf-binary'}});}
+    return new Response(null,{status:204,headers:noStore});
   }
   const imageUpload=pathname.match(/^\/api\/shares\/([0-9a-f]{48})\/images\/(\d{1,4})$/);
   if(imageUpload){
@@ -100,6 +115,7 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
     if(entry.status!=='draft')return error(409,'발행된 공유는 변경할 수 없습니다.');
     let snapshot:PublicShareSnapshot;
     try{snapshot=parsePublicShare(await boundedJson(request));}catch(e){return error(400,(e as Error).message);}
+    let modelBytes=0;for(const hash of publicModelIds(snapshot)){const model=await env.SHARES.head(modelKey(id,hash));if(!model)return error(409,'3D 작품 모델 업로드가 완료되지 않았습니다.');modelBytes+=model.size;}if(modelBytes>PUBLIC_MODELS_MAX_BYTES)return error(413,'공유 모델 자산 총합은 80MiB 이하여야 합니다.');
     for(const imageId of publicImageIds(snapshot))if(!(await env.SHARES.head(imageKey(id,imageId))))return error(409,'작품/표면 이미지 업로드가 완료되지 않았습니다.');
     await env.SHARES.put(snapshotKey(id),JSON.stringify(snapshot),{httpMetadata:{contentType:'application/json'}});
     await saveMeta(env.SHARES,{...entry,status:'active',name:snapshot.name,includeDimensions:!!snapshot.dimensions});

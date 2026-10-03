@@ -29,3 +29,11 @@ it('fits a shared camera to a narrow viewer without enlarging the authored view'
   expect(fitSharedCameraZoom(40,{width:390,height:524},walls)).toBeLessThan(40);
   expect(fitSharedCameraZoom(40,{width:860,height:640},walls)).toBe(40);
 });
+
+
+it('includes distant and tilted 3D artworks when fitting a shared camera',()=>{
+ const walls=createDemoProject().walls,viewport={width:860,height:640};
+ const model={widthMm:1200,heightMm:2100,depthMm:900,position:{x:20000,y:100,z:15000},rotation:{x:25,y:35,z:10}};
+ expect(fitSharedCameraZoom(40,viewport,walls,[model])).toBeLessThan(fitSharedCameraZoom(40,viewport,walls));
+ expect(fitSharedCameraZoom(40,viewport,[],[{...model,heightMm:50000,rotation:{x:0,y:0,z:0}}])).toBeLessThan(fitSharedCameraZoom(40,viewport,[],[model]));
+});

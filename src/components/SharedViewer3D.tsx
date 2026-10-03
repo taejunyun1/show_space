@@ -1,3 +1,5 @@
+import {PublicModelArtworks3D} from './PublicModelArtworks3D';
+import {projectSpatialBounds} from '../domain/referenceModel';
 import {outdoorAppearance} from '../domain/outdoor';
 import {Lighting3D} from './Lighting3D';
 import {WallSurfaceGeometry,FloorSurfaceGeometry} from './SurfaceGeometry';
@@ -19,7 +21,7 @@ import {applyWallVisibility} from './wallVisibility3d';
 import {measurementDistance} from './sharedMeasure';
 import {fitSharedCameraZoom} from './sharedCamera';
 
-type Selection={kind:'wall'|'artwork';id:string};
+type Selection={kind:'wall'|'artwork'|'modelArtwork';id:string};
 type Art=PublicShareSnapshot['artworks'][number];
 type PublicWall=PublicShareSnapshot['walls'][number];
 const frameColors={black:'#282827',natural:'#b9a383',white:'#f5f4ef',none:'#eee8dc'};
@@ -93,15 +95,15 @@ function CutawayVisibility({walls,groups,cutaway}:{walls:readonly Wall[];groups:
   return null;
 }
 
-function CameraSetup({frame,reset,walls}:{frame:NonNullable<PublicShareSnapshot['camera']>;reset:number;walls:PublicShareSnapshot['walls']}){
+function CameraSetup({frame,reset,snapshot}:{frame:NonNullable<PublicShareSnapshot['camera']>;reset:number;snapshot:PublicShareSnapshot}){
   const {camera,invalidate,size}=useThree();
   useEffect(()=>{
     camera.position.set(...frame.position);
     camera.lookAt(...frame.target);
-    if('zoom' in camera)camera.zoom=frame.projection==='perspective'?frame.zoom:fitSharedCameraZoom(frame.zoom,size,walls);
+    if('zoom' in camera)camera.zoom=frame.projection==='perspective'?frame.zoom:fitSharedCameraZoom(frame.zoom,size,snapshot.walls,snapshot.modelArtworks);
     if('fov' in camera)camera.fov=frame.fov??50;
     camera.updateProjectionMatrix();invalidate();
-  },[camera,frame,reset,invalidate,size.width,size.height,walls]);
+  },[camera,frame,reset,invalidate,size.width,size.height,snapshot]);
   return null;
 }
 
@@ -110,10 +112,8 @@ export default function SharedViewer3D({snapshot,shareId,selectedId,onSelect,res
   const cutawayWalls=useMemo<Wall[]>(()=>snapshot.walls.map(wall=>({...wall,material:finish(wall.material),visible:true,locked:true,note:''})),[snapshot.walls]);
   const frame=useMemo<NonNullable<PublicShareSnapshot['camera']>>(()=>{
     if(snapshot.camera)return snapshot.camera;
-    const points=[...snapshot.walls.flatMap(wall=>[wall.start,wall.end]),...(snapshot.importedFloor?.flat()??[])];
-    const minX=Math.min(...points.map(point=>point.x))/1000,maxX=Math.max(...points.map(point=>point.x))/1000;
-    const minZ=Math.min(...points.map(point=>point.z))/1000,maxZ=Math.max(...points.map(point=>point.z))/1000;
-    const span=Math.max(maxX-minX,maxZ-minZ,4),height=Math.max(...snapshot.walls.map(wall=>wall.heightMm))/1000;
+    const bounds=projectSpatialBounds(snapshot),minX=bounds.minX/1000,maxX=bounds.maxX/1000,minZ=bounds.minZ/1000,maxZ=bounds.maxZ/1000;
+    const span=Math.max(maxX-minX,maxZ-minZ,4),height=Math.max(0,bounds.maxY)/1000;
     const centerX=(minX+maxX)/2,centerZ=(minZ+maxZ)/2;
     return {position:[centerX-span,height+span,centerZ+span] as [number,number,number],target:[centerX,height/3,centerZ] as [number,number,number],zoom:Math.max(8,Math.min(90,650/(span+height+2)))};
   },[snapshot]);
@@ -127,10 +127,11 @@ export default function SharedViewer3D({snapshot,shareId,selectedId,onSelect,res
   const point3d=(point:WorldPoint):[number,number,number]=>[point.x/1000,point.y/1000,point.z/1000];
   return <div className="shared-3d"><Canvas shadows orthographic={frame.projection!=='perspective'} frameloop="demand" dpr={[1,1.5]} camera={{position:frame.position,zoom:frame.zoom,fov:frame.fov??50,near:.01,far:2000}} gl={{antialias:true}} onPointerMissed={()=>{if(!active)onSelect(null);}}>
     <SurfaceEnvironment enabled={needsSurfaceEnvironment(snapshot)} outdoor={snapshot.outdoor} intensity={outdoorAppearance(snapshot.outdoor)?.environment??snapshot.lighting?.environment}/><color attach="background" args={[outdoorAppearance(snapshot.outdoor)?.background??'#e9edf1']}/><Lighting3D source={snapshot.lighting?snapshot:{...snapshot,lighting:{ambient:1.3,hemisphere:0,fill:1.8,environment:.35}}}/>
-    <CameraSetup frame={frame} reset={reset} walls={snapshot.walls}/><Floor snapshot={snapshot} shareId={shareId} measuring={active} onMeasure={pick}/>
+    <CameraSetup frame={frame} reset={reset} snapshot={snapshot}/><Floor snapshot={snapshot} shareId={shareId} measuring={active} onMeasure={pick}/>
     {snapshot.walls.map(wall=><PublicWallMesh key={wall.id} wall={wall} artworks={snapshot.artworks.filter(art=>art.wallId===wall.id)} shareId={shareId} selectedId={selectedId} onSelect={onSelect} groups={wallGroups.current} measuring={active} onMeasure={pick}/>)}
     <CutawayVisibility walls={cutawayWalls} groups={wallGroups.current} cutaway={frame.projection!=='perspective'&&cutaway}/>
     {snapshot.openings.map(opening=><group key={opening.id}><Line points={[[opening.start.x/1000,.025,opening.start.z/1000],[opening.end.x/1000,.025,opening.end.z/1000]]} color={opening.kind==='window'?'#2785b8':'#16816b'} dashed dashSize={.1} gapSize={.08}/><Html center position={[(opening.start.x+opening.end.x)/2000,.12,(opening.start.z+opening.end.z)/2000]} style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="shared-3d-dimension">{opening.kind==='door'?'출입구':opening.kind==='stair-access'?'계단 통로':'창문'}</span></Html></group>)}
+    <PublicModelArtworks3D artworks={snapshot.modelArtworks??[]} shareId={shareId} selectedId={selectedId} onSelect={id=>onSelect({kind:'modelArtwork',id})} measuring={active} onMeasure={pick}/>
     {snapshot.zones.map(zone=><mesh key={zone.id} rotation={[-Math.PI/2,0,0]} position={[(zone.x+zone.width/2)/1000,.012,(zone.z+zone.depth/2)/1000]}><planeGeometry args={[zone.width/1000,zone.depth/1000]}/><meshBasicMaterial color="#e44b4b" transparent opacity={.27} depthWrite={false}/></mesh>)}
     {mm?.filter(dim=>dim.view==='3d').map(dim=><group key={dim.id}><mesh position={[(dim.start.x+dim.end.x)/2000,(dim.start.y+dim.end.y)/2000,(dim.start.z+dim.end.z)/2000]}><sphereGeometry args={[.015,8,8]}/><meshBasicMaterial color="#365cf5"/></mesh><Html center style={{pointerEvents:'none'}}><span className="shared-3d-dimension">{Math.round(dim.distanceMm).toLocaleString()} mm</span></Html></group>)}
     {active&&measurePoints.map((point,index)=><mesh key={index} position={point3d(point)} renderOrder={10}><sphereGeometry args={[.045,12,12]}/><meshBasicMaterial color="#16816b" depthTest={false}/></mesh>)}

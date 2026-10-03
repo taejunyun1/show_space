@@ -25,12 +25,13 @@ export function parseModelArtworks(value:unknown,reserved:Iterable<string>=[]):M
 }
 export function modelArtworkMembers(project:Pick<Project,'modelArtworks'>,id:string){const a=project.modelArtworks?.find(a=>a.id===id);return project.modelArtworks?.filter(b=>b.id===id||!!a?.groupId&&a.groupId===b.groupId)??[];}
 export function modelArtworkMatrix(a:Pick<ModelArtwork,'position'|'rotation'>){return new Matrix4().compose(new Vector3(a.position.x/1000,a.position.y/1000,a.position.z/1000),new Quaternion().setFromEuler(new Euler(a.rotation.x*Math.PI/180,a.rotation.y*Math.PI/180,a.rotation.z*Math.PI/180,'XYZ')),new Vector3(1,1,1));}
-export function modelArtworkCorners(a:ModelArtwork):WorldPoint[]{
+export type ModelArtworkPose=Pick<ModelArtwork,'widthMm'|'heightMm'|'depthMm'|'position'|'rotation'>;
+export function modelArtworkCorners(a:ModelArtworkPose):WorldPoint[]{
  const m=modelArtworkMatrix(a),points:WorldPoint[]=[];
  for(const x of [-a.widthMm/2000,a.widthMm/2000])for(const y of [0,a.heightMm/1000])for(const z of [-a.depthMm/2000,a.depthMm/2000]){const p=new Vector3(x,y,z).applyMatrix4(m);points.push({x:p.x*1000,y:p.y*1000,z:p.z*1000});}return points;
 }
-export function modelArtworkBounds(a:ModelArtwork){const b=new Box3().setFromPoints(modelArtworkCorners(a).map(p=>new Vector3(p.x,p.y,p.z)));return {minX:b.min.x,maxX:b.max.x,minY:b.min.y,maxY:b.max.y,minZ:b.min.z,maxZ:b.max.z};}
-export function modelArtworkFootprint(a:ModelArtwork){
+export function modelArtworkBounds(a:ModelArtworkPose){const b=new Box3().setFromPoints(modelArtworkCorners(a).map(p=>new Vector3(p.x,p.y,p.z)));return {minX:b.min.x,maxX:b.max.x,minY:b.min.y,maxY:b.max.y,minZ:b.min.z,maxZ:b.max.z};}
+export function modelArtworkFootprint(a:ModelArtworkPose){
  // Convex hull of all eight corners: tipping an object changes its plan footprint.
  const points=modelArtworkCorners(a).map(p=>({x:p.x,z:p.z})).sort((a,b)=>a.x-b.x||a.z-b.z),cross=(a:WorldPoint|{x:number;z:number},b:{x:number;z:number},c:{x:number;z:number})=>(b.x-a.x)*(c.z-a.z)-(b.z-a.z)*(c.x-a.x);
  const half=(list:typeof points)=>{const out:typeof points=[];for(const p of list){while(out.length>=2&&cross(out[out.length-2],out[out.length-1],p)<=0)out.pop();out.push(p);}out.pop();return out;};return [...half(points),...half([...points].reverse())];

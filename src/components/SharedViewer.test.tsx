@@ -54,3 +54,8 @@ describe('read-only public drawings',()=>{
     expect(privatePlan).not.toContain('2,000 mm');
   });
 });
+
+it('draws rotated 3D artwork footprints in read-only plans without dimension or edit controls',async()=>{
+ const {addModelArtwork}=await import('../domain/modelArtworks'),{testArtworkModel}=await import('../lib/modelArtworkTestFixture'),{preparePublicModels}=await import('../lib/publicModelAsset'),p=addModelArtwork(createDemoProject(),testArtworkModel()).project;p.modelArtworks![0].position={x:20000,y:100,z:15000};p.modelArtworks![0].rotation={x:25,y:35,z:10};const models=await preparePublicModels(p),snapshot=createPublicShare(p,{includeDimensions:false,modelAssetIds:models.ids}).snapshot;
+ const html=renderToStaticMarkup(<SharedPlan snapshot={snapshot} selectedId={snapshot.modelArtworks![0].id} onSelect={()=>{}}/>);expect(html).toContain('3D 작품 translated-arch');expect(html).toContain('<polygon');expect(html).not.toContain(' mm');expect(html).not.toMatch(/input|이동|회전|삭제/);const [x,z,width,depth]=html.match(/viewBox="([^"]+)"/)![1].split(' ').map(Number);expect(x+width).toBeGreaterThan(21000);expect(z+depth).toBeGreaterThan(16000);const vertices=html.match(/<polygon[^>]*points="([^"]+)"/)![1].split(' ').map(v=>v.split(',').map(Number));expect(vertices.length).toBeGreaterThanOrEqual(4);expect(vertices.every(([vx,vz])=>vx>=x&&vx<=x+width&&vz>=z&&vz<=z+depth)).toBe(true);
+});

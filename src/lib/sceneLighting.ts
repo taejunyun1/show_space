@@ -5,7 +5,7 @@ import {outdoorAppearance,type OutdoorSettings} from '../domain/outdoor';
 import {projectSpatialBounds} from '../domain/referenceModel';
 import type {Project,Point} from '../domain/types';
 export type RenderLight=Omit<ExhibitionLight,'locked'|'note'>;
-export interface LightingSource {lights?:RenderLight[];lighting?:LightingSettings;outdoor?:OutdoorSettings;walls?:Array<{start:Point;end:Point;heightMm:number;thicknessMm?:number}>;artworks?:Array<{widthMm:number;heightMm:number;depthMm:number;centerHeightMm:number}>;importedFloor?:Point[][];referenceModel?:Project['referenceModel'];modelArtworks?:Project['modelArtworks']}
+export interface LightingSource {lights?:RenderLight[];lighting?:LightingSettings;outdoor?:OutdoorSettings;walls?:Array<{start:Point;end:Point;heightMm:number;thicknessMm?:number}>;artworks?:Array<{widthMm:number;heightMm:number;depthMm:number;centerHeightMm:number}>;importedFloor?:Point[][];referenceModel?:Project['referenceModel'];modelArtworks?:Parameters<typeof projectSpatialBounds>[0]['modelArtworks']}
 let initialized=false;
 export function createLightObject(kind:RenderLight['kind']){
  const group=new Group();group.name='light-object';const lamp=kind==='spot'?new SpotLight():new RectAreaLight();lamp.name='emitter';group.add(lamp);
