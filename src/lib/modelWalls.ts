@@ -24,6 +24,8 @@ export function extractModelWalls(scene:Object3D,model:ReferenceModel):{walls:Wa
  const floorLimit=model.positionMm[1]/1000+.25*model.scale;
  root.traverse(object=>{
   if(!(object instanceof Mesh)||'isSkinnedMesh' in object||'isInstancedMesh' in object||object.morphTargetInfluences?.some(v=>v!==0))return;
+  // Our GLB keeps artwork identity, so a large frame cannot become an installation wall.
+  for(let parent:Object3D|null=object;parent;parent=parent.parent)if(parent.userData.gonggan?.kind==='artwork')return;
   const geometry=object.geometry,position=geometry.getAttribute('position'),index=geometry.index;if(!position)return;
   const matrix=transform.clone().multiply(object.matrixWorld),winding=matrix.determinant()<0?-1:1,count=index?.count??position.count;
   for(let i=0;i+2<count;i+=3){

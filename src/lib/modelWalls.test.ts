@@ -28,6 +28,10 @@ it('skips tilted, elevated and excessively thick blocks',()=>{
  const scene=new Group(),tilt=box(0,0,4,.2);tilt.rotation.x=.2;const raised=box(0,5,4,.2);raised.position.y=5;scene.add(tilt,raised,box(0,10,4,2));
  expect(extractModelWalls(scene,model).walls).toEqual([]);
 });
+it('does not turn a tall exported artwork frame into a wall on reimport',()=>{
+ const scene=new Group(),artwork=new Group();artwork.userData={gonggan:{kind:'artwork'}};artwork.add(box(0,0,1,.04,2));scene.add(artwork,box(0,-3,8,.2));
+ expect(extractModelWalls(scene,model).walls).toHaveLength(1);
+});
 it('preserves the actual floor even when the model has an open wall boundary',()=>{
  const scene=new Group();scene.add(box(0,-3,8,.2),box(-4,0,.2,6),box(4,0,.2,6),box(0,0,8,6,.15));
  const result=extractModelWalls(scene,model);expect(result.importedFloor).toHaveLength(1);expect(result.importedFloor![0]).toHaveLength(4);
