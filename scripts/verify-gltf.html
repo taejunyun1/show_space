@@ -1,0 +1,19 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>glTF 로컬 검증</title>
+<style>body{font:15px system-ui;margin:24px;color:#283345}canvas{display:block;border:1px solid #ddd;margin-top:18px}pre{white-space:pre-wrap}</style>
+<h1>glTF 별도 파일 검증</h1><p>로컬 ZIP의 scene.gltf와 바이너리·이미지만 읽습니다.</p><input aria-label="검증할 glTF ZIP" type="file" accept=".zip"><pre id="details">파일을 선택하세요.</pre>
+<script type="module">
+import JSZip from 'jszip';
+import {Scene,AmbientLight,DirectionalLight,OrthographicCamera,Box3,Vector3,WebGLRenderer,LoadingManager,Mesh} from 'three';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+const renderer=new WebGLRenderer({antialias:true});renderer.setSize(950,650);renderer.setClearColor('#e9edf1');document.body.append(renderer.domElement);let urls=[];
+document.querySelector('input').addEventListener('change',async event=>{try{
+ urls.forEach(URL.revokeObjectURL);urls=[];document.querySelector('#details').textContent='읽는 중';
+ const zip=await JSZip.loadAsync(await event.target.files[0].arrayBuffer(),{checkCRC32:true}),resources=new Map(),mime=name=>name.endsWith('.png')?'image/png':name.endsWith('.jpg')?'image/jpeg':name.endsWith('.webp')?'image/webp':'application/octet-stream';
+ for(const [name,file] of Object.entries(zip.files))if(!file.dir){const url=URL.createObjectURL(new Blob([await file.async('uint8array')],{type:mime(name)}));resources.set(name,url);urls.push(url);}
+ const manager=new LoadingManager().setURLModifier(path=>{if(!resources.has(path))throw new Error('누락된 자산: '+path);return resources.get(path);});
+ const root=(await new GLTFLoader(manager).parseAsync(await zip.file('scene.gltf').async('string'),'')).scene,scene=new Scene();scene.add(root,new AmbientLight(0xffffff,1));const light=new DirectionalLight(0xffffff,2);light.position.set(-3,12,6);scene.add(light);
+ const box=new Box3().setFromObject(root),center=box.getCenter(new Vector3()),size=box.getSize(new Vector3()),span=Math.max(...size.toArray()),camera=new OrthographicCamera(-950/2,950/2,650/2,-650/2,.01,1000);camera.position.copy(center.clone().add(new Vector3(-span,span,span)));camera.lookAt(center);camera.zoom=650/(span*1.7);camera.updateProjectionMatrix();renderer.render(scene,camera);
+ const meshes=[],walls=[],textures=[];root.traverse(o=>{if(o.userData.gonggan?.kind==='wall')walls.push({name:o.name,sizeM:new Box3().setFromObject(o).getSize(new Vector3()).toArray()});if(o instanceof Mesh){meshes.push(o.name);for(const m of Array.isArray(o.material)?o.material:[o.material])if(m.map)textures.push({mesh:o.name,width:m.map.image.width,height:m.map.image.height});}});
+ document.querySelector('#details').textContent=JSON.stringify({loaded:true,files:[...resources.keys()],sizeM:size.toArray(),meshes:meshes.length,walls,textures},null,2);
+ }catch(error){document.querySelector('#details').textContent='오류: '+error.message;}});
+</script></html>

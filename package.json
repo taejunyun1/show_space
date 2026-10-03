@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "test": "vitest run",
     "preview": "vite preview --host 127.0.0.1",
-    "postinstall": "node scripts/sync-pdf-assets.mjs && node scripts/sync-ocr-assets.mjs",
+    "postinstall": "node scripts/sync-pdf-assets.mjs && node scripts/sync-ocr-assets.mjs && node scripts/sync-zip-notices.mjs",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
     "@react-three/drei": "10.7.0",
     "@react-three/fiber": "9.3.0",
     "idb-keyval": "6.2.2",
+    "jszip": "3.10.2",
     "lucide-react": "0.468.0",
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.3.289",
@@ -32,8 +33,8 @@
     "@types/three": "0.180.0",
     "@vitejs/plugin-react": "5.0.0",
     "typescript": "5.9.2",
-    "vite": "7.1.0",
-    "vitest": "3.2.0",
-    "wrangler": "4.131.0"
+    "vite": "7.3.6",
+    "vitest": "4.1.11",
+    "wrangler": "4.147.0"
   }
 }

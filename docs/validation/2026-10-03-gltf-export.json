@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-03",
+  "deploymentVersion": "04552058-2d46-4690-93ff-02adf608ba26",
+  "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+  "tests": {
+    "passed": 551,
+    "skipped": 2,
+    "build": "passed",
+    "npmAuditVulnerabilities": 0
+  },
+  "tools": {
+    "node": "24.14.0",
+    "vite": "7.3.6",
+    "vitest": "4.1.11",
+    "wrangler": "4.147.0",
+    "jszip": "3.10.2"
+  },
+  "publicDownload": {
+    "name": "여백의 기록.gltf (2).zip",
+    "bytes": 3550853,
+    "sha256": "436e85ca237b4a7d110279d747b4a7911a65674f31a0b561dc491f7aa8129008",
+    "crc": "passed",
+    "meshDefinitions": 15,
+    "images": 5,
+    "relativeResourceReferences": "passed",
+    "bufferByteLengths": "passed",
+    "units": "meter",
+    "editorUnchanged": true,
+    "consoleWarningsAndErrors": 0
+  },
+  "localReload": {
+    "bytes": 737186,
+    "meshInstances": 6,
+    "imagePixels": [
+      397,
+      793
+    ],
+    "boundsMeters": [
+      12.200000003,
+      3.159999996,
+      8.100000192
+    ],
+    "wallHeightMeters": 3,
+    "wallThicknessMeters": 0.2,
+    "artRotationDegrees": 30,
+    "loader": "Three.js GLTFLoader",
+    "browserRender": "passed"
+  },
+  "referenceModelExport": {
+    "meshDefinitions": 7,
+    "originalMeshInstances": 4,
+    "sharedMeshIndex": 6
+  },
+  "evidence": [
+    "2026-10-03-gltf-reload.png",
+    "2026-10-03-public-gltf-options.png"
+  ],
+  "remaining": [
+    "raw SKP input/conversion",
+    "full editable asset backup package",
+    "account/server storage",
+    "real SketchUp exports, large models and mobile device validation"
+  ]
+}

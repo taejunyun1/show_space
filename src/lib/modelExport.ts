@@ -46,3 +46,14 @@ export async function exportProjectGlb(project:Project,onProgress:(message:strin
   return new Blob([bytes],{type:'application/octet-stream'});
  }finally{disposeExportScene(scene);}
 }
+
+export async function exportProjectGltf(project:Project,onProgress:(message:string)=>void=()=>{}):Promise<Blob>{
+ const scene=await prepareExportScene(project,onProgress);
+ try{
+  onProgress('glTF 형상과 이미지 만드는 중');
+  const document=await new GLTFExporter().parseAsync(scene,{binary:false,onlyVisible:true,maxTextureSize:1024});
+  if(document instanceof ArrayBuffer||!document||typeof document!=='object')throw new Error('glTF 파일을 만들지 못했습니다.');
+  const {createGltfFiles,zipGltfFiles}=await import('./gltfPackage');
+  return await zipGltfFiles(createGltfFiles(document,project),onProgress);
+ }finally{disposeExportScene(scene);}
+}

@@ -59,3 +59,17 @@ it('roundtrips a real binary GLB with wall dimensions and a floor hole intact',a
   expect(result.walls).toHaveLength(4);expect(result.walls.every(w=>w.thicknessMm===160&&w.heightMm===3200)).toBe(true);expect(result.importedFloor).toHaveLength(2);disposeExportScene(gltf.scene);
  }finally{vi.unstubAllGlobals();}
 });
+
+it('roundtrips the real separate glTF ZIP with meter dimensions and a floor hole intact',async()=>{
+ vi.stubGlobal('FileReader',class {result:string|null=null;onloadend:(()=>void)|null=null;readAsDataURL(blob:Blob){void blob.arrayBuffer().then(bytes=>{this.result=`data:${blob.type||'application/octet-stream'};base64,${Buffer.from(bytes).toString('base64')}`;this.onloadend?.();});}});
+ vi.stubGlobal('ProgressEvent',class {constructor(public type:string,public init:unknown){}});
+ try{
+  const project=createDemoProject();project.artworks=[];project.walls[0].note='PRIVATE';project.importedFloor=[[{x:-4000,z:-3000},{x:4000,z:-3000},{x:4000,z:3000},{x:-4000,z:3000}],[{x:-1000,z:-1000},{x:1000,z:-1000},{x:1000,z:1000},{x:-1000,z:1000}]];const before=structuredClone(project);
+  const {exportProjectGltf}=await import('./modelExport'),{default:JSZip}=await import('jszip'),{GLTFLoader}=await import('three/examples/jsm/loaders/GLTFLoader.js'),{LoadingManager}=await import('three');
+  const zip=await JSZip.loadAsync(await (await exportProjectGltf(project)).arrayBuffer(),{checkCRC32:true}),json=await zip.file('scene.gltf')!.async('string'),doc=JSON.parse(json);
+  expect(json).not.toContain('PRIVATE');expect(doc.buffers[0].uri).toBe('buffers/buffer-1.bin');expect(doc.buffers[0].uri).not.toContain('data:');
+  const buffer=await zip.file(doc.buffers[0].uri)!.async('uint8array'),manager=new LoadingManager().setURLModifier(url=>{if(url!==doc.buffers[0].uri)throw new Error(`Unexpected resource: ${url}`);return `data:application/octet-stream;base64,${Buffer.from(buffer).toString('base64')}`;});
+  const gltf=await new GLTFLoader(manager).parseAsync(json,''),wall=gltf.scene.getObjectByName('wall-wall-a')!,size=new Box3().setFromObject(wall).getSize(new Vector3());expect(size.x).toBeCloseTo(8);expect(size.y).toBeCloseTo(3.2);expect(size.z).toBeCloseTo(.16);expect(gltf.scene.children).toHaveLength(5);
+  const {extractModelWalls}=await import('./modelWalls');const result=extractModelWalls(gltf.scene,{name:'scene.gltf',dataUrl:'unused',visible:true,sizeMm:[8000,3200,6000],sourceOffsetM:[0,0,0],positionMm:[0,0,0],rotationDeg:0,scale:1});expect(result.walls).toHaveLength(4);expect(result.importedFloor).toHaveLength(2);expect(project).toEqual(before);disposeExportScene(gltf.scene);
+ }finally{vi.unstubAllGlobals();}
+});
