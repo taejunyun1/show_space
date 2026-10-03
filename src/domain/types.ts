@@ -48,7 +48,19 @@ export interface ReferenceModel {
  name:string;dataUrl:string;visible:boolean;sizeMm:[number,number,number];sourceOffsetM:[number,number,number];positionMm:[number,number,number];rotationDeg:number;scale:number
 }
 
+/** A floor-space artwork. Physical dimensions change only through numeric fields.
+ * Position is the source bounding box's bottom centre; rotation is XYZ Euler degrees. */
+export interface ModelArtwork {
+ id:string;name:string;artist:string;year:string
+ kind:'sculpture'|'installation'|'object'|'custom'
+ model:Pick<ReferenceModel,'name'|'dataUrl'|'sizeMm'|'sourceOffsetM'>
+ widthMm:number;heightMm:number;depthMm:number
+ position:WorldPoint;rotation:WorldPoint
+ visible:boolean;locked:boolean;note:string;groupId?:string
+}
+
 export interface SceneStructure {
+  modelArtworks?:ModelArtwork[]
   outdoor?:OutdoorSettings
   lights?:ExhibitionLight[]
   lighting?:LightingSettings
@@ -80,6 +92,7 @@ export interface Opening {
 }
 
 export interface Project {
+  modelArtworks?:ModelArtwork[]
   outdoor?:OutdoorSettings
   lights?:ExhibitionLight[]
   lighting?:LightingSettings
@@ -98,4 +111,4 @@ export interface Project {
   floorColor: string; planImageUrl?: string; planOpacity?: number; planReference?: PlanReference
 }
 
-export interface EntitySelection { type: 'wall' | 'artwork' | 'light'; id: string }
+export interface EntitySelection { type: 'wall' | 'artwork' | 'modelArtwork' | 'light'; id: string }

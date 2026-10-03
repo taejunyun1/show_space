@@ -1,3 +1,4 @@
+import {addModelArtwork as addModelArtworkToProject,patchModelArtwork as updateModelArtwork,modelArtworkMembers,groupModelArtworks,transformModelArtworks,modelArtworkBounds} from '../domain/modelArtworks';
 import {parseOutdoor,DEFAULT_OUTDOOR,type OutdoorSettings} from '../domain/outdoor';
 import {newLight,patchLight as updateLight,parseLighting,translatedLight,CUSTOM_LIGHTING,DEFAULT_LIGHTING,type ExhibitionLight,type LightingSettings} from '../domain/lighting';
 import {adoptModelSpace,sameModelGeometry} from '../domain/modelSpace'
@@ -16,7 +17,7 @@ import {
   updateArtwork,
   updateWall,
 } from '../domain/model'
-import type { Artwork, CameraView, EntitySelection, MeasurementAnchor, Project, ReferenceModel, SavedDimension, Wall } from '../domain/types'
+import type { Artwork, CameraView, EntitySelection, MeasurementAnchor, Project, ReferenceModel, SavedDimension, Wall, ModelArtwork, WorldPoint } from '../domain/types'
 import type {Point} from '../domain/types'
 import {snapWallTranslation,transformWalls} from '../domain/wallTransform'
 import {addWallBetween,updateWallEndpoint} from '../domain/wallEditing'
@@ -81,6 +82,14 @@ interface EditorState {
   beginOutdoorTime():void
   updateOutdoorTime(time:string):void
   finishOutdoorTime(cancel?:boolean):void
+  modelArtworkGesture:{id:string;ids:string[];base:Project}|null
+  addModelArtwork(model:ReferenceModel,expectedProjectId:string):void
+  patchModelArtwork(id:string,patch:Partial<ModelArtwork>):void
+  groupSelectedModelArtworks(ungroup?:boolean):void
+  beginModelArtworkTransform(id:string):void
+  updateModelArtworkTransform(position:WorldPoint,rotation:WorldPoint):void
+  finishModelArtworkTransform(cancel?:boolean):void
+  floorSelectedModelArtwork():void
   lightGesture:{id:string;base:Project}|null
   beginLightMove(id:string):void
   updateLightMove(position:import('../domain/types').WorldPoint):void
@@ -116,6 +125,7 @@ const clone = <T,>(value: T): T => structuredClone(value)
 
 function firstSelection(project: Project): EntitySelection[] {
   if (project.artworks[0]) return artworkGroupMembers(project,project.artworks[0].id).map(a=>({type:'artwork',id:a.id}))
+  if(project.modelArtworks?.[0])return [{type:'modelArtwork',id:project.modelArtworks[0].id}]
   if (project.walls[0]) return [{ type: 'wall', id: project.walls[0].id }]
   return []
 }
@@ -128,8 +138,10 @@ function groupMembers(project:Project,id:string):EntitySelection[] {
 function validSelection(project: Project, selected: EntitySelection[]) {
   return selected.filter((selection) => selection.type === 'artwork'
     ? project.artworks.some((artwork) => artwork.id === selection.id)
-    : selection.type==='light'?project.lights?.some(l=>l.id===selection.id):project.walls.some((wall) => wall.id === selection.id))
+    : selection.type==='modelArtwork'?project.modelArtworks?.some(a=>a.id===selection.id):selection.type==='light'?project.lights?.some(l=>l.id===selection.id):project.walls.some((wall) => wall.id === selection.id))
 }
+
+function selectedModelArtworkIds(project:Project,selected:EntitySelection[],id:string){return selected.some(i=>i.type==='modelArtwork'&&i.id===id)?[...new Set(selected.filter(i=>i.type==='modelArtwork').flatMap(i=>modelArtworkMembers(project,i.id).map(a=>a.id)))]:modelArtworkMembers(project,id).map(a=>a.id);}
 
 function validWall(project: Project, preferred: string) {
   return project.walls.some((wall) => wall.id === preferred) ? preferred : (project.walls[0]?.id ?? '')
@@ -151,7 +163,7 @@ export const useEditor = create<EditorState>((set, get) => {
   }
   return {
     project: initialProject,
-    lightGesture:null,outdoorGesture:null,
+    lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,
     previewProject: null,
     wallGesture: null,
     artworkGesture:null,
@@ -171,14 +183,14 @@ export const useEditor = create<EditorState>((set, get) => {
     future: [],
     hydrated: false,
     select: (selection, additive = false) => set((state) => {
-      const members=selection.type==='wall'?groupMembers(state.project,selection.id):selection.type==='light'?[selection]:artworkGroupMembers(state.project,selection.id).map(a=>({type:'artwork' as const,id:a.id}));
+      const members=selection.type==='wall'?groupMembers(state.project,selection.id):selection.type==='light'?[selection]:selection.type==='modelArtwork'?modelArtworkMembers(state.project,selection.id).map(a=>({type:'modelArtwork' as const,id:a.id})):artworkGroupMembers(state.project,selection.id).map(a=>({type:'artwork' as const,id:a.id}));
       const matches=(item:EntitySelection)=>members.some(member=>member.type===item.type&&member.id===item.id);
       const selected = !additive ? members : members.every(member=>state.selected.some(item=>item.type===member.type&&item.id===member.id))
         ? state.selected.filter(item=>!matches(item)) : [...state.selected.filter(item=>!matches(item)),...members];
       const artwork = selection.type === 'artwork' ? state.project.artworks.find((item) => item.id === selection.id) : undefined
       return { selected, activeWallId: selection.type === 'wall' ? selection.id : (artwork?.wallId ?? state.activeWallId) }
     }),
-    setTool: (activeTool) => set({activeTool,measurementDraft:null,previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,outdoorGesture:null,rotatingArtworkId:null}),
+    setTool: (activeTool) => set({activeTool,measurementDraft:null,previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null}),
     pickMeasurement: (anchor,view,elevationWallId) => attempt(()=>{
       const state=get(),current=state.measurementDraft;
       const next:MeasurementDraft= !current||current.end||current.view!==view||current.elevationWallId!==elevationWallId
@@ -213,7 +225,7 @@ export const useEditor = create<EditorState>((set, get) => {
         ? [...new Set(selected.filter(item=>item.type==='wall').flatMap(item=>groupMembers(project,item.id).map(w=>w.id)))] : groupMembers(project,id).map(w=>w.id);
       if(project.walls.some(w=>ids.includes(w.id)&&w.locked))throw new Error('잠긴 벽은 이동하거나 회전할 수 없습니다.');
       if(!Number.isFinite(start.x)||!Number.isFinite(start.z))throw new Error('시작점이 올바르지 않습니다.');
-      set({wallGesture:{id,ids,mode,start,base:project},outdoorGesture:null,artworkGesture:null,rotatingArtworkId:null,previewProject:null,selected:ids.map(id=>({type:'wall',id})),activeWallId:id});
+      set({wallGesture:{id,ids,mode,start,base:project},outdoorGesture:null,modelArtworkGesture:null,artworkGesture:null,rotatingArtworkId:null,previewProject:null,selected:ids.map(id=>({type:'wall',id})),activeWallId:id});
     }),
     updateWallTransform: (point,snap=false) => attempt(()=>{
       const gesture=get().wallGesture;if(!gesture)return;
@@ -240,7 +252,7 @@ export const useEditor = create<EditorState>((set, get) => {
       if(!artwork)throw new Error('작품을 찾을 수 없습니다.');
       if(artworkGroupMembers(project,id).some(a=>a.locked))throw new Error('잠긴 작품은 이동할 수 없습니다.');
       if(!Number.isFinite(hit.alongMm)||!Number.isFinite(hit.centerHeightMm))throw new Error('작품 시작점이 올바르지 않습니다.');
-      set({outdoorGesture:null,artworkGesture:{id,base:project,grab:{alongMm:artwork.alongMm-hit.alongMm,centerHeightMm:artwork.centerHeightMm-hit.centerHeightMm}},wallGesture:null,rotatingArtworkId:null,previewProject:null,selected:artworkGroupMembers(project,id).map(a=>({type:'artwork',id:a.id})),activeWallId:artwork.wallId,message:null});
+      set({outdoorGesture:null,modelArtworkGesture:null,artworkGesture:{id,base:project,grab:{alongMm:artwork.alongMm-hit.alongMm,centerHeightMm:artwork.centerHeightMm-hit.centerHeightMm}},wallGesture:null,rotatingArtworkId:null,previewProject:null,selected:artworkGroupMembers(project,id).map(a=>({type:'artwork',id:a.id})),activeWallId:artwork.wallId,message:null});
     }),
     updateArtworkDrag: (hit) => attempt(()=>{
       const gesture=get().artworkGesture;if(!gesture)return;
@@ -261,8 +273,8 @@ export const useEditor = create<EditorState>((set, get) => {
     },
     setArtworkRotationActive:(rotatingArtworkId)=>set({rotatingArtworkId}),
     setView: (view) => set(state=>{
-      if(view!=='plan'&&state.project.planDraft&&!state.project.planReference?.calibrated)return {view:'plan',message:'두 점 축척 보정 후 3D와 벽면도를 열 수 있습니다.',wallGesture:null,artworkGesture:null,lightGesture:null,outdoorGesture:null,rotatingArtworkId:null,previewProject:null};
-      return {view,measurementDraft:state.view===view?state.measurementDraft:null,activeTool:view!=='plan'&&state.activeTool==='draw'?'select':state.activeTool,wallGesture:null,artworkGesture:null,lightGesture:null,outdoorGesture:null,rotatingArtworkId:null,previewProject:null};
+      if(view!=='plan'&&state.project.planDraft&&!state.project.planReference?.calibrated)return {view:'plan',message:'두 점 축척 보정 후 3D와 벽면도를 열 수 있습니다.',wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,previewProject:null};
+      return {view,measurementDraft:state.view===view?state.measurementDraft:null,activeTool:view!=='plan'&&state.activeTool==='draw'?'select':state.activeTool,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,previewProject:null};
     }),
     setActiveWall: (activeWallId) => set({ activeWallId }),
     toggleDimensions: () => set((state) => ({ showDimensions: !state.showDimensions })),
@@ -271,7 +283,7 @@ export const useEditor = create<EditorState>((set, get) => {
     commit: (next) => set((state) => ({
       project: clone(next),
       view:safeView(next,state.view),
-      previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,outdoorGesture:null,rotatingArtworkId:null,
+      previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,
       past: [...state.past, clone(state.project)].slice(-50),
       future: [],
       message: null,
@@ -281,13 +293,20 @@ export const useEditor = create<EditorState>((set, get) => {
     addLight: kind=>attempt(()=>{const project=get().project;if(project.planDraft&&!project.planReference?.calibrated)throw new Error('도면 축척을 먼저 보정해주세요.');const light=newLight(project,kind);get().commit({...project,lights:[...(project.lights??[]),light],lighting:project.lighting??CUSTOM_LIGHTING});set({selected:[{type:'light',id:light.id}],view:'3d',activeTool:'select'});}),
     patchLight:(id,patch)=>attempt(()=>get().commit(updateLight(get().project,id,patch))),
     patchOutdoor: outdoor=>attempt(()=>get().commit({...get().project,outdoor:parseOutdoor(outdoor)})),
-    beginOutdoorTime:()=>{const s=get();if(s.project.outdoor?.mode!=='outdoor'||s.wallGesture||s.artworkGesture||s.lightGesture)return;set({outdoorGesture:{base:s.project},previewProject:null});},
+    beginOutdoorTime:()=>{const s=get();if(s.project.outdoor?.mode!=='outdoor'||s.wallGesture||s.artworkGesture||s.lightGesture||s.modelArtworkGesture)return;set({outdoorGesture:{base:s.project},previewProject:null});},
     updateOutdoorTime:time=>attempt(()=>{const g=get().outdoorGesture;if(!g)return;set({previewProject:{...g.base,outdoor:parseOutdoor({...g.base.outdoor??DEFAULT_OUTDOOR,time})}});}),
     finishOutdoorTime:(cancel=false)=>{const {outdoorGesture,previewProject}=get();set({outdoorGesture:null,previewProject:null});if(!cancel&&outdoorGesture&&previewProject&&JSON.stringify(outdoorGesture.base.outdoor)!==JSON.stringify(previewProject.outdoor))attempt(()=>get().commit(previewProject));},
     patchLighting: lighting=>attempt(()=>get().commit({...get().project,lighting:parseLighting(lighting)})),
     beginLightMove:id=>attempt(()=>{const p=get().project,l=p.lights?.find(l=>l.id===id);if(!l||l.locked)throw new Error('잠긴 조명은 이동할 수 없습니다.');set({lightGesture:{id,base:p},outdoorGesture:null,previewProject:null});}),
     updateLightMove:position=>attempt(()=>{const g=get().lightGesture;if(!g)return;const l=g.base.lights!.find(l=>l.id===g.id)!;set({previewProject:updateLight(g.base,g.id,translatedLight(l,position))});}),
-    finishLightMove:(cancel=false)=>{const {lightGesture,previewProject}=get();set({lightGesture:null,outdoorGesture:null,previewProject:null});if(!cancel&&lightGesture&&previewProject&&JSON.stringify(lightGesture.base.lights)!==JSON.stringify(previewProject.lights))attempt(()=>get().commit(previewProject));},
+    finishLightMove:(cancel=false)=>{const {lightGesture,previewProject}=get();set({lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,previewProject:null});if(!cancel&&lightGesture&&previewProject&&JSON.stringify(lightGesture.base.lights)!==JSON.stringify(previewProject.lights))attempt(()=>get().commit(previewProject));},
+    addModelArtwork:(model,expectedProjectId)=>attempt(()=>{const p=get().project;if(p.id!==expectedProjectId)throw new Error('프로젝트가 바뀌어 3D 작품 가져오기를 취소했습니다.');const result=addModelArtworkToProject(p,model);get().commit(result.project);set({selected:[{type:'modelArtwork',id:result.artwork.id}],view:'3d',activeTool:'select',message:'3D 작품을 등록했습니다. 실제 크기는 오른쪽 숫자 입력으로 조절하세요.'});}),
+    patchModelArtwork:(id,patch)=>attempt(()=>{const p=get().project,a=p.modelArtworks?.find(a=>a.id===id);if(!a)throw new Error('3D 작품을 찾을 수 없습니다.');let next=updateModelArtwork(p,id,patch);if(patch.position||patch.rotation){next=transformModelArtworks(p,selectedModelArtworkIds(p,get().selected,id),id,patch.position??a.position,patch.rotation??a.rotation);const {position:_,rotation:__,...other}=patch;if(Object.keys(other).length)next=updateModelArtwork(next,id,other);}get().commit(next);}),
+    groupSelectedModelArtworks:(ungroup=false)=>attempt(()=>{const s=get();if(s.selected.some(i=>i.type!=='modelArtwork'))throw new Error('3D 작품만 선택하세요.');get().commit(groupModelArtworks(s.project,s.selected.map(i=>i.id),ungroup));}),
+    beginModelArtworkTransform:id=>attempt(()=>{const s=get(),p=s.project,a=p.modelArtworks?.find(a=>a.id===id);if(!a)throw new Error('3D 작품이 없습니다.');const ids=selectedModelArtworkIds(p,s.selected,id);if(p.modelArtworks?.some(a=>ids.includes(a.id)&&a.locked))throw new Error('잠긴 3D 작품이 포함되어 이동·회전할 수 없습니다.');set({modelArtworkGesture:{id,ids,base:p},wallGesture:null,artworkGesture:null,lightGesture:null,outdoorGesture:null,rotatingArtworkId:null,previewProject:null,selected:ids.map(id=>({type:'modelArtwork',id}))});}),
+    updateModelArtworkTransform:(position,rotation)=>attempt(()=>{const g=get().modelArtworkGesture;if(g)set({previewProject:transformModelArtworks(g.base,g.ids,g.id,position,rotation)});}),
+    finishModelArtworkTransform:(cancel=false)=>{const s=get(),g=s.modelArtworkGesture,preview=s.previewProject;set({modelArtworkGesture:null,previewProject:null});if(!cancel&&g&&preview&&JSON.stringify(g.base.modelArtworks?.map(a=>[a.position,a.rotation]))!==JSON.stringify(preview.modelArtworks?.map(a=>[a.position,a.rotation])))attempt(()=>get().commit(parseProject(preview)));},
+    floorSelectedModelArtwork:()=>attempt(()=>{const s=get(),id=s.selected.find(i=>i.type==='modelArtwork')?.id;if(!id)throw new Error('3D 작품을 선택하세요.');const a=s.project.modelArtworks!.find(a=>a.id===id)!;const ids=selectedModelArtworkIds(s.project,s.selected,id),members=s.project.modelArtworks!.filter(a=>ids.includes(a.id));if(members.some(a=>a.locked))throw new Error('잠긴 3D 작품은 이동할 수 없습니다.');const minY=Math.min(...members.map(a=>modelArtworkBounds(a).minY));s.patchModelArtwork(id,{position:{...a.position,y:a.position.y-minY}});}),
     patchArtwork: (id, patch) => attempt(() => get().commit(patchGroupedArtwork(get().project, id, patch))),
     patchWall: (id, patch) => attempt(() => get().commit(updateWall(get().project, id, patch))),
     moveWallEndpoint: (id,endpoint,point) => attempt(()=>get().commit(updateWallEndpoint(get().project,id,endpoint,point,get().linkedCorners))),
@@ -370,6 +389,7 @@ export const useEditor = create<EditorState>((set, get) => {
           const shift=Math.max(10,Math.min(next.planReference!.widthPx,next.planReference!.heightPx)*.025);
           if(source)next={...next,walls:next.walls.map(w=>w.id===copyId?{...w,start:{x:source.start.x,z:source.start.z+shift},end:{x:source.end.x,z:source.end.z+shift}}:w)};
         }
+        if(selection.type==='modelArtwork'){const groupId=next.modelArtworks?.find(a=>a.id===selection.id)?.groupId;if(groupId){const key='modelArtwork:'+groupId;if(!copiedGroups.has(key))copiedGroups.set(key,crypto.randomUUID());next={...next,modelArtworks:next.modelArtworks?.map(a=>a.id===result.selection.id?{...a,groupId:copiedGroups.get(key)}:a)};}}
         if(selection.type==='artwork'){
           const groupId=next.artworks.find(a=>a.id===selection.id)?.groupId;
           if(groupId){
@@ -393,7 +413,7 @@ export const useEditor = create<EditorState>((set, get) => {
     lockSelected: (locked) => attempt(()=>{
       if(!get().selected.length)throw new Error('잠글 항목을 선택해 주세요.');
       let next=get().project;
-      for(const selection of get().selected)next=selection.type==='wall'?updateWall(next,selection.id,{locked}):selection.type==='light'?updateLight(next,selection.id,{locked}):updateArtwork(next,selection.id,{locked});
+      for(const selection of get().selected)next=selection.type==='wall'?updateWall(next,selection.id,{locked}):selection.type==='modelArtwork'?updateModelArtwork(next,selection.id,{locked}):selection.type==='light'?updateLight(next,selection.id,{locked}):updateArtwork(next,selection.id,{locked});
       get().commit(next);
     }),
     deleteSelected: () => attempt(() => {
@@ -411,24 +431,24 @@ export const useEditor = create<EditorState>((set, get) => {
       const previous = state.past[state.past.length - 1]
       if (!previous) return state
       const project = clone(previous)
-      return { project, view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project, view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     redo: () => set((state) => {
       const next = state.future[0]
       if (!next) return state
       const project = clone(next)
-      return { project,view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project,view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     loadProject: (project) => attempt(() => {
       const parsed = parseProject(project)
-      set({ project: parsed, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
+      set({ project: parsed, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
     }),
     saveScene: (name,cameraView) => attempt(() => {
       const project = get().project
       const used = new Set(project.scenes.map((scene) => scene.id))
       let index = 1
       while (used.has(`scene-${index}`)) index += 1
-      const structure={outdoor:clone(project.outdoor??DEFAULT_OUTDOOR),lights:clone(project.lights??[]),lighting:clone(project.lighting??DEFAULT_LIGHTING),floorColor:project.floorColor,...(project.floorMaterial?{floorMaterial:clone(project.floorMaterial)}:{}),...(project.importedFloor?{importedFloor:clone(project.importedFloor)}:{}),...(project.referenceModel?{referenceModel:clone(project.referenceModel)}:{}),walls:clone(project.walls),openings:clone(project.openings??[]),dimensions:clone(project.dimensions??[]),unplacedArtworks:clone(project.unplacedArtworks??[])}
+      const structure={modelArtworks:clone(project.modelArtworks??[]),outdoor:clone(project.outdoor??DEFAULT_OUTDOOR),lights:clone(project.lights??[]),lighting:clone(project.lighting??DEFAULT_LIGHTING),floorColor:project.floorColor,...(project.floorMaterial?{floorMaterial:clone(project.floorMaterial)}:{}),...(project.importedFloor?{importedFloor:clone(project.importedFloor)}:{}),...(project.referenceModel?{referenceModel:clone(project.referenceModel)}:{}),walls:clone(project.walls),openings:clone(project.openings??[]),dimensions:clone(project.dimensions??[]),unplacedArtworks:clone(project.unplacedArtworks??[])}
       get().commit(parseProject({ ...project, scenes: [...project.scenes, { id: `scene-${index}`, name, artworks: clone(project.artworks), wallVisibility: Object.fromEntries(project.walls.map((wall) => [wall.id, wall.visible])),structure,...(cameraView?{cameraView:clone(cameraView)}:{}) }] }))
     }),
     restoreScene: (id) => attempt(() => {
@@ -436,7 +456,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const scene = project.scenes.find((item) => item.id === id)
       if (!scene) throw new Error('장면을 찾을 수 없습니다.')
       if(scene.structure){
-        get().commit(parseProject({...project,...(scene.structure.outdoor?{outdoor:clone(scene.structure.outdoor)}:{}),...(scene.structure.lights!==undefined?{lights:clone(scene.structure.lights),lighting:clone(scene.structure.lighting)}:{}),...(scene.structure.floorColor!==undefined?{floorColor:scene.structure.floorColor,floorMaterial:scene.structure.floorMaterial?clone(scene.structure.floorMaterial):undefined}:{}),importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
+        get().commit(parseProject({...project,...(scene.structure.modelArtworks!==undefined?{modelArtworks:clone(scene.structure.modelArtworks)}:{}),...(scene.structure.outdoor?{outdoor:clone(scene.structure.outdoor)}:{}),...(scene.structure.lights!==undefined?{lights:clone(scene.structure.lights),lighting:clone(scene.structure.lighting)}:{}),...(scene.structure.floorColor!==undefined?{floorColor:scene.structure.floorColor,floorMaterial:scene.structure.floorMaterial?clone(scene.structure.floorMaterial):undefined}:{}),importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
       }else{
         const wallIds = new Set(project.walls.map((wall) => wall.id))
         const artworks = clone(scene.artworks.filter((artwork) => wallIds.has(artwork.wallId)))

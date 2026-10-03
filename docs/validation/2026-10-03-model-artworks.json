@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-04",
+  "scope": "T5 partial: static 3D artwork import, editing, persistence, output",
+  "tests": {
+    "passed": 627,
+    "optionalBenchmarksSkipped": 2,
+    "build": "passed"
+  },
+  "browser": {
+    "local": "http://localhost:8798/",
+    "restoreOrigin": "http://127.0.0.1:8798/",
+    "import": [
+      "actual GLB",
+      "UV/PBR PNG textured glTF ZIP"
+    ],
+    "verified": [
+      "numeric size and XYZ rotation",
+      "3D arrows and rotation circles with one-step Undo",
+      "plan footprint drag and Undo",
+      "floor placement of tipped bounds",
+      "Shift selection, groups, locked fields and deletion guard",
+      "Scene restore, empty list semantics, reload",
+      "backup to fresh-origin UI restores 3 models and Scene",
+      "artist, private note, position and rotation restoration",
+      "visible 3D model sharing disabled explicitly"
+    ],
+    "restoreConsoleWarningsErrors": [],
+    "knownTestFixtureLimitation": "Synthetic source has overlapping coplanar faces on its cap; original geometry is preserved.",
+    "toolIssues": [
+      "file chooser took unusually long; result completed",
+      "old local tab lazy module 404 after rebuilding dist; resolved by reload"
+    ],
+    "public": {
+      "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+      "verified": [
+        "import menu for JPG/PNG/PDF and SketchUp-exported GLB",
+        "separate 3D artwork button",
+        "no project mutations"
+      ],
+      "warningsErrors": []
+    }
+  },
+  "outputs": [
+    {
+      "name": "여백의 기록-3D (6).png",
+      "bytes": 418257,
+      "sha256": "7a635a934a8e738ff033046cf7733c12108740e3047bca8f78307350d1be2551"
+    },
+    {
+      "name": "여백의 기록.gonggan (4).zip",
+      "bytes": 3553324,
+      "sha256": "66ba1f05c6a70fe7d3dc84ed1e5d33f939886d65a0c95eb5a8a1cc9d8975533f"
+    },
+    {
+      "name": "여백의 기록 (7).glb",
+      "bytes": 3577520,
+      "sha256": "a72de4c63063cfeb2c282f0c1c450bc8bea78815cd92bb652500cffdd069f91a"
+    },
+    {
+      "name": "여백의 기록.gltf (5).zip",
+      "bytes": 3552877,
+      "sha256": "57bf125136ef04c34bb6b370f0515ba5a249b88d19f00ec6c5ed51c5cec4a2fe"
+    },
+    {
+      "name": "여백의 기록-전시안 (9).pdf",
+      "bytes": 3315427,
+      "sha256": "d59509cce914e4b936db38c25ac1769c8243258e48f36309f73f3ad98996d548"
+    }
+  ],
+  "remaining": [
+    "3D model link sharing",
+    "raw SKP conversion",
+    "actual user SketchUp files",
+    "account storage",
+    "large venue/mobile device performance"
+  ],
+  "outputChecks": {
+    "png": [
+      1920,
+      1519
+    ],
+    "backup": {
+      "assets": 7,
+      "modelAssets": 2,
+      "rootModelArtworks": 3,
+      "sceneModelArtworks": 2,
+      "crcAndAllSha256": "passed"
+    },
+    "glb": {
+      "modelArtworkRoots": 3,
+      "images": 6,
+      "privateNoteAbsent": true
+    },
+    "gltfZip": {
+      "modelArtworkRoots": 3,
+      "images": 6,
+      "relativeBufferSizesAndCRC": "passed",
+      "pbrBaseColorTexture": "present",
+      "privateNoteAbsent": true
+    },
+    "pdf": {
+      "pages": 6,
+      "threeDPlanSchedule": "current and saved Scene",
+      "privateNoteAbsent": true,
+      "koreanTextAnd3DRender": "verified"
+    }
+  },
+  "deployment": {
+    "version": "6515a4a3-5bf2-4fc6-b324-87dbfea7ef3b",
+    "firstValidationVersion": "bdddc758-f8b5-4604-b3dc-aa0356477447",
+    "entryScript": "/assets/index-BWln-Y7r.js",
+    "status": "deployed and verified in public browser",
+    "projectDataChanged": false
+  }
+}

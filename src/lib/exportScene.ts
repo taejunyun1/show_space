@@ -1,3 +1,4 @@
+import {placeModelArtwork,checkModelArtworkBounds} from './modelArtworkGeometry';
 import {createExportLighting,disposeLighting} from './sceneLighting';
 import {wallMetricUv,floorMetricUv,repeatingSurfaceTexture} from './surfaceUv';
 import {createSurfaceMaterial} from './surfaceMaterial';
@@ -9,10 +10,11 @@ import type {Project} from '../domain/types';
 const frameColors={black:'#282827',natural:'#b9a383',white:'#f5f4ef',none:'#eee8dc'};
 
 /** Build from stored geometry, independent of the editor camera, grid and selection. */
-export function buildExportScene(project:Project,textures=new Map<string,Texture>(),referenceScene?:Object3D,materialTextures=new Map<string,Texture>()):Scene{
+export function buildExportScene(project:Project,textures=new Map<string,Texture>(),referenceScene?:Object3D,materialTextures=new Map<string,Texture>(),artworkModels=new Map<string,Object3D>()):Scene{
  if(project.planReference&&!project.planReference.calibrated)throw new Error('도면 축척을 설정한 뒤 3D 모델을 내보내세요.');
  for(const m of [project.floorMaterial,...project.walls.filter(w=>w.visible).map(w=>w.material)])if(m?.texture&&!materialTextures.has(m.texture.imageUrl))throw new Error('표면 텍스처를 준비하지 못했습니다.');
  function finish(color:string,material:Project['floorMaterial'],roughness:number){const result=createSurfaceMaterial(color,material,roughness) as MeshStandardMaterial;if(material?.texture){const source=materialTextures.get(material.texture.imageUrl);if(!source)throw new Error('표면 텍스처를 준비하지 못했습니다.');result.map=repeatingSurfaceTexture(source,material.texture);}return result;}
+ for(const a of project.modelArtworks??[])if(a.visible){const source=artworkModels.get(a.id);if(!source)throw new Error('3D 작품 모델을 준비하지 못했습니다.');checkModelArtworkBounds(source,a.model);}
  const scene=new Scene();scene.name=project.name;
  for(const wall of project.walls){
   if(!wall.visible)continue;
@@ -34,6 +36,7 @@ export function buildExportScene(project:Project,textures=new Map<string,Texture
   const frame=new Mesh(new BoxGeometry(w+padding,h+padding,d),new MeshStandardMaterial({color:frameColors[artwork.frame],roughness:.75}));frame.name='frame';group.add(frame);
   const image=new Mesh(new PlaneGeometry(w,h),Object.assign(createSurfaceMaterial('#ffffff',artwork.material,.9),{map:textures.get(artwork.id)??null}));image.name='image';image.position.z=d/2+.002;group.add(image);scene.add(group);
  }
+ for(const a of project.modelArtworks??[])if(a.visible){const source=artworkModels.get(a.id);if(!source)throw new Error('3D 작품 모델을 준비하지 못했습니다.');const root=placeModelArtwork(a,source);root.traverse(o=>{if(o!==root)o.userData={};if(o instanceof Mesh){o.castShadow=true;o.receiveShadow=true;for(const material of Array.isArray(o.material)?o.material:[o.material])material.userData={};}});scene.add(root);}
  if(project.referenceModel?.visible&&referenceScene){
   const model=project.referenceModel,root=new Group(),offset=new Group();root.name=model.name;root.position.set(...model.positionMm.map(v=>v/1000) as [number,number,number]);root.rotation.y=model.rotationDeg*Math.PI/180;root.scale.setScalar(model.scale);
   offset.position.set(...model.sourceOffsetM);offset.add(referenceScene.clone(true));root.add(offset);scene.add(root);
@@ -47,5 +50,5 @@ export function disposeExportScene(scene:Object3D){
  disposeLighting(scene);
  const geometries=new Set<Mesh['geometry']>(),materials=new Set<Material>(),textures=new Set<Texture>();
  scene.traverse(object=>{if(object instanceof Mesh){geometries.add(object.geometry);for(const material of Array.isArray(object.material)?object.material:[object.material]){materials.add(material);for(const value of Object.values(material))if(value instanceof Texture)textures.add(value);}}});
- textures.forEach(t=>t.dispose());materials.forEach(m=>m.dispose());geometries.forEach(g=>g.dispose());
+ const images=new Set<unknown>();textures.forEach(t=>{images.add(t.source.data);t.dispose();});for(const image of images)if(typeof ImageBitmap!=='undefined'&&image instanceof ImageBitmap)image.close();materials.forEach(m=>m.dispose());geometries.forEach(g=>g.dispose());
 }

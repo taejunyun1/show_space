@@ -1,0 +1,25 @@
+import {beforeEach,describe,it,expect} from 'vitest';
+import {useEditor} from './editor';
+import {createDemoProject,parseProject} from '../domain/model';
+import {testArtworkModel} from '../lib/modelArtworkTestFixture';
+import {modelArtworkBounds} from '../domain/modelArtworks';
+beforeEach(()=>{useEditor.getState().loadProject(createDemoProject());useEditor.setState({view:'3d',activeTool:'select',message:null});});
+const add=()=>{const s=useEditor.getState();s.addModelArtwork(testArtworkModel(),s.project.id);return useEditor.getState().project.modelArtworks!.at(-1)!;};
+describe('3D artwork commands and history',()=>{
+ it('commits one gesture, cancels safely, and clears gestures on view or tool changes',()=>{
+  const a=add(),before=useEditor.getState().past.length;useEditor.getState().beginModelArtworkTransform(a.id);useEditor.getState().updateModelArtworkTransform({x:500,y:20,z:700},{x:0,y:45,z:0});expect(useEditor.getState().project.modelArtworks![0].position).toEqual(a.position);expect(useEditor.getState().previewProject!.modelArtworks![0].position.x).toBe(500);useEditor.getState().finishModelArtworkTransform();expect(useEditor.getState().past).toHaveLength(before+1);useEditor.getState().undo();expect(useEditor.getState().project.modelArtworks![0].position).toEqual(a.position);
+  useEditor.getState().beginModelArtworkTransform(a.id);useEditor.getState().updateModelArtworkTransform({x:500,y:0,z:0},a.rotation);useEditor.getState().finishModelArtworkTransform(true);expect(useEditor.getState().previewProject).toBeNull();expect(useEditor.getState().project.modelArtworks![0].position).toEqual(a.position);
+  useEditor.getState().beginModelArtworkTransform(a.id);useEditor.getState().setView('plan');expect(useEditor.getState().modelArtworkGesture).toBeNull();useEditor.getState().beginModelArtworkTransform(a.id);useEditor.getState().setTool('pan');expect(useEditor.getState().modelArtworkGesture).toBeNull();
+ });
+ it('groups Shift selections, translates and rotates the group, preserves copied groups and rejects locked members',()=>{
+  const a=add();useEditor.getState().duplicateSelected();const b=useEditor.getState().project.modelArtworks![1];useEditor.getState().select({type:'modelArtwork',id:a.id});useEditor.getState().select({type:'modelArtwork',id:b.id},true);useEditor.getState().groupSelectedModelArtworks();useEditor.getState().patchModelArtwork(a.id,{position:{x:1000,y:0,z:0},rotation:{x:0,y:90,z:0}});const p=useEditor.getState().project;expect(p.modelArtworks![1].position.z).toBeCloseTo(-400);useEditor.getState().select({type:'modelArtwork',id:a.id});expect(useEditor.getState().selected).toHaveLength(2);useEditor.getState().duplicateSelected();const copies=useEditor.getState().project.modelArtworks!.slice(2);expect(copies[0].groupId).toBe(copies[1].groupId);expect(copies[0].groupId).not.toBe(p.modelArtworks![0].groupId);
+  useEditor.getState().select({type:'modelArtwork',id:a.id});useEditor.getState().lockSelected(true);useEditor.getState().beginModelArtworkTransform(a.id);expect(useEditor.getState().modelArtworkGesture).toBeNull();expect(useEditor.getState().message).toContain('잠긴');useEditor.getState().deleteSelected();expect(useEditor.getState().project.modelArtworks).toHaveLength(4);
+ });
+ it('snaps a tipped artwork to the floor, keeps real dimensions, and restores Scene assets and empty lists',()=>{
+  useEditor.getState().saveScene('empty');const a=add();useEditor.getState().patchModelArtwork(a.id,{widthMm:2400,rotation:{x:45,y:30,z:20},position:{x:0,y:500,z:0}});useEditor.getState().floorSelectedModelArtwork();expect(modelArtworkBounds(useEditor.getState().project.modelArtworks![0]).minY).toBeCloseTo(0);useEditor.getState().saveScene('sculpture');const saved=structuredClone(useEditor.getState().project.modelArtworks);useEditor.getState().deleteSelected();useEditor.getState().restoreScene('scene-2');expect(useEditor.getState().project.modelArtworks).toEqual(saved);useEditor.getState().restoreScene('scene-1');expect(useEditor.getState().project.modelArtworks).toEqual([]);expect(parseProject(useEditor.getState().project).modelArtworks).toEqual([]);
+ });
+ it('applies numeric pose edits to ungrouped Shift selection and keeps sizes per artwork',()=>{const a=add();useEditor.getState().duplicateSelected();const b=useEditor.getState().project.modelArtworks![1];useEditor.getState().select({type:'modelArtwork',id:a.id});useEditor.getState().select({type:'modelArtwork',id:b.id},true);useEditor.getState().patchModelArtwork(a.id,{position:{x:500,y:200,z:0},widthMm:2400});const models=useEditor.getState().project.modelArtworks!;expect(models.map(a=>a.position.x)).toEqual([500,900]);expect(models.map(a=>a.widthMm)).toEqual([2400,1200]);useEditor.getState().floorSelectedModelArtwork();expect(useEditor.getState().project.modelArtworks!.map(a=>a.position.y)).toEqual([0,0]);});
+ it('rejects stale asynchronous imports without changing the draft',()=>{
+  useEditor.getState().addModelArtwork(testArtworkModel(),'different-project');expect(useEditor.getState().project.modelArtworks).toBeUndefined();expect(useEditor.getState().message).toContain('프로젝트');
+ });
+});

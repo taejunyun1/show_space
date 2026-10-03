@@ -5,7 +5,7 @@ import {outdoorAppearance,type OutdoorSettings} from '../domain/outdoor';
 import {projectSpatialBounds} from '../domain/referenceModel';
 import type {Project,Point} from '../domain/types';
 export type RenderLight=Omit<ExhibitionLight,'locked'|'note'>;
-export interface LightingSource {lights?:RenderLight[];lighting?:LightingSettings;outdoor?:OutdoorSettings;walls?:Array<{start:Point;end:Point;heightMm:number;thicknessMm?:number}>;artworks?:Array<{widthMm:number;heightMm:number;depthMm:number;centerHeightMm:number}>;importedFloor?:Point[][];referenceModel?:Project['referenceModel']}
+export interface LightingSource {lights?:RenderLight[];lighting?:LightingSettings;outdoor?:OutdoorSettings;walls?:Array<{start:Point;end:Point;heightMm:number;thicknessMm?:number}>;artworks?:Array<{widthMm:number;heightMm:number;depthMm:number;centerHeightMm:number}>;importedFloor?:Point[][];referenceModel?:Project['referenceModel'];modelArtworks?:Project['modelArtworks']}
 let initialized=false;
 export function createLightObject(kind:RenderLight['kind']){
  const group=new Group();group.name='light-object';const lamp=kind==='spot'?new SpotLight():new RectAreaLight();lamp.name='emitter';group.add(lamp);
@@ -30,7 +30,7 @@ export function createOutdoorLighting(source:LightingSource,base=true){
  const group=new Group();group.name='outdoor-lighting';const appearance=outdoorAppearance(source.outdoor);if(!appearance)return group;
  if(base)group.add(new AmbientLight(0xffffff,appearance.ambient),new HemisphereLight(0xc5deff,0x757064,appearance.hemisphere));
  if(appearance.sunIntensity<=0)return group;
- const bounds=projectSpatialBounds({walls:source.walls??[],importedFloor:source.importedFloor,referenceModel:source.referenceModel});
+ const bounds=projectSpatialBounds({walls:source.walls??[],importedFloor:source.importedFloor,referenceModel:source.referenceModel,modelArtworks:source.modelArtworks});
  const min=new Vector3(bounds.minX/1000,bounds.minY/1000,bounds.minZ/1000),max=new Vector3(bounds.maxX/1000,bounds.maxY/1000,bounds.maxZ/1000),center=min.clone().add(max).multiplyScalar(.5);
  const margin=Math.max(.5,...(source.walls??[]).map(w=>(w.thicknessMm??0)/1000),...(source.artworks??[]).map(a=>Math.max(a.widthMm,a.heightMm,a.depthMm,Math.abs(a.centerHeightMm))/1000));
  const radius=Math.max(2,max.distanceTo(min)/2+margin),target=new Object3D();target.name='sun-aim';target.position.copy(center);

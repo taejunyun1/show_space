@@ -5,7 +5,7 @@ const auth=(ownerToken:string)=>({authorization:`Bearer ${ownerToken}`});
 async function checked(response:Response){if(response.ok)return response;let message=`요청에 실패했습니다 (${response.status}).`;try{const body=await response.json() as {error?:string};if(body.error)message=body.error;}catch{/* Non-JSON errors still carry the status. */}throw new Error(message);}
 
 export async function publishPublicShare(project:Project,options:PublicShareOptions,ownerToken:string,camera?:PublicShareOptions['camera'],fetcher:ShareFetch=fetch,origin=location.origin):Promise<string>{
-  if(project.referenceModel?.visible)throw new Error('3D 참고 모델이 보이는 배치는 아직 링크 공유를 지원하지 않습니다. 모델을 숨기거나 JSON·PNG로 전달해주세요.');
+  if(project.referenceModel?.visible||project.modelArtworks?.some(a=>a.visible))throw new Error('3D 참고 모델 또는 3D 작품이 보이는 배치는 아직 링크 공유를 지원하지 않습니다. 모델을 숨기거나 JSON·PNG로 전달해주세요.');
   const {snapshot,uploads}=createPublicShare(project,{...options,camera});
   const created=await checked(await fetcher('/api/shares',{method:'POST',headers:auth(ownerToken)}));
   const {id}=await created.json() as {id:string};

@@ -11,7 +11,7 @@ export function Outliner() {
   const { project, selected, activeWallId, select, setActiveWall, patchWall, patchArtwork, addArtwork, addWall, placeUnplaced, notify } = useEditor();
   const provisional = !!project.planDraft && !project.planReference?.calibrated;
   const [tab, setTab] = useState<'all' | 'artwork'>('all');
-  const upload = useRef<HTMLInputElement>(null);
+  const upload = useRef<HTMLInputElement>(null),modelUpload=useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [floorMaterialOpen,setFloorMaterialOpen]=useState(false),[lightingOpen,setLightingOpen]=useState(false),[outdoorOpen,setOutdoorOpen]=useState(false);
   const unplaced = project.unplacedArtworks ?? [];
@@ -23,8 +23,9 @@ export function Outliner() {
     finally { setBusy(false); }
   }
 
+  async function uploadModelArtworks(files:File[]){const original=useEditor.getState().project.id;setBusy(true);notify('3D 작품과 자산을 읽고 있습니다…');try{const {readModelArtworkFiles}=await import('../lib/modelArtworkImport');const model=await readModelArtworkFiles(files);useEditor.getState().addModelArtwork(model,original);}catch(e){notify(e instanceof Error?e.message:'3D 작품을 읽지 못했습니다.');}finally{setBusy(false);}}
   return <><aside className="outliner">
-    <div className="panel-heading"><h1>전시 구성</h1><span className="count">{project.artworks.length + unplaced.length}</span></div>
+    <div className="panel-heading"><h1>전시 구성</h1><span className="count">{project.artworks.length + unplaced.length+(project.modelArtworks?.length??0)}</span></div>
     <div className="segment"><button className={tab === 'all' ? 'selected' : ''} onClick={() => setTab('all')}>공간</button><button className={tab === 'artwork' ? 'selected' : ''} onClick={() => setTab('artwork')}>작품</button></div>
     <div className="entity-list">
       {tab === 'all' && <section>
@@ -37,12 +38,13 @@ export function Outliner() {
       </section>}
       {tab==='all'&&<section><div className="section-label">LIGHTING<span>{project.lights?.length??0}/20</span></div><div className="rotation-buttons"><button className="button secondary" disabled={provisional||(project.lights?.length??0)>=20} onClick={()=>useEditor.getState().addLight('spot')}>스팟 추가</button><button className="button secondary" disabled={provisional||(project.lights?.length??0)>=20} onClick={()=>useEditor.getState().addLight('area')}>면조명 추가</button></div>{project.lights?.map(light=><div key={light.id} className={`entity-row ${selected.some(s=>s.type==='light'&&s.id===light.id)?'selected':''}`}><button className={`entity-main ${!light.visible?'muted':''}`} onClick={e=>select({type:'light',id:light.id},e.shiftKey)}><Lightbulb size={20}/><span>{light.name}</span>{light.locked&&<LockKeyhole size={12}/>}</button><button className="row-action" aria-label={`${light.name} ${light.visible?'숨기기':'보이기'}`} onClick={()=>useEditor.getState().patchLight(light.id,{visible:!light.visible})}>{light.visible?<Eye size={14}/>:<EyeOff size={14}/>}</button></div>)}<button className="text-button" onClick={()=>setLightingOpen(true)}>공간 기본 조명</button><button className="text-button" disabled={provisional} onClick={()=>setOutdoorOpen(true)}>야외 환경 · 태양과 시간</button></section>}
       <section>
-        <div className="section-label">ARTWORK<span>{project.artworks.length}</span></div>
+        <div className="section-label">ARTWORK<span>{project.artworks.length+(project.modelArtworks?.length??0)}</span></div>
         {project.artworks.map((art, i) => <div className={`entity-row artwork-row ${selected.some(s => s.id === art.id) ? 'selected' : ''}`} key={art.id}>
           <button className={`entity-main ${!art.visible ? 'muted' : ''}`} onClick={e => select({ type: 'artwork', id: art.id }, e.shiftKey)}><span className="art-thumbnail" style={artStyle(art.imageUrl)} /><span className="entity-text"><strong>{art.name}</strong><small>작품 {String(i + 1).padStart(2, '0')}</small></span>{art.locked && <LockKeyhole size={12} />}</button>
           <button className="row-action" aria-label={`${art.name} ${art.visible ? '숨기기' : '보이기'}`} onClick={() => patchArtwork(art.id, { visible: !art.visible })}>{art.visible ? <Eye size={14} /> : <EyeOff size={14} />}</button>
         </div>)}
-        {project.artworks.length === 0 && unplaced.length === 0 && <p className="empty-hint">첫 작품을 등록해 전시를 시작하세요.</p>}
+        {project.modelArtworks?.map(a=><div key={a.id} className={`entity-row artwork-row ${selected.some(s=>s.type==='modelArtwork'&&s.id===a.id)?'selected':''}`}><button className={`entity-main ${!a.visible?'muted':''}`} onClick={e=>select({type:'modelArtwork',id:a.id},e.shiftKey)}><Box size={25}/><span className='entity-text'><strong>{a.name}</strong><small>3D 작품 · {Math.round(a.widthMm)}×{Math.round(a.heightMm)}×{Math.round(a.depthMm)} mm</small></span>{a.locked&&<LockKeyhole size={12}/>}</button><button className='row-action' aria-label={`${a.name} ${a.visible?'숨기기':'보이기'}`} onClick={()=>useEditor.getState().patchModelArtwork(a.id,{visible:!a.visible})}>{a.visible?<Eye size={14}/>:<EyeOff size={14}/>}</button></div>)}
+        {project.artworks.length === 0 && !project.modelArtworks?.length && unplaced.length === 0 && <p className="empty-hint">첫 작품을 등록해 전시를 시작하세요.</p>}
       </section>
       {unplaced.length > 0 && <section className="unplaced-section">
         <div className="section-label">미배치 작품<span>{unplaced.length}</span></div>
@@ -55,6 +57,6 @@ export function Outliner() {
       </section>}
     </div>
     <ReferenceModelControls/>
-    <div className="add-art-card"><Box size={19} strokeWidth={1.4} /><strong>작품을 더해보세요</strong><p>{provisional ? '두 점 축척 보정 후 실제 크기의 작품을 추가할 수 있습니다.' : <>이미지와 실제 크기로<br />나만의 전시를 구성하세요.</>}</p><button className="button outline" disabled={busy || provisional} onClick={() => upload.current?.click()}><ImagePlus size={16} />{busy ? '이미지 처리 중' : '작품 추가'}</button><button className="text-button" disabled={provisional} onClick={() => addArtwork()}>예제 작품 추가</button><input type="file" accept="image/png,image/jpeg,image/webp" hidden ref={upload} onChange={e => { const f = e.target.files?.[0]; if (f) void uploadArtwork(f); e.currentTarget.value = ''; }} /></div>
+    <div className="add-art-card"><Box size={19} strokeWidth={1.4} /><strong>작품을 더해보세요</strong><p>{provisional ? '두 점 축척 보정 후 실제 크기의 작품을 추가할 수 있습니다.' : <>이미지와 실제 크기로<br />나만의 전시를 구성하세요.</>}</p><button className="button outline" disabled={busy || provisional} onClick={() => upload.current?.click()}><ImagePlus size={16} />{busy ? '이미지 처리 중' : '작품 추가'}</button><button className="button outline" disabled={busy||provisional||(project.modelArtworks?.length??0)>=50} onClick={()=>modelUpload.current?.click()}><Box size={16}/>3D 작품 추가</button><p className="field-hint">GLB · glTF와 자산 · glTF ZIP / 12MB 이하</p><input ref={modelUpload} type="file" hidden multiple aria-label="3D 작품 파일" accept=".glb,.gltf,.zip,.bin,.png,.jpg,.jpeg,.webp" onChange={e=>{const files=Array.from(e.currentTarget.files??[]);e.currentTarget.value='';if(files.length)void uploadModelArtworks(files);}}/><button className="text-button" disabled={provisional} onClick={() => addArtwork()}>예제 작품 추가</button><input type="file" accept="image/png,image/jpeg,image/webp" hidden ref={upload} onChange={e => { const f = e.target.files?.[0]; if (f) void uploadArtwork(f); e.currentTarget.value = ''; }} /></div>
   </aside>{outdoorOpen&&<OutdoorDialog onClose={()=>setOutdoorOpen(false)}/>} {lightingOpen&&<LightingDialog onClose={()=>setLightingOpen(false)}/>} {floorMaterialOpen&&<FloorMaterialDialog onClose={()=>setFloorMaterialOpen(false)}/>}</>;
 }

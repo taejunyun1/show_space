@@ -17,7 +17,7 @@ export async function artworkTexture(url:string):Promise<Texture>{
 
 export async function prepareExportScene(project:Project,onProgress:(message:string)=>void=()=>{}){
  if(project.planReference&&!project.planReference.calibrated)throw new Error('도면 축척을 설정한 뒤 3D 모델을 내보내세요.');
- const textures=new Map<string,Texture>(),cache=new Map<string,Texture>(),materialTextures=new Map<string,Texture>();let referenceScene:Object3D|undefined,scene:Object3D|undefined;
+ const textures=new Map<string,Texture>(),cache=new Map<string,Texture>(),materialTextures=new Map<string,Texture>();const artworkModels=new Map<string,Object3D>(),modelCache=new Map<string,Object3D>();let referenceScene:Object3D|undefined,scene:Object3D|undefined;
  try{
   const artworks=project.artworks.filter(a=>a.visible&&a.imageUrl&&project.walls.some(w=>w.id===a.wallId&&w.visible));
   for(const [index,artwork] of artworks.entries()){
@@ -30,11 +30,12 @@ export async function prepareExportScene(project:Project,onProgress:(message:str
    onProgress('불러온 3D 모델 준비 중');
    const bytes=Uint8Array.from(atob(project.referenceModel.dataUrl.split(',')[1]),c=>c.charCodeAt(0));referenceScene=(await new GLTFLoader().parseAsync(bytes.buffer,'')).scene;
   }
-  scene=buildExportScene(project,textures,referenceScene,materialTextures);
+  for(const a of project.modelArtworks??[])if(a.visible){onProgress('3D 작품 모델 준비 중');let source=modelCache.get(a.model.dataUrl);if(!source){const bytes=Uint8Array.from(atob(a.model.dataUrl.split(',')[1]),c=>c.charCodeAt(0));source=(await new GLTFLoader().parseAsync(bytes.buffer,'')).scene;modelCache.set(a.model.dataUrl,source);}artworkModels.set(a.id,source);}
+  scene=buildExportScene(project,textures,referenceScene,materialTextures,artworkModels);
   if(!scene.children.length)throw new Error('내보낼 벽·바닥·작품 또는 3D 모델이 없습니다.');
   return scene;
  }catch(error){
-  if(scene)disposeExportScene(scene);else{if(referenceScene)disposeExportScene(referenceScene);new Set(textures.values()).forEach(texture=>texture.dispose());}
+  if(scene)disposeExportScene(scene);else{if(referenceScene)disposeExportScene(referenceScene);modelCache.forEach(m=>disposeExportScene(m));new Set(textures.values()).forEach(texture=>texture.dispose());}
   throw error;
  }finally{materialTextures.forEach(texture=>texture.dispose());}
 }

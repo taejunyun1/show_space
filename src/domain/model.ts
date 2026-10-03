@@ -1,3 +1,4 @@
+import {parseModelArtworks,parseModelArtwork,MAX_MODEL_ARTWORKS} from './modelArtworks';
 import {parseOutdoor} from './outdoor';
 import {parseLight,parseLights,parseLighting,translatedLight,MAX_LIGHTS} from './lighting';
 import {validateImportedFloor} from './importedFloor';
@@ -176,7 +177,7 @@ export function updateArtwork(project: Project, id: string, patch: Partial<Artwo
 
 export function addWall(project: Project): Project {
   if (project.walls.length >= wallLimit) throw new Error(`벽은 최대 ${wallLimit}개까지 만들 수 있습니다.`)
-  const id = uniqueId('wall', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[]),...(project.lights??[])].map(item => item.id))
+  const id = uniqueId('wall', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[]),...(project.lights??[]),...(project.modelArtworks??[])].map(item => item.id))
   const z = project.walls.length * 400
   const wall: Wall = { id, role: 'partition', name: `새 벽 ${project.walls.length + 1}`, start: { x: 0, z }, end: { x: 3000, z }, heightMm: 3200, thicknessMm: 160, color: '#ffffff', visible: true, locked: false, note: '' }
   return { ...project, walls: [...project.walls, wall] }
@@ -185,17 +186,24 @@ export function addWall(project: Project): Project {
 export function addArtwork(project: Project, imageUrl = '/artworks/artwork-1.png', name = '새 작품'): Project {
   if (!project.walls.length) throw new Error('작품을 배치할 벽이 없습니다.')
   if (project.artworks.length+(project.unplacedArtworks?.length??0) >= artworkLimit) throw new Error(`작품은 최대 ${artworkLimit}개까지 만들 수 있습니다.`)
-  const id = uniqueId('artwork', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[]),...(project.lights??[])].map(item => item.id))
+  const id = uniqueId('artwork', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[]),...(project.lights??[]),...(project.modelArtworks??[])].map(item => item.id))
   const artwork: Artwork = { id, name, artist: '', widthMm: 900, heightMm: 1200, depthMm: 30, wallId: project.walls[0].id, alongMm: 450, centerHeightMm: 1500, frame: 'natural', imageUrl, visible: true, locked: false, note: '' }
   validateArtwork(artwork, new Set(project.walls.map(wall => wall.id)))
   return { ...project, artworks: [...project.artworks, artwork] }
 }
 
 export function duplicateSelection(project: Project, selection: EntitySelection): { project: Project; selection: EntitySelection } {
+  if(selection.type==='modelArtwork'){
+    const source=project.modelArtworks?.find(a=>a.id===selection.id);if(!source)throw new Error('복제할 3D 작품이 없습니다.');
+    if(project.modelArtworks!.length>=MAX_MODEL_ARTWORKS)throw new Error(`3D 작품은 최대 ${MAX_MODEL_ARTWORKS}개까지 만들 수 있습니다.`);
+    const id=uniqueId('model-artwork',[...project.walls,...project.artworks,...project.unplacedArtworks??[],...project.lights??[],...project.modelArtworks??[]].map(a=>a.id));
+    const copy={...source,id,name:(source.name+' 복사본').slice(0,200),position:{...source.position,x:source.position.x+400},rotation:{...source.rotation},locked:false,groupId:undefined};
+    return {project:{...project,modelArtworks:[...project.modelArtworks!,parseModelArtwork(copy,false)]},selection:{type:'modelArtwork',id}};
+  }
   if (selection.type === 'light') {
     const source=project.lights?.find(l=>l.id===selection.id);if(!source)throw new Error('조명을 찾을 수 없습니다.');
     if((project.lights?.length??0)>=MAX_LIGHTS)throw new Error(`조명은 최대 ${MAX_LIGHTS}개까지 만들 수 있습니다.`);
-    const id=uniqueId('light',[...project.walls,...project.artworks,...(project.unplacedArtworks??[]),...(project.lights??[])].map(o=>o.id));
+    const id=uniqueId('light',[...project.walls,...project.artworks,...(project.unplacedArtworks??[]),...(project.lights??[]),...(project.modelArtworks??[])].map(o=>o.id));
     const copy=parseLight({...source,...translatedLight(source,{...source.position,x:source.position.x+400}),id,name:source.name+' 복사본',locked:false});
     return {project:{...project,lights:[...project.lights!,copy]},selection:{type:'light',id}};
   }
@@ -203,19 +211,20 @@ export function duplicateSelection(project: Project, selection: EntitySelection)
     const source = project.artworks.find(item => item.id === selection.id)
     if (!source) throw new Error('복제할 작품을 찾을 수 없습니다.')
     if (project.artworks.length+(project.unplacedArtworks?.length??0) >= artworkLimit) throw new Error(`작품은 최대 ${artworkLimit}개까지 만들 수 있습니다.`)
-    const id = uniqueId('artwork', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[]),...(project.lights??[])].map(item => item.id))
+    const id = uniqueId('artwork', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[]),...(project.lights??[]),...(project.modelArtworks??[])].map(item => item.id))
     const copy = { ...source, groupId: undefined, id, name: `${source.name} 복사본`, alongMm: source.alongMm + 200, locked: false }
     return { project: { ...project, artworks: [...project.artworks, copy] }, selection: { type: 'artwork', id } }
   }
   const source = project.walls.find(item => item.id === selection.id)
   if (!source) throw new Error('복제할 벽을 찾을 수 없습니다.')
   if (project.walls.length >= wallLimit) throw new Error(`벽은 최대 ${wallLimit}개까지 만들 수 있습니다.`)
-  const id = uniqueId('wall', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[]),...(project.lights??[])].map(item => item.id))
+  const id = uniqueId('wall', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[]),...(project.lights??[]),...(project.modelArtworks??[])].map(item => item.id))
   const copy = { ...source, groupId: undefined, id, name: `${source.name} 복사본`, start: { x: source.start.x, z: source.start.z + 400 }, end: { x: source.end.x, z: source.end.z + 400 }, locked: false }
   return { project: { ...project, walls: [...project.walls, copy] }, selection: { type: 'wall', id } }
 }
 
 export function deleteSelection(project: Project, selection: EntitySelection): Project {
+  if(selection.type==='modelArtwork'){const source=project.modelArtworks?.find(a=>a.id===selection.id);if(source?.locked)throw new Error('잠긴 3D 작품은 삭제할 수 없습니다.');return {...project,modelArtworks:project.modelArtworks?.filter(a=>a.id!==selection.id)};}
   if(selection.type==='light'){const source=project.lights?.find(l=>l.id===selection.id);if(source?.locked)throw new Error('잠긴 조명은 삭제할 수 없습니다.');return {...project,lights:project.lights?.filter(l=>l.id!==selection.id)};}
   if (selection.type === 'artwork') {
     const item = project.artworks.find(artwork => artwork.id === selection.id)
@@ -346,7 +355,8 @@ export function parseProject(input: unknown): Project {
     validateArtworkRecord({...unplaced,wallId:walls[0].id},artworkIds)
   }
   for (const id of artworkIds) if (wallIds.has(id)) throw new Error(`서로 다른 객체에 중복된 ID가 있습니다: ${id}`)
-  if(raw.lights!==undefined)parseLights(raw.lights,[...wallIds,...artworkIds]);
+  const modelArtworkIds=raw.modelArtworks===undefined?[]:parseModelArtworks(raw.modelArtworks,[...wallIds,...artworkIds]).map(a=>a.id);
+  if(raw.lights!==undefined)parseLights(raw.lights,[...wallIds,...artworkIds,...modelArtworkIds]);
   const sceneIds = new Set<string>()
   for (const value of raw.scenes) {
     const scene = object(value, '장면')
@@ -389,7 +399,8 @@ export function parseProject(input: unknown): Project {
         if('wallId' in unplaced)throw new Error('장면 미배치 작품에는 설치 벽이 없어야 합니다.')
         validateArtworkRecord({...unplaced,wallId:firstWall},snapshotIds,sceneWallIds)
       }
-      if(structure.lights!==undefined)parseLights(structure.lights,[...sceneWallIds,...snapshotIds]);
+      const modelIds=structure.modelArtworks===undefined?[]:parseModelArtworks(structure.modelArtworks,[...sceneWallIds,...snapshotIds]).map(a=>a.id);
+      if(structure.lights!==undefined)parseLights(structure.lights,[...sceneWallIds,...snapshotIds,...modelIds]);
       for(const id of snapshotIds)if(sceneWallIds.has(id))throw new Error(`장면에 중복된 객체 ID가 있습니다: ${id}`)
     }
     const visibility = object(scene.wallVisibility, '장면 벽 표시 설정')

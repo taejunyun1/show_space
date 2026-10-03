@@ -34,6 +34,7 @@ export interface PublicShareOptions {
 }
 
 export function createPublicShare(project:Project,options:PublicShareOptions){
+  if(project.modelArtworks?.some(a=>a.visible))throw new Error('3D 작품을 포함한 링크 공유는 아직 지원하지 않습니다. 자산 백업·GLB·PNG로 전달하거나 모델을 숨긴 배치를 공유하세요.');
   if(project.planDraft&&!project.planReference?.calibrated)throw new Error('축척 보정 후 3D 공간을 공유할 수 있습니다.');
   const visibleWalls=project.walls.filter(wall=>wall.visible);
   const wallIds=new Set(visibleWalls.map(wall=>wall.id));

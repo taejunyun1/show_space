@@ -1,0 +1,14 @@
+import type {ReferenceModel} from '../domain/types';
+import {BoxGeometry} from 'three';
+import {packEmbeddedGltf,modelDataUrl} from './artworkModelPayload';
+/** A synthetic three-part arch, translated far from origin to exercise pivot normalization. */
+export function artworkTestGltf(external=false){
+ const box=new BoxGeometry(1,1,1),positions=new Float32Array(box.attributes.position.array),normals=new Float32Array(box.attributes.normal.array),indices=new Uint16Array(box.index!.array),uvs=new Float32Array(box.attributes.uv.array);box.dispose();
+ const vertices=new Uint8Array(positions.byteLength+normals.byteLength+uvs.byteLength);vertices.set(new Uint8Array(positions.buffer));vertices.set(new Uint8Array(normals.buffer),positions.byteLength);vertices.set(new Uint8Array(uvs.buffer),positions.byteLength+normals.byteLength);
+ const indexBytes=new Uint8Array(indices.buffer),embed=(b:Uint8Array)=>modelDataUrl(b.slice().buffer).replace('model/gltf-binary','application/octet-stream');
+ const doc={asset:{version:'2.0'},scene:0,scenes:[{nodes:[0,1,2]}],nodes:[{mesh:0,translation:[9.525,3.05,5],scale:[.25,2.1,.9]},{mesh:0,translation:[10.475,3.05,5],scale:[.25,2.1,.9]},{mesh:1,translation:[10,3.975,5],scale:[1.2,.25,.9]}],meshes:[{primitives:[{attributes:{POSITION:0,NORMAL:1,TEXCOORD_0:3},indices:2,material:0}]},{primitives:[{attributes:{POSITION:0,NORMAL:1,TEXCOORD_0:3},indices:2,material:1}]}],materials:[{name:'brown metal',pbrMetallicRoughness:{baseColorFactor:[.6,.22,.04,1],metallicFactor:.5,roughnessFactor:.35}},{name:'blue cap',pbrMetallicRoughness:{baseColorFactor:[.03,.16,.55,1],metallicFactor:.15,roughnessFactor:.45}}],accessors:[{bufferView:0,componentType:5126,count:positions.length/3,type:'VEC3',min:[-.5,-.5,-.5],max:[.5,.5,.5]},{bufferView:1,componentType:5126,count:normals.length/3,type:'VEC3'},{bufferView:2,componentType:5123,count:indices.length,type:'SCALAR'},{bufferView:3,componentType:5126,count:uvs.length/2,type:'VEC2'}],bufferViews:[{buffer:0,byteOffset:0,byteLength:positions.byteLength},{buffer:0,byteOffset:positions.byteLength,byteLength:normals.byteLength},{buffer:1,byteOffset:0,byteLength:indices.byteLength},{buffer:0,byteOffset:positions.byteLength+normals.byteLength,byteLength:uvs.byteLength}],buffers:[{byteLength:vertices.byteLength,uri:external?'buffers/shape.bin':embed(vertices)},{byteLength:indexBytes.byteLength,uri:external?'buffers/indices.bin':embed(indexBytes)}]};
+ return {doc,files:new Map([['buffers/shape.bin',vertices],['buffers/indices.bin',indexBytes]])};
+}
+export function artworkTestGlb(){return packEmbeddedGltf(artworkTestGltf().doc);}
+
+export function testArtworkModel():ReferenceModel{return {name:'translated-arch.glb',dataUrl:modelDataUrl(artworkTestGlb()),sizeMm:[1200,2100,900],sourceOffsetM:[-10,-2,-5],visible:true,positionMm:[0,0,0],rotationDeg:0,scale:1};}

@@ -1,3 +1,4 @@
+import {modelArtworkFootprint} from '../domain/modelArtworks';
 import fontkit from '@pdf-lib/fontkit';
 import {PDFDocument,PDFDict,PDFName,PDFRawStream,PDFRef,decodePDFRawStream,degrees,rgb,type PDFFont,type PDFImage,type PDFPage} from 'pdf-lib';
 import {wallLength} from '../domain/model';
@@ -32,7 +33,7 @@ function scaleNote(page:PDFPage,font:PDFFont,fit:ReturnType<typeof fitPdfDrawing
  text(page,font,`치수 단위 mm · A4 가로 100% 인쇄 시 축척 약 1:${fit.denominator.toFixed(1)} · 용지 맞춤 인쇄 시 축척이 달라집니다.`,36,42,8);
 }
 function plan(page:PDFPage,font:PDFFont,project:Project){
- const points=[...project.walls.flatMap(w=>[w.start,w.end]),...(project.importedFloor?.flat()??[]),...(project.dimensions??[]).filter(d=>d.view==='plan').flatMap(d=>{const r=resolveMeasurement(project,d);return [r.start,r.end];})];
+ const points=[...(project.modelArtworks??[]).filter(a=>a.visible).flatMap(modelArtworkFootprint),...project.walls.flatMap(w=>[w.start,w.end]),...(project.importedFloor?.flat()??[]),...(project.dimensions??[]).filter(d=>d.view==='plan').flatMap(d=>{const r=resolveMeasurement(project,d);return [r.start,r.end];})];
  if(!points.length){text(page,font,'편집 벽이 없습니다. 참고 모델은 3D 보기에서 확인하세요.',70,280,12);return;}
  const fit=fitPdfDrawing({minX:Math.min(...points.map(p=>p.x)),minY:Math.min(...points.map(p=>p.z)),maxX:Math.max(...points.map(p=>p.x)),maxY:Math.max(...points.map(p=>p.z))},{x:48,y:76,width:W-96,height:385});
  for(const surface of floorWithOpenings(project).surfaces){polygon(page,surface.outer,fit,project.floorColor);for(const hole of surface.holes)polygon(page,hole,fit,'#ffffff');}
@@ -44,6 +45,7 @@ function plan(page:PDFPage,font:PDFFont,project:Project){
  }
  for(const o of openingSegments(project)){line(page,fit.x(o.start.x),fit.y(o.start.z),fit.x(o.end.x),fit.y(o.end.z),rgb(.09,.5,.42),1.5);text(page,font,o.kind==='door'?'출입구':o.kind==='window'?'창문':'계단 통로',fit.x((o.start.x+o.end.x)/2)+3,fit.y((o.start.z+o.end.z)/2)-11,7,100);}
  for(const [i,art] of project.artworks.entries()){const wall=project.walls.find(w=>w.id===art.wallId);if(!art.visible||!wall?.visible)continue;const t=art.alongMm/wallLength(wall),x=fit.x(wall.start.x+(wall.end.x-wall.start.x)*t),y=fit.y(wall.start.z+(wall.end.z-wall.start.z)*t);page.drawCircle({x,y,size:3,color:blue});text(page,font,String(i+1),x+4,y-11,7);}
+ for(const [i,a] of (project.modelArtworks??[]).entries())if(a.visible){polygon(page,modelArtworkFootprint(a),fit,'#c5ad8e');text(page,font,`3D ${i+1} · ${a.name}`,fit.x(a.position.x),fit.y(a.position.z),7,160);}
  for(const d of project.dimensions??[])if(d.view==='plan'){const r=resolveMeasurement(project,d);dimension(page,font,fit.x(r.start.x),fit.y(r.start.z),fit.x(r.end.x),fit.y(r.end.z),`${mm(r.distanceMm)} mm`);}
  scaleNote(page,font,fit);if(project.referenceModel?.visible)text(page,font,'평면도는 편집 벽 기준입니다. 원본 3D 참고 모델의 형상은 3D 페이지에 포함됩니다.',36,60,8);
 }
@@ -71,6 +73,7 @@ function schedules(doc:PDFDocument,font:PDFFont,section:PdfSection){
  const row=(value:string,size=9)=>{if(y<65){page=header(doc,font,section,'치수 목록 · 계속');y=H-126;}text(page,font,value,42,y,size,W-84);y-=19;};
  row('벽 번호 · 이름 / 길이 × 높이 × 두께 (mm)',11);
  for(const [i,w] of section.project.walls.entries())if(w.visible)row(`${i+1}. ${w.name} / ${mm(wallLength(w))} × ${mm(w.heightMm)} × ${mm(w.thicknessMm)}`);
+ for(const [i,a] of (section.project.modelArtworks??[]).entries())if(a.visible)row(`3D ${i+1}. ${a.name} / ${mm(a.widthMm)}×${mm(a.heightMm)}×${mm(a.depthMm)} mm · 위치 ${mm(a.position.x)}, ${mm(a.position.y)}, ${mm(a.position.z)} mm · 회전 ${a.rotation.x.toFixed(1)}, ${a.rotation.y.toFixed(1)}, ${a.rotation.z.toFixed(1)}°`);
  y-=12;row('작품 번호 · 이름 / 크기 · 설치 벽/면 · 시작점 거리 · 중심 높이 · 회전',11);
  for(const [i,a] of section.project.artworks.entries()){const w=section.project.walls.find(w=>w.id===a.wallId);if(a.visible&&w?.visible)row(`${i+1}. ${a.name} / ${mm(a.widthMm)}×${mm(a.heightMm)}×${mm(a.depthMm)} mm · ${w.name} ${a.wallSide==='back'?'B':'A'}면 · ${mm(a.alongMm)} mm · ${mm(a.centerHeightMm)} mm · ${a.rotationDeg??0}°`);}
 }

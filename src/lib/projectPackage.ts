@@ -21,11 +21,12 @@ function assetSlots(input:unknown):Slot[]{
  const walls=(value:unknown)=>{for(const item of list(value))material(object(item).material);};
  const artworks=(value:unknown)=>{for(const item of list(value)){const a=object(item);slots.push({object:a,key:'imageUrl',kind:'image'});material(a.material);}};
  const model=(value:unknown)=>{if(value!==undefined)slots.push({object:object(value),key:'dataUrl',kind:'model'});};
- const project=object(input);walls(project.walls);material(project.floorMaterial);artworks(project.artworks);if(project.unplacedArtworks!==undefined)artworks(project.unplacedArtworks);model(project.referenceModel);
+ const models=(value:unknown)=>{if(value!==undefined)for(const a of list(value))model(object(a).model);};
+ const project=object(input);models(project.modelArtworks);walls(project.walls);material(project.floorMaterial);artworks(project.artworks);if(project.unplacedArtworks!==undefined)artworks(project.unplacedArtworks);model(project.referenceModel);
  if(project.planImageUrl!==undefined)slots.push({object:project,key:'planImageUrl',kind:'image'});
  if(project.sourcePlan!==undefined)slots.push({object:object(project.sourcePlan),key:'imageUrl',kind:'image'});
- for(const value of list(project.scenes)){const scene=object(value);artworks(scene.artworks);if(scene.structure!==undefined){const structure=object(scene.structure);walls(structure.walls);material(structure.floorMaterial);artworks(structure.unplacedArtworks);model(structure.referenceModel);}}
- return slots;
+ for(const value of list(project.scenes)){const scene=object(value);artworks(scene.artworks);if(scene.structure!==undefined){const structure=object(scene.structure);models(structure.modelArtworks);walls(structure.walls);material(structure.floorMaterial);artworks(structure.unplacedArtworks);model(structure.referenceModel);}}
+ const seen=new WeakMap<object,Set<string>>();return slots.filter(slot=>{let keys=seen.get(slot.object);if(!keys){keys=new Set();seen.set(slot.object,keys);}if(keys.has(slot.key))return false;keys.add(slot.key);return true;});
 }
 async function sha256(bytes:Uint8Array){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes.slice().buffer as ArrayBuffer))].map(n=>n.toString(16).padStart(2,'0')).join('');}
 function fromDataUrl(value:string){
@@ -70,7 +71,7 @@ export async function exportProjectPackage(project:Project,resolveSample:(url:st
  if(encode(JSON.stringify(restored)).length>PROJECT_PACKAGE_MAX_BYTES)throw new Error('복원 프로젝트가 80MB를 넘습니다. 사용하지 않는 Scene이나 모델을 정리해주세요.');
  const bytes=encode(JSON.stringify(document)),manifest:Manifest={format:'gonggan-project-backup',version:1,project:{path:'project.json',bytes:bytes.byteLength,sha256:await sha256(bytes)},assets:[...assets.values()].map(a=>a.meta)};
  const zip=new JSZip();zip.file('project.json',bytes);zip.file('manifest.json',JSON.stringify(manifest,null,2));
- zip.file('README.txt','공간 · 프로젝트 자산 백업\n\n공간 앱 상단 불러오기 → 저장 프로젝트 → 이 .gonggan.zip 파일을 선택하세요. 압축을 풀 필요가 없습니다.\n모든 Scene·숨김/미배치 작품·치수·내부 메모·저장된 도면 이미지·참고 GLB를 포함합니다.\n프로젝트에 저장되지 않은 원본 업로드 PDF/JPG 파일, Undo 기록, 공유 링크 관리 정보는 포함하지 않습니다.\n이 파일에는 비공개 메모도 포함되므로 공개 전시 전달에는 공유 링크·PDF·glTF를 사용하세요.\nproject.json의 자산 포인터는 이 ZIP의 manifest.json과 assets 폴더로 함께 복원합니다.\n');
+ zip.file('README.txt','공간 · 프로젝트 자산 백업\n\n공간 앱 상단 불러오기 → 저장 프로젝트 → 이 .gonggan.zip 파일을 선택하세요. 압축을 풀 필요가 없습니다.\n모든 Scene·숨김/미배치 작품·치수·내부 메모·저장된 도면 이미지·참고 GLB·3D 작품 모델을 포함합니다.\n프로젝트에 저장되지 않은 원본 업로드 PDF/JPG 파일, Undo 기록, 공유 링크 관리 정보는 포함하지 않습니다.\n이 파일에는 비공개 메모도 포함되므로 공개 전시 전달에는 공유 링크·PDF·glTF를 사용하세요.\nproject.json의 자산 포인터는 이 ZIP의 manifest.json과 assets 폴더로 함께 복원합니다.\n');
  for(const asset of assets.values())zip.file(asset.meta.path,asset.bytes,{createFolders:false});
  const packed=await zip.generateAsync({type:'uint8array',compression:'DEFLATE',compressionOptions:{level:3}},m=>onProgress(`프로젝트 묶는 중 · ${Math.round(m.percent)}%`));
  inspectArchive(packed);

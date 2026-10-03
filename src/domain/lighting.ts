@@ -32,7 +32,7 @@ export function patchLight(project:Project,id:string,patch:Partial<ExhibitionLig
 export function translatedLight(light:ExhibitionLight,position:WorldPoint){const delta={x:position.x-light.position.x,y:position.y-light.position.y,z:position.z-light.position.z};return {position,target:{x:light.target.x+delta.x,y:light.target.y+delta.y,z:light.target.z+delta.z}};}
 export function newLight(project:Project,kind:'spot'|'area'):ExhibitionLight{
  if((project.lights?.length??0)>=MAX_LIGHTS)throw new Error(`조명은 최대 ${MAX_LIGHTS}개까지 만들 수 있습니다.`);
- const used=new Set([...project.walls,...project.artworks,...(project.unplacedArtworks??[]),...(project.lights??[])].map(o=>o.id));let index=1;while(used.has(`light-${index}`))index++;
+ const used=new Set([...project.walls,...project.artworks,...(project.unplacedArtworks??[]),...(project.lights??[]),...(project.modelArtworks??[])].map(o=>o.id));let index=1;while(used.has(`light-${index}`))index++;
  const art=project.artworks.find(a=>a.visible),wall=project.walls.find(w=>w.id===art?.wallId)??project.walls[0];
  const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz),side=art?.wallSide==='back'?-1:1;
  const nx=-dz/length*side,nz=dx/length*side,along=art?.alongMm??length/2;
