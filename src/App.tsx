@@ -23,7 +23,7 @@ export default function App() {
       const el = e.target as HTMLElement;
       if (el.closest('input,textarea,select,[contenteditable="true"],dialog')) return;
       const state = useEditor.getState(), mod = e.metaKey || e.ctrlKey;
-      if (e.key === 'Escape') { e.preventDefault(); if(state.wallGesture)state.finishWallTransform(true); else if(state.artworkGesture)state.finishArtworkDrag(true); else state.setTool('select'); return; }
+      if (e.key === 'Escape') { e.preventDefault(); if(state.lightGesture)state.finishLightMove(true);else if(state.wallGesture)state.finishWallTransform(true); else if(state.artworkGesture)state.finishArtworkDrag(true); else state.setTool('select'); return; }
       if (!mod && !e.altKey && !e.shiftKey && e.key.toLowerCase()==='m') { e.preventDefault(); state.setTool('move'); return; }
       if (!mod && !e.altKey && !e.shiftKey && e.key.toLowerCase()==='h') { e.preventDefault(); state.setTool('pan'); return; }
       if (!mod && !e.altKey && !e.shiftKey && e.key.toLowerCase()==='q') { e.preventDefault(); state.setTool('rotate'); return; }

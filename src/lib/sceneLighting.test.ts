@@ -1,0 +1,21 @@
+import {expect,it,vi} from 'vitest';import {SpotLight,RectAreaLight,Vector3} from 'three';
+import {newLight,CUSTOM_LIGHTING} from '../domain/lighting';import {createDemoProject} from '../domain/model';import {createSceneLighting,disposeLighting,updateLightObject} from './sceneLighting';import {buildExportScene,disposeExportScene} from './exportScene';
+it('aims Spot and Area toward the stored millimeter target with correct beam, dimensions and shadow budget',()=>{
+ const p=createDemoProject(),a=newLight(p,'spot'),b={...a,id:'area',kind:'area' as const,widthMm:1500,heightMm:700};p.lights=[a,b,...Array.from({length:5},(_,i)=>({...a,id:`s${i}`}))];p.lighting=CUSTOM_LIGHTING;
+ const rig=createSceneLighting(p),spot=rig.getObjectByName(`light-${a.id}`)!.getObjectByName('emitter') as SpotLight,area=rig.getObjectByName('light-area')!.getObjectByName('emitter') as RectAreaLight;
+ expect(spot.position.toArray()).toEqual([a.position.x/1000,a.position.y/1000,a.position.z/1000]);expect(spot.target.getWorldPosition(new Vector3()).toArray()).toEqual([a.target.x/1000,a.target.y/1000,a.target.z/1000]);expect(spot.angle).toBeCloseTo(a.beamDeg*Math.PI/360);expect(area.width).toBe(1.5);expect(area.height).toBe(.7);
+ const direction=area.getWorldDirection(new Vector3()).negate(),aim=new Vector3(b.target.x/1000,b.target.y/1000,b.target.z/1000).sub(area.getWorldPosition(new Vector3())).normalize();expect(direction.distanceTo(aim)).toBeLessThan(.000001);
+ let count=0;rig.traverse(o=>{if(o instanceof SpotLight&&o.castShadow)count++;});expect(count).toBe(4);const disposed=vi.spyOn(spot.shadow,'dispose');disposeLighting(rig);expect(disposed).toHaveBeenCalledOnce();
+ updateLightObject(rig.getObjectByName(`light-${a.id}`) as import('three').Group,{...a,intensity:0},false);expect(spot.intensity).toBe(0);expect(spot.castShadow).toBe(false);
+});
+it('exports Spot lights through real GLB and preserves orientation, strength and cone without pretending Area is portable',async()=>{
+ vi.stubGlobal('FileReader',class{result:ArrayBuffer|string|null=null;onloadend:(()=>void)|null=null;readAsArrayBuffer(blob:Blob){void blob.arrayBuffer().then(b=>{this.result=b;this.onloadend?.();});}readAsDataURL(blob:Blob){void blob.arrayBuffer().then(b=>{this.result=`data:${blob.type||'application/octet-stream'};base64,${Buffer.from(b).toString('base64')}`;this.onloadend?.();});}});
+ try{
+ const p=createDemoProject();p.artworks=[];const light=newLight(p,'spot');p.lights=[{...light,kelvin:2700,intensity:85},{...light,id:'area',kind:'area'}];const scene=buildExportScene(p);expect(scene.getObjectByName('light-area')).toBeUndefined();disposeExportScene(scene);
+ const {exportProjectGlb}=await import('./modelExport'),{GLTFLoader}=await import('three/examples/jsm/loaders/GLTFLoader.js'),bytes=await(await exportProjectGlb(p)).arrayBuffer(),length=new DataView(bytes).getUint32(12,true),doc=JSON.parse(new TextDecoder().decode(new Uint8Array(bytes,20,length)));const exported=doc.extensions.KHR_lights_punctual.lights;expect(exported).toHaveLength(1);expect(exported[0].intensity).toBe(85);expect(exported[0].spot.outerConeAngle).toBeCloseTo(light.beamDeg*Math.PI/360);
+ const loaded=(await new GLTFLoader().parseAsync(bytes,'')).scene;let spot:SpotLight|undefined;loaded.traverse(o=>{if(o instanceof SpotLight)spot=o;});expect(spot).toBeDefined();expect(spot!.intensity).toBe(85);const dir=spot!.getWorldDirection(new Vector3()).negate(),aim=new Vector3(light.target.x/1000,light.target.y/1000,light.target.z/1000).sub(spot!.getWorldPosition(new Vector3())).normalize();expect(dir.distanceTo(aim)).toBeLessThan(.000001);disposeExportScene(loaded);
+ const {exportProjectGltf}=await import('./modelExport'),{default:JSZip}=await import('jszip');
+ const zip=await JSZip.loadAsync(await (await exportProjectGltf(p)).arrayBuffer(),{checkCRC32:true}),gltf=JSON.parse(await zip.file('scene.gltf')!.async('string')),report=JSON.parse(await zip.file('export-report.json')!.async('string'));
+ expect(gltf.extensions.KHR_lights_punctual.lights).toEqual(exported);expect(gltf.nodes.find((n:{name?:string;extensions?:unknown})=>n.extensions)?.rotation).toEqual(doc.nodes.find((n:{name?:string;extensions?:unknown})=>n.extensions)?.rotation);expect(report.omitted.join(' ')).toContain('Area');
+ }finally{vi.unstubAllGlobals();}
+});

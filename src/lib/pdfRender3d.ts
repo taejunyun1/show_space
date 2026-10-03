@@ -1,4 +1,5 @@
-import {ACESFilmicToneMapping,SRGBColorSpace,AmbientLight,Box3,Color,DirectionalLight,HemisphereLight,Mesh,OrthographicCamera,PerspectiveCamera,Vector3,WebGLRenderer,type Scene} from 'three';
+import {createSceneLighting,disposeLighting} from './sceneLighting';
+import {ACESFilmicToneMapping,SRGBColorSpace,PCFSoftShadowMap,Box3,Color,Mesh,OrthographicCamera,PerspectiveCamera,Vector3,WebGLRenderer,type Scene} from 'three';
 import {createStandardView} from '../components/cameraView3d';
 import {prepareExportScene} from './modelExport';
 import {disposeExportScene} from './exportScene';
@@ -26,10 +27,9 @@ export async function renderPdf3d(section:PdfSection,current?:PdfCurrentCamera):
   const hidden=new Set<string>();
   if(cutaway&&camera instanceof OrthographicCamera)for(const wall of section.project.walls){const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z;if(wall.role!=='partition'&&-dz*(camera.position.x-(wall.start.x+wall.end.x)/2000)+dx*(camera.position.z-(wall.start.z+wall.end.z)/2000)<=0){const object=scene.getObjectByName(`wall-${wall.id}`);if(object)object.visible=false;hidden.add(wall.id);}}
   for(const art of section.project.artworks)if(hidden.has(art.wallId)){const object=scene.getObjectByName(`artwork-${art.id}`);if(object)object.visible=false;}
-  scene.background=new Color('#e9edf1');scene.add(new AmbientLight(0xffffff,.65),new HemisphereLight(0xffffff,0xcad0d6,.7));
-  const light=new DirectionalLight(0xffffff,2.3);light.position.set(-3,12,6);scene.add(light);
+  scene.background=new Color('#e9edf1');const exported=scene.getObjectByName('gonggan-lighting');if(exported){scene.remove(exported);disposeLighting(exported);}scene.add(createSceneLighting(section.project));
   scene.traverse(o=>{if(o instanceof Mesh){o.castShadow=true;o.receiveShadow=true;}});
-  renderer=new WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.toneMapping=ACESFilmicToneMapping;renderer.outputColorSpace=SRGBColorSpace;renderer.setSize(width,height,false);renderer.setPixelRatio(1);if(needsSurfaceEnvironment(section.project)){environment=surfaceEnvironment(renderer);scene.environment=environment.texture;scene.environmentIntensity=SURFACE_ENVIRONMENT_INTENSITY;}renderer.render(scene,camera);
+  renderer=new WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.toneMapping=ACESFilmicToneMapping;renderer.outputColorSpace=SRGBColorSpace;renderer.shadowMap.enabled=true;renderer.shadowMap.type=PCFSoftShadowMap;renderer.setSize(width,height,false);renderer.setPixelRatio(1);if(needsSurfaceEnvironment(section.project)){environment=surfaceEnvironment(renderer);scene.environment=environment.texture;scene.environmentIntensity=section.project.lighting?.environment??SURFACE_ENVIRONMENT_INTENSITY;}renderer.render(scene,camera);
   const blob=await new Promise<Blob>((resolve,reject)=>renderer!.domElement.toBlob(b=>b?resolve(b):reject(new Error('PDF 3D 이미지를 만들지 못했습니다.')),'image/png'));
   return new Uint8Array(await blob.arrayBuffer());
  }finally{environment?.dispose();renderer?.dispose();renderer?.forceContextLoss();disposeExportScene(scene);}

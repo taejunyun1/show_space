@@ -1,3 +1,4 @@
+import type {ExhibitionLight,LightingSettings} from './lighting';
 import type {PlanAnalysis} from '../lib/analyzePlan';
 import type {PlanLabel} from './planLabels';
 import type {SurfaceMaterial} from './materials';
@@ -47,6 +48,8 @@ export interface ReferenceModel {
 }
 
 export interface SceneStructure {
+  lights?:ExhibitionLight[]
+  lighting?:LightingSettings
   floorColor?:string
   floorMaterial?:SurfaceMaterial
   importedFloor?:Point[][]
@@ -75,6 +78,8 @@ export interface Opening {
 }
 
 export interface Project {
+  lights?:ExhibitionLight[]
+  lighting?:LightingSettings
   floorMaterial?:SurfaceMaterial
   importedFloor?:Point[][]
   referenceModel?:ReferenceModel
@@ -90,4 +95,4 @@ export interface Project {
   floorColor: string; planImageUrl?: string; planOpacity?: number; planReference?: PlanReference
 }
 
-export interface EntitySelection { type: 'wall' | 'artwork'; id: string }
+export interface EntitySelection { type: 'wall' | 'artwork' | 'light'; id: string }

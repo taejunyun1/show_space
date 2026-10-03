@@ -1,3 +1,4 @@
+import {createExportLighting,disposeLighting} from './sceneLighting';
 import {wallMetricUv,floorMetricUv,repeatingSurfaceTexture} from './surfaceUv';
 import {createSurfaceMaterial} from './surfaceMaterial';
 import {BoxGeometry,ExtrudeGeometry,Group,Mesh,MeshStandardMaterial,Path,PlaneGeometry,Scene,Shape,Texture,type Material,type Object3D} from 'three';
@@ -37,11 +38,13 @@ export function buildExportScene(project:Project,textures=new Map<string,Texture
   const model=project.referenceModel,root=new Group(),offset=new Group();root.name=model.name;root.position.set(...model.positionMm.map(v=>v/1000) as [number,number,number]);root.rotation.y=model.rotationDeg*Math.PI/180;root.scale.setScalar(model.scale);
   offset.position.set(...model.sourceOffsetM);offset.add(referenceScene.clone(true));root.add(offset);scene.add(root);
  }
+ if(project.lights?.some(l=>l.visible&&l.kind==='spot'))scene.add(createExportLighting(project));
  scene.updateMatrixWorld(true);return scene;
 }
 
 /** Export owns its resources; never call this with the live editor scene. */
 export function disposeExportScene(scene:Object3D){
+ disposeLighting(scene);
  const geometries=new Set<Mesh['geometry']>(),materials=new Set<Material>(),textures=new Set<Texture>();
  scene.traverse(object=>{if(object instanceof Mesh){geometries.add(object.geometry);for(const material of Array.isArray(object.material)?object.material:[object.material]){materials.add(material);for(const value of Object.values(material))if(value instanceof Texture)textures.add(value);}}});
  textures.forEach(t=>t.dispose());materials.forEach(m=>m.dispose());geometries.forEach(g=>g.dispose());

@@ -83,3 +83,11 @@ it('refuses publication until every referenced surface image has uploaded',async
  const {snapshot}=createPublicShare(p,{includeDimensions:false}),created=await call('POST','/api/shares',undefined,true),{id}=await created.json() as {id:string};
  expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(snapshot),true)).status).toBe(409);
 });
+
+it('publishes visible Spot/Area and illumination settings without exposing notes, locks or accepting invalid Kelvin',async()=>{
+ const {newLight,CUSTOM_LIGHTING}=await import('../domain/lighting'),{call}=setup(),p=createDemoProject();p.artworks=[];const spot=newLight(p,'spot');p.lights=[{...spot,note:'PRIVATE LIGHT NOTE',locked:true},{...spot,id:'area-light',kind:'area'},{...spot,id:'hidden-light',visible:false}];p.lighting=CUSTOM_LIGHTING;
+ const {snapshot}=createPublicShare(p,{includeDimensions:false}),created=await call('POST','/api/shares',undefined,true),{id}=await created.json() as {id:string};
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify({...snapshot,lights:snapshot.lights!.map(l=>({...l,kelvin:0}))}),true)).status).toBe(400);
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify({...snapshot,lights:snapshot.lights!.map(l=>({...l,note:'SECRET',locked:true}))}),true)).status).toBe(201);
+ const result=await(await call('GET',`/api/public/${id}`)).json() as typeof snapshot;expect(result.lights).toEqual(snapshot.lights);expect(result.lighting).toEqual(CUSTOM_LIGHTING);expect(JSON.stringify(result)).not.toMatch(/PRIVATE|SECRET|hidden-light|locked/);
+});

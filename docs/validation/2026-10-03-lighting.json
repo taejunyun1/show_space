@@ -1,0 +1,140 @@
+{
+  "date": "2026-10-03",
+  "feature": "indoor-spot-area-lighting",
+  "automated": {
+    "testsPassed": 594,
+    "testsSkipped": 2,
+    "build": "passed",
+    "realGlbReimportDirection": "passed",
+    "realGltfZipCRCAndLightRotation": "passed",
+    "sceneBackupRoundtrip": "passed",
+    "workerPublicAllowlist": "passed"
+  },
+  "browser": {
+    "origin": "http://127.0.0.1:8799/",
+    "spotKelvin": [
+      2700,
+      6500
+    ],
+    "spotBeamDegrees": [
+      40,
+      70
+    ],
+    "spotIntensity": [
+      0,
+      85
+    ],
+    "areaDimensionsMm": [
+      1800,
+      900
+    ],
+    "areaIntensity": 35,
+    "drag3d": {
+      "axis": "Y",
+      "beforeMm": 3000,
+      "afterMm": 3812.72998046875,
+      "targetBeforeMm": 1500,
+      "targetAfterMm": 2312.72998046875,
+      "wallsUnchanged": true,
+      "undo": "passed"
+    },
+    "dragPlan": {
+      "beforeMm": [
+        -700,
+        -1700
+      ],
+      "afterMm": [
+        -140,
+        -1280
+      ],
+      "undo": "passed"
+    },
+    "lockDuplicateDelete": "passed",
+    "sceneRestoreReload": "passed",
+    "narrowScreen": "390px observed missing header icon names; aria-label fixed; later viewport override did not apply, so no claim of mobile recheck",
+    "consoleWarningsErrors": []
+  },
+  "share": {
+    "localOnly": true,
+    "lights": [
+      {
+        "id": "light-1",
+        "name": "스팟 조명 1",
+        "kind": "spot",
+        "position": {
+          "x": -2600,
+          "y": 3000,
+          "z": -1700
+        },
+        "target": {
+          "x": -2600,
+          "y": 1500,
+          "z": -2900
+        },
+        "intensity": 85,
+        "kelvin": 6500,
+        "beamDeg": 70,
+        "penumbra": 0.3,
+        "distanceMm": 0,
+        "widthMm": 1000,
+        "heightMm": 500,
+        "shadow": true,
+        "visible": true
+      },
+      {
+        "id": "light-2",
+        "name": "면 조명 2",
+        "kind": "area",
+        "position": {
+          "x": -700,
+          "y": 3000,
+          "z": -1700
+        },
+        "target": {
+          "x": -700,
+          "y": 1500,
+          "z": -2900
+        },
+        "intensity": 35,
+        "kelvin": 4000,
+        "beamDeg": 40,
+        "penumbra": 0.3,
+        "distanceMm": 0,
+        "widthMm": 1800,
+        "heightMm": 900,
+        "shadow": false,
+        "visible": true
+      }
+    ],
+    "lighting": {
+      "ambient": 0.2,
+      "hemisphere": 0.15,
+      "fill": 0,
+      "environment": 0.08
+    },
+    "privateNotePresent": false,
+    "lockPresent": false,
+    "scenesPresent": false,
+    "viewer": "actual Spot/Area rendered, no editing handles"
+  },
+  "browserExports": {
+    "backup": "UI completed",
+    "glb": "UI completed",
+    "gltfZip": "UI completed",
+    "pdf3d": "UI completed",
+    "png3d": "UI completed",
+    "downloadArtifactInspection": "not verified: download event timed out and no new Downloads files found"
+  },
+  "limits": [
+    "20 lights maximum; first 4 visible emitting Spot shadows",
+    "Area has no own shadows and is excluded from GLB/glTF",
+    "Kelvin is sRGB approximation for previews",
+    "solar/outdoor, account save, 3D artworks, raw SKP and hardware performance remain incomplete"
+  ],
+  "deployment": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "de90f62d-cf9f-4b55-bd93-58ea6639a8fd",
+    "publicUI": "Spot/Area add buttons and base lighting dialog visible; no project edits or QA snapshots",
+    "consoleWarningsErrors": []
+  }
+}

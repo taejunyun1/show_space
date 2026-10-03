@@ -1,3 +1,4 @@
+import {newLight,patchLight as updateLight,parseLighting,translatedLight,CUSTOM_LIGHTING,DEFAULT_LIGHTING,type ExhibitionLight,type LightingSettings} from '../domain/lighting';
 import {adoptModelSpace,sameModelGeometry} from '../domain/modelSpace'
 import {artworkGroupMembers,groupArtworks,ungroupArtworks,patchGroupedArtwork} from '../domain/artworkGroups'
 import { create } from 'zustand'
@@ -71,6 +72,13 @@ interface EditorState {
   setCaptureMode(clean:boolean,includeDimensions?:boolean):void
   notify(message: string | null): void
   commit(next: Project): void
+  addLight(kind:'spot'|'area'):void
+  patchLight(id:string,patch:Partial<ExhibitionLight>):void
+  patchLighting(patch:LightingSettings):void
+  lightGesture:{id:string;base:Project}|null
+  beginLightMove(id:string):void
+  updateLightMove(position:import('../domain/types').WorldPoint):void
+  finishLightMove(cancel?:boolean):void
   patchArtwork(id: string, patch: Partial<Artwork>): void
   patchWall(id: string, patch: Partial<Wall>): void
   moveWallEndpoint(id:string,endpoint:'start'|'end',point:Point):void
@@ -114,7 +122,7 @@ function groupMembers(project:Project,id:string):EntitySelection[] {
 function validSelection(project: Project, selected: EntitySelection[]) {
   return selected.filter((selection) => selection.type === 'artwork'
     ? project.artworks.some((artwork) => artwork.id === selection.id)
-    : project.walls.some((wall) => wall.id === selection.id))
+    : selection.type==='light'?project.lights?.some(l=>l.id===selection.id):project.walls.some((wall) => wall.id === selection.id))
 }
 
 function validWall(project: Project, preferred: string) {
@@ -137,6 +145,7 @@ export const useEditor = create<EditorState>((set, get) => {
   }
   return {
     project: initialProject,
+    lightGesture:null,
     previewProject: null,
     wallGesture: null,
     artworkGesture:null,
@@ -156,14 +165,14 @@ export const useEditor = create<EditorState>((set, get) => {
     future: [],
     hydrated: false,
     select: (selection, additive = false) => set((state) => {
-      const members=selection.type==='wall'?groupMembers(state.project,selection.id):artworkGroupMembers(state.project,selection.id).map(a=>({type:'artwork' as const,id:a.id}));
+      const members=selection.type==='wall'?groupMembers(state.project,selection.id):selection.type==='light'?[selection]:artworkGroupMembers(state.project,selection.id).map(a=>({type:'artwork' as const,id:a.id}));
       const matches=(item:EntitySelection)=>members.some(member=>member.type===item.type&&member.id===item.id);
       const selected = !additive ? members : members.every(member=>state.selected.some(item=>item.type===member.type&&item.id===member.id))
         ? state.selected.filter(item=>!matches(item)) : [...state.selected.filter(item=>!matches(item)),...members];
       const artwork = selection.type === 'artwork' ? state.project.artworks.find((item) => item.id === selection.id) : undefined
       return { selected, activeWallId: selection.type === 'wall' ? selection.id : (artwork?.wallId ?? state.activeWallId) }
     }),
-    setTool: (activeTool) => set({activeTool,measurementDraft:null,previewProject:null,wallGesture:null,artworkGesture:null,rotatingArtworkId:null}),
+    setTool: (activeTool) => set({activeTool,measurementDraft:null,previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,rotatingArtworkId:null}),
     pickMeasurement: (anchor,view,elevationWallId) => attempt(()=>{
       const state=get(),current=state.measurementDraft;
       const next:MeasurementDraft= !current||current.end||current.view!==view||current.elevationWallId!==elevationWallId
@@ -246,8 +255,8 @@ export const useEditor = create<EditorState>((set, get) => {
     },
     setArtworkRotationActive:(rotatingArtworkId)=>set({rotatingArtworkId}),
     setView: (view) => set(state=>{
-      if(view!=='plan'&&state.project.planDraft&&!state.project.planReference?.calibrated)return {view:'plan',message:'두 점 축척 보정 후 3D와 벽면도를 열 수 있습니다.',wallGesture:null,artworkGesture:null,rotatingArtworkId:null,previewProject:null};
-      return {view,measurementDraft:state.view===view?state.measurementDraft:null,activeTool:view!=='plan'&&state.activeTool==='draw'?'select':state.activeTool,wallGesture:null,artworkGesture:null,rotatingArtworkId:null,previewProject:null};
+      if(view!=='plan'&&state.project.planDraft&&!state.project.planReference?.calibrated)return {view:'plan',message:'두 점 축척 보정 후 3D와 벽면도를 열 수 있습니다.',wallGesture:null,artworkGesture:null,lightGesture:null,rotatingArtworkId:null,previewProject:null};
+      return {view,measurementDraft:state.view===view?state.measurementDraft:null,activeTool:view!=='plan'&&state.activeTool==='draw'?'select':state.activeTool,wallGesture:null,artworkGesture:null,lightGesture:null,rotatingArtworkId:null,previewProject:null};
     }),
     setActiveWall: (activeWallId) => set({ activeWallId }),
     toggleDimensions: () => set((state) => ({ showDimensions: !state.showDimensions })),
@@ -256,13 +265,19 @@ export const useEditor = create<EditorState>((set, get) => {
     commit: (next) => set((state) => ({
       project: clone(next),
       view:safeView(next,state.view),
-      previewProject:null,wallGesture:null,artworkGesture:null,rotatingArtworkId:null,
+      previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,rotatingArtworkId:null,
       past: [...state.past, clone(state.project)].slice(-50),
       future: [],
       message: null,
       selected: validSelection(next, state.selected),
       activeWallId: validWall(next, state.activeWallId),
     })),
+    addLight: kind=>attempt(()=>{const project=get().project;if(project.planDraft&&!project.planReference?.calibrated)throw new Error('도면 축척을 먼저 보정해주세요.');const light=newLight(project,kind);get().commit({...project,lights:[...(project.lights??[]),light],lighting:project.lighting??CUSTOM_LIGHTING});set({selected:[{type:'light',id:light.id}],view:'3d',activeTool:'select'});}),
+    patchLight:(id,patch)=>attempt(()=>get().commit(updateLight(get().project,id,patch))),
+    patchLighting: lighting=>attempt(()=>get().commit({...get().project,lighting:parseLighting(lighting)})),
+    beginLightMove:id=>attempt(()=>{const p=get().project,l=p.lights?.find(l=>l.id===id);if(!l||l.locked)throw new Error('잠긴 조명은 이동할 수 없습니다.');set({lightGesture:{id,base:p},previewProject:null});}),
+    updateLightMove:position=>attempt(()=>{const g=get().lightGesture;if(!g)return;const l=g.base.lights!.find(l=>l.id===g.id)!;set({previewProject:updateLight(g.base,g.id,translatedLight(l,position))});}),
+    finishLightMove:(cancel=false)=>{const {lightGesture,previewProject}=get();set({lightGesture:null,previewProject:null});if(!cancel&&lightGesture&&previewProject&&JSON.stringify(lightGesture.base.lights)!==JSON.stringify(previewProject.lights))attempt(()=>get().commit(previewProject));},
     patchArtwork: (id, patch) => attempt(() => get().commit(patchGroupedArtwork(get().project, id, patch))),
     patchWall: (id, patch) => attempt(() => get().commit(updateWall(get().project, id, patch))),
     moveWallEndpoint: (id,endpoint,point) => attempt(()=>get().commit(updateWallEndpoint(get().project,id,endpoint,point,get().linkedCorners))),
@@ -368,7 +383,7 @@ export const useEditor = create<EditorState>((set, get) => {
     lockSelected: (locked) => attempt(()=>{
       if(!get().selected.length)throw new Error('잠글 항목을 선택해 주세요.');
       let next=get().project;
-      for(const selection of get().selected)next=selection.type==='wall'?updateWall(next,selection.id,{locked}):updateArtwork(next,selection.id,{locked});
+      for(const selection of get().selected)next=selection.type==='wall'?updateWall(next,selection.id,{locked}):selection.type==='light'?updateLight(next,selection.id,{locked}):updateArtwork(next,selection.id,{locked});
       get().commit(next);
     }),
     deleteSelected: () => attempt(() => {
@@ -386,24 +401,24 @@ export const useEditor = create<EditorState>((set, get) => {
       const previous = state.past[state.past.length - 1]
       if (!previous) return state
       const project = clone(previous)
-      return { project, view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,rotatingArtworkId:null,measurementDraft:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project, view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,rotatingArtworkId:null,measurementDraft:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     redo: () => set((state) => {
       const next = state.future[0]
       if (!next) return state
       const project = clone(next)
-      return { project,view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,rotatingArtworkId:null,measurementDraft:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project,view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,rotatingArtworkId:null,measurementDraft:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     loadProject: (project) => attempt(() => {
       const parsed = parseProject(project)
-      set({ project: parsed, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,artworkGesture:null,rotatingArtworkId:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
+      set({ project: parsed, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,rotatingArtworkId:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
     }),
     saveScene: (name,cameraView) => attempt(() => {
       const project = get().project
       const used = new Set(project.scenes.map((scene) => scene.id))
       let index = 1
       while (used.has(`scene-${index}`)) index += 1
-      const structure={floorColor:project.floorColor,...(project.floorMaterial?{floorMaterial:clone(project.floorMaterial)}:{}),...(project.importedFloor?{importedFloor:clone(project.importedFloor)}:{}),...(project.referenceModel?{referenceModel:clone(project.referenceModel)}:{}),walls:clone(project.walls),openings:clone(project.openings??[]),dimensions:clone(project.dimensions??[]),unplacedArtworks:clone(project.unplacedArtworks??[])}
+      const structure={lights:clone(project.lights??[]),lighting:clone(project.lighting??DEFAULT_LIGHTING),floorColor:project.floorColor,...(project.floorMaterial?{floorMaterial:clone(project.floorMaterial)}:{}),...(project.importedFloor?{importedFloor:clone(project.importedFloor)}:{}),...(project.referenceModel?{referenceModel:clone(project.referenceModel)}:{}),walls:clone(project.walls),openings:clone(project.openings??[]),dimensions:clone(project.dimensions??[]),unplacedArtworks:clone(project.unplacedArtworks??[])}
       get().commit(parseProject({ ...project, scenes: [...project.scenes, { id: `scene-${index}`, name, artworks: clone(project.artworks), wallVisibility: Object.fromEntries(project.walls.map((wall) => [wall.id, wall.visible])),structure,...(cameraView?{cameraView:clone(cameraView)}:{}) }] }))
     }),
     restoreScene: (id) => attempt(() => {
@@ -411,7 +426,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const scene = project.scenes.find((item) => item.id === id)
       if (!scene) throw new Error('장면을 찾을 수 없습니다.')
       if(scene.structure){
-        get().commit(parseProject({...project,...(scene.structure.floorColor!==undefined?{floorColor:scene.structure.floorColor,floorMaterial:scene.structure.floorMaterial?clone(scene.structure.floorMaterial):undefined}:{}),importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
+        get().commit(parseProject({...project,...(scene.structure.lights!==undefined?{lights:clone(scene.structure.lights),lighting:clone(scene.structure.lighting)}:{}),...(scene.structure.floorColor!==undefined?{floorColor:scene.structure.floorColor,floorMaterial:scene.structure.floorMaterial?clone(scene.structure.floorMaterial):undefined}:{}),importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
       }else{
         const wallIds = new Set(project.walls.map((wall) => wall.id))
         const artworks = clone(scene.artworks.filter((artwork) => wallIds.has(artwork.wallId)))

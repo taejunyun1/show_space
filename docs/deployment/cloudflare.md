@@ -4,7 +4,7 @@
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
 - 최신 배포일: 2026-10-03
-- 최신 버전: dfcb6fc9-af57-415c-a0bd-f32ae870557c
+- 최신 버전: de90f62d-cf9f-4b55-bd93-58ea6639a8fd
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
@@ -63,3 +63,6 @@ GitHub: https://github.com/taejunyun1/show_space · 기본 브랜치 main. Cloud
 2026-10-03 glTF 파일 묶음 배포: 최종 버전 `04552058-2d46-4690-93ff-02adf608ba26`. 벽·바닥·작품 이미지·표시 중인 참고 모델을 미터 좌표의 `scene.gltf`, 상대 경로 바이너리/이미지, 보고서·한글 안내 ZIP으로 출력한다. 551개 테스트 통과·2개 제외, TypeScript·빌드 통과, npm audit 알려진 취약점 0개. 공개 HTTPS 실다운로드 ZIP 3,550,853바이트·mesh 정의 15개·이미지 5개, CRC/상대 참조/버퍼 크기 검증 및 콘솔 경고/오류 없음 확인. 공개 초안과 Undo 상태 유지. 코드 검증 버전 `089163f3-b7e1-4b8f-8ff5-afa9f6537e09` 이후 최종 배포에는 `/licenses/zip-third-party-notices.txt`만 추가했다. 검증 기록: `docs/validation/2026-10-03-gltf-export.json`. 앱 모델 재입력은 GLB, 편집 복원은 JSON이며 이 ZIP은 전체 편집 자산 백업이 아니다. 원본 SKP·전체 자산 패키지·계정 저장·대형 모델/모바일 검증 및 전체 제품 완료는 남아 있다.
 
 2026-10-03 프로젝트 자산 백업 배포: 버전 `696a1043-bfd4-4438-9dd6-4b33c7036361`. 모든 저장된 Scene/구조·숨김/미배치 작품·도면 이미지·참고 GLB·치수·메모를 `.gonggan.zip`으로 묶고 상단 불러오기에서 복원한다. SHA-256/크기/경로/참조·프로젝트 구조·실제 이미지 디코딩 검사 후 기존 작업을 JSON으로 백업하고 교체한다. ZIP/확장 크기/복원 JSON은 각 80MiB 이하이며 ZIP64/분할/암호화 ZIP은 지원하지 않는다. 560개 테스트 통과·2개 제외, TypeScript·빌드 통과. 로컬 실제 ZIP 3,552,234바이트(이미지 5개·GLB 1개)를 초안이 없는 별도 origin으로 복원하고 전체 데이터 비교·새로고침·다른 Scene/그룹/모델·이미지 렌더를 확인했다. 공개 HTTPS ZIP 3,550,230바이트(이미지 5개) 실다운로드·CRC/해시 검증, 복원 메뉴 표시·콘솔 경고/오류 없음·공개 초안/Undo 불변 확인. 검증 기록: `docs/validation/2026-10-03-project-backup.json`. 저장하지 않은 업로드 원본 PDF/JPG, Undo 기록·공유 관리 정보는 백업에서 제외한다. 원본 SKP·계정 저장·3D 작품/고급 재질/조명·대형 모델/모바일과 전체 제품 완료는 남아 있다.
+
+
+2026-10-03 실내 조명 배포: 버전 `de90f62d-cf9f-4b55-bd93-58ea6639a8fd`. Spot/Area 추가·이동·밝기/색온도/조준·잠금/복제/삭제, 기본 조명 설정, Undo·Scene·백업·공유를 연결했다. Spot은 GLB/glTF, 전체 실내 조명은 PNG/PDF 3D에 반영한다. 테스트 594개 통과·선택 벤치마크 2개 제외, TypeScript/빌드 통과. 공개 HTTPS에서 조명 추가 메뉴와 기본 조명 설정 창, 콘솔 경고/오류 없음 확인; 공개 초안이나 R2 QA 스냅샷은 변경하지 않았다. 로컬 공유 뷰어와 서버 허용 목록, 실제 GLB/glTF/백업 왕복은 별도 검증했다. 이번 브라우저 다운로드 이벤트/신규 파일을 확보하지 못해 내려받은 PNG/PDF의 육안 검사는 미검증이다. 기록: `docs/validation/2026-10-03-lighting.json`. 야외 환경/태양·계정 저장·3D 작품·원본 SKP·실기기 성능 및 전체 제품 완료는 남아 있다.
