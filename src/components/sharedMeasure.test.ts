@@ -37,3 +37,7 @@ it('includes distant and tilted 3D artworks when fitting a shared camera',()=>{
  expect(fitSharedCameraZoom(40,viewport,walls,[model])).toBeLessThan(fitSharedCameraZoom(40,viewport,walls));
  expect(fitSharedCameraZoom(40,viewport,[],[{...model,heightMm:50000,rotation:{x:0,y:0,z:0}}])).toBeLessThan(fitSharedCameraZoom(40,viewport,[],[model]));
 });
+
+it('includes a venue reference model in the shared camera fit',()=>{
+ const walls=createDemoProject().walls,viewport={width:860,height:640},reference={sizeMm:[40000,10000,20000] as [number,number,number],sourceOffsetM:[0,0,0] as [number,number,number],positionMm:[20000,0,15000] as [number,number,number],rotationDeg:45,scale:2};expect(fitSharedCameraZoom(40,viewport,walls,[],reference)).toBeLessThan(fitSharedCameraZoom(40,viewport,walls));
+});

@@ -33,8 +33,11 @@ export function publicModelBytes(input:ArrayBuffer):ArrayBuffer{
 }
 export async function publicModelHash(bytes:ArrayBuffer){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');}
 export const PUBLIC_MODELS_MAX_BYTES=80*1024*1024;
-export async function preparePublicModels(project:{modelArtworks?:readonly {id:string;visible:boolean;model:{dataUrl:string}}[]}){
+export const PUBLIC_MODEL_ASSETS_MAX=51; // 50 independent artworks plus one venue model.
+export async function preparePublicModels(project:{referenceModel?:{dataUrl:string;visible:boolean};modelArtworks?:readonly {id:string;visible:boolean;model:{dataUrl:string}}[]}){
  const ids=new Map<string,string>(),uploads=new Map<string,ArrayBuffer>(),cache=new Map<string,string>();let total=0;
- for(const a of project.modelArtworks??[])if(a.visible){let hash=cache.get(a.model.dataUrl);if(!hash){const raw=Uint8Array.from(atob(a.model.dataUrl.split(',')[1]),c=>c.charCodeAt(0)),bytes=publicModelBytes(raw.buffer);hash=await publicModelHash(bytes);if(!uploads.has(hash)){total+=bytes.byteLength;if(total>PUBLIC_MODELS_MAX_BYTES)throw new Error('공유 모델 자산 총합은 80MiB 이하여야 합니다.');uploads.set(hash,bytes);}cache.set(a.model.dataUrl,hash);}ids.set(a.id,hash);}
- return {ids,uploads};
+ async function register(dataUrl:string){let hash=cache.get(dataUrl);if(!hash){if(!/^data:model\/gltf-binary;base64,[A-Za-z0-9+/]+={0,2}$/.test(dataUrl)||dataUrl.length>MODEL_MAX_BYTES*4/3+100)throw new Error('공유 모델 파일 데이터가 올바르지 않습니다.');const raw=Uint8Array.from(atob(dataUrl.split(',')[1]),c=>c.charCodeAt(0)),bytes=publicModelBytes(raw.buffer);hash=await publicModelHash(bytes);if(!uploads.has(hash)){total+=bytes.byteLength;if(total>PUBLIC_MODELS_MAX_BYTES||uploads.size>=PUBLIC_MODEL_ASSETS_MAX)throw new Error('공유 모델 자산 총합은 80MiB·51개 이하여야 합니다.');uploads.set(hash,bytes);}cache.set(dataUrl,hash);}return hash;}
+ const referenceId=project.referenceModel?.visible?await register(project.referenceModel.dataUrl):undefined;
+ for(const a of project.modelArtworks??[])if(a.visible)ids.set(a.id,await register(a.model.dataUrl));
+ return {ids,uploads,referenceId};
 }

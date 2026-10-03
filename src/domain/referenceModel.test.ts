@@ -26,3 +26,8 @@ it('does not persist an invalid live camera in a new Scene',()=>{
  expect(useEditor.getState().project.scenes).toHaveLength(count);
  expect(useEditor.getState().message).toContain('시점 좌표');
 });
+
+it('fits model-only venues at their position without adding an artificial origin range',()=>{
+ const bounds=projectSpatialBounds({walls:[],referenceModel:{...model,rotationDeg:0,positionMm:[50000,500,70000]}});
+ expect(bounds.minX).toBe(40000);expect(bounds.maxX).toBe(60000);expect(bounds.minZ).toBe(65000);expect(bounds.maxZ).toBe(75000);
+});

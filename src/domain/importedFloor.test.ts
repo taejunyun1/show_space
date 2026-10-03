@@ -15,6 +15,7 @@ it('rejects open, self-intersecting and nonfinite floor payloads',()=>{
 it('preserves the adopted floor in structure Scenes and the public allowlist',()=>{
  const project={...createDemoProject(),importedFloor:loops};useEditor.getState().loadProject(project);useEditor.getState().saveScene('floor');const scene=useEditor.getState().project.scenes.at(-1)!;
  useEditor.getState().loadProject({...useEditor.getState().project,importedFloor:undefined});useEditor.getState().restoreScene(scene.id);expect(useEditor.getState().project.importedFloor).toEqual(loops);
- const {snapshot}=createPublicShare(project,{includeDimensions:false});expect(snapshot.importedFloor).toEqual(loops);expect(parsePublicShare({...snapshot,referenceModel:{dataUrl:'private'},importedFloor:loops.map(l=>l.map(p=>({...p,secret:'private'})))}).importedFloor).toEqual(loops);
+ const {snapshot}=createPublicShare(project,{includeDimensions:false});expect(snapshot.importedFloor).toEqual(loops);expect(parsePublicShare({...snapshot,privateModel:{dataUrl:'private'},importedFloor:loops.map(l=>l.map(p=>({...p,secret:'private'})))}).importedFloor).toEqual(loops);
+ expect(()=>parsePublicShare({...snapshot,referenceModel:{dataUrl:'private'}})).toThrow();
  expect(JSON.stringify(snapshot)).not.toContain('referenceModel');
 });

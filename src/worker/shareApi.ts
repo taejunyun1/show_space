@@ -1,5 +1,5 @@
 import {MODEL_MAX_BYTES} from '../lib/glbPayload';
-import {publicModelBytes,publicModelHash,PUBLIC_MODELS_MAX_BYTES} from '../lib/publicModelAsset';
+import {publicModelBytes,publicModelHash,PUBLIC_MODELS_MAX_BYTES,PUBLIC_MODEL_ASSETS_MAX} from '../lib/publicModelAsset';
 import {parsePublicShare,publicModelIds,publicImageIds,type PublicShareSnapshot} from '../domain/publicShare';
 
 export interface ShareBucket {
@@ -89,7 +89,7 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
     if(Number(request.headers.get('content-length'))>MODEL_MAX_BYTES)return error(413,'공유 3D 작품은 12MiB 이하여야 합니다.');
     let bytes:ArrayBuffer;
     try{const reader=request.body?.getReader();if(!reader)throw new Error('3D 작품 모델이 없습니다.');const chunks:Uint8Array[]=[];let length=0;try{while(true){const {done,value}=await reader.read();if(done)break;length+=value.length;if(length>MODEL_MAX_BYTES){await reader.cancel();return error(413,'공유 3D 작품은 12MiB 이하여야 합니다.');}chunks.push(value);}}finally{reader.releaseLock();}const raw=new Uint8Array(length);let offset=0;for(const chunk of chunks){raw.set(chunk,offset);offset+=chunk.length;}bytes=publicModelBytes(raw.buffer);if(await publicModelHash(bytes)!==hash)throw new Error('공유 모델의 해시·공개 자산 데이터가 일치하지 않습니다.');}catch(e){return error(400,(e as Error).message);}
-    const key=modelKey(id,hash);if(!(await env.SHARES.head(key))){const listing=await env.SHARES.list({prefix:`shares/${id}/models/`,limit:51});let total=bytes.byteLength;for(const item of listing.objects)total+=(await env.SHARES.head(item.key))?.size??0;if(listing.truncated||listing.objects.length>=50||total>PUBLIC_MODELS_MAX_BYTES)return error(413,'공유 모델은 50개·자산 총합 80MiB 이하여야 합니다.');await env.SHARES.put(key,bytes,{httpMetadata:{contentType:'model/gltf-binary'}});}
+    const key=modelKey(id,hash);if(!(await env.SHARES.head(key))){const listing=await env.SHARES.list({prefix:`shares/${id}/models/`,limit:PUBLIC_MODEL_ASSETS_MAX+1});let total=bytes.byteLength;for(const item of listing.objects)total+=(await env.SHARES.head(item.key))?.size??0;if(listing.truncated||listing.objects.length>=PUBLIC_MODEL_ASSETS_MAX||total>PUBLIC_MODELS_MAX_BYTES)return error(413,'공유 모델 자산은 51개·총합 80MiB 이하여야 합니다.');await env.SHARES.put(key,bytes,{httpMetadata:{contentType:'model/gltf-binary'}});}
     return new Response(null,{status:204,headers:noStore});
   }
   const imageUpload=pathname.match(/^\/api\/shares\/([0-9a-f]{48})\/images\/(\d{1,4})$/);

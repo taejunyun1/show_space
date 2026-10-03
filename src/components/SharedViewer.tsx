@@ -1,3 +1,4 @@
+import {referenceModelFootprint} from '../domain/referenceModel';
 import {modelArtworkFootprint} from '../domain/modelArtworks';
 import {floorSvgPath} from '../domain/importedFloor';
 import {lazy,Suspense,useEffect,useMemo,useState} from 'react';
@@ -9,7 +10,7 @@ import './sharedViewer.css';
 
 const SharedViewer3D=lazy(()=>import('./SharedViewer3D'));
 type View='3d'|'plan'|'elevation';
-type Selection={kind:'wall'|'artwork'|'modelArtwork';id:string}|null;
+type Selection={kind:'wall'|'artwork'|'modelArtwork'|'referenceModel';id:string}|null;
 type Select=(selection:Selection)=>void;
 const formatMm=(value:number)=>`${Math.round(value).toLocaleString()} mm`;
 const length=(wall:PublicShareSnapshot['walls'][number])=>Math.hypot(wall.end.x-wall.start.x,wall.end.z-wall.start.z);
@@ -35,14 +36,14 @@ function SharedArtworkImage({url,x,y,width,height,spritePanel}:{url:string;x:num
 }
 
 function bounds(snapshot:PublicShareSnapshot){
-  const points=[...snapshot.walls.flatMap(wall=>[wall.start,wall.end]),...(snapshot.importedFloor?.flat()??[]),...(snapshot.modelArtworks?.flatMap(modelArtworkFootprint)??[])];
+  const points=[...snapshot.walls.flatMap(wall=>[wall.start,wall.end]),...(snapshot.referenceModel?referenceModelFootprint(snapshot.referenceModel):[]),...(snapshot.importedFloor?.flat()??[]),...(snapshot.modelArtworks?.flatMap(modelArtworkFootprint)??[])];
   const minX=Math.min(...points.map(point=>point.x)),maxX=Math.max(...points.map(point=>point.x));
   const minZ=Math.min(...points.map(point=>point.z)),maxZ=Math.max(...points.map(point=>point.z));
   const span=Math.max(maxX-minX,maxZ-minZ,1000),pad=span*.12;
   return {minX,minZ,maxX,maxZ,pad,span};
 }
 
-export function SharedPlan({snapshot,selectedId,onSelect,measuring=false,measurePoints=[],onMeasurePoint}:{snapshot:PublicShareSnapshot;selectedId:string|null;onSelect:Select}&MeasureProps){
+export function SharedPlan({snapshot,selectedId,referenceSelected=false,onSelect,measuring=false,measurePoints=[],onMeasurePoint}:{snapshot:PublicShareSnapshot;selectedId:string|null;referenceSelected?:boolean;onSelect:Select}&MeasureProps){
   const box=useMemo(()=>bounds(snapshot),[snapshot]);
   const active=measuring&&!!snapshot.dimensions;
   function pick(event:ReactPointerEvent<SVGSVGElement>){
@@ -52,6 +53,7 @@ export function SharedPlan({snapshot,selectedId,onSelect,measuring=false,measure
     event.preventDefault();onMeasurePoint({x:point.x,y:0,z:point.y});
   }
   return <div className="shared-drawing" aria-label="평면도"><svg className={active?'shared-measuring':''} onPointerDown={pick} viewBox={`${box.minX-box.pad} ${box.minZ-box.pad} ${box.maxX-box.minX+box.pad*2} ${box.maxZ-box.minZ+box.pad*2}`} role="img" aria-label="공유된 전시장 평면도">
+    {snapshot.referenceModel&&<polygon aria-label="전시장 3D 모델 범위" className="shared-selectable" points={referenceModelFootprint(snapshot.referenceModel).map(p=>`${p.x},${p.z}`).join(' ')} fill="none" stroke={referenceSelected?'#365cf5':'#758aa8'} strokeWidth={box.span/500} strokeDasharray={`${box.span/100} ${box.span/150}`} onClick={()=>{if(!active)onSelect({kind:'referenceModel',id:'referenceModel'});}}/>}
     {snapshot.importedFloor&&<path aria-label="모델 바닥" d={floorSvgPath(snapshot.importedFloor)} fill={snapshot.floorColor} fillRule="evenodd" pointerEvents="none"/>}
     {snapshot.zones.map(zone=><rect key={zone.id} x={zone.x} y={zone.z} width={zone.width} height={zone.depth} fill="#eec9c1" stroke="#bb6b58" strokeWidth={box.span/500} pointerEvents="none"/>)}
     {snapshot.walls.map(wall=><g key={wall.id} onClick={()=>{if(!active)onSelect({kind:'wall',id:wall.id});}} className="shared-selectable"><line x1={wall.start.x} y1={wall.start.z} x2={wall.end.x} y2={wall.end.z} stroke={selectedId===wall.id?'#365cf5':wall.color} strokeWidth={Math.max(wall.thicknessMm,box.span/250)} strokeLinecap="square"/><line x1={wall.start.x} y1={wall.start.z} x2={wall.end.x} y2={wall.end.z} stroke="transparent" strokeWidth={Math.max(wall.thicknessMm*3,box.span/65)}/>{snapshot.dimensions&&<text x={(wall.start.x+wall.end.x)/2} y={(wall.start.z+wall.end.z)/2-box.span/75} textAnchor="middle" fontSize={box.span/90} fill="#536176" stroke="#fff" strokeWidth={box.span/500} paintOrder="stroke">{formatMm(length(wall))}</text>}</g>)}
@@ -64,9 +66,9 @@ export function SharedPlan({snapshot,selectedId,onSelect,measuring=false,measure
   </svg></div>;
 }
 
-export function SharedElevation({snapshot,wallId,side,selectedId,onSelect,shareId,measuring=false,measurePoints=[],onMeasurePoint}:{snapshot:PublicShareSnapshot;wallId:string;side:'front'|'back';selectedId:string|null;onSelect:Select;shareId?:string}&MeasureProps){
+export function SharedElevation({snapshot,wallId,side,selectedId,onSelect,shareId,measuring=false,measurePoints=[],onMeasurePoint}:{snapshot:PublicShareSnapshot;wallId:string|null;side:'front'|'back';selectedId:string|null;onSelect:Select;shareId?:string}&MeasureProps){
   const wall=snapshot.walls.find(item=>item.id===wallId)??snapshot.walls[0];
-  if(!wall)return null;
+  if(!wall)return <div className="shared-state" role="status">표시할 편집 벽이 없습니다. 가져온 전시장 모델은 3D에서 확인하세요.</div>;
   const width=length(wall),height=wall.heightMm,span=Math.max(width,height),pad=span*.12;
   const art=snapshot.artworks.filter(item=>item.wallId===wall.id&&item.wallSide===side);
   const active=measuring&&!!snapshot.dimensions;
@@ -98,7 +100,7 @@ export default function SharedViewer({shareId}:{shareId:string|null}){
   const [measuring,setMeasuring]=useState(false);
   const [measurePoints,setMeasurePoints]=useState<WorldPoint[]>([]);
   const addMeasurePoint=(point:WorldPoint)=>setMeasurePoints(current=>nextMeasurePoints(current,point));
-  const changeView=(next:View)=>{setView(next);setMeasurePoints([]);};
+  const changeView=(next:View)=>{setView(next);setMeasurePoints([]);if(next==='elevation'&&snapshot?.walls.length===0)setMeasuring(false);};
   useEffect(()=>{
     if(!shareId)return;
     const abort=new AbortController();
@@ -129,15 +131,17 @@ export default function SharedViewer({shareId}:{shareId:string|null}){
   },[shareId,snapshot,error]);
   if(error)return <main className="shared-state" role="alert"><strong>{error}</strong><p>링크를 확인하거나 공유한 사람에게 새 링크를 요청해 주세요.</p></main>;
   if(!snapshot||!shareId)return <main className="shared-state" role="status">공유 공간을 불러오는 중…</main>;
-  const selectedWall=snapshot.walls.find(item=>item.id===selection?.id);
-  const selectedModel=snapshot.modelArtworks?.find(item=>item.id===selection?.id);
-  const selectedArt=snapshot.artworks.find(item=>item.id===selection?.id);
+  const selectedReference=selection?.kind==='referenceModel'?snapshot.referenceModel:undefined;
+  const selectedId=selection?.kind==='referenceModel'?null:selection?.id??null;
+  const selectedWall=selection?.kind==='wall'?snapshot.walls.find(item=>item.id===selection.id):undefined;
+  const selectedModel=selection?.kind==='modelArtwork'?snapshot.modelArtworks?.find(item=>item.id===selection.id):undefined;
+  const selectedArt=selection?.kind==='artwork'?snapshot.artworks.find(item=>item.id===selection.id):undefined;
   return <main className="shared-viewer"><header className="shared-header"><div><span className="shared-brand">공간</span><span className="shared-title"><strong>{snapshot.name}</strong><small>{snapshot.venue}{snapshot.outdoor?.mode==='outdoor'&&<> · 야외 {snapshot.outdoor.date} {snapshot.outdoor.time} ({snapshot.outdoor.timeZone})</>}</small></span></div><span className="shared-readonly">읽기 전용 공유</span></header>
-    <div className="shared-content"><aside className="shared-list"><h1>전시 공간</h1><p>벽이나 작품을 선택해 정보를 볼 수 있습니다.</p><h2>벽</h2>{snapshot.walls.map(wall=><button key={wall.id} className={selection?.id===wall.id?'active':''} onClick={()=>{setSelection({kind:'wall',id:wall.id});setWallId(wall.id);setMeasurePoints([]);}}>{wall.name}</button>)}{snapshot.artworks.length>0&&<><h2>작품</h2>{snapshot.artworks.map(art=><button key={art.id} className={selection?.id===art.id?'active':''} onClick={()=>{setSelection({kind:'artwork',id:art.id});setWallId(art.wallId);setMeasurePoints([]);}}>{art.name}</button>)}</>}{!!snapshot.modelArtworks?.length&&<><h2>3D 작품</h2>{snapshot.modelArtworks.map(a=><button key={a.id} className={selection?.id===a.id?'active':''} onClick={()=>{setSelection({kind:'modelArtwork',id:a.id});setMeasurePoints([]);}}>{a.name}</button>)}</>}</aside>
-    <section className="shared-stage" aria-label="공유 전시장"><div className="shared-tools"><nav aria-label="보기 전환"><button aria-pressed={view==='3d'} onClick={()=>changeView('3d')}>3D</button><button aria-pressed={view==='plan'} onClick={()=>changeView('plan')}>평면</button><button aria-pressed={view==='elevation'} onClick={()=>changeView('elevation')}>벽면</button></nav>{view==='3d'&&<button onClick={()=>setReset(value=>value+1)}>시점 초기화</button>}{view==='elevation'&&<div className="shared-face"><button aria-pressed={side==='front'} onClick={()=>{setSide('front');setMeasurePoints([]);}}>A면</button><button aria-pressed={side==='back'} onClick={()=>{setSide('back');setMeasurePoints([]);}}>B면</button></div>}{snapshot.dimensions&&<button className="shared-measure-button" aria-pressed={measuring} onClick={()=>{setMeasuring(value=>!value);setMeasurePoints([]);}}>임시 줄자</button>}</div>
-      {view==='3d'&&<label className="shared-cutaway"><input type="checkbox" checked={cutaway} onChange={event=>setCutaway(event.target.checked)}/>벽 자동 숨김</label>}
-      {view==='3d'?<Suspense fallback={<div className="shared-state">3D를 불러오는 중…</div>}><SharedViewer3D snapshot={snapshot} shareId={shareId} selectedId={selection?.id??null} onSelect={setSelection} reset={reset} cutaway={cutaway} measuring={measuring} measurePoints={measurePoints} onMeasurePoint={addMeasurePoint}/></Suspense>:view==='plan'?<SharedPlan snapshot={snapshot} selectedId={selection?.id??null} onSelect={setSelection} measuring={measuring} measurePoints={measurePoints} onMeasurePoint={addMeasurePoint}/>:<SharedElevation snapshot={snapshot} shareId={shareId} wallId={wallId??snapshot.walls[0].id} side={side} selectedId={selection?.id??null} onSelect={setSelection} measuring={measuring} measurePoints={measurePoints} onMeasurePoint={addMeasurePoint}/>}
-      <p className="shared-hint">{measuring?(measurePoints.length===2?`임시 측정 ${formatMm(measurementDistance(measurePoints[0],measurePoints[1]))} · 다음 점을 누르면 새 측정`:`${view==='3d'?'바닥·벽·작품':'도면'}에서 ${measurePoints.length?'끝점':'시작점'}을 선택하세요`):view==='3d'?'드래그 회전 · 마우스 휠 확대 · 오른쪽 버튼 이동':'벽이나 작품을 클릭해 선택할 수 있습니다.'}</p>
-    </section><aside className="shared-info"><h2>선택 정보</h2>{selectedModel?<><strong>{selectedModel.name}</strong><p>{selectedModel.artist||'작가 미기재'}{selectedModel.year&&` · ${selectedModel.year}`}</p><p>3D {({'sculpture':'조각','installation':'설치','object':'오브젝트','custom':'작품'})[selectedModel.kind]} · 배치 잠금</p>{snapshot.dimensions&&<p>{formatMm(selectedModel.widthMm)} × {formatMm(selectedModel.heightMm)} × {formatMm(selectedModel.depthMm)}</p>}</>:selectedArt?<><strong>{selectedArt.name}</strong><p>{selectedArt.artist||'작가 미기재'}</p>{snapshot.dimensions&&<p>{formatMm(selectedArt.widthMm)} × {formatMm(selectedArt.heightMm)}</p>}</>:selectedWall?<><strong>{selectedWall.name}</strong>{snapshot.dimensions&&<p>길이 {formatMm(length(selectedWall))}<br/>높이 {formatMm(selectedWall.heightMm)}<br/>두께 {formatMm(selectedWall.thicknessMm)}</p>}</>:<p>벽이나 작품을 선택하세요.</p>}</aside></div>
+    <div className="shared-content"><aside className="shared-list"><h1>전시 공간</h1><p>벽이나 작품을 선택해 정보를 볼 수 있습니다.</p>{snapshot.referenceModel&&<><h2>가져온 공간</h2><button className={selection?.kind==='referenceModel'?'active':''} onClick={()=>{setSelection({kind:'referenceModel',id:'referenceModel'});setMeasurePoints([]);}}>전시장 3D 모델</button></>}{snapshot.walls.length>0&&<h2>벽</h2>}{snapshot.walls.map(wall=><button key={wall.id} className={selectedId===wall.id?'active':''} onClick={()=>{setSelection({kind:'wall',id:wall.id});setWallId(wall.id);setMeasurePoints([]);}}>{wall.name}</button>)}{snapshot.artworks.length>0&&<><h2>작품</h2>{snapshot.artworks.map(art=><button key={art.id} className={selectedId===art.id?'active':''} onClick={()=>{setSelection({kind:'artwork',id:art.id});setWallId(art.wallId);setMeasurePoints([]);}}>{art.name}</button>)}</>}{!!snapshot.modelArtworks?.length&&<><h2>3D 작품</h2>{snapshot.modelArtworks.map(a=><button key={a.id} className={selectedId===a.id?'active':''} onClick={()=>{setSelection({kind:'modelArtwork',id:a.id});setMeasurePoints([]);}}>{a.name}</button>)}</>}</aside>
+    <section className="shared-stage" aria-label="공유 전시장"><div className="shared-tools"><nav aria-label="보기 전환"><button aria-pressed={view==='3d'} onClick={()=>changeView('3d')}>3D</button><button aria-pressed={view==='plan'} onClick={()=>changeView('plan')}>평면</button><button aria-pressed={view==='elevation'} onClick={()=>changeView('elevation')}>벽면</button></nav>{view==='3d'&&<button onClick={()=>setReset(value=>value+1)}>시점 초기화</button>}{view==='elevation'&&snapshot.walls.length>0&&<div className="shared-face"><button aria-pressed={side==='front'} onClick={()=>{setSide('front');setMeasurePoints([]);}}>A면</button><button aria-pressed={side==='back'} onClick={()=>{setSide('back');setMeasurePoints([]);}}>B면</button></div>}{snapshot.dimensions&&(view!=='elevation'||snapshot.walls.length>0)&&<button className="shared-measure-button" aria-pressed={measuring} onClick={()=>{setMeasuring(value=>!value);setMeasurePoints([]);}}>임시 줄자</button>}</div>
+      {view==='3d'&&snapshot.walls.length>0&&<label className="shared-cutaway"><input type="checkbox" checked={cutaway} onChange={event=>setCutaway(event.target.checked)}/>벽 자동 숨김</label>}
+      {view==='3d'?<Suspense fallback={<div className="shared-state">3D를 불러오는 중…</div>}><SharedViewer3D referenceSelected={selection?.kind==='referenceModel'} snapshot={snapshot} shareId={shareId} selectedId={selectedId} onSelect={setSelection} reset={reset} cutaway={cutaway} measuring={measuring} measurePoints={measurePoints} onMeasurePoint={addMeasurePoint}/></Suspense>:view==='plan'?<SharedPlan referenceSelected={selection?.kind==='referenceModel'} snapshot={snapshot} selectedId={selectedId} onSelect={setSelection} measuring={measuring} measurePoints={measurePoints} onMeasurePoint={addMeasurePoint}/>:<SharedElevation snapshot={snapshot} shareId={shareId} wallId={wallId??snapshot.walls[0]?.id??null} side={side} selectedId={selectedId} onSelect={setSelection} measuring={measuring} measurePoints={measurePoints} onMeasurePoint={addMeasurePoint}/>}
+      <p className="shared-hint">{measuring?(measurePoints.length===2?`임시 측정 ${formatMm(measurementDistance(measurePoints[0],measurePoints[1]))} · 다음 점을 누르면 새 측정`:`${view==='3d'?'바닥·벽·작품':'도면'}에서 ${measurePoints.length?'끝점':'시작점'}을 선택하세요`):view==='3d'?'드래그 회전 · 마우스 휠 확대 · 오른쪽 버튼 이동':view==='plan'&&snapshot.referenceModel?'점선은 전시장 모델의 범위입니다. 실제 형상은 3D에서 확인하세요.':'벽이나 작품을 클릭해 선택할 수 있습니다.'}</p>
+    </section><aside className="shared-info"><h2>선택 정보</h2>{selectedReference?<><strong>전시장 3D 모델</strong><p>원본 형상 · 배치 잠금</p>{snapshot.dimensions&&<p>{selectedReference.sizeMm.map(n=>formatMm(n*selectedReference.scale)).join(' × ')}</p>}{view==='plan'&&<p>평면의 점선은 모델 범위이며 실제 바닥 경계는 아닙니다.</p>}</>:selectedModel?<><strong>{selectedModel.name}</strong><p>{selectedModel.artist||'작가 미기재'}{selectedModel.year&&` · ${selectedModel.year}`}</p><p>3D {({'sculpture':'조각','installation':'설치','object':'오브젝트','custom':'작품'})[selectedModel.kind]} · 배치 잠금</p>{snapshot.dimensions&&<p>{formatMm(selectedModel.widthMm)} × {formatMm(selectedModel.heightMm)} × {formatMm(selectedModel.depthMm)}</p>}</>:selectedArt?<><strong>{selectedArt.name}</strong><p>{selectedArt.artist||'작가 미기재'}</p>{snapshot.dimensions&&<p>{formatMm(selectedArt.widthMm)} × {formatMm(selectedArt.heightMm)}</p>}</>:selectedWall?<><strong>{selectedWall.name}</strong>{snapshot.dimensions&&<p>길이 {formatMm(length(selectedWall))}<br/>높이 {formatMm(selectedWall.heightMm)}<br/>두께 {formatMm(selectedWall.thicknessMm)}</p>}</>:<p>벽이나 작품을 선택하세요.</p>}</aside></div>
   </main>;
 }

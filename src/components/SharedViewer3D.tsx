@@ -1,3 +1,4 @@
+import {PublicReferenceModel3D} from './PublicReferenceModel3D';
 import {PublicModelArtworks3D} from './PublicModelArtworks3D';
 import {projectSpatialBounds} from '../domain/referenceModel';
 import {outdoorAppearance} from '../domain/outdoor';
@@ -21,7 +22,7 @@ import {applyWallVisibility} from './wallVisibility3d';
 import {measurementDistance} from './sharedMeasure';
 import {fitSharedCameraZoom} from './sharedCamera';
 
-type Selection={kind:'wall'|'artwork'|'modelArtwork';id:string};
+type Selection={kind:'wall'|'artwork'|'modelArtwork'|'referenceModel';id:string};
 type Art=PublicShareSnapshot['artworks'][number];
 type PublicWall=PublicShareSnapshot['walls'][number];
 const frameColors={black:'#282827',natural:'#b9a383',white:'#f5f4ef',none:'#eee8dc'};
@@ -100,14 +101,14 @@ function CameraSetup({frame,reset,snapshot}:{frame:NonNullable<PublicShareSnapsh
   useEffect(()=>{
     camera.position.set(...frame.position);
     camera.lookAt(...frame.target);
-    if('zoom' in camera)camera.zoom=frame.projection==='perspective'?frame.zoom:fitSharedCameraZoom(frame.zoom,size,snapshot.walls,snapshot.modelArtworks);
+    if('zoom' in camera)camera.zoom=frame.projection==='perspective'?frame.zoom:fitSharedCameraZoom(frame.zoom,size,snapshot.walls,snapshot.modelArtworks,snapshot.referenceModel);
     if('fov' in camera)camera.fov=frame.fov??50;
     camera.updateProjectionMatrix();invalidate();
   },[camera,frame,reset,invalidate,size.width,size.height,snapshot]);
   return null;
 }
 
-export default function SharedViewer3D({snapshot,shareId,selectedId,onSelect,reset,cutaway,measuring,measurePoints,onMeasurePoint}:{snapshot:PublicShareSnapshot;shareId:string;selectedId:string|null;onSelect:(selection:Selection|null)=>void;reset:number;cutaway:boolean;measuring:boolean;measurePoints:WorldPoint[];onMeasurePoint:(point:WorldPoint)=>void}){
+export default function SharedViewer3D({snapshot,shareId,selectedId,referenceSelected=false,onSelect,reset,cutaway,measuring,measurePoints,onMeasurePoint}:{snapshot:PublicShareSnapshot;shareId:string;selectedId:string|null;referenceSelected?:boolean;onSelect:(selection:Selection|null)=>void;reset:number;cutaway:boolean;measuring:boolean;measurePoints:WorldPoint[];onMeasurePoint:(point:WorldPoint)=>void}){
   const wallGroups=useRef(new Map<string,Group>());
   const cutawayWalls=useMemo<Wall[]>(()=>snapshot.walls.map(wall=>({...wall,material:finish(wall.material),visible:true,locked:true,note:''})),[snapshot.walls]);
   const frame=useMemo<NonNullable<PublicShareSnapshot['camera']>>(()=>{
@@ -131,6 +132,7 @@ export default function SharedViewer3D({snapshot,shareId,selectedId,onSelect,res
     {snapshot.walls.map(wall=><PublicWallMesh key={wall.id} wall={wall} artworks={snapshot.artworks.filter(art=>art.wallId===wall.id)} shareId={shareId} selectedId={selectedId} onSelect={onSelect} groups={wallGroups.current} measuring={active} onMeasure={pick}/>)}
     <CutawayVisibility walls={cutawayWalls} groups={wallGroups.current} cutaway={frame.projection!=='perspective'&&cutaway}/>
     {snapshot.openings.map(opening=><group key={opening.id}><Line points={[[opening.start.x/1000,.025,opening.start.z/1000],[opening.end.x/1000,.025,opening.end.z/1000]]} color={opening.kind==='window'?'#2785b8':'#16816b'} dashed dashSize={.1} gapSize={.08}/><Html center position={[(opening.start.x+opening.end.x)/2000,.12,(opening.start.z+opening.end.z)/2000]} style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="shared-3d-dimension">{opening.kind==='door'?'출입구':opening.kind==='stair-access'?'계단 통로':'창문'}</span></Html></group>)}
+    {snapshot.referenceModel&&<PublicReferenceModel3D model={snapshot.referenceModel} shareId={shareId} selected={referenceSelected} onSelect={()=>onSelect({kind:'referenceModel',id:'referenceModel'})} measuring={active} onMeasure={pick}/>}
     <PublicModelArtworks3D artworks={snapshot.modelArtworks??[]} shareId={shareId} selectedId={selectedId} onSelect={id=>onSelect({kind:'modelArtwork',id})} measuring={active} onMeasure={pick}/>
     {snapshot.zones.map(zone=><mesh key={zone.id} rotation={[-Math.PI/2,0,0]} position={[(zone.x+zone.width/2)/1000,.012,(zone.z+zone.depth/2)/1000]}><planeGeometry args={[zone.width/1000,zone.depth/1000]}/><meshBasicMaterial color="#e44b4b" transparent opacity={.27} depthWrite={false}/></mesh>)}
     {mm?.filter(dim=>dim.view==='3d').map(dim=><group key={dim.id}><mesh position={[(dim.start.x+dim.end.x)/2000,(dim.start.y+dim.end.y)/2000,(dim.start.z+dim.end.z)/2000]}><sphereGeometry args={[.015,8,8]}/><meshBasicMaterial color="#365cf5"/></mesh><Html center style={{pointerEvents:'none'}}><span className="shared-3d-dimension">{Math.round(dim.distanceMm).toLocaleString()} mm</span></Html></group>)}

@@ -1,0 +1,165 @@
+{
+  "snapshotSha": "da2bb397f82586ca4f326aeb1ba0b4d0b0b845c06f87c44be99352c9e85396d1",
+  "editableWalls": 0,
+  "imageArtworks": 0,
+  "modelArtworks": 3,
+  "venue": {
+    "modelId": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+    "sizeMm": [
+      12000,
+      3000,
+      8000
+    ],
+    "sourceOffsetM": [
+      -10,
+      -1.9999999999999998,
+      -5
+    ],
+    "positionMm": [
+      1500,
+      100,
+      -500
+    ],
+    "rotationDeg": 30,
+    "scale": 1.2
+  },
+  "uniqueModelAssets": 3,
+  "filenameExcluded": true,
+  "internalNoteExcluded": true,
+  "assets": [
+    {
+      "hash": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+      "size": 3312,
+      "shaMatches": true,
+      "mime": "model/gltf-binary",
+      "noStore": true,
+      "nodes": 16,
+      "meshes": 4,
+      "images": 0,
+      "metadataExcluded": true
+    },
+    {
+      "hash": "6e6fe8d470f89a9e7c09fed434164d8e63bceb20b649177275644378243f11cf",
+      "size": 2496,
+      "shaMatches": true,
+      "mime": "model/gltf-binary",
+      "noStore": true,
+      "nodes": 3,
+      "meshes": 2,
+      "images": 1,
+      "metadataExcluded": true
+    },
+    {
+      "hash": "dae7a10f1bc215d5d4538e578f6771f364d554cf4c027dc65c5ebda9712f7fcc",
+      "size": 1780,
+      "shaMatches": true,
+      "mime": "model/gltf-binary",
+      "noStore": true,
+      "nodes": 3,
+      "meshes": 2,
+      "images": 0,
+      "metadataExcluded": true
+    }
+  ],
+  "snapshotUnchangedAfterEditorPoseChange": true,
+  "snapshotUnchangedAfterEditorReimport": true,
+  "modelOnly": {
+    "walls": 0,
+    "artworks": 0,
+    "modelArtworks": 0,
+    "venue": {
+      "modelId": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+      "sizeMm": [
+        12000,
+        3000,
+        8000
+      ],
+      "sourceOffsetM": [
+        -10,
+        -1.9999999999999998,
+        -5
+      ],
+      "positionMm": [
+        12000,
+        100,
+        -500
+      ],
+      "rotationDeg": -35,
+      "scale": 0.8
+    },
+    "dimensionsExcluded": true,
+    "assetShaMatches": true,
+    "assetBytes": 3312,
+    "noStore": true
+  },
+  "revocations": [
+    {
+      "snapshotStatus": 410,
+      "modelAssetStatuses": [
+        410,
+        410,
+        410
+      ]
+    },
+    {
+      "snapshotStatus": 410,
+      "modelAssetStatuses": [
+        410
+      ]
+    }
+  ],
+  "date": "2026-10-04",
+  "tests": {
+    "passed": 652,
+    "optionalBenchmarksSkipped": 2,
+    "buildPassed": true,
+    "largeChunkWarningsRemain": true
+  },
+  "fixture": {
+    "kind": "synthetic-not-actual-sketchup-export",
+    "path": "docs/validation/venue-model-fixtures/courtyard-venue.glb",
+    "bytes": 3312,
+    "meshInstances": 15,
+    "nodes": 16,
+    "materials": 4,
+    "sizeMm": [
+      12000,
+      3000,
+      8000
+    ],
+    "courtyardDownwardRayHits": 0
+  },
+  "browser": {
+    "finalBuildReimportPassed": true,
+    "noEditableWallsElevationToolsHidden": true,
+    "noPrivateFilenameInViewer": true,
+    "modelOnlyDimensionUIAbsent": true,
+    "warnErrorLogs": [],
+    "revokedViewersCleared": true,
+    "screenshots": [
+      "2026-10-04-venue-model-share-dialog.png",
+      "2026-10-04-venue-model-sharing-3d.png",
+      "2026-10-04-venue-model-sharing-plan.png",
+      "2026-10-04-venue-model-sharing-only.png",
+      "2026-10-04-venue-model-import-final.png",
+      "2026-10-04-venue-model-sharing-elevation.png",
+      "2026-10-04-venue-model-sharing-revoked.png",
+      "2026-10-04-venue-model-production-menu.png"
+    ]
+  },
+  "production": {
+    "modelSharePublishedToProductionR2": false,
+    "versionId": "01f0df2e-c8c3-4b9d-801d-689b7d26c9cc",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entryScript": "/assets/index-CgmmVyvi.js",
+    "importMenuVerified": true,
+    "warnErrorLogs": [],
+    "publicDraftChanged": false
+  },
+  "limits": {
+    "rawSKPUnsupported": true,
+    "actualSketchUpExportUntested": true,
+    "mobileLargeSceneUntested": true,
+    "wholeProductGoalComplete": false
+  }
+}
