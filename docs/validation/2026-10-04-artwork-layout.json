@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-04",
+  "scope": "original document 1 section 12, document 2 section 23, MVP alignment and horizontal/vertical spacing",
+  "goalComplete": false,
+  "automated": {
+    "passed": 760,
+    "optionalBenchmarksSkipped": 2,
+    "build": "passed",
+    "newTests": 9,
+    "bundleWarning": "existing"
+  },
+  "browser": {
+    "source": "http://localhost:8798",
+    "fixtures": "synthetic only",
+    "row10": {
+      "works": 10,
+      "imageSizeMm": [
+        400,
+        500,
+        30
+      ],
+      "outerSizeMm": [
+        580,
+        680,
+        70
+      ],
+      "gapsMm": [
+        250,
+        250,
+        250,
+        250,
+        250,
+        250,
+        250,
+        250,
+        250
+      ],
+      "outerLeftMm": 3975,
+      "outerRightMm": 12025,
+      "centerHeightsMm": [
+        1450,
+        1450,
+        1450,
+        1450,
+        1450,
+        1450,
+        1450,
+        1450,
+        1450,
+        1450
+      ],
+      "designPreserved": true
+    },
+    "backFace": {
+      "rotationDeg": 33,
+      "alignments": 6,
+      "alignmentErrorToleranceMm": 1e-06,
+      "automaticHorizontalGapsMm": [
+        1781.6082633907154,
+        1781.6082633907154
+      ],
+      "automaticVerticalGapsMm": [
+        516.9066867441979,
+        516.9066867441979
+      ],
+      "manualVerticalGapsMm": [
+        250,
+        250
+      ],
+      "manualHorizontalGapsMm": [
+        250.0000000000009,
+        249.99999999999818
+      ],
+      "selectionCenterMm": 8000,
+      "centerHeightsMm": [
+        1450,
+        1450,
+        1450
+      ],
+      "designPreserved": true
+    },
+    "checks": [
+      "50,000mm overflow rejected atomically",
+      "locked selection controls disabled",
+      "mixed walls and mixed faces disabled",
+      "one Undo and Redo",
+      "same-layout no-op",
+      "full group retained",
+      "Scene restore",
+      "reload persisted location and group",
+      "390px actual layout button and Undo"
+    ],
+    "downloads": [
+      {
+        "file": "작품 정렬 검증 20261004.json",
+        "bytes": 7176,
+        "sha256": "ffb28005d444bb3a6d53a2d789f6718d949dc6351675249ee892940e828972cf"
+      },
+      {
+        "file": "회전 B면 정렬 검증 20261004.json",
+        "bytes": 3406,
+        "sha256": "843c47ee892b546b91545ee3c1e9a47ecfbf28e00e5a785910e1c98a868ee4f8"
+      }
+    ],
+    "mobile": {
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "beforeDocumentScrollWidth": 419,
+      "afterDocumentScrollWidth": 390,
+      "layoutWidth": 346,
+      "layoutScrollWidth": 346,
+      "layoutLeft": 22,
+      "layoutRight": 368,
+      "hardwareTest": false
+    },
+    "consoleWarnings": 0,
+    "consoleErrors": 0
+  },
+  "production": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "af0d0198-c728-42d5-b7b8-ce6c7464d465",
+    "entry": "/assets/index-CrbypDAL.js",
+    "uiPanelVerified": true,
+    "newSyntheticDataPublished": false,
+    "existingDraftEdited": false,
+    "existingShareEdited": false,
+    "undoEnabled": false,
+    "firstPositionMm": 1400,
+    "consoleWarnings": 0,
+    "consoleErrors": 0,
+    "authEnabled": false,
+    "keepVars": true
+  },
+  "limitations": [
+    "wall image artworks only; no 3D object alignment",
+    "requires same wall and face, full group selection and calibrated plan",
+    "strict whole-layout wall boundary guard; does not resize artworks",
+    "real auth unconfigured; real account and device tests pending",
+    "real user SketchUp, large model and mobile hardware validation pending",
+    "Object Edge/Center snap and full source requirement audit remain",
+    "video/projection playback deferred; raw SKP unsupported"
+  ]
+}

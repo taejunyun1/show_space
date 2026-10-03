@@ -1,4 +1,5 @@
 import {installArtworkTemplate,type ArtworkTemplate} from '../domain/artworkLibrary';
+import {layoutArtworks,type ArtworkLayout} from '../domain/artworkLayout';
 import {updateNote,preserveCurrentNotes,validateProjectNotes,type NoteTarget,type NoteDetails} from '../domain/notes';
 import {addModelArtwork as addModelArtworkToProject,patchModelArtwork as updateModelArtwork,modelArtworkMembers,groupModelArtworks,transformModelArtworks,modelArtworkBounds} from '../domain/modelArtworks';
 import {parseOutdoor,DEFAULT_OUTDOOR,type OutdoorSettings} from '../domain/outdoor';
@@ -11,7 +12,6 @@ import {
   addWall as addWallToProject,
   createDemoProject,
   deleteSelection,
-  distributeArtworks,
   duplicateSelection,
   parseProject,
   placeUnplacedArtwork,
@@ -117,6 +117,7 @@ interface EditorState {
   lockSelected(locked:boolean):void
   deleteSelected(): void
   spaceSelected(gap: number): void
+  layoutSelectedArtworks(layout:ArtworkLayout):void
   undo(): void
   redo(): void
   loadProject(project: Project, alreadySaved?:boolean): void
@@ -436,9 +437,14 @@ export const useEditor = create<EditorState>((set, get) => {
       get().commit(next)
       set({ selected: [] })
     }),
-    spaceSelected: (gap) => attempt(() => {
-      const ids = get().selected.filter((item) => item.type === 'artwork').map((item) => item.id)
-      get().commit(distributeArtworks(get().project, ids, gap))
+    spaceSelected: (gap) => get().layoutSelectedArtworks({kind:'spacing',axis:'horizontal',gapMm:gap}),
+    layoutSelectedArtworks: (layout) => attempt(() => {
+      const {project,selected}=get();
+      if(selected.some(item=>item.type!=='artwork'))throw new Error('같은 벽면의 이미지 작품만 선택해 주세요.');
+      const next=layoutArtworks(project,selected.map(item=>item.id),layout);
+      if(next===project){set({message:'이미 같은 배치입니다.'});return;}
+      get().commit(next);
+      set({message:'선택한 작품의 배치를 적용했습니다.'});
     }),
     undo: () => set((state) => {
       const previous = state.past[state.past.length - 1]
