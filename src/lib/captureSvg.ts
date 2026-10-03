@@ -1,11 +1,24 @@
 import {artPanel} from './art';
 
-export interface CaptureOptions {longEdge:1920|3840;includeDimensions:boolean;includeGrid:boolean;includePlan:boolean}
+export interface CaptureRatio {width:number;height:number}
+export interface CaptureOptions {longEdge:1920|2560|3840;aspectRatio?:CaptureRatio;includeDimensions:boolean;includeGrid:boolean;includePlan:boolean}
 
-export function capturePixelSize(width:number,height:number,longEdge:number){
+export function capturePixelSize(width:number,height:number,longEdge:number,aspectRatio?:CaptureRatio){
  if(![width,height,longEdge].every(Number.isFinite)||width<=0||height<=0||longEdge<1||longEdge>8192)throw new Error('캡처 해상도가 올바르지 않습니다.');
+ if(aspectRatio){
+  if(![aspectRatio.width,aspectRatio.height].every(n=>Number.isFinite(n)&&n>=1&&n<=10000))throw new Error('사용자 지정 비율은 1~10,000 사이의 숫자로 입력해 주세요.');
+  width=aspectRatio.width;height=aspectRatio.height;
+ }
  const scale=longEdge/Math.max(width,height);
  return {width:Math.max(1,Math.round(width*scale)),height:Math.max(1,Math.round(height*scale))};
+}
+
+/** Fit the complete source into the output without cropping or changing its proportions. */
+export function captureFit(source:CaptureRatio,target:CaptureRatio){
+ if(![source.width,source.height,target.width,target.height].every(n=>Number.isFinite(n)&&n>0))throw new Error('캡처 화면 크기가 올바르지 않습니다.');
+ const scale=Math.min(target.width/source.width,target.height/source.height);
+ const width=source.width*scale,height=source.height*scale;
+ return {x:(target.width-width)/2,y:(target.height-height)/2,width,height,scale};
 }
 
 function loadImage(src:string):Promise<HTMLImageElement>{
@@ -53,10 +66,12 @@ function toBlob(canvas:HTMLCanvasElement):Promise<Blob>{
 export async function captureSvg(svg:SVGSVGElement,options:CaptureOptions):Promise<Blob>{
  await document.fonts.ready;
  const box=svg.viewBox.baseVal;
- const size=capturePixelSize(box.width,box.height,options.longEdge);
+ const size=capturePixelSize(box.width,box.height,options.longEdge,options.aspectRatio);
+ const fit=captureFit({width:box.width,height:box.height},size);
  const clone=svg.cloneNode(true) as SVGSVGElement;
  inlineStyles(svg,clone);
  clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('width',String(size.width));clone.setAttribute('height',String(size.height));
+ clone.setAttribute('preserveAspectRatio','xMidYMid meet');
  clone.querySelectorAll('.drag-handle,[data-capture-draft]').forEach(el=>el.remove());
  clone.querySelectorAll('g.draggable-art rect[stroke="#365cf5"],g.selectable rect[stroke="#365cf5"],.svg-dimensions.blue').forEach(el=>el.remove());
  clone.querySelectorAll<SVGElement>('line.selectable[stroke="#365cf5"]').forEach(el=>{el.setAttribute('stroke','#697789');el.style.stroke='#697789';});
@@ -64,7 +79,7 @@ export async function captureSvg(svg:SVGSVGElement,options:CaptureOptions):Promi
  if(!options.includeDimensions)clone.querySelectorAll('text,.svg-dimensions,[aria-label="평면 치수선"],[aria-label="벽면 치수선"]').forEach(el=>el.remove());
  if(!options.includeGrid)clone.querySelectorAll<SVGElement>('rect[fill="url(#plan-grid)"]').forEach(el=>{el.setAttribute('fill','#ffffff');el.style.fill='#ffffff';});
  if(!options.includePlan)clone.querySelectorAll('image[data-source-plan]').forEach(el=>el.remove());
- await replaceArtworkImages(clone,size.width/box.width);
+ await replaceArtworkImages(clone,fit.scale);
  const markup=new XMLSerializer().serializeToString(clone),blob=new Blob([markup],{type:'image/svg+xml;charset=utf-8'}),url=URL.createObjectURL(blob);
  try{
   const image=await loadImage(url),canvas=document.createElement('canvas');canvas.width=size.width;canvas.height=size.height;

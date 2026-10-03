@@ -4,7 +4,7 @@
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
 - 최신 배포일: 2026-10-04
-- 최신 버전: 426a78b5-3a7b-48f6-bd79-25dc731e1019
+- 최신 버전: f65572d8-f605-49a9-94c0-f170124fc5d1
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
@@ -83,3 +83,7 @@ GitHub: https://github.com/taejunyun1/show_space · 기본 브랜치 main. Cloud
 
 
 2026-10-04 액자·매트·앞면 보호 배포: 최종 버전 `f4180d5d-12e7-4c04-ba2b-ae9d99c1b114`, 공개 entry `/assets/index-CWDMlRR7.js`. 최초 검증 `cdc6662c-b229-413d-b77b-bd6aeee42ff8` 이후 공유 벽면의 선택 테두리와 외곽 라벨 위치를 최종 반영했다. 726개 테스트 통과·선택 벤치마크 2개 제외, TypeScript/Vite 빌드 통과. 공개 편집 패널·같은 액자 외곽의 읽기 전용 Scene 공유·이미지/GLB 자산 3개·콘솔 경고/오류 없음 검증, 직접 만든 로컬/생산 합성 링크만 중단하여 모든 요청 410. `--keep-vars`로 기존 키·바인딩 유지, 사용자 기존 초안/공유는 수정하지 않았다. 상세 `../implementation/2026-10-04-framing.md`, 기록 `../validation/2026-10-04-framing.json`. 실제 인증·실제 SketchUp/모바일 실기기·전체 제품 완료는 미증명이다.
+
+2026-10-04 PNG 캡처 출력 배포: 테스트 739개 통과·선택 벤치마크 2개 제외, 빌드 통과. 3D 1080p/1440p/4K·세로 4K·현재 비율, 평면도 2560px 정사각, 벽면도 사용자 지정 2.4:1을 실제 PNG 헤더/화면으로 확인했다. 캡처 후 프로젝트 JSON은 가져오기에서 새로 부여한 id 외에 원본과 동일하다. 390px 설정 창 가로 넘침 없음. 공개 HTTPS의 /assets/index-Des8ZPsw.js에서 3840×2160 PNG를 실제 다운로드했고 콘솔 경고·오류 없음. 공개 초안 데이터·공유는 수정하지 않았다. Cloudflare f65572d8-f605-49a9-94c0-f170124fc5d1, --keep-vars 사용. 기록: ../validation/2026-10-04-capture-output.json.
+
+같은 캡처 창을 열어 둔 채 390px로 변경: 현재 비율 표시 1920×1519 → 1062×1920 → 1920×1519 복원. 최종 HTTPS 내보내기 → 현재 화면 이미지에서도 4K PNG 저장 확인.

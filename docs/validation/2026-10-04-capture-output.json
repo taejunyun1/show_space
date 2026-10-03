@@ -1,0 +1,155 @@
+{
+  "date": "2026-10-04",
+  "requirements": [
+    "Source document 1 section 27: clean current 3D PNG, 1920x1080, 2560x1440, 3840x2160, custom aspect ratio",
+    "Later user decision: simple views and capture, no walking camera flow"
+  ],
+  "tests": {
+    "passed": 739,
+    "skippedOptionalBenchmarks": 2,
+    "build": "passed",
+    "warnings": [
+      "Existing >500kB bundle warnings",
+      "Node experimental SQLite warning"
+    ]
+  },
+  "local": {
+    "outputs": [
+      {
+        "name": "캡처 검증 20261004-3D (1).png",
+        "width": 2160,
+        "height": 3840,
+        "bytes": 232518,
+        "sha256": "8042e2809847cd7b747adff3eaff4d044f9faf03df8a0485207572eedf0ef67b"
+      },
+      {
+        "name": "캡처 검증 20261004-3D (6).png",
+        "width": 1920,
+        "height": 1519,
+        "bytes": 552045,
+        "sha256": "b564fe4e4f180656f942946024c861299ab8eb0bf1b9f177dd73ff80b21be673"
+      },
+      {
+        "name": "캡처 검증 20261004-3D.png",
+        "width": 1920,
+        "height": 1080,
+        "bytes": 77614,
+        "sha256": "0d888c6337bf11eea080f47510cd50da3a2a7b3d89b821662e8f99c0e3145c2f"
+      },
+      {
+        "name": "캡처 검증 20261004-3D (4).png",
+        "width": 1920,
+        "height": 800,
+        "bytes": 52986,
+        "sha256": "fd20d0e9f5e3e7e2c18d5a3d9c3daa06a596daa0771da874487441e363810d42"
+      },
+      {
+        "name": "캡처 검증 20261004-3D (5).png",
+        "width": 1,
+        "height": 1920,
+        "bytes": 222,
+        "sha256": "e5991f1c4aa58aa5992e1f97d5bdef792570eea34c22f3565790dafe1036eb9f"
+      },
+      {
+        "name": "캡처 검증 20261004-3D (2).png",
+        "width": 2560,
+        "height": 1440,
+        "bytes": 128323,
+        "sha256": "e839f2254e14aeeb8221cc2647cecf4f23387f4a8dac13354928727720d41ec8"
+      },
+      {
+        "name": "캡처 검증 20261004-벽면도.png",
+        "width": 1920,
+        "height": 800,
+        "bytes": 107275,
+        "sha256": "1232cfd1d330d8eecea19888956d6f4f5fa7388aae583c5a351788dcdb5e054b"
+      },
+      {
+        "name": "캡처 검증 20261004-평면도.png",
+        "width": 2560,
+        "height": 2560,
+        "bytes": 135741,
+        "sha256": "71ac31b71c58f818ff0793d85757ddd45c1b67e8bf60860af397ed1a81349e0c"
+      },
+      {
+        "name": "캡처 검증 20261004-3D (3).png",
+        "width": 3840,
+        "height": 2160,
+        "bytes": 267527,
+        "sha256": "556f23fa30ac0667754b2918073e06a3397e927de6d03546b495fcdc0371587d"
+      }
+    ],
+    "projectFieldsChanged": [
+      "id"
+    ],
+    "expectedImportAssignedNewId": true,
+    "projectDataPreserved": true,
+    "restoredCanvas": {
+      "width": 1358,
+      "height": 1074,
+      "cssWidth": 776,
+      "cssHeight": 614
+    },
+    "mobileDialog": {
+      "viewportWidth": 390,
+      "x": 19.5,
+      "width": 351,
+      "scrollWidth": 349,
+      "clientWidth": 349
+    },
+    "invalidCustomSaveDisabled": true,
+    "consoleWarningsErrors": [],
+    "resizeWhileDialogOpen": {
+      "desktop": [
+        1920,
+        1519
+      ],
+      "mobile": [
+        1062,
+        1920
+      ],
+      "desktopRestored": [
+        1920,
+        1519
+      ],
+      "mobileSourceCss": [
+        260,
+        470
+      ],
+      "mobileDocumentWidth": 390
+    }
+  },
+  "production": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "f65572d8-f605-49a9-94c0-f170124fc5d1",
+    "entry": "/assets/index-Des8ZPsw.js",
+    "actualPng": {
+      "name": "여백의 기록-3D (8).png",
+      "width": 3840,
+      "height": 2160,
+      "bytes": 1056187,
+      "sha256": "7d075db38f38f1655fbd7f6edf09548700a798bc900d7964061e93c36d98c123"
+    },
+    "consoleWarningsErrors": [],
+    "editorProjectDataMutated": false,
+    "publicSharePublished": false,
+    "exportMenuRouteVerified": true
+  },
+  "behavior": {
+    "source3D": "current renderer viewport, existing camera unchanged",
+    "sourceSVG": "current viewBox",
+    "otherRatio": "centered containment with background margins, no crop or stretch",
+    "customRatioRange": "both numbers 1..10000; short output edge minimum 1 pixel",
+    "busyControls": "disabled, repeated save guarded",
+    "captureConfiguration": "per-dialog; project data and Scene serialization unchanged"
+  },
+  "limits": [
+    "Extreme ratios necessarily reduce visible detail",
+    "Source image texture resolution still bounds artwork detail",
+    "GPU maximum size errors preserve editor via existing finally restoration; GPU failure not induced in actual browser",
+    "Original plan image toggle not re-tested in this increment; fixture had no plan image",
+    "390px browser viewport test is not real mobile hardware verification",
+    "Real account authentication and full original requirements audit remain incomplete"
+  ],
+  "goalStatus": "active"
+}

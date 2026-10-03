@@ -15,7 +15,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import { Canvas, events, flushSync, useFrame, useThree } from '@react-three/fiber';
 import type {ThreeEvent} from '@react-three/fiber';
 import { OrbitControls, Html, Line, useTexture } from '@react-three/drei';
-import { Path, Shape, SRGBColorSpace, Plane, Vector2, Vector3, MOUSE } from 'three';
+import { Color, Path, Shape, SRGBColorSpace, Plane, Vector2, Vector3, MOUSE } from 'three';
 import type {Group, Object3D} from 'three';
 import type { Artwork, CameraView, Project, Wall } from '../domain/types';
 import { artworkPosition, artworkWarnings, canRestoreDemoBoundary, wallLength } from '../domain/model';
@@ -23,7 +23,7 @@ import {floorWithOpenings,openingSegments} from '../domain/openings';
 import { useEditor } from '../state/editor';
 import {snapMeasurementCorner} from './measurementSnap3d';
 import {fixedAnchor,resolveMeasurement,wallAnchor} from '../domain/measurements';
-import {capturePixelSize,type CaptureOptions} from '../lib/captureSvg';
+import {captureFit,capturePixelSize,type CaptureOptions} from '../lib/captureSvg';
 import { artPanel } from '../lib/art';
 import { applyWallVisibility } from './wallVisibility3d';
 import {editorHits3d} from './editorHits3d';
@@ -235,7 +235,8 @@ function CameraSetup({ reset, hydrated, projectId, onReady, onCameraReady, onCam
   },[camera,get,onCameraReady,centerX,centerZ,centerY]);
   useEffect(() => onReady(async (options) => {
     const editor=useEditor.getState(),oldPixelRatio=gl.getPixelRatio(),cssSize=gl.getSize(new Vector2());
-    const target=capturePixelSize(cssSize.x,cssSize.y,options.longEdge);
+    const target=capturePixelSize(cssSize.x,cssSize.y,options.longEdge,options.aspectRatio);
+    const fit=captureFit({width:cssSize.x,height:cssSize.y},target);
     const max=Math.min(gl.getContext().getParameter(gl.getContext().MAX_RENDERBUFFER_SIZE) as number,gl.getContext().getParameter(gl.getContext().MAX_TEXTURE_SIZE) as number);
     if(target.width>max||target.height>max)throw new Error('이 브라우저에서는 선택한 고해상도를 지원하지 않습니다. 낮은 해상도로 저장해 주세요.');
     const grid=scene.getObjectByName('capture-grid'),gridWasVisible=grid?.visible;
@@ -245,11 +246,14 @@ function CameraSetup({ reset, hydrated, projectId, onReady, onCameraReady, onCam
       flushSync(()=>editor.setCaptureMode(true,options.includeDimensions));
       await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
       if(grid)grid.visible=options.includeGrid;
-      gl.setPixelRatio(target.width/cssSize.x);gl.render(scene,camera);
-      const canvas=document.createElement('canvas');canvas.width=gl.domElement.width;canvas.height=gl.domElement.height;
+      // A very narrow custom output must still have a non-empty source drawing buffer.
+      gl.setPixelRatio(Math.max(fit.scale,1/cssSize.x,1/cssSize.y));gl.render(scene,camera);
+      const canvas=document.createElement('canvas');canvas.width=target.width;canvas.height=target.height;
       const context=canvas.getContext('2d');if(!context)throw new Error('3D 캡처 캔버스를 만들 수 없습니다.');
-      context.drawImage(gl.domElement,0,0,canvas.width,canvas.height);
-      if(options.includeDimensions)drawHtmlLabels(context,gl.domElement,canvas.width/cssSize.x);
+      context.fillStyle=scene.background instanceof Color?'#'+scene.background.getHexString():'#e9edf1';
+      context.fillRect(0,0,canvas.width,canvas.height);
+      context.drawImage(gl.domElement,fit.x,fit.y,fit.width,fit.height);
+      if(options.includeDimensions){context.save();context.translate(fit.x,fit.y);drawHtmlLabels(context,gl.domElement,fit.scale);context.restore();}
       return await captureCanvas(canvas);
     }finally{if(grid&&gridWasVisible!==undefined)grid.visible=gridWasVisible;gl.setPixelRatio(oldPixelRatio);editor.setCaptureMode(false);gl.render(scene,camera);}
   }), [gl, scene, camera, onReady]);
