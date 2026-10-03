@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-04",
+  "tests": {
+    "passed": 776,
+    "skippedOptionalBenchmarks": 2,
+    "build": "passed"
+  },
+  "ui": {
+    "elevationFront": {
+      "alongMm": 2820,
+      "centerHeightMm": 1600
+    },
+    "threeFront": {
+      "alongMm": 2820,
+      "centerHeightMm": 1600
+    },
+    "elevationBackRotation90": {
+      "alongMm": 4530,
+      "centerHeightMm": 1600
+    },
+    "snapOffFree": {
+      "alongMm": 2434.81,
+      "centerHeightMm": 1466.67
+    },
+    "group": {
+      "members": 10,
+      "gapLabels": 9,
+      "gapMm": 250,
+      "singleUndo": true,
+      "jsonArtworksUnchangedExceptIntendedGroup": true
+    },
+    "mobile": {
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "toolbarHorizontalScrollVerified": true,
+      "magnetAfterScroll": {
+        "left": 260,
+        "right": 287
+      },
+      "togglePressed": false
+    },
+    "consoleWarningsErrors": []
+  },
+  "png": [
+    {
+      "name": "작품 스냅 검증 20261004-벽면도.png",
+      "pixels": [
+        1920,
+        980
+      ],
+      "sha256": "7e1f7f2f99af24d906a7a5e6b7023b140d71bad4989ea1238f739bef16bb08b1"
+    },
+    {
+      "name": "작품 스냅 검증 20261004-벽면도 (1).png",
+      "pixels": [
+        1920,
+        980
+      ],
+      "sha256": "041f83eb047b66efce65991b69ddfd6914fab2866a0ef6922337b4b09270873f"
+    }
+  ],
+  "limits": [
+    "Wall-mounted image artwork snapping only",
+    "Perspective radius is local approximation",
+    "Automatic dimensions editor/PNG only; PDF and shared viewer pending",
+    "Alt/Escape during native drag covered by state tests, not physical input",
+    "Actual auth, SketchUp and large models/mobile hardware remain unverified"
+  ],
+  "production": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "b8a294bb-d504-4a1b-8d55-5ad28e5bec08",
+    "entry": "/assets/index-CYDGyaGf.js",
+    "keepVars": true,
+    "bindings": [
+      "PROJECTS_DB",
+      "SHARES",
+      "PRIVATE_PROJECTS",
+      "ASSETS"
+    ],
+    "authEnabled": false,
+    "importMenuVerified": true,
+    "snapToolbarVerified": true,
+    "consoleWarningsErrors": [],
+    "existingProjectUnmodified": true
+  }
+}

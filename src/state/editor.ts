@@ -25,13 +25,14 @@ import {snapWallTranslation,transformWalls} from '../domain/wallTransform'
 import {addWallBetween,updateWallEndpoint} from '../domain/wallEditing'
 import {addMeasurement,measureDistance,resolveAnchor} from '../domain/measurements'
 import { readDraft, writeDraft } from '../lib/persistence'
-import {draggedArtworkPlacement,type ArtworkFacePoint} from '../domain/artworkDrag3d'
+import type {ArtworkFacePoint} from '../domain/artworkDrag3d'
+import {snapArtworkPlacement,type ArtworkSnapGuide,type ArtworkSnapOptions} from '../domain/artworkSnap'
 
 export type View = '3d' | 'plan' | 'elevation'
 type SaveStatus = 'loading' | 'saved' | 'saving' | 'error'
 type EditTool = 'select' | 'pan' | 'move' | 'rotate' | 'draw' | 'measure'
 interface WallGesture {id:string;ids:string[];mode:'move'|'rotate';start:Point;base:Project}
-interface ArtworkGesture {id:string;grab:ArtworkFacePoint;base:Project}
+interface ArtworkGesture {id:string;grab:ArtworkFacePoint;base:Project;guides?:ArtworkSnapGuide[]}
 type ArtworkDragHit=ArtworkFacePoint&{wallId?:string;wallSide?:'front'|'back'}
 interface MeasurementDraft {view:View; elevationWallId?:string;start:MeasurementAnchor;end?:MeasurementAnchor}
 
@@ -47,6 +48,8 @@ interface EditorState {
   selected: EntitySelection[]
   view: View
   activeWallId: string
+  artworkSnapping:boolean
+  toggleArtworkSnapping():void
   showDimensions: boolean
   captureClean:boolean
   captureDimensions:boolean
@@ -67,7 +70,7 @@ interface EditorState {
   updateWallTransform(point:Point,snap?:boolean):void
   finishWallTransform(cancel?:boolean):void
   beginArtworkDrag(id:string,hit:ArtworkFacePoint):void
-  updateArtworkDrag(hit:ArtworkDragHit):void
+  updateArtworkDrag(hit:ArtworkDragHit,options?:ArtworkSnapOptions):void
   finishArtworkDrag(cancel?:boolean):void
   setArtworkRotationActive(id:string|null):void
   setView(view: View): void
@@ -180,6 +183,8 @@ export const useEditor = create<EditorState>((set, get) => {
     selected: firstSelection(initialProject),
     view: '3d',
     activeWallId: 'wall-a',
+    artworkSnapping:true,
+    toggleArtworkSnapping:()=>set(s=>({artworkSnapping:!s.artworkSnapping,artworkGesture:s.artworkGesture?{...s.artworkGesture,guides:[]}:null})),
     showDimensions: true,
     captureClean:false,
     captureDimensions:true,
@@ -260,22 +265,21 @@ export const useEditor = create<EditorState>((set, get) => {
       if(!Number.isFinite(hit.alongMm)||!Number.isFinite(hit.centerHeightMm))throw new Error('작품 시작점이 올바르지 않습니다.');
       set({outdoorGesture:null,modelArtworkGesture:null,artworkGesture:{id,base:project,grab:{alongMm:artwork.alongMm-hit.alongMm,centerHeightMm:artwork.centerHeightMm-hit.centerHeightMm}},wallGesture:null,rotatingArtworkId:null,previewProject:null,selected:artworkGroupMembers(project,id).map(a=>({type:'artwork',id:a.id})),activeWallId:artwork.wallId,message:null});
     }),
-    updateArtworkDrag: (hit) => attempt(()=>{
+    updateArtworkDrag: (hit,options) => attempt(()=>{
       const gesture=get().artworkGesture;if(!gesture)return;
       const artwork=gesture.base.artworks.find(item=>item.id===gesture.id),wall=gesture.base.walls.find(item=>item.id===(hit.wallId??artwork?.wallId));
       if(!artwork||!wall)return;
       if(!Number.isFinite(hit.alongMm)||!Number.isFinite(hit.centerHeightMm))return;
-      const wallSide=hit.wallSide??artwork.wallSide;
-      const placement=draggedArtworkPlacement({...artwork,wallId:wall.id,wallSide},wall,gesture.grab,hit);
-      set({previewProject:null});
-      set({previewProject:patchGroupedArtwork(gesture.base,gesture.id,{...placement,wallId:wall.id,wallSide},true)});
+      const wallSide=hit.wallSide??artwork.wallSide??'front';
+      const snapped=snapArtworkPlacement(gesture.base,gesture.id,wall.id,wallSide,{alongMm:hit.alongMm+gesture.grab.alongMm,centerHeightMm:hit.centerHeightMm+gesture.grab.centerHeightMm},{toleranceMm:options?.toleranceMm??{alongMm:0,centerHeightMm:0},bypass:!get().artworkSnapping||options?.bypass});
+      set({previewProject:patchGroupedArtwork(gesture.base,gesture.id,{...snapped.placement,wallId:wall.id,wallSide},true),artworkGesture:{...gesture,guides:snapped.guides}});
     }),
     finishArtworkDrag: (cancel=false) => {
       const gesture=get().artworkGesture,preview=get().previewProject;
       set({artworkGesture:null,previewProject:null});
       if(!gesture||cancel||!preview)return;
       const before=gesture.base.artworks.find(item=>item.id===gesture.id),after=preview.artworks.find(item=>item.id===gesture.id);
-      if(before&&after&&(before.alongMm!==after.alongMm||before.centerHeightMm!==after.centerHeightMm||before.wallId!==after.wallId||before.wallSide!==after.wallSide))attempt(()=>{get().commit(preview);set({activeWallId:after.wallId});});
+      if(before&&after&&(Math.abs(before.alongMm-after.alongMm)>1e-6||Math.abs(before.centerHeightMm-after.centerHeightMm)>1e-6||before.wallId!==after.wallId||(before.wallSide??'front')!==(after.wallSide??'front')))attempt(()=>{get().commit(preview);set({activeWallId:after.wallId});});
     },
     setArtworkRotationActive:(rotatingArtworkId)=>set({rotatingArtworkId}),
     setView: (view) => set(state=>{
