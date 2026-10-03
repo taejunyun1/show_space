@@ -1,3 +1,4 @@
+import {projectSpatialBounds} from '../domain/referenceModel';
 import type { Camera, Vector3 } from 'three';
 import type {CameraView,Project} from '../domain/types';
 
@@ -31,11 +32,10 @@ export function createEyeLevelView(project:Project,wallId:string,heightMm=1600):
 
 export type StandardView='front'|'left'|'right'|'bird';
 export function createStandardView(project:Project,view:StandardView,viewport:{width:number;height:number}):CameraView {
-  const points=project.walls.flatMap(w=>[w.start,w.end]);
-  const minX=Math.min(...points.map(p=>p.x))/1000,maxX=Math.max(...points.map(p=>p.x))/1000;
-  const minZ=Math.min(...points.map(p=>p.z))/1000,maxZ=Math.max(...points.map(p=>p.z))/1000;
-  const height=Math.max(...project.walls.map(w=>w.heightMm))/1000;
-  const target:[number,number,number]=[(minX+maxX)/2,height/2,(minZ+maxZ)/2];
+  const bounds=projectSpatialBounds(project);
+  const minX=bounds.minX/1000,maxX=bounds.maxX/1000,minZ=bounds.minZ/1000,maxZ=bounds.maxZ/1000;
+  const height=(bounds.maxY-bounds.minY)/1000;
+  const target:[number,number,number]=[(minX+maxX)/2,bounds.minY/1000+height/2,(minZ+maxZ)/2];
   const span=Math.max(Math.hypot(maxX-minX,maxZ-minZ),2);
   const position:[number,number,number]=view==='front'?[target[0],target[1],maxZ+span]:view==='left'?[minX-span,target[1],target[2]]:view==='right'?[maxX+span,target[1],target[2]]:[target[0]-span,target[1]+span*1.5,target[2]+span];
   const width=view==='front'?maxX-minX:view==='bird'?span:maxZ-minZ;

@@ -46,3 +46,10 @@ it('removes an unfinished draft when publishing is rejected',async()=>{
   await expect(publishPublicShare(project,{includeDimensions:false},'owner-token',undefined,fetcher,'https://example.test')).rejects.toThrow('rejected');
   expect(methods).toEqual(['POST','POST','DELETE']);
 });
+
+it('refuses visible reference models before creating an incomplete public share',async()=>{
+ const project=createDemoProject();project.referenceModel={name:'room.glb',dataUrl:'unused',visible:true,sizeMm:[1000,1000,1000],positionMm:[0,0,0],sourceOffsetM:[0,0,0],rotationDeg:0,scale:1};
+ const fetcher=vi.fn();
+ await expect(publishPublicShare(project,{includeDimensions:false},'owner',undefined,fetcher,'https://example.test')).rejects.toThrow(/3D 참고 모델/);
+ expect(fetcher).not.toHaveBeenCalled();
+});

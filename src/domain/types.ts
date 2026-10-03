@@ -39,7 +39,12 @@ export interface CameraView {
   position:[number,number,number];target:[number,number,number];zoom:number
 }
 
+export interface ReferenceModel {
+ name:string;dataUrl:string;visible:boolean;sizeMm:[number,number,number];sourceOffsetM:[number,number,number];positionMm:[number,number,number];rotationDeg:number;scale:number
+}
+
 export interface SceneStructure {
+  referenceModel?:ReferenceModel
   walls:Wall[];openings:Opening[];dimensions:SavedDimension[];unplacedArtworks:UnplacedArtwork[]
 }
 
@@ -64,6 +69,7 @@ export interface Opening {
 }
 
 export interface Project {
+  referenceModel?:ReferenceModel
   /** The detector's untouched geometry; current walls can be edited independently. */
   planDraft?:{kind:'partial';sourceEvidenceHash:string;originalWalls:Wall[]};
   dimensions?:SavedDimension[];

@@ -1,3 +1,4 @@
+import {ReferenceModelControls} from './ReferenceModelControls';
 import { useRef, useState } from 'react';
 import { Box, Plus, Eye, EyeOff, LockKeyhole, PanelTop, Layers, ImagePlus } from 'lucide-react';
 import { useEditor } from '../state/editor';
@@ -48,6 +49,7 @@ export function Outliner() {
         </div>)}
       </section>}
     </div>
+    <ReferenceModelControls/>
     <div className="add-art-card"><Box size={19} strokeWidth={1.4} /><strong>작품을 더해보세요</strong><p>{provisional ? '두 점 축척 보정 후 실제 크기의 작품을 추가할 수 있습니다.' : <>이미지와 실제 크기로<br />나만의 전시를 구성하세요.</>}</p><button className="button outline" disabled={busy || provisional} onClick={() => upload.current?.click()}><ImagePlus size={16} />{busy ? '이미지 처리 중' : '작품 추가'}</button><button className="text-button" disabled={provisional} onClick={() => addArtwork()}>예제 작품 추가</button><input type="file" accept="image/png,image/jpeg,image/webp" hidden ref={upload} onChange={e => { const f = e.target.files?.[0]; if (f) void uploadArtwork(f); e.currentTarget.value = ''; }} /></div>
   </aside>;
 }

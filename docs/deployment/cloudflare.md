@@ -3,8 +3,8 @@
 - 계정: taejun.foto@gmail.com (Wrangler whoami로 확인)
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
-- 최신 배포일: 2026-09-30
-- 최신 버전: 008eb1c0-846b-4457-ba65-5a2a9b51ac14
+- 최신 배포일: 2026-10-03
+- 최신 버전: f9c087bb-b010-43ef-baa9-5d5a84a2f862
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
@@ -51,3 +51,5 @@ GitHub: https://github.com/taejunyun1/show_space · 기본 브랜치 main. Cloud
 2026-09-30 3D 줄자 모서리 스냅 배포: 버전 `55a3a636-ce94-45a5-b400-629812faacb9`. 509개 테스트 통과·2개 제외, 빌드 통과. 로컬 작품 대각선/벽 높이 스냅 검증 및 공개 HTTPS 스냅 안내 표시·콘솔 오류 없음 확인.
 
 2026-10-03 상단 불러오기 배포: 도면 JPG·PNG·PDF와 프로젝트 JSON 선택 창 및 평면도 가져오기 연결. 버전 `162c27ad-647d-4371-b147-b551c56104e9`. 509개 테스트 통과·2개 제외, 빌드 통과. 로컬 JPG 분석/배치/새로고침 복원 및 공개 HTTPS 선택 창 표시·콘솔 오류 없음 확인. .skp 원본 3D 입력은 미지원으로 안내.
+
+2026-10-03 GLB 참고 모델 배포: 버전 `f9c087bb-b010-43ef-baa9-5d5a84a2f862`. 상단 GLB 선택, 원본 크기·위치·회전·배율·표시, JSON/Scene/로컬 저장, 모델 포함 PNG 및 카메라 맞춤 연결. 517개 테스트 통과·2개 제외, 빌드 통과. 로컬 GLB 표시·Undo·새로고침·JSON·Scene 복원 및 1920×1519 PNG 실출력 확인. 공개 HTTPS의 새 메뉴·미지원 .skp 안내와 콘솔 오류 없음 확인. 공개 초안은 변경하지 않았다. .skp 변환·모델 벽 직접 설치·모델 포함 링크 공유 및 실제 SketchUp/대형 모델 검증은 남아 있다.

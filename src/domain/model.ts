@@ -1,3 +1,4 @@
+import {validateReferenceModel} from './referenceModel';
 import {removeWallOpenings} from './openingAnchors';
 import {installationZones,footprintOverlapsZone} from './installationZones';
 import {validateOpenings} from './openings';
@@ -291,6 +292,7 @@ function safeImage(value: unknown, label: string) {
 
 export function parseProject(input: unknown): Project {
   const raw = object(input, '프로젝트')
+  if(raw.referenceModel!==undefined)validateReferenceModel(raw.referenceModel)
   if (raw.schemaVersion !== 1) throw new Error('지원하지 않는 프로젝트 스키마입니다.')
   ;['id', 'name', 'venue', 'floorColor'].forEach(key => text(raw[key], `프로젝트 ${key}`))
   if (!Array.isArray(raw.walls) || !Array.isArray(raw.artworks) || !Array.isArray(raw.scenes)) throw new Error('벽, 작품, 장면 목록 형식이 올바르지 않습니다.')
@@ -336,6 +338,7 @@ export function parseProject(input: unknown): Project {
     let sceneWallIds=wallIds
     if(scene.structure!==undefined){
       const structure=object(scene.structure,'장면 구조')
+      if(structure.referenceModel!==undefined)validateReferenceModel(structure.referenceModel)
       if(!Array.isArray(structure.walls)||structure.walls.length<1||structure.walls.length>wallLimit)throw new Error('장면 벽 목록이 올바르지 않습니다.')
       sceneWallIds=new Set<string>()
       for(const value of structure.walls){
