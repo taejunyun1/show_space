@@ -18,7 +18,7 @@ export async function prepareSharePresentation(project:Project,options:PublicSha
    if(total>80*1024*1024||models.size>=51)throw new Error('전체 Scene의 공유 모델 자산은 80MiB·51개 이하여야 합니다.');
    models.set(hash,bytes);
   }
-  const result=createPublicShare(p,{includeDimensions:options.includeDimensions,camera:view,modelAssetIds:assets.ids,referenceAssetId:assets.referenceId}),remap=new Map<string,string>();
+  const result=createPublicShare(p,{includeDimensions:options.includeDimensions,includeArtworkDetails:options.includeArtworkDetails,camera:view,modelAssetIds:assets.ids,referenceAssetId:assets.referenceId}),remap=new Map<string,string>();
   for(const upload of result.uploads){
    let imageId=images.get(upload.sourceUrl);
    if(imageId===undefined){imageId=String(uploads.length);images.set(upload.sourceUrl,imageId);uploads.push({imageId,sourceUrl:upload.sourceUrl});}

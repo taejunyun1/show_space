@@ -190,3 +190,19 @@ it('stops oversized chunked publication input before consuming the entire stream
  const request=new Request(`https://example.test/api/shares/${id}/publish`,{method:'POST',headers:{authorization:'Bearer private-owner-token-for-testing'},body,duplex:'half'} as RequestInit);
  expect((await handleShareRequest(request,{SHARES:bucket,OWNER_TOKEN:'private-owner-token-for-testing'})).status).toBe(400);expect(cancelled).toBe(true);expect(produced).toBeLessThan(10);
 });
+it('honors the publication-wide details flag on server input and excludes private Note from every Scene',async()=>{
+ const {call}=setup(),p=createDemoProject();p.artworks=[];
+ const base=createPublicShare(p,{includeDimensions:false}).snapshot;
+ const art={id:'info-art',name:'텍스트 작품',artist:'검증 작가',year:'2026',medium:'<b>재료</b>',description:'작품 설명',artworkType:'photo',presentationType:'mounted-print',wallId:p.walls[0].id,wallSide:'front',widthMm:900,heightMm:1200,depthMm:30,alongMm:1000,centerHeightMm:1500,frame:'none',imageId:'0',note:'PRIVATE NOTE',noteDetails:{text:'PRIVATE'}};
+ for(const includeArtworkDetails of [false,true]){
+  const nested={...base,includeArtworkDetails:true,artworks:[art]};
+  const raw={...base,includeArtworkDetails,artworks:[art],scenes:[{id:'s',name:'Scene',snapshot:nested}]};
+  const {id}=await (await call('POST','/api/shares',undefined,true)).json() as {id:string};
+  await call('PUT',`/api/shares/${id}/images/0`,png.buffer,true);
+  expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(raw),true)).status).toBe(201);
+  const snapshot=await (await call('GET',`/api/public/${id}`)).json() as import('../domain/publicShare').PublicShareSnapshot;
+  for(const layout of [snapshot,snapshot.scenes![0].snapshot]){expect(layout.artworks[0].year).toBe('2026');expect(layout.artworks[0].medium).toBe(includeArtworkDetails?art.medium:undefined);expect(layout.artworks[0].description).toBe(includeArtworkDetails?art.description:undefined);}
+  expect(JSON.stringify(snapshot)).not.toContain('PRIVATE');
+  await call('DELETE',`/api/shares/${id}`,undefined,true);
+ }
+});

@@ -10,7 +10,7 @@ export interface ShareBucket {
   delete(keys:string|string[]):Promise<unknown>;
 }
 export interface ShareEnv {SHARES:ShareBucket;OWNER_TOKEN?:string;ASSETS?:{fetch(request:Request):Promise<Response>}}
-interface Meta {id:string;status:'draft'|'active'|'revoked';createdAt:string;name:string;includeDimensions:boolean;sceneCount?:number}
+interface Meta {id:string;status:'draft'|'active'|'revoked';createdAt:string;name:string;includeDimensions:boolean;sceneCount?:number;includeArtworkDetails?:boolean}
 const noStore={'cache-control':'no-store','x-content-type-options':'nosniff'};
 const json=(value:unknown,status=200)=>Response.json(value,{status,headers:noStore});
 const error=(status:number,message:string)=>json({error:message},status);
@@ -120,7 +120,7 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
     let modelBytes=0;for(const hash of publicModelIds(snapshot)){const model=await env.SHARES.head(modelKey(id,hash));if(!model)return error(409,'3D 작품 모델 업로드가 완료되지 않았습니다.');modelBytes+=model.size;}if(modelBytes>PUBLIC_MODELS_MAX_BYTES)return error(413,'공유 모델 자산 총합은 80MiB 이하여야 합니다.');
     for(const imageId of publicImageIds(snapshot))if(!(await env.SHARES.head(imageKey(id,imageId))))return error(409,'작품/표면 이미지 업로드가 완료되지 않았습니다.');
     await env.SHARES.put(snapshotKey(id),JSON.stringify(snapshot),{httpMetadata:{contentType:'application/json'}});
-    await saveMeta(env.SHARES,{...entry,status:'active',name:snapshot.name,includeDimensions:!!snapshot.dimensions,sceneCount:snapshot.scenes?.length??0});
+    await saveMeta(env.SHARES,{...entry,status:'active',name:snapshot.name,includeDimensions:!!snapshot.dimensions,sceneCount:snapshot.scenes?.length??0,includeArtworkDetails:!!snapshot.includeArtworkDetails});
     return json({id},201);
   }
   const share=pathname.match(/^\/api\/shares\/([0-9a-f]{48})$/);

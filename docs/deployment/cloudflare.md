@@ -4,7 +4,7 @@
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
 - 최신 배포일: 2026-10-04
-- 최신 버전: 1d9a93f0-5670-4183-b004-f9faa16a8f33
+- 최신 버전: 426a78b5-3a7b-48f6-bd79-25dc731e1019
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
@@ -77,3 +77,6 @@ GitHub: https://github.com/taejunyun1/show_space · 기본 브랜치 main. Cloud
 2026-10-04 계정·비공개 클라우드 경로 배포: 버전 `1d9a93f0-5670-4183-b004-f9faa16a8f33`. D1 `gonggan-exhibition-projects`와 비공개 R2 `PRIVATE_PROJECTS`를 연결했다. remote에 `0001_cloud_projects.sql` 적용과 프로젝트 0개를 확인했으며 R2의 r2.dev 접근은 비활성·공개 도메인 없음이다. 기존 공유 버킷과 작성자 비밀 키는 유지한다. 배포 시 `--keep-vars`를 사용했다.
 
 전체 테스트 694개 통과·선택 벤치마크 2개 제외, TypeScript/Vite 빌드 통과. 실제 로컬 D1/R2 저장·다운로드·CAS/소유권 검증은 모의 Supabase 제공자로 수행했다. 실제 인증 설정이 없어 공개 `/api/auth/config`는 200/`enabled:false`, 비공개 프로젝트 API와 로컬 테스트 토큰 접근은 503으로 거부된다. `/auth/callback`과 `/assets/index-BGLPV8gK.js`는 200이다. 공개 브라우저에서 계정 준비 중 안내·프로젝트 목록·기존 초안 보존·오류 없는 콘솔을 확인했다. 실제 로그인/메일/Google/두 계정·기기 검증은 미완료다. 설정·제한은 `../implementation/2026-10-04-cloud-projects.md` 참조.
+
+
+2026-10-04 작품 정보·상세 공개 선택 배포: 최종 버전 `426a78b5-3a7b-48f6-bd79-25dc731e1019`, 공개 entry `/assets/index-Dmyqto8c.js`. 이미지·3D 작품의 작가/연도/종류/설치 형식/재료/설명, Scene·JSON·백업 유지, 공유 상세 공개의 전역 선택 및 서버 허용 목록을 연결했다. 테스트 717개 통과·선택 벤치마크 2개 제외, TypeScript/Vite 빌드 통과. 실제 로컬 JSON/ZIP 다운로드·패키지 복원·두 공개 범위 링크, 390px 가로 넘침, 생산 R2의 합성 링크 두 개와 이미지/GLB 자산을 검증했다. 작성자 비밀 키와 기존 바인딩은 `--keep-vars`로 보존했다. 실제 이메일/Google 인증은 아직 설정되지 않았다. 세부 증거 `../validation/2026-10-04-artwork-information.json`.

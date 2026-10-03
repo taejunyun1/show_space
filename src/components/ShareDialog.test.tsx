@@ -13,3 +13,6 @@ it('offers explicitly unchecked Scene selection and explains that other Scenes a
  const p=createDemoProject();p.scenes=[{id:'installation-a',name:'설치안 A',artworks:[],wallVisibility:{}}];const html=renderToStaticMarkup(<ShareDialog project={p} onClose={()=>{}}/>);
  expect(html).toContain('함께 공유할 Scene');expect(html).toContain('설치안 A');expect(html).toContain('선택하지 않은 Scene');expect(html).toContain('최대 20개');expect(html).not.toContain('checked=""');
 });
+it('defaults additional artwork information to private and explains the basic public fields',()=>{
+ const html=renderToStaticMarkup(<ShareDialog project={createDemoProject()} onClose={()=>{}}/>);expect(html).toContain('작품 상세 정보 공개');expect(html).toContain('이름·작가·연도는 기본 공개');expect(html).toContain('내부 설치 메모는 포함하지 않습니다');expect(html).not.toContain('checked=""');
+});

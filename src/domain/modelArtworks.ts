@@ -1,3 +1,4 @@
+import {parseArtworkInformation} from './artworkInformation';
 import {Box3,Euler,Matrix4,Quaternion,Vector3} from 'three';
 import type {ModelArtwork,Project,ReferenceModel,WorldPoint} from './types';
 import {validateReferenceModel} from './referenceModel';
@@ -8,6 +9,7 @@ export function parseModelArtwork(value:unknown,checkAsset=true):ModelArtwork{
  const a=value as ModelArtwork;
  if(!a||typeof a!=='object')throw new Error('3D 작품 정보가 올바르지 않습니다.');
  for(const key of ['id','name','artist','year','note'] as const)if(typeof a[key]!=='string'||a[key].length>(key==='note'?20000:200)||(['id','name'].includes(key)&&!a[key].trim()))throw new Error(`3D 작품 ${key}가 올바르지 않습니다.`);
+ parseArtworkInformation(a);
  if(!['sculpture','installation','object','custom'].includes(a.kind)||typeof a.visible!=='boolean'||typeof a.locked!=='boolean'||(a.groupId!==undefined&&(typeof a.groupId!=='string'||!a.groupId||a.groupId.length>200)))throw new Error('3D 작품 속성이 올바르지 않습니다.');
  for(const key of ['widthMm','heightMm','depthMm'] as const)if(!Number.isFinite(a[key])||a[key]<1||a[key]>50000)throw new Error('3D 작품 크기는 1–50,000mm 범위여야 합니다.');
  for(const key of ['position','rotation'] as const){const p=a[key];if(!p||['x','y','z'].some(k=>!Number.isFinite(p[k as keyof WorldPoint])||Math.abs(p[k as keyof WorldPoint])>(key==='position'?1e7:180)))throw new Error('3D 작품 위치 또는 회전이 올바르지 않습니다.');}

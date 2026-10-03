@@ -26,7 +26,7 @@ export async function publishPublicShare(project:Project,options:PublicShareOpti
   }
 }
 
-export interface ShareListItem {id:string;status:'active'|'revoked';createdAt:string;name:string;includeDimensions:boolean;sceneCount?:number}
+export interface ShareListItem {id:string;status:'active'|'revoked';createdAt:string;name:string;includeDimensions:boolean;sceneCount?:number;includeArtworkDetails?:boolean}
 export async function listPublicShares(ownerToken:string,fetcher:ShareFetch=fetch):Promise<ShareListItem[]>{
   const response=await checked(await fetcher('/api/shares',{headers:auth(ownerToken)}));
   const body=await response.json() as {items:ShareListItem[]};

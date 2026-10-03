@@ -1,3 +1,4 @@
+import type {ArtworkInformation} from './artworkInformation';
 import type {NoteDetails} from './notes';
 import type {OutdoorSettings} from './outdoor';
 import type {ExhibitionLight,LightingSettings} from './lighting';
@@ -26,7 +27,7 @@ export interface Wall {
   visible: boolean; locked: boolean; note: string
 }
 
-export interface Artwork {
+export interface Artwork extends ArtworkInformation {
   noteDetails?:NoteDetails
   material?:SurfaceMaterial
   groupId?: string
@@ -55,7 +56,7 @@ export interface ReferenceModel {
 
 /** A floor-space artwork. Physical dimensions change only through numeric fields.
  * Position is the source bounding box's bottom centre; rotation is XYZ Euler degrees. */
-export interface ModelArtwork {
+export interface ModelArtwork extends ArtworkInformation {
   noteDetails?:NoteDetails
  id:string;name:string;artist:string;year:string
  kind:'sculpture'|'installation'|'object'|'custom'

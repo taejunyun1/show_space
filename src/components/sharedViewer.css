@@ -38,3 +38,5 @@
 
 .shared-scenes{display:flex;flex:none;align-items:center;gap:6px;padding:8px 16px;overflow-x:auto;background:#fff;border-bottom:1px solid #dce2e9;white-space:nowrap;min-width:0}
 .shared-scenes span{color:#627187;font-size:11px;margin-right:6px}.shared-scenes button{flex:none;max-width:260px;overflow:hidden;text-overflow:ellipsis;border:1px solid #dce2e9;border-radius:5px;padding:7px 11px;font-size:12px}.shared-scenes button[aria-pressed=true]{background:#2d3747;color:#fff;border-color:#2d3747}.shared-scenes button:hover{border-color:#365cf5}
+
+.shared-info .shared-medium,.shared-info .shared-description{white-space:pre-wrap;overflow-wrap:anywhere;color:#596a80;line-height:1.7}.shared-info .shared-description{margin-top:16px}

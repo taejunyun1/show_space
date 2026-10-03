@@ -1,0 +1,235 @@
+{
+  "date": "2026-10-04",
+  "automated": {
+    "passed": 717,
+    "skippedOptionalBenchmarks": 2,
+    "testFilesPassed": 131,
+    "build": "passed",
+    "typescript": "passed"
+  },
+  "local": {
+    "backup": {
+      "fileBytes": 1414072,
+      "scenes": 5,
+      "imageInfo": true,
+      "modelInfo": true,
+      "modelLocked": true
+    },
+    "publications": [
+      {
+        "id": "89505da91fe32ae996458a0bd3ab880508b1da16ca49268e",
+        "details": false,
+        "year": true,
+        "scenes": 2,
+        "privateExcluded": true,
+        "revoked": {
+          "status": 410,
+          "assets": [
+            {
+              "kind": "images",
+              "key": "0",
+              "status": 410
+            },
+            {
+              "kind": "models",
+              "key": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+              "status": 410
+            },
+            {
+              "kind": "models",
+              "key": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+              "status": 410
+            }
+          ]
+        }
+      },
+      {
+        "id": "4ed887ff26732cecdaa959cff1b7cd1a1a4917508ab0b7be",
+        "details": true,
+        "year": true,
+        "scenes": 2,
+        "privateExcluded": true,
+        "revoked": {
+          "status": 410,
+          "assets": [
+            {
+              "kind": "images",
+              "key": "0",
+              "status": 410
+            },
+            {
+              "kind": "models",
+              "key": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+              "status": 410
+            },
+            {
+              "kind": "models",
+              "key": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+              "status": 410
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "production": {
+    "origin": "https://gonggan-exhibition-preview.taejunyun.workers.dev",
+    "publications": [
+      {
+        "id": "3b3b4e9e971463893061a80295433f1b00037f9c5a204f7c",
+        "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/s/3b3b4e9e971463893061a80295433f1b00037f9c5a204f7c",
+        "details": false,
+        "imageIds": [
+          "0"
+        ],
+        "modelIds": [
+          "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+          "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76"
+        ],
+        "assets": [
+          {
+            "kind": "images",
+            "key": "0",
+            "status": 200,
+            "bytes": 2781018
+          },
+          {
+            "kind": "models",
+            "key": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+            "status": 200,
+            "bytes": 2116
+          },
+          {
+            "kind": "models",
+            "key": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+            "status": 200,
+            "bytes": 3312
+          }
+        ],
+        "publicBytes": 3868,
+        "privacy": true,
+        "sceneNames": [
+          "정보 저장 Scene",
+          "3D 정보 Scene"
+        ],
+        "revoked": {
+          "status": 410,
+          "assets": [
+            {
+              "kind": "images",
+              "key": "0",
+              "status": 410
+            },
+            {
+              "kind": "models",
+              "key": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+              "status": 410
+            },
+            {
+              "kind": "models",
+              "key": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+              "status": 410
+            }
+          ]
+        }
+      },
+      {
+        "id": "334376eb870cbc143b0d5aa7e048a46f557dfb04c98ea868",
+        "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/s/334376eb870cbc143b0d5aa7e048a46f557dfb04c98ea868",
+        "details": true,
+        "imageIds": [
+          "0"
+        ],
+        "modelIds": [
+          "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+          "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76"
+        ],
+        "assets": [
+          {
+            "kind": "images",
+            "key": "0",
+            "status": 200,
+            "bytes": 2781018
+          },
+          {
+            "kind": "models",
+            "key": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+            "status": 200,
+            "bytes": 2116
+          },
+          {
+            "kind": "models",
+            "key": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+            "status": 200,
+            "bytes": 3312
+          }
+        ],
+        "publicBytes": 4568,
+        "privacy": true,
+        "sceneNames": [
+          "정보 저장 Scene",
+          "3D 정보 Scene"
+        ],
+        "revoked": {
+          "status": 410,
+          "assets": [
+            {
+              "kind": "images",
+              "key": "0",
+              "status": 410
+            },
+            {
+              "kind": "models",
+              "key": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f",
+              "status": 410
+            },
+            {
+              "kind": "models",
+              "key": "2af57884a772976d09de009cdec46dd70e6c284a55fc88b132049426e21a6f76",
+              "status": 410
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "browser": {
+    "refreshPersisted2DAnd3DInformation": true,
+    "sceneRestoreInformation": true,
+    "lockedMetadataDisabledControls": 6,
+    "presentationAndFrameSync": true,
+    "undoPresentationChange": true,
+    "unassignedImagePresentationClearsFrame": true,
+    "mobileViewportWidth": 390,
+    "mobilePageWidth": 390,
+    "descriptionLineBreaks": true,
+    "publicBasicAndDetailed2DInfo": true,
+    "public3DInfoAndScene": true,
+    "consoleWarningsAndErrors": [],
+    "ownedTestLinkAutoClosedWithoutReload": true,
+    "legacyLongImageNamesAndArtistsCompatible": true,
+    "finalProductionEditorMetadataFieldsVisible": true,
+    "finalProductionEntryVerified": true
+  },
+  "screenshots": [
+    "2026-10-04-artwork-information-editor.png",
+    "2026-10-04-artwork-information-shared.png",
+    "2026-10-04-artwork-information-model-shared.png",
+    "2026-10-04-artwork-information-mobile.png",
+    "2026-10-04-artwork-information-production.png",
+    "2026-10-04-artwork-information-model-production.png"
+  ],
+  "limitations": [
+    "No real authenticated login, Google/email, two-account/device verification",
+    "Synthetic GLB only, not actual SketchUp/SKP or large model/hardware performance",
+    "Presentation classification and frame sync, not video/projection playback or advanced frames/glass",
+    "Backup verified through actual download and package import module, not reupload to a fresh browser",
+    "Optional information not added to PDF artwork listing or GLB extras",
+    "Goal remains active"
+  ],
+  "deployment": {
+    "version": "426a78b5-3a7b-48f6-bd79-25dc731e1019",
+    "entry": "/assets/index-Dmyqto8c.js",
+    "keepVars": true
+  }
+}
