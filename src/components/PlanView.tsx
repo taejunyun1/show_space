@@ -13,7 +13,7 @@ import {fixedAnchor,wallAnchor} from '../domain/measurements';
 import {PlanMeasurements} from './MeasurementOverlay';
 import { WallCandidateDialog } from './WallCandidateDialog';
 import { PlanImportDialog } from './PlanImportDialog';
-export function PlanView() {
+export function PlanView({incomingFile,onFileReceived}:{incomingFile?:File|null;onFileReceived?:()=>void}) {
   const { project, previewProject, wallGesture, activeTool, setTool, measurementDraft, pickMeasurement, selected, select, moveWallEndpoint, drawWall, patchProject, commit, notify, showDimensions, beginWallTransform, updateWallTransform, finishWallTransform } = useEditor();
   const displayed=previewProject??project;
   const svg = useRef<SVGSVGElement>(null), file = useRef<HTMLInputElement>(null);
@@ -28,6 +28,7 @@ export function PlanView() {
   const [reviewLabels,setReviewLabels]=useState(false);
   const [reviewCandidates,setReviewCandidates]=useState(false);
   const [importFile,setImportFile]=useState<File|null>(null);
+  useEffect(()=>{if(incomingFile){setImportFile(incomingFile);onFileReceived?.();}},[incomingFile,onFileReceived]);
   const [calibrating,setCalibrating]=useState(false),[anchors,setAnchors]=useState<Point[]>([]),[realLength,setRealLength]=useState('1000');
   const points = project.walls.flatMap(w => [w.start, w.end]);
   const wallMinX=Math.min(...points.map(p=>p.x)), wallMinZ=Math.min(...points.map(p=>p.z));
