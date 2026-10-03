@@ -1,3 +1,6 @@
+import {SurfaceFinish} from './SurfaceFinish';
+import {SurfaceEnvironment} from './SurfaceEnvironment';
+import {needsSurfaceEnvironment} from '../lib/surfaceEnvironment';
 import {Component,Suspense,useCallback,useEffect,useMemo,useRef} from 'react';
 import type {ReactNode} from 'react';
 import {Canvas,useFrame,useThree} from '@react-three/fiber';
@@ -32,7 +35,7 @@ function Floor({snapshot,measuring,onMeasure}:{snapshot:PublicShareSnapshot;meas
       return shape;
     });
   },[snapshot]);
-  return <>{shapes.map((shape,index)=><mesh key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><shapeGeometry args={[shape]}/><meshStandardMaterial color={snapshot.floorColor} side={2} roughness={.96}/></mesh>)}</>;
+  return <>{shapes.map((shape,index)=><mesh key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><shapeGeometry args={[shape]}/><SurfaceFinish color={snapshot.floorColor} material={snapshot.floorMaterial} side={2} roughness={.96}/></mesh>)}</>;
 }
 
 function ArtworkImage({url,art,width,height,depth}:{url:string;art:Art;width:number;height:number;depth:number}){
@@ -45,7 +48,7 @@ function ArtworkImage({url,art,width,height,depth}:{url:string;art:Art;width:num
     return copy;
   },[source,art.spritePanel]);
   useEffect(()=>()=>texture.dispose(),[texture]);
-  return <mesh position={[0,0,depth/2+.002]}><planeGeometry args={[width,height]}/><meshStandardMaterial color="#ffffff" map={texture} roughness={.9}/></mesh>;
+  return <mesh position={[0,0,depth/2+.002]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={art.material} map={texture} roughness={.9}/></mesh>;
 }
 
 function ArtworkPlaceholder({width,height,depth,failed=false}:{width:number;height:number;depth:number;failed?:boolean}){
@@ -74,7 +77,7 @@ function PublicWallMesh({wall,artworks,shareId,selectedId,onSelect,groups,measur
   const register=useCallback((group:Group|null)=>{if(group)groups.set(wall.id,group);else groups.delete(wall.id);},[groups,wall.id]);
   const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz);
   if(!length)return null;
-  return <group ref={register}><mesh position={[(wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000]} rotation={[0,-Math.atan2(dz,dx),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'wall',id:wall.id});}}><boxGeometry args={[length/1000,wall.heightMm/1000,wall.thicknessMm/1000]}/><meshStandardMaterial color={selectedId===wall.id?'#cfdbff':wall.color} roughness={.92}/></mesh>{artworks.map(art=><PublicArtwork key={art.id} art={art} wall={wall} shareId={shareId} selected={selectedId===art.id} onSelect={onSelect} measuring={measuring} onMeasure={onMeasure}/>)}</group>;
+  return <group ref={register}><mesh position={[(wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000]} rotation={[0,-Math.atan2(dz,dx),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'wall',id:wall.id});}}><boxGeometry args={[length/1000,wall.heightMm/1000,wall.thicknessMm/1000]}/><SurfaceFinish color={selectedId===wall.id?'#cfdbff':wall.color} material={wall.material} roughness={.92}/></mesh>{artworks.map(art=><PublicArtwork key={art.id} art={art} wall={wall} shareId={shareId} selected={selectedId===art.id} onSelect={onSelect} measuring={measuring} onMeasure={onMeasure}/>)}</group>;
 }
 
 function CutawayVisibility({walls,groups,cutaway}:{walls:readonly Wall[];groups:ReadonlyMap<string,Group>;cutaway:boolean}){
@@ -117,7 +120,7 @@ export default function SharedViewer3D({snapshot,shareId,selectedId,onSelect,res
   };
   const point3d=(point:WorldPoint):[number,number,number]=>[point.x/1000,point.y/1000,point.z/1000];
   return <div className="shared-3d"><Canvas orthographic={frame.projection!=='perspective'} frameloop="demand" dpr={[1,1.5]} camera={{position:frame.position,zoom:frame.zoom,fov:frame.fov??50,near:.01,far:2000}} gl={{antialias:true}} onPointerMissed={()=>{if(!active)onSelect(null);}}>
-    <color attach="background" args={['#e9edf1']}/><ambientLight intensity={1.3}/><directionalLight position={[8,15,10]} intensity={1.8}/>
+    <SurfaceEnvironment enabled={needsSurfaceEnvironment(snapshot)}/><color attach="background" args={['#e9edf1']}/><ambientLight intensity={1.3}/><directionalLight position={[8,15,10]} intensity={1.8}/>
     <CameraSetup frame={frame} reset={reset} walls={snapshot.walls}/><Floor snapshot={snapshot} measuring={active} onMeasure={pick}/>
     {snapshot.walls.map(wall=><PublicWallMesh key={wall.id} wall={wall} artworks={snapshot.artworks.filter(art=>art.wallId===wall.id)} shareId={shareId} selectedId={selectedId} onSelect={onSelect} groups={wallGroups.current} measuring={active} onMeasure={pick}/>)}
     <CutawayVisibility walls={cutawayWalls} groups={wallGroups.current} cutaway={frame.projection!=='perspective'&&cutaway}/>

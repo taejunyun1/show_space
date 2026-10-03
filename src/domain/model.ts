@@ -1,4 +1,5 @@
 import {validateImportedFloor} from './importedFloor';
+import {parseSurfaceMaterial} from './materials';
 import {validateReferenceModel} from './referenceModel';
 import {removeWallOpenings} from './openingAnchors';
 import {installationZones,footprintOverlapsZone} from './installationZones';
@@ -31,6 +32,7 @@ function isPoint(value: unknown): value is Point {
 function samePoint(a: Point, b: Point) { return a.x === b.x && a.z === b.z }
 
 function validateWall(wall: Wall) {
+  if(wall.material!==undefined)parseSurfaceMaterial(wall.material)
   if (wall.groupId !== undefined && (typeof wall.groupId !== 'string' || !wall.groupId.trim() || wall.groupId.length > 100)) throw new Error('벽 그룹이 올바르지 않습니다.')
   if (wall.role !== undefined && !['boundary','partition'].includes(wall.role)) throw new Error('벽 용도가 올바르지 않습니다.')
   if (!isPoint(wall.start) || !isPoint(wall.end)) throw new Error('벽 좌표는 유한한 숫자여야 합니다.')
@@ -40,6 +42,7 @@ function validateWall(wall: Wall) {
 }
 
 function validateArtwork(artwork: Artwork, wallIds: Set<string>) {
+  if(artwork.material!==undefined)parseSurfaceMaterial(artwork.material)
   if (artwork.groupId !== undefined && (typeof artwork.groupId !== 'string' || !artwork.groupId.trim() || artwork.groupId.length > 100)) throw new Error('작품 그룹이 올바르지 않습니다.')
   if (artwork.wallSide !== undefined && !['front','back'].includes(artwork.wallSide)) throw new Error('설치 면이 올바르지 않습니다.')
   if (artwork.rotationDeg !== undefined) {
@@ -293,6 +296,7 @@ function safeImage(value: unknown, label: string) {
 
 export function parseProject(input: unknown): Project {
   const raw = object(input, '프로젝트')
+  if(raw.floorMaterial!==undefined)parseSurfaceMaterial(raw.floorMaterial)
   if(raw.importedFloor!==undefined)validateImportedFloor(raw.importedFloor)
   if(raw.referenceModel!==undefined)validateReferenceModel(raw.referenceModel)
   if (raw.schemaVersion !== 1) throw new Error('지원하지 않는 프로젝트 스키마입니다.')
@@ -340,6 +344,8 @@ export function parseProject(input: unknown): Project {
     let sceneWallIds=wallIds
     if(scene.structure!==undefined){
       const structure=object(scene.structure,'장면 구조')
+      if(structure.floorColor!==undefined)text(structure.floorColor,'장면 바닥 색상')
+      if(structure.floorMaterial!==undefined){if(structure.floorColor===undefined)throw new Error('장면 재질에는 바닥 색상이 필요합니다.');parseSurfaceMaterial(structure.floorMaterial)}
       if(structure.importedFloor!==undefined)validateImportedFloor(structure.importedFloor)
       if(structure.referenceModel!==undefined)validateReferenceModel(structure.referenceModel)
       if(!Array.isArray(structure.walls)||structure.walls.length<1||structure.walls.length>wallLimit)throw new Error('장면 벽 목록이 올바르지 않습니다.')

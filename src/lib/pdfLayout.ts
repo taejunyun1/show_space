@@ -10,7 +10,7 @@ export function pdfSections(project:Project,options:PdfOptions):PdfSection[]{
  for(const id of new Set(options.sceneIds)){
   const scene=project.scenes.find(s=>s.id===id);if(!scene)throw new Error('선택한 Scene을 찾지 못했습니다.');
   const p=structuredClone(project);
-  if(scene.structure){Object.assign(p,structuredClone(scene.structure));p.referenceModel=scene.structure.referenceModel?structuredClone(scene.structure.referenceModel):undefined;p.importedFloor=scene.structure.importedFloor?structuredClone(scene.structure.importedFloor):undefined;}
+  if(scene.structure){Object.assign(p,structuredClone(scene.structure));if(scene.structure.floorColor!==undefined)p.floorMaterial=scene.structure.floorMaterial?structuredClone(scene.structure.floorMaterial):undefined;p.referenceModel=scene.structure.referenceModel?structuredClone(scene.structure.referenceModel):undefined;p.importedFloor=scene.structure.importedFloor?structuredClone(scene.structure.importedFloor):undefined;}
   else p.walls=p.walls.map(w=>({...w,visible:scene.wallVisibility[w.id]??w.visible}));
   const wallIds=new Set(p.walls.map(w=>w.id));p.artworks=structuredClone(scene.artworks.filter(a=>wallIds.has(a.wallId)));
   batches.push({project:p,name:scene.name,camera:scene.cameraView});

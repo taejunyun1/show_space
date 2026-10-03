@@ -1,7 +1,8 @@
-import {AmbientLight,Box3,Color,DirectionalLight,HemisphereLight,Mesh,OrthographicCamera,PerspectiveCamera,Vector3,WebGLRenderer,type Scene} from 'three';
+import {ACESFilmicToneMapping,SRGBColorSpace,AmbientLight,Box3,Color,DirectionalLight,HemisphereLight,Mesh,OrthographicCamera,PerspectiveCamera,Vector3,WebGLRenderer,type Scene} from 'three';
 import {createStandardView} from '../components/cameraView3d';
 import {prepareExportScene} from './modelExport';
 import {disposeExportScene} from './exportScene';
+import {needsSurfaceEnvironment,surfaceEnvironment,SURFACE_ENVIRONMENT_INTENSITY} from './surfaceEnvironment';
 import type {CameraView} from '../domain/types';
 import type {PdfSection} from './pdfLayout';
 export interface PdfCurrentCamera {view:CameraView;width:number;height:number;cutaway:boolean}
@@ -10,7 +11,7 @@ export interface PdfCurrentCamera {view:CameraView;width:number;height:number;cu
 export async function renderPdf3d(section:PdfSection,current?:PdfCurrentCamera):Promise<Uint8Array>{
  const source=section.current?current:undefined,longEdge=source?Math.max(source.width,source.height):1920;
  const width=source?Math.max(1,Math.round(1920*source.width/longEdge)):1920,height=source?Math.max(1,Math.round(1920*source.height/longEdge)):1200;
- const scene=await prepareExportScene(section.project) as Scene;let renderer:WebGLRenderer|undefined;
+ const scene=await prepareExportScene(section.project) as Scene;let renderer:WebGLRenderer|undefined,environment:ReturnType<typeof surfaceEnvironment>|undefined;
  try{
   const view=source?.view??section.camera??createStandardView(section.project,'bird',{width,height});
   const camera=view.projection==='perspective'?new PerspectiveCamera(view.fov??50,width/height,.02,10000):new OrthographicCamera(-(source?.width??width)/2,(source?.width??width)/2,(source?.height??height)/2,-(source?.height??height)/2,.01,10000);
@@ -28,8 +29,8 @@ export async function renderPdf3d(section:PdfSection,current?:PdfCurrentCamera):
   scene.background=new Color('#e9edf1');scene.add(new AmbientLight(0xffffff,.65),new HemisphereLight(0xffffff,0xcad0d6,.7));
   const light=new DirectionalLight(0xffffff,2.3);light.position.set(-3,12,6);scene.add(light);
   scene.traverse(o=>{if(o instanceof Mesh){o.castShadow=true;o.receiveShadow=true;}});
-  renderer=new WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(width,height,false);renderer.setPixelRatio(1);renderer.render(scene,camera);
+  renderer=new WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.toneMapping=ACESFilmicToneMapping;renderer.outputColorSpace=SRGBColorSpace;renderer.setSize(width,height,false);renderer.setPixelRatio(1);if(needsSurfaceEnvironment(section.project)){environment=surfaceEnvironment(renderer);scene.environment=environment.texture;scene.environmentIntensity=SURFACE_ENVIRONMENT_INTENSITY;}renderer.render(scene,camera);
   const blob=await new Promise<Blob>((resolve,reject)=>renderer!.domElement.toBlob(b=>b?resolve(b):reject(new Error('PDF 3D 이미지를 만들지 못했습니다.')),'image/png'));
   return new Uint8Array(await blob.arrayBuffer());
- }finally{renderer?.dispose();renderer?.forceContextLoss();disposeExportScene(scene);}
+ }finally{environment?.dispose();renderer?.dispose();renderer?.forceContextLoss();disposeExportScene(scene);}
 }

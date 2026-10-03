@@ -1,3 +1,4 @@
+import {FloorMaterialDialog} from './FloorMaterialDialog';
 import {ReferenceModelControls} from './ReferenceModelControls';
 import { useRef, useState } from 'react';
 import { Box, Plus, Eye, EyeOff, LockKeyhole, PanelTop, Layers, ImagePlus } from 'lucide-react';
@@ -10,6 +11,7 @@ export function Outliner() {
   const [tab, setTab] = useState<'all' | 'artwork'>('all');
   const upload = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const [floorMaterialOpen,setFloorMaterialOpen]=useState(false);
   const unplaced = project.unplacedArtworks ?? [];
 
   async function uploadArtwork(file: File) {
@@ -19,7 +21,7 @@ export function Outliner() {
     finally { setBusy(false); }
   }
 
-  return <aside className="outliner">
+  return <><aside className="outliner">
     <div className="panel-heading"><h1>전시 구성</h1><span className="count">{project.artworks.length + unplaced.length}</span></div>
     <div className="segment"><button className={tab === 'all' ? 'selected' : ''} onClick={() => setTab('all')}>공간</button><button className={tab === 'artwork' ? 'selected' : ''} onClick={() => setTab('artwork')}>작품</button></div>
     <div className="entity-list">
@@ -29,7 +31,7 @@ export function Outliner() {
           <button className={`entity-main ${!wall.visible ? 'muted' : ''}`} onClick={e => select({ type: 'wall', id: wall.id }, e.shiftKey)}><PanelTop size={23} strokeWidth={1.2} /><span>{wall.name}</span>{wall.locked && <LockKeyhole size={12} />}</button>
           <button className="row-action" aria-label={`${wall.name} ${wall.visible ? '숨기기' : '보이기'}`} onClick={() => patchWall(wall.id, { visible: !wall.visible })}>{wall.visible ? <Eye size={14} /> : <EyeOff size={14} />}</button>
         </div>)}
-        <div className="floor-row"><Layers size={23} strokeWidth={1.2} /><span>바닥</span><input type="color" aria-label="바닥 색상" value={project.floorColor} onChange={e => useEditor.getState().patchProject({ floorColor: e.target.value })} /></div>
+        <div className="floor-row"><Layers size={23} strokeWidth={1.2} /><button aria-label="바닥 재질 편집" onClick={()=>setFloorMaterialOpen(true)}>바닥 · 재질</button><input type="color" aria-label="바닥 색상" value={project.floorColor} onChange={e => useEditor.getState().patchProject({ floorColor: e.target.value })} /></div>
       </section>}
       <section>
         <div className="section-label">ARTWORK<span>{project.artworks.length}</span></div>
@@ -51,5 +53,5 @@ export function Outliner() {
     </div>
     <ReferenceModelControls/>
     <div className="add-art-card"><Box size={19} strokeWidth={1.4} /><strong>작품을 더해보세요</strong><p>{provisional ? '두 점 축척 보정 후 실제 크기의 작품을 추가할 수 있습니다.' : <>이미지와 실제 크기로<br />나만의 전시를 구성하세요.</>}</p><button className="button outline" disabled={busy || provisional} onClick={() => upload.current?.click()}><ImagePlus size={16} />{busy ? '이미지 처리 중' : '작품 추가'}</button><button className="text-button" disabled={provisional} onClick={() => addArtwork()}>예제 작품 추가</button><input type="file" accept="image/png,image/jpeg,image/webp" hidden ref={upload} onChange={e => { const f = e.target.files?.[0]; if (f) void uploadArtwork(f); e.currentTarget.value = ''; }} /></div>
-  </aside>;
+  </aside>{floorMaterialOpen&&<FloorMaterialDialog onClose={()=>setFloorMaterialOpen(false)}/>}</>;
 }

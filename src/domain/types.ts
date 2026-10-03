@@ -1,5 +1,6 @@
 import type {PlanAnalysis} from '../lib/analyzePlan';
 import type {PlanLabel} from './planLabels';
+import type {SurfaceMaterial} from './materials';
 export interface Point { x: number; z: number }
 export interface WorldPoint extends Point { y:number }
 
@@ -13,6 +14,7 @@ export interface SavedDimension {
 }
 
 export interface Wall {
+  material?:SurfaceMaterial
   groupId?: string
   role?: 'boundary' | 'partition'
   id: string; name: string; start: Point; end: Point
@@ -21,6 +23,7 @@ export interface Wall {
 }
 
 export interface Artwork {
+  material?:SurfaceMaterial
   groupId?: string
   wallSide?: 'front' | 'back'
   /** Counterclockwise rotation within the wall plane, in degrees. */
@@ -44,6 +47,8 @@ export interface ReferenceModel {
 }
 
 export interface SceneStructure {
+  floorColor?:string
+  floorMaterial?:SurfaceMaterial
   importedFloor?:Point[][]
   referenceModel?:ReferenceModel
   walls:Wall[];openings:Opening[];dimensions:SavedDimension[];unplacedArtworks:UnplacedArtwork[]
@@ -70,6 +75,7 @@ export interface Opening {
 }
 
 export interface Project {
+  floorMaterial?:SurfaceMaterial
   importedFloor?:Point[][]
   referenceModel?:ReferenceModel
   /** The detector's untouched geometry; current walls can be edited independently. */

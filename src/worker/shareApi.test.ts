@@ -1,4 +1,5 @@
 import {describe,expect,it} from 'vitest';
+import {materialPreset} from '../domain/materials';
 import {createDemoProject} from '../domain/model';
 import {createPublicShare} from '../domain/publicShare';
 import {handleShareRequest,type ShareBucket} from './shareApi';
@@ -54,4 +55,13 @@ describe('share API',()=>{
     expect((await call('PUT',`/api/shares/${id}/images/0`,new TextEncoder().encode('<script>').buffer,true)).status).toBe(415);
     expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify({schemaVersion:1,privateProject:{notes:'secret'}}),true)).status).toBe(400);
   });
+});
+
+it('publishes validated physical material fields and rejects invalid finishes before publishing',async()=>{
+ const {call}=setup(),p=createDemoProject();p.artworks=[];p.floorMaterial=materialPreset('epoxy-floor').material;p.walls[0].material=materialPreset('glass').material;
+ const {snapshot}=createPublicShare(p,{includeDimensions:false}),created=await call('POST','/api/shares',undefined,true),{id}=await created.json() as {id:string};
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify({...snapshot,floorMaterial:{...snapshot.floorMaterial,opacity:-1}}),true)).status).toBe(400);
+ const valid={...snapshot,floorMaterial:{...snapshot.floorMaterial,privateNote:'SECRET'}};expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(valid),true)).status).toBe(201);
+ const response=await call('GET',`/api/public/${id}`),published=await response.json() as typeof snapshot;
+ expect(published.floorMaterial).toEqual(p.floorMaterial);expect(published.walls[0].material).toEqual(p.walls[0].material);expect(JSON.stringify(published)).not.toContain('SECRET');
 });

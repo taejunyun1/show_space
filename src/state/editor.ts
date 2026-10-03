@@ -75,7 +75,7 @@ interface EditorState {
   patchWall(id: string, patch: Partial<Wall>): void
   moveWallEndpoint(id:string,endpoint:'start'|'end',point:Point):void
   renameProject(name: string): void
-  patchProject(patch: Pick<Partial<Project>, 'referenceModel' | 'floorColor' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan' | 'planDraft'>): void
+  patchProject(patch: Pick<Partial<Project>, 'referenceModel' | 'floorColor' | 'floorMaterial' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan' | 'planDraft'>): void
   addArtwork(imageUrl?: string, name?: string): void
   placeUnplaced(id:string):void
   adoptModelWalls(walls:Wall[],expected:ReferenceModel,importedFloor?:Point[][]):void
@@ -403,7 +403,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const used = new Set(project.scenes.map((scene) => scene.id))
       let index = 1
       while (used.has(`scene-${index}`)) index += 1
-      const structure={...(project.importedFloor?{importedFloor:clone(project.importedFloor)}:{}),...(project.referenceModel?{referenceModel:clone(project.referenceModel)}:{}),walls:clone(project.walls),openings:clone(project.openings??[]),dimensions:clone(project.dimensions??[]),unplacedArtworks:clone(project.unplacedArtworks??[])}
+      const structure={floorColor:project.floorColor,...(project.floorMaterial?{floorMaterial:clone(project.floorMaterial)}:{}),...(project.importedFloor?{importedFloor:clone(project.importedFloor)}:{}),...(project.referenceModel?{referenceModel:clone(project.referenceModel)}:{}),walls:clone(project.walls),openings:clone(project.openings??[]),dimensions:clone(project.dimensions??[]),unplacedArtworks:clone(project.unplacedArtworks??[])}
       get().commit(parseProject({ ...project, scenes: [...project.scenes, { id: `scene-${index}`, name, artworks: clone(project.artworks), wallVisibility: Object.fromEntries(project.walls.map((wall) => [wall.id, wall.visible])),structure,...(cameraView?{cameraView:clone(cameraView)}:{}) }] }))
     }),
     restoreScene: (id) => attempt(() => {
@@ -411,7 +411,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const scene = project.scenes.find((item) => item.id === id)
       if (!scene) throw new Error('장면을 찾을 수 없습니다.')
       if(scene.structure){
-        get().commit(parseProject({...project,importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
+        get().commit(parseProject({...project,...(scene.structure.floorColor!==undefined?{floorColor:scene.structure.floorColor,floorMaterial:scene.structure.floorMaterial?clone(scene.structure.floorMaterial):undefined}:{}),importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
       }else{
         const wallIds = new Set(project.walls.map((wall) => wall.id))
         const artworks = clone(scene.artworks.filter((artwork) => wallIds.has(artwork.wallId)))

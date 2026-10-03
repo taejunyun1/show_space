@@ -1,0 +1,4 @@
+import {MeshPhysicalMaterial,MeshStandardMaterial,type Material} from 'three';
+import type {SurfaceMaterial} from '../domain/materials';
+export function physicalMaterialParameters(color:string,material:SurfaceMaterial){return {color,roughness:material.roughness,metalness:material.metalness,opacity:material.opacity,transparent:material.opacity<1,depthWrite:material.opacity===1,transmission:material.transmission,thickness:material.thicknessMm/1000,ior:material.ior,clearcoat:material.clearcoat,clearcoatRoughness:material.roughness,sheen:material.sheen,sheenColor:'#ffffff',sheenRoughness:material.roughness};}
+export function createSurfaceMaterial(color:string,material:SurfaceMaterial|undefined,legacyRoughness:number):Material{return material?new MeshPhysicalMaterial(physicalMaterialParameters(color,material)):new MeshStandardMaterial({color,roughness:legacyRoughness});}

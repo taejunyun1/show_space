@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-03",
+  "feature": "basic-pbr-materials",
+  "presets": 15,
+  "automated": {
+    "testsPassed": 573,
+    "testsSkipped": 2,
+    "build": "passed"
+  },
+  "local": {
+    "origin": "http://127.0.0.1:5188/",
+    "presetChanges": [
+      "glass wall",
+      "epoxy floor",
+      "glossy artwork"
+    ],
+    "lockControls": "disabled",
+    "transmissionOpacity": "mutually normalized",
+    "sceneRestoreAndReload": "passed",
+    "consoleWarningsErrors": [],
+    "json": {
+      "bytes": 9523,
+      "wall": "glass",
+      "floor": "epoxy-floor",
+      "art": "glossy-photo-paper",
+      "sceneFloor": "epoxy-floor"
+    },
+    "glb": {
+      "bytes": 3571196,
+      "extensions": [
+        "KHR_materials_transmission",
+        "KHR_materials_volume",
+        "KHR_materials_clearcoat"
+      ],
+      "volumeThicknessMeters": 0.01,
+      "images": 5
+    },
+    "gltfZip": {
+      "bytes": 3551201,
+      "sha256": "244283ad6a88bbffa1521d69617e8f2567c6356e60c877b2c55dcff6852d1c0f",
+      "crc": "passed",
+      "extensions": [
+        "KHR_materials_transmission",
+        "KHR_materials_volume",
+        "KHR_materials_clearcoat"
+      ],
+      "images": 5
+    },
+    "pdf": {
+      "bytes": 3205329,
+      "pages": 1,
+      "pagePoints": [
+        841.89,
+        595.28
+      ],
+      "embeddedImagePx": [
+        1920,
+        1519
+      ],
+      "colorHandling": "ACESFilmicToneMapping / SRGB / environment intensity 0.35"
+    }
+  },
+  "sharing": {
+    "validation": "in-memory Worker API publish / GET; no new public share published",
+    "fields": "floor / wall / artwork material allowlist",
+    "publicViewer": "render components connected, new material share not browser-tested yet"
+  },
+  "limitations": [
+    "scalar presets; no woodgrain/fabric texture or texture scale yet",
+    "mirror uses environment approximation; no scene-object mirror image",
+    "no measured optical or photometric accuracy",
+    "raw SKP, 3D artworks, account cloud save, user lighting and outdoor time still incomplete",
+    "photo-to-material remains future paid feature"
+  ],
+  "deployment": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "ca84a2ca-ab4b-4246-b11b-26279942fc85",
+    "publicCheck": "floor material dialog / 15 presets / editable scalar fields",
+    "projectEdits": "none",
+    "consoleWarningsErrors": []
+  }
+}
