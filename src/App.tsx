@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Undo2, Redo2, X, CircleHelp } from 'lucide-react';
 import { useEditor, hydrateEditor, startAutosave } from './state/editor';
+import {initializeAuth} from './state/auth';
+import {startCloudAutosave} from './state/cloudSync';
 import { Header } from './components/Header';
 import { Outliner } from './components/Outliner';
 import { Inspector } from './components/Inspector';
@@ -17,7 +19,7 @@ export default function App() {
   const [incomingPlan,setIncomingPlan]=useState<File|null>(null);
   const capture = useRef<(() => void) | null>(null);
   const cameraGetter=useRef<(()=>CameraView3D)|null>(null);
-  useEffect(() => { const stop = startAutosave(); void hydrateEditor(); return stop; }, []);
+  useEffect(() => { const stop = startAutosave(),stopCloud=startCloudAutosave(); void hydrateEditor();void initializeAuth(); return ()=>{stopCloud();stop();}; }, []);
   useEffect(() => {
     function keyboard(e: KeyboardEvent) {
       const el = e.target as HTMLElement;

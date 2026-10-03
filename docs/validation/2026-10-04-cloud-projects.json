@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-04",
+  "scope": "T2 auth/cloud implementation; real Supabase configuration absent",
+  "localRuntime": {
+    "kind": "real-local-Wrangler-D1-R2-with-simulated-Supabase-provider",
+    "put": 201,
+    "retry": 200,
+    "download": 200,
+    "foreign": 404,
+    "unsigned": 401,
+    "wrongHash": 503,
+    "bytes": 3319,
+    "sha256": "65b08e2c7a794e0807d183bce0491d54a5aced737c905c1e4b0899ca7c36fc6f",
+    "projects": 1,
+    "update": 200,
+    "stale": 409,
+    "revision": 2
+  },
+  "productionStorage": {
+    "account": "taejun.foto@gmail.com",
+    "d1Name": "gonggan-exhibition-projects",
+    "d1Id": "09e81757-5086-4735-b5b3-445b01225283",
+    "migration": "0001_cloud_projects.sql",
+    "migrationApplied": true,
+    "r2Name": "gonggan-exhibition-projects",
+    "r2DevPublicAccess": false,
+    "customDomains": [],
+    "projectCountBeforeAuthConfiguration": 0
+  },
+  "browser": {
+    "authUnconfiguredNotice": true,
+    "priorLocalProjects": 5,
+    "priorNotePhotoAnd3DArtPreserved": true,
+    "warnings": 0,
+    "errors": 0
+  },
+  "notVerified": [
+    "real Supabase email or Google auth",
+    "production authenticated account/project round trip",
+    "two real devices/accounts",
+    "actual SketchUp or raw SKP",
+    "mobile hardware or large venue performance"
+  ],
+  "tests": {
+    "passed": 694,
+    "optionalBenchmarksSkipped": 2,
+    "filesPassed": 128
+  },
+  "deployment": {
+    "version": "1d9a93f0-5670-4183-b004-f9faa16a8f33",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "authConfigStatus": 200,
+    "authEnabled": false,
+    "privateApiStatus": 503,
+    "testAuthTokenRejectedStatus": 503,
+    "callbackStatus": 200,
+    "entry": "/assets/index-BGLPV8gK.js",
+    "entryStatus": 200,
+    "browserAccountUnconfiguredNotice": true,
+    "browserPriorDraftNotEdited": true,
+    "browserWarnings": 0,
+    "browserErrors": 0
+  },
+  "build": {
+    "typecheck": true,
+    "vite": true,
+    "existingLargeChunkWarning": true
+  }
+}

@@ -9,6 +9,8 @@ type Reader = (key: string) => Promise<unknown>
 type Writer = (key: string, value: unknown) => Promise<unknown>
 
 const revisions=new Map<string,number>();
+/** Revision acknowledged by this tab, rather than another tab's latest document. */
+export const localProjectRevision=(id:string)=>revisions.get(id);
 let activeId:string|undefined;
 const remember=(stored:StoredProject)=>{revisions.set(stored.project.id,stored.summary.revision);activeId=stored.project.id;return stored.project;};
 export async function readDraft(reader?: Reader): Promise<unknown> {

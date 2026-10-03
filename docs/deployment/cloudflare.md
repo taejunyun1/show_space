@@ -4,7 +4,7 @@
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
 - 최신 배포일: 2026-10-04
-- 최신 버전: 277397ad-9948-4651-84cf-7725c9240c94
+- 최신 버전: 1d9a93f0-5670-4183-b004-f9faa16a8f33
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
@@ -72,3 +72,8 @@ GitHub: https://github.com/taejunyun1/show_space · 기본 브랜치 main. Cloud
 2026-10-04 독립 3D 작품 배포: 최종 버전 `6515a4a3-5bf2-4fc6-b324-87dbfea7ef3b`. 정적 GLB/glTF/자산 ZIP 입력, 실제 형상·UV/PBR 유지, 숫자 W/H/D·XYZ 위치/회전·3D 축 핸들·평면 드래그·그룹/잠금·Scene/JSON/백업·PNG/PDF/GLB/glTF 출력 연결. 627개 테스트 통과·선택 벤치마크 2개 제외, TypeScript/빌드 통과. 별도 로컬 origin의 실제 백업 복원과 내려받은 출력의 원본 모델·치수/재질·자산 SHA/CRC·메모 제외를 검증했다. 공개 HTTPS의 입력 메뉴·3D 작품 버튼·최종 JS entry 확인, 콘솔 오류/경고 없음·공개 편집 초안 불변. 기록: `docs/validation/2026-10-03-model-artworks.json`. 첫 검증 배포 bdddc758-f8b5-4604-b3dc-aa0356477447 후 최종판에는 그룹 없는 Shift 선택의 숫자 이동 범위를 맞췄다. 3D 작품 링크 공유·원본 SKP·실제 사용자 SketchUp/대형 모델/모바일·계정 저장 및 전체 제품 완료는 남아 있다.
 
 2026-10-04 프로젝트 관리 배포: 버전 `277397ad-9948-4651-84cf-7725c9240c94`. 프로젝트 목록·생성·복제·전환·검색·보관/복구, 기존 단일 초안 이전, IndexedDB 원자적 저장·revision 검사, 두 탭 충돌 복사본 복구, JSON/백업 복원의 새 항목 추가. 테스트 669개 통과·선택 벤치마크 2개 제외, TypeScript/빌드 통과. 공개 HTTPS의 목록·기존 프로젝트 이전·최종 JS entry 확인, 콘솔 경고/오류 없음. 기존 전시 내용은 수정하지 않았다. 로컬 두 탭·새로고침·전시장 전체 JSON 입력·원래 3D 작품/메모 사진 보존 확인. 계정/클라우드 프로젝트 저장은 아직 미연결. 기록: `docs/validation/2026-10-04-project-library.json`.
+
+
+2026-10-04 계정·비공개 클라우드 경로 배포: 버전 `1d9a93f0-5670-4183-b004-f9faa16a8f33`. D1 `gonggan-exhibition-projects`와 비공개 R2 `PRIVATE_PROJECTS`를 연결했다. remote에 `0001_cloud_projects.sql` 적용과 프로젝트 0개를 확인했으며 R2의 r2.dev 접근은 비활성·공개 도메인 없음이다. 기존 공유 버킷과 작성자 비밀 키는 유지한다. 배포 시 `--keep-vars`를 사용했다.
+
+전체 테스트 694개 통과·선택 벤치마크 2개 제외, TypeScript/Vite 빌드 통과. 실제 로컬 D1/R2 저장·다운로드·CAS/소유권 검증은 모의 Supabase 제공자로 수행했다. 실제 인증 설정이 없어 공개 `/api/auth/config`는 200/`enabled:false`, 비공개 프로젝트 API와 로컬 테스트 토큰 접근은 503으로 거부된다. `/auth/callback`과 `/assets/index-BGLPV8gK.js`는 200이다. 공개 브라우저에서 계정 준비 중 안내·프로젝트 목록·기존 초안 보존·오류 없는 콘솔을 확인했다. 실제 로그인/메일/Google/두 계정·기기 검증은 미완료다. 설정·제한은 `../implementation/2026-10-04-cloud-projects.md` 참조.

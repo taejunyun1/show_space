@@ -7,9 +7,28 @@
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*"],
+    "run_worker_first": [
+      "/api/*"
+    ],
     "not_found_handling": "single-page-application"
   },
-  "r2_buckets": [{"binding":"SHARES","bucket_name":"gonggan-exhibition-shares"}],
-  "account_id": "a58fbe3a0082c49f571d69d08c1227ab"
+  "r2_buckets": [
+    {
+      "binding": "SHARES",
+      "bucket_name": "gonggan-exhibition-shares"
+    },
+    {
+      "binding": "PRIVATE_PROJECTS",
+      "bucket_name": "gonggan-exhibition-projects"
+    }
+  ],
+  "account_id": "a58fbe3a0082c49f571d69d08c1227ab",
+  "d1_databases": [
+    {
+      "binding": "PROJECTS_DB",
+      "database_name": "gonggan-exhibition-projects",
+      "database_id": "09e81757-5086-4735-b5b3-445b01225283",
+      "migrations_dir": "migrations"
+    }
+  ]
 }

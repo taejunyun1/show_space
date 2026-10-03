@@ -1,5 +1,6 @@
 import {parseProject} from '../domain/model';
 import type {Project} from '../domain/types';
+import {parseCloudLink,parseCloudPending,type CloudProjectLink,type CloudSavePending} from '../domain/cloudProject';
 
 export interface ProjectSummary {id:string;name:string;venue:string;revision:number;createdAt:string;updatedAt:string;archived:boolean}
 export interface StoredProject {project:Project;summary:ProjectSummary}
@@ -21,6 +22,20 @@ export function createProjectLibrary(factory:IDBFactory=globalThis.indexedDB,nam
     r.onblocked=()=>{connection=undefined;reject(new Error('다른 탭을 닫고 프로젝트 저장을 다시 시도해주세요.'));};
   });
   return {
+    async cloudLink(userId:string,id:string):Promise<CloudProjectLink|undefined>{const db=await open(),tx=db.transaction('settings'),done=finished(tx),value=await request(tx.objectStore('settings').get('cloud-link:'+JSON.stringify([userId,id])));await done;if(value===undefined)return;const link=parseCloudLink(value);if(link.userId!==userId||link.localProjectId!==id)throw new Error('클라우드 연결 계정이 다릅니다.');return link;},
+    async cloudPending(userId:string,id:string):Promise<CloudSavePending|undefined>{const db=await open(),tx=db.transaction('settings'),done=finished(tx),value=await request(tx.objectStore('settings').get('cloud-pending:'+JSON.stringify([userId,id])));await done;if(value===undefined)return;const pending=parseCloudPending(value);if(pending.link.userId!==userId||pending.link.localProjectId!==id)throw new Error('클라우드 대기 작업 계정이 다릅니다.');return pending;},
+    async saveCloudPending(value:CloudSavePending):Promise<void>{const pending=parseCloudPending(value),{link}=pending,key='cloud-pending:'+JSON.stringify([link.userId,link.localProjectId]),db=await open(),tx=db.transaction('settings','readwrite'),done=finished(tx),store=tx.objectStore('settings');
+      const old=await request(store.get(key));if(old&&old.requestId!==pending.requestId){tx.abort();await done.catch(()=>{});throw new Error('다른 탭에서 업로드할 작업을 보관했습니다. 저장을 다시 시도해주세요.');}
+      try{store.put(pending,key);await done;}catch(error){try{tx.abort();}catch{/* Already aborted. */}await done.catch(()=>{});throw error;}
+    },
+    async saveCloudLink(value:CloudProjectLink,pendingId?:string):Promise<void>{const link=parseCloudLink(value),key=JSON.stringify([link.userId,link.localProjectId]),db=await open(),tx=db.transaction('settings','readwrite'),done=finished(tx),store=tx.objectStore('settings');
+      const [old,pending]=await Promise.all([request(store.get('cloud-link:'+key)),request(store.get('cloud-pending:'+key))]);
+      if(pendingId&&(pending?.requestId!==pendingId||pending.link.cloudProjectId!==link.cloudProjectId)||(old&&old.revision>link.revision)){tx.abort();await done.catch(()=>{});throw new Error('다른 탭에서 클라우드 연결을 변경했습니다. 다시 시도해주세요.');}
+      try{store.put({...link,autoSync:pendingId?pending.link.autoSync:link.autoSync},'cloud-link:'+key);if(pendingId)store.delete('cloud-pending:'+key);await done;}catch(error){try{tx.abort();}catch{/* Already aborted. */}await done.catch(()=>{});throw error;}
+    },
+    async setCloudAutoSync(userId:string,id:string,enabled:boolean):Promise<void>{const key=JSON.stringify([userId,id]),db=await open(),tx=db.transaction('settings','readwrite'),done=finished(tx),store=tx.objectStore('settings'),[raw,pending]=await Promise.all([request(store.get('cloud-link:'+key)),request(store.get('cloud-pending:'+key))]);
+      if(raw){const link=parseCloudLink(raw);store.put({...link,autoSync:enabled},'cloud-link:'+key);}if(pending){const valid=parseCloudPending(pending);store.put({...valid,link:{...valid.link,autoSync:enabled}},'cloud-pending:'+key);}await done;
+    },
     async list():Promise<ProjectSummary[]>{const db=await open(),tx=db.transaction('summaries'),done=finished(tx),items=await request(tx.objectStore('summaries').getAll());await done;return (items as ProjectSummary[]).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)||a.id.localeCompare(b.id));},
     async read(id:string):Promise<StoredProject|undefined>{const db=await open(),tx=db.transaction(['documents','summaries']),done=finished(tx);const [document,summary]=await Promise.all([request(tx.objectStore('documents').get(id)),request(tx.objectStore('summaries').get(id))]);await done;if(!document||!summary)return undefined;return {project:parseProject(document.project),summary};},
     async activeId():Promise<string|undefined>{const db=await open(),tx=db.transaction('settings'),done=finished(tx),id=await request(tx.objectStore('settings').get('active'));await done;return typeof id==='string'?id:undefined;},
