@@ -9,3 +9,7 @@ it('offers publication for a visible venue model and explains its locked shape',
 it('keeps the calibration gate when a plan has no physical scale',()=>{
  const p=createDemoProject();p.referenceModel=testVenueModel();p.planDraft={kind:'partial',sourceEvidenceHash:'0'.repeat(64),originalWalls:structuredClone(p.walls)};const html=renderToStaticMarkup(<ShareDialog project={p} onClose={()=>{}}/>);expect(html).toContain('disabled');expect(html).toContain('축척');
 });
+it('offers explicitly unchecked Scene selection and explains that other Scenes and notes remain private',()=>{
+ const p=createDemoProject();p.scenes=[{id:'installation-a',name:'설치안 A',artworks:[],wallVisibility:{}}];const html=renderToStaticMarkup(<ShareDialog project={p} onClose={()=>{}}/>);
+ expect(html).toContain('함께 공유할 Scene');expect(html).toContain('설치안 A');expect(html).toContain('선택하지 않은 Scene');expect(html).toContain('최대 20개');expect(html).not.toContain('checked=""');
+});

@@ -1,3 +1,4 @@
+import {sceneProject} from '../domain/sceneProject';
 import {wallLength} from '../domain/model';
 import type {Artwork,CameraView,Project,Wall} from '../domain/types';
 export interface PdfOptions {current:boolean;sceneIds:string[];threeD:boolean;plan:boolean;elevation:boolean;allWallFaces:boolean;includeSchedule?:boolean}
@@ -9,10 +10,7 @@ export function pdfSections(project:Project,options:PdfOptions):PdfSection[]{
  const batches:Array<{project:Project;name:string;current?:boolean;camera?:CameraView}>=options.current?[{project:structuredClone(project),name:'현재 배치',current:true}]:[];
  for(const id of new Set(options.sceneIds)){
   const scene=project.scenes.find(s=>s.id===id);if(!scene)throw new Error('선택한 Scene을 찾지 못했습니다.');
-  const p=structuredClone(project);
-  if(scene.structure){Object.assign(p,structuredClone(scene.structure));if(scene.structure.lights!==undefined)p.lighting=scene.structure.lighting?structuredClone(scene.structure.lighting):undefined;if(scene.structure.floorColor!==undefined)p.floorMaterial=scene.structure.floorMaterial?structuredClone(scene.structure.floorMaterial):undefined;p.referenceModel=scene.structure.referenceModel?structuredClone(scene.structure.referenceModel):undefined;p.importedFloor=scene.structure.importedFloor?structuredClone(scene.structure.importedFloor):undefined;}
-  else p.walls=p.walls.map(w=>({...w,visible:scene.wallVisibility[w.id]??w.visible}));
-  const wallIds=new Set(p.walls.map(w=>w.id));p.artworks=structuredClone(scene.artworks.filter(a=>wallIds.has(a.wallId)));
+  const p=sceneProject(project,scene);
   batches.push({project:p,name:scene.name,camera:scene.cameraView});
  }
  const result:PdfSection[]=[];

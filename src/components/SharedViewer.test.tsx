@@ -66,3 +66,8 @@ it('shows the venue outline as an unfilled reference range and handles elevation
  const plan=renderToStaticMarkup(<SharedPlan snapshot={snapshot} selectedId={null} referenceSelected onSelect={()=>{}}/>);expect(plan).toContain('전시장 3D 모델 범위');expect(plan).toContain('fill="none"');expect(plan).toContain('stroke-dasharray');expect(plan).not.toContain(' mm');expect(plan).not.toContain('<path');const [x,z,width,depth]=plan.match(/viewBox="([^"]+)"/)![1].split(' ').map(Number);expect(x).toBeGreaterThan(17000);expect(z).toBeGreaterThan(12000);expect(x+width).toBeGreaterThan(21000);expect(z+depth).toBeGreaterThan(16000);
  const elevation=renderToStaticMarkup(<SharedElevation snapshot={snapshot} wallId={null} side="front" selectedId={null} onSelect={()=>{}}/>);expect(elevation).toContain('벽');expect(elevation).not.toContain('<svg');
 });
+it('shows read-only Scene navigation including current layout and the active saved name',async()=>{
+ const {SharedScenes}=await import('./SharedViewer');const snapshot=createPublicShare(createDemoProject(),{includeDimensions:false}).snapshot;
+ const html=renderToStaticMarkup(<SharedScenes scenes={[{id:'a',name:'설치안 A',snapshot},{id:'b',name:'설치안 B',snapshot}]} selectedId="b" onChange={()=>{}}/>);
+ expect(html).toContain('aria-label="전시 Scene"');expect(html).toContain('현재 배치');expect(html).toContain('aria-pressed="true">설치안 B');expect(html).not.toMatch(/저장|삭제|input/);
+});

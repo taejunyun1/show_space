@@ -140,3 +140,53 @@ it('discards note text, checklists and private photo fields at the server public
  const dirty={...snapshot,note:'PRIVATE_SERVER_NOTE',noteDetails:details,floorNoteDetails:details,walls:snapshot.walls.map(w=>({...w,noteDetails:details})),lights:snapshot.lights!.map(l=>({...l,note:'PRIVATE_SERVER_LIGHT',noteDetails:details}))};
  expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(dirty),true)).status).toBe(201);const response=await call('GET',`/api/public/${id}`);expect(response.status).toBe(200);expect(await response.text()).not.toMatch(/PRIVATE_SERVER|noteDetails|checklist|private.example/);expect([...bucket.data.keys()].some(k=>k.includes('/images/'))).toBe(false);
 });
+
+it('checks Scene-only assets before publish, strips private nested fields, and revokes every Scene asset',async()=>{
+ const {call}=setup(),p=createDemoProject();p.artworks=p.artworks.slice(0,1);
+ const {snapshot}=createPublicShare(p,{includeDimensions:false});
+ const scene=structuredClone(snapshot);scene.artworks[0].imageId='9';scene.artworks[0].name='Scene only';
+ const raw={...snapshot,scenes:[{id:'scene-one',name:'Presentation',note:'PRIVATE',snapshot:{...scene,note:'PRIVATE',sourcePlan:'PRIVATE',artworks:scene.artworks.map(a=>({...a,note:'PRIVATE'}))}}]};
+ const {id}=await (await call('POST','/api/shares',undefined,true)).json() as {id:string};
+ expect((await call('PUT',`/api/shares/${id}/images/0`,png.buffer,true)).status).toBe(204);
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(raw),true)).status).toBe(409);
+ expect((await call('PUT',`/api/shares/${id}/images/9`,png.buffer,true)).status).toBe(204);
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(raw),true)).status).toBe(201);
+ const published=await (await call('GET',`/api/public/${id}`)).text();expect(published).toContain('Presentation');expect(published).not.toContain('PRIVATE');
+ expect((await call('GET',`/api/public/${id}/images/9`)).status).toBe(200);expect((await call('GET',`/api/public/${id}/images/8`)).status).toBe(404);
+ expect((await call('POST',`/api/public/${id}`,JSON.stringify(raw))).status).toBe(405);
+ const listed=await (await call('GET','/api/shares',undefined,true)).json() as {items:Array<{sceneCount:number}>};expect(listed.items[0].sceneCount).toBe(1);
+ expect((await call('DELETE',`/api/shares/${id}`,undefined,true)).status).toBe(204);expect((await call('GET',`/api/public/${id}/images/9`)).status).toBe(410);
+});
+it('publishes and serves a model that exists only in a selected saved Scene',async()=>{
+ const {testVenueModel}=await import('../lib/venueModelTestFixture'),{publishPublicShare}=await import('../lib/shareClient');
+ const p=createDemoProject();p.artworks=[];p.scenes=[{id:'scene-model',name:'모델 설치안',artworks:[],wallVisibility:{},structure:{walls:structuredClone(p.walls),openings:[],dimensions:[],unplacedArtworks:[],referenceModel:testVenueModel()}}];
+ const {bucket}=setup(),env={SHARES:bucket,OWNER_TOKEN:'private-owner-token-for-testing'};
+ const fetcher=(input:string,init?:RequestInit)=>handleShareRequest(new Request(`https://example.test${input}`,init),env);
+ const url=await publishPublicShare(p,{includeDimensions:false,sceneIds:['scene-model']},env.OWNER_TOKEN,undefined,fetcher,'https://example.test'),id=url.split('/').at(-1)!;
+ const snapshot=await (await fetcher(`/api/public/${id}`)).json() as import('../domain/publicShare').PublicShareSnapshot;
+ expect(snapshot.referenceModel).toBeUndefined();const hash=snapshot.scenes![0].snapshot.referenceModel!.modelId;
+ expect((await fetcher(`/api/public/${id}/models/${hash}`)).status).toBe(200);
+ await fetcher(`/api/shares/${id}`,{method:'DELETE',headers:{authorization:`Bearer ${env.OWNER_TOKEN}`}});
+ expect((await fetcher(`/api/public/${id}/models/${hash}`)).status).toBe(410);
+ expect([...bucket.data.keys()].filter(k=>k.startsWith(`shares/${id}/`))).toHaveLength(0);
+});
+it('deletes all pages of data and resumes an interrupted revoked cleanup',async()=>{
+ const {bucket,call}=setup();
+ const {id}=await (await call('POST','/api/shares',undefined,true)).json() as {id:string};
+ const originalList=bucket.list.bind(bucket);bucket.list=async options=>{const all=await originalList(options);return {objects:all.objects.slice(0,1000),truncated:all.objects.length>1000};};
+ const originalDelete=bucket.delete.bind(bucket);let first=true;
+ bucket.delete=async keys=>{if(first){first=false;throw new Error('storage unavailable');}await originalDelete(keys);};
+ const p=createDemoProject();p.artworks=[];const snapshot=createPublicShare(p,{includeDimensions:false}).snapshot;
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(snapshot),true)).status).toBe(201);
+ for(let i=0;i<1051;i++)await bucket.put(`shares/${id}/images/${i}`,png.buffer);
+ await expect(call('DELETE',`/api/shares/${id}`,undefined,true)).rejects.toThrow('storage unavailable');
+ expect((await call('GET',`/api/public/${id}`)).status).toBe(410);
+ expect((await call('DELETE',`/api/shares/${id}`,undefined,true)).status).toBe(204);
+ expect([...bucket.data.keys()].filter(k=>k.startsWith(`shares/${id}/`))).toHaveLength(0);
+});
+it('stops oversized chunked publication input before consuming the entire stream',async()=>{
+ const {bucket,call}=setup();const {id}=await (await call('POST','/api/shares',undefined,true)).json() as {id:string};let produced=0,cancelled=false;
+ const body=new ReadableStream({pull(controller){produced++;controller.enqueue(new Uint8Array(600000));if(produced===10)controller.close();},cancel(){cancelled=true;}});
+ const request=new Request(`https://example.test/api/shares/${id}/publish`,{method:'POST',headers:{authorization:'Bearer private-owner-token-for-testing'},body,duplex:'half'} as RequestInit);
+ expect((await handleShareRequest(request,{SHARES:bucket,OWNER_TOKEN:'private-owner-token-for-testing'})).status).toBe(400);expect(cancelled).toBe(true);expect(produced).toBeLessThan(10);
+});
