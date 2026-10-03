@@ -1,0 +1,134 @@
+{
+  "date": "2026-10-04",
+  "scope": "original document 2 section 14; independent local artwork library",
+  "goalComplete": false,
+  "automated": {
+    "testsPassed": 751,
+    "optionalBenchmarksSkipped": 2,
+    "build": "passed",
+    "largeBundleWarning": "existing"
+  },
+  "browser": {
+    "localSource": "http://localhost:8798",
+    "localRestore": "http://127.0.0.1:8798",
+    "consoleWarnings": 0,
+    "consoleErrors": 0,
+    "checks": [
+      "image and 3D selection save",
+      "actual decoded image and 3D thumbnails",
+      "year search and empty result",
+      "model filter",
+      "archive and restore",
+      "different project creation and chosen wall placement",
+      "one Undo and Redo: artwork count 1 -> 0 -> 1",
+      "preserved model bytes, physical dimensions, image and frame/mat/glass",
+      "fresh model pose and blank installation notes",
+      "backup restore into different origin with archived entries",
+      "reject tampered source model bounds before any write",
+      "reject wrong-format image before any write",
+      "reject valid PNG header with undecodable image before any write",
+      "reload persisted library",
+      "final 256px detached model render"
+    ],
+    "sourceBackup": {
+      "file": "공간-작품라이브러리.gonggan-artworks.json",
+      "bytes": 999038,
+      "items": 3,
+      "archived": 1,
+      "sha256": "26f1ddda5264174499e462366ede941b310bd7121b1a4a31497b520cce621a45",
+      "privateInstallMarkersAbsent": true
+    },
+    "placedProject": {
+      "file": "라이브러리 재배치 검증 20261004.json",
+      "bytes": 983403,
+      "sha256": "0f0fef9151d025620f0f54411c42f0e8025e18d1789204642e9ee0bf626b8f18",
+      "designFieldsEqualToLibrary": true,
+      "imageWallId": "wall-b",
+      "alongMm": 540,
+      "frameSettings": {
+        "widthMm": 30,
+        "depthMm": 70,
+        "matWidthMm": 60,
+        "cover": "glass"
+      },
+      "modelPosition": [
+        0,
+        0,
+        0
+      ],
+      "modelRotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    "finalDesktopLibrary": {
+      "items": 4,
+      "archived": 2,
+      "activeThumbnails": [
+        {
+          "kind": "model",
+          "width": 256,
+          "height": 256
+        },
+        {
+          "kind": "image",
+          "width": 128,
+          "height": 256
+        }
+      ]
+    },
+    "mobileViewport": {
+      "width": 390,
+      "height": 844,
+      "dialogClientWidth": 348,
+      "dialogScrollWidth": 348,
+      "dialogLeft": 20,
+      "dialogRight": 370,
+      "hardwareTest": false
+    }
+  },
+  "limitations": [
+    "local per browser and origin; no account library synchronization",
+    "real Supabase auth still unconfigured",
+    "real user SketchUp and large models or mobile hardware not validated",
+    "raw SKP not supported",
+    "video and projection playback, full source requirements audit remain"
+  ],
+  "production": {
+    "status": "verified UI",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "2be9af45-6a32-4352-b9b0-cfab73b3feda",
+    "entry": "/assets/index-DKEF1Sgg.js",
+    "keepVars": true,
+    "libraryEmpty": true,
+    "libraryControlsVisible": true,
+    "JpgPngPdfSketchUpGlbImportMenuVisible": true,
+    "consoleWarnings": 0,
+    "consoleErrors": 0,
+    "existingDraftAndSharesModified": false,
+    "productionStorageOrPlacementTested": false
+  },
+  "artifacts": [
+    {
+      "path": "2026-10-04-artwork-library-desktop.png",
+      "bytes": 58917,
+      "sha256": "178cf2f518f3511b5dbf6b26d98dfe7c6c3e8d371ef928d8db91c6e6156ae4a6"
+    },
+    {
+      "path": "2026-10-04-artwork-library-mobile.png",
+      "bytes": 36194,
+      "sha256": "6b024798af3fe2a0c2300d3f679f0f559719b743c004883007010bf7c474eeaa"
+    },
+    {
+      "path": "2026-10-04-artwork-library-public.png",
+      "bytes": 49648,
+      "sha256": "046abb598a860be329b07aa04f756c76a5595e46cf95f49319d5c26ab969797d"
+    },
+    {
+      "path": "2026-10-04-artwork-library-import-menu-public.png",
+      "bytes": 52235,
+      "sha256": "ab2ab22ac4c571391c0594cb13d027f4d196e8ce1f20500f35fdd0754b714939"
+    }
+  ]
+}

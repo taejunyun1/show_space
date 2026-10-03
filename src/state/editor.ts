@@ -1,3 +1,4 @@
+import {installArtworkTemplate,type ArtworkTemplate} from '../domain/artworkLibrary';
 import {updateNote,preserveCurrentNotes,validateProjectNotes,type NoteTarget,type NoteDetails} from '../domain/notes';
 import {addModelArtwork as addModelArtworkToProject,patchModelArtwork as updateModelArtwork,modelArtworkMembers,groupModelArtworks,transformModelArtworks,modelArtworkBounds} from '../domain/modelArtworks';
 import {parseOutdoor,DEFAULT_OUTDOOR,type OutdoorSettings} from '../domain/outdoor';
@@ -102,6 +103,7 @@ interface EditorState {
   renameProject(name: string): void
   patchProject(patch: Pick<Partial<Project>, 'referenceModel' | 'floorColor' | 'floorMaterial' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan' | 'planDraft'>): void
   addArtwork(imageUrl?: string, name?: string): void
+  installLibraryArtwork(template:ArtworkTemplate,expectedProjectId:string,wallId?:string):void
   placeUnplaced(id:string):void
   adoptModelWalls(walls:Wall[],expected:ReferenceModel,importedFloor?:Point[][]):void
   restoreDemoSpace():void
@@ -323,6 +325,13 @@ export const useEditor = create<EditorState>((set, get) => {
       get().commit(next)
       set({ selected: [{ type: 'artwork', id: created.id }], activeWallId: created.wallId })
     }),
+    installLibraryArtwork:(template,expectedProjectId,wallId)=>{
+      const s=get();if(s.project.id!==expectedProjectId)throw new Error('프로젝트가 바뀌어 작품 배치를 취소했습니다.');
+      const result=installArtworkTemplate(s.project,template,wallId??(s.activeWallId||s.project.walls[0]?.id));
+      get().commit(result.project);
+      const art=result.project.artworks.find(a=>a.id===result.selection.id);
+      set({selected:[result.selection],...(art?{activeWallId:art.wallId}:{}),...(result.selection.type==='modelArtwork'?{view:'3d' as const}:{}),activeTool:'select',message:'라이브러리 작품을 새 객체로 배치했습니다.'});
+    },
     placeUnplaced: (id) => attempt(() => {
       const wallId=validWall(get().project,get().activeWallId)
       const next=placeUnplacedArtwork(get().project,id,wallId)

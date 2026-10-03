@@ -10,9 +10,10 @@ import type {PdfSection} from './pdfLayout';
 export interface PdfCurrentCamera {view:CameraView;width:number;height:number;cutaway:boolean}
 
 /** Render a detached snapshot, leaving selection, project, Undo and live camera untouched. */
-export async function renderPdf3d(section:PdfSection,current?:PdfCurrentCamera):Promise<Uint8Array>{
+export async function renderPdf3d(section:PdfSection,current?:PdfCurrentCamera,outputEdge=1920):Promise<Uint8Array>{
+ if(!Number.isInteger(outputEdge)||outputEdge<1||outputEdge>3840)throw new Error('3D 이미지 해상도가 올바르지 않습니다.');
  const source=section.current?current:undefined,longEdge=source?Math.max(source.width,source.height):1920;
- const width=source?Math.max(1,Math.round(1920*source.width/longEdge)):1920,height=source?Math.max(1,Math.round(1920*source.height/longEdge)):1200;
+ const width=source?Math.max(1,Math.round(outputEdge*source.width/longEdge)):outputEdge,height=source?Math.max(1,Math.round(outputEdge*source.height/longEdge)):Math.max(1,Math.round(outputEdge*1200/1920));
  const scene=await prepareExportScene(section.project) as Scene;let renderer:WebGLRenderer|undefined,environment:ReturnType<typeof surfaceEnvironment>|undefined;
  try{
   const view=source?.view??section.camera??createStandardView(section.project,'bird',{width,height});

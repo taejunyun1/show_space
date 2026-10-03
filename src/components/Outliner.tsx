@@ -1,15 +1,17 @@
+import {ArtworkLibraryDialog} from './ArtworkLibraryDialog';
 import {OutdoorDialog} from './OutdoorDialog';
 import {LightingDialog} from './LightingDialog';
 import {FloorMaterialDialog} from './FloorMaterialDialog';
 import {ReferenceModelControls} from './ReferenceModelControls';
 import { useRef, useState } from 'react';
-import { Lightbulb, Box, Plus, Eye, EyeOff, LockKeyhole, PanelTop, Layers, ImagePlus } from 'lucide-react';
+import { Library, Lightbulb, Box, Plus, Eye, EyeOff, LockKeyhole, PanelTop, Layers, ImagePlus } from 'lucide-react';
 import { useEditor } from '../state/editor';
 import { artStyle, readImage } from '../lib/art';
 
 export function Outliner() {
   const { project, selected, activeWallId, select, setActiveWall, patchWall, patchArtwork, addArtwork, addWall, placeUnplaced, notify } = useEditor();
   const provisional = !!project.planDraft && !project.planReference?.calibrated;
+  const [libraryOpen,setLibraryOpen]=useState(false);
   const [tab, setTab] = useState<'all' | 'artwork'>('all');
   const upload = useRef<HTMLInputElement>(null),modelUpload=useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -57,6 +59,6 @@ export function Outliner() {
       </section>}
     </div>
     <ReferenceModelControls/>
-    <div className="add-art-card"><Box size={19} strokeWidth={1.4} /><strong>작품을 더해보세요</strong><p>{provisional ? '두 점 축척 보정 후 실제 크기의 작품을 추가할 수 있습니다.' : <>이미지와 실제 크기로<br />나만의 전시를 구성하세요.</>}</p><button className="button outline" disabled={busy || provisional} onClick={() => upload.current?.click()}><ImagePlus size={16} />{busy ? '이미지 처리 중' : '작품 추가'}</button><button className="button outline" disabled={busy||provisional||(project.modelArtworks?.length??0)>=50} onClick={()=>modelUpload.current?.click()}><Box size={16}/>3D 작품 추가</button><p className="field-hint">GLB · glTF와 자산 · glTF ZIP / 12MB 이하</p><input ref={modelUpload} type="file" hidden multiple aria-label="3D 작품 파일" accept=".glb,.gltf,.zip,.bin,.png,.jpg,.jpeg,.webp" onChange={e=>{const files=Array.from(e.currentTarget.files??[]);e.currentTarget.value='';if(files.length)void uploadModelArtworks(files);}}/><button className="text-button" disabled={provisional} onClick={() => addArtwork()}>예제 작품 추가</button><input type="file" accept="image/png,image/jpeg,image/webp" hidden ref={upload} onChange={e => { const f = e.target.files?.[0]; if (f) void uploadArtwork(f); e.currentTarget.value = ''; }} /></div>
-  </aside>{outdoorOpen&&<OutdoorDialog onClose={()=>setOutdoorOpen(false)}/>} {lightingOpen&&<LightingDialog onClose={()=>setLightingOpen(false)}/>} {floorMaterialOpen&&<FloorMaterialDialog onClose={()=>setFloorMaterialOpen(false)}/>}</>;
+    <div className="add-art-card"><Box size={19} strokeWidth={1.4} /><strong>작품을 더해보세요</strong><p>{provisional ? '두 점 축척 보정 후 실제 크기의 작품을 추가할 수 있습니다.' : <>이미지와 실제 크기로<br />나만의 전시를 구성하세요.</>}</p><button className="button outline" disabled={busy || provisional} onClick={() => upload.current?.click()}><ImagePlus size={16} />{busy ? '이미지 처리 중' : '작품 추가'}</button><button className="button outline" disabled={busy||provisional||(project.modelArtworks?.length??0)>=50} onClick={()=>modelUpload.current?.click()}><Box size={16}/>3D 작품 추가</button><p className="field-hint">GLB · glTF와 자산 · glTF ZIP / 12MB 이하</p><button className="button outline" onClick={()=>setLibraryOpen(true)}><Library size={16}/>작품 라이브러리</button><input ref={modelUpload} type="file" hidden multiple aria-label="3D 작품 파일" accept=".glb,.gltf,.zip,.bin,.png,.jpg,.jpeg,.webp" onChange={e=>{const files=Array.from(e.currentTarget.files??[]);e.currentTarget.value='';if(files.length)void uploadModelArtworks(files);}}/><button className="text-button" disabled={provisional} onClick={() => addArtwork()}>예제 작품 추가</button><input type="file" accept="image/png,image/jpeg,image/webp" hidden ref={upload} onChange={e => { const f = e.target.files?.[0]; if (f) void uploadArtwork(f); e.currentTarget.value = ''; }} /></div>
+  </aside>{libraryOpen&&<ArtworkLibraryDialog onClose={()=>setLibraryOpen(false)}/>} {outdoorOpen&&<OutdoorDialog onClose={()=>setOutdoorOpen(false)}/>} {lightingOpen&&<LightingDialog onClose={()=>setLightingOpen(false)}/>} {floorMaterialOpen&&<FloorMaterialDialog onClose={()=>setFloorMaterialOpen(false)}/>}</>;
 }

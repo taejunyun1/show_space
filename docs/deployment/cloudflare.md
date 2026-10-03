@@ -4,7 +4,7 @@
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
 - 최신 배포일: 2026-10-04
-- 최신 버전: f65572d8-f605-49a9-94c0-f170124fc5d1
+- 최신 버전: 2be9af45-6a32-4352-b9b0-cfab73b3feda
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
@@ -87,3 +87,5 @@ GitHub: https://github.com/taejunyun1/show_space · 기본 브랜치 main. Cloud
 2026-10-04 PNG 캡처 출력 배포: 테스트 739개 통과·선택 벤치마크 2개 제외, 빌드 통과. 3D 1080p/1440p/4K·세로 4K·현재 비율, 평면도 2560px 정사각, 벽면도 사용자 지정 2.4:1을 실제 PNG 헤더/화면으로 확인했다. 캡처 후 프로젝트 JSON은 가져오기에서 새로 부여한 id 외에 원본과 동일하다. 390px 설정 창 가로 넘침 없음. 공개 HTTPS의 /assets/index-Des8ZPsw.js에서 3840×2160 PNG를 실제 다운로드했고 콘솔 경고·오류 없음. 공개 초안 데이터·공유는 수정하지 않았다. Cloudflare f65572d8-f605-49a9-94c0-f170124fc5d1, --keep-vars 사용. 기록: ../validation/2026-10-04-capture-output.json.
 
 같은 캡처 창을 열어 둔 채 390px로 변경: 현재 비율 표시 1920×1519 → 1062×1920 → 1920×1519 복원. 최종 HTTPS 내보내기 → 현재 화면 이미지에서도 4K PNG 저장 확인.
+
+2026-10-04 작품 라이브러리 배포: 버전 `2be9af45-6a32-4352-b9b0-cfab73b3feda`, 공개 entry `/assets/index-DKEF1Sgg.js`. 이미지/3D 작품을 프로젝트 밖의 로컬 Library에 정보·액자·자산·실제 썸네일로 저장하고 다른 전시에 재배치한다. 검색/형식 필터·보관/복구·자산 포함 JSON 백업/복원, 저장 실패의 원자적 롤백·revision·용량 상한을 연결했다. 3D 썸네일은 256px에서만 렌더하고 별도 렌더러를 해제한다. 751개 테스트 통과·선택 벤치마크 2개 제외, 빌드 통과. 실제 로컬 두 주소에서 배치·Undo/Redo·백업 복원·원본 자산/액자 보존·손상 이미지/변조 모델의 전체 거부·390px 레이아웃 검증. 공개 HTTPS에서는 라이브러리 빈 목록/버튼·최신 entry·기존 JPG/PNG/PDF/SketchUp GLB 입력 메뉴·콘솔 경고/오류 없음만 확인했다. 공개 기존 프로젝트/라이브러리 작품·공유는 수정하지 않았다. `--keep-vars`로 키/바인딩 유지. 계정 Library 자동 동기화·실제 로그인은 미연결이며 전체 목표 미완료. 기록 `../validation/2026-10-04-artwork-library.json`.
