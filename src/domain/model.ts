@@ -1,3 +1,4 @@
+import {parseOutdoor} from './outdoor';
 import {parseLight,parseLights,parseLighting,translatedLight,MAX_LIGHTS} from './lighting';
 import {validateImportedFloor} from './importedFloor';
 import {parseSurfaceMaterial} from './materials';
@@ -307,6 +308,7 @@ export function parseProject(input: unknown): Project {
   const raw = object(input, '프로젝트')
   if(raw.floorMaterial!==undefined)parseSurfaceMaterial(raw.floorMaterial)
   if(raw.lighting!==undefined)parseLighting(raw.lighting)
+  if(raw.outdoor!==undefined)parseOutdoor(raw.outdoor)
   if(raw.importedFloor!==undefined)validateImportedFloor(raw.importedFloor)
   if(raw.referenceModel!==undefined)validateReferenceModel(raw.referenceModel)
   if (raw.schemaVersion !== 1) throw new Error('지원하지 않는 프로젝트 스키마입니다.')
@@ -356,6 +358,7 @@ export function parseProject(input: unknown): Project {
     if(scene.structure!==undefined){
       const structure=object(scene.structure,'장면 구조')
       if(structure.lighting!==undefined)parseLighting(structure.lighting)
+      if(structure.outdoor!==undefined)parseOutdoor(structure.outdoor)
       if(structure.floorColor!==undefined)text(structure.floorColor,'장면 바닥 색상')
       if(structure.floorMaterial!==undefined){if(structure.floorColor===undefined)throw new Error('장면 재질에는 바닥 색상이 필요합니다.');parseSurfaceMaterial(structure.floorMaterial)}
       if(structure.importedFloor!==undefined)validateImportedFloor(structure.importedFloor)
@@ -423,9 +426,10 @@ export function parseProject(input: unknown): Project {
     validatePlanLabels(source.labels,source.widthPx as number,source.heightPx as number);
   }
   const result=structuredClone(raw);
+  if(raw.outdoor!==undefined)result.outdoor=parseOutdoor(raw.outdoor);
   if(raw.lights!==undefined)result.lights=parseLights(raw.lights);
   if(raw.lighting!==undefined)result.lighting=parseLighting(raw.lighting);
-  for(const scene of result.scenes as Array<{structure?:Record<string,unknown>}>)if(scene.structure){if(scene.structure.lights!==undefined)scene.structure.lights=parseLights(scene.structure.lights);if(scene.structure.lighting!==undefined)scene.structure.lighting=parseLighting(scene.structure.lighting);}
+  for(const scene of result.scenes as Array<{structure?:Record<string,unknown>}>)if(scene.structure){if(scene.structure.outdoor!==undefined)scene.structure.outdoor=parseOutdoor(scene.structure.outdoor);if(scene.structure.lights!==undefined)scene.structure.lights=parseLights(scene.structure.lights);if(scene.structure.lighting!==undefined)scene.structure.lighting=parseLighting(scene.structure.lighting);}
   if(raw.planLabels!==undefined){const r=raw.planReference as Project['planReference'];if(!r)throw new Error('표기 인식 결과에 도면 정보가 필요합니다.');result.planLabels=validatePlanLabels(raw.planLabels,r.widthPx,r.heightPx);}
   if(raw.planAnalysis!==undefined){
     const a=raw.planAnalysis as Project['planAnalysis'],r=raw.planReference as Project['planReference'];

@@ -1,3 +1,4 @@
+import type {OutdoorSettings} from './outdoor';
 import type {ExhibitionLight,LightingSettings} from './lighting';
 import type {PlanAnalysis} from '../lib/analyzePlan';
 import type {PlanLabel} from './planLabels';
@@ -48,6 +49,7 @@ export interface ReferenceModel {
 }
 
 export interface SceneStructure {
+  outdoor?:OutdoorSettings
   lights?:ExhibitionLight[]
   lighting?:LightingSettings
   floorColor?:string
@@ -78,6 +80,7 @@ export interface Opening {
 }
 
 export interface Project {
+  outdoor?:OutdoorSettings
   lights?:ExhibitionLight[]
   lighting?:LightingSettings
   floorMaterial?:SurfaceMaterial

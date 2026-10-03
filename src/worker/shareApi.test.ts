@@ -1,3 +1,4 @@
+import {DEFAULT_OUTDOOR} from '../domain/outdoor';
 import {describe,expect,it} from 'vitest';
 import {materialPreset} from '../domain/materials';
 import {createDemoProject} from '../domain/model';
@@ -90,4 +91,12 @@ it('publishes visible Spot/Area and illumination settings without exposing notes
  expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify({...snapshot,lights:snapshot.lights!.map(l=>({...l,kelvin:0}))}),true)).status).toBe(400);
  expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify({...snapshot,lights:snapshot.lights!.map(l=>({...l,note:'SECRET',locked:true}))}),true)).status).toBe(201);
  const result=await(await call('GET',`/api/public/${id}`)).json() as typeof snapshot;expect(result.lights).toEqual(snapshot.lights);expect(result.lighting).toEqual(CUSTOM_LIGHTING);expect(JSON.stringify(result)).not.toMatch(/PRIVATE|SECRET|hidden-light|locked/);
+});
+
+it('rejects invalid outdoor times at the API boundary and rebuilds public outdoor metadata',async()=>{
+ const {call}=setup(),p=createDemoProject();p.artworks=[];p.outdoor={...DEFAULT_OUTDOOR,mode:'outdoor',time:'17:00',northDeg:90};
+ const {snapshot}=createPublicShare(p,{includeDimensions:false}),created=await call('POST','/api/shares',undefined,true),{id}=await created.json() as {id:string};
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify({...snapshot,outdoor:{...snapshot.outdoor,timeZone:'America/New_York',date:'2026-03-08',time:'02:30'}}),true)).status).toBe(400);
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify({...snapshot,outdoor:{...snapshot.outdoor,secret:'PRIVATE'}}),true)).status).toBe(201);
+ const result=await call('GET',`/api/public/${id}`),text=await result.text();expect(result.status).toBe(200);expect(JSON.parse(text).outdoor).toEqual(p.outdoor);expect(text).not.toContain('PRIVATE');
 });

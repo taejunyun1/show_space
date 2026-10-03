@@ -1,3 +1,4 @@
+import {outdoorAppearance} from '../domain/outdoor';
 import {Lighting3D} from './Lighting3D';
 import {WallSurfaceGeometry,FloorSurfaceGeometry} from './SurfaceGeometry';
 import {SurfaceFinish} from './SurfaceFinish';
@@ -125,7 +126,7 @@ export default function SharedViewer3D({snapshot,shareId,selectedId,onSelect,res
   };
   const point3d=(point:WorldPoint):[number,number,number]=>[point.x/1000,point.y/1000,point.z/1000];
   return <div className="shared-3d"><Canvas shadows orthographic={frame.projection!=='perspective'} frameloop="demand" dpr={[1,1.5]} camera={{position:frame.position,zoom:frame.zoom,fov:frame.fov??50,near:.01,far:2000}} gl={{antialias:true}} onPointerMissed={()=>{if(!active)onSelect(null);}}>
-    <SurfaceEnvironment enabled={needsSurfaceEnvironment(snapshot)} intensity={snapshot.lighting?.environment}/><color attach="background" args={['#e9edf1']}/><Lighting3D source={snapshot.lighting?snapshot:{...snapshot,lighting:{ambient:1.3,hemisphere:0,fill:1.8,environment:.35}}}/>
+    <SurfaceEnvironment enabled={needsSurfaceEnvironment(snapshot)} outdoor={snapshot.outdoor} intensity={outdoorAppearance(snapshot.outdoor)?.environment??snapshot.lighting?.environment}/><color attach="background" args={[outdoorAppearance(snapshot.outdoor)?.background??'#e9edf1']}/><Lighting3D source={snapshot.lighting?snapshot:{...snapshot,lighting:{ambient:1.3,hemisphere:0,fill:1.8,environment:.35}}}/>
     <CameraSetup frame={frame} reset={reset} walls={snapshot.walls}/><Floor snapshot={snapshot} shareId={shareId} measuring={active} onMeasure={pick}/>
     {snapshot.walls.map(wall=><PublicWallMesh key={wall.id} wall={wall} artworks={snapshot.artworks.filter(art=>art.wallId===wall.id)} shareId={shareId} selectedId={selectedId} onSelect={onSelect} groups={wallGroups.current} measuring={active} onMeasure={pick}/>)}
     <CutawayVisibility walls={cutawayWalls} groups={wallGroups.current} cutaway={frame.projection!=='perspective'&&cutaway}/>

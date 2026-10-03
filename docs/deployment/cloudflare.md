@@ -4,7 +4,7 @@
 - URL: https://gonggan-exhibition-preview.taejunyun.workers.dev
 - Worker: gonggan-exhibition-preview
 - 최신 배포일: 2026-10-03
-- 최신 버전: de90f62d-cf9f-4b55-bd93-58ea6639a8fd
+- 최신 버전: eee3d2f4-46a3-4e5e-bba7-0f2560be236b
 - 방식: Cloudflare Worker API + Static Assets, SPA fallback
 - 설정: wrangler.jsonc. 계정 ID를 고정하여 다른 계정으로 잘못 배포하지 않도록 설정함. 인증 정보는 프로젝트에 저장하지 않음.
 
@@ -66,3 +66,5 @@ GitHub: https://github.com/taejunyun1/show_space · 기본 브랜치 main. Cloud
 
 
 2026-10-03 실내 조명 배포: 버전 `de90f62d-cf9f-4b55-bd93-58ea6639a8fd`. Spot/Area 추가·이동·밝기/색온도/조준·잠금/복제/삭제, 기본 조명 설정, Undo·Scene·백업·공유를 연결했다. Spot은 GLB/glTF, 전체 실내 조명은 PNG/PDF 3D에 반영한다. 테스트 594개 통과·선택 벤치마크 2개 제외, TypeScript/빌드 통과. 공개 HTTPS에서 조명 추가 메뉴와 기본 조명 설정 창, 콘솔 경고/오류 없음 확인; 공개 초안이나 R2 QA 스냅샷은 변경하지 않았다. 로컬 공유 뷰어와 서버 허용 목록, 실제 GLB/glTF/백업 왕복은 별도 검증했다. 이번 브라우저 다운로드 이벤트/신규 파일을 확보하지 못해 내려받은 PNG/PDF의 육안 검사는 미검증이다. 기록: `docs/validation/2026-10-03-lighting.json`. 야외 환경/태양·계정 저장·3D 작품·원본 SKP·실기기 성능 및 전체 제품 완료는 남아 있다.
+
+2026-10-03 야외 환경 배포: 버전 eee3d2f4-46a3-4e5e-bba7-0f2560be236b, 605개 테스트 통과·선택 벤치마크 2개 제외·빌드 통과. 위도/경도/시간대/날짜/시간/북쪽, 날씨 연출·일몰/야간, 시간 슬라이더, Scene·백업·공유·PNG/PDF·GLB/glTF 연계. 실제 PNG·2쪽 한글 PDF·ZIP 자산 해시·태양 directional GLB 검증. 공개 HTTPS의 야외 환경 메뉴·정밀 좌표·날짜/시간·태양 계산 표시와 콘솔 오류/경고 없음을 확인했다. 공개 초안은 변경하지 않았고 공유 게시 검증은 가짜 키의 별도 로컬 R2로 실행했다. 실제 날씨·GPS·정밀 일조 해석과 모바일 실기기·대형 모델 성능 검증은 포함하지 않는다.

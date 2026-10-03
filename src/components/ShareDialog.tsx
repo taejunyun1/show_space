@@ -40,6 +40,7 @@ export function ShareDialog({project,onClose,getCamera}:{project:Project;onClose
   return <dialog ref={ref} className="share-dialog" onCancel={onClose} onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
     <div className="dialog-header"><div><h2>보기 전용 링크 공유</h2><p>현재 배치를 고정된 스냅샷으로 공유합니다.</p></div><button className="icon-button" aria-label="공유 창 닫기" onClick={onClose}><X size={18}/></button></div>
     <p className="share-explain">링크를 가진 사람은 로그인 없이 열람할 수 있습니다. 원본 도면·내부 메모·다른 Scene은 포함하지 않습니다. 나중에 편집해도 이미 만든 링크는 바뀌지 않습니다.</p>
+    {project.outdoor?.mode==='outdoor'&&<p className="share-explain">야외의 위치 좌표·날짜·시간·북쪽 방향을 포함해 같은 태양과 그림자로 표시합니다.</p>}
     <label className="share-key">작성자 키<input type="password" autoComplete="off" aria-label="작성자 키" value={ownerToken} onChange={e=>setOwnerToken(e.target.value)} placeholder="공유 서버의 작성자 키"/></label>
     <label className="share-check"><input type="checkbox" checked={includeDimensions} onChange={e=>setIncludeDimensions(e.target.checked)}/> 치수 공개</label>
     {uncalibrated&&<p className="share-error">도면의 두 점 축척을 보정한 뒤 3D 공간을 공유할 수 있습니다.</p>}

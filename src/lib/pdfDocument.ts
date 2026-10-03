@@ -25,7 +25,7 @@ function polygon(page:PDFPage,points:Point[],fit:ReturnType<typeof fitPdfDrawing
  page.drawSvgPath(path,{x:0,y:H,color:color(fill),borderColor:light,borderWidth:.4});
 }
 function header(doc:PDFDocument,font:PDFFont,section:PdfSection,title:string){
- const page=doc.addPage([W,H]);text(page,font,section.project.name,36,H-38,18);text(page,font,`${section.project.venue} · ${section.name}`,36,H-60,10);text(page,font,title,36,H-89,12);line(page,36,H-102,W-36,H-102);
+ const page=doc.addPage([W,H]);text(page,font,section.project.name,36,H-38,18);text(page,font,`${section.project.venue} · ${section.name}${section.project.outdoor?.mode==='outdoor'?` · 야외 ${section.project.outdoor.date} ${section.project.outdoor.time} (${section.project.outdoor.timeZone}) · 북쪽 ${section.project.outdoor.northDeg}°`:''}`,36,H-60,10);text(page,font,title,36,H-89,12);line(page,36,H-102,W-36,H-102);
  text(page,font,'공간 · 전시 배치 출력 · 내부 메모 제외',36,22,8);return page;
 }
 function scaleNote(page:PDFPage,font:PDFFont,fit:ReturnType<typeof fitPdfDrawing>){

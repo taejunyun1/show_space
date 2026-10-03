@@ -3,9 +3,9 @@ import type { ReactNode } from 'react';
 export function IconButton({ label, children, onClick, active, disabled }: { label: string; children: ReactNode; onClick?: () => void; active?: boolean; disabled?: boolean }) {
   return <button type="button" className={`icon-button ${active ? 'active' : ''}`} title={label} aria-label={label} aria-pressed={active} disabled={disabled} onClick={onClick}>{children}</button>;
 }
-export function NumberField({ label, value, onChange, disabled, min, max, step = 10, suffix = 'mm' }: { label: string; value: number; onChange: (value: number) => void; disabled?: boolean; min?: number; max?: number; step?: number; suffix?: string }) {
-  const [draft, setDraft] = useState(String(Math.round(value * 100) / 100));
-  useEffect(() => setDraft(String(Math.round(value * 100) / 100)), [value]);
+export function NumberField({ label, value, onChange, disabled, min, max, step = 10, suffix = 'mm', precision = 2 }: { label: string; value: number; onChange: (value: number) => void; disabled?: boolean; min?: number; max?: number; step?: number; suffix?: string; precision?:number }) {
+  const [draft, setDraft] = useState(String(Math.round(value * 10**precision) / 10**precision));
+  useEffect(() => setDraft(String(Math.round(value * 10**precision) / 10**precision)), [value,precision]);
   function commit() {
     const n = Number(draft);
     if (draft.trim() && Number.isFinite(n) && (min === undefined || n >= min) && (max === undefined || n <= max)) { if (n !== value) onChange(n); }

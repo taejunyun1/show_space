@@ -1,0 +1,128 @@
+{
+  "backup": {
+    "path": "/Users/taejun-yun/Downloads/여백의 기록.gonggan (3).zip",
+    "bytes": 3550821,
+    "assets": 5,
+    "outdoor": {
+      "mode": "outdoor",
+      "latitude": 37.5665,
+      "longitude": 126.978,
+      "timeZone": "Asia/Seoul",
+      "date": "2026-06-21",
+      "time": "19:30",
+      "northDeg": 90,
+      "preset": "sunset",
+      "sunIntensity": 3,
+      "shadow": true,
+      "occurrence": "earlier"
+    },
+    "scenes": [
+      {
+        "name": "야외 오전",
+        "outdoor": {
+          "mode": "outdoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "07:41",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        }
+      },
+      {
+        "name": "야외 일몰 북쪽90",
+        "outdoor": {
+          "mode": "outdoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "19:30",
+          "northDeg": 90,
+          "preset": "sunset",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        }
+      }
+    ]
+  },
+  "glb": {
+    "path": "/Users/taejun-yun/Downloads/여백의 기록 (6).glb",
+    "bytes": 3571508,
+    "lights": [
+      {
+        "name": "outdoor-sun",
+        "color": [
+          1,
+          0.5598693096377647,
+          0.30462329790768744
+        ],
+        "intensity": 3,
+        "type": "directional"
+      }
+    ]
+  },
+  "pdf": {
+    "path": "/Users/taejun-yun/Downloads/여백의 기록-전시안 (8).pdf",
+    "bytes": 3270170,
+    "sha256": "bcb48ffaad6ee8dac3e03846d88d8957735babcd8d67b02afa68ce4af42dc59f",
+    "pages": 2,
+    "texts": [
+      "여백의 기록\n성수 갤러리 · 야외 오전 · 야외 2026-06-21 07:41 (Asia/Seoul) · 북쪽 0°\n3D 공간\n공간 · 전시 배치 출력 · 내부 메모 제외\n3D 이미지는 시각 참고용입니다. 실제 치수는 평면·벽면도 또는 치수 목록을 확인하세요.\n1 / 2\n",
+      "여백의 기록\n성수 갤러리 · 야외 일몰 북쪽90 · 야외 2026-06-21 19:30 (Asia/Seoul) · 북쪽 90°\n3D 공간\n공간 · 전시 배치 출력 · 내부 메모 제외\n3D 이미지는 시각 참고용입니다. 실제 치수는 평면·벽면도 또는 치수 목록을 확인하세요.\n2 / 2\n"
+    ]
+  },
+  "png": {
+    "path": "/Users/taejun-yun/Downloads/여백의 기록-3D (5).png",
+    "bytes": 425426,
+    "dimensions": [
+      1920,
+      1519
+    ]
+  },
+  "tests": {
+    "passed": 605,
+    "skipped_optional_benchmarks": 2
+  },
+  "local_share": {
+    "outdoor": {
+      "mode": "outdoor",
+      "latitude": 37.5665,
+      "longitude": 126.978,
+      "timeZone": "Asia/Seoul",
+      "date": "2026-06-21",
+      "time": "19:30",
+      "northDeg": 90,
+      "preset": "sunset",
+      "sunIntensity": 3,
+      "shadow": true,
+      "occurrence": "earlier"
+    },
+    "private_notes": false,
+    "url": "http://localhost:8799/s/1148f227ce45aaa99255559b727d1e673de76a92d4a62de1"
+  },
+  "browser_checks": [
+    "07:41 and 17:20 shadows change",
+    "00:00 no direct sun",
+    "drag one Undo",
+    "reload and separate Scene restore",
+    "invalid timezone rejected",
+    "Sky reflection map stainless surface",
+    "readonly share"
+  ],
+  "deployment": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "eee3d2f4-46a3-4e5e-bba7-0f2560be236b",
+    "public_browser": "environment dialog fields visible; no warnings/errors; draft unchanged"
+  },
+  "console": {
+    "editor": [],
+    "local_share": [],
+    "public": []
+  }
+}

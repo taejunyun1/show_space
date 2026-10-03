@@ -38,7 +38,7 @@ export function buildExportScene(project:Project,textures=new Map<string,Texture
   const model=project.referenceModel,root=new Group(),offset=new Group();root.name=model.name;root.position.set(...model.positionMm.map(v=>v/1000) as [number,number,number]);root.rotation.y=model.rotationDeg*Math.PI/180;root.scale.setScalar(model.scale);
   offset.position.set(...model.sourceOffsetM);offset.add(referenceScene.clone(true));root.add(offset);scene.add(root);
  }
- if(project.lights?.some(l=>l.visible&&l.kind==='spot'))scene.add(createExportLighting(project));
+ if(project.outdoor?.mode==='outdoor'||project.lights?.some(l=>l.visible&&l.kind==='spot'))scene.add(createExportLighting(project));
  scene.updateMatrixWorld(true);return scene;
 }
 
