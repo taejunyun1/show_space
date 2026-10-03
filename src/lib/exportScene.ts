@@ -1,3 +1,4 @@
+import {wallMetricUv,floorMetricUv,repeatingSurfaceTexture} from './surfaceUv';
 import {createSurfaceMaterial} from './surfaceMaterial';
 import {BoxGeometry,ExtrudeGeometry,Group,Mesh,MeshStandardMaterial,Path,PlaneGeometry,Scene,Shape,Texture,type Material,type Object3D} from 'three';
 import {artworkPosition,wallLength} from '../domain/model';
@@ -7,19 +8,21 @@ import type {Project} from '../domain/types';
 const frameColors={black:'#282827',natural:'#b9a383',white:'#f5f4ef',none:'#eee8dc'};
 
 /** Build from stored geometry, independent of the editor camera, grid and selection. */
-export function buildExportScene(project:Project,textures=new Map<string,Texture>(),referenceScene?:Object3D):Scene{
+export function buildExportScene(project:Project,textures=new Map<string,Texture>(),referenceScene?:Object3D,materialTextures=new Map<string,Texture>()):Scene{
  if(project.planReference&&!project.planReference.calibrated)throw new Error('도면 축척을 설정한 뒤 3D 모델을 내보내세요.');
+ for(const m of [project.floorMaterial,...project.walls.filter(w=>w.visible).map(w=>w.material)])if(m?.texture&&!materialTextures.has(m.texture.imageUrl))throw new Error('표면 텍스처를 준비하지 못했습니다.');
+ function finish(color:string,material:Project['floorMaterial'],roughness:number){const result=createSurfaceMaterial(color,material,roughness) as MeshStandardMaterial;if(material?.texture){const source=materialTextures.get(material.texture.imageUrl);if(!source)throw new Error('표면 텍스처를 준비하지 못했습니다.');result.map=repeatingSurfaceTexture(source,material.texture);}return result;}
  const scene=new Scene();scene.name=project.name;
  for(const wall of project.walls){
   if(!wall.visible)continue;
-  const mesh=new Mesh(new BoxGeometry(wallLength(wall)/1000,wall.heightMm/1000,wall.thicknessMm/1000),createSurfaceMaterial(wall.color,wall.material,.92));
+  const mesh=new Mesh(wallMetricUv(new BoxGeometry(wallLength(wall)/1000,wall.heightMm/1000,wall.thicknessMm/1000)),finish(wall.color,wall.material,.92));
   mesh.name=`wall-${wall.id}`;mesh.position.set((wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000);mesh.rotation.y=-Math.atan2(wall.end.z-wall.start.z,wall.end.x-wall.start.x);
   mesh.userData={gonggan:{kind:'wall',id:wall.id}};scene.add(mesh);
  }
  for(const [index,{outer,holes}] of floorWithOpenings(project).surfaces.entries()){
   const shape=new Shape();shape.moveTo(outer[0].x/1000,outer[0].z/1000);outer.slice(1).forEach(p=>shape.lineTo(p.x/1000,p.z/1000));shape.closePath();
   shape.holes=holes.map(points=>{const reversed=[...points].reverse(),hole=new Path();hole.moveTo(reversed[0].x/1000,reversed[0].z/1000);reversed.slice(1).forEach(p=>hole.lineTo(p.x/1000,p.z/1000));hole.closePath();return hole;});
-  const floor=new Mesh(new ExtrudeGeometry(shape,{depth:.16,bevelEnabled:false,steps:1}),createSurfaceMaterial(project.floorColor,project.floorMaterial,.96));
+  const floor=new Mesh(floorMetricUv(new ExtrudeGeometry(shape,{depth:.16,bevelEnabled:false,steps:1})),finish(project.floorColor,project.floorMaterial,.96));
   floor.name=`floor-${index+1}`;floor.rotation.x=Math.PI/2;floor.userData={gonggan:{kind:'floor'}};scene.add(floor);
  }
  for(const artwork of project.artworks){

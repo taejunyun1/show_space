@@ -14,7 +14,7 @@ export async function publishPublicShare(project:Project,options:PublicShareOpti
     for(const upload of uploads){
       const source=await checked(await fetcher(upload.sourceUrl));
       const image=await source.blob();
-      if(image.size>5_000_000)throw new Error('공유할 작품 이미지는 각 5MB 이하로 줄여 주세요.');
+      if(image.size>5_000_000)throw new Error('공유할 이미지는 각 5MB 이하로 줄여 주세요.');
       await checked(await fetcher(`/api/shares/${id}/images/${upload.imageId}`,{method:'PUT',headers:auth(ownerToken),body:image}));
     }
     await checked(await fetcher(`/api/shares/${id}/publish`,{method:'POST',headers:{...auth(ownerToken),'content-type':'application/json'},body:JSON.stringify(snapshot)}));

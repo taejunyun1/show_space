@@ -17,24 +17,26 @@ export async function artworkTexture(url:string):Promise<Texture>{
 
 export async function prepareExportScene(project:Project,onProgress:(message:string)=>void=()=>{}){
  if(project.planReference&&!project.planReference.calibrated)throw new Error('도면 축척을 설정한 뒤 3D 모델을 내보내세요.');
- const textures=new Map<string,Texture>(),cache=new Map<string,Texture>();let referenceScene:Object3D|undefined,scene:Object3D|undefined;
+ const textures=new Map<string,Texture>(),cache=new Map<string,Texture>(),materialTextures=new Map<string,Texture>();let referenceScene:Object3D|undefined,scene:Object3D|undefined;
  try{
   const artworks=project.artworks.filter(a=>a.visible&&a.imageUrl&&project.walls.some(w=>w.id===a.wallId&&w.visible));
   for(const [index,artwork] of artworks.entries()){
    onProgress(`작품 이미지 준비 중 · ${index+1}/${artworks.length}`);
    let texture=cache.get(artwork.imageUrl);if(!texture){texture=await artworkTexture(artwork.imageUrl);cache.set(artwork.imageUrl,texture);}textures.set(artwork.id,texture);
   }
+  const materialUrls=new Set([project.floorMaterial?.texture?.imageUrl,...project.walls.filter(w=>w.visible).map(w=>w.material?.texture?.imageUrl)].filter((url):url is string=>!!url));
+  for(const [index,url] of [...materialUrls].entries()){onProgress(`표면 텍스처 준비 중 · ${index+1}/${materialUrls.size}`);materialTextures.set(url,await artworkTexture(url));}
   if(project.referenceModel?.visible){
    onProgress('불러온 3D 모델 준비 중');
    const bytes=Uint8Array.from(atob(project.referenceModel.dataUrl.split(',')[1]),c=>c.charCodeAt(0));referenceScene=(await new GLTFLoader().parseAsync(bytes.buffer,'')).scene;
   }
-  scene=buildExportScene(project,textures,referenceScene);
+  scene=buildExportScene(project,textures,referenceScene,materialTextures);
   if(!scene.children.length)throw new Error('내보낼 벽·바닥·작품 또는 3D 모델이 없습니다.');
   return scene;
  }catch(error){
   if(scene)disposeExportScene(scene);else{if(referenceScene)disposeExportScene(referenceScene);new Set(textures.values()).forEach(texture=>texture.dispose());}
   throw error;
- }
+ }finally{materialTextures.forEach(texture=>texture.dispose());}
 }
 export async function exportProjectGlb(project:Project,onProgress:(message:string)=>void=()=>{}):Promise<Blob>{
  const scene=await prepareExportScene(project,onProgress);

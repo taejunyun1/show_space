@@ -65,3 +65,21 @@ it('publishes validated physical material fields and rejects invalid finishes be
  const response=await call('GET',`/api/public/${id}`),published=await response.json() as typeof snapshot;
  expect(published.floorMaterial).toEqual(p.floorMaterial);expect(published.walls[0].material).toEqual(p.walls[0].material);expect(JSON.stringify(published)).not.toContain('SECRET');
 });
+
+it('uploads, publishes, serves and revokes textured surfaces through the actual share client',async()=>{
+ const {publishPublicShare}=await import('../lib/shareClient'),p=createDemoProject();p.artworks=[];
+ const imageUrl='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a2ioAAAAASUVORK5CYII=';
+ p.floorMaterial={...materialPreset('wood').material,texture:{imageUrl,widthMm:500,heightMm:250}};p.walls[0].material={...materialPreset('wood').material,texture:{imageUrl,widthMm:1000,heightMm:750}};
+ const bucket=new MemoryBucket(),env={SHARES:bucket,OWNER_TOKEN:'private-owner-token-for-testing'};
+ const fetcher=async(input:string,init?:RequestInit)=>input.startsWith('data:')?fetch(input):handleShareRequest(new Request(`https://example.test${input}`,init),env);
+ const url=await publishPublicShare(p,{includeDimensions:false},env.OWNER_TOKEN,undefined,fetcher,'https://example.test'),id=url.split('/').at(-1)!;
+ const snapshot=await(await fetcher(`/api/public/${id}`)).json() as ReturnType<typeof createPublicShare>['snapshot'];expect(snapshot.floorMaterial?.texture).toEqual({imageId:'0',widthMm:500,heightMm:250});expect(snapshot.walls[0].material?.texture).toEqual({imageId:'0',widthMm:1000,heightMm:750});
+ const image=await fetcher(`/api/public/${id}/images/0`);expect(image.status).toBe(200);expect(image.headers.get('content-type')).toBe('image/png');expect((await image.arrayBuffer()).byteLength).toBeGreaterThan(8);
+ expect((await fetcher(`/api/public/${id}/images/99`)).status).toBe(404);expect([...bucket.data.keys()].filter(k=>k.includes('/images/'))).toHaveLength(1);
+ await fetcher(`/api/shares/${id}`,{method:'DELETE',headers:{authorization:`Bearer ${env.OWNER_TOKEN}`}});expect((await fetcher(`/api/public/${id}/images/0`)).status).toBe(410);
+});
+it('refuses publication until every referenced surface image has uploaded',async()=>{
+ const {call}=setup(),p=createDemoProject();p.artworks=[];p.floorMaterial={...materialPreset('wood').material,texture:{imageUrl:'data:image/png;base64,AAAA',widthMm:500,heightMm:500}};
+ const {snapshot}=createPublicShare(p,{includeDimensions:false}),created=await call('POST','/api/shares',undefined,true),{id}=await created.json() as {id:string};
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(snapshot),true)).status).toBe(409);
+});

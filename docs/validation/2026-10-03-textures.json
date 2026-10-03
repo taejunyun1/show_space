@@ -1,0 +1,140 @@
+{
+  "date": "2026-10-03",
+  "feature": "wall-floor-direct-textures",
+  "automated": {
+    "testsPassed": 583,
+    "testsSkipped": 2,
+    "build": "passed"
+  },
+  "browser": {
+    "origin": "http://127.0.0.1:8798/",
+    "fileProcessing": "grid PNG File -> readImage WebP -> Image decode -> SurfaceTexture; OS user-file chooser not exercised",
+    "immediateUploadAndRemoveReapply": "passed after shader invalidation fix",
+    "wallMm": [
+      500,
+      500
+    ],
+    "floorMm": [
+      1000,
+      1000
+    ],
+    "reload": "preserved",
+    "wallLocked": "texture controls disabled",
+    "sharing": "local-only Wrangler R2/dummy key; readonly viewer actual rendered; no production snapshot created",
+    "consoleWarningsErrors": []
+  },
+  "outputs": {
+    "backup": {
+      "bytes": 3551131,
+      "textures": [
+        {
+          "widthMm": 1000,
+          "heightMm": 1000,
+          "imageUrl": "gonggan-asset:assets/images/1e14c8ad16fc210cd438e7457426eeb031513445891763f236c7e78ea47d6364.webp"
+        },
+        {
+          "widthMm": 500,
+          "heightMm": 500,
+          "imageUrl": "gonggan-asset:assets/images/1e14c8ad16fc210cd438e7457426eeb031513445891763f236c7e78ea47d6364.webp"
+        }
+      ],
+      "crc": "passed",
+      "sha256": "all assets and project passed",
+      "assetCount": 6
+    },
+    "glb": {
+      "bytes": 3572892,
+      "images": 6,
+      "transforms": [
+        {
+          "scale": [
+            2,
+            2
+          ]
+        }
+      ],
+      "samplers": [
+        {
+          "magFilter": 9729,
+          "minFilter": 9987,
+          "wrapS": 10497,
+          "wrapT": 10497
+        },
+        {
+          "magFilter": 9729,
+          "minFilter": 9987,
+          "wrapS": 10497,
+          "wrapT": 10497
+        },
+        {
+          "magFilter": 9729,
+          "minFilter": 9987,
+          "wrapS": 33071,
+          "wrapT": 33071
+        },
+        {
+          "magFilter": 9729,
+          "minFilter": 9987,
+          "wrapS": 33071,
+          "wrapT": 33071
+        },
+        {
+          "magFilter": 9729,
+          "minFilter": 9987,
+          "wrapS": 33071,
+          "wrapT": 33071
+        },
+        {
+          "magFilter": 9729,
+          "minFilter": 9987,
+          "wrapS": 33071,
+          "wrapT": 33071
+        },
+        {
+          "magFilter": 9729,
+          "minFilter": 9987,
+          "wrapS": 33071,
+          "wrapT": 33071
+        }
+      ],
+      "extensions": [
+        "KHR_texture_transform"
+      ]
+    },
+    "gltfZip": {
+      "bytes": 3552928,
+      "images": 6,
+      "transforms": [
+        {
+          "scale": [
+            2,
+            2
+          ]
+        }
+      ],
+      "crc": "passed"
+    },
+    "pdf": {
+      "bytes": 3346841,
+      "pages": 1,
+      "images": [
+        {
+          "width": 1920,
+          "height": 1519
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "base-color image only; repeated seams are not corrected",
+    "raw SKP unsupported",
+    "photo-to-material remains future paid",
+    "3D artworks, account save, lighting and outdoor environment remain incomplete"
+  ],
+  "deployment": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "version": "2d4b4b33-2a4e-49ce-a9b9-e80451c9abc6",
+    "browser": "floor material texture upload/example controls visible; no production project edits",
+    "consoleWarningsErrors": []
+  }
+}

@@ -42,7 +42,7 @@ function validateWall(wall: Wall) {
 }
 
 function validateArtwork(artwork: Artwork, wallIds: Set<string>) {
-  if(artwork.material!==undefined)parseSurfaceMaterial(artwork.material)
+  if(artwork.material!==undefined){parseSurfaceMaterial(artwork.material);if(artwork.material.texture)throw new Error('작품 표면은 원본 이미지를 사용하며 별도 반복 텍스처를 지원하지 않습니다.');}
   if (artwork.groupId !== undefined && (typeof artwork.groupId !== 'string' || !artwork.groupId.trim() || artwork.groupId.length > 100)) throw new Error('작품 그룹이 올바르지 않습니다.')
   if (artwork.wallSide !== undefined && !['front','back'].includes(artwork.wallSide)) throw new Error('설치 면이 올바르지 않습니다.')
   if (artwork.rotationDeg !== undefined) {

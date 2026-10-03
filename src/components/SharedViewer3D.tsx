@@ -1,3 +1,4 @@
+import {WallSurfaceGeometry,FloorSurfaceGeometry} from './SurfaceGeometry';
 import {SurfaceFinish} from './SurfaceFinish';
 import {SurfaceEnvironment} from './SurfaceEnvironment';
 import {needsSurfaceEnvironment} from '../lib/surfaceEnvironment';
@@ -10,7 +11,7 @@ import {Path,Shape,SRGBColorSpace} from 'three';
 import type {Group} from 'three';
 import {floorFromLoops} from '../domain/importedFloor';
 import {deriveFloor} from '../domain/floor';
-import type {PublicShareSnapshot} from '../domain/publicShare';
+import type {PublicShareSnapshot,PublicSurfaceMaterial} from '../domain/publicShare';
 import type {Wall,WorldPoint} from '../domain/types';
 import {applyWallVisibility} from './wallVisibility3d';
 import {measurementDistance} from './sharedMeasure';
@@ -21,11 +22,14 @@ type Art=PublicShareSnapshot['artworks'][number];
 type PublicWall=PublicShareSnapshot['walls'][number];
 const frameColors={black:'#282827',natural:'#b9a383',white:'#f5f4ef',none:'#eee8dc'};
 
+function finish(m?:PublicSurfaceMaterial){return m?{...m,texture:undefined}:undefined;}
+function publicTexture(m:PublicSurfaceMaterial|undefined,shareId:string){return m?.texture?{imageUrl:`/api/public/${shareId}/images/${m.texture.imageId}`,widthMm:m.texture.widthMm,heightMm:m.texture.heightMm}:undefined;}
+
 type MeasurePick=(event:ThreeEvent<PointerEvent>)=>void;
 
-function Floor({snapshot,measuring,onMeasure}:{snapshot:PublicShareSnapshot;measuring:boolean;onMeasure:MeasurePick}){
+function Floor({snapshot,shareId,measuring,onMeasure}:{snapshot:PublicShareSnapshot;shareId:string;measuring:boolean;onMeasure:MeasurePick}){
   const shapes=useMemo(()=>{
-    const walls:Wall[]=snapshot.walls.map(wall=>({...wall,visible:true,locked:true,note:''}));
+    const walls:Wall[]=snapshot.walls.map(wall=>({...wall,material:finish(wall.material),visible:true,locked:true,note:''}));
     const virtual:Wall[]=snapshot.openings.map(opening=>({id:`opening-${opening.id}`,name:'',start:opening.start,end:opening.end,heightMm:1,thicknessMm:1,color:'#000000',role:'boundary',visible:false,locked:true,note:''}));
     return (snapshot.importedFloor?floorFromLoops(snapshot.importedFloor):deriveFloor([...walls,...virtual])).surfaces.map(surface=>{
       const shape=new Shape();
@@ -35,7 +39,7 @@ function Floor({snapshot,measuring,onMeasure}:{snapshot:PublicShareSnapshot;meas
       return shape;
     });
   },[snapshot]);
-  return <>{shapes.map((shape,index)=><mesh key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><shapeGeometry args={[shape]}/><SurfaceFinish color={snapshot.floorColor} material={snapshot.floorMaterial} side={2} roughness={.96}/></mesh>)}</>;
+  return <>{shapes.map((shape,index)=><mesh key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><FloorSurfaceGeometry shape={shape} flat/><SurfaceFinish color={snapshot.floorColor} material={finish(snapshot.floorMaterial)} texture={publicTexture(snapshot.floorMaterial,shareId)} side={2} roughness={.96}/></mesh>)}</>;
 }
 
 function ArtworkImage({url,art,width,height,depth}:{url:string;art:Art;width:number;height:number;depth:number}){
@@ -48,7 +52,7 @@ function ArtworkImage({url,art,width,height,depth}:{url:string;art:Art;width:num
     return copy;
   },[source,art.spritePanel]);
   useEffect(()=>()=>texture.dispose(),[texture]);
-  return <mesh position={[0,0,depth/2+.002]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={art.material} map={texture} roughness={.9}/></mesh>;
+  return <mesh position={[0,0,depth/2+.002]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={finish(art.material)} map={texture} roughness={.9}/></mesh>;
 }
 
 function ArtworkPlaceholder({width,height,depth,failed=false}:{width:number;height:number;depth:number;failed?:boolean}){
@@ -77,7 +81,7 @@ function PublicWallMesh({wall,artworks,shareId,selectedId,onSelect,groups,measur
   const register=useCallback((group:Group|null)=>{if(group)groups.set(wall.id,group);else groups.delete(wall.id);},[groups,wall.id]);
   const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz);
   if(!length)return null;
-  return <group ref={register}><mesh position={[(wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000]} rotation={[0,-Math.atan2(dz,dx),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'wall',id:wall.id});}}><boxGeometry args={[length/1000,wall.heightMm/1000,wall.thicknessMm/1000]}/><SurfaceFinish color={selectedId===wall.id?'#cfdbff':wall.color} material={wall.material} roughness={.92}/></mesh>{artworks.map(art=><PublicArtwork key={art.id} art={art} wall={wall} shareId={shareId} selected={selectedId===art.id} onSelect={onSelect} measuring={measuring} onMeasure={onMeasure}/>)}</group>;
+  return <group ref={register}><mesh position={[(wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000]} rotation={[0,-Math.atan2(dz,dx),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'wall',id:wall.id});}}><WallSurfaceGeometry length={length/1000} height={wall.heightMm/1000} depth={wall.thicknessMm/1000}/><SurfaceFinish color={selectedId===wall.id?'#cfdbff':wall.color} material={finish(wall.material)} texture={publicTexture(wall.material,shareId)} roughness={.92}/></mesh>{artworks.map(art=><PublicArtwork key={art.id} art={art} wall={wall} shareId={shareId} selected={selectedId===art.id} onSelect={onSelect} measuring={measuring} onMeasure={onMeasure}/>)}</group>;
 }
 
 function CutawayVisibility({walls,groups,cutaway}:{walls:readonly Wall[];groups:ReadonlyMap<string,Group>;cutaway:boolean}){
@@ -101,7 +105,7 @@ function CameraSetup({frame,reset,walls}:{frame:NonNullable<PublicShareSnapshot[
 
 export default function SharedViewer3D({snapshot,shareId,selectedId,onSelect,reset,cutaway,measuring,measurePoints,onMeasurePoint}:{snapshot:PublicShareSnapshot;shareId:string;selectedId:string|null;onSelect:(selection:Selection|null)=>void;reset:number;cutaway:boolean;measuring:boolean;measurePoints:WorldPoint[];onMeasurePoint:(point:WorldPoint)=>void}){
   const wallGroups=useRef(new Map<string,Group>());
-  const cutawayWalls=useMemo<Wall[]>(()=>snapshot.walls.map(wall=>({...wall,visible:true,locked:true,note:''})),[snapshot.walls]);
+  const cutawayWalls=useMemo<Wall[]>(()=>snapshot.walls.map(wall=>({...wall,material:finish(wall.material),visible:true,locked:true,note:''})),[snapshot.walls]);
   const frame=useMemo<NonNullable<PublicShareSnapshot['camera']>>(()=>{
     if(snapshot.camera)return snapshot.camera;
     const points=[...snapshot.walls.flatMap(wall=>[wall.start,wall.end]),...(snapshot.importedFloor?.flat()??[])];
@@ -121,7 +125,7 @@ export default function SharedViewer3D({snapshot,shareId,selectedId,onSelect,res
   const point3d=(point:WorldPoint):[number,number,number]=>[point.x/1000,point.y/1000,point.z/1000];
   return <div className="shared-3d"><Canvas orthographic={frame.projection!=='perspective'} frameloop="demand" dpr={[1,1.5]} camera={{position:frame.position,zoom:frame.zoom,fov:frame.fov??50,near:.01,far:2000}} gl={{antialias:true}} onPointerMissed={()=>{if(!active)onSelect(null);}}>
     <SurfaceEnvironment enabled={needsSurfaceEnvironment(snapshot)}/><color attach="background" args={['#e9edf1']}/><ambientLight intensity={1.3}/><directionalLight position={[8,15,10]} intensity={1.8}/>
-    <CameraSetup frame={frame} reset={reset} walls={snapshot.walls}/><Floor snapshot={snapshot} measuring={active} onMeasure={pick}/>
+    <CameraSetup frame={frame} reset={reset} walls={snapshot.walls}/><Floor snapshot={snapshot} shareId={shareId} measuring={active} onMeasure={pick}/>
     {snapshot.walls.map(wall=><PublicWallMesh key={wall.id} wall={wall} artworks={snapshot.artworks.filter(art=>art.wallId===wall.id)} shareId={shareId} selectedId={selectedId} onSelect={onSelect} groups={wallGroups.current} measuring={active} onMeasure={pick}/>)}
     <CutawayVisibility walls={cutawayWalls} groups={wallGroups.current} cutaway={frame.projection!=='perspective'&&cutaway}/>
     {snapshot.openings.map(opening=><group key={opening.id}><Line points={[[opening.start.x/1000,.025,opening.start.z/1000],[opening.end.x/1000,.025,opening.end.z/1000]]} color={opening.kind==='window'?'#2785b8':'#16816b'} dashed dashSize={.1} gapSize={.08}/><Html center position={[(opening.start.x+opening.end.x)/2000,.12,(opening.start.z+opening.end.z)/2000]} style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="shared-3d-dimension">{opening.kind==='door'?'출입구':opening.kind==='stair-access'?'계단 통로':'창문'}</span></Html></group>)}

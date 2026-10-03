@@ -1,4 +1,4 @@
-import {parsePublicShare,type PublicShareSnapshot} from '../domain/publicShare';
+import {parsePublicShare,publicImageIds,type PublicShareSnapshot} from '../domain/publicShare';
 
 export interface ShareBucket {
   put(key:string,value:string|ArrayBuffer|ReadableStream,options?:{httpMetadata?:{contentType?:string}}):Promise<unknown>;
@@ -55,7 +55,7 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
     const snapshot=await readSnapshot(env.SHARES,id);
     if(!snapshot)return error(404,'공유 화면을 찾을 수 없습니다.');
     if(imageId===undefined)return json(snapshot);
-    if(!validImageId(imageId)||!snapshot.artworks.some(art=>art.imageId===imageId))return error(404,'작품 이미지를 찾을 수 없습니다.');
+    if(!validImageId(imageId)||!publicImageIds(snapshot).includes(imageId))return error(404,'작품 이미지를 찾을 수 없습니다.');
     const image=await env.SHARES.get(imageKey(id,imageId));
     if(!image)return error(404,'작품 이미지를 찾을 수 없습니다.');
     return new Response(image.body,{headers:{...noStore,'content-type':image.httpMetadata?.contentType??'application/octet-stream'}});
@@ -100,7 +100,7 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
     if(entry.status!=='draft')return error(409,'발행된 공유는 변경할 수 없습니다.');
     let snapshot:PublicShareSnapshot;
     try{snapshot=parsePublicShare(await boundedJson(request));}catch(e){return error(400,(e as Error).message);}
-    for(const art of snapshot.artworks)if(!(await env.SHARES.head(imageKey(id,art.imageId))))return error(409,'작품 이미지 업로드가 완료되지 않았습니다.');
+    for(const imageId of publicImageIds(snapshot))if(!(await env.SHARES.head(imageKey(id,imageId))))return error(409,'작품/표면 이미지 업로드가 완료되지 않았습니다.');
     await env.SHARES.put(snapshotKey(id),JSON.stringify(snapshot),{httpMetadata:{contentType:'application/json'}});
     await saveMeta(env.SHARES,{...entry,status:'active',name:snapshot.name,includeDimensions:!!snapshot.dimensions});
     return json({id},201);
