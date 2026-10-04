@@ -21,15 +21,18 @@ import type {WallCandidate} from '../domain/wallCandidates';
 import {detectPlanLabels} from '../domain/planLabels';
 import {readPlanNumbers} from '../domain/planNumbers';
 import {readPlanOcr} from './readPlanOcr';
+import {createPlanOcrBudget} from './planOcrBudget';
 import {detectPlanWalls} from './detectPlanWalls';
 export interface PlanAnalysis {stairRegions?:StairRegion[];lines:WallCandidate[];issues:string[];textState:'complete'|'failed';lineState:'complete'|'failed';numericCount:number;selfCheck?:{attempts:number;status:'stable'|'withheld'}}
 export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(message:string)=>void=()=>{}):Promise<PlanPage>{
+ const withinOcrBudget=createPlanOcrBudget(signal);
+ const ocr=(imageUrl:string,onProgress?:Parameters<typeof readPlanOcr>[2],mode?:Parameters<typeof readPlanOcr>[3],rotation?:Parameters<typeof readPlanOcr>[4],region?:Parameters<typeof readPlanOcr>[5])=>withinOcrBudget(child=>readPlanOcr(imageUrl,child,onProgress,mode,rotation,region));
  page={...page,resolvedVenue:undefined,dimensionRechecks:undefined,dimensionTotals:undefined,overlaidDoors:undefined};
  const abort=()=>{if(signal.aborted)throw new Error('자동 분석을 취소했습니다.');};abort();
  onStage('문자·숫자와 구조 선을 자동 분석하고 있습니다.');
  const reuseText=(page.textSource==='pdf-text'||page.textSource==='ocr')&&(page.labels?.length??0)>0;
  const [textResult,lineResult,symbolResult]=await Promise.allSettled([
-  reuseText?Promise.resolve(page.labels??[]):readPlanOcr(page.imageUrl,signal).then(detectPlanLabels),
+  reuseText?Promise.resolve(page.labels??[]):ocr(page.imageUrl).then(detectPlanLabels),
   detectPlanWalls(page.imageUrl,155,0.008,signal,1,500),
   detectPlanSymbols(page.imageUrl,signal),
  ]);abort();
@@ -39,19 +42,19 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  const issues:string[]=[];
  if(reuseText&&page.textSource==='pdf-text'){
   onStage('PDF 이미지에 포함된 설비 표기를 추가 인식하고 있습니다.');
-  try{const extra=await readPlanOcr(page.imageUrl,signal);abort();labels=mergePdfFacilityOcr(labels,extra);}
+  try{const extra=await ocr(page.imageUrl);abort();labels=mergePdfFacilityOcr(labels,extra);}
   catch{abort();issues.push('이미지 설비 표기 보완 인식을 완료하지 못했습니다. PDF 문자 근거는 보존했습니다.');}
   const regions=numericOcrRegions(page.widthPx,page.heightPx);
   for(let i=0;i<regions.length;i++){
    onStage(`이미지 속 설비 표기를 확대 인식하고 있습니다 (${i+1}/${regions.length}).`);abort();
-   try{const extra=await readPlanOcr(page.imageUrl,signal,undefined,'facilities',0,regions[i]);abort();labels=mergePdfFacilityOcr(labels,extra);}
+   try{const extra=await ocr(page.imageUrl,undefined,'facilities',0,regions[i]);abort();labels=mergePdfFacilityOcr(labels,extra);}
    catch{abort();issues.push(`구역 ${i+1}의 설비 보완 인식을 완료하지 못했습니다.`);}
   }
  }
  if(!reuseText){
   for(const rotation of [90,180,270] as const){
    abort();onStage(`회전 숫자를 자동 인식하고 있습니다 (${rotation}°).`);
-   try{const texts=await readPlanOcr(page.imageUrl,signal,undefined,'numbers',rotation);abort();labels=mergeOrientedPlanLabels(labels,detectPlanLabels(texts).map(l=>({...l,id:`rotation-${rotation}-${l.id}`})));}
+   try{const texts=await ocr(page.imageUrl,undefined,'numbers',rotation);abort();labels=mergeOrientedPlanLabels(labels,detectPlanLabels(texts).map(l=>({...l,id:`rotation-${rotation}-${l.id}`})));}
    catch{abort();issues.push(`${rotation}° 숫자 보완 인식을 완료하지 못했습니다.`);}
   }
  }
@@ -60,7 +63,7 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
   for(let i=0;i<regions.length;i++)for(const rotation of [0,90] as const){
    abort();onStage(`누락 숫자를 구역별로 확대 인식하고 있습니다 (${i+1}/${regions.length}, ${rotation}°).`);
    try{
-    const texts=await readPlanOcr(page.imageUrl,signal,undefined,'numbers',rotation,regions[i]);abort();
+    const texts=await ocr(page.imageUrl,undefined,'numbers',rotation,regions[i]);abort();
     const extra=detectPlanLabels(texts).filter(l=>l.kind==='dimension'||l.kind==='furniture').map(l=>({...l,id:`region-${i}-${rotation}-${l.id}`}));
     labels=mergeOrientedPlanLabels(labels,extra);
    }catch{abort();issues.push(`구역 ${i+1}의 ${rotation}° 숫자 보완 인식을 완료하지 못했습니다.`);}
@@ -71,7 +74,7 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
   for(let i=0;i<regions.length;i++)for(const rotation of regions[i].rotations){
    abort();onStage(`도형 안의 가구 표기를 확대 인식하고 있습니다 (${i+1}/${regions.length}).`);
    try{
-    const texts=await readPlanOcr(page.imageUrl,signal,undefined,'numbers',rotation,regions[i]);abort();
+    const texts=await ocr(page.imageUrl,undefined,'numbers',rotation,regions[i]);abort();
     labels=mergeOrientedPlanLabels(labels,detectPlanLabels(texts).filter(l=>l.kind==='furniture').map(l=>({...l,id:`shape-${i}-${rotation}-${l.id}`})));
    }catch{abort();issues.push(`도형 ${i+1} 표기 보완 인식을 완료하지 못했습니다.`);}
   }
@@ -80,7 +83,7 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  for(const sign of page.embeddedSigns??[]){
   abort();onStage('PDF 원본 표지 이미지에서 설비를 인식하고 있습니다.');
   try{
-   let texts=signOcr.get(sign.imageUrl);if(!texts){texts=await readPlanOcr(sign.imageUrl,signal,undefined,'facilities');abort();signOcr.set(sign.imageUrl,texts);}
+   let texts=signOcr.get(sign.imageUrl);if(!texts){texts=await ocr(sign.imageUrl,undefined,'facilities');abort();signOcr.set(sign.imageUrl,texts);}
    labels=mergePdfFacilityOcr(labels,texts.map(t=>({...t,box:{x:sign.box.x+t.box.x*sign.box.width/sign.widthPx,y:sign.box.y+t.box.y*sign.box.height/sign.heightPx,width:t.box.width*sign.box.width/sign.widthPx,height:t.box.height*sign.box.height/sign.heightPx}})));
   }catch{abort();issues.push('원본 설비 이미지의 문자 인식을 완료하지 못했습니다.');}
   labels=mergeSignSymbol(labels,sign.box,sign.symbol);
@@ -127,7 +130,7 @@ export async function analyzePlan(page:PlanPage,signal:AbortSignal,onStage:(mess
  const dimensions=venueDimensions(selected,structural,openings.structure,openings.gaps);
  const conflicts=[...conflictingDimensionLabels(dimensions.annotations.allMatches),...dimensions.solution.axes.flatMap(a=>a.conflicts.map(c=>c.labelId))];
  const targets=dimensionRecheckTargets(labels,page.widthPx,page.heightPx,conflicts);
- const dimensionRechecks=await recheckDimensionReadings(targets,signal,(region,rotation)=>readPlanOcr(page.imageUrl,signal,undefined,'numbers',rotation,region),onStage);
+ const dimensionRechecks=await recheckDimensionReadings(targets,signal,(region,rotation)=>ocr(page.imageUrl,undefined,'numbers',rotation,region),onStage);
  if(dimensionRechecks.length){
   const confirmed=dimensionRechecks.filter(r=>r.status==='reading-confirmed').length,disagrees=dimensionRechecks.filter(r=>r.status==='reading-disagrees').length;
   issues.push(`충돌 치수 ${dimensionRechecks.length}개를 자동 재인식했습니다. 기존 숫자와 일치 ${confirmed}개 · 다른 숫자 ${disagrees}개 · 판독 미완료 ${dimensionRechecks.length-confirmed-disagrees}개. 숫자 일치는 벽 연결이나 실측 치수 검증을 뜻하지 않습니다.`);

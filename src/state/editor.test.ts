@@ -3,6 +3,7 @@ import { createDemoProject, parseProject, updateArtwork } from '../domain/model'
 import {deriveFloor} from '../domain/floor'
 import {wallEndAtLength} from '../domain/wallEditing'
 import { hydrateEditor, startAutosave, useEditor } from './editor'
+import {adoptPlanDraft} from '../domain/editablePlanDraft'
 
 const reset = () => {
   const project = createDemoProject()
@@ -26,6 +27,17 @@ const reset = () => {
 
 describe('editor history and commands', () => {
   beforeEach(reset)
+
+  it('keeps venue import in the same project and restores original contents on undo',()=>{
+    const before=useEditor.getState().project;
+    const draft={...createDemoProject(),id:'automatic-venue',name:'자동 공간 초안',venue:'도면에서 생성',artworks:[],scenes:[]};
+    useEditor.getState().commit(adoptPlanDraft(before,draft));
+    expect(useEditor.getState().project.id).toBe(before.id);
+    expect(useEditor.getState().project.name).toBe(before.name);
+    expect(useEditor.getState().project.artworks).toEqual([]);
+    useEditor.getState().undo();expect(useEditor.getState().project).toEqual(before);
+    useEditor.getState().redo();expect(useEditor.getState().project.id).toBe(before.id);expect(useEditor.getState().project.artworks).toEqual([]);
+  });
 
   it('keeps immutable snapshots and clears the redo branch after a new edit', () => {
     const original = useEditor.getState().project

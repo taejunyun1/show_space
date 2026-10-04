@@ -13,6 +13,20 @@ const page={imageUrl:'image',widthPx:100,heightPx:100,textSource:'none' as const
 beforeEach(()=>{vi.resetAllMocks();vi.mocked(detectPlanSymbols).mockResolvedValue([]);vi.mocked(readPlanOcr).mockResolvedValue([{text:'3200',source:'ocr',box:{x:0,y:0,width:40,height:10}}]);vi.mocked(detectPlanWalls).mockResolvedValue([{id:'line',start:{x:0,y:0},end:{x:90,y:0},thicknessPx:1}]);});
 it('automatically combines OCR and line analysis without changing input',async()=>{const result=await analyzePlan(page,new AbortController().signal);expect(result.analysis).toMatchObject({numericCount:1,textState:'complete',lineState:'complete'});expect(result.analysis?.lines).toHaveLength(1);expect(result.labels?.[0].text).toBe('3200');expect(page).not.toHaveProperty('analysis');});
 it('preserves native PDF dimensions while supplementing image facilities',async()=>{const result=await analyzePlan({...page,textSource:'pdf-text',labels:[{id:'pdf-1',text:'8000 mm',source:'pdf-text',kind:'dimension',status:'unreviewed',note:'',box:{x:0,y:0,width:30,height:10}}]},new AbortController().signal);expect(readPlanOcr).toHaveBeenCalledTimes(5);expect(result.labels?.map(l=>l.text)).toEqual(['8000 mm']);expect(result.textSource).toBe('pdf-text');expect(detectPlanWalls).toHaveBeenCalledTimes(3);});
+it('finishes PDF analysis with native dimensions and wall evidence when every optional OCR pass hangs',async()=>{
+ vi.useFakeTimers();try{
+  const {input,lines}=closedPage(),signals:AbortSignal[]=[];
+  vi.mocked(detectPlanWalls).mockResolvedValue(lines);
+  vi.mocked(readPlanOcr).mockImplementation((_url,signal)=>{signals.push(signal);return new Promise(()=>{});});
+  const pending=analyzePlan(input,new AbortController().signal);
+  await vi.advanceTimersByTimeAsync(45_000);
+  const result=await pending;
+  expect(result.labels).toEqual(input.labels);expect(result.analysis?.numericCount).toBe(2);
+  expect(result.analysis?.textState).toBe('complete');expect(result.analysis?.lineState).toBe('complete');
+  expect(result.analysis?.selfCheck?.status).toBe('stable');expect(result.analysis?.issues.join(' ')).toContain('보완 인식을 완료하지 못');
+  expect(signals).toHaveLength(4);expect(signals.every(signal=>signal.aborted)).toBe(true);expect(vi.getTimerCount()).toBe(0);
+ }finally{vi.useRealTimers();}
+});
 it('preserves partial results and reports failed stages',async()=>{vi.mocked(readPlanOcr).mockRejectedValue(new Error('OCR failed'));const result=await analyzePlan(page,new AbortController().signal);expect(result.analysis?.textState).toBe('failed');expect(result.analysis?.lines).toHaveLength(1);expect(result.analysis?.issues.join(' ')).toContain('읽지 못');});
 it('does not deliver a completed result after cancellation',async()=>{const c=new AbortController();vi.mocked(readPlanOcr).mockImplementation(async()=>{c.abort();return [];});await expect(analyzePlan(page,c.signal)).rejects.toThrow('취소');});
 

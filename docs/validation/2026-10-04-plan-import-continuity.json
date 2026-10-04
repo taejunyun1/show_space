@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-04",
+  "scope": "local PDF import continuity; not full 24-step MVP acceptance",
+  "source": {
+    "url": "https://www.anca.net.au/s/ANCA_floor-plan.pdf",
+    "sha256": "fae32ff3049f526d2d42dd7116d8ca4eb4ed68a77c08e6df5909ca6549988db4",
+    "notToScale": true
+  },
+  "before": {
+    "projectNameOverwritten": true,
+    "venueOverwritten": true,
+    "extraPartialProjectCreated": true,
+    "analysisWaitObserved": true,
+    "elapsedMsNotReliableAsBenchmark": true
+  },
+  "after": {
+    "numericLabels": 22,
+    "rawLineCandidates": 500,
+    "editableWallCandidates": 17,
+    "scale": "unknown px",
+    "fullVenueVerified": false,
+    "projectNameRetained": true,
+    "venueRetained": true,
+    "unitRetained": "m",
+    "undoRestoresOriginalWalls": true,
+    "redoTested": true,
+    "reloadAfterSavedRetainsDraft": true,
+    "consoleWarnings": 0,
+    "consoleErrors": 0
+  },
+  "ocrBudget": {
+    "totalMs": 45000,
+    "passMs": 12000,
+    "manualOcrUnchanged": true,
+    "wallProcessingAndPdfRenderNotIncludedInTimeGuarantee": true,
+    "testsTerminateHungWorkersAndPreservePdfEvidence": true
+  },
+  "checks": {
+    "testsPassed": 836,
+    "optionalBenchmarksSkipped": 2,
+    "build": "passed",
+    "existingLargeChunkWarning": true
+  },
+  "pending": [
+    "actual authentication",
+    "continuous 24-step acceptance beyond import",
+    "not-to-scale venue requires an actual scale before 3D/outputs",
+    "reload while saving can discard the final debounced change; observed separately"
+  ],
+  "screenshots": [
+    "2026-10-04-plan-import-continuity-analysis.png",
+    "2026-10-04-plan-import-continuity-project.png",
+    "2026-10-04-plan-import-continuity-public-menu.png"
+  ],
+  "deployment": {
+    "version": "23f20cc3-ce4c-4c35-a229-2816d04ed9cf",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entry": "/assets/index-BLn3ggQf.js",
+    "nativeMenuVerified": true,
+    "productionDataWritten": false,
+    "consoleWarnings": 0,
+    "consoleErrors": 0
+  }
+}

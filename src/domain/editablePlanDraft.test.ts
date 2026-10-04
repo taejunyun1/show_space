@@ -1,5 +1,5 @@
 import {expect,it} from 'vitest';
-import {buildEditablePlanDraft,calibrateEditableDraft,refreshPlanEvidence,draftEditSummary} from './editablePlanDraft';
+import {adoptPlanDraft,buildEditablePlanDraft,calibrateEditableDraft,refreshPlanEvidence,draftEditSummary} from './editablePlanDraft';
 import {createDemoProject,parseProject} from './model';
 import {updateWallEndpoint} from './wallEditing';
 import type {PlanPage} from '../lib/planImport';
@@ -7,6 +7,17 @@ import type {PlanPage} from '../lib/planImport';
 const image='data:image/png;base64,AA==';
 const line=(id:string,x:number,y:number,x2:number,y2:number)=>({id,start:{x,y},end:{x:x2,y:y2},thicknessPx:5});
 function partialPage():PlanPage{return {imageUrl:image,widthPx:1000,heightPx:800,labels:[],analysis:{textState:'complete',lineState:'complete',numericCount:0,issues:[],selfCheck:{status:'withheld',attempts:2},lines:[line('top',100,100,900,100),line('right',900,100,900,700)]}};}
+
+it('replaces venue contents while preserving project identity, units and private project notes',()=>{
+ const current={...createDemoProject(),id:'my-existing-project',name:'나의 전시',venue:'기존 전시장',displayUnit:'m' as const,note:'프로젝트 전체 준비 메모'};
+ const draft=buildEditablePlanDraft(partialPage()).project!,before=structuredClone(current);
+ const next=adoptPlanDraft(current,draft);
+ expect(next).toMatchObject({id:current.id,name:current.name,venue:current.venue,displayUnit:'m',note:current.note});
+ expect(next.walls).toEqual(draft.walls);expect(next.artworks).toEqual([]);expect(next.scenes).toEqual([]);
+ expect(next.planDraft).toEqual(draft.planDraft);expect(next.planImageUrl).toBe(image);
+ expect(parseProject(next)).toMatchObject({id:current.id,name:current.name});
+ next.walls[0].start.x=999;expect(draft.walls[0].start.x).not.toBe(999);expect(current).toEqual(before);
+});
 
 it('opens a withheld, incomplete drawing as editable walls without inventing scale or floor',()=>{
  const page=partialPage(),before=structuredClone(page),result=buildEditablePlanDraft(page);

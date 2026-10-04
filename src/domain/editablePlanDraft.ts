@@ -5,6 +5,11 @@ import type {MeasurementAnchor,Opening,Point,Project,SavedDimension,SceneStructu
 
 export interface EditablePlanDraft {kind:'verified'|'partial'|'none';project?:Project;reasons:string[];wallCount:number}
 
+/** Importing a venue replaces its contents, not the saved project's identity. */
+export function adoptPlanDraft(current:Project,draft:Project):Project {
+ return structuredClone({...draft,id:current.id,name:current.name,venue:current.venue,displayUnit:current.displayUnit,note:current.note,noteDetails:current.noteDetails});
+}
+
 function evidenceHash(page:PlanPage){
  const key=planEvidenceKey(page);let hash=2166136261;
  for(let i=0;i<key.length;i++)hash=Math.imul(hash^key.charCodeAt(i),16777619);
