@@ -1164,3 +1164,13 @@ Cloudflare `2d404023-0d3c-4adc-9af1-42196dfa1b86` 배포, 공개 entry `/assets/
 - 실제 계정 인증·두 계정/기기·사용자 대형 모델/모바일 실기기·원본 전체 검증은 미완료. 상세 `2026-10-04-model-measurements.md`, 기록 `../validation/2026-10-04-model-measurements.json`. 최종 목표는 진행 중이다.
 
 Cloudflare `4084f89e-16a1-4b75-a1d7-59ca441f18d4` 배포 완료. 공개 entry `/assets/index-DGjklsFH.js`·정상 편집기/불러오기 메뉴·콘솔 경고/오류 없음. `--keep-vars`로 기존 설정과 D1/R2 바인딩 유지, 인증 구성 `enabled:false`. 생산 프로젝트/공유에는 합성 검증 데이터를 입력하지 않았다.
+
+
+## 2026-10-04 — 상단 불러오기 진입점 정리
+
+- 스크린샷의 모호한 불러오기 대신 상단을 도면·3D 불러오기로 명시했다. 기존 JPG/PNG/PDF 도면과 GLB 전시장 공간 입력을 앞에 배치하고 저장 프로젝트 ZIP/JSON 복원은 접힌 별도 항목으로 유지한다.
+- 도면 이미지 20MB/PDF 30MB, GLB 12MB 한도를 표시하고 .skp 원본 미지원과 SketchUp GLB 내보내기 절차를 안내한다. SketchUp 공식 문서 https://help.sketchup.com/en/sketchup/working-gltf-files 에서 절차를 확인했다. 직접 .skp 변환이나 인식 알고리즘 확장은 하지 않았다.
+- 관련 입력 테스트 21개 및 TypeScript/Vite 빌드 통과. 실제 합성 JPG 1200×900 입력, 숫자 표기 2개/구조선 후보 5개, 참고 도면 배치·기존 벽/작품 유지·Undo를 확인했다. 기존 합성 courtyard-venue.glb 입력·3D 참고 모델 표시·Undo도 확인했다. 실제 SketchUp 원본 내보내기는 이번 검증 범위에 포함되지 않는다.
+- 안내/백업 복원 펼침, 390px 문서 폭 390px·모달 폭 351px/가로 넘침 없음, 콘솔 경고/오류 없음을 확인했다. 로컬에서 변경한 합성 입력은 Undo로 복원했고 생산 데이터는 입력하지 않았다. 화면: ../validation/2026-10-04-import-clarity-menu-clear.png 및 jpg/glb/mobile-clear.png.
+
+Cloudflare 버전 `460df9b1-6905-4cd6-81a2-fecd14b4c655` 배포. 공개 entry `/assets/index-Dlds6YRx.js`와 도면/GLB 메뉴·.skp 안내·백업 복원 접힘 및 콘솔 경고/오류 없음을 확인했다. `--keep-vars`로 기존 설정과 D1/R2 바인딩을 보존했다. 공개 화면 `../validation/2026-10-04-import-clarity-public.png`.
