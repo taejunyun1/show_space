@@ -3,7 +3,7 @@ import {wallLength} from './wallGeometry';
 import type {Project,Wall} from './types';
 import type {PresentedArtwork} from './artworkPresentation';
 export type InstallationArtwork=PresentedArtwork&{id:string;wallId:string;wallSide?:'front'|'back';alongMm:number;centerHeightMm:number;visible?:boolean};
-export interface InstallationDrawing {walls:readonly Pick<Wall,'id'|'start'|'end'|'heightMm'>[];artworks:readonly InstallationArtwork[];planDraft?:Project['planDraft'];planReference?:Project['planReference']}
+export interface InstallationDrawing {displayUnit?:Project['displayUnit'];walls:readonly Pick<Wall,'id'|'start'|'end'|'heightMm'>[];artworks:readonly InstallationArtwork[];planDraft?:Project['planDraft'];planReference?:Project['planReference']}
 export const installationDimensionLabel=(d:ArtworkElevationDimension)=>d.kind==='gap'?`외곽 ${d.axis==='horizontal'?'가로':'세로'} 간격`:d.kind==='floor'?'바닥':d.kind==='left'?'벽 왼쪽':'벽 오른쪽';
 export interface ArtworkElevationDimension {key:string;axis:'horizontal'|'vertical';kind:'gap'|'floor'|'left'|'right';distanceMm:number;start:{x:number;y:number};end:{x:number;y:number};artworkIds:string[]}
 /** Axis gaps between rotated outer bounds; never claim a shortest distance between diagonal artworks. */

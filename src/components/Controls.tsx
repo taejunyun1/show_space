@@ -1,17 +1,21 @@
+import {lengthDraft, lengthFactor, readLengthDraft} from '../domain/lengthUnits';
+import {useLengthUnit} from './LengthUnits';
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 export function IconButton({ label, children, onClick, active, disabled }: { label: string; children: ReactNode; onClick?: () => void; active?: boolean; disabled?: boolean }) {
   return <button type="button" className={`icon-button ${active ? 'active' : ''}`} title={label} aria-label={label} aria-pressed={active} disabled={disabled} onClick={onClick}>{children}</button>;
 }
 export function NumberField({ label, value, onChange, disabled, min, max, step = 10, suffix = 'mm', precision = 2 }: { label: string; value: number; onChange: (value: number) => void; disabled?: boolean; min?: number; max?: number; step?: number; suffix?: string; precision?:number }) {
-  const [draft, setDraft] = useState(String(Math.round(value * 10**precision) / 10**precision));
-  useEffect(() => setDraft(String(Math.round(value * 10**precision) / 10**precision)), [value,precision]);
+  const selectedUnit = useLengthUnit(), unit = suffix === 'mm' ? selectedUnit : 'mm';
+  const initial = lengthDraft(value, unit, precision), factor = lengthFactor(unit);
+  const [draft, setDraft] = useState(initial);
+  useEffect(() => setDraft(initial), [initial, value, unit]);
   function commit() {
-    const n = Number(draft);
-    if (draft.trim() && Number.isFinite(n) && (min === undefined || n >= min) && (max === undefined || n <= max)) { if (n !== value) onChange(n); }
-    else setDraft(String(value));
+    const n = readLengthDraft(draft, initial, value, unit, min, max);
+    if (n !== null) { if (n !== value) onChange(n); }
+    else setDraft(initial);
   }
-  return <label className="number-field"><span>{label}</span><div><input aria-label={label} type="number" value={draft} step={step} min={min} max={max} disabled={disabled} onChange={e => setDraft(e.target.value)} onBlur={commit} onKeyDown={e => { if (e.key === 'Enter') e.currentTarget.blur(); }} /><span className="unit">{suffix}</span></div></label>;
+  return <label className="number-field"><span>{label}</span><div><input aria-label={label} type="number" value={draft} step={step / factor} min={min === undefined ? undefined : min / factor} max={max === undefined ? undefined : max / factor} disabled={disabled} onChange={e => setDraft(e.target.value)} onBlur={commit} onKeyDown={e => { if (e.key === 'Enter') e.currentTarget.blur(); }} /><span className="unit">{suffix === 'mm' ? selectedUnit : suffix}</span></div></label>;
 }
 
 export function TextEditor({value, onCommit, label, multiline = false, placeholder,disabled,maxLength}: {value:string;disabled?:boolean;maxLength?:number; onCommit:(value:string)=>void; label:string; multiline?:boolean; placeholder?:string}) {

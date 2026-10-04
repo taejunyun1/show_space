@@ -1,9 +1,12 @@
+import {NumberField} from './Controls';
+import {useLengthFormatter} from './LengthUnits';
 import {NoteEditor} from './NoteEditor';
 import {useState} from 'react';
 import {downloadBlob} from '../lib/art';
 import {adoptModelSpace,sameModelGeometry} from '../domain/modelSpace';
 import {useEditor} from '../state/editor';
 export function ReferenceModelControls(){
+ const formatLength = useLengthFormatter();
  const {project,patchProject}=useEditor(),model=project.referenceModel;const [busy,setBusy]=useState(false);if(!model)return null;
  async function convert(){
   if(!model||busy)return;setBusy(true);
@@ -20,9 +23,9 @@ export function ReferenceModelControls(){
  return <section className="reference-model-controls" aria-label="3D 참고 모델">
  <strong>3D 참고 모델</strong><span>{model.name}</span>
  <label><input type="checkbox" checked={model.visible} onChange={e=>update({visible:e.target.checked})}/> 모델 표시</label>
- <small>{model.sizeMm.map(value=>Math.round(value*model.scale).toLocaleString()).join(' × ')} mm</small>
+ <small>{model.sizeMm.map(value=>formatLength(value*model.scale)).join(' × ')}</small>
  <details><summary>모델 위치·크기</summary>
- {(['X','높이','Z'] as const).map((name,index)=><label key={name}>{name}<input type="number" aria-label={`모델 ${name} 위치`} value={model.positionMm[index]} step={100} onChange={e=>{const value=Number(e.target.value);if(!Number.isFinite(value)||Math.abs(value)>1e7)return;const position:[number,number,number]=[...model.positionMm];position[index]=value;update({positionMm:position});}}/>mm</label>)}
+ {(['X','높이','Z'] as const).map((name,index)=><NumberField key={name} label={`모델 ${name} 위치`} value={model.positionMm[index]} step={100} min={-1e7} max={1e7} onChange={value=>{const position:[number,number,number]=[...model.positionMm];position[index]=value;update({positionMm:position});}}/>)}
  <label>회전<input type="number" aria-label="모델 회전" value={model.rotationDeg} min={-180} max={180} step={15} onChange={e=>{const rotationDeg=Number(e.target.value);if(Number.isFinite(rotationDeg)&&Math.abs(rotationDeg)<=180)update({rotationDeg});}}/>°</label>
  <label>크기<input type="number" aria-label="모델 크기 배율" value={Math.round(model.scale*100)} min={1} max={10000} onChange={e=>{const scale=Number(e.target.value)/100;if(Number.isFinite(scale)&&scale>=.01&&scale<=100)update({scale});}}/>%</label>
  </details>

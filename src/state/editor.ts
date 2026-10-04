@@ -105,7 +105,7 @@ interface EditorState {
   moveWallEndpoint(id:string,endpoint:'start'|'end',point:Point):void
   patchNote(target:NoteTarget,patch:{text?:string;details?:NoteDetails}):void
   renameProject(name: string): void
-  patchProject(patch: Pick<Partial<Project>, 'referenceModel' | 'floorColor' | 'floorMaterial' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan' | 'planDraft'>): void
+  patchProject(patch: Pick<Partial<Project>, 'displayUnit' | 'referenceModel' | 'floorColor' | 'floorMaterial' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan' | 'planDraft'>): void
   addArtwork(imageUrl?: string, name?: string): void
   installLibraryArtwork(template:ArtworkTemplate,expectedProjectId:string,wallId?:string):void
   placeUnplaced(id:string):void

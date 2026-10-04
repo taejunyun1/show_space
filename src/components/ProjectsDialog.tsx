@@ -1,3 +1,6 @@
+import {NumberField} from './Controls';
+import {LengthUnitContext} from './LengthUnits';
+import {parseLengthUnit, type LengthUnit} from '../domain/lengthUnits';
 import {CloudProjectsPanel} from './CloudProjectsPanel';
 import {useEffect,useRef,useState} from 'react';
 import {Plus,Copy,Archive,ArchiveRestore,X} from 'lucide-react';
@@ -9,7 +12,7 @@ import {openLocalProject,saveNewLocalProject} from '../lib/persistence';
 export function ProjectsDialog({onClose}:{onClose:()=>void}){
  const ref=useRef<HTMLDialogElement>(null),project=useEditor(s=>s.project),hydrated=useEditor(s=>s.hydrated),saveStatus=useEditor(s=>s.saveStatus);
  const [items,setItems]=useState<ProjectSummary[]>([]),[localBusy,setBusy]=useState(true),[cloudBusy,setCloudBusy]=useState(false),[error,setError]=useState(''),[query,setQuery]=useState(''),[archived,setArchived]=useState(false),[creating,setCreating]=useState(false);
- const [name,setName]=useState('새 전시'),[venue,setVenue]=useState(''),[width,setWidth]=useState('8000'),[depth,setDepth]=useState('6000'),[height,setHeight]=useState('3200'),[outdoor,setOutdoor]=useState(false);
+ const [name,setName]=useState('새 전시'),[venue,setVenue]=useState(''),[width,setWidth]=useState(8000),[depth,setDepth]=useState(6000),[height,setHeight]=useState(3200),[unit,setUnit]=useState<LengthUnit>(project.displayUnit ?? 'mm'),[outdoor,setOutdoor]=useState(false);
  const busy=localBusy||cloudBusy;
  const refresh=async()=>setItems(await projectLibrary().list());
  useEffect(()=>{ref.current?.showModal();let cancelled=false;(async()=>{let failure='';try{await flushAutosave();}catch(e){failure=e instanceof Error?e.message:'저장하지 못했습니다.';}try{const list=await projectLibrary().list();if(!cancelled){setItems(list);setError(failure);}}catch(e){if(!cancelled)setError(e instanceof Error?e.message:'목록을 읽지 못했습니다.');}finally{if(!cancelled)setBusy(false);}})();return()=>{cancelled=true;};},[]);
@@ -20,9 +23,9 @@ export function ProjectsDialog({onClose}:{onClose:()=>void}){
  return <dialog ref={ref} className="export-dialog projects-dialog" aria-label="프로젝트 목록" onCancel={e=>{if(busy)e.preventDefault();else onClose();}}><div className="dialog-header"><h2>프로젝트</h2><button type="button" className="icon-button" aria-label="프로젝트 목록 닫기" disabled={busy} onClick={onClose}><X size={18}/></button></div>
  <p className="field-hint">이 브라우저에 저장된 프로젝트입니다. 프로젝트 자산 백업으로 옮기거나, 연결된 계정의 클라우드에 저장할 수 있습니다.</p>
  <div className="projects-tools"><input aria-label="프로젝트 검색" type="search" placeholder="프로젝트·전시장 검색" value={query} onChange={e=>setQuery(e.target.value)}/><button className="button secondary" type="button" disabled={busy||!hydrated} onClick={()=>setCreating(!creating)}><Plus size={15}/>새 프로젝트</button></div>
- {creating&&<form className="new-project-form" onSubmit={e=>{e.preventDefault();void run(async()=>{const next=newProject({name,venue,widthMm:Number(width),depthMm:Number(depth),heightMm:Number(height),outdoor});await flushAutosave();useEditor.getState().loadProject(await saveNewLocalProject(next),true);setCreating(false);onClose();});}}>
+ {creating&&<form className="new-project-form" onSubmit={e=>{e.preventDefault();void run(async()=>{const next=newProject({name,venue,widthMm:width,depthMm:depth,heightMm:height,outdoor,displayUnit:unit});await flushAutosave();useEditor.getState().loadProject(await saveNewLocalProject(next),true);setCreating(false);onClose();});}}>
  <label>프로젝트 이름<input required maxLength={200} value={name} onChange={e=>setName(e.target.value)}/></label><label>전시장 이름<input maxLength={200} value={venue} onChange={e=>setVenue(e.target.value)}/></label>
- <div className="project-size-fields">{[['초기 공간 너비',width,setWidth,200000],['초기 공간 깊이',depth,setDepth,200000],['벽 높이',height,setHeight,30000]].map(([label,value,set,max])=><label key={label as string}>{label as string} · mm<input required type="number" min={100} max={max as number} value={value as string} onChange={e=>(set as (v:string)=>void)(e.target.value)}/></label>)}</div>
+ <label>치수 단위<select aria-label="새 프로젝트 단위" value={unit} onChange={e=>setUnit(parseLengthUnit(e.target.value))}><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option></select></label><LengthUnitContext.Provider value={unit}><div className="project-size-fields"><NumberField label="초기 공간 너비" value={width} step={0.01} min={100} max={200000} onChange={setWidth}/><NumberField label="초기 공간 깊이" value={depth} step={0.01} min={100} max={200000} onChange={setDepth}/><NumberField label="벽 높이" value={height} step={0.01} min={100} max={30000} onChange={setHeight}/></div></LengthUnitContext.Provider>
  <label className="project-outdoor"><input type="checkbox" checked={outdoor} onChange={e=>setOutdoor(e.target.checked)}/>야외 전시</label><p className="field-hint">입력한 크기의 네 벽으로 시작합니다. 도면이나 모델을 불러오면 공간을 바꿀 수 있습니다.</p><button type="submit" className="button primary full" disabled={busy}>프로젝트 만들기</button></form>}
  <label className="project-outdoor"><input type="checkbox" checked={archived} onChange={e=>setArchived(e.target.checked)}/>보관된 프로젝트 보기</label>
  {(error||saveStatus==='error')&&<div className="project-error" role="alert"><p>{error||'현재 작업을 저장하지 못했습니다. 작업을 복사본으로 보존할 수 있습니다.'}</p><button type="button" className="button secondary" disabled={busy} onClick={()=>void run(()=>duplicate(project.id))}>현재 작업 복사본 만들기</button></div>}

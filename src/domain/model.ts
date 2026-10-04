@@ -320,8 +320,11 @@ function safeImage(value: unknown, label: string) {
   if (!/^\/artworks\/artwork-[1-5]\.png$/.test(value) && !/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(value)) throw new Error(`${label} 이미지 URL은 안전한 PNG, JPEG, WEBP 또는 제공된 작품 경로여야 합니다.`)
 }
 
+import {parseLengthUnit} from './lengthUnits';
+
 export function parseProject(input: unknown): Project {
   const raw = object(input, '프로젝트')
+  parseLengthUnit(raw.displayUnit)
   validateProjectNotes(raw)
   if(raw.floorMaterial!==undefined)parseSurfaceMaterial(raw.floorMaterial)
   if(raw.lighting!==undefined)parseLighting(raw.lighting)

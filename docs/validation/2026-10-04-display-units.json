@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-04",
+  "scope": "Project display/input units; all model lengths remain mm",
+  "tests": {
+    "passed": 830,
+    "skipped": 2,
+    "filesPassed": 151,
+    "filesSkipped": 2,
+    "build": "passed",
+    "knownWarning": "existing chunks >500kB"
+  },
+  "nativeUI": {
+    "origins": [
+      "http://127.0.0.1:5184/",
+      "http://localhost:5184/"
+    ],
+    "model": {
+      "initialMm": [
+        1200,
+        3000,
+        900
+      ],
+      "m": [
+        1.2,
+        3,
+        0.9
+      ],
+      "editWidthM": 1.25,
+      "observedWidthMm": 1250,
+      "undoWidthMm": 1200,
+      "cm": [
+        120,
+        300,
+        90
+      ],
+      "positionCm": [
+        70,
+        30,
+        0
+      ],
+      "rotationZDeg": 30,
+      "reloadRetained": "cm"
+    },
+    "imageArtwork": {
+      "editWidthM": 0.91234,
+      "observedWidthMm": 912.34,
+      "undoWidthMm": 900,
+      "angleUnchanged": 0,
+      "roughnessPercentUnchanged": 90,
+      "frameOuterM": [
+        0.945,
+        1.245,
+        0.03
+      ]
+    },
+    "newProject": {
+      "widthInputM": 9.123,
+      "observedMm": 9123,
+      "depthMm": 6000,
+      "heightMm": 3200
+    },
+    "drawWall": {
+      "inputM": 1.23456,
+      "observedLengthMm": 1234.56,
+      "observedLabel": "새 벽 5 · 1,234.56 mm"
+    },
+    "responsive": {
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 390,
+      "unitControlAfterNativeScrollY": 815,
+      "selected": "cm"
+    },
+    "capture": {
+      "file": "2026-10-04-display-units-capture.png",
+      "observedLabels": [
+        "9.123 m",
+        "6 m"
+      ],
+      "format": "PNG",
+      "downloadEventObservation": "timed out at 15 seconds; actual new file found and visually inspected; no repeated capture"
+    },
+    "consoleLocalhost": {
+      "warn": 0,
+      "error": 0
+    },
+    "browserApproval": "One read-only log check timed out without an approval decision; retry of current page state succeeded"
+  },
+  "limits": [
+    "Actual shared recipient browser with displayUnit preference not exercised in this increment; parser/SSR/privacy tests passed",
+    "Provisional px is covered by rendered SVG test, not a new native plan-upload case in this increment",
+    "Actual Supabase accounts, full 24-step acceptance and representative hardware remain pending"
+  ],
+  "deployment": {
+    "version": "61a128ac-0059-4a0f-a991-a541cfe2b7e2",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entry": "/assets/index-95xjx441.js",
+    "nativeVerified": [
+      "JPG/PNG/PDF import card",
+      "SketchUp-export GLB card and honest SKP unsupported notice",
+      "backup ZIP/JSON separately folded",
+      "project unit options mm/cm/m"
+    ],
+    "console": {
+      "warn": 0,
+      "error": 0
+    },
+    "projectWritesDuringPublicCheck": false
+  }
+}

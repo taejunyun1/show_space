@@ -1,3 +1,4 @@
+import {useLengthFormatter} from './LengthUnits';
 import {ArtworkLibraryDialog} from './ArtworkLibraryDialog';
 import {OutdoorDialog} from './OutdoorDialog';
 import {LightingDialog} from './LightingDialog';
@@ -9,6 +10,7 @@ import { useEditor } from '../state/editor';
 import { artStyle, readImage } from '../lib/art';
 
 export function Outliner() {
+ const formatLength = useLengthFormatter();
   const { project, selected, activeWallId, select, setActiveWall, patchWall, patchArtwork, addArtwork, addWall, placeUnplaced, notify } = useEditor();
   const provisional = !!project.planDraft && !project.planReference?.calibrated;
   const [libraryOpen,setLibraryOpen]=useState(false);
@@ -45,7 +47,7 @@ export function Outliner() {
           <button className={`entity-main ${!art.visible ? 'muted' : ''}`} onClick={e => select({ type: 'artwork', id: art.id }, e.shiftKey)}><span className="art-thumbnail" style={artStyle(art.imageUrl)} /><span className="entity-text"><strong>{art.name}</strong><small>작품 {String(i + 1).padStart(2, '0')}</small></span>{art.locked && <LockKeyhole size={12} />}</button>
           <button className="row-action" aria-label={`${art.name} ${art.visible ? '숨기기' : '보이기'}`} onClick={() => patchArtwork(art.id, { visible: !art.visible })}>{art.visible ? <Eye size={14} /> : <EyeOff size={14} />}</button>
         </div>)}
-        {project.modelArtworks?.map(a=><div key={a.id} className={`entity-row artwork-row ${selected.some(s=>s.type==='modelArtwork'&&s.id===a.id)?'selected':''}`}><button className={`entity-main ${!a.visible?'muted':''}`} onClick={e=>select({type:'modelArtwork',id:a.id},e.shiftKey)}><Box size={25}/><span className='entity-text'><strong>{a.name}</strong><small>3D 작품 · {Math.round(a.widthMm)}×{Math.round(a.heightMm)}×{Math.round(a.depthMm)} mm</small></span>{a.locked&&<LockKeyhole size={12}/>}</button><button className='row-action' aria-label={`${a.name} ${a.visible?'숨기기':'보이기'}`} onClick={()=>useEditor.getState().patchModelArtwork(a.id,{visible:!a.visible})}>{a.visible?<Eye size={14}/>:<EyeOff size={14}/>}</button></div>)}
+        {project.modelArtworks?.map(a=><div key={a.id} className={`entity-row artwork-row ${selected.some(s=>s.type==='modelArtwork'&&s.id===a.id)?'selected':''}`}><button className={`entity-main ${!a.visible?'muted':''}`} onClick={e=>select({type:'modelArtwork',id:a.id},e.shiftKey)}><Box size={25}/><span className='entity-text'><strong>{a.name}</strong><small>3D 작품 · {[a.widthMm,a.heightMm,a.depthMm].map(formatLength).join(' × ')}</small></span>{a.locked&&<LockKeyhole size={12}/>}</button><button className='row-action' aria-label={`${a.name} ${a.visible?'숨기기':'보이기'}`} onClick={()=>useEditor.getState().patchModelArtwork(a.id,{visible:!a.visible})}>{a.visible?<Eye size={14}/>:<EyeOff size={14}/>}</button></div>)}
         {project.artworks.length === 0 && !project.modelArtworks?.length && unplaced.length === 0 && <p className="empty-hint">첫 작품을 등록해 전시를 시작하세요.</p>}
       </section>
       {unplaced.length > 0 && <section className="unplaced-section">

@@ -1,3 +1,4 @@
+import type {LengthUnit} from './lengthUnits';
 import type {FrameSettings} from './artworkPresentation';
 import type {ArtworkInformation} from './artworkInformation';
 import type {NoteDetails} from './notes';
@@ -102,6 +103,7 @@ export interface Opening {
 }
 
 export interface Project {
+  displayUnit?:LengthUnit
   noteDetails?:NoteDetails
   note?:string
   floorNote?:string;floorNoteDetails?:NoteDetails
