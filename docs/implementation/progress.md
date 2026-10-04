@@ -1174,3 +1174,12 @@ Cloudflare `4084f89e-16a1-4b75-a1d7-59ca441f18d4` 배포 완료. 공개 entry `/
 - 안내/백업 복원 펼침, 390px 문서 폭 390px·모달 폭 351px/가로 넘침 없음, 콘솔 경고/오류 없음을 확인했다. 로컬에서 변경한 합성 입력은 Undo로 복원했고 생산 데이터는 입력하지 않았다. 화면: ../validation/2026-10-04-import-clarity-menu-clear.png 및 jpg/glb/mobile-clear.png.
 
 Cloudflare 버전 `460df9b1-6905-4cd6-81a2-fecd14b4c655` 배포. 공개 entry `/assets/index-Dlds6YRx.js`와 도면/GLB 메뉴·.skp 안내·백업 복원 접힘 및 콘솔 경고/오류 없음을 확인했다. `--keep-vars`로 기존 설정과 D1/R2 바인딩을 보존했다. 공개 화면 `../validation/2026-10-04-import-clarity-public.png`.
+
+
+## 2026-10-04 — 작품 이미지 자동 해상도·메모리 배분
+
+- 작품 이미지를 화면 밖 128px/화면 안 512px에서 선택·화면 크기에 따라 1024/2048px로 표시한다. Canvas별 작품 192MiB 목표 배분, 먼저 낮춘 뒤 올리기, 최대 4개 읽기·대기 취소, 이전 이미지 교체 후 해제와 캡처 출력 배율/준비 대기를 연결했다. 프로젝트 자산/실제 치수·Scene·출력 경로는 유지한다. 공유 3D도 같은 배분기를 사용한다.
+- 실제 50벽/서로 다른 2048px 이미지 100개/20조명 장면: 전체 512px map 추정 133.33MiB/GPU texture 104개, 근접 98개 128px/1개 512px/선택 2048px 약30.83MiB, 캡처34.83MiB/4 그림자/LOD 준비 완료. 1920×1080 PNG와 일반 편집기 표현을 확인했다. 테스트 822개·빌드 통과.
+- 전체 GPU VRAM 256MiB/대형 모델/모바일 실기기/입력 p95/실계정·두 기기/신규 실제 공유 왕복/24단계 인수는 미완료다. 전체 목표는 진행 중. 상세 2026-10-04-artwork-texture-lod.md와 ../validation/2026-10-04-artwork-texture-lod.json.
+
+같은 렌더러의 전체→근접→전체 반복 후 100개512px/133.33MiB/GPU texture104개로 돌아옴을 확인했다. Cloudflare `988c8b9d-0e3b-47a5-89fd-c8cd3519cdb1` 배포, 공개 entry `/assets/index-BlUsTePV.js`·정상 작품/품질 선택·콘솔 경고/오류 없음. keep-vars로 설정/바인딩 보존.

@@ -1,0 +1,142 @@
+{
+  "clean-orbit": {
+    "artworkBudgetMiB": 133.3333969116211,
+    "lodReady": true,
+    "textureTiers": {
+      "512": 100
+    },
+    "frames": 600,
+    "durationMs": 6005.899999999441,
+    "medianFrameMs": 8.299999999813735,
+    "p95FrameMs": 9.200000000186265,
+    "medianSubmitMs": 2.2999999998137355,
+    "p95SubmitMs": 2.6000000005587935,
+    "calls": 372,
+    "triangles": 10492,
+    "textures": 104,
+    "imageTextureMiB": 133.33333333333317,
+    "dpr": 1,
+    "shadowCasters": 2,
+    "canvasPixels": 842240
+  },
+  "close": {
+    "artworkBudgetMiB": 30.833396911621094,
+    "lodReady": true,
+    "textureTiers": {
+      "128": 98,
+      "512": 1,
+      "2048": 1
+    },
+    "frames": 600,
+    "durationMs": 6006.5,
+    "medianFrameMs": 8.299999999813735,
+    "p95FrameMs": 9.299999999813735,
+    "medianSubmitMs": 0.8999999994412065,
+    "p95SubmitMs": 1.5,
+    "calls": 12,
+    "triangles": 164,
+    "textures": 6,
+    "imageTextureMiB": 30.833333333333215,
+    "dpr": 1,
+    "shadowCasters": 2,
+    "canvasPixels": 842240
+  },
+  "preview": {
+    "artworkBudgetMiB": 34.833396911621094,
+    "lodReady": true,
+    "textureTiers": {
+      "128": 98,
+      "1024": 1,
+      "2048": 1
+    },
+    "frames": 600,
+    "durationMs": 6001,
+    "medianFrameMs": 8.299999999813735,
+    "p95FrameMs": 8.600000000558794,
+    "medianSubmitMs": 0.6999999992549419,
+    "p95SubmitMs": 0.8999999994412065,
+    "calls": 13,
+    "triangles": 176,
+    "textures": 13,
+    "imageTextureMiB": 34.833333333333336,
+    "dpr": 1.75,
+    "shadowCasters": 4,
+    "canvasPixels": 2578240
+  },
+  "capture": "{\"shadowCasters\":4,\"dpr\":1.75,\"lodReady\":true,\"artworkBudgetMiB\":34.833396911621094,\"textureTiers\":{\"128\":98,\"1024\":1,\"2048\":1}} 캡처 완료",
+  "limits": [
+    "GPU byte values are conservative RGBA + mip estimates of artwork image maps, not total VRAM measurements.",
+    "192 MiB allocator budget is per Canvas and excludes imported GLB textures, surface textures, shadow maps and framebuffers. Temporary image replacement overlap and decode memory are not a verified total GPU cap.",
+    "Fresh renderer metrics exclude development hot-reload residue.",
+    "100 distinct synthetic 2048px images, 50 low-poly walls and 20 lights were used. No 1M triangle asset, mobile hardware, user input latency or five-user usability gate was verified.",
+    "The shared viewer is connected to the same allocator, but a new real shared receiver workflow has not been verified in this increment.",
+    "No production project or share data was created or modified."
+  ],
+  "restored": {
+    "artworkBudgetMiB": 133.3333969116211,
+    "lodReady": true,
+    "textureTiers": {
+      "512": 100
+    },
+    "frames": 600,
+    "durationMs": 6007.299999999814,
+    "medianFrameMs": 8.299999999813735,
+    "p95FrameMs": 9.200000000186265,
+    "medianSubmitMs": 2.3999999994412065,
+    "p95SubmitMs": 2.900000000372529,
+    "calls": 372,
+    "triangles": 10492,
+    "textures": 104,
+    "imageTextureMiB": 133.33333333333317,
+    "dpr": 1,
+    "shadowCasters": 2,
+    "canvasPixels": 842240
+  },
+  "repeat-close": {
+    "artworkBudgetMiB": 30.833396911621094,
+    "lodReady": true,
+    "textureTiers": {
+      "128": 98,
+      "512": 1,
+      "2048": 1
+    },
+    "frames": 600,
+    "durationMs": 6003.5,
+    "medianFrameMs": 8.299999999813735,
+    "p95FrameMs": 9.299999999813735,
+    "medianSubmitMs": 0.900000000372529,
+    "p95SubmitMs": 1.699999999254942,
+    "calls": 12,
+    "triangles": 164,
+    "textures": 6,
+    "imageTextureMiB": 30.833333333333215,
+    "dpr": 1,
+    "shadowCasters": 2,
+    "canvasPixels": 842240
+  },
+  "roundtrip": {
+    "artworkBudgetMiB": 133.3333969116211,
+    "lodReady": true,
+    "textureTiers": {
+      "512": 100
+    },
+    "frames": 600,
+    "durationMs": 6004.5,
+    "medianFrameMs": 8.299999999813735,
+    "p95FrameMs": 9,
+    "medianSubmitMs": 2.6000000005587935,
+    "p95SubmitMs": 2.900000000372529,
+    "calls": 372,
+    "triangles": 10492,
+    "textures": 104,
+    "imageTextureMiB": 133.33333333333317,
+    "dpr": 1,
+    "shadowCasters": 2,
+    "canvasPixels": 842240
+  },
+  "deployment": {
+    "version": "988c8b9d-0e3b-47a5-89fd-c8cd3519cdb1",
+    "entry": "/assets/index-BlUsTePV.js",
+    "consoleWarningsAndErrors": 0
+  }
+}

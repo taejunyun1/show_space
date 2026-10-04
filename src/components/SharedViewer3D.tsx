@@ -1,3 +1,4 @@
+import {ArtworkTextureQuality,useArtworkTextureSize} from './ArtworkTextureQuality';
 import {useArtworkTexture} from './useArtworkTexture';
 import {artworkPresentation} from '../domain/artworkPresentation';
 import {ArtworkPresentationShell} from './ArtworkPresentationShell';
@@ -49,10 +50,11 @@ function Floor({snapshot,shareId,measuring,onMeasure}:{snapshot:PublicShareSnaps
   return <>{shapes.map((shape,index)=><mesh receiveShadow key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><FloorSurfaceGeometry shape={shape} flat/><SurfaceFinish color={snapshot.floorColor} material={finish(snapshot.floorMaterial)} texture={publicTexture(snapshot.floorMaterial,shareId)} side={2} roughness={.96}/></mesh>)}</>;
 }
 
-function ArtworkImage({url,art,width,height}:{url:string;art:Art;width:number;height:number}){
-  const {texture,failed}=useArtworkTexture(url,art.spritePanel??null);
+function ArtworkImage({url,art,width,height,selected}:{url:string;art:Art;width:number;height:number;selected:boolean}){
+  const textureSize=useArtworkTextureSize(art.id);
+  const {texture,failed,ready,appliedSize}=useArtworkTexture(url,art.spritePanel??null,textureSize);
   if(failed)throw new Error('공유 작품 이미지 로딩 실패');
-  return <mesh position={[0,0,artworkPresentation(art).imageZMm/1000]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={finish(art.material)} map={texture} roughness={.9}/></mesh>;
+  return <mesh userData={{artworkTextureReady:ready,artworkTextureSize:textureSize,artworkTextureAppliedSize:appliedSize,artworkTextureRequest:{id:art.id,key:JSON.stringify([url,art.spritePanel??null]),width,height,selected}}} position={[0,0,artworkPresentation(art).imageZMm/1000]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={finish(art.material)} map={texture} roughness={.9}/></mesh>;
 }
 
 function ArtworkPlaceholder({width,height,imageZ,failed=false}:{width:number;height:number;imageZ:number;failed?:boolean}){
@@ -74,7 +76,7 @@ function PublicArtwork({art,wall,shareId,selected,onSelect,measuring,onMeasure}:
   return <group position={[x,art.centerHeightMm/1000,z]} rotation={[0,Math.atan2(nx,nz),(art.rotationDeg??0)*Math.PI/180]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'artwork',id:art.id});}}>
     <ArtworkPresentationShell artwork={art}/>
     {selected&&<Line points={(()=>{const p=artworkPresentation(art),w=p.widthMm/2000+.02,h=p.heightMm/2000+.02,z=p.depthMm/2000+.005;return [[-w,-h,z],[w,-h,z],[w,h,z],[-w,h,z],[-w,-h,z]];})()} color="#365cf5" lineWidth={2}/>}
-    <ArtworkLoadBoundary key={`${shareId}:${art.imageId}`} width={width} height={height} imageZ={imageZ}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} imageZ={imageZ}/>}><ArtworkImage url={`/api/public/${shareId}/images/${art.imageId}`} art={art} width={width} height={height}/></Suspense></ArtworkLoadBoundary>
+    <ArtworkLoadBoundary key={`${shareId}:${art.imageId}`} width={width} height={height} imageZ={imageZ}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} imageZ={imageZ}/>}><ArtworkImage selected={selected} url={`/api/public/${shareId}/images/${art.imageId}`} art={art} width={width} height={height}/></Suspense></ArtworkLoadBoundary>
   </group>;
 }
 
@@ -123,7 +125,7 @@ export default function SharedViewer3D({snapshot,shareId,selectedId,referenceSel
   };
   const point3d=(point:WorldPoint):[number,number,number]=>[point.x/1000,point.y/1000,point.z/1000];
   return <div className="shared-3d"><Canvas shadows orthographic={frame.projection!=='perspective'} frameloop="demand" dpr={[1,1.5]} camera={{position:frame.position,zoom:frame.zoom,fov:frame.fov??50,near:.01,far:2000}} gl={{antialias:true}} onPointerMissed={()=>{if(!active)onSelect(null);}}>
-    <SurfaceEnvironment enabled={needsSurfaceEnvironment(snapshot)} outdoor={snapshot.outdoor} intensity={outdoorAppearance(snapshot.outdoor)?.environment??snapshot.lighting?.environment}/><color attach="background" args={[outdoorAppearance(snapshot.outdoor)?.background??'#e9edf1']}/><Lighting3D source={snapshot.lighting?snapshot:{...snapshot,lighting:{ambient:1.3,hemisphere:0,fill:1.8,environment:.35}}}/>
+    <SurfaceEnvironment enabled={needsSurfaceEnvironment(snapshot)} outdoor={snapshot.outdoor} intensity={outdoorAppearance(snapshot.outdoor)?.environment??snapshot.lighting?.environment}/><ArtworkTextureQuality><color attach="background" args={[outdoorAppearance(snapshot.outdoor)?.background??'#e9edf1']}/><Lighting3D source={snapshot.lighting?snapshot:{...snapshot,lighting:{ambient:1.3,hemisphere:0,fill:1.8,environment:.35}}}/>
     <CameraSetup frame={frame} reset={reset} snapshot={snapshot}/><Floor snapshot={snapshot} shareId={shareId} measuring={active} onMeasure={pick}/>
     {snapshot.walls.map(wall=><PublicWallMesh key={wall.id} wall={wall} artworks={snapshot.artworks.filter(art=>art.wallId===wall.id)} shareId={shareId} selectedId={selectedId} onSelect={onSelect} groups={wallGroups.current} measuring={active} onMeasure={pick}/>)}
     <CutawayVisibility walls={cutawayWalls} groups={wallGroups.current} cutaway={frame.projection!=='perspective'&&cutaway}/>
@@ -135,5 +137,5 @@ export default function SharedViewer3D({snapshot,shareId,selectedId,referenceSel
     {active&&measurePoints.map((point,index)=><mesh key={index} position={point3d(point)} renderOrder={10}><sphereGeometry args={[.045,12,12]}/><meshBasicMaterial color="#16816b" depthTest={false}/></mesh>)}
     {active&&measurePoints.length===2&&<><Line points={[point3d(measurePoints[0]),point3d(measurePoints[1])]} color="#16816b" lineWidth={2} depthTest={false} renderOrder={10}/><Html center position={[(measurePoints[0].x+measurePoints[1].x)/2000,(measurePoints[0].y+measurePoints[1].y)/2000+.1,(measurePoints[0].z+measurePoints[1].z)/2000]} style={{pointerEvents:'none'}}><span className="shared-3d-dimension">임시 측정 {Math.round(measurementDistance(measurePoints[0],measurePoints[1])).toLocaleString()} mm</span></Html></>}
     <OrbitControls key={reset} makeDefault target={frame.target} enabled={!active} enableDamping={false} minZoom={.03} maxZoom={300} maxPolarAngle={frame.projection==='perspective'?Math.PI-.05:Math.PI/2.02} minDistance={.1}/>
-  </Canvas></div>;
+  </ArtworkTextureQuality></Canvas></div>;
 }
