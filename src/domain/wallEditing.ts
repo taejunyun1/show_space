@@ -3,6 +3,17 @@ import type {Point,Project,Wall} from './types';
 
 export type SnapKind='endpoint'|'axis'|'grid';
 
+/** Keep the picked direction; an explicit length must never be re-snapped. */
+export function wallEndAtLength(start:Point,direction:Point,length:number):Point{
+ if(![start.x,start.z,direction.x,direction.z].every(Number.isFinite))throw new Error('벽 좌표가 올바르지 않습니다.');
+ if(!Number.isFinite(length)||length<1)throw new Error('벽 길이는 1 이상인 숫자를 입력하세요.');
+ const dx=direction.x-start.x,dz=direction.z-start.z,distance=Math.hypot(dx,dz);
+ if(!Number.isFinite(distance)||distance<1)throw new Error('두 번째 점을 다른 위치에서 선택해 주세요.');
+ const end={x:start.x+dx/distance*length,z:start.z+dz/distance*length};
+ if(![end.x,end.z].every(Number.isFinite))throw new Error('벽 좌표가 올바르지 않습니다.');
+ return end;
+}
+
 export function addWallBetween(project:Project,start:Point,end:Point):Project{
  if(![start.x,start.z,end.x,end.z].every(Number.isFinite))throw new Error('벽 좌표가 올바르지 않습니다.');
  if(Math.hypot(end.x-start.x,end.z-start.z)<1)throw new Error('벽 길이는 0보다 커야 합니다.');

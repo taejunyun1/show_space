@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-04",
+  "scope": "Two picked points → numeric length → Enter; exact chained wall creation",
+  "environment": {
+    "url": "http://127.0.0.1:5184/",
+    "data": "Own synthetic model-measurement project; no production project writes"
+  },
+  "automated": {
+    "passed": 804,
+    "optionalSkipped": 2,
+    "build": "passed; existing large-chunk warning"
+  },
+  "browser": {
+    "horizontal": {
+      "enteredLength": 1234.5,
+      "start": {
+        "x": -2800,
+        "z": -1800
+      },
+      "end": {
+        "x": -1565.5,
+        "z": -1800
+      },
+      "beforeConfirm": "No extra wall; live preview only"
+    },
+    "chainedDiagonal": {
+      "enteredLength": 2500,
+      "start": {
+        "x": -1565.5,
+        "z": -1800
+      },
+      "end": {
+        "x": 243.75840129427115,
+        "z": -74.72204055517545
+      },
+      "inspectorLength": 2500,
+      "reloadedLength": 2500
+    },
+    "invalidZero": "Button disabled; length validation shown; no committed wall",
+    "cancel": "Escape inside length input closes form without adding wall",
+    "undoRedo": "Diagonal wall removed by one Undo and restored by Redo",
+    "undoDuringDraft": "New 900mm wall undone while next wall pending; pending input and preview cleared",
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyWidth": 390,
+      "scrollWidth": 390,
+      "panel": {
+        "left": 192,
+        "right": 382,
+        "width": 190
+      },
+      "enteredLength": 1800,
+      "createdViaButton": true,
+      "viewportReset": true
+    },
+    "consoleWarnError": []
+  },
+  "captureDraft": "Wall preview marked data-capture-draft; existing SVG capture removes those nodes. No new exported PNG verification for this increment.",
+  "pixelDraft": "Existing uncalibrated plan-draft branch labels numeric input px; real scale still requires calibration. Not browser-tested with a pixel draft in this increment.",
+  "remaining": [
+    "Actual account login configuration and real-account cloud verification",
+    "Product-wide acceptance and target-size performance verification",
+    "Actual user SketchUp/large models and mobile hardware verification"
+  ],
+  "artifacts": [
+    "2026-10-04-numeric-wall-preview.png",
+    "2026-10-04-numeric-wall-created.png",
+    "2026-10-04-numeric-wall-mobile.png"
+  ],
+  "deployment": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "versionId": "f8924da0-3181-4787-96cf-2a9047c4c950",
+    "entry": "/assets/index--XhXxKe_.js",
+    "liveHelp": "W → 두 점 클릭 → 길이 입력 → Enter",
+    "browserConsoleWarnError": [],
+    "productionProjectWrites": false,
+    "keepVars": true
+  }
+}

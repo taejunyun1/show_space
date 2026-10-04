@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createDemoProject, parseProject, updateArtwork } from '../domain/model'
 import {deriveFloor} from '../domain/floor'
+import {wallEndAtLength} from '../domain/wallEditing'
 import { hydrateEditor, startAutosave, useEditor } from './editor'
 
 const reset = () => {
@@ -214,6 +215,20 @@ describe('editor history and commands', () => {
     expect(useEditor.getState().selected[0]).toMatchObject({type:'wall'});
     useEditor.getState().undo();
     expect(useEditor.getState().project.walls).toHaveLength(4);
+  });
+
+  it('retains an exact typed diagonal wall and its chained endpoint through JSON and undo/redo',()=>{
+    const start={x:125.5,z:-200},end=wallEndAtLength(start,{x:425.5,z:200},1234.5);
+    useEditor.getState().drawWall(start,end);
+    useEditor.getState().drawWall(end,wallEndAtLength(end,{x:end.x,z:end.z-100},1800));
+    const project=useEditor.getState().project;
+    const restored=parseProject(JSON.parse(JSON.stringify(project)));
+    expect(restored.walls[4]).toMatchObject({start,end});
+    expect(restored.walls[5].start).toEqual(end);
+    expect(restored.walls[5].end.z).toBeCloseTo(end.z-1800,8);
+    expect(useEditor.getState().past).toHaveLength(2);
+    useEditor.getState().undo();expect(useEditor.getState().project.walls).toHaveLength(5);
+    useEditor.getState().redo();expect(useEditor.getState().project.walls).toEqual(project.walls);
   });
 
   it('duplicates and locks a multi-wall selection in single undo steps',()=>{
