@@ -16,6 +16,10 @@
 @media(max-width:700px){.wall-face-tabs{top:140px}.elevation{padding-top:180px}}
 /* Keep dense plan inspection inside its viewport and separate from import tools. */
 .plan-drawing>.plan-svg{overflow:hidden}
+.render-quality-switch{position:absolute;bottom:78px;right:18px;z-index:2;display:flex;gap:2px;padding:3px;background:#ffffffdc;border:1px solid #dce2eb;border-radius:6px}.render-quality-switch button{font-size:10px;padding:5px 8px;border-radius:4px;color:#748299}.render-quality-switch button[aria-pressed=true]{background:#e8efff;color:#365cf5}
+@media(max-width:700px){.render-quality-switch{bottom:106px;right:8px}.render-quality-switch button{font-size:8px;padding:4px 6px}}
+.workspace:has(.outdoor-timebar) .render-quality-switch{bottom:180px}
+@media(max-width:900px){.workspace:has(.outdoor-timebar) .render-quality-switch{bottom:238px}}
 .wall-draw-panel{position:absolute;top:149px;right:18px;z-index:3;width:230px;max-width:calc(100% - 16px);padding:12px;display:flex;flex-direction:column;gap:9px;background:white;border:1px solid #dce2eb;border-radius:9px;box-shadow:0 6px 20px #26394a1c;font-size:11px}
 .wall-draw-panel>strong{font-size:12px}.wall-draw-panel>label{display:flex;align-items:center;gap:7px}.wall-draw-panel input{min-width:0;width:100%;border:1px solid #dce2eb;border-radius:4px;padding:7px;font-size:12px}.wall-draw-panel input[aria-invalid=true]{border-color:#c25a26}.wall-draw-panel>div{display:flex;gap:6px}.wall-draw-panel .button{font-size:10px;min-height:30px;padding:6px 9px}.wall-draw-panel small{font-size:10px;line-height:1.5;color:#697789}.wall-draw-panel small[role=alert]{color:#a34f25}
 @media(max-width:700px){.wall-draw-panel{top:145px;right:8px;width:190px;padding:8px}}

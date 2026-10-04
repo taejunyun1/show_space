@@ -1,0 +1,162 @@
+{
+  "date": "2026-10-04",
+  "benchmark": {
+    "url": "http://127.0.0.1:5184/__render-benchmark",
+    "source": "src/dev/RenderBenchmark.tsx; development-only route, omitted from production bundle",
+    "browser": "Codex in-app browser, id 2",
+    "viewport": [
+      1280,
+      720
+    ],
+    "canvasCss": [
+      1280,
+      658
+    ],
+    "fixture": {
+      "walls": 50,
+      "artworks": 100,
+      "distinctImages": 100,
+      "imagePixels": [
+        512,
+        512
+      ],
+      "spotLights": 10,
+      "areaLights": 10,
+      "cutaway": false
+    },
+    "measurement": "6-second scripted camera orbit, first 1 second discarded; frame intervals and CPU submission duration; GPU time and user input latency are not measured",
+    "baseline": "7acf19a renderer plus development-only probe, before texture/quality changes"
+  },
+  "reports": {
+    "baseline": {
+      "frames": 600,
+      "durationMs": 6000.199999999953,
+      "medianFrameMs": 8.300000000046566,
+      "p95FrameMs": 9.299999999813735,
+      "medianSubmitMs": 2.5,
+      "p95SubmitMs": 3,
+      "calls": 372,
+      "triangles": 10492,
+      "textures": 206,
+      "imageTextureMiB": 133.33333333333317,
+      "dpr": 1.75
+    },
+    "edit": {
+      "frames": 600,
+      "durationMs": 6001.199999999721,
+      "medianFrameMs": 8.300000000279397,
+      "p95FrameMs": 9.200000000186265,
+      "medianSubmitMs": 2.7999999998137355,
+      "p95SubmitMs": 3.1000000000931323,
+      "calls": 372,
+      "triangles": 10492,
+      "textures": 104,
+      "imageTextureMiB": 133.33333333333317,
+      "dpr": 1,
+      "shadowCasters": 2,
+      "canvasPixels": 842240
+    },
+    "preview": {
+      "frames": 600,
+      "durationMs": 6005.799999999814,
+      "medianFrameMs": 8.299999999813735,
+      "p95FrameMs": 9.400000000372529,
+      "medianSubmitMs": 2.6000000000931323,
+      "p95SubmitMs": 3,
+      "calls": 372,
+      "triangles": 10492,
+      "textures": 106,
+      "imageTextureMiB": 133.33333333333317,
+      "dpr": 1.75,
+      "shadowCasters": 4,
+      "canvasPixels": 2578240
+    }
+  },
+  "capture": {
+    "enteredFrom": "edit",
+    "actualObservedPreviewRig": {
+      "shadowCasters": 4,
+      "dpr": 1.75
+    },
+    "pixels": [
+      1920,
+      1080
+    ],
+    "bytes": 307150,
+    "sha256": "fc2e29f297c15f9bd59148a99aeadd7d917a403249a0919d6fafa018f582cfbc",
+    "actualNativeDownload": "/Users/taejun-yun/Downloads/렌더품질-검증-캡처 (2).png",
+    "observedBugFixed": "First frame previously kept 2 edit shadow casters; capture now waits for actual preview rig readiness"
+  },
+  "ui": {
+    "desktopEditCanvas": {
+      "buffer": [
+        776,
+        614
+      ],
+      "css": [
+        776,
+        614
+      ]
+    },
+    "desktopPreviewCanvas": {
+      "buffer": [
+        1358,
+        1074
+      ],
+      "css": [
+        776,
+        614
+      ]
+    },
+    "mobile": {
+      "viewport": [
+        390,
+        844
+      ],
+      "bodyWidth": 390,
+      "scrollWidth": 390,
+      "qualityBounds": {
+        "left": 286.8671875,
+        "right": 382,
+        "top": 408,
+        "bottom": 436
+      }
+    },
+    "mobileOutdoor": {
+      "qualityBounds": {
+        "top": 300,
+        "bottom": 328
+      },
+      "timebarBounds": {
+        "top": 371.5,
+        "bottom": 434
+      },
+      "bodyWidth": 390,
+      "scrollWidth": 390
+    },
+    "viewportReset": true,
+    "consoleWarnError": []
+  },
+  "checks": {
+    "testsPassed": 812,
+    "optionalSkipped": 2,
+    "build": "passed; existing large-chunk warning",
+    "benchmarkNotInProductionBundle": true
+  },
+  "limits": [
+    "No claim of an FPS improvement: median is display-limited near 120Hz before and after",
+    "Map byte estimate counts scene material maps, not every GPU allocation; no complete 256MiB budget claim",
+    "100 distinct 2048px images, 1M-triangle models, real mobile hardware and input latency p95 remain unverified",
+    "Full product acceptance, real login accounts and cloud synchronization verification remain incomplete"
+  ],
+  "deployment": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "versionId": "41edb533-7c33-42ad-b04b-58fda64a2370",
+    "entry": "/assets/index-C1-W5Nav.js",
+    "editButtonVisible": true,
+    "previewButtonVisible": true,
+    "consoleWarnError": [],
+    "productionProjectWrites": false,
+    "keepVars": true
+  }
+}

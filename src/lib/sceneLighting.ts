@@ -13,20 +13,21 @@ export function createLightObject(kind:RenderLight['kind']){
  else if(!initialized){RectAreaLightUniformsLib.init();initialized=true;}
  return group;
 }
-export function updateLightObject(group:Group,data:RenderLight,castShadow:boolean){
+export function updateLightObject(group:Group,data:RenderLight,castShadow:boolean,shadowSize=1024){
  const lamp=group.getObjectByName('emitter') as SpotLight|RectAreaLight;group.name=`light-${data.id}`;group.visible=data.visible;
  lamp.color=new Color().setRGB(...kelvinRgb(data.kelvin),SRGBColorSpace);lamp.intensity=data.intensity;lamp.position.set(data.position.x/1000,data.position.y/1000,data.position.z/1000);
  if(lamp instanceof SpotLight){
   const target=lamp.target;target.position.set(data.target.x/1000,data.target.y/1000,data.target.z/1000);target.updateMatrixWorld(true);
+  if(!castShadow||lamp.shadow.mapSize.x!==shadowSize){lamp.shadow.dispose();lamp.shadow.map=null;lamp.shadow.mapPass=null;}
   lamp.angle=data.beamDeg*Math.PI/360;lamp.penumbra=data.penumbra;lamp.distance=data.distanceMm/1000;lamp.decay=2;lamp.castShadow=castShadow;
-  lamp.shadow.mapSize.set(1024,1024);lamp.shadow.bias=-.0001;lamp.shadow.normalBias=.015;lamp.shadow.camera.near=.02;lamp.shadow.camera.far=Math.max(.03,lamp.distance||Math.max(20,lamp.position.distanceTo(target.position)*4));lamp.shadow.needsUpdate=true;
+  lamp.shadow.mapSize.set(shadowSize,shadowSize);lamp.shadow.bias=-.0001;lamp.shadow.normalBias=.015;lamp.shadow.camera.near=.02;lamp.shadow.camera.far=Math.max(.03,lamp.distance||Math.max(20,lamp.position.distanceTo(target.position)*4));lamp.shadow.needsUpdate=true;
  }else{lamp.width=data.widthMm/1000;lamp.height=data.heightMm/1000;lamp.lookAt(data.target.x/1000,data.target.y/1000,data.target.z/1000);}
  group.updateMatrixWorld(true);
 }
-export function createBaseLighting(settings:LightingSettings=DEFAULT_LIGHTING,legacyShadow=true){
- const group=new Group();group.name='base-lighting';const ambient=new AmbientLight(0xffffff,settings.ambient),hemisphere=new HemisphereLight(0xffffff,0xcad0d6,settings.hemisphere),fill=new DirectionalLight(0xffffff,settings.fill);fill.position.set(-3,12,6);fill.castShadow=legacyShadow&&settings.fill>0;fill.shadow.mapSize.set(2048,2048);Object.assign(fill.shadow.camera,{left:-12,right:12,top:12,bottom:-12});fill.shadow.bias=-.001;group.add(ambient,hemisphere,fill);return group;
+export function createBaseLighting(settings:LightingSettings=DEFAULT_LIGHTING,legacyShadow=true,shadowSize=2048){
+ const group=new Group();group.name='base-lighting';const ambient=new AmbientLight(0xffffff,settings.ambient),hemisphere=new HemisphereLight(0xffffff,0xcad0d6,settings.hemisphere),fill=new DirectionalLight(0xffffff,settings.fill);fill.position.set(-3,12,6);fill.castShadow=legacyShadow&&settings.fill>0;fill.shadow.mapSize.set(shadowSize,shadowSize);Object.assign(fill.shadow.camera,{left:-12,right:12,top:12,bottom:-12});fill.shadow.bias=-.001;group.add(ambient,hemisphere,fill);return group;
 }
-export function createOutdoorLighting(source:LightingSource,base=true){
+export function createOutdoorLighting(source:LightingSource,base=true,shadowSize=2048){
  const group=new Group();group.name='outdoor-lighting';const appearance=outdoorAppearance(source.outdoor);if(!appearance)return group;
  if(base)group.add(new AmbientLight(0xffffff,appearance.ambient),new HemisphereLight(0xc5deff,0x757064,appearance.hemisphere));
  if(appearance.sunIntensity<=0)return group;
@@ -35,10 +36,18 @@ export function createOutdoorLighting(source:LightingSource,base=true){
  const margin=Math.max(.5,...(source.walls??[]).map(w=>(w.thicknessMm??0)/1000),...(source.artworks??[]).map(a=>Math.max(a.widthMm,a.heightMm,a.depthMm,Math.abs(a.centerHeightMm))/1000));
  const radius=Math.max(2,max.distanceTo(min)/2+margin),target=new Object3D();target.name='sun-aim';target.position.copy(center);
  const sun=new DirectionalLight(new Color().setRGB(...kelvinRgb(appearance.sunKelvin),SRGBColorSpace),appearance.sunIntensity);sun.name='outdoor-sun';sun.target=target;sun.position.copy(center).add(new Vector3(...appearance.sun.direction).multiplyScalar(radius*2));sun.castShadow=source.outdoor!.shadow;
- sun.shadow.mapSize.set(2048,2048);sun.shadow.bias=-.0001;sun.shadow.normalBias=.02;Object.assign(sun.shadow.camera,{left:-radius,right:radius,top:radius,bottom:-radius,near:.02,far:radius*4});sun.shadow.camera.updateProjectionMatrix();
+ sun.shadow.mapSize.set(shadowSize,shadowSize);sun.shadow.bias=-.0001;sun.shadow.normalBias=.02;Object.assign(sun.shadow.camera,{left:-radius,right:radius,top:radius,bottom:-radius,near:.02,far:radius*4});sun.shadow.camera.updateProjectionMatrix();
  group.add(sun,target);group.updateMatrixWorld(true);return group;
 }
-export function sceneSpotShadowIds(source:LightingSource){const outdoor=outdoorAppearance(source.outdoor);return spotShadowIds(source.lights??[]).slice(0,outdoor&&outdoor.sunIntensity>0&&source.outdoor?.shadow?3:4);}
+export function sceneSpotShadowIds(source:LightingSource,budget=4){const outdoor=outdoorAppearance(source.outdoor);return spotShadowIds(source.lights??[]).slice(0,Math.max(0,Math.min(4,budget)-(outdoor&&outdoor.sunIntensity>0&&source.outdoor?.shadow?1:0)));}
+/** DOM and R3F commit independently; export must wait for the actual preview rig. */
+export function lightingProfileReady(scene:Object3D,source:LightingSource,profile:{shadowBudget:number;spotShadowSize:number;baseShadowSize:number}){
+ const base=scene.getObjectByName(source.outdoor?.mode==='outdoor'?'outdoor-lighting':'base-lighting');if(!base)return false;
+ if(source.outdoor?.mode==='outdoor'){const appearance=outdoorAppearance(source.outdoor)!,sun=base.getObjectByName('outdoor-sun');if((appearance.sunIntensity>0)!==(sun instanceof DirectionalLight))return false;if(sun instanceof DirectionalLight&&(sun.intensity!==appearance.sunIntensity||sun.castShadow!==source.outdoor.shadow))return false;}
+ let baseReady=true;base.traverse(o=>{if(o instanceof DirectionalLight&&o.shadow.mapSize.x!==profile.baseShadowSize)baseReady=false;});if(!baseReady)return false;
+ const shadowIds=new Set(sceneSpotShadowIds(source,profile.shadowBudget));
+ return (source.lights??[]).filter(l=>l.visible).every(l=>{const lamp=scene.getObjectByName(`light-${l.id}`)?.getObjectByName('emitter');return l.kind==='area'?lamp instanceof RectAreaLight:lamp instanceof SpotLight&&lamp.castShadow===shadowIds.has(l.id)&&lamp.shadow.mapSize.x===profile.spotShadowSize;});
+}
 export function createSceneLighting(source:LightingSource,{base=true,area=true}={}){
  const group=new Group();group.name='gonggan-lighting';const visible=(source.lights??[]).filter(l=>l.visible),shadows=new Set(sceneSpotShadowIds(source));
  if(source.outdoor?.mode==='outdoor')group.add(createOutdoorLighting(source,base));

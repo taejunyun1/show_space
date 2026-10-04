@@ -1,3 +1,4 @@
+import {useArtworkTexture} from './useArtworkTexture';
 import {artworkPresentation} from '../domain/artworkPresentation';
 import {ArtworkPresentationShell} from './ArtworkPresentationShell';
 import {PublicReferenceModel3D} from './PublicReferenceModel3D';
@@ -13,8 +14,8 @@ import {Component,Suspense,useCallback,useEffect,useMemo,useRef} from 'react';
 import type {ReactNode} from 'react';
 import {Canvas,useFrame,useThree} from '@react-three/fiber';
 import type {ThreeEvent} from '@react-three/fiber';
-import {OrbitControls,Html,Line,useTexture} from '@react-three/drei';
-import {Path,Shape,SRGBColorSpace} from 'three';
+import {OrbitControls,Html,Line} from '@react-three/drei';
+import {Path,Shape} from 'three';
 import type {Group} from 'three';
 import {floorFromLoops} from '../domain/importedFloor';
 import {deriveFloor} from '../domain/floor';
@@ -49,15 +50,8 @@ function Floor({snapshot,shareId,measuring,onMeasure}:{snapshot:PublicShareSnaps
 }
 
 function ArtworkImage({url,art,width,height}:{url:string;art:Art;width:number;height:number}){
-  const source=useTexture(url);
-  const texture=useMemo(()=>{
-    const copy=source.clone();
-    copy.colorSpace=SRGBColorSpace;
-    if(art.spritePanel!==undefined){copy.repeat.set(.2,1);copy.offset.set(art.spritePanel*.2,0);}
-    copy.needsUpdate=true;
-    return copy;
-  },[source,art.spritePanel]);
-  useEffect(()=>()=>texture.dispose(),[texture]);
+  const {texture,failed}=useArtworkTexture(url,art.spritePanel??null);
+  if(failed)throw new Error('공유 작품 이미지 로딩 실패');
   return <mesh position={[0,0,artworkPresentation(art).imageZMm/1000]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={finish(art.material)} map={texture} roughness={.9}/></mesh>;
 }
 

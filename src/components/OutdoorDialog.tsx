@@ -22,6 +22,6 @@ export function OutdoorDialog({onClose}:{onClose:()=>void}){
  <p className="field-hint">날씨는 연출 프리셋입니다. 일몰·야간은 현재 날짜·위치에 맞는 시간으로 이동합니다. 시간 변경 후에는 계산한 태양 높이를 따릅니다.</p>
  <NumberField label="태양 밝기" value={settings.sunIntensity} min={0} max={10} step={.1} suffix="" onChange={sunIntensity=>update({sunIntensity})}/><label className="check-field"><input type="checkbox" aria-label="태양 그림자" checked={settings.shadow} onChange={e=>update({shadow:e.target.checked})}/>태양 그림자</label>
  <p className="outdoor-status">태양 높이 {sun.elevation.toFixed(1)}° · 방위 {sun.azimuth.toFixed(1)}°<br/>{sun.elevation<=0?'태양이 지평선 아래에 있어 직사광을 끕니다.':'태양 위치는 북쪽 기준 시계 방향으로 표시합니다.'}</p>
- <p className="field-hint">태양은 근사 계산입니다. 지형·주변 건물·실제 날씨는 반영하지 않습니다. 야외에서는 기본 실내 보조광을 대신하며 개별 Spot·Area 조명은 유지합니다. 태양을 포함해 그림자 광원은 최대 4개입니다.</p>
+ <p className="field-hint">태양은 근사 계산입니다. 지형·주변 건물·실제 날씨는 반영하지 않습니다. 야외에서는 기본 실내 보조광을 대신하며 개별 Spot·Area 조명은 유지합니다. 태양을 포함해 빠른 편집은 최대 2개, 미리보기·캡처는 최대 4개의 그림자를 표시합니다.</p>
  <button className="button primary full" onClick={onClose}>완료</button></dialog>;
 }
