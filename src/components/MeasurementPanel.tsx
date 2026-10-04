@@ -17,7 +17,7 @@ export function MeasurementPanel(){
   <strong>줄자 · {view==='plan'?'평면 거리':view==='elevation'?'벽면 거리':'3D 직선거리'}</strong>
   <label>패널 표시 단위 <select aria-label="측정 패널 표시 단위" value={unit} disabled={provisional} onChange={e=>setDisplayUnit(e.target.value as MeasurementUnit)}>{provisional?<option value="px">px</option>:<><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option></>}</select></label>
   <p>{current?`직선거리 ${format(current.distanceMm)}${current.detached?' · 연결 끊김':''}`:measurementDraft?'두 번째 점을 선택하세요':'첫 번째 점을 선택하세요'}</p>
-  {view==='3d'&&<small>벽·작품 모서리 근처에서 자동 스냅 · Alt로 해제. 작품 측정점은 벽 기준으로 유지됩니다.</small>}
+  {view==='3d'&&<small>벽·작품 모서리 근처에서 자동 스냅 · Alt로 해제. 3D 작품의 측정점은 이동·회전·크기 변경을 따라갑니다. 벽 걸이 작품은 벽 기준입니다.</small>}
   {current&&components(current)}
   <small>수평거리는 바닥에 투영한 거리입니다. 치수선·캡처와 라벨 간격은 {provisional?'px':'mm'} 기준입니다.</small>
   {scaleUnknown&&<small>{provisional?'도면 좌표 기준 거리입니다. 실제 mm 길이는 두 점 축척 보정 후 확인하세요.':'참고 도면 축척 미정 · 표시는 모델상 값'}</small>}

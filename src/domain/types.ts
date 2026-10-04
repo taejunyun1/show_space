@@ -12,6 +12,7 @@ export interface WorldPoint extends Point { y:number }
 export type MeasurementAnchor =
   | {kind:'fixed';fallback:WorldPoint}
   | {kind:'wall';wallId:string;t:number;heightRatio:number;offsetMm:number;fallback:WorldPoint}
+  | {kind:'modelArtwork';modelArtworkId:string;localRatio:WorldPoint;fallback:WorldPoint}
 
 export interface SavedDimension {
   id:string;view:'plan'|'elevation'|'3d';elevationWallId?:string

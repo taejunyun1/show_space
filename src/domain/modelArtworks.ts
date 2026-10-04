@@ -38,10 +38,11 @@ export function modelArtworkFootprint(a:ModelArtworkPose){
  const points=modelArtworkCorners(a).map(p=>({x:p.x,z:p.z})).sort((a,b)=>a.x-b.x||a.z-b.z),cross=(a:WorldPoint|{x:number;z:number},b:{x:number;z:number},c:{x:number;z:number})=>(b.x-a.x)*(c.z-a.z)-(b.z-a.z)*(c.x-a.x);
  const half=(list:typeof points)=>{const out:typeof points=[];for(const p of list){while(out.length>=2&&cross(out[out.length-2],out[out.length-1],p)<=0)out.pop();out.push(p);}out.pop();return out;};return [...half(points),...half([...points].reverse())];
 }
+export function modelArtworkMeasurementIds(project:Project){const ids=new Set<string>();for(const d of [...project.dimensions??[],...project.scenes.flatMap(s=>s.structure?.dimensions??[])])for(const a of [d.start,d.end])if(a.kind==='modelArtwork')ids.add(a.modelArtworkId);return ids;}
 export function addModelArtwork(project:Project,model:ReferenceModel):{project:Project;artwork:ModelArtwork}{
  if(project.planDraft&&!project.planReference?.calibrated)throw new Error('3D 작품을 배치하려면 도면 축척을 먼저 보정하세요.');
  if((project.modelArtworks?.length??0)>=MAX_MODEL_ARTWORKS)throw new Error(`3D 작품은 최대 ${MAX_MODEL_ARTWORKS}개까지 만들 수 있습니다.`);
- const used=new Set([...project.walls,...project.artworks,...project.unplacedArtworks??[],...project.lights??[],...project.modelArtworks??[]].map(a=>a.id));let index=1;while(used.has(`model-artwork-${index}`))index++;
+ const used=new Set([...project.walls,...project.artworks,...project.unplacedArtworks??[],...project.lights??[],...project.modelArtworks??[]].map(a=>a.id));for(const id of modelArtworkMeasurementIds(project))used.add(id);let index=1;while(used.has(`model-artwork-${index}`))index++;
  const artwork=parseModelArtwork({id:`model-artwork-${index}`,name:model.name.replace(/\.[^.]+$/,''),artist:'',year:'',kind:'sculpture',model:{name:model.name,dataUrl:model.dataUrl,sizeMm:model.sizeMm,sourceOffsetM:model.sourceOffsetM},widthMm:Math.max(1,model.sizeMm[0]),heightMm:Math.max(1,model.sizeMm[1]),depthMm:Math.max(1,model.sizeMm[2]),position:{x:0,y:0,z:0},rotation:{x:0,y:0,z:0},visible:true,locked:false,note:''});
  return {project:{...project,modelArtworks:[...project.modelArtworks??[],artwork]},artwork};
 }

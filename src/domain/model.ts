@@ -3,7 +3,7 @@ export {wallLength} from './wallGeometry';
 import {parseFrameSettings,artworkPresentation,rotatedArtworkOuterSize} from './artworkPresentation';
 import {parseArtworkInformation} from './artworkInformation';
 import {validateProjectNotes} from './notes';
-import {parseModelArtworks,parseModelArtwork,MAX_MODEL_ARTWORKS} from './modelArtworks';
+import {parseModelArtworks,parseModelArtwork,MAX_MODEL_ARTWORKS,modelArtworkMeasurementIds} from './modelArtworks';
 import {parseOutdoor} from './outdoor';
 import {parseLight,parseLights,parseLighting,translatedLight,MAX_LIGHTS} from './lighting';
 import {validateImportedFloor} from './importedFloor';
@@ -12,7 +12,7 @@ import {validateReferenceModel} from './referenceModel';
 import {removeWallOpenings} from './openingAnchors';
 import {installationZones,footprintOverlapsZone} from './installationZones';
 import {validateOpenings} from './openings';
-import {validateDimensions} from './measurements';
+import {validateDimensions,resolveAnchor} from './measurements';
 import {validatePlanLabels,type PlanLabel} from './planLabels'
 import { validatePlanReference } from './plan'
 import type { Artwork, EntitySelection, Point, Project, UnplacedArtwork, Wall } from './types'
@@ -203,7 +203,7 @@ export function duplicateSelection(project: Project, selection: EntitySelection)
   if(selection.type==='modelArtwork'){
     const source=project.modelArtworks?.find(a=>a.id===selection.id);if(!source)throw new Error('복제할 3D 작품이 없습니다.');
     if(project.modelArtworks!.length>=MAX_MODEL_ARTWORKS)throw new Error(`3D 작품은 최대 ${MAX_MODEL_ARTWORKS}개까지 만들 수 있습니다.`);
-    const id=uniqueId('model-artwork',[...project.walls,...project.artworks,...project.unplacedArtworks??[],...project.lights??[],...project.modelArtworks??[]].map(a=>a.id));
+    const id=uniqueId('model-artwork',[...[...project.walls,...project.artworks,...project.unplacedArtworks??[],...project.lights??[],...project.modelArtworks??[]].map(a=>a.id),...modelArtworkMeasurementIds(project)]);
     const copy={...source,id,name:(source.name+' 복사본').slice(0,200),position:{...source.position,x:source.position.x+400},rotation:{...source.rotation},locked:false,groupId:undefined};
     return {project:{...project,modelArtworks:[...project.modelArtworks!,parseModelArtwork(copy,false)]},selection:{type:'modelArtwork',id}};
   }
@@ -231,7 +231,7 @@ export function duplicateSelection(project: Project, selection: EntitySelection)
 }
 
 export function deleteSelection(project: Project, selection: EntitySelection): Project {
-  if(selection.type==='modelArtwork'){const source=project.modelArtworks?.find(a=>a.id===selection.id);if(source?.locked)throw new Error('잠긴 3D 작품은 삭제할 수 없습니다.');return {...project,modelArtworks:project.modelArtworks?.filter(a=>a.id!==selection.id)};}
+  if(selection.type==='modelArtwork'){const source=project.modelArtworks?.find(a=>a.id===selection.id);if(source?.locked)throw new Error('잠긴 3D 작품은 삭제할 수 없습니다.');return {...project,modelArtworks:project.modelArtworks?.filter(a=>a.id!==selection.id),...(project.dimensions?{dimensions:project.dimensions.map(d=>({...d,start:d.start.kind==='modelArtwork'&&d.start.modelArtworkId===selection.id?{...d.start,fallback:resolveAnchor(project,d.start).point}:d.start,end:d.end.kind==='modelArtwork'&&d.end.modelArtworkId===selection.id?{...d.end,fallback:resolveAnchor(project,d.end).point}:d.end}))}:{})};}
   if(selection.type==='light'){const source=project.lights?.find(l=>l.id===selection.id);if(source?.locked)throw new Error('잠긴 조명은 삭제할 수 없습니다.');return {...project,lights:project.lights?.filter(l=>l.id!==selection.id)};}
   if (selection.type === 'artwork') {
     const item = project.artworks.find(artwork => artwork.id === selection.id)

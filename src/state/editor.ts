@@ -440,7 +440,7 @@ export const useEditor = create<EditorState>((set, get) => {
       if (!selections.length) throw new Error('삭제할 항목을 선택해 주세요.')
       const next = selections.reduce((project, selection) => deleteSelection(project, selection), get().project)
       get().commit(next)
-      set({ selected: [] })
+      set({selected:[],...(selections.some(s=>s.type==='modelArtwork')?{measurementDraft:null}:{})})
     }),
     spaceSelected: (gap) => get().layoutSelectedArtworks({kind:'spacing',axis:'horizontal',gapMm:gap}),
     layoutSelectedArtworks: (layout) => attempt(() => {

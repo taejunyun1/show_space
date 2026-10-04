@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-04",
+  "tests": {
+    "passed": 799,
+    "optionalBenchmarksSkipped": 2
+  },
+  "ui": {
+    "initialDistanceMm": 2100,
+    "afterSizePoseEdit": {
+      "distanceMm": 3000,
+      "horizontalMm": 1500,
+      "verticalDisplayedMm": 2598
+    },
+    "deleted": "last position retained, detached",
+    "undo": "reattached",
+    "reload": "3000mm retained",
+    "consoleWarningsErrors": 0,
+    "mobileViewportWidth": 390,
+    "mobileDocumentScrollWidth": 390
+  },
+  "downloadJson": {
+    "sha256": "2cb27663cc32031a335b6b1e4e4964c6e0c4e55becc8a956cbf02b8e278771ee",
+    "bytes": 5886,
+    "heightMm": 3000,
+    "position": {
+      "x": 700,
+      "y": 300,
+      "z": 0
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 29.999999999999996
+    },
+    "measurement": {
+      "id": "dimension-1",
+      "view": "3d",
+      "start": {
+        "kind": "modelArtwork",
+        "modelArtworkId": "model-artwork-1",
+        "localRatio": {
+          "x": -0.5,
+          "y": 1,
+          "z": 0.5
+        },
+        "fallback": {
+          "x": -600,
+          "y": 2100,
+          "z": 450
+        }
+      },
+      "end": {
+        "kind": "modelArtwork",
+        "modelArtworkId": "model-artwork-1",
+        "localRatio": {
+          "x": -0.4999999999999997,
+          "y": -1.0573552615477681e-16,
+          "z": 0.5
+        },
+        "fallback": {
+          "x": -599.9999999999997,
+          "y": -2.220446049250313e-13,
+          "z": 450
+        }
+      },
+      "offsetMm": 180
+    }
+  },
+  "capture": {
+    "width": 1920,
+    "height": 1080,
+    "sha256": "8ec38195e75d125ca45e875cd109a8aeecdc54dbeb77dea47c8d0904a891b2c7",
+    "bytes": 395774,
+    "visual": "3000 mm line follows tipped model; selection handles absent"
+  },
+  "limits": [
+    "synthetic static GLB only",
+    "physical Alt drag not verified",
+    "mobile hardware not verified",
+    "wall-mounted image points retain wall-based anchors"
+  ],
+  "deployment": {
+    "version": "4084f89e-16a1-4b75-a1d7-59ca441f18d4",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entry": "/assets/index-DGjklsFH.js",
+    "consoleWarningsErrors": 0,
+    "keepVars": true,
+    "authEnabled": false
+  }
+}

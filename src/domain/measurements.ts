@@ -1,4 +1,6 @@
 import type {MeasurementAnchor,Project,SavedDimension,WorldPoint} from './types';
+import {Vector3} from 'three';
+import {modelArtworkMatrix} from './modelArtworks';
 
 function finitePoint(point:WorldPoint){return [point.x,point.y,point.z].every(Number.isFinite);}
 export function fixedAnchor(point:WorldPoint):MeasurementAnchor{
@@ -19,10 +21,25 @@ export function wallAnchor(project:Project,wallId:string,point:WorldPoint):Measu
 
 export function resolveAnchor(project:Project,anchor:MeasurementAnchor):{point:WorldPoint;detached:boolean}{
  if(anchor.kind==='fixed')return {point:{...anchor.fallback},detached:false};
+ if(anchor.kind==='modelArtwork'){
+  const a=project.modelArtworks?.find(a=>a.id===anchor.modelArtworkId);
+  if(!a)return {point:{...anchor.fallback},detached:true};
+  const p=new Vector3(anchor.localRatio.x*a.widthMm/1000,anchor.localRatio.y*a.heightMm/1000,anchor.localRatio.z*a.depthMm/1000).applyMatrix4(modelArtworkMatrix(a));
+  return {point:{x:p.x*1000,y:p.y*1000,z:p.z*1000},detached:false};
+ }
  const wall=project.walls.find(item=>item.id===anchor.wallId);
  if(!wall)return {point:{...anchor.fallback},detached:true};
  const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz);
  return {point:{x:wall.start.x+dx*anchor.t-dz/length*anchor.offsetMm,y:wall.heightMm*anchor.heightRatio,z:wall.start.z+dz*anchor.t+dx/length*anchor.offsetMm},detached:false};
+}
+
+/** A physical point in the model's normalized local frame, independent of its pose and size. */
+export function modelArtworkAnchor(project:Project,id:string,point:WorldPoint):MeasurementAnchor{
+ if(!finitePoint(point))throw new Error('치수 좌표가 올바르지 않습니다.');
+ const a=project.modelArtworks?.find(a=>a.id===id);if(!a)throw new Error('치수 기준 3D 작품을 찾을 수 없습니다.');
+ const p=new Vector3(point.x/1000,point.y/1000,point.z/1000).applyMatrix4(modelArtworkMatrix(a).invert());
+ const anchor:MeasurementAnchor={kind:'modelArtwork',modelArtworkId:id,localRatio:{x:p.x*1000/a.widthMm,y:p.y*1000/a.heightMm,z:p.z*1000/a.depthMm},fallback:{...point}};
+ validateDimensions([{id:'check',view:'3d',start:anchor,end:anchor,offsetMm:0}]);return anchor;
 }
 
 export function measureDistance(a:WorldPoint,b:WorldPoint):number{
@@ -62,8 +79,9 @@ export function validateDimensions(value:unknown):asserts value is SavedDimensio
   ids.add(item.id);
   if(item.elevationWallId!==undefined&&(typeof item.elevationWallId!=='string'||item.elevationWallId.length>100))throw new Error('치수선 벽 정보가 올바르지 않습니다.');
   for(const anchor of [item.start,item.end]){
-   if(!anchor||!['fixed','wall'].includes(anchor.kind)||!anchor.fallback||!finitePoint(anchor.fallback))throw new Error('치수선 좌표가 올바르지 않습니다.');
+   if(!anchor||!['fixed','wall','modelArtwork'].includes(anchor.kind)||!anchor.fallback||!finitePoint(anchor.fallback))throw new Error('치수선 좌표가 올바르지 않습니다.');
    if(anchor.kind==='wall'&&(typeof anchor.wallId!=='string'||anchor.wallId.length<1||anchor.wallId.length>100||!Number.isFinite(anchor.t)||anchor.t<0||anchor.t>1||!Number.isFinite(anchor.heightRatio)||anchor.heightRatio<0||anchor.heightRatio>1||!Number.isFinite(anchor.offsetMm)))throw new Error('치수선 벽 좌표가 올바르지 않습니다.');
+   if(anchor.kind==='modelArtwork'&&(typeof anchor.modelArtworkId!=='string'||!anchor.modelArtworkId||anchor.modelArtworkId.length>200||!anchor.localRatio||!finitePoint(anchor.localRatio)||Math.abs(anchor.localRatio.x)>.50001||anchor.localRatio.y<-.00001||anchor.localRatio.y>1.00001||Math.abs(anchor.localRatio.z)>.50001))throw new Error('치수선 3D 작품 좌표가 올바르지 않습니다.');
   }
  }
 }
