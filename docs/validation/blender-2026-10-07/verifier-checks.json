@@ -1,0 +1,18 @@
+[
+  {
+    "case": "no-texture",
+    "exitCode": 0,
+    "passed": true,
+    "renders": [
+      "overview.png"
+    ],
+    "staleSuccessReplaced": true
+  },
+  {
+    "case": "mismatch",
+    "exitCode": 1,
+    "passed": false,
+    "renders": [],
+    "staleSuccessReplaced": true
+  }
+]

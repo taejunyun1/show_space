@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-07",
+  "projectId": "3065bd45-b859-4dda-9aba-898f27c800e3",
+  "projectName": "ANCA 연속 검증 · 저장 보호",
+  "displayUnit": "m",
+  "walls": 17,
+  "artworks": 10,
+  "files": [
+    {
+      "name": "ANCA 연속 검증 · 저장 보호 (3).json",
+      "bytes": 26606097,
+      "sha256": "fcc1b745e87403e2fd8111f3f04f75bfddd18f8e0b5abddf58b099e3da4af442"
+    },
+    {
+      "name": "ANCA 연속 검증 · 저장 보호 (1).glb",
+      "bytes": 1909912,
+      "sha256": "fdbc85c756e9aad573c46e8ad762346ad0ab078d13880d994da77acea81c359b"
+    },
+    {
+      "name": "ANCA 연속 검증 · 저장 보호-3D (1).png",
+      "bytes": 919980,
+      "sha256": "ea3aa54cf540158c338466355e7fcb27cf0253838340f808b6b0923e8d98e850"
+    }
+  ],
+  "texture": {
+    "source": "public/artworks/artwork-1.png",
+    "wallId": "auto-wall-1",
+    "widthMm": 2000,
+    "heightMm": 1000,
+    "nativeReloadVerified": true,
+    "nativeSceneRestoreVerified": true,
+    "sceneName": "배치 D · 직접 텍스처 2×1m",
+    "changedWidthMmBeforeRestore": 2500
+  },
+  "capture": {
+    "nativeButton": "PNG 저장",
+    "dimensionsPx": [
+      1920,
+      1519
+    ],
+    "visualTextureAndArtworksVerified": true
+  },
+  "glb": {
+    "bytes": 1909912,
+    "embeddedImages": 2,
+    "privateNoteDetailsAbsent": true,
+    "privateInstallationMarkerAbsent": true,
+    "receiver": "Blender 4.4.1",
+    "receiverReport": "blender-2026-10-07/receiver.json"
+  },
+  "share": {
+    "environment": "local Worker + local R2",
+    "nativeCreated": true,
+    "selectedScenes": [
+      "배치 D · 직접 텍스처 2×1m"
+    ],
+    "currentAndSceneTextureDimensionsVerified": true,
+    "privateNoteDetailsAbsent": true,
+    "privateInstallationMarkerAbsent": true,
+    "originalPlanAbsent": true,
+    "nativeReadonlySceneAndWallSelectionVerified": true,
+    "consoleWarningsErrors": []
+  },
+  "installationStatusesPreserved": true,
+  "applicationCodeChanged": false,
+  "remaining": [
+    "Actual authentication and two-account/two-device acceptance",
+    "Actual SketchUp receiving-tool compatibility",
+    "Representative device performance and real-user success metrics",
+    "Source document 2 tracked extensions",
+    "Texture in PDF: current texture Scene output not checked"
+  ]
+}

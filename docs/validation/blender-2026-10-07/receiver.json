@@ -1,0 +1,267 @@
+{
+  "blenderVersion": "4.4.1",
+  "glbFile": "ANCA 연속 검증 · 저장 보호 (1).glb",
+  "glbSHA256": "fdbc85c756e9aad573c46e8ad762346ad0ab078d13880d994da77acea81c359b",
+  "projectId": "3065bd45-b859-4dda-9aba-898f27c800e3",
+  "importedObjects": 64,
+  "meshObjects": 47,
+  "images": [
+    {
+      "name": "Image_0",
+      "sizePx": [
+        1024,
+        409
+      ],
+      "packed": true
+    },
+    {
+      "name": "Image_1",
+      "sizePx": [
+        1024,
+        409
+      ],
+      "packed": true
+    }
+  ],
+  "lights": [
+    {
+      "name": "emitter",
+      "type": "SPOT"
+    },
+    {
+      "name": "outdoor-sun",
+      "type": "SUN"
+    }
+  ],
+  "walls": [
+    {
+      "id": "auto-wall-1",
+      "lengthM": 5.971316894091453,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 9.501893831753705e-07,
+      "texture": {
+        "repeatScale": [
+          0.5,
+          1.0,
+          1
+        ],
+        "uvSpanM": [
+          5.971316814422607,
+          3.0
+        ],
+        "imagesPacked": true,
+        "wrapping": "REPEAT"
+      }
+    },
+    {
+      "id": "auto-wall-2",
+      "lengthM": 5.864805110027391,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 4.2889152074288006e-07
+    },
+    {
+      "id": "auto-wall-3",
+      "lengthM": 4.813001242394783,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 1.1936980879312387e-06
+    },
+    {
+      "id": "auto-wall-4",
+      "lengthM": 4.631701534479811,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 7.664243852900654e-07
+    },
+    {
+      "id": "auto-wall-5",
+      "lengthM": 4.079357817005925,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 1.8292587178336817e-07
+    },
+    {
+      "id": "auto-wall-6",
+      "lengthM": 3.872886814996017,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 2.836375503356692e-07
+    },
+    {
+      "id": "auto-wall-7",
+      "lengthM": 2.4497710334734166,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 4.262297554902261e-07
+    },
+    {
+      "id": "auto-wall-8",
+      "lengthM": 2.469002327818318,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 3.8893492160241294e-07
+    },
+    {
+      "id": "auto-wall-9",
+      "lengthM": 2.3411387928591885,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 1.8115652355987777e-07
+    },
+    {
+      "id": "auto-wall-10",
+      "lengthM": 1.5377638824248887,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 3.7765338234407864e-07
+    },
+    {
+      "id": "auto-wall-11",
+      "lengthM": 1.5187603690647393,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 1.1079005179936985e-07
+    },
+    {
+      "id": "auto-wall-12",
+      "lengthM": 1.5244499094168813,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 3.7765338234407864e-07
+    },
+    {
+      "id": "auto-wall-13",
+      "lengthM": 1.4112811388488151,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 1.1323824233855362e-07
+    },
+    {
+      "id": "auto-wall-14",
+      "lengthM": 1.105059759664638,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 3.7798479368689186e-07
+    },
+    {
+      "id": "auto-wall-15",
+      "lengthM": 0.998547975600578,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 3.7798479368689186e-07
+    },
+    {
+      "id": "auto-wall-16",
+      "lengthM": 0.7622249547084406,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 3.7798479368689186e-07
+    },
+    {
+      "id": "auto-wall-17",
+      "lengthM": 0.6190997448723587,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 3.7798479368689186e-07
+    }
+  ],
+  "artworks": [
+    {
+      "id": "artwork-1",
+      "widthM": 0.4,
+      "heightM": 1.2,
+      "maxLocalImageErrorM": 4.768371586472142e-08,
+      "imagePacked": true
+    },
+    {
+      "id": "artwork-2",
+      "widthM": 0.4,
+      "heightM": 1.2,
+      "maxLocalImageErrorM": 4.768371586472142e-08,
+      "imagePacked": true
+    },
+    {
+      "id": "artwork-3",
+      "widthM": 0.4,
+      "heightM": 1.2,
+      "maxLocalImageErrorM": 4.768371586472142e-08,
+      "imagePacked": true
+    },
+    {
+      "id": "artwork-4",
+      "widthM": 0.4,
+      "heightM": 1.2,
+      "maxLocalImageErrorM": 4.768371586472142e-08,
+      "imagePacked": true
+    },
+    {
+      "id": "artwork-5",
+      "widthM": 0.4,
+      "heightM": 1.2,
+      "maxLocalImageErrorM": 4.768371586472142e-08,
+      "imagePacked": true
+    },
+    {
+      "id": "artwork-6",
+      "widthM": 0.4,
+      "heightM": 1.2,
+      "maxLocalImageErrorM": 4.768371586472142e-08,
+      "imagePacked": true
+    },
+    {
+      "id": "artwork-7",
+      "widthM": 0.4,
+      "heightM": 1.2,
+      "maxLocalImageErrorM": 4.768371586472142e-08,
+      "imagePacked": true
+    },
+    {
+      "id": "artwork-8",
+      "widthM": 0.4,
+      "heightM": 1.2,
+      "maxLocalImageErrorM": 4.768371586472142e-08,
+      "imagePacked": true
+    },
+    {
+      "id": "artwork-9",
+      "widthM": 0.4,
+      "heightM": 1.2,
+      "maxLocalImageErrorM": 4.768371586472142e-08,
+      "imagePacked": true
+    },
+    {
+      "id": "artwork-10",
+      "widthM": 0.4,
+      "heightM": 1.2,
+      "maxLocalImageErrorM": 4.768371586472142e-08,
+      "imagePacked": true
+    }
+  ],
+  "privateNoteDetailsAbsent": true,
+  "externalAssetDependencies": false,
+  "geometryAndTexturesPassed": true,
+  "renderRequested": true,
+  "passed": true,
+  "status": "complete",
+  "renders": [
+    "overview.png",
+    "texture-wall.png"
+  ],
+  "scope": [
+    "solid-straight-walls",
+    "mounted-image-dimensions",
+    "packed-images",
+    "wall-texture-repeat"
+  ],
+  "notChecked": [
+    "floor",
+    "openings",
+    "reference-models",
+    "independent-3d-artworks",
+    "artwork-placement",
+    "lighting-fidelity",
+    "SketchUp-compatibility"
+  ]
+}
