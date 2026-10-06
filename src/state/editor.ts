@@ -536,7 +536,28 @@ export function startAutosave(
   };
   const flush=async()=>{schedule();await queued;if(error)throw error;};
   flushCurrentAutosave=flush;
+  const browser=typeof window==='undefined'?undefined:window;
+  let guarding=false;
+  const beforeUnload=(event:BeforeUnloadEvent)=>{
+    if(!['saving','error'].includes(useEditor.getState().saveStatus))return;
+    schedule();
+    event.preventDefault();event.returnValue='';
+  };
+  const refreshGuard=()=>{
+    const needed=['saving','error'].includes(useEditor.getState().saveStatus);
+    if(needed===guarding||!browser)return;
+    if(needed)browser.addEventListener('beforeunload',beforeUnload);
+    else browser.removeEventListener('beforeunload',beforeUnload);
+    guarding=needed;
+  };
+  // Start the queued write before mobile/background suspension; pagehide alone
+  // cannot guarantee that an asynchronous IndexedDB transaction will finish.
+  const hidden=()=>{if(browser?.document.visibilityState==='hidden')schedule();};
+  browser?.document.addEventListener('visibilitychange',hidden);
+  browser?.addEventListener('pagehide',schedule);
+  refreshGuard();
   const unsubscribe = useEditor.subscribe((state) => {
+    refreshGuard();
     if (!state.hydrated || state.project === lastProject) return
     lastProject = state.project
     if(state.project===savedSnapshot){error=undefined;return;}
@@ -545,5 +566,5 @@ export function startAutosave(
     revision++;pending=state.project;
     timer = setTimeout(schedule, debounceMs)
   })
-  return () => { if (timer) clearTimeout(timer); unsubscribe();if(flushCurrentAutosave===flush)flushCurrentAutosave=async()=>{}; }
+  return () => { schedule();unsubscribe();browser?.removeEventListener('beforeunload',beforeUnload);browser?.removeEventListener('pagehide',schedule);browser?.document.removeEventListener('visibilitychange',hidden);if(flushCurrentAutosave===flush)flushCurrentAutosave=async()=>{}; }
 }

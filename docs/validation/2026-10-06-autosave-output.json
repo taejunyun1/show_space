@@ -1,0 +1,97 @@
+{
+  "project": {
+    "id": "3065bd45-b859-4dda-9aba-898f27c800e3",
+    "name": "ANCA 연속 검증 · 저장 보호",
+    "unit": "m",
+    "walls": 17,
+    "artworks": 10,
+    "fixture": "public/artworks/artwork-1.png uploaded once and duplicated nine times",
+    "scenes": [
+      {
+        "name": "배치 A · 버드아이",
+        "artworks": 10,
+        "cameraSaved": true,
+        "structureSaved": true
+      },
+      {
+        "name": "배치 B · 회전",
+        "artworks": 10,
+        "cameraSaved": true,
+        "structureSaved": true
+      }
+    ],
+    "firstWidthMm": 400,
+    "privateNoteRetained": true
+  },
+  "capture": {
+    "width": 1920,
+    "height": 1519,
+    "bytes": 825895,
+    "sha256": "b9e368189dc78afc366afe704b57a80085a42f882aa52e4c47ce29bec6ce708f",
+    "visualInspection": "No editing notices or private notes; disconnected candidate walls, no reconstructed floor"
+  },
+  "pdf": {
+    "pages": 18,
+    "bytes": 4135650,
+    "sha256": "d36a041754bda4d176eef76d1120007fc52250552817bb71f68b641d58dfab68",
+    "sceneAIncluded": true,
+    "sceneBIncluded": true,
+    "privateNoteIncluded": false,
+    "gapMm": 100,
+    "captionMinSize": 8,
+    "captionTruncatedWithEllipsis": true,
+    "fullTenthNameInSchedule": true
+  },
+  "glb": {
+    "version": 2,
+    "bytes": 1008272,
+    "declaredBytes": 1008272,
+    "nodes": 57,
+    "meshes": 47,
+    "images": 1,
+    "sha256": "1594b72890de01151804ac86c480b654d243feff7944ccc7fe5d41d9fa6bc442",
+    "privateNoteIncluded": false,
+    "receiverToolReimportVerified": false
+  },
+  "share": {
+    "environment": "localhost:8806, local D1 and R2 only",
+    "auth": "Synthetic local test owner key, no real login",
+    "readonly": true,
+    "editableTextFields": 0,
+    "editButtons": [],
+    "publishedScene": "배치 A · 버드아이",
+    "unselectedSceneAbsent": true,
+    "privateNoteAbsent": true,
+    "unit": "m",
+    "gap": "0.1 m",
+    "receiverSceneSwitchVerified": true
+  },
+  "mobile": {
+    "viewport": [
+      390,
+      844
+    ],
+    "floorNotice": {
+      "top": 355,
+      "bottom": 402
+    },
+    "viewTabs": {
+      "top": 467.5,
+      "bottom": 508
+    },
+    "realMobileDevice": false
+  },
+  "tests": {
+    "passed": 841,
+    "skipped": 2,
+    "build": "passed"
+  },
+  "remaining": [
+    "Actual authentication and two-account/two-device checks",
+    "Physical correctness of nonuniform Not-to-scale ANCA drawing",
+    "Snap gestures and independent elevation editing in this same acceptance flow",
+    "Uploaded photo texture, Spot/Kelvin and outdoor date/time in this same flow",
+    "Editor Scene restore/comparison and real GLB receiver import",
+    "Representative mobile GPU, full GPU memory and user success metrics"
+  ]
+}

@@ -15,9 +15,15 @@ const W=841.89,H=595.28,ink=rgb(.14,.19,.25),muted=rgb(.36,.42,.49),blue=rgb(.21
 const mm=(n:number)=>Math.round(n).toLocaleString('en-US');
 const installationMm=(n:number)=>n.toLocaleString('en-US',{maximumFractionDigits:1});
 const color=(hex:string)=>{const m=/^#([0-9a-f]{6})$/i.exec(hex);return m?rgb(parseInt(m[1].slice(0,2),16)/255,parseInt(m[1].slice(2,4),16)/255,parseInt(m[1].slice(4,6),16)/255):rgb(.9,.9,.9);};
-function text(page:PDFPage,font:PDFFont,value:string,x:number,y:number,size=10,maxWidth=W-80){
- const str=value.normalize('NFC').replace(/[\r\n\t]/g,' '),width=font.widthOfTextAtSize(str,size);
- page.drawText(str,{x,y,font,size:width>maxWidth?Math.max(5,size*maxWidth/width):size,color:ink});
+function text(page:PDFPage,font:PDFFont,value:string,x:number,y:number,size=10,maxWidth=W-80,minSize=5){
+ let str=value.normalize('NFC').replace(/[\r\n\t]/g,' ');const width=font.widthOfTextAtSize(str,size);
+ const fittedSize=width>maxWidth?Math.max(minSize,size*maxWidth/width):size;
+ if(font.widthOfTextAtSize(str,fittedSize)>maxWidth){
+  const chars=Array.from(str);let low=0,high=chars.length;
+  while(low<high){const mid=Math.ceil((low+high)/2);if(font.widthOfTextAtSize(chars.slice(0,mid).join('')+'…',fittedSize)<=maxWidth)low=mid;else high=mid-1;}
+  str=chars.slice(0,low).join('')+'…';
+ }
+ page.drawText(str,{x,y,font,size:fittedSize,color:ink});
 }
 function line(page:PDFPage,x1:number,y1:number,x2:number,y2:number,c=light,width=.65){page.drawLine({start:{x:x1,y:y1},end:{x:x2,y:y2},color:c,thickness:width});}
 function dimension(page:PDFPage,font:PDFFont,x1:number,y1:number,x2:number,y2:number,value:string){
@@ -73,7 +79,7 @@ function elevation(page:PDFPage,font:PDFFont,section:PdfSection,images:Map<strin
  }
  dimension(page,font,fit.x(0),fit.y(0)+17,fit.x(length),fit.y(0)+17,`${mm(length)} mm`);
  text(page,font,`높이 ${mm(height)} mm · 두께 ${mm(wall.thicknessMm)} mm`,52,91,9);
- const names=artworks.map(a=>`${section.project.artworks.indexOf(a)+1}. ${a.name} (${mm(a.widthMm)}×${mm(a.heightMm)} mm)`).join(' · ');text(page,font,names,52,74,8,W-104);
+ const names=artworks.map(a=>`${section.project.artworks.indexOf(a)+1}. ${a.name} (${mm(a.widthMm)}×${mm(a.heightMm)} mm)`).join(' · ');text(page,font,names,52,74,8,W-104,8);
  for(const d of section.project.dimensions??[])if(d.view==='elevation'&&d.elevationWallId===wall.id){const r=resolveMeasurement(section.project,d),dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z;const p=(point:{x:number;y:number;z:number})=>{const along=((point.x-wall.start.x)*dx+(point.z-wall.start.z)*dz)/length;return {x:fit.x(side==='back'?length-along:along),y:fit.y(height-point.y)};};const a=p(r.start),b=p(r.end);dimension(page,font,a.x,a.y,b.x,b.y,`${mm(r.distanceMm)} mm`);}
  scaleNote(page,font,fit);
 }

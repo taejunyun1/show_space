@@ -17,6 +17,18 @@ it('creates searchable Korean PDF with vector plan/elevations and a complete emb
  expect(text).toContain('여백의 기록');expect(text).toContain('8,000');expect(text).toContain('1,200');expect(text).toContain('고요한 면');expect(text).toContain('5. 여백');expect(text).toContain('30°');expect(text).toContain('액자 외곽 1,080×1,380×70 mm');expect(text).toContain('900×1,200×30 mm');expect(text).not.toContain('PRIVATE');expect(pathCount).toBeGreaterThan(0);await task.destroy();
 },20000);
 
+it('keeps dense elevation captions readable and inside the page while preserving full names in the schedule',async()=>{
+ const p=createDemoProject(),original=p.artworks[0];p.artworks=Array.from({length:10},(_,i)=>({...original,id:`caption-${i}`,name:`작품 ${i+1} ${'긴 이름 '.repeat(10)}`,widthMm:400,heightMm:1200,wallId:'wall-a',alongMm:600+i*650,centerHeightMm:1500}));
+ const options={current:true,sceneIds:[],threeD:false,plan:false,elevation:true,allWallFaces:false,includeSchedule:true};
+ const png=Uint8Array.from(Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==','base64'));
+ const bytes=await buildExhibitionPdf(pdfSections(p,options),options,{fontBytes:new Uint8Array(await readFile('public/fonts/NotoSansKR-Regular.ttf')),images:new Map([[original.imageUrl,png]]),previews:new Map()});
+ const {getDocument}=await import('pdfjs-dist/legacy/build/pdf.mjs'),task=getDocument({data:bytes.slice(),useSystemFonts:false}),pdf=await task.promise;
+ const page=await pdf.getPage(1),items=(await page.getTextContent()).items.filter(item=>'str' in item),caption=items.find(item=>item.str.trim()&&Math.abs(item.transform[5]-74)<.1);
+ expect(caption).toBeDefined();expect(caption!.str).toContain('…');expect(caption!.height).toBeGreaterThanOrEqual(8);expect(caption!.transform[4]+caption!.width).toBeLessThanOrEqual(841.89-52+.1);
+ let schedule='';for(let i=2;i<=pdf.numPages;i++)schedule+=(await (await pdf.getPage(i)).getTextContent()).items.map(item=>'str' in item?item.str:'').join(' ');
+ expect(schedule).toContain('작품 10');expect(schedule).not.toContain('…');await task.destroy();
+},20000);
+
 it('exports frame/rotation-aware axis gaps and A/B-face installation schedules without private notes',async()=>{
  const p=createDemoProject();p.artworks=p.artworks.slice(0,4).map((a,i)=>({...a,name:`설치 검증 ${i+1}`,wallId:'wall-a',wallSide:i<2?'front':'back',widthMm:i===3?700:500,heightMm:i===3?900:600,alongMm:i<2?1000:i===2?4780:3600,centerHeightMm:i<2?800+i*1030:1600,rotationDeg:i<2?0:90,frame:'natural',frameSettings:{widthMm:30,depthMm:70,matWidthMm:60,matColor:'#ffffff',material:'metal',cover:'glass'},note:'PRIVATE NOTE'}));
  const before=JSON.stringify(p),options={current:true,sceneIds:[],threeD:false,plan:false,elevation:true,allWallFaces:false,includeSchedule:true};
