@@ -1,6 +1,9 @@
 import {textureHeaderSize} from '../lib/artworkModelPayload';
 import type {EntitySelection,Project} from './types';
-export interface NoteDetails {checklist:NoteCheck[];images:NoteImage[]}
+export const INSTALLATION_STAGES=[['printed','출력 완료'],['framed','액자·마감 완료'],['delivered','운송 완료'],['installed','설치 완료'],['lightingChecked','조명 확인']] as const;
+export type InstallationStage=typeof INSTALLATION_STAGES[number][0];
+export type InstallationStatus=Partial<Record<InstallationStage,boolean>>;
+export interface NoteDetails {checklist:NoteCheck[];images:NoteImage[];installation?:InstallationStatus}
 export interface NoteCheck {id:string;text:string;done:boolean}
 export interface NoteImage {id:string;name:string;imageUrl:string}
 export type NoteTarget=EntitySelection|{type:'project'}|{type:'floor'}|{type:'referenceModel'};
@@ -23,7 +26,10 @@ export function parseNoteDetails(value:unknown):NoteDetails{
  const ids=new Set<string>(),unique=(value:unknown)=>{const key=id(value);if(ids.has(key))throw new Error('중복된 메모 항목 ID가 있습니다.');ids.add(key);return key;};
  const checklist=v.checklist.map(value=>{const c=record(value);if(typeof c.done!=='boolean')throw new Error('체크 항목 상태가 올바르지 않습니다.');return {id:unique(c.id),text:text(c.text,1000),done:c.done};});
  let size=0;const images=v.images.map(value=>{const i=record(value);size+=noteImageBytes(i.imageUrl);return {id:unique(i.id),name:text(i.name,200),imageUrl:i.imageUrl as string};});
- if(size>NOTE_IMAGES_TOTAL_BYTES)throw new Error('한 메모의 이미지 총합은 8MiB 이하여야 합니다.');return {checklist,images};
+ if(size>NOTE_IMAGES_TOTAL_BYTES)throw new Error('한 메모의 이미지 총합은 8MiB 이하여야 합니다.');
+ let installation:InstallationStatus|undefined;
+ if(v.installation!==undefined){const raw=record(v.installation);installation={};for(const [key,value] of Object.entries(raw)){if(!INSTALLATION_STAGES.some(([stage])=>stage===key)||typeof value!=='boolean')throw new Error('설치 확인 상태가 올바르지 않습니다.');installation[key as InstallationStage]=value;}}
+ return {checklist,images,...(installation?{installation}:{})};
 }
 export function readNote(project:Project,target:NoteTarget):{text:string;details:NoteDetails}{
  const source=noteSource(project,target);return {text:source.note??'',details:source.noteDetails??{checklist:[],images:[]}};

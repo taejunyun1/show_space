@@ -155,3 +155,5 @@
 .floor-empty-state{position:absolute;left:20px;bottom:164px;width:max-content;max-width:min(430px,calc(100% - 40px));z-index:2;pointer-events:none}
 .floor-empty-state button{pointer-events:auto}
 @media(max-width:700px){.floor-empty-state{left:10px;bottom:164px;max-width:calc(100% - 20px)}}
+
+@media(max-width:1450px){.header .installation-entry span{display:none}}

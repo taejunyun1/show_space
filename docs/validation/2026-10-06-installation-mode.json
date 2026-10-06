@@ -1,0 +1,126 @@
+{
+  "filename": "ANCA 연속 검증 · 저장 보호 (1).json",
+  "sha256": "fa21437df7f0ad7f579611e54f9cf4e5a65c6a8750a33b844e409e03696f4f2d",
+  "id": "3065bd45-b859-4dda-9aba-898f27c800e3",
+  "name": "ANCA 연속 검증 · 저장 보호",
+  "walls": 17,
+  "artworks": 10,
+  "geometryMatchesPreviousExport": true,
+  "installation": {
+    "printed": true,
+    "installed": true,
+    "lightingChecked": true
+  },
+  "checks": {
+    "project": [
+      {
+        "id": "525fcccb-e6d2-4129-8bda-3f10ed157b21",
+        "text": "설치 공구 준비",
+        "done": true
+      }
+    ],
+    "artwork": [
+      {
+        "id": "a3d6b1e1-acea-433b-8eb8-2b002ed05687",
+        "text": "작품 수평 확인",
+        "done": true
+      }
+    ]
+  },
+  "lights": [
+    {
+      "name": "스팟 조명 1",
+      "kelvin": 3200
+    }
+  ],
+  "outdoor": {
+    "mode": "outdoor",
+    "latitude": 37.5665,
+    "longitude": 126.978,
+    "timeZone": "Asia/Seoul",
+    "date": "2026-07-21",
+    "time": "16:30",
+    "northDeg": 0,
+    "preset": "clear",
+    "sunIntensity": 3,
+    "shadow": true,
+    "occurrence": "earlier"
+  },
+  "sceneNames": [
+    "배치 A · 버드아이",
+    "배치 B · 회전",
+    "배치 C · 3200K 야외 16:30"
+  ],
+  "fieldMode": {
+    "stages": [
+      "printed",
+      "framed",
+      "delivered",
+      "installed",
+      "lightingChecked"
+    ],
+    "installed": 1,
+    "artworks": 10,
+    "completedStages": 3,
+    "totalStages": 50,
+    "completedAdditionalChecks": 2,
+    "additionalChecks": 2,
+    "nativeReloadVerified": true,
+    "nativeSceneRestorePreservesLatestStatuses": true,
+    "nativeAdditionalCheckToggleVerified": true,
+    "privateStagesExcludedFromPublicShare": "domain regression test",
+    "geometryReadonly": "native export matches previous walls and artworks; no geometry controls"
+  },
+  "temporaryRuler": {
+    "clicksPx": [
+      [
+        220,
+        580
+      ],
+      [
+        440,
+        580
+      ]
+    ],
+    "displayMetres": 2.34219,
+    "expectedFromVisibleSvgMetres": 2.342193063603964,
+    "permanentMeasurementWritten": false
+  },
+  "responsive": {
+    "tablet": [
+      768,
+      1024
+    ],
+    "tabletDialogClientWidth": 734,
+    "tabletDialogScrollWidth": 734,
+    "mobile": [
+      390,
+      844
+    ],
+    "mobileDialogClientWidth": 376,
+    "mobileDialogScrollWidth": 376,
+    "mobileScrolledStickyHeader": {
+      "top": 7,
+      "bottom": 101
+    },
+    "realDevice": false
+  },
+  "imageFit": {
+    "normalImages": 10,
+    "preserveAspectRatio": "none",
+    "legacySpriteCropPreserved": true
+  },
+  "consoleWarningsErrors": [],
+  "tests": {
+    "passed": 851,
+    "skipped": 2,
+    "build": "passed"
+  },
+  "remaining": [
+    "Actual authentication, two-account and two-device acceptance",
+    "Snap gesture, independent elevation edit and uploaded texture in the same acceptance flow",
+    "External SketchUp or equivalent receiver import of exported GLB",
+    "Representative physical tablet/mobile GPU performance and actual user success metrics",
+    "Remaining doc2 extensions tracked in requirement audit"
+  ]
+}
