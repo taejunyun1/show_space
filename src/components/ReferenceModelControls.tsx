@@ -5,7 +5,7 @@ import {useState} from 'react';
 import {downloadBlob} from '../lib/art';
 import {adoptModelSpace,sameModelGeometry} from '../domain/modelSpace';
 import {useEditor} from '../state/editor';
-export function ReferenceModelControls(){
+export function ReferenceModelControls({hidden=false}:{hidden?:boolean}={}){
  const formatLength = useLengthFormatter();
  const {project,patchProject}=useEditor(),model=project.referenceModel;const [busy,setBusy]=useState(false);if(!model)return null;
  async function convert(){
@@ -20,7 +20,7 @@ export function ReferenceModelControls(){
   }catch(error){useEditor.getState().notify(error instanceof Error?error.message:'모델 벽을 읽지 못했습니다.');}finally{setBusy(false);}
  }
  const update=(patch:Partial<typeof model>)=>patchProject({referenceModel:{...model,...patch}});
- return <section className="reference-model-controls" aria-label="3D 참고 모델">
+ return <section style={hidden?{display:'none'}:undefined} className="reference-model-controls" aria-label="3D 참고 모델">
  <strong>3D 참고 모델</strong><span>{model.name}</span>
  <label><input type="checkbox" checked={model.visible} onChange={e=>update({visible:e.target.checked})}/> 모델 표시</label>
  <small>{model.sizeMm.map(value=>formatLength(value*model.scale)).join(' × ')}</small>

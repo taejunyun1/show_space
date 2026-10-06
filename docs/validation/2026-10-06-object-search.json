@@ -1,0 +1,83 @@
+{
+  "projectId": "3065bd45-b859-4dda-9aba-898f27c800e3",
+  "projectExport": "ANCA 연속 검증 · 저장 보호 (2).json",
+  "exportSHA256": "fa21437df7f0ad7f579611e54f9cf4e5a65c6a8750a33b844e409e03696f4f2d",
+  "sameContentAsBeforeSearchAndGestures": true,
+  "search": {
+    "nativeMaterialResult": {
+      "query": "무광 사진용지",
+      "count": 1,
+      "selected": "artwork-1"
+    },
+    "nativeWallResult": {
+      "query": "자동 벽 17",
+      "count": 1,
+      "selected": "자동 벽 17"
+    },
+    "nativeLightResult": {
+      "query": "스팟",
+      "selected": "스팟 조명 1"
+    },
+    "artworkTabLightQueryCount": 0,
+    "nativeEscapeClears": true
+  },
+  "mobile": {
+    "viewport": [
+      390,
+      844
+    ],
+    "outlinerClientWidth": 129,
+    "outlinerScrollWidth": 129,
+    "searchClientWidth": 109,
+    "searchScrollWidth": 109,
+    "physicalDevice": false
+  },
+  "elevation": {
+    "nativeSnapDragPx": [
+      [
+        443,
+        376
+      ],
+      [
+        424,
+        376
+      ]
+    ],
+    "snappedAlongMetres": 0.2225,
+    "outerLeftGapMetres": 0,
+    "centerHeightMetres": 1.5,
+    "sizeMetres": [
+      0.4,
+      1.2,
+      0.03
+    ],
+    "nativeRotationDragPx": [
+      [
+        443,
+        315
+      ],
+      [
+        504,
+        376
+      ]
+    ],
+    "rotationDegrees": -90,
+    "numericSizeUnchanged": true,
+    "undoRestores": {
+      "alongMetresDisplayed": 0.53316,
+      "rotationDegrees": 0
+    }
+  },
+  "tests": {
+    "passed": 855,
+    "skipped": 2,
+    "build": "passed"
+  },
+  "consoleWarningsErrors": [],
+  "remaining": [
+    "Actual authentication and two-account/two-device acceptance",
+    "Uploaded raw texture in this same acceptance flow",
+    "External receiver reimport and representative physical-device checks",
+    "Doc2 extensions remain in requirement audit"
+  ]
+}
