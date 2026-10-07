@@ -13,5 +13,36 @@
     "build": "TypeScript/Vite passed"
   },
   "localNewTab": "net::ERR_BLOCKED_BY_CLIENT; no network filter bypass attempted",
-  "publicAfter": "pending"
+  "publicAfter": {
+    "sourceCommit": "5603151",
+    "versionId": "458d4815-0a75-48ed-93a7-472084c4d6fb",
+    "entry": "/assets/index-ClTHtoCy.js",
+    "selectionSequence": [
+      "고요한 면",
+      "빛의 간격",
+      "벽 A",
+      "여백",
+      "벽 B",
+      "고요한 면"
+    ],
+    "informationSections": [
+      1,
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "artistFields": [
+      1,
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "consoleErrorsOrWarnings": [],
+    "projectDataModified": false,
+    "screenshot": "2026-10-07-inspector-public.png"
+  }
 }
