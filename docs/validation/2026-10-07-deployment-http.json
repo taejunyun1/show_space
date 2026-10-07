@@ -1,0 +1,532 @@
+{
+  "verifiedAt": "2026-10-07T14:37:28.582Z",
+  "origin": "https://gonggan-exhibition-preview.taejunyun.workers.dev",
+  "source": "8fb69dc167daedfd000178376e9bd1ebc486b064",
+  "assets": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "bytes": 715,
+      "sha256": "ad8d5380da65ac28d4e5c6f8b075b3b54f8e6ad3baa5b1e2a5f1caa2051ca11b",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/AccountDialog-T3lqd_zJ.js",
+      "status": 200,
+      "bytes": 10183,
+      "sha256": "9b4fd7789eec28dbd80ae50e004b84d0e96064ba7f0827c9d1955e07146b312e",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/App-BIB-cO4P.js",
+      "status": 200,
+      "bytes": 465745,
+      "sha256": "0b31083e5a78ad231081bd745525a82aa12af5d24ab9252de43feb0a63104d55",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/CloudHistoryDialog-Bjc9tn9a.js",
+      "status": 200,
+      "bytes": 14399,
+      "sha256": "7716cd40a126d43b557ba97513e55a35f6eb390440527728dadd0a7eb417e18e",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/Controls-C-W5RYkO.js",
+      "status": 200,
+      "bytes": 1508,
+      "sha256": "35ea3a5e42acecb22da9b3be0051f5e003d9713db46b27b128b843ea93a53da8",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/Gallery3D-BhhHw-IZ.js",
+      "status": 200,
+      "bytes": 49916,
+      "sha256": "bcc95f47a67f817ec88e61e22e204c5d0884f045c3dd6ce329816e6a58cac452",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/InstallationMode-CWE3HM_d.css",
+      "status": 200,
+      "bytes": 5296,
+      "sha256": "04bd8ea52c739e88101f00c6caf4ef020d8731314b80f2df8e84d25fcd85485c",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/InstallationMode-Crwe8xJw.js",
+      "status": 200,
+      "bytes": 12638,
+      "sha256": "6356a221782f0cb3f8020077370cf12cfefae3f1325e97d8549ccd38aa692c95",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/LengthUnits-Dpr8I8jo.js",
+      "status": 200,
+      "bytes": 220,
+      "sha256": "9deb2c3eb9bf49537b77a93dd23599c607d83f29c21368509f665082045884f0",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/MaterialLibraryDialog-B67mQUGX.js",
+      "status": 200,
+      "bytes": 7867,
+      "sha256": "04f2cf9ad5b276b8c49451208e5b4f37cb448e69fd661715329713eaa1867b15",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/PdfDialog-gS94BUAk.js",
+      "status": 200,
+      "bytes": 13901,
+      "sha256": "d888877ab3157797d1ec8447e2ebf9a09a27197f2c676fe11bf916324935c7cd",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/PresentationMode-BaZ1DR1l.js",
+      "status": 200,
+      "bytes": 8904,
+      "sha256": "f7768f67e6c15f509d4693bfe91735c48c99a0f6890d5b78bbadbff9e8bb3320",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/PresentationMode-DKEmcm6j.css",
+      "status": 200,
+      "bytes": 3962,
+      "sha256": "a78aeaeab2d6fb39eccbeba824b20a15addff36ab1730c8291c9ac43fb913922",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/ProjectArchiveDialog-btfeV1md.js",
+      "status": 200,
+      "bytes": 9662,
+      "sha256": "3833154456522ab019fb9fe6b37018654473610dcb62fadb6c96da4cbd699ad7",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/ProjectCollaborationDialog-Y6Y0fyxK.js",
+      "status": 200,
+      "bytes": 5750,
+      "sha256": "d6d9e7bba21ff9b474149561a21392f1dee08d72adfd6cd69a279f7e6e4107b0",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/ProjectHistoryDialog-D3Z6WuZR.js",
+      "status": 200,
+      "bytes": 13936,
+      "sha256": "7d0c1ebfa1ca88bd5c30da8380ae6bcc9484aaf362dc1ecd878fb8a97eed11ef",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/ProjectInvitationPage-SvYHhyhG.js",
+      "status": 200,
+      "bytes": 5411,
+      "sha256": "66426adead5976e10242f6bde364a5cd8f7ba3bcee58aafe62d7acf1bceec27e",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/ReadonlyAssets-B5PG2cki.js",
+      "status": 200,
+      "bytes": 300,
+      "sha256": "1d9cc9b41456a7d70dcf95673c124d59576ebe1de159f32ec9d1d4747a99f387",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/ReviewCommentsPanel-B5uY7r9i.js",
+      "status": 200,
+      "bytes": 16795,
+      "sha256": "320d7f17efd515aaa568c8c521add9a6ea056c159346ff60480628712c9e6dbe",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/ReviewCommentsPanel-DVfK2Bpi.css",
+      "status": 200,
+      "bytes": 1970,
+      "sha256": "e31986add23470f7b70bba943abe779c05cf8b643b649d40a679eba7bcc21f9d",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/ShareReviewDialog-BskdrJS2.js",
+      "status": 200,
+      "bytes": 1646,
+      "sha256": "dea1638a019333df39bdc665c7c020a6ee670690f7a7dec816536c737a1466eb",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/SharedViewer-ClqBSymF.js",
+      "status": 200,
+      "bytes": 23668,
+      "sha256": "b3c7f502c00174d8f2800de6fc39a021e116901f24db1e0607eb3a4374b40ed5",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/SharedViewer-Cm3gXi4w.css",
+      "status": 200,
+      "bytes": 5838,
+      "sha256": "9389bab67a18b5c68636860d54fc78f1a5780d00e26221e774e49f87a3820157",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/SharedViewer3D-BN75DNCX.js",
+      "status": 200,
+      "bytes": 14737,
+      "sha256": "9ffc3435d9c505f8ee1d7c72f99302307972f26140c50204d62a4ff31dfb606f",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/TeamProjectDialog-CzsQSmDz.js",
+      "status": 200,
+      "bytes": 5479,
+      "sha256": "43f3d2e20aa0421e69e38e64a3769336c1ff2ddb38ea3bfec627cd7eb5633842",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/TimeComparisonDialog-CQuZvuEh.js",
+      "status": 200,
+      "bytes": 9148,
+      "sha256": "f633ef3226723a1a4b682764b49a4c762b663150f93facb22276523d7b7fc06d",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/collaborationClient-DitJEFG9.js",
+      "status": 200,
+      "bytes": 2986,
+      "sha256": "b08bc033f35c32b3e0a7bf5300429d155b4f87877f6a4aefb08419a908c0f56e",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/gltfPackage-DoupH_R3.js",
+      "status": 200,
+      "bytes": 5071,
+      "sha256": "3753237157b57c70a1a6641dc6da1b3f69dfb04d4512499795c6b6c1328bf427",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/index-BlI9WeLm.js",
+      "status": 200,
+      "bytes": 228238,
+      "sha256": "ab6b720972a398657fc7c69afbe8e1c8eb394b43cb36f5761dabf0e73c668ae2",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/index-CZhaPR6R.js",
+      "status": 200,
+      "bytes": 192840,
+      "sha256": "353924a0e3e8823afc3a503a2d678051593fc7eb0733c3903b18d5e5223d38fc",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/index-mBbH50YA.css",
+      "status": 200,
+      "bytes": 60666,
+      "sha256": "7b4d9bfe6e80077ef38d7080731839d1272a10470f061c37f2da146c841742b9",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/jszip.min-C9Dyr3BG.js",
+      "status": 200,
+      "bytes": 96906,
+      "sha256": "74f714ee705ace890685696b737b73bee9042a2c94d7f80951e93ea0b33e511a",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/lengthUnits-CoUmWZQw.js",
+      "status": 200,
+      "bytes": 765434,
+      "sha256": "9ff9bcd122ff08bbb6c3ac254de61b5319a7f0ab38df2195479571eedf50417e",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/materialLibraryMedia-aXo84KBj.js",
+      "status": 200,
+      "bytes": 1968,
+      "sha256": "eee304023c00dcb6670401ed471a927c79d9f3c42aac9abc9c5a6f46eb47a7c9",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/modelArtworkGeometry-cUGd68lf.js",
+      "status": 200,
+      "bytes": 48277,
+      "sha256": "33cad8712be8b5f0a0a8448a53708148b84e5bdc0149d9af38e322b1ad13a684",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/modelArtworkImport-D_yRcWZC.js",
+      "status": 200,
+      "bytes": 5440,
+      "sha256": "d60700a34d7c45e2820c43d72892e52083b9cc39161e1573cf50b6e360e3b87f",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/modelExport-C1n9n4oY.js",
+      "status": 200,
+      "bytes": 45185,
+      "sha256": "84c8483cbce6ae160eedd86d52479f7b5f479c1ea3b0e2892b84b5cd627815be",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/modelImport-DOY35-J9.js",
+      "status": 200,
+      "bytes": 1304,
+      "sha256": "0735e3bcbb0898ae8dcf11ded32496f98672f65259e820dd1c303dfe709f23d1",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/modelWalls-DMaArcTw.js",
+      "status": 200,
+      "bytes": 6063,
+      "sha256": "695ac3d234c3471f307a9dba624c0ff9b4fcbbb3f18a4cb242d0ea289f6e5510",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/openCloudProject-H8co5bE4.js",
+      "status": 200,
+      "bytes": 44662,
+      "sha256": "9d0f37443092be23f23b7aaae66df0a1546b2063c350c4fa9015e080636d4f5e",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/pdf-YYBQA8p7.js",
+      "status": 200,
+      "bytes": 437740,
+      "sha256": "b87c98af0a4fddae0ebce650bf2289c7870a2cba94bf73b94f0569f8b2556cbf",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/pdf.worker.min-Dswkl-cV.mjs",
+      "status": 200,
+      "bytes": 1265413,
+      "sha256": "8ab0e5e30031b4a06ecfddd5ae9562f0227f830ee7ec9ed1a968b134243d2386",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/pdfExport-CBiCo1kX.js",
+      "status": 200,
+      "bytes": 1162923,
+      "sha256": "d0c4a87634aebc455980bce767ef9b7eb4252dff05842cd56dcbb022c1b376c5",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/pdfRender3d-DQwmboa7.js",
+      "status": 200,
+      "bytes": 3922,
+      "sha256": "885635db5b3e31a1e6bf2c79b4cc52bd221ed6125e8956a13c6eb1a912a585eb",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/projectArchive--Vad7ulV.js",
+      "status": 200,
+      "bytes": 12127,
+      "sha256": "ebc0ebb9bfc6922d6f5dd5d7d2c6693a777fadd3f16230b8d557192e93be4f73",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/projectArchive-wihPwSH-.css",
+      "status": 200,
+      "bytes": 2971,
+      "sha256": "9198b7033fbfed73d2ddebf0fc7a96c042d3f728cc9601e4f15f255373b5c5c7",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/projectBackup-ChuCkUb_.js",
+      "status": 200,
+      "bytes": 2214,
+      "sha256": "1fae50dabfcde2b29333bffe156a83ca878747f1fe70cd0eb57a6bd66d34a3a9",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/projectHistory-BzCDKZ8p.css",
+      "status": 200,
+      "bytes": 1798,
+      "sha256": "2eafc5a09fabeb3cf1920e8bc4341d1f4d2a5123d3484d5f8dd3a5c7278c7f01",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/projectHistory-DAnfp0fF.js",
+      "status": 200,
+      "bytes": 1049,
+      "sha256": "49fbdd0bb926b7cf2ccb58f30d7ba68e6499c2491f1f07a7b60613b257686c38",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/projectPackage-BwrZiLnm.js",
+      "status": 200,
+      "bytes": 11707,
+      "sha256": "7d71cc4804cd601ec62595b2f2a3c9363022260103aaab2f429b5a51969d2f10",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/publicModelAsset-BmCVcOWH.js",
+      "status": 200,
+      "bytes": 6314,
+      "sha256": "d41b138b56ed7b53670361ad42978c44486e5ceb7ae24b77ee5b9a58099612ee",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/publicShare-D_PxYv0u.js",
+      "status": 200,
+      "bytes": 22131,
+      "sha256": "f307d8a242e7d9737b130460ddecd3d2e8267fa40b37ecc44b890753ca785aff",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/readPlanOcr.worker-CLgGsRuS.js",
+      "status": 200,
+      "bytes": 16559,
+      "sha256": "c25a06a65ce30565fb209749700af4c4a317767504f917d77d6d8cb968994e01",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/sceneProject-DJN_5XWE.js",
+      "status": 200,
+      "bytes": 744,
+      "sha256": "11f4ce85f9c017fcb5b2774dd8870ab4926d5827a9e2d1d4e002c37653f6a284",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/sceneThumbnail-DVZNQoue.js",
+      "status": 200,
+      "bytes": 1990,
+      "sha256": "d918f27e7489421780e1d7fec3fa28a7bb23e9abd3710ac17c83faf48a3a6cbe",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/signDetection.worker-Dw8UZT7A.js",
+      "status": 200,
+      "bytes": 6275,
+      "sha256": "d91aeb8d0bb818cef07b21d541d12c765a7c1a8ecc2844dc79ecc8364ee8809d",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/surfaceEnvironment-DyMmD2hU.js",
+      "status": 200,
+      "bytes": 8978,
+      "sha256": "af30ed1ab5a1c8a26a2706d4b5cb04124360299c2ad346377d31dfae7abce5f0",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/surfaceMaterial-rqsiGAhG.js",
+      "status": 200,
+      "bytes": 257871,
+      "sha256": "77d616479084ceb2f54d1715f04c90c6014878a05b593d36eaae9faef8519bb9",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/temporaryRenderQueue-D70sj2t4.js",
+      "status": 200,
+      "bytes": 180,
+      "sha256": "639edd5ca572ab39a8f5cdfedc1ae4203e51be5e58868cfb6e10c87916c94a11",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/vanilla-m3Xdu9cz.js",
+      "status": 200,
+      "bytes": 344,
+      "sha256": "65399dfdb398e1cbf16974d31f6db0f5a672116d676f86be3737ae366741074c",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/videoArtworkImport-DUSfqWuR.js",
+      "status": 200,
+      "bytes": 2839,
+      "sha256": "f517df15e59a9296d2253c2d65a4a823483a29c564901abcd4d31148744942f4",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/videoPoster-BObtWfvo.js",
+      "status": 200,
+      "bytes": 924,
+      "sha256": "b4de5aff5fb84fe7a36e0dc1ae71cb13c2c381c6de30d97537272e463269f3de",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/wallDetection.worker-Di2A9gjP.js",
+      "status": 200,
+      "bytes": 6976,
+      "sha256": "0fceaf093dce704d76305fd85935bb74bc50bb1e2f1cacf6764bffb90a29b82e",
+      "matchesBuild": true
+    },
+    {
+      "path": "assets/wallVisibility3d-hndZA-1K.js",
+      "status": 200,
+      "bytes": 208570,
+      "sha256": "8af22a20247519d8b3cd4b8e685b45021ebead81f7179494190e9293af6f2dec",
+      "matchesBuild": true
+    }
+  ],
+  "apis": [
+    {
+      "path": "/api/projects",
+      "status": 503,
+      "expected": 503,
+      "json": true
+    },
+    {
+      "path": "/api/projects/00000000-0000-4000-8000-000000000007/members",
+      "status": 503,
+      "expected": 503,
+      "json": true
+    },
+    {
+      "path": "/api/project-invitations/00000000-0000-4000-8000-000000000007",
+      "status": 503,
+      "expected": 503,
+      "json": true
+    },
+    {
+      "path": "/api/shares",
+      "status": 401,
+      "expected": 401,
+      "json": true
+    },
+    {
+      "path": "/api/public/000000000000000000000000000000000000000000000000",
+      "status": 404,
+      "expected": 404,
+      "json": true
+    },
+    {
+      "path": "/api/public/000000000000000000000000000000000000000000000000/comments",
+      "status": 404,
+      "expected": 404,
+      "json": true
+    }
+  ],
+  "authEnabled": false,
+  "browserPixelsVerified": false,
+  "deployment": {
+    "id": "c2dff9a6-c0ba-4a2d-9520-c1d28b4c3dbc",
+    "versionId": "e31372f0-c30b-4ea6-bc36-b8ca3803dc27",
+    "percentage": 100,
+    "createdOn": "2026-10-07T14:36:43.475189Z",
+    "worker": "gonggan-exhibition-preview",
+    "message": "2026-10-07 공유 협업·배치 경고·저장·캡처 안정화 8fb69dc"
+  },
+  "database": {
+    "databaseId": "09e81757-5086-4735-b5b3-445b01225283",
+    "migrationLedger": [
+      "0001_cloud_projects.sql",
+      "0002_cloud_history.sql",
+      "0003_cloud_library.sql",
+      "0004_review_comments.sql",
+      "0005_project_collaboration.sql"
+    ],
+    "addedMigrations": [
+      "0004_review_comments.sql",
+      "0005_project_collaboration.sql"
+    ],
+    "verifiedAddedTables": [
+      "project_invites",
+      "project_members",
+      "review_threads"
+    ],
+    "verificationQueryReadOnly": true
+  },
+  "bindingsVerified": [
+    "ASSETS",
+    "OWNER_TOKEN",
+    "PRIVATE_PROJECTS",
+    "PROJECTS_DB",
+    "SHARES"
+  ],
+  "verificationWrites": "GET requests only; no project, comment, invitation or share writes during smoke verification",
+  "scope": "HTML and assets/*.js, *.mjs, *.css hashes; API denial boundaries. Browser execution, fonts/OCR data bytes and rendered pixels not verified."
+}

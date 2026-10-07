@@ -95,3 +95,13 @@ GitHub: https://github.com/taejunyun1/show_space · 기본 브랜치 main. Cloud
 2026-10-04 작품 스냅·설치 치수 배포: 버전 `b8a294bb-d504-4a1b-8d55-5ad28e5bec08`, entry `/assets/index-CYDGyaGf.js`. 같은 벽/면 이미지 작품의 모서리·중심·벽 끝 스냅과 액자/매트/회전/그룹 경계, 벽면 자동 간격·바닥/벽 끝 치수 및 PNG 연결. 776개 테스트 통과·선택 벤치마크 2개 제외, 빌드 통과. 실제 로컬 A/B면·3D 정면 포인터 드래그·250mm 그룹 간격·Undo·JSON 보존·1920×980 PNG와 390px 스크롤 도구막대를 확인했다. 공개 UI에서는 새 스냅 버튼과 기존 JPG/PNG/PDF/SketchUp GLB 입력 메뉴만 확인하고 사용자 초안/공유는 수정하지 않았다. 콘솔 경고/오류 0, 인증 `/api/auth/config`는 `enabled:false`, `--keep-vars`로 키/D1/R2 유지. PDF/공유의 새 자동 간격과 독립 GLB 작품 스냅은 아직 미연결이다. 기록 `../validation/2026-10-04-artwork-snapping.json`.
 
 2026-10-04 설치 치수 PDF·공유 배포: 버전 `73beba89-986c-42dd-9b3e-b515e37aac5a`, entry `/assets/index-C-dErE1K.js`. 같은 회전 외곽 간격/바닥/벽 끝 계산을 PDF 벽면도·작품별 목록과 치수 공개 공유 링크에 연결했다. B면 자동 전환·읽기 쉬운 선택 목록·짧은 도면 라벨, 긴 PDF 행 줄바꿈/페이지 나눔을 지원한다. 781개 테스트 통과·선택 벤치마크 2개 제외, 빌드 통과. 실제 로컬 3페이지 PDF 텍스트/렌더·공개/비공개 링크·잠금 드래그·390px 가로 넘침 없음·합성 링크 두 개 중단 후 JSON/이미지 410을 확인했다. 공개 HTTPS는 최신 entry, SharedViewer/PDF 파일 200, 벽면 치수 755/877.5/927.5/6127.5mm·콘솔 경고/오류 없음만 확인하고 사용자 프로젝트/공유는 수정하지 않았다. 기존 키/D1/R2는 `--keep-vars`로 유지했고 인증은 `enabled:false`다. 독립 GLB 작품 오브젝트 스냅·실제 로그인·실제 사용자 모델/실기기 및 전체 목표는 미완료. 상세 `../validation/2026-10-04-installation-dimension-output.json`.
+
+## 2026-10-07 누적 구현 배포
+
+소스 `8fb69dc167daedfd000178376e9bd1ebc486b064`, Worker 버전 `e31372f0-c30b-4ea6-bc36-b8ca3803dc27`, 활성 배포 `c2dff9a6-c0ba-4a2d-9520-c1d28b4c3dbc`(100%). 지정된 taejun.foto@gmail.com 계정에 `wrangler deploy --keep-vars`로 배포했다. 공유 전송/계정 경로, 시리즈/Archive/Comment/역할·초대 구현, 선택 Focus/Save, 투명 캡처, 회전 배치 경고, 모델 Texture 및 모델/표면 캡처 준비 보호를 묶어서 반영했다.
+
+운영 D1 `0004_review_comments.sql`·`0005_project_collaboration.sql` 추가 테이블/인덱스를 적용했다. 0001–0005 원격 ledger와 `review_threads`/`project_members`/`project_invites` 존재를 읽기 전용 SQL로 확인했다. 기존 테이블을 삭제/변경하는 migration은 없고 ASSETS/OWNER_TOKEN/두 R2/D1 바인딩을 새 버전 metadata로 확인했다. 비밀값을 열람하거나 Supabase 설정을 추가하지 않았다. `/api/auth/config`는 배포 전후 `enabled:false`다.
+
+전체 1,133 통과/선택 10 제외 및 TypeScript/Vite 빌드 통과 후 배포했다. 공개 HTTPS의 HTML와 JS/MJS/CSS 64개·5,657,193바이트가 로컬 dist SHA256과 일치했다. 익명 프로젝트/멤버/초대 요청 503, 작성자 키 없는 공유 목록 401, 존재하지 않는 공개 스냅샷/댓글 404의 JSON 응답 6개를 확인했다. 검증 중에는 GET만 사용했고 프로젝트/공유/댓글/초대를 만들거나 수정하지 않았다.
+
+[HTTP/해시 및 배포 증거](../validation/2026-10-07-deployment-http.json). 이 증거는 브라우저 실행·새 UI·GPU/캡처 결과 픽셀이나 실제 계정 협업 인수를 대신하지 않는다. 폰트/OCR 데이터 전체 바이트도 이번 HTTP 해시 대조 대상이 아니다. 운영 로그인은 사용자 결정대로 보류했으며 전체 제품 목표·24단계 실제 전시 흐름·실기기/사용자 지표는 아직 미완료다.
