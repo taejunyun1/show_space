@@ -28,3 +28,6 @@ export async function writeDraft(project: Project, writer?: Writer): Promise<voi
 }
 export async function openLocalProject(id:string):Promise<Project>{const stored=await projectLibrary().read(id);if(!stored||stored.summary.archived)throw new Error('프로젝트를 찾을 수 없습니다.');await projectLibrary().activate(id);return remember(stored);}
 export async function saveNewLocalProject(project:Project):Promise<Project>{const summary=await projectLibrary().save(project,0,true);return remember({project,summary});}
+
+/** Conditional replacement also updates this tab's acknowledged revision before editing resumes. */
+export async function replaceLocalProject(project:Project,expectedRevision:number):Promise<Project>{const summary=await projectLibrary().save(project,expectedRevision,true);return remember({project,summary});}

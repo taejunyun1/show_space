@@ -2,17 +2,19 @@ import {NumberField} from './Controls';
 import {LengthUnitContext} from './LengthUnits';
 import {parseLengthUnit, type LengthUnit} from '../domain/lengthUnits';
 import {CloudProjectsPanel} from './CloudProjectsPanel';
-import {useEffect,useRef,useState} from 'react';
-import {Plus,Copy,Archive,ArchiveRestore,X} from 'lucide-react';
+import {lazy,Suspense,useEffect,useRef,useState} from 'react';
+import {Plus,Copy,Archive,ArchiveRestore,History,X} from 'lucide-react';
 import {flushAutosave,useEditor} from '../state/editor';
 import {copyProject,newProject} from '../domain/projects';
 import {projectLibrary,type ProjectSummary} from '../lib/projectLibrary';
 import {openLocalProject,saveNewLocalProject} from '../lib/persistence';
 
+const ProjectHistoryDialog=lazy(()=>import('./ProjectHistoryDialog'));
 export function ProjectsDialog({onClose}:{onClose:()=>void}){
  const ref=useRef<HTMLDialogElement>(null),project=useEditor(s=>s.project),hydrated=useEditor(s=>s.hydrated),saveStatus=useEditor(s=>s.saveStatus);
  const [items,setItems]=useState<ProjectSummary[]>([]),[localBusy,setBusy]=useState(true),[cloudBusy,setCloudBusy]=useState(false),[error,setError]=useState(''),[query,setQuery]=useState(''),[archived,setArchived]=useState(false),[creating,setCreating]=useState(false);
  const [name,setName]=useState('새 전시'),[venue,setVenue]=useState(''),[width,setWidth]=useState(8000),[depth,setDepth]=useState(6000),[height,setHeight]=useState(3200),[unit,setUnit]=useState<LengthUnit>(project.displayUnit ?? 'mm'),[outdoor,setOutdoor]=useState(false);
+ const [historyProjectId,setHistoryProjectId]=useState<string>();
  const busy=localBusy||cloudBusy;
  const refresh=async()=>setItems(await projectLibrary().list());
  useEffect(()=>{ref.current?.showModal();let cancelled=false;(async()=>{let failure='';try{await flushAutosave();}catch(e){failure=e instanceof Error?e.message:'저장하지 못했습니다.';}try{const list=await projectLibrary().list();if(!cancelled){setItems(list);setError(failure);}}catch(e){if(!cancelled)setError(e instanceof Error?e.message:'목록을 읽지 못했습니다.');}finally{if(!cancelled)setBusy(false);}})();return()=>{cancelled=true;};},[]);
@@ -30,8 +32,9 @@ export function ProjectsDialog({onClose}:{onClose:()=>void}){
  <label className="project-outdoor"><input type="checkbox" checked={archived} onChange={e=>setArchived(e.target.checked)}/>보관된 프로젝트 보기</label>
  {(error||saveStatus==='error')&&<div className="project-error" role="alert"><p>{error||'현재 작업을 저장하지 못했습니다. 작업을 복사본으로 보존할 수 있습니다.'}</p><button type="button" className="button secondary" disabled={busy} onClick={()=>void run(()=>duplicate(project.id))}>현재 작업 복사본 만들기</button></div>}
  {busy&&<p role="status">프로젝트 처리 중…</p>}
- <div className="project-list">{visible.map(item=><article className="project-card" key={item.id}><div><strong>{item.name}</strong><span>{item.venue||'전시장 미지정'}{item.id===project.id?' · 현재 프로젝트':''}</span><small>수정 {new Date(item.updatedAt).toLocaleString('ko-KR')}</small></div><div className="project-card-actions">{!archived&&<><button type="button" className="button secondary" disabled={busy||item.id===project.id} onClick={()=>void run(async()=>{await flushAutosave();useEditor.getState().loadProject(await openLocalProject(item.id),true);onClose();})}>열기</button><button type="button" className="icon-button" aria-label={`${item.name} 복제`} disabled={busy} onClick={()=>void run(()=>duplicate(item.id))}><Copy size={16}/></button></>}<button type="button" className="icon-button" aria-label={`${item.name} ${archived?'복구':'보관'}`} disabled={busy||item.id===project.id} onClick={()=>void run(async()=>{await flushAutosave();const latest=await projectLibrary().read(item.id);if(!latest)throw new Error('프로젝트를 찾을 수 없습니다.');await projectLibrary().archive(item.id,!archived,latest.summary.revision);})}>{archived?<ArchiveRestore size={16}/>:<Archive size={16}/>}</button></div></article>)}</div>
+ <div className="project-list">{visible.map(item=><article className="project-card" key={item.id}><div><strong>{item.name}</strong><span>{item.venue||'전시장 미지정'}{item.id===project.id?' · 현재 프로젝트':''}</span><small>수정 {new Date(item.updatedAt).toLocaleString('ko-KR')}</small></div><div className="project-card-actions"><button type="button" className="icon-button" aria-label={`${item.name} 버전 기록`} disabled={busy} onClick={()=>setHistoryProjectId(item.id)}><History size={16}/></button>{!archived&&<><button type="button" className="button secondary" disabled={busy||item.id===project.id} onClick={()=>void run(async()=>{await flushAutosave();useEditor.getState().loadProject(await openLocalProject(item.id),true);onClose();})}>열기</button><button type="button" className="icon-button" aria-label={`${item.name} 복제`} disabled={busy} onClick={()=>void run(()=>duplicate(item.id))}><Copy size={16}/></button></>}<button type="button" className="icon-button" aria-label={`${item.name} ${archived?'복구':'보관'}`} disabled={busy||item.id===project.id} onClick={()=>void run(async()=>{await flushAutosave();const latest=await projectLibrary().read(item.id);if(!latest)throw new Error('프로젝트를 찾을 수 없습니다.');await projectLibrary().archive(item.id,!archived,latest.summary.revision);})}>{archived?<ArchiveRestore size={16}/>:<Archive size={16}/>}</button></div></article>)}</div>
  {!busy&&!visible.length&&<p className="field-hint">{query?'검색 결과가 없습니다.':archived?'보관된 프로젝트가 없습니다.':'저장된 프로젝트가 없습니다.'}</p>}
  <CloudProjectsPanel disabled={localBusy} onBusy={setCloudBusy} onLocalChange={refresh}/>
+ {historyProjectId&&<Suspense fallback={null}><ProjectHistoryDialog projectId={historyProjectId} onClose={()=>setHistoryProjectId(undefined)} onRestored={()=>{setHistoryProjectId(undefined);onClose();}}/></Suspense>}
  </dialog>;
 }

@@ -13,6 +13,6 @@ async function sampleImage(url:string){
  const context=canvas.getContext('2d');if(!context)throw new Error('예제 작품을 백업하지 못했습니다.');
  context.drawImage(img,panel*img.naturalWidth/5,0,img.naturalWidth/5,img.naturalHeight,0,0,canvas.width,canvas.height);return canvas.toDataURL('image/png');
 }
-async function verifyImages(project:Project,onProgress:(message:string)=>void){const urls=projectImageUrls(project);for(const [i,url] of urls.entries()){onProgress(`이미지 확인 중 · ${i+1}/${urls.length}`);await image(url);}}
-export async function exportProjectBackup(project:Project,onProgress:(message:string)=>void=()=>{}){await verifyImages(project,onProgress);return exportProjectPackage(project,sampleImage,onProgress);}
-export async function readProjectBackup(file:File,onProgress:(message:string)=>void=()=>{}){if(file.size>PROJECT_PACKAGE_MAX_BYTES)throw new Error('프로젝트 백업은 80MB 이하로 선택해주세요.');const project=await importProjectPackage(await file.arrayBuffer(),onProgress);await verifyImages(project,onProgress);return project;}
+export async function verifyProjectBackupImages(project:Project,onProgress:(message:string)=>void=()=>{}){const urls=projectImageUrls(project);for(const [i,url] of urls.entries()){onProgress(`이미지 확인 중 · ${i+1}/${urls.length}`);await image(url);}}
+export async function exportProjectBackup(project:Project,onProgress:(message:string)=>void=()=>{}){await verifyProjectBackupImages(project,onProgress);return exportProjectPackage(project,sampleImage,onProgress);}
+export async function readProjectBackup(file:File,onProgress:(message:string)=>void=()=>{}){if(file.size>PROJECT_PACKAGE_MAX_BYTES)throw new Error('프로젝트 백업은 80MB 이하로 선택해주세요.');const project=await importProjectPackage(await file.arrayBuffer(),onProgress);await verifyProjectBackupImages(project,onProgress);return project;}

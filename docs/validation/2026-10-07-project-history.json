@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-07",
+  "nativeBackup": {
+    "file": "검증 · 버전 기록 20261007-A · 벽 3200 작품 900.gonggan.zip",
+    "bytes": 737142,
+    "sha256": "c5fa73254865d3aab2553a7aca3beb3ff0aa840a4434f7492f3b2253be4ada77",
+    "assets": 2,
+    "crcAndHashesVerified": true,
+    "wallHeight": 3200,
+    "artworkWidth": 900,
+    "artworkNote": "검증 전 메모",
+    "scenes": 1
+  },
+  "nativeUi": {
+    "savedPoints": [
+      "A · 벽 3200 작품 900",
+      "B · 벽 3500 작품 1100"
+    ],
+    "reloadPreserved": true,
+    "sameVersionComparedEqual": true,
+    "differentSections": [
+      "벽",
+      "작품"
+    ],
+    "previewRendered": true,
+    "restoredA": {
+      "wallHeight": 3200,
+      "width": 900,
+      "note": "검증 전 메모",
+      "scenes": 1
+    },
+    "editAfterRestoreSaved": {
+      "width": 950
+    },
+    "restoredSafetyB": {
+      "wallHeight": 3500,
+      "width": 1100,
+      "note": "검증 후 메모"
+    },
+    "safetyPointsCreated": 2,
+    "archiveAndRecover": true,
+    "mobile": {
+      "viewport": [
+        390,
+        844
+      ],
+      "dialogWidth": 351,
+      "dialogClientWidth": 349,
+      "dialogScrollWidth": 349,
+      "documentWidth": 390,
+      "documentScrollWidth": 390
+    },
+    "consoleErrorsOrWarnings": [],
+    "backupImportedIntoNewProject": {
+      "wallHeight": 3200,
+      "width": 900,
+      "note": "검증 전 메모",
+      "scenes": 1
+    },
+    "originalProjectReturned": "ANCA 연속 검증 · 저장 보호",
+    "originalProjectUpdatedAtUnchanged": "2026-10-07 11:17:44 KST",
+    "ownTestProjectsRecoverablyArchived": 2,
+    "historyPointsPreserved": 4
+  },
+  "deployment": {
+    "status": "pending"
+  },
+  "limits": [
+    "local browser restore-point history, no account synchronization",
+    "selected version ZIP only; history list is not inside project backup",
+    "desktop 390px viewport, no real mobile GPU",
+    "permanent deletion tested only with fake IndexedDB; native test data kept recoverably"
+  ],
+  "automated": {
+    "testsPassed": 918,
+    "optionalBenchmarksSkipped": 2,
+    "build": "TypeScript/Vite passed, 2641 modules",
+    "finalEntry": "/assets/index-CrR82Ylp.js"
+  }
+}
