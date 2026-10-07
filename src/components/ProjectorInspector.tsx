@@ -4,25 +4,28 @@ import {LockKeyhole,UnlockKeyhole} from 'lucide-react';
 import type {ExhibitionLight} from '../domain/lighting';
 import {projectionGeometry,projectorDistance,type ProjectionSettings} from '../domain/projection';
 import {PROJECTION_PATTERN} from '../domain/projectionPattern';
-import {readImage} from '../lib/art';
+import {readProjectorImage} from '../lib/projectorImageImport';
 import {useEditor} from '../state/editor';
 import {useLengthFormatter} from './LengthUnits';
 
 export function ProjectorInspector({light}:{light:ExhibitionLight}){
- const p=light.projection!,g=projectionGeometry({...light,projection:p}),format=useLengthFormatter(),input=useRef<HTMLInputElement>(null),mounted=useRef(true),currentId=useRef(light.id),[busy,setBusy]=useState(false),[error,setError]=useState('');currentId.current=light.id;
- useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;};},[light.id]);
+ const p=light.projection!,g=projectionGeometry({...light,projection:p}),format=useLengthFormatter(),input=useRef<HTMLInputElement>(null),mounted=useRef(true),request=useRef<AbortController|undefined>(undefined),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;request.current?.abort();};},[]);
  const patch=(value:Partial<ProjectionSettings>)=>useEditor.getState().patchLight(light.id,{projection:{...p,...value}});
  async function upload(file:File){
-  const project=useEditor.getState().project;setBusy(true);setError('');
-  try{const imageUrl=await readImage(file),current=useEditor.getState();if(!mounted.current||currentId.current!==light.id)return;if(current.project!==project||current.project.lights?.find(l=>l.id===light.id)!==light)throw new Error('편집 중인 프로젝트가 변경됐습니다. 이미지를 다시 선택해주세요.');patch({imageUrl});}
-  catch(cause){if(mounted.current)setError(cause instanceof Error?cause.message:'투사 이미지를 읽지 못했습니다.');}
-  finally{if(mounted.current)setBusy(false);}
+  request.current?.abort();const controller=new AbortController();request.current=controller;
+  const project=useEditor.getState().project;setBusy(true);setError('');setNotice('');
+  try{const result=await readProjectorImage(file,controller.signal),current=useEditor.getState();if(!mounted.current||controller.signal.aborted||current.selected[0]?.type!=='light'||current.selected[0].id!==light.id)return;if(current.project!==project||current.project.lights?.find(l=>l.id===light.id)!==light)throw new Error('편집 중인 프로젝트가 변경됐습니다. 이미지를 다시 선택해주세요.');patch({imageUrl:result.imageUrl});setNotice(result.optimized?'큰 이미지의 저장 용량을 줄였습니다. 화면에서는 최대 1,024px로 표시합니다.':'원본 이미지 파일을 보존했습니다. 화면에서는 최대 1,024px로 표시합니다.');}
+  catch(cause){if(mounted.current&&!controller.signal.aborted)setError(cause instanceof Error?cause.message:'투사 이미지를 읽지 못했습니다.');}
+  finally{if(mounted.current&&request.current===controller)setBusy(false);}
  }
  return <section className="inspector-section" aria-label="프로젝터 설정"><h3>프로젝터 <IconButton label={light.locked?'조명 잠금 해제':'조명 잠금'} active={light.locked} onClick={()=>useEditor.getState().patchLight(light.id,{locked:!light.locked})}>{light.locked?<LockKeyhole size={16}/>:<UnlockKeyhole size={16}/>}</IconButton></h3>
   <img src={p.imageUrl} alt="투사 이미지" style={{width:'100%',maxHeight:160,objectFit:'contain',background:'#171717'}}/>
-  <input hidden ref={input} type="file" accept="image/jpeg,image/png,image/webp" onChange={e=>{const file=e.target.files?.[0];e.target.value='';if(file)void upload(file);}}/>
+  <input hidden ref={input} aria-label="프로젝터 투사 이미지 파일" type="file" accept="image/jpeg,image/png,image/webp" disabled={light.locked||busy} onChange={e=>{const file=e.target.files?.[0];e.target.value='';if(file)void upload(file);}}/>
   <button className="button secondary full" disabled={light.locked||busy} onClick={()=>input.current?.click()}>{busy?'이미지 준비 중…':'투사 이미지 불러오기'}</button>
-  <button className="text-button" disabled={light.locked||busy} onClick={()=>patch({imageUrl:PROJECTION_PATTERN})}>테스트 패턴으로</button>
+  <button className="text-button" disabled={light.locked||busy} onClick={()=>{patch({imageUrl:PROJECTION_PATTERN});setNotice('');setError('');}}>테스트 패턴으로</button>
+  <p className="field-hint">JPG·PNG·WebP · 20MB 이하. 5MB까지 원본 보존, 큰 파일은 저장용으로 최적화합니다.</p>
+  {notice&&<p role="status" className="field-hint">{notice}</p>}
   {error&&<p role="alert" className="field-hint">{error}</p>}
   <NumberField label="렌즈 투사비" suffix="" step={.01} precision={4} min={.3} max={10} value={p.throwRatio} disabled={light.locked} onChange={throwRatio=>patch({throwRatio})}/>
   <NumberField label="투사 거리" min={100} max={100000} value={g.distanceMm} disabled={light.locked} onChange={distance=>useEditor.getState().patchLight(light.id,{position:projectorDistance(light,distance)})}/>

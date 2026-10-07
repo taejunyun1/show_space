@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-07",
+  "scope": "projector image import and cancellation",
+  "checks": {
+    "testFilesPassed": 185,
+    "testFilesSkipped": 4,
+    "testsPassed": 1001,
+    "testsSkipped": 4,
+    "finalRelatedTestsPassed": 17,
+    "realFormatsDecoded": ["PNG", "JPEG", "WebP"],
+    "portraitPngOriginalBytesPreserved": true,
+    "zipRoundTripOriginalBytesPreserved": true,
+    "currentAndSceneShareDeduplicated": true,
+    "largeSourceOptimizationChecked": true,
+    "pendingDecodeCancellationAndBitmapCloseChecked": true,
+    "mislabeledTruncatedAndOversizedInputRejected": true
+  },
+  "limits": {
+    "inputBytes": 20971520,
+    "preservedOriginalBytes": 5242880,
+    "decodedPixels": 60000000,
+    "optimizedSourceEdge": 2048,
+    "renderedProjectionMapEdge": 1024
+  },
+  "nativeUiVerification": {
+    "completedThisFollowUp": false,
+    "tool": "CUA",
+    "error": "failed to write kernel assets: No such file or directory",
+    "attempts": ["select existing tab", "reset and getState"],
+    "userActionRequired": false
+  },
+  "deployment": {
+    "newChangesDeployed": false,
+    "pending": ["native file upload and contain/cover", "shared and presentation 3D", "imported GLB projection", "projector PNG/PDF 3D output"]
+  }
+}

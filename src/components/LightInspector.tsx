@@ -6,7 +6,7 @@ import {useEditor} from '../state/editor';
 import {translatedLight,spotShadowIds,type ExhibitionLight} from '../domain/lighting';
 export function LightInspector({light}:{light:ExhibitionLight}){
  const state=useEditor(),patch=(value:Partial<ExhibitionLight>)=>state.patchLight(light.id,value),disabled=light.locked;
- return <>{light.projection?<ProjectorInspector light={light}/>:<section className="inspector-section"><h3>조명 <IconButton label={disabled?'조명 잠금 해제':'조명 잠금'} active={disabled} onClick={()=>patch({locked:!disabled})}>{disabled?<LockKeyhole size={16}/>:<UnlockKeyhole size={16}/>}</IconButton></h3>
+ return <>{light.projection?<ProjectorInspector key={`${state.project.id}:${light.id}`} light={light}/>:<section className="inspector-section"><h3>조명 <IconButton label={disabled?'조명 잠금 해제':'조명 잠금'} active={disabled} onClick={()=>patch({locked:!disabled})}>{disabled?<LockKeyhole size={16}/>:<UnlockKeyhole size={16}/>}</IconButton></h3>
  <label className="select-field"><span>종류</span><select aria-label="조명 종류" disabled={disabled} value={light.kind} onChange={e=>patch({kind:e.target.value as 'spot'|'area'})}><option value="spot">Spot · 스팟</option><option value="area">Area · 면조명</option></select></label>
  <NumberField label="조명 밝기" suffix={light.kind==='spot'?'cd':'cd/m²'} step={1} value={light.intensity} min={0} max={100000} disabled={disabled} onChange={intensity=>patch({intensity})}/>
  <NumberField label="색온도" suffix="K" step={100} min={2700} max={6500} value={light.kelvin} disabled={disabled} onChange={kelvin=>patch({kelvin})}/>
