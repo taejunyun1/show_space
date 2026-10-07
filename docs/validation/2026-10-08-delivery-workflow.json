@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-08",
+  "scope": "React dialog delivery workflow using synthetic 10-artwork project",
+  "test": "src/components/Delivery.workflow.test.tsx",
+  "nativePngDecode": true,
+  "nativePdfRaster": true,
+  "browserPixelsVerified": false,
+  "gpuPixelsVerified": false,
+  "publicHttpRoundTripVerified": false,
+  "full24StepAcceptance": false,
+  "pdf": {
+    "pages": 8,
+    "pageRequestCount": 6,
+    "artworks": 10,
+    "orderedPages": [
+      "Scene plan",
+      "current cover",
+      "current schedule",
+      "current schedule continuation",
+      "Scene schedule",
+      "Scene schedule continuation",
+      "current detail",
+      "Scene detail"
+    ],
+    "currentWallHeightMm": 3500,
+    "sceneWallHeightMm": 3200,
+    "currentDetailWidthMm": 400,
+    "sceneDetailWidthMm": 777,
+    "detailPixelProof": {
+      "center": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "x100y333Current": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "x100y333Scene": [
+        255,
+        0,
+        0,
+        255
+      ]
+    },
+    "privateNotesIncluded": false
+  },
+  "backup": {
+    "CRC32Verified": true,
+    "exactProjectRoundTrip": true,
+    "browserImageVerificationWithNativeDecoder": true,
+    "storedArtworks": 10,
+    "storedScenes": 1,
+    "privateNotesPreserved": true
+  },
+  "publicPresentation": {
+    "selectedSceneCount": 1,
+    "currentArtworks": 10,
+    "privateNotesIncluded": false
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/gonggan-delivery-20261008.pdf",
+      "bytes": 3138250,
+      "sha256": "695b6280c70018c09970d715afd7286ef701d48197db99dc346beb57f0b20995"
+    },
+    {
+      "path": "/tmp/gonggan-delivery-20261008.gonggan.zip",
+      "bytes": 6632,
+      "sha256": "62dd2f929cb162dd9e88cd6e71b15169f6be5518a7d59636c1347f0c621eade6"
+    },
+    {
+      "path": "/tmp/gonggan-delivery-detail-7-20261008.png",
+      "bytes": 16587,
+      "sha256": "0c1cbfdc4ad811b252a4c1a924bb5e9e36ce1dd12b36c6c153513069ac65178d"
+    },
+    {
+      "path": "/tmp/gonggan-delivery-detail-8-20261008.png",
+      "bytes": 16403,
+      "sha256": "43b799bc3ca64e5486c6c0df97c71f2ca08e69bc040703c97178f5ccadb33e29"
+    }
+  ],
+  "command": "GONGGAN_DELIVERY_PROOF=1 npx vitest run src/components/Delivery.workflow.test.tsx",
+  "tests": {
+    "newPassed": 12,
+    "fullPassed": 1187,
+    "fullSkipped": 10
+  }
+}

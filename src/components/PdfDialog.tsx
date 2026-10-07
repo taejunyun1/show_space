@@ -1,4 +1,5 @@
 import {useEffect,useRef,useState} from 'react';
+import {useProjectDialogScope} from './useProjectDialogScope';
 import {FileText,LoaderCircle,X} from 'lucide-react';
 import {useEditor} from '../state/editor';
 import {downloadBlob} from '../lib/art';
@@ -9,13 +10,15 @@ import type {PdfCurrentCamera} from '../lib/pdfRender3d';
 export default function PdfDialog({onClose,getCamera}:{onClose:()=>void;getCamera:()=>PdfCurrentCamera|undefined}){
  const project=useRef(useEditor.getState().project).current,dialog=useRef<HTMLDialogElement>(null),running=useRef(false);
  const [options,setOptions]=useState<PdfOptions>({current:true,sceneIds:[],threeD:true,plan:true,elevation:true,allWallFaces:false,includeSchedule:true});
+ const scope=useProjectDialogScope(project.id,onClose);
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[progress,setProgress]=useState('');
  useEffect(()=>{dialog.current?.showModal();},[]);
  async function save(){
-  if(running.current)return;running.current=true;setBusy(true);setError('');
-  try{const {exportProjectPdf}=await import('../lib/pdfExport');const blob=await exportProjectPdf(project,options,getCamera(),setProgress);downloadBlob(blob,`${project.name}-전시안.pdf`);useEditor.getState().notify('전시안 PDF 다운로드를 시작했습니다.');onClose();}
-  catch(e){setError(e instanceof Error?e.message:'PDF를 내보내지 못했습니다.');}
-  finally{running.current=false;setBusy(false);setProgress('');}
+  if(running.current)return;const operation=scope.begin();if(operation===undefined)return;
+  running.current=true;setBusy(true);setError('');
+  try{const camera=structuredClone(getCamera());const {exportProjectPdf}=await import('../lib/pdfExport');if(!scope.current(operation))return;const blob=await exportProjectPdf(project,options,camera,message=>{if(scope.current(operation))setProgress(message);});if(!scope.current(operation))return;downloadBlob(blob,`${project.name}-전시안.pdf`);useEditor.getState().notify('전시안 PDF 다운로드를 시작했습니다.');onClose();}
+  catch(e){if(scope.current(operation))setError(e instanceof Error?e.message:'PDF를 내보내지 못했습니다.');}
+  finally{running.current=false;if(scope.current(operation)){setBusy(false);setProgress('');}}
  }
  const patch=(key:'current'|'threeD'|'plan'|'elevation'|'allWallFaces'|'includeSchedule',value:boolean)=>setOptions(o=>({...o,[key]:value}));
  function editPages(){try{const pages=pdfDefaultPages(project,options);setOptions(o=>({...o,pages}));setError('');}catch(e){setOptions(o=>({...o,pages:[]}));setError(e instanceof Error?e.message:'페이지를 직접 추가하세요.');}}

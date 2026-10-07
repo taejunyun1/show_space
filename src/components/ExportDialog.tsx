@@ -1,3 +1,4 @@
+import {useProjectDialogScope} from './useProjectDialogScope';
 import {modelExportOmissionNotice} from '../domain/modelExportScope';
 import {X,FileJson,FileText,Image,Download,Box,Files,LoaderCircle} from 'lucide-react';
 import {useEffect,useRef,useState} from 'react';
@@ -8,22 +9,22 @@ import {MODEL_MAX_BYTES} from '../lib/glbPayload';
 export function ExportDialog({onClose,onPng,onPdf}:{onClose:()=>void;onPng:()=>void;onPdf:()=>void}){
  const project=useEditor(s=>s.project),omission=modelExportOmissionNotice(project),ref=useRef<HTMLDialogElement>(null);
  const [busy,setBusy]=useState(false),[progress,setProgress]=useState(''),[error,setError]=useState('');
- const exporting=useRef(false);
+ const exporting=useRef(false),scope=useProjectDialogScope(project.id,onClose);
  useEffect(()=>{ref.current?.showModal();},[]);
  async function exportBackup(){
-  if(exporting.current)return;exporting.current=true;setBusy(true);setError('');setProgress('프로젝트 백업 준비 중');
-  try{const {exportProjectBackup}=await import('../lib/projectBackup');const blob=await exportProjectBackup(project,setProgress);downloadBlob(blob,`${project.name}.gonggan.zip`);useEditor.getState().notify('자산을 포함한 프로젝트 백업을 저장했습니다. 불러오기에서 ZIP을 선택해 복원하세요.');onClose();}
-  catch(e){setError(e instanceof Error?e.message:'프로젝트 백업을 만들지 못했습니다.');}
-  finally{exporting.current=false;setBusy(false);setProgress('');}
+  if(exporting.current)return;const operation=scope.begin();if(operation===undefined)return;exporting.current=true;setBusy(true);setError('');setProgress('프로젝트 백업 준비 중');
+  try{const {exportProjectBackup}=await import('../lib/projectBackup');if(!scope.current(operation))return;const blob=await exportProjectBackup(project,message=>{if(scope.current(operation))setProgress(message);});if(!scope.current(operation))return;downloadBlob(blob,`${project.name}.gonggan.zip`);useEditor.getState().notify('자산을 포함한 프로젝트 백업을 저장했습니다. 불러오기에서 ZIP을 선택해 복원하세요.');onClose();}
+  catch(e){if(scope.current(operation))setError(e instanceof Error?e.message:'프로젝트 백업을 만들지 못했습니다.');}
+  finally{exporting.current=false;if(scope.current(operation)){setBusy(false);setProgress('');}}
  }
  async function exportModel(format:'glb'|'gltf'='glb'){
-  if(exporting.current)return;exporting.current=true;setBusy(true);setError('');setProgress('3D 모델 준비 중');
+  if(exporting.current)return;const operation=scope.begin();if(operation===undefined)return;exporting.current=true;setBusy(true);setError('');setProgress('3D 모델 준비 중');
   try{
    const {exportProjectGlb,exportProjectGltf}=await import('../lib/modelExport');
-   const blob=await (format==='glb'?exportProjectGlb:exportProjectGltf)(project,setProgress);downloadBlob(blob,`${project.name}.${format==='glb'?'glb':'gltf.zip'}`);
+   if(!scope.current(operation))return;const blob=await (format==='glb'?exportProjectGlb:exportProjectGltf)(project,message=>{if(scope.current(operation))setProgress(message);});if(!scope.current(operation))return;downloadBlob(blob,`${project.name}.${format==='glb'?'glb':'gltf.zip'}`);
    const delivered=format==='gltf'?'glTF ZIP 다운로드를 시작했습니다. 압축을 풀고 scene.gltf를 여세요.':blob.size>MODEL_MAX_BYTES?'GLB를 저장했습니다. 파일이 12MB를 넘어 현재 앱에서는 다시 불러올 수 없습니다.':'벽·바닥·작품을 GLB로 저장했습니다.';useEditor.getState().notify(delivered+(omission?' '+omission:''));onClose();
-  }catch(e){setError(e instanceof Error?e.message:'3D 모델을 내보내지 못했습니다.');}
-  finally{exporting.current=false;setBusy(false);setProgress('');}
+  }catch(e){if(scope.current(operation))setError(e instanceof Error?e.message:'3D 모델을 내보내지 못했습니다.');}
+  finally{exporting.current=false;if(scope.current(operation)){setBusy(false);setProgress('');}}
  }
  return <dialog ref={ref} className="export-dialog" onCancel={e=>{if(exporting.current)e.preventDefault();else onClose();}} onClick={e=>{if(e.target===e.currentTarget&&!exporting.current)onClose();}}>
   <div className="dialog-header"><div><h2>전시안 내보내기</h2><p>작업을 보관하거나 이미지·PDF·3D 모델로 남기세요.</p></div><button className="icon-button" disabled={busy} onClick={onClose} aria-label="닫기"><X size={18}/></button></div>
