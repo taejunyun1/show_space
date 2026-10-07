@@ -1,3 +1,4 @@
+import {captureAssetsReady,waitForCaptureAssets} from '../lib/captureAssets';
 import {beginCaptureBackground,paintCaptureBackground} from '../lib/captureBackground';
 import {videoSessionKey} from '../lib/videoPlayback';
 import {VideoArtworkScreen} from './VideoArtworkScreen';
@@ -134,7 +135,7 @@ function Painting({ artwork, wall, groups }: { artwork: Artwork; wall: Wall; gro
     event.stopPropagation();(event.target as Element).releasePointerCapture(event.pointerId);
     useEditor.getState().finishArtworkDrag(cancel);
   }
-  return <>{measurementSnap.marker}<group userData={{artworkImageReady:!!texture,artworkTextureReady:ready,artworkTextureSize:textureSize,artworkTextureAppliedSize:appliedSize,artworkTextureRequest:{id:artwork.id,key:JSON.stringify([artwork.imageUrl,artPanel(artwork.imageUrl)]),width:artwork.widthMm/1000,height:artwork.heightMm/1000,selected}}} name={`artwork-${artwork.id}`} position={[x / 1000, y / 1000, z / 1000]} rotation={[0, rotationY, (previewAngle??artwork.rotationDeg??0)*Math.PI/180]} onPointerDown={begin} onPointerMove={e=>{measurementSnap.hover(e);moving(e);}} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)} onClick={e => { if(activeTool==='pan')return; e.stopPropagation(); if(activeTool==='measure'){useEditor.getState().pickMeasurement(wallAnchor(project,wall.id,modelPoint(measurementSnap.point(e))),'3d');return;} if(e.delta<4)useEditor.getState().select({ type: 'artwork', id: artwork.id }, e.shiftKey); }} onPointerOver={e => { if(activeTool==='pan')return; e.stopPropagation(); document.body.style.cursor = artwork.locked?'pointer':'grab'; }} onPointerOut={() => { measurementSnap.clear();if(!dragging)document.body.style.cursor = 'auto'; }}><ArtworkPresentationShell artwork={artwork}/>{failed&&<Html center><span className="dimension-label">작품 이미지를 불러오지 못했습니다</span></Html>}{artwork.video?<VideoArtworkScreen sessionKey={videoSessionKey(project.id,artwork.id)} media={artwork.video} poster={texture} widthMm={artwork.widthMm} heightMm={artwork.heightMm} z={presentation.imageZMm/1000}/>:(<mesh name="image" position={[0,0,presentation.imageZMm/1000]}><planeGeometry args={[artwork.widthMm/1000,artwork.heightMm/1000]}/><SurfaceFinish color="#ffffff" material={artwork.material} map={texture} normalExtentM={[artwork.widthMm/1000,artwork.heightMm/1000]} roughness={.9}/></mesh>)}{installationConflict&&<Html position={[0,h/2+.15,0]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#a22'}}>계단·추정 범위와 겹침</span></Html>}{selected && !captureClean && <Line points={[[-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008]]} color="#365cf5" lineWidth={2} />}{selected&&singleSelection&&!artwork.locked&&activeTool==='select'&&!captureClean&&<group><Line points={[[0,h/2+.045,d/2+.05],[0,h/2+.24,d/2+.05]]} color="#365cf5" lineWidth={3}/><mesh position={[0,h/2+.24,d/2+.05]} onPointerDown={beginRotation} onPointerMove={moveRotation} onPointerUp={e=>finishRotation(e)} onPointerCancel={e=>finishRotation(e,true)} onClick={e=>e.stopPropagation()} onPointerOver={e=>{e.stopPropagation();document.body.style.cursor='grab';}} onPointerOut={()=>{document.body.style.cursor='auto';}}><sphereGeometry args={[.115,16,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh></group>}</group></>;
+  return <>{measurementSnap.marker}<group userData={{artworkImageReady:!!texture,artworkImageFailed:!!failed,artworkTextureReady:ready,artworkTextureSize:textureSize,artworkTextureAppliedSize:appliedSize,artworkTextureRequest:{id:artwork.id,key:JSON.stringify([artwork.imageUrl,artPanel(artwork.imageUrl)]),width:artwork.widthMm/1000,height:artwork.heightMm/1000,selected}}} name={`artwork-${artwork.id}`} position={[x / 1000, y / 1000, z / 1000]} rotation={[0, rotationY, (previewAngle??artwork.rotationDeg??0)*Math.PI/180]} onPointerDown={begin} onPointerMove={e=>{measurementSnap.hover(e);moving(e);}} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)} onClick={e => { if(activeTool==='pan')return; e.stopPropagation(); if(activeTool==='measure'){useEditor.getState().pickMeasurement(wallAnchor(project,wall.id,modelPoint(measurementSnap.point(e))),'3d');return;} if(e.delta<4)useEditor.getState().select({ type: 'artwork', id: artwork.id }, e.shiftKey); }} onPointerOver={e => { if(activeTool==='pan')return; e.stopPropagation(); document.body.style.cursor = artwork.locked?'pointer':'grab'; }} onPointerOut={() => { measurementSnap.clear();if(!dragging)document.body.style.cursor = 'auto'; }}><ArtworkPresentationShell artwork={artwork}/>{failed&&<Html center><span className="dimension-label">작품 이미지를 불러오지 못했습니다</span></Html>}{artwork.video?<VideoArtworkScreen sessionKey={videoSessionKey(project.id,artwork.id)} media={artwork.video} poster={texture} widthMm={artwork.widthMm} heightMm={artwork.heightMm} z={presentation.imageZMm/1000}/>:(<mesh name="image" position={[0,0,presentation.imageZMm/1000]}><planeGeometry args={[artwork.widthMm/1000,artwork.heightMm/1000]}/><SurfaceFinish color="#ffffff" material={artwork.material} map={texture} normalExtentM={[artwork.widthMm/1000,artwork.heightMm/1000]} roughness={.9}/></mesh>)}{installationConflict&&<Html position={[0,h/2+.15,0]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#a22'}}>계단·추정 범위와 겹침</span></Html>}{selected && !captureClean && <Line points={[[-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008]]} color="#365cf5" lineWidth={2} />}{selected&&singleSelection&&!artwork.locked&&activeTool==='select'&&!captureClean&&<group><Line points={[[0,h/2+.045,d/2+.05],[0,h/2+.24,d/2+.05]]} color="#365cf5" lineWidth={3}/><mesh position={[0,h/2+.24,d/2+.05]} onPointerDown={beginRotation} onPointerMove={moveRotation} onPointerUp={e=>finishRotation(e)} onPointerCancel={e=>finishRotation(e,true)} onClick={e=>e.stopPropagation()} onPointerOver={e=>{e.stopPropagation();document.body.style.cursor='grab';}} onPointerOut={()=>{document.body.style.cursor='auto';}}><sphereGeometry args={[.115,16,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh></group>}</group></>;
 }
 const ground=new Plane(new Vector3(0,1,0),0);
 function groundPoint(e:ThreeEvent<PointerEvent>){const hit=e.ray.intersectPlane(ground,new Vector3());return hit?{x:Math.round(hit.x*100)*10,z:Math.round(hit.z*100)*10}:null;}
@@ -174,19 +175,6 @@ function captureCanvas(canvas:HTMLCanvasElement):Promise<Blob>{return new Promis
 async function waitForPreviewLighting(scene:Object3D,project:Project,invalidate:()=>void){
  const deadline=performance.now()+3000;
  while(!lightingProfileReady(scene,project,renderProfile('preview'))){if(performance.now()>deadline)throw new Error('캡처용 조명이 아직 준비되지 않았습니다. 다시 시도해 주세요.');invalidate();await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));}
-}
-function waitForArtworks(scene:Object3D,project:Project):Promise<void>{
- const wallIds=new Set(project.walls.map(wall=>wall.id));
- const names=project.artworks.filter(art=>art.visible&&art.imageUrl&&wallIds.has(art.wallId)).map(art=>`artwork-${art.id}`).concat((project.modelArtworks??[]).filter(a=>a.visible).map(a=>`model-artwork-${a.id}`));
- return new Promise((resolve,reject)=>{
-  const deadline=Date.now()+10000;
-  function check(){
-   if(names.every(name=>{const object=scene.getObjectByName(name);return object&&object.userData.artworkImageReady!==false;})){resolve();return;}
-   if(Date.now()>deadline){reject(new Error('일부 작품 이미지가 아직 준비되지 않았습니다. 다시 시도해 주세요.'));return;}
-   setTimeout(check,60);
-  }
-  check();
- });
 }
 function waitForArtworkDetail(scene:Object3D,invalidate:()=>void):Promise<void>{
  return new Promise((resolve,reject)=>{
@@ -255,21 +243,23 @@ function CameraSetup({ reset, hydrated, projectId, onReady, onCameraReady, onCam
     return ()=>onCameraReady(null);
   },[camera,get,onCameraReady,centerX,centerZ,centerY]);
   useEffect(() => onReady(async (options) => {
-    const editor=useEditor.getState(),oldPixelRatio=gl.getPixelRatio(),cssSize=gl.getSize(new Vector2());
+    const editor=useEditor.getState(),capturedProject=editor.previewProject??editor.project,oldPixelRatio=gl.getPixelRatio(),cssSize=gl.getSize(new Vector2());
     const target=capturePixelSize(cssSize.x,cssSize.y,options.longEdge,options.aspectRatio);
     const fit=captureFit({width:cssSize.x,height:cssSize.y},target);
     const max=Math.min(gl.getContext().getParameter(gl.getContext().MAX_RENDERBUFFER_SIZE) as number,gl.getContext().getParameter(gl.getContext().MAX_TEXTURE_SIZE) as number);
     if(target.width>max||target.height>max)throw new Error('이 브라우저에서는 선택한 고해상도를 지원하지 않습니다. 낮은 해상도로 저장해 주세요.');
+    const assertCurrent=()=>{const current=useEditor.getState();if((current.previewProject??current.project)!==capturedProject)throw new Error('캡처 중 전시 내용이 변경됐습니다. 다시 캡처해 주세요.');};
     const grid=scene.getObjectByName('capture-grid'),gridWasVisible=grid?.visible;
     let captureBackground:ReturnType<typeof beginCaptureBackground>|undefined;
     try{
-      await waitForArtworks(scene,editor.previewProject??editor.project);
-      await document.fonts.ready;
+      await waitForCaptureAssets(scene,capturedProject,invalidate,assertCurrent);
+      await document.fonts.ready;assertCurrent();
       scene.userData.artworkCaptureScale=fit.scale;
       flushSync(()=>editor.setCaptureMode(true,options.includeDimensions));
       await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
-      await waitForPreviewLighting(scene,editor.previewProject??editor.project,invalidate);
-      await waitForArtworkDetail(scene,invalidate);
+      await waitForPreviewLighting(scene,capturedProject,invalidate);
+      await waitForArtworkDetail(scene,invalidate);assertCurrent();
+      if(!captureAssetsReady(scene,capturedProject))throw new Error('캡처용 모델이 변경됐습니다. 다시 캡처해 주세요.');
       if(grid)grid.visible=options.includeGrid;
       captureBackground=beginCaptureBackground(scene,gl,options);
       // A very narrow custom output must still have a non-empty source drawing buffer.

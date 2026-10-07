@@ -11,6 +11,8 @@ import {readModelFile,readModelWalls} from './modelImport';
 import {exportProjectGlb,exportProjectGltf} from './modelExport';
 import {publicModelBytes} from './publicModelAsset';
 import {createDemoProject} from '../domain/model';
+import {renderPdf3d} from './pdfRender3d';
+import {pdfPreviewSection} from './pdfLayout';
 import {addModelArtwork} from '../domain/modelArtworks';
 
 const canvas=createCanvas(2,2),ctx=canvas.getContext('2d');ctx.fillStyle='#d93412';ctx.fillRect(0,0,2,2);
@@ -68,4 +70,12 @@ it('fails both model exports without changing a recoverable project and ignores 
 it('still detects corrupt texture bytes after public metadata sanitization without leaking source names in the error',async()=>{
  const doc=source(true);Object.assign(doc.images?.[0]??{},{name:'PRIVATE_FILE_NAME'});const bytes=publicModelBytes(packEmbeddedGltf(doc));
  try{await loadStaticModel(bytes);throw new Error('Expected decode failure');}catch(error){expect((error as Error).message).toContain('텍스처');expect((error as Error).message).not.toContain('PRIVATE');}
+});
+
+it('rejects PDF 3D and model detail rendering before constructing a GPU renderer when textures fail',async()=>{
+ const model={...testArtworkModel(),dataUrl:modelDataUrl(packEmbeddedGltf(source(true)))},p=createDemoProject();p.artworks=[];const {project,artwork}=addModelArtwork(p,model),before=JSON.stringify(project),createElement=vi.fn(()=>{throw new Error('GPU construction must not begin');});vi.stubGlobal('document',{createElementNS:createElement,createElement});
+ await expect(renderPdf3d({project,name:'현재 전시',kind:'3d',current:true})).rejects.toThrow('텍스처');
+ await expect(renderPdf3d(pdfPreviewSection({project,name:'작품 상세',kind:'detail',modelArtwork:artwork}))).rejects.toThrow('텍스처');
+ project.modelArtworks=[];project.referenceModel=model;await expect(renderPdf3d({project,name:'전시장',kind:'3d'})).rejects.toThrow('텍스처');expect(createElement).not.toHaveBeenCalled();
+ project.referenceModel=undefined;project.modelArtworks=[artwork];expect(JSON.stringify(project)).toBe(before);
 });
