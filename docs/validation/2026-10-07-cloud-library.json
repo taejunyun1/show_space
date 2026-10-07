@@ -53,5 +53,20 @@
     "materialCountAfter": 2,
     "originalPreserved": true,
     "sameLocalCount": 1
-  }
+  },
+  "deployment": {
+    "sourceCommit": "7fbced0",
+    "version": "c236d8f9-9115-4ebe-a310-78132933a597",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "migration": "0003_cloud_library.sql applied remote",
+    "workerKiB": 858,
+    "startupMs": 10,
+    "entryVerifiedThroughDOM": "/assets/index-CYLObT-Q.js",
+    "publicBrowserConsoleErrors": [],
+    "publicProjectWritten": false,
+    "authUi": "로그인 서비스가 아직 연결되지 않았습니다.",
+    "screenshot": "2026-10-07-cloud-library-public.png",
+    "directApiProbe": "CLI requests blocked by Cloudflare 403 code 1010; direct browser endpoint navigation ERR_BLOCKED_BY_CLIENT. No bypass attempted. API response status for this deployment not independently verified."
+  },
+  "fixtureDatabaseIntegrity": "ok"
 }

@@ -29,3 +29,5 @@
 운영 로그인 provider는 아직 설정되지 않아 공개 웹에서는 로컬 저장/백업과 명확한 로그인 미연결 안내가 표시된다. 실제 hosted 로그인·두 물리 기기·로그인 세션 교체 검증은 미완료다. 모든 로컬 항목을 무조건 업로드하거나 완전 자동 양방향 동기화하지 않는다. 계정 항목 영구 삭제와 원격 thumbnail preview도 현재 범위 밖의 후속 기능이다. 협업/댓글·미디어/프로젝션·고급 조명·전체 autosave 영구 이력·실제 SketchUp/전체 인수는 별도 진행해야 한다. 최종 구현 목표 전체의 완료를 의미하지 않는다.
 
 최종 검증: 전체 174 test files / 950 tests 통과, 선택 벤치마크 2 files / 2 tests 제외. `npm run build` 성공. 제품 dist에 모의 provider·시험 token·모의 인증 UI가 포함되지 않은 것을 확인했다.
+
+배포: source `7fbced0`, 원격 main push, 원격 `0003_cloud_library.sql` 적용 및 `wrangler deploy --keep-vars` 성공. Cloudflare version `c236d8f9-9115-4ebe-a310-78132933a597`, Worker 858KiB/gzip 170.92KiB, 시작 10ms. 공개 웹 DOM의 entry `/assets/index-CYLObT-Q.js` 및 작품·재질 Library의 로그인 미연결 안내, 콘솔 오류 없음 확인. 공개 프로젝트 데이터는 변경하지 않았다. 공개 API 직접 probe는 CLI 403/Cloudflare 1010 및 브라우저 직접 endpoint 이동 차단으로 독립 검증하지 못했고 우회하지 않았다. 공개 UI 상태와 API 테스트 증거를 구분한다.
