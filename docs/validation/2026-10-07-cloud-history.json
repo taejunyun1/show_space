@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-07",
+  "scope": "account restore points; local real Wrangler D1/R2 with test-only auth provider",
+  "auth": "mock provider; not real Supabase login",
+  "native": {
+    "savedPoints": [
+      "A · 3200mm 원래 배치",
+      "B · 3500mm 작품 1100"
+    ],
+    "changedSections": [
+      "벽",
+      "작품"
+    ],
+    "sameVersionComparedEqual": true,
+    "previewRendered": true,
+    "restoredA": {
+      "heightMm": 3200,
+      "widthMm": 900,
+      "note": "클라우드 A 메모"
+    },
+    "postRestoreEditSavedWidthMm": 950,
+    "restoredSafetyB": {
+      "heightMm": 3500,
+      "widthMm": 1100,
+      "note": "클라우드 B 메모"
+    },
+    "archiveAndRecover": true,
+    "mobile": {
+      "viewport": [
+        390,
+        844
+      ],
+      "dialogWidth": 351,
+      "dialogClientWidth": 349,
+      "dialogScrollWidth": 349,
+      "documentWidth": 390,
+      "documentScrollWidth": 390
+    },
+    "accountBCloudListEmpty": true,
+    "separateOrigins": [
+      "http://localhost:8810",
+      "http://localhost:8812"
+    ],
+    "secondOriginRestoredA": true,
+    "firstExistingLocalProjectsPreserved": true,
+    "nativePermanentDeletion": false
+  },
+  "localApi": {
+    "projectId": "09879d1e-f330-486d-b936-d213429c578a",
+    "latestRevision": 7,
+    "points": 5,
+    "safetyPoints": 3,
+    "otherAccountStatus": {
+      "/history": 404,
+      "/history/6a3204aa-0129-4c2f-bd4c-9a55c18e68c6": 404,
+      "/history/6a3204aa-0129-4c2f-bd4c-9a55c18e68c6/meta": 404
+    },
+    "anonymousStatus": 401,
+    "versionByteForByteMatchesNativeDownload": true
+  },
+  "download": {
+    "file": "검증 · 클라우드 버전 20261007-A · 3200mm 원래 배치.gonggan.zip",
+    "bytes": 3550286,
+    "sha256": "a9ac543eebb8487da9bd881f70ed7e52d9befc745256044529e1da58485c46f8",
+    "assets": 5,
+    "crcAndAllSha256Verified": true
+  },
+  "screenshots": [
+    "2026-10-07-cloud-history-comparison.png",
+    "2026-10-07-cloud-history-preview.png",
+    "2026-10-07-cloud-history-mobile.png",
+    "2026-10-07-cloud-history-second-origin.png"
+  ],
+  "limits": [
+    "real Supabase email/Google authentication and physical devices still unverified",
+    "local history list not automatically synchronized; cloud points are explicit captures of saved cloud state",
+    "not a permanent record of every autosave",
+    "proxy-only second-origin restore was rejected by unchanged same-origin check; direct Worker-hosted second origin passed",
+    "permanent deletion tested only on in-memory synthetic SQL/R2; no native permanent deletion"
+  ],
+  "automated": {
+    "testsPassed": 932,
+    "optionalBenchmarksSkipped": 2,
+    "relatedTestsPassed": 24,
+    "build": "TypeScript/Vite passed, 2645 modules",
+    "entry": "/assets/index-CzWCOy4t.js",
+    "testProviderNotInProductionBundle": true
+  },
+  "deployment": {
+    "status": "pending"
+  }
+}
