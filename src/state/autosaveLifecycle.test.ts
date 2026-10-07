@@ -1,6 +1,6 @@
 import {afterEach,beforeEach,expect,it,vi} from 'vitest';
 import {createDemoProject} from '../domain/model';
-import {flushAutosave,startAutosave,useEditor} from './editor';
+import {flushAutosave,captureAutosaveFlush,startAutosave,useEditor} from './editor';
 
 let stop=()=>{};
 beforeEach(()=>{useEditor.setState({project:createDemoProject(),hydrated:true,saveStatus:'saved',past:[],future:[]});});
@@ -53,4 +53,8 @@ it('flushes pending edits on editor cleanup and removes every lifecycle listener
  useEditor.setState({saveStatus:'saving'});const event=leaving();browser.dispatchEvent(event);expect(event.defaultPrevented).toBe(false);
  document.visibilityState='hidden';document.dispatchEvent(new Event('visibilitychange'));browser.dispatchEvent(new Event('pagehide'));
  await vi.advanceTimersByTimeAsync(250);expect(writer).toHaveBeenCalledTimes(1);expect(vi.getTimerCount()).toBe(0);
+});
+
+it('retains the queued save and its failure for recovery after the editor is unmounted',async()=>{
+ const writer=vi.fn().mockRejectedValue(new Error('unmounted save failed'));stop=startAutosave(writer,10000);const retained=captureAutosaveFlush();useEditor.getState().renameProject('복구할 마지막 수정');stop();stop=()=>{};await expect(retained()).rejects.toThrow('unmounted save failed');expect(writer).toHaveBeenCalledTimes(1);expect(writer.mock.calls[0][0].name).toBe('복구할 마지막 수정');
 });

@@ -1,3 +1,4 @@
+import {ScreenRecoveryBoundary} from './ScreenRecoveryBoundary';
 import {NumberField} from './Controls';
 import {LengthUnitContext} from './LengthUnits';
 import {parseLengthUnit, type LengthUnit} from '../domain/lengthUnits';
@@ -35,6 +36,6 @@ export function ProjectsDialog({onClose}:{onClose:()=>void}){
  <div className="project-list">{visible.map(item=><article className="project-card" key={item.id}><div><strong>{item.name}</strong><span>{item.venue||'전시장 미지정'}{item.id===project.id?' · 현재 프로젝트':''}</span><small>수정 {new Date(item.updatedAt).toLocaleString('ko-KR')}</small></div><div className="project-card-actions"><button type="button" className="icon-button" aria-label={`${item.name} 버전 기록`} disabled={busy} onClick={()=>setHistoryProjectId(item.id)}><History size={16}/></button>{!archived&&<><button type="button" className="button secondary" disabled={busy||item.id===project.id} onClick={()=>void run(async()=>{await flushAutosave();useEditor.getState().loadProject(await openLocalProject(item.id),true);onClose();})}>열기</button><button type="button" className="icon-button" aria-label={`${item.name} 복제`} disabled={busy} onClick={()=>void run(()=>duplicate(item.id))}><Copy size={16}/></button></>}<button type="button" className="icon-button" aria-label={`${item.name} ${archived?'복구':'보관'}`} disabled={busy||item.id===project.id} onClick={()=>void run(async()=>{await flushAutosave();const latest=await projectLibrary().read(item.id);if(!latest)throw new Error('프로젝트를 찾을 수 없습니다.');await projectLibrary().archive(item.id,!archived,latest.summary.revision);})}>{archived?<ArchiveRestore size={16}/>:<Archive size={16}/>}</button></div></article>)}</div>
  {!busy&&!visible.length&&<p className="field-hint">{query?'검색 결과가 없습니다.':archived?'보관된 프로젝트가 없습니다.':'저장된 프로젝트가 없습니다.'}</p>}
  <CloudProjectsPanel disabled={localBusy} onBusy={setCloudBusy} onLocalChange={refresh}/>
- {historyProjectId&&<Suspense fallback={null}><ProjectHistoryDialog projectId={historyProjectId} onClose={()=>setHistoryProjectId(undefined)} onRestored={()=>{setHistoryProjectId(undefined);onClose();}}/></Suspense>}
+ {historyProjectId&&<ScreenRecoveryBoundary name="프로젝트 버전 기록" onClose={()=>setHistoryProjectId(undefined)}><Suspense fallback={null}><ProjectHistoryDialog projectId={historyProjectId} onClose={()=>setHistoryProjectId(undefined)} onRestored={()=>{setHistoryProjectId(undefined);onClose();}}/></Suspense></ScreenRecoveryBoundary>}
  </dialog>;
 }

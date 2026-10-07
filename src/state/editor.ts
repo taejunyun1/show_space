@@ -514,6 +514,8 @@ export async function hydrateEditor(reader: () => Promise<unknown> = readDraft):
 
 let flushCurrentAutosave:()=>Promise<void>=async()=>{};
 export const flushAutosave=()=>flushCurrentAutosave();
+/** Recovery retains this queue even after React unmounts the editor. */
+export const captureAutosaveFlush=()=>flushCurrentAutosave;
 export function startAutosave(
   writer: (project: Project) => Promise<void> = writeDraft,
   debounceMs = 250,

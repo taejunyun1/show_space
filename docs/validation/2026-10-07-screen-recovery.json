@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-07",
+  "scope": "Lazy screen/module and React render failure recovery with durable local draft and JSON backup",
+  "fixture": {
+    "origin": "http://localhost:8814",
+    "isolated": true,
+    "assetsOnlyWrangler": true,
+    "actualProductAppAndIndexedDB": true,
+    "noD1R2": true,
+    "faultControlsOnlyInTemporaryFixture": true,
+    "workerStoppedExitCode": 130,
+    "temporaryBrowserTabClosed": true,
+    "heldAssetsRestored": true
+  },
+  "failureInjection": {
+    "materialModule": "MaterialLibraryDialog-BVgi5Wr9.js",
+    "startupAppModule": "App-x-D33KqW.js",
+    "mechanism": "Temporarily rename fixture files; SPA fallback is not a valid JavaScript module",
+    "testErrorsHiddenFromUi": true,
+    "noAutomaticReload": true
+  },
+  "nativeChecks": {
+    "missingLazyMaterialScreenKeepsEditorMounted": true,
+    "recoveryFocus": "재질 라이브러리 복구",
+    "injectedSaveFailureBlocksReload": true,
+    "jsonBackupDownloadedAndParsed": true,
+    "closeFailurePanelAllowsContinuedEditing": true,
+    "restoredAssetAndSuccessfulSaveReloadOpenLibrary": true,
+    "rootRenderFailureRetainsSaveAndBackup": true,
+    "lastWidthMmAfterRootReload": 1400,
+    "lastNoteAfterRootReload": "화면 복구 후에도 치수와 설치 메모 보존 · 오류 화면 닫고 편집 계속",
+    "missingAppModuleBeforeEditorInitializationOffersRefreshWithoutClaimingBackup": true,
+    "startupRecoveryMobile": {
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "documentScrollWidth": 390,
+      "alertWidth": 358
+    },
+    "downloadedJsonImportedThroughHeaderFileChooser": true,
+    "backupImportedAsNewProjectPreservingPreviousProject": true,
+    "visibleMatchingLocalProjectCards": 2
+  },
+  "backups": {
+    "lazyScreen": {
+      "file": "/Users/taejun-yun/Downloads/검증 · 화면 복구 20261007-화면복구-백업.json",
+      "sha256": "d5493c88a02f6437353b597e3272f0363c94c36b9852160619ccb47e4f01506d",
+      "name": "검증 · 화면 복구 20261007",
+      "walls": 4,
+      "artworks": 5,
+      "firstArtwork": {
+        "id": "artwork-1",
+        "name": "고요한 면",
+        "artist": "",
+        "widthMm": 1350,
+        "heightMm": 1200,
+        "depthMm": 30,
+        "wallId": "wall-a",
+        "alongMm": 1400,
+        "centerHeightMm": 1500,
+        "frame": "natural",
+        "imageUrl": "/artworks/artwork-1.png",
+        "visible": true,
+        "locked": false,
+        "note": "화면 복구 후에도 치수와 설치 메모 보존"
+      }
+    },
+    "root": {
+      "file": "/Users/taejun-yun/Downloads/검증 · 화면 복구 20261007-화면복구-백업 (1).json",
+      "sha256": "804bdc0a32b0c6dd3431acb3cf555a4a67e22988500d8351434c1383519b4664",
+      "projectId": "project-1",
+      "name": "검증 · 화면 복구 20261007",
+      "walls": 4,
+      "artworks": 5,
+      "widthMm": 1400,
+      "note": "화면 복구 후에도 치수와 설치 메모 보존 · 오류 화면 닫고 편집 계속"
+    }
+  },
+  "tests": {
+    "targetedRecoveryTests": 14,
+    "fullPassed": 960,
+    "optionalSkipped": 2,
+    "passedFiles": 176,
+    "skippedFiles": 2,
+    "typescript": true,
+    "productionBuild": true,
+    "diffCheck": true,
+    "realIndexedDBTests": [
+      "Failed queued save then editor unmount can persist latest draft and clear unload guard state",
+      "Stale revision cannot overwrite other tab even during failed-queue retry"
+    ],
+    "genericRecoveryTests": [
+      "Module failure classification",
+      "Wait for durable save",
+      "Storage error blocks successful save",
+      "Current project/edit changes during write refused",
+      "Retained callback after failed subtree",
+      "Transient queue failure can retry guarded writer",
+      "Queue failure does not bypass revision checks"
+    ],
+    "buildWarning": "Existing >500kB chunks; not a new zero-warning build claim"
+  },
+  "screenshots": [
+    "2026-10-07-screen-recovery-storage-error.png",
+    "2026-10-07-screen-recovery-root-error.png",
+    "2026-10-07-screen-recovery-restored.png",
+    "2026-10-07-screen-recovery-startup-mobile.png",
+    "2026-10-07-screen-recovery-backup-import.png"
+  ],
+  "limits": [
+    "Failure injection is local; no deliberate production missing-file or storage fault",
+    "Screenshots before final heading wording refinement retain earlier text",
+    "React bootstrap must load for its recovery boundary to execute; missing HTML/bootstrap or catastrophic browser failure is outside this fix",
+    "Error boundaries do not handle every asynchronous/event-handler failure",
+    "Real account authentication/two physical devices, full original acceptance, media/video projection and other audit items remain incomplete"
+  ],
+  "deployment": {
+    "status": "pending"
+  }
+}

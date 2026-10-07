@@ -1,3 +1,4 @@
+import {ScreenRecoveryBoundary} from './ScreenRecoveryBoundary';
 import {TextureEditor} from './TextureEditor';
 import {NormalMapEditor} from './NormalMapEditor';
 import {materialPreset,materialPresets,type MaterialPresetId,type SurfaceMaterial} from '../domain/materials';
@@ -32,6 +33,6 @@ export function MaterialEditor({label,material,color,disabled=false,image=false,
  <p className="field-hint">재질 두께는 빛의 투과에 쓰이며 실제 벽·작품 크기를 바꾸지 않습니다. 투과율을 높이면 불투명도는 100%로 유지하고, 불투명도를 낮추면 투과율은 0%로 바뀝니다.</p>
  </details>
  {material?.preset==='mirror'&&<p className="field-hint">거울은 환경 반사로 근사합니다. 정확한 거울 상·시공 재료 판정은 지원하지 않습니다.</p>}
- {libraryOpen&&libraryTarget&&<Suspense fallback={<p role="status">재질 라이브러리 여는 중…</p>}><MaterialLibraryDialog target={libraryTarget} source={{name:label,category:libraryTarget.type==='floor'?'floor':image?'artwork':'architecture',color,material:current}} onClose={()=>setLibraryOpen(false)}/></Suspense>}
+ {libraryOpen&&libraryTarget&&<ScreenRecoveryBoundary name="재질 라이브러리" onClose={()=>setLibraryOpen(false)}><Suspense fallback={<p role="status">재질 라이브러리 여는 중…</p>}><MaterialLibraryDialog target={libraryTarget} source={{name:label,category:libraryTarget.type==='floor'?'floor':image?'artwork':'architecture',color,material:current}} onClose={()=>setLibraryOpen(false)}/></Suspense></ScreenRecoveryBoundary>}
  </section>;
 }

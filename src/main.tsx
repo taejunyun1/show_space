@@ -1,3 +1,4 @@
+import {ScreenRecoveryBoundary} from './components/ScreenRecoveryBoundary';
 import {lazy,Suspense} from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
@@ -7,4 +8,4 @@ const Benchmark=import.meta.env.DEV?lazy(()=>import('./dev/RenderBenchmark')):nu
 const benchmarkRoute=import.meta.env.DEV&&location.pathname==='/__render-benchmark';
 const sharedRoute=location.pathname.startsWith('/s/');
 const match=location.pathname.match(/^\/s\/([0-9a-f]{48})\/?$/);
-createRoot(document.getElementById('root')!).render(<Suspense fallback={<div className="loading-canvas">화면을 불러오는 중…</div>}>{benchmarkRoute&&Benchmark?<Benchmark/>:sharedRoute?<SharedViewer shareId={match?.[1]??null}/>:<App/>}</Suspense>);
+createRoot(document.getElementById('root')!).render(<ScreenRecoveryBoundary name="시작 화면"><Suspense fallback={<div className="loading-canvas">화면을 불러오는 중…</div>}>{benchmarkRoute&&Benchmark?<Benchmark/>:sharedRoute?<SharedViewer shareId={match?.[1]??null}/>:<App/>}</Suspense></ScreenRecoveryBoundary>);
