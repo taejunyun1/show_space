@@ -102,5 +102,12 @@
     "Actual authentication and account library synchronization",
     "Basic/Advanced material editor separation",
     "Other source-document-2 extensions and remaining full-scope acceptance"
-  ]
+  ],
+  "deployment": {
+    "versionId": "4e88716b-b683-4859-813d-c0907f291f20",
+    "entry": "/assets/index-BIMStZ0W.js",
+    "nativeProductionLibraryOpened": true,
+    "consoleWarningsErrors": [],
+    "productionTestDataPublished": false
+  }
 }

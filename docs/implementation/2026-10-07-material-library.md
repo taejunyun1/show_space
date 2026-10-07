@@ -15,3 +15,5 @@
 864개 테스트 통과, 선택 벤치마크 2개 제외, 빌드 통과. 저장/복원/충돌/원자성/자산 검증과 실제 크기·이미지·메모 보존, 잠금·프로젝트 교체를 포함한 새 테스트 9개다. [기록 및 해시](../validation/2026-10-07-material-library.json)와 동일 접두사의 desktop/mobile/wall/restored PNG, texture-pdf-current/scene PNG를 보존했다.
 
 문서 2 §28 Basic/Advanced 편집 분리, 계정의 작품·재질 Library 동기화, 실제 인증 및 다른 후속 확장은 남아 있다. 전체 최종 구현 완료로 집계하지 않는다.
+
+Cloudflare 배포 `4e88716b-b683-4859-813d-c0907f291f20` 완료. 공개 웹 엔트리 `/assets/index-BIMStZ0W.js`와 실제 재질 라이브러리 메뉴를 확인했으며 콘솔 경고/오류는 없었다. 운영에 시험 재질이나 공유 데이터를 게시하지 않았다.
