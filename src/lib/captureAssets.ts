@@ -1,4 +1,5 @@
 import {captureSurfaceReady} from './captureSurface';
+import {projectorMapReady} from './projectorLighting';
 import {floorWithOpenings} from '../domain/openings';
 import type {Group,Object3D} from 'three';
 import type {Project,ReferenceModel} from '../domain/types';
@@ -20,6 +21,7 @@ function createCaptureAssetCheck(project:Project){
  const floorIndices=project.floorMaterial?.texture||project.floorMaterial?.normal?floorWithOpenings(project).surfaces.map((_,index)=>index):[];
  return (scene:Object3D)=>{
  let ready=true;const visibleWalls=new Set(project.walls.filter(w=>w.visible).map(w=>w.id));
+ for(const light of project.lights??[])if(!projectorMapReady(scene,light))ready=false;
  for(const art of project.artworks)if(art.visible&&art.imageUrl&&visibleWalls.has(art.wallId)){
   const object=scene.getObjectByName(`artwork-${art.id}`);
   if(object?.userData.artworkImageFailed)throw new Error('작품 이미지를 읽지 못해 캡처할 수 없습니다. 이미지를 다시 가져오세요.');
@@ -44,7 +46,7 @@ export async function waitForCaptureAssets(scene:Object3D,project:Project,invali
  const deadline=Date.now()+10000,check=createCaptureAssetCheck(project);
  while(true){
   assertCurrent();if(check(scene))return;
-  if(Date.now()>=deadline)throw new Error('일부 작품 이미지·3D 모델·표면 재질이 아직 준비되지 않았습니다. 로딩 후 다시 캡처해 주세요.');
+  if(Date.now()>=deadline)throw new Error('일부 작품 이미지·3D 모델·표면 재질·프로젝터 이미지가 아직 준비되지 않았습니다. 로딩 후 다시 캡처해 주세요.');
   invalidate();await new Promise<void>(resolve=>setTimeout(resolve,60));
  }
 }

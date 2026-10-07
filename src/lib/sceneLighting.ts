@@ -1,5 +1,5 @@
 import type {ProjectionScalars} from '../domain/projection';
-import {projectorRenderKey} from './projectorLighting';
+import {projectorMapReady} from './projectorLighting';
 import {AmbientLight,Color,DirectionalLight,Group,HemisphereLight,Object3D,RectAreaLight,SpotLight,SRGBColorSpace,Vector3} from 'three';
 import {RectAreaLightUniformsLib} from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import {DEFAULT_LIGHTING,kelvinRgb,spotShadowIds,type ExhibitionLight,type LightingSettings} from '../domain/lighting';
@@ -45,11 +45,13 @@ export function createOutdoorLighting(source:LightingSource,base=true,shadowSize
 export function sceneSpotShadowIds(source:LightingSource,budget=4){const outdoor=outdoorAppearance(source.outdoor),sun=outdoor&&outdoor.sunIntensity>0&&source.outdoor?.shadow?1:0,projectors=(source.lights??[]).filter(l=>l.visible&&l.projection&&l.projection.brightnessLumens>0).length;return spotShadowIds(source.lights??[]).slice(0,Math.max(0,Math.min(4,Math.max(budget,projectors+sun))-sun));}
 /** DOM and R3F commit independently; export must wait for the actual preview rig. */
 export function lightingProfileReady(scene:Object3D,source:LightingSource,profile:{shadowBudget:number;spotShadowSize:number;baseShadowSize:number}){
+ let projectorsReady=true;for(const light of source.lights??[])if(!projectorMapReady(scene,light))projectorsReady=false;
+ if(!projectorsReady)return false;
  const base=scene.getObjectByName(source.outdoor?.mode==='outdoor'?'outdoor-lighting':'base-lighting');if(!base)return false;
  if(source.outdoor?.mode==='outdoor'){const appearance=outdoorAppearance(source.outdoor)!,sun=base.getObjectByName('outdoor-sun');if((appearance.sunIntensity>0)!==(sun instanceof DirectionalLight))return false;if(sun instanceof DirectionalLight&&(sun.intensity!==appearance.sunIntensity||sun.castShadow!==source.outdoor.shadow))return false;}
  let baseReady=true;base.traverse(o=>{if(o instanceof DirectionalLight&&o.shadow.mapSize.x!==profile.baseShadowSize)baseReady=false;});if(!baseReady)return false;
  const shadowIds=new Set(sceneSpotShadowIds(source,profile.shadowBudget));
- return (source.lights??[]).filter(l=>l.visible).every(l=>{const object=scene.getObjectByName(`light-${l.id}`),lamp=object?.getObjectByName('emitter');return l.kind==='area'?lamp instanceof RectAreaLight:lamp instanceof SpotLight&&lamp.castShadow===shadowIds.has(l.id)&&lamp.shadow.mapSize.x===profile.spotShadowSize&&(!l.projection||!!lamp.map&&object?.userData.projectorReady===true&&object.userData.projectorRenderKey===projectorRenderKey(l));});
+ return (source.lights??[]).filter(l=>l.visible).every(l=>{const object=scene.getObjectByName(`light-${l.id}`),lamp=object?.getObjectByName('emitter');return l.kind==='area'?lamp instanceof RectAreaLight:lamp instanceof SpotLight&&lamp.castShadow===shadowIds.has(l.id)&&lamp.shadow.mapSize.x===profile.spotShadowSize;});
 }
 export function createSceneLighting(source:LightingSource,{base=true,area=true}={}){
  const group=new Group();group.name='gonggan-lighting';const visible=(source.lights??[]).filter(l=>l.visible),shadows=new Set(sceneSpotShadowIds(source));

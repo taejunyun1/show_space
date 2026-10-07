@@ -1,4 +1,4 @@
-import {ShaderChunk,SpotLight,Texture,Vector3,PerspectiveCamera,CanvasTexture,SRGBColorSpace,type Group} from 'three';
+import {ShaderChunk,SpotLight,Texture,Vector3,PerspectiveCamera,CanvasTexture,SRGBColorSpace,type Group,type Object3D} from 'three';
 import {projectionGeometry} from '../domain/projection';
 import {videoPosterRect} from './videoPoster';
 import type {RenderLight} from './sceneLighting';
@@ -9,7 +9,7 @@ const projected='directLight.color = inSpotLightMap ? directLight.color * spotCo
 // existing ACES camera. This is a relative preview, not a calibrated lux renderer.
 export const PROJECTOR_PREVIEW_GAIN=.05;
 /** Own a bounded fitted map. Never change a cached source texture or its pixels. */
-export function framedProjectorTexture(source:Texture,projection:NonNullable<RenderLight['projection']>){
+export function framedProjectorTexture(source:Texture,projection:Pick<NonNullable<RenderLight['projection']>,'aspectRatio'|'fit'>){
  const image=source.image as HTMLCanvasElement,aspect=projection.aspectRatio,canvas=document.createElement('canvas');
  canvas.width=Math.round(aspect>=1?1024:1024*aspect);canvas.height=Math.round(aspect>=1?1024/aspect:1024);
  const context=canvas.getContext('2d');if(!context)throw new Error('프로젝터 이미지를 준비하지 못했습니다.');
@@ -27,19 +27,31 @@ export function installProjectorShader(){
  ShaderChunk.lights_fragment_begin=ShaderChunk.lights_fragment_begin.replace(original,projected);
 }
 
-export function applyProjectorMap(group:Group,data:RenderLight,texture:Texture|undefined){
+export function applyProjectorMap(group:Group,data:RenderLight,texture:Texture|undefined,error=''){
  const lamp=group.getObjectByName('emitter');if(!(lamp instanceof SpotLight)||!data.projection)return;
  const geometry=projectionGeometry({...data,projection:data.projection});
  lamp.color.set(0xffffff);lamp.angle=geometry.halfAngle;lamp.penumbra=0;lamp.distance=0;
  lamp.shadow.focus=geometry.focus;lamp.shadow.aspect=data.projection.aspectRatio;
  lamp.shadow.camera.up.copy(projectorUp(data));
  lamp.shadow.camera.far=Math.max(20,geometry.distanceMm/1000*4);
- lamp.map=texture??null;lamp.intensity=texture?geometry.intensity*PROJECTOR_PREVIEW_GAIN:0;
- group.userData.projectorReady=!!texture;
+ lamp.map=error?null:texture??null;lamp.intensity=lamp.map?geometry.intensity*PROJECTOR_PREVIEW_GAIN:0;
+ group.userData.projectorReady=!!lamp.map;
+ group.userData.projectorError=error;
  group.userData.projectorRenderKey=projectorRenderKey(data);
+ group.userData.projectorImageUrl=data.projection.imageUrl;
+ group.userData.projectorImageId=data.projection.imageId;
  lamp.updateMatrixWorld(true);lamp.shadow.updateMatrices(lamp);lamp.shadow.needsUpdate=true;
 }
-export function projectorRenderKey(data:RenderLight){return JSON.stringify([data.position,data.target,data.projection]);}
+export function projectorRenderKey(data:RenderLight){const p=data.projection;return JSON.stringify([data.position,data.target,p?.throwRatio,p?.aspectRatio,p?.brightnessLumens,p?.fit]);}
+
+/** An old source's failure must not reject a replacement that is still committing. */
+export function projectorMapReady(scene:Object3D,data:RenderLight){
+ if(!data.visible||!data.projection)return true;
+ // Compare source strings by value without serializing megabytes at every capture poll.
+ const group=scene.getObjectByName(`light-${data.id}`);if(!group||group.userData.projectorImageUrl!==data.projection.imageUrl||group.userData.projectorImageId!==data.projection.imageId||group.userData.projectorRenderKey!==projectorRenderKey(data))return false;
+ if(group.userData.projectorError)throw new Error(group.userData.projectorError);
+ const lamp=group.getObjectByName('emitter');return lamp instanceof SpotLight&&!!lamp.map&&group.userData.projectorReady===true;
+}
 
 /** Guide on the plane perpendicular to the optical axis; surface hits are rendered by the light. */
 export function projectorFrame(data:RenderLight){
