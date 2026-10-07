@@ -104,7 +104,9 @@
     "2026-10-07-screen-recovery-root-error.png",
     "2026-10-07-screen-recovery-restored.png",
     "2026-10-07-screen-recovery-startup-mobile.png",
-    "2026-10-07-screen-recovery-backup-import.png"
+    "2026-10-07-screen-recovery-backup-import.png",
+    "2026-10-07-screen-recovery-public.png",
+    "2026-10-07-screen-recovery-public-import.png"
   ],
   "limits": [
     "Failure injection is local; no deliberate production missing-file or storage fault",
@@ -114,6 +116,26 @@
     "Real account authentication/two physical devices, full original acceptance, media/video projection and other audit items remain incomplete"
   ],
   "deployment": {
-    "status": "pending"
+    "status": "deployed-and-public-ui-verified",
+    "sourceCommit": "c3091953514cb320f5787f57c2f8a6ce5e49917b",
+    "versionId": "08d7d1c1-a22b-46cd-bd01-3ea052f7cf73",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entry": "/assets/index-CniTehc8.js",
+    "keepVars": true,
+    "migrationRequired": false,
+    "workerUploadKiB": 858,
+    "workerGzipKiB": 170.92,
+    "workerStartupMs": 12,
+    "publicChecks": [
+      "Fresh entry loaded in existing browser tab",
+      "Material Library normal lazy dialog rendered",
+      "PDF lazy dialog rendered",
+      "JPG/PNG/PDF and SketchUp-exported GLB input menu preserved",
+      "Disabled actual account service honestly disclosed",
+      "No console warnings/errors in checked public flow"
+    ],
+    "publicProjectModified": false,
+    "deliberateProductionFaultInjected": false,
+    "rawSkpSupported": false
   }
 }
