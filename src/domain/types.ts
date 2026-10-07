@@ -7,6 +7,7 @@ import type {ExhibitionLight,LightingSettings} from './lighting';
 import type {PlanAnalysis} from '../lib/analyzePlan';
 import type {PlanLabel} from './planLabels';
 import type {SurfaceMaterial} from './materials';
+import type {VideoArtwork} from './mediaArtwork';
 export interface Point { x: number; z: number }
 export interface WorldPoint extends Point { y:number }
 
@@ -31,6 +32,7 @@ export interface Wall {
 }
 
 export interface Artwork extends ArtworkInformation {
+  video?:VideoArtwork
   frameSettings?:FrameSettings
   noteDetails?:NoteDetails
   material?:SurfaceMaterial

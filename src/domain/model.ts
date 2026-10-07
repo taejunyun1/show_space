@@ -1,4 +1,5 @@
 import {wallLength} from './wallGeometry';
+import {parseVideoArtwork} from './mediaArtwork';
 import {parseSceneThumbnail} from './sceneThumbnail';
 export {wallLength} from './wallGeometry';
 import {parseFrameSettings,artworkPresentation,rotatedArtworkOuterSize} from './artworkPresentation';
@@ -68,6 +69,7 @@ function validateArtwork(artwork: Artwork, wallIds: Set<string>) {
   if (!wallIds.has(artwork.wallId)) throw new Error(`존재하지 않는 벽을 참조합니다: ${artwork.wallId}`)
   if (!frames.has(artwork.frame)) throw new Error('작품 프레임 값이 올바르지 않습니다.')
   safeImage(artwork.imageUrl, '작품')
+  if(artwork.video!==undefined)parseVideoArtwork(artwork.video)
 }
 
 function validateArtworkGroups(artworks:Artwork[]) {

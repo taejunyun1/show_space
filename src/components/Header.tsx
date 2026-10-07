@@ -43,6 +43,7 @@ export function Header({ onExport,onShare,onPlanImport,onInstallation,onPresenta
       const isBackup=/\.zip$/i.test(f.name);
       notify(isBackup?'프로젝트 백업을 검사하고 있습니다…':'프로젝트를 읽고 있습니다…');
       const data = isBackup?await (await import('../lib/projectBackup')).readProjectBackup(f,notify):parseProject(JSON.parse(await f.text()));
+      if(!isBackup){const {projectVideos}=await import('../lib/projectPackage');const videos=projectVideos(data);if(videos.length){const {verifyVideoArtwork}=await import('../lib/videoArtworkImport');for(const video of videos)await verifyVideoArtwork(video);}}
       if(version!==importVersion.current)return;
       if(useEditor.getState().project.id!==originalProjectId)throw new Error('프로젝트가 바뀌어 가져오기를 취소했습니다.');
       await flushAutosave();

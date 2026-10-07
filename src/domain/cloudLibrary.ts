@@ -14,7 +14,7 @@ export function parseLibraryMetadata(value:unknown):CloudLibraryMetadata{
  if(!(r.sourceItemId as string)||!(r.name as string).trim()||typeof r.archived!=='boolean')throw new Error('항목 이름과 보관 상태가 필요합니다.');return {sourceItemId:r.sourceItemId as string,name:r.name as string,detail:r.detail as string,archived:r.archived};
 }
 export function libraryMetadata(document:CloudLibraryDocument,sourceItemId:string,archived:boolean):CloudLibraryMetadata{
- const t=document.template;return parseLibraryMetadata({sourceItemId,name:document.kind==='artwork'?(t as ArtworkTemplate).artwork.name:(t as MaterialTemplate).name,detail:document.kind==='artwork'?[document.template.artwork.artist,document.template.artwork.year??'',document.template.kind==='model'?'3D 작품':'이미지 작품'].filter(Boolean).join(' · '):(t as MaterialTemplate).category,archived});
+ const t=document.template;return parseLibraryMetadata({sourceItemId,name:document.kind==='artwork'?(t as ArtworkTemplate).artwork.name:(t as MaterialTemplate).name,detail:document.kind==='artwork'?[document.template.artwork.artist,document.template.artwork.year??'',document.template.kind==='model'?'3D 작품':document.template.artwork.video?'영상 작품':'이미지 작품'].filter(Boolean).join(' · '):(t as MaterialTemplate).category,archived});
 }
 export function parseLibraryDocument(value:unknown):CloudLibraryDocument{
  const r=value as CloudLibraryDocument;if(!r||r.format!=='gonggan-library-item'||r.version!==1)throw new Error('라이브러리 파일 형식이 올바르지 않습니다.');

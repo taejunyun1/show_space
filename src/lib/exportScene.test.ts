@@ -1,5 +1,5 @@
 import {expect,it,vi} from 'vitest';
-import {Box3,BoxGeometry,Group,Mesh,MeshStandardMaterial,Texture,Vector3} from 'three';
+import {Box3,BoxGeometry,Group,Mesh,MeshBasicMaterial,MeshStandardMaterial,PlaneGeometry,Texture,Vector3} from 'three';
 import {createDemoProject,artworkPosition} from '../domain/model';
 import {buildExportScene,disposeExportScene} from './exportScene';
 
@@ -72,4 +72,11 @@ it('roundtrips the real separate glTF ZIP with meter dimensions and a floor hole
   const gltf=await new GLTFLoader(manager).parseAsync(json,''),wall=gltf.scene.getObjectByName('wall-wall-a')!,size=new Box3().setFromObject(wall).getSize(new Vector3());expect(size.x).toBeCloseTo(8);expect(size.y).toBeCloseTo(3.2);expect(size.z).toBeCloseTo(.16);expect(gltf.scene.children).toHaveLength(5);
   const {extractModelWalls}=await import('./modelWalls');const result=extractModelWalls(gltf.scene,{name:'scene.gltf',dataUrl:'unused',visible:true,sizeMm:[8000,3200,6000],sourceOffsetM:[0,0,0],positionMm:[0,0,0],rotationDeg:0,scale:1});expect(result.walls).toHaveLength(4);expect(result.importedFloor).toHaveLength(2);expect(project).toEqual(before);disposeExportScene(gltf.scene);
  }finally{vi.unstubAllGlobals();}
+});
+
+it('exports a video poster with its fit and independent UVs, preserving black bars and source texture',()=>{
+ const p=createDemoProject();p.artworks=[{...p.artworks[0],frame:'none',widthMm:1000,heightMm:1000,video:{dataUrl:'data:video/mp4;base64,AAAAEGZ0eXBpc29tAAAAAA==',widthPx:1920,heightPx:1080,durationSeconds:4,fit:'contain',loop:true}}];
+ const source=new Texture();const scene=buildExportScene(p,new Map([[p.artworks[0].id,source]]));const poster=scene.getObjectByName('video-poster') as Mesh;const background=scene.getObjectByName('video-screen-background') as Mesh;
+ expect((poster.geometry as PlaneGeometry).parameters.height).toBe(.5625);expect((background.geometry as PlaneGeometry).parameters.height).toBe(1);expect((poster.material as MeshBasicMaterial).map).not.toBe(source);expect(source.repeat.toArray()).toEqual([1,1]);disposeExportScene(scene);
+ p.artworks[0].video!.fit='cover';const cropped=buildExportScene(p,new Map([[p.artworks[0].id,source]]));const croppedPoster=cropped.getObjectByName('video-poster') as Mesh;expect((croppedPoster.material as MeshBasicMaterial).map!.repeat.x).toBe(.5625);expect(source.repeat.x).toBe(1);disposeExportScene(cropped);
 });

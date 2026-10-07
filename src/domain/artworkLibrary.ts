@@ -1,11 +1,12 @@
 import {parseArtworkInformation} from './artworkInformation';
+import {parseVideoArtwork} from './mediaArtwork';
 import {parseFrameSettings,rotatedArtworkOuterSize} from './artworkPresentation';
 import {parseSurfaceMaterial} from './materials';
 import {addArtwork,createDemoProject,parseProject,wallLength} from './model';
 import {addModelArtwork,parseModelArtwork} from './modelArtworks';
 import {textureHeaderSize} from '../lib/artworkModelPayload';
 import type {Artwork,ModelArtwork,Project,EntitySelection} from './types';
-type ImageDesign=Pick<Artwork,'name'|'artist'|'widthMm'|'heightMm'|'depthMm'|'frame'|'frameSettings'|'material'|'imageUrl'|'year'|'medium'|'description'|'artworkType'|'presentationType'>;
+type ImageDesign=Pick<Artwork,'video'|'name'|'artist'|'widthMm'|'heightMm'|'depthMm'|'frame'|'frameSettings'|'material'|'imageUrl'|'year'|'medium'|'description'|'artworkType'|'presentationType'>;
 type ModelDesign=Pick<ModelArtwork,'name'|'artist'|'year'|'kind'|'model'|'widthMm'|'heightMm'|'depthMm'|'medium'|'description'|'artworkType'|'presentationType'>;
 export type ArtworkTemplate={kind:'image';artwork:ImageDesign}|{kind:'model';artwork:ModelDesign};
 export const ARTWORK_LIBRARY_IMAGE_MAX=5*1024*1024;
@@ -27,7 +28,7 @@ export function parseArtworkTemplate(value:unknown):ArtworkTemplate{
  const shared={name:raw.name as string,artist:raw.artist as string,widthMm:raw.widthMm as number,heightMm:raw.heightMm as number,depthMm:raw.depthMm as number,...parseArtworkInformation(raw)};
  if(input.kind==='image'){
   libraryImageBytes(raw.imageUrl);
-  const a:ImageDesign={...shared,frame:raw.frame as Artwork['frame'],imageUrl:raw.imageUrl as string,...(raw.frameSettings!==undefined?{frameSettings:parseFrameSettings(raw.frameSettings)}:{}),...(raw.material!==undefined?{material:parseSurfaceMaterial(raw.material)}:{})};
+  const a:ImageDesign={...shared,frame:raw.frame as Artwork['frame'],imageUrl:raw.imageUrl as string,...(raw.video!==undefined?{video:parseVideoArtwork(raw.video)}:{}),...(raw.frameSettings!==undefined?{frameSettings:parseFrameSettings(raw.frameSettings)}:{}),...(raw.material!==undefined?{material:parseSurfaceMaterial(raw.material)}:{})};
   if(a.material?.texture)libraryImageBytes(a.material.texture.imageUrl);
   if(a.material?.normal)libraryImageBytes(a.material.normal.imageUrl,5_000_000,1024);
   const p=createDemoProject();parseProject({...p,artworks:[{...a,id:'template',wallId:p.walls[0].id,alongMm:0,centerHeightMm:1500,visible:true,locked:false,note:''}]});

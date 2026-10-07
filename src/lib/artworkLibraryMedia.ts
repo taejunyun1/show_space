@@ -17,6 +17,7 @@ export async function prepareArtworkLibraryInput(kind:'image'|'model',source:Art
  const original=structuredClone(source);
  if(kind==='image'){
   const a=original as Artwork,panel=artPanel(a.imageUrl);
+  if(a.video)await (await import('./videoArtworkImport')).verifyVideoArtwork(a.video);
   if(panel!==null&&!/^\/artworks\/artwork-[1-5]\.png$/.test(a.imageUrl))throw new Error('예제 작품 경로가 올바르지 않습니다.');
   if(panel===null)libraryImageBytes(a.imageUrl);
   const img=await image(a.imageUrl),width=panel===null?img.naturalWidth:img.naturalWidth/5,height=img.naturalHeight;
@@ -37,7 +38,7 @@ export async function readArtworkLibraryBackup(file:File):Promise<ArtworkLibrary
  for(const item of backup.items){
   if(!item||typeof item!=='object'||(item.archived!==undefined&&typeof item.archived!=='boolean'))throw new Error('라이브러리 작품 정보가 올바르지 않습니다.');
   const template=parseArtworkTemplate(item.template);libraryImageBytes(item.thumbnail,128*1024,256);await image(item.thumbnail);
-  if(template.kind==='image'){await image(template.artwork.imageUrl);if(template.artwork.material?.texture)await image(template.artwork.material.texture.imageUrl);if(template.artwork.material?.normal)await image(template.artwork.material.normal.imageUrl);}
+  if(template.kind==='image'){await image(template.artwork.imageUrl);if(template.artwork.video)await (await import('./videoArtworkImport')).verifyVideoArtwork(template.artwork.video);if(template.artwork.material?.texture)await image(template.artwork.material.texture.imageUrl);if(template.artwork.material?.normal)await image(template.artwork.material.normal.imageUrl);}
   else{
    const bytes=Uint8Array.from(atob(template.artwork.model.dataUrl.split(',')[1]),c=>c.charCodeAt(0));
    const {readModelFile}=await import('./modelImport');const model=await readModelFile(new File([bytes],template.artwork.model.name));

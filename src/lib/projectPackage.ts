@@ -1,3 +1,4 @@
+import {checkVideoSignature} from '../domain/mediaArtwork';
 import JSZip from 'jszip';
 import {parseProject} from '../domain/model';
 import type {Project} from '../domain/types';
@@ -7,10 +8,10 @@ const MAX_ASSETS=2000,MAX_FILES=MAX_ASSETS+3;
 const encode=(value:string)=>new TextEncoder().encode(value);
 const decode=(bytes:Uint8Array)=>new TextDecoder('utf-8',{fatal:true}).decode(bytes);
 const hashPattern=/^[0-9a-f]{64}$/;
-const types:Record<string,string>={'image/png':'png','image/jpeg':'jpg','image/webp':'webp','model/gltf-binary':'glb'};
+const types:Record<string,string>={'image/png':'png','image/jpeg':'jpg','image/webp':'webp','model/gltf-binary':'glb','video/mp4':'mp4','video/webm':'webm'};
 export interface PackageAsset {path:string;mime:string;bytes:number;sha256:string}
 interface Manifest {format:'gonggan-project-backup';version:1;project:{path:'project.json';bytes:number;sha256:string};assets:PackageAsset[]}
-type Slot={object:Record<string,unknown>;key:string;kind:'image'|'model'};
+type Slot={object:Record<string,unknown>;key:string;kind:'image'|'model'|'video'};
 
 /** Only schema-defined asset fields are rewritten. Text notes and arbitrary strings stay intact; note image fields are packed. */
 function assetSlots(input:unknown):Slot[]{
@@ -21,7 +22,7 @@ function assetSlots(input:unknown):Slot[]{
  const lights=(value:unknown)=>{if(value!==undefined)for(const l of list(value))note(l);};
  const material=(value:unknown)=>{if(value!==undefined){const m=object(value);for(const key of ['texture','normal'])if(m[key]!==undefined)slots.push({object:object(m[key]),key:'imageUrl',kind:'image'});}};
  const walls=(value:unknown)=>{for(const item of list(value)){const w=object(item);note(w);material(w.material);}};
- const artworks=(value:unknown)=>{for(const item of list(value)){const a=object(item);note(a);slots.push({object:a,key:'imageUrl',kind:'image'});material(a.material);}};
+ const artworks=(value:unknown)=>{for(const item of list(value)){const a=object(item);note(a);slots.push({object:a,key:'imageUrl',kind:'image'});if(a.video!==undefined)slots.push({object:object(a.video),key:'dataUrl',kind:'video'});material(a.material);}};
  const model=(value:unknown)=>{if(value!==undefined){note(value);slots.push({object:object(value),key:'dataUrl',kind:'model'});}};
  const models=(value:unknown)=>{if(value!==undefined)for(const a of list(value)){note(a);model(object(a).model);}};
  const project=object(input);note(project);note({noteDetails:project.floorNoteDetails});lights(project.lights);if(project.planDraft!==undefined)walls(object(project.planDraft).originalWalls);models(project.modelArtworks);walls(project.walls);material(project.floorMaterial);artworks(project.artworks);if(project.unplacedArtworks!==undefined)artworks(project.unplacedArtworks);model(project.referenceModel);
@@ -37,7 +38,10 @@ function fromDataUrl(value:string){
  let bytes:Uint8Array;try{bytes=Uint8Array.from(atob(match[2]),c=>c.charCodeAt(0));}catch{throw new Error('백업 자산 데이터가 손상됐습니다.');}
  checkSignature(bytes,match[1]);return {mime:match[1],bytes};
 }
+const assetKind=(mime:string)=>mime==='model/gltf-binary'?'model':mime.startsWith('video/')?'video':'image';
+const assetFolder=(mime:string)=>assetKind(mime)==='model'?'models':assetKind(mime)==='video'?'videos':'images';
 function checkSignature(b:Uint8Array,mime:string){
+ if(mime.startsWith('video/')){checkVideoSignature(b,mime);return;}
  const starts=(values:number[])=>values.every((n,i)=>b[i]===n);
  const valid=mime==='image/png'?starts([137,80,78,71,13,10,26,10]):mime==='image/jpeg'?starts([255,216,255]):mime==='image/webp'?starts([82,73,70,70])&&b.length>=12&&decode(b.slice(8,12))==='WEBP':mime==='model/gltf-binary'?starts([103,108,84,70]):false;
  if(!valid)throw new Error('백업 자산의 실제 파일 형식이 일치하지 않습니다.');
@@ -55,8 +59,8 @@ export async function exportProjectPackage(project:Project,resolveSample:(url:st
   let pointer=cache.get(value);
   if(!pointer){
    const embedded=value.startsWith('/artworks/')?await resolveSample(value):value;
-   const {mime,bytes}=fromDataUrl(embedded);if((slot.kind==='model')!==(mime==='model/gltf-binary'))throw new Error('백업 자산 종류가 일치하지 않습니다.');
-   const hash=await sha256(bytes),path=`assets/${slot.kind==='model'?'models':'images'}/${hash}.${types[mime]}`;
+   const {mime,bytes}=fromDataUrl(embedded);if(slot.kind!==assetKind(mime))throw new Error('백업 자산 종류가 일치하지 않습니다.');
+   const hash=await sha256(bytes),path=`assets/${assetFolder(mime)}/${hash}.${types[mime]}`;
    pointer=`gonggan-asset:${path}`;
    if(!assets.has(path))assets.set(path,{meta:{path,mime,bytes:bytes.byteLength,sha256:hash},bytes});
    if(assets.size>MAX_ASSETS)throw new Error('백업 자산은 2,000개 이하여야 합니다.');
@@ -73,7 +77,7 @@ export async function exportProjectPackage(project:Project,resolveSample:(url:st
  if(encode(JSON.stringify(restored)).length>PROJECT_PACKAGE_MAX_BYTES)throw new Error('복원 프로젝트가 80MB를 넘습니다. 사용하지 않는 Scene이나 모델을 정리해주세요.');
  const bytes=encode(JSON.stringify(document)),manifest:Manifest={format:'gonggan-project-backup',version:1,project:{path:'project.json',bytes:bytes.byteLength,sha256:await sha256(bytes)},assets:[...assets.values()].map(a=>a.meta)};
  const zip=new JSZip();zip.file('project.json',bytes);zip.file('manifest.json',JSON.stringify(manifest,null,2));
- zip.file('README.txt','공간 · 프로젝트 자산 백업\n\n공간 앱 상단 불러오기 → 저장 프로젝트 → 이 .gonggan.zip 파일을 선택하세요. 압축을 풀 필요가 없습니다.\n모든 Scene·숨김/미배치 작품·치수·내부 메모·저장된 도면 이미지·참고 GLB·3D 작품 모델을 포함합니다.\n프로젝트에 저장되지 않은 원본 업로드 PDF/JPG 파일, Undo 기록, 공유 링크 관리 정보는 포함하지 않습니다.\n이 파일에는 비공개 메모도 포함되므로 공개 전시 전달에는 공유 링크·PDF·glTF를 사용하세요.\nproject.json의 자산 포인터는 이 ZIP의 manifest.json과 assets 폴더로 함께 복원합니다.\n');
+ zip.file('README.txt','공간 · 프로젝트 자산 백업\n\n공간 앱 상단 불러오기 → 저장 프로젝트 → 이 .gonggan.zip 파일을 선택하세요. 압축을 풀 필요가 없습니다.\n모든 Scene·숨김/미배치 작품·치수·내부 메모·저장된 도면 이미지·참고 GLB·3D 작품 모델·영상 원본을 포함합니다.\n프로젝트에 저장되지 않은 원본 업로드 PDF/JPG 파일, Undo 기록, 공유 링크 관리 정보는 포함하지 않습니다.\n이 파일에는 비공개 메모도 포함되므로 공개 전시 전달에는 공유 링크·PDF·glTF를 사용하세요.\nproject.json의 자산 포인터는 이 ZIP의 manifest.json과 assets 폴더로 함께 복원합니다.\n');
  for(const asset of assets.values())zip.file(asset.meta.path,asset.bytes,{createFolders:false});
  const packed=await zip.generateAsync({type:'uint8array',compression:'DEFLATE',compressionOptions:{level:3}},m=>onProgress(`프로젝트 묶는 중 · ${Math.round(m.percent)}%`));
  inspectArchive(packed);
@@ -94,7 +98,7 @@ function inspectArchive(bytes:Uint8Array){
   const flags=view.getUint16(pos+8,true),method=view.getUint16(pos+10,true),compressed=view.getUint32(pos+20,true),size=view.getUint32(pos+24,true),nameLength=view.getUint16(pos+28,true),extra=view.getUint16(pos+30,true),comment=view.getUint16(pos+32,true),offset=view.getUint32(pos+42,true),end=pos+46+nameLength+extra+comment;
   if(end>eocd||view.getUint16(pos+34,true)||flags&1||![0,8].includes(method)||compressed===0xffffffff||size===0xffffffff||offset===0xffffffff||offset+30>start)throw new Error('암호화·ZIP64 또는 손상된 백업 ZIP은 지원하지 않습니다.');
   const name=decode(bytes.subarray(pos+46,pos+46+nameLength));
-  if(!/^(manifest\.json|project\.json|README\.txt|assets\/(images\/[0-9a-f]{64}\.(png|jpg|webp)|models\/[0-9a-f]{64}\.glb))$/.test(name)||names.has(name))throw new Error('백업 ZIP에 잘못되거나 중복된 파일 경로가 있습니다.');
+  if(!/^(manifest\.json|project\.json|README\.txt|assets\/(images\/[0-9a-f]{64}\.(png|jpg|webp)|models\/[0-9a-f]{64}\.glb|videos\/[0-9a-f]{64}\.(mp4|webm)))$/.test(name)||names.has(name))throw new Error('백업 ZIP에 잘못되거나 중복된 파일 경로가 있습니다.');
   if(view.getUint32(offset,true)!==0x04034b50||view.getUint16(offset+6,true)!==flags||view.getUint16(offset+8,true)!==method)throw new Error('백업 ZIP 파일 헤더가 일치하지 않습니다.');
   const localName=view.getUint16(offset+26,true),localExtra=view.getUint16(offset+28,true),dataStart=offset+30+localName+localExtra;
   if(dataStart+compressed>start||decode(bytes.subarray(offset+30,offset+30+localName))!==name)throw new Error('백업 ZIP 파일 경로/범위가 일치하지 않습니다.');
@@ -119,7 +123,7 @@ export async function importProjectPackage(input:ArrayBuffer,onProgress:(message
  if(manifest?.format!=='gonggan-project-backup'||manifest.version!==1||manifest.project?.path!=='project.json'||!Array.isArray(manifest.assets)||manifest.assets.length>MAX_ASSETS)throw new Error('지원하는 공간 프로젝트 백업이 아닙니다.');
  const validMeta=(a:{path:string;bytes:number;sha256:string})=>typeof a?.path==='string'&&Number.isSafeInteger(a.bytes)&&a.bytes>0&&a.bytes===names.get(a.path)&&hashPattern.test(a.sha256);
  if(!validMeta(manifest.project))throw new Error('백업 프로젝트 크기/해시 정보가 올바르지 않습니다.');
- const assets=new Map<string,PackageAsset>();for(const a of manifest.assets){if(!validMeta(a)||!types[a.mime]||a.path!==`assets/${a.mime==='model/gltf-binary'?'models':'images'}/${a.sha256}.${types[a.mime]}`||assets.has(a.path))throw new Error('백업 자산 목록이 올바르지 않습니다.');assets.set(a.path,a);}
+ const assets=new Map<string,PackageAsset>();for(const a of manifest.assets){if(!validMeta(a)||!types[a.mime]||a.path!==`assets/${assetFolder(a.mime)}/${a.sha256}.${types[a.mime]}`||assets.has(a.path))throw new Error('백업 자산 목록이 올바르지 않습니다.');assets.set(a.path,a);}
  if(names.size!==assets.size+3)throw new Error('백업 목록에 없는 자산이 포함됐습니다.');
  const projectBytes=await read('project.json');if(await sha256(projectBytes)!==manifest.project.sha256)throw new Error('백업 프로젝트 해시가 일치하지 않습니다.');
  let project:unknown;try{project=JSON.parse(decode(projectBytes));}catch{throw new Error('백업 프로젝트 JSON이 손상됐습니다.');}
@@ -127,7 +131,7 @@ export async function importProjectPackage(input:ArrayBuffer,onProgress:(message
  for(const [index,slot] of slots.entries()){
   onProgress(`백업 자산 검사 중 · ${index+1}/${slots.length}`);
   const value=slot.object[slot.key];if(typeof value!=='string'||!value.startsWith('gonggan-asset:'))throw new Error('백업 자산 참조가 올바르지 않습니다.');
-  const path=value.slice('gonggan-asset:'.length),meta=assets.get(path);if(!meta||(slot.kind==='model')!==(meta.mime==='model/gltf-binary'))throw new Error('백업 자산이 누락됐거나 종류가 일치하지 않습니다.');
+  const path=value.slice('gonggan-asset:'.length),meta=assets.get(path);if(!meta||slot.kind!==assetKind(meta.mime))throw new Error('백업 자산이 누락됐거나 종류가 일치하지 않습니다.');
   let url=cache.get(path);if(!url){const raw=await read(path);if(await sha256(raw)!==meta.sha256)throw new Error('백업 자산 해시가 일치하지 않습니다.');checkSignature(raw,meta.mime);url=dataUrl(raw,meta.mime);cache.set(path,url);}
   restoredSize+=url.length-value.length;if(restoredSize>PROJECT_PACKAGE_MAX_BYTES)throw new Error('복원 프로젝트가 80MB를 넘습니다.');
   slot.object[slot.key]=url;
@@ -139,3 +143,6 @@ export async function importProjectPackage(input:ArrayBuffer,onProgress:(message
 
 /** Distinct source images for a final browser decode/pixel-limit check. */
 export function projectImageUrls(project:Project){return [...new Set(assetSlots(project).filter(s=>s.kind==='image').map(s=>s.object[s.key] as string))];}
+
+/** Unique complete video records for real browser metadata/codec verification. */
+export function projectVideos(project:Project){const found=new Map<string,import('../domain/mediaArtwork').VideoArtwork>();for(const slot of assetSlots(project))if(slot.kind==='video'){const media=slot.object as unknown as import('../domain/mediaArtwork').VideoArtwork;const key=JSON.stringify([media.dataUrl,media.widthPx,media.heightPx,media.durationSeconds]);if(!found.has(key))found.set(key,media);}return [...found.values()];}

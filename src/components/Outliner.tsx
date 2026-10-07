@@ -6,7 +6,7 @@ import {FloorMaterialDialog} from './FloorMaterialDialog';
 import {ReferenceModelControls} from './ReferenceModelControls';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {searchProjectObjects,type OutlinerObjectType} from '../domain/outlinerSearch';
-import { Library, Lightbulb, Box, Plus, Eye, EyeOff, LockKeyhole, PanelTop, Layers, ImagePlus, Search, X } from 'lucide-react';
+import { Library, Lightbulb, Box, Plus, Eye, EyeOff, LockKeyhole, PanelTop, Layers, ImagePlus, Film, Search, X } from 'lucide-react';
 import { useEditor } from '../state/editor';
 import { artStyle, readImage } from '../lib/art';
 
@@ -23,6 +23,7 @@ export function Outliner() {
   const matchingWalls=project.walls.filter(w=>shows('wall',w.id)),matchingLights=(project.lights??[]).filter(l=>shows('light',l.id));
   const matchingArtworks=results.filter(r=>r.type==='artwork'||r.type==='modelArtwork'),matchingUnplaced=(project.unplacedArtworks??[]).filter(a=>shows('unplacedArtwork',a.id));
   useEffect(()=>setQuery(''),[project.id]);
+  const videoUpload=useRef<HTMLInputElement>(null);
   const upload = useRef<HTMLInputElement>(null),modelUpload=useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [floorMaterialOpen,setFloorMaterialOpen]=useState(false),[lightingOpen,setLightingOpen]=useState(false),[outdoorOpen,setOutdoorOpen]=useState(false);
@@ -34,6 +35,8 @@ export function Outliner() {
     catch (e) { notify(e instanceof Error ? e.message : '이미지를 읽지 못했습니다.'); }
     finally { setBusy(false); }
   }
+
+  async function uploadVideoArtwork(file:File){const state=useEditor.getState(),original=state.project.id,wallId=state.activeWallId;setBusy(true);notify('영상을 읽고 첫 프레임을 준비하고 있습니다…');try{const {readVideoArtworkFile}=await import('../lib/videoArtworkImport');const template=await readVideoArtworkFile(file);useEditor.getState().installLibraryArtwork(template,original,wallId);useEditor.getState().setView('3d');notify('영상 스크린을 추가했습니다. 오른쪽에서 재생과 화면 비율을 조절하세요.');}catch(e){notify(e instanceof Error?e.message:'영상을 읽지 못했습니다.');}finally{setBusy(false);}}
 
   async function uploadModelArtworks(files:File[]){const original=useEditor.getState().project.id;setBusy(true);notify('3D 작품과 자산을 읽고 있습니다…');try{const {readModelArtworkFiles}=await import('../lib/modelArtworkImport');const model=await readModelArtworkFiles(files);useEditor.getState().addModelArtwork(model,original);}catch(e){notify(e instanceof Error?e.message:'3D 작품을 읽지 못했습니다.');}finally{setBusy(false);}}
   return <><aside className="outliner">
@@ -55,7 +58,7 @@ export function Outliner() {
       {(!searching||matchingArtworks.length>0)&&<section>
         <div className="section-label">ARTWORK<span>{searching?`${matchingArtworks.length} / `:''}{project.artworks.length+(project.modelArtworks?.length??0)}</span></div>
         {project.artworks.map((art, i) => shows('artwork',art.id)?<div className={`entity-row artwork-row ${selected.some(s => s.id === art.id) ? 'selected' : ''}`} key={art.id}>
-          <button className={`entity-main ${!art.visible ? 'muted' : ''}`} onClick={e => select({ type: 'artwork', id: art.id }, e.shiftKey)}><span className="art-thumbnail" style={artStyle(art.imageUrl)} /><span className="entity-text"><strong>{art.name}</strong><small>작품 {String(i + 1).padStart(2, '0')}</small></span>{art.locked && <LockKeyhole size={12} />}</button>
+          <button className={`entity-main ${!art.visible ? 'muted' : ''}`} onClick={e => select({ type: 'artwork', id: art.id }, e.shiftKey)}><span className="art-thumbnail" style={artStyle(art.imageUrl)} /><span className="entity-text"><strong>{art.name}</strong><small>{art.video?'영상 작품':'작품'} {String(i + 1).padStart(2, '0')}</small></span>{art.locked && <LockKeyhole size={12} />}</button>
           <button className="row-action" aria-label={`${art.name} ${art.visible ? '숨기기' : '보이기'}`} onClick={() => patchArtwork(art.id, { visible: !art.visible })}>{art.visible ? <Eye size={14} /> : <EyeOff size={14} />}</button>
         </div>:null)}
         {project.modelArtworks?.filter(a=>shows('modelArtwork',a.id)).map(a=><div key={a.id} className={`entity-row artwork-row ${selected.some(s=>s.type==='modelArtwork'&&s.id===a.id)?'selected':''}`}><button className={`entity-main ${!a.visible?'muted':''}`} onClick={e=>select({type:'modelArtwork',id:a.id},e.shiftKey)}><Box size={25}/><span className='entity-text'><strong>{a.name}</strong><small>3D 작품 · {[a.widthMm,a.heightMm,a.depthMm].map(formatLength).join(' × ')}</small></span>{a.locked&&<LockKeyhole size={12}/>}</button><button className='row-action' aria-label={`${a.name} ${a.visible?'숨기기':'보이기'}`} onClick={()=>useEditor.getState().patchModelArtwork(a.id,{visible:!a.visible})}>{a.visible?<Eye size={14}/>:<EyeOff size={14}/>}</button></div>)}
@@ -72,6 +75,6 @@ export function Outliner() {
       </section>}
     </div>
     <ReferenceModelControls hidden={searching&&!shows('referenceModel')}/>
-    <div className="add-art-card"><Box size={19} strokeWidth={1.4} /><strong>작품을 더해보세요</strong><p>{provisional ? '두 점 축척 보정 후 실제 크기의 작품을 추가할 수 있습니다.' : <>이미지와 실제 크기로<br />나만의 전시를 구성하세요.</>}</p><button className="button outline" disabled={busy || provisional} onClick={() => upload.current?.click()}><ImagePlus size={16} />{busy ? '이미지 처리 중' : '작품 추가'}</button><button className="button outline" disabled={busy||provisional||(project.modelArtworks?.length??0)>=50} onClick={()=>modelUpload.current?.click()}><Box size={16}/>3D 작품 추가</button><p className="field-hint">GLB · glTF와 자산 · glTF ZIP / 12MB 이하</p><button className="button outline" onClick={()=>setLibraryOpen(true)}><Library size={16}/>작품 라이브러리</button><input ref={modelUpload} type="file" hidden multiple aria-label="3D 작품 파일" accept=".glb,.gltf,.zip,.bin,.png,.jpg,.jpeg,.webp" onChange={e=>{const files=Array.from(e.currentTarget.files??[]);e.currentTarget.value='';if(files.length)void uploadModelArtworks(files);}}/><button className="text-button" disabled={provisional} onClick={() => addArtwork()}>예제 작품 추가</button><input type="file" accept="image/png,image/jpeg,image/webp" hidden ref={upload} onChange={e => { const f = e.target.files?.[0]; if (f) void uploadArtwork(f); e.currentTarget.value = ''; }} /></div>
+    <div className="add-art-card"><Box size={19} strokeWidth={1.4} /><strong>작품을 더해보세요</strong><p>{provisional ? '두 점 축척 보정 후 실제 크기의 작품을 추가할 수 있습니다.' : <>이미지와 실제 크기로<br />나만의 전시를 구성하세요.</>}</p><button className="button outline" disabled={busy || provisional} onClick={() => upload.current?.click()}><ImagePlus size={16} />{busy ? '이미지 처리 중' : '작품 추가'}</button><button className="button outline" disabled={busy||provisional} onClick={()=>videoUpload.current?.click()}><Film size={16}/>영상 작품 추가</button><input ref={videoUpload} type="file" hidden aria-label="영상 작품 파일" accept=".mp4,.webm,video/mp4,video/webm" onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)void uploadVideoArtwork(file);}}/><p className="field-hint">MP4·WebM / 16MB 이하 · 긴 변 1,920px 이하</p><button className="button outline" disabled={busy||provisional||(project.modelArtworks?.length??0)>=50} onClick={()=>modelUpload.current?.click()}><Box size={16}/>3D 작품 추가</button><p className="field-hint">GLB · glTF와 자산 · glTF ZIP / 12MB 이하</p><button className="button outline" onClick={()=>setLibraryOpen(true)}><Library size={16}/>작품 라이브러리</button><input ref={modelUpload} type="file" hidden multiple aria-label="3D 작품 파일" accept=".glb,.gltf,.zip,.bin,.png,.jpg,.jpeg,.webp" onChange={e=>{const files=Array.from(e.currentTarget.files??[]);e.currentTarget.value='';if(files.length)void uploadModelArtworks(files);}}/><button className="text-button" disabled={provisional} onClick={() => addArtwork()}>예제 작품 추가</button><input type="file" accept="image/png,image/jpeg,image/webp" hidden ref={upload} onChange={e => { const f = e.target.files?.[0]; if (f) void uploadArtwork(f); e.currentTarget.value = ''; }} /></div>
   </aside>{libraryOpen&&<ArtworkLibraryDialog onClose={()=>setLibraryOpen(false)}/>} {outdoorOpen&&<OutdoorDialog onClose={()=>setOutdoorOpen(false)}/>} {lightingOpen&&<LightingDialog onClose={()=>setLightingOpen(false)}/>} {floorMaterialOpen&&<FloorMaterialDialog onClose={()=>setFloorMaterialOpen(false)}/>}</>;
 }

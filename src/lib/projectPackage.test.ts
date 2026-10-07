@@ -35,6 +35,14 @@ it('packs Scene thumbnails as verified image assets and restores their view meta
  const restored=await importProjectPackage(await blob.arrayBuffer());expect(restored.scenes[0].thumbnail).toEqual(p.scenes[0].thumbnail);expect(projectImageUrls(restored)).toContain(png);
  const corrupt=await edited(zip=>updateProject(zip,p=>{p.scenes[0].thumbnail={imageUrl:'gonggan-asset:missing',widthPx:1,heightPx:1,view:'3d'};}));await expect(importProjectPackage(corrupt)).rejects.toThrow(/자산|참조/);
 });
+it('packs each video once across current, hidden, unplaced and Scene artworks and rejects asset-kind substitution',async()=>{
+ const p=fixture(),video={dataUrl:'data:video/mp4;base64,'+btoa(String.fromCharCode(0,0,0,16,102,116,121,112,105,115,111,109,0,0,0,0)),widthPx:640,heightPx:360,durationSeconds:3,loop:true,fit:'contain' as const};
+ p.artworks.forEach(a=>a.video=video);p.unplacedArtworks![0].video=video;p.scenes[0].artworks.forEach(a=>a.video=video);p.scenes[0].structure!.unplacedArtworks[0].video=video;
+ const zip=await JSZip.loadAsync(await (await exportProjectPackage(p,sample)).arrayBuffer()),m=JSON.parse(await zip.file('manifest.json')!.async('string')),stored=JSON.parse(await zip.file('project.json')!.async('string'));
+ expect(m.assets.filter((a:{mime:string})=>a.mime==='video/mp4')).toHaveLength(1);expect(stored.artworks[0].video.dataUrl).toMatch(/^gonggan-asset:assets\/videos\//);
+ expect(await importProjectPackage(await zip.generateAsync({type:'arraybuffer'}))).toEqual(p);
+ await updateProject(zip,p=>{p.artworks[0].video!.dataUrl=p.artworks[0].imageUrl;});await expect(importProjectPackage(await zip.generateAsync({type:'arraybuffer'}))).rejects.toThrow(/종류/);
+});
 it('embeds sample panels once per unique source and deduplicates identical asset bytes',async()=>{
  const resolve=vi.fn(async()=>png),p=createDemoProject();p.scenes=[{id:'scene',name:'예제',artworks:structuredClone(p.artworks),wallVisibility:{}}];
  const blob=await exportProjectPackage(p,resolve),zip=await JSZip.loadAsync(await blob.arrayBuffer()),manifest=JSON.parse(await zip.file('manifest.json')!.async('string')),restored=await importProjectPackage(await blob.arrayBuffer());

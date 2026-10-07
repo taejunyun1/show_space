@@ -26,3 +26,10 @@ it('serializes simultaneous tabs against the count limit without losing either s
  const results=await Promise.allSettled([a.add(input()),b.add(input())]);expect(results.filter(r=>r.status==='fulfilled')).toHaveLength(1);expect(results.filter(r=>r.status==='rejected')).toHaveLength(1);
  const list=await a.list();expect(list).toHaveLength(1);expect((await b.read(list[0].id))!.template).toEqual(input().template);expect((await a.backup()).items).toHaveLength(1);
 });
+it('preserves video originals in independent library storage and backup restoration, without placement or private notes',async()=>{
+ const bytes=Uint8Array.from([0,0,0,16,102,116,121,112,105,115,111,109,0,0,0,0]);const video={dataUrl:'data:video/mp4;base64,'+btoa(String.fromCharCode(...bytes)),widthPx:640,heightPx:360,durationSeconds:4,loop:false,fit:'cover' as const};
+ const a={...createDemoProject().artworks[0],imageUrl:png,artworkType:'video' as const,presentationType:'screen' as const,video,note:'private note'};
+ const repo=createArtworkLibrary(new IDBFactory(),'video'),summary=await repo.add({template:artworkTemplate('image',a),thumbnail:png});const stored=(await repo.read(summary.id))!.template;
+ expect(stored.kind).toBe('image');if(stored.kind!=='image')throw new Error('wrong kind');expect(stored.artwork.video).toEqual(video);expect(stored.artwork).not.toHaveProperty('note');expect(stored.artwork).not.toHaveProperty('wallId');
+ const restored=createArtworkLibrary(new IDBFactory(),'video-restored');await restored.restore(await repo.backup());const item=(await restored.read((await restored.list())[0].id))!.template;expect(item).toEqual(stored);
+});

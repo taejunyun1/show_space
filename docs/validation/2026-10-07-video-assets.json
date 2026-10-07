@@ -1,0 +1,32 @@
+{
+  "fixture": "owned ffmpeg testsrc2 640x360, 24fps, 4s, H264 MP4",
+  "fixtureSha256": "e9c8d94044a6d82ad1aeee0943d11090e7843f21340899057f6c90f6d23f767e",
+  "bytes": 382181,
+  "zipVideoCount": 1,
+  "sceneVideoSameAsset": true,
+  "posterDimensions": [
+    640,
+    360
+  ],
+  "posterExtrema": [
+    [
+      0,
+      255
+    ],
+    [
+      0,
+      255
+    ],
+    [
+      0,
+      255
+    ]
+  ],
+  "videoMetadata": {
+    "widthPx": 640,
+    "heightPx": 360,
+    "durationSeconds": 4,
+    "loop": true,
+    "fit": "cover"
+  }
+}
