@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-07",
+  "status": "implemented-awaiting-native-ui-acceptance",
+  "tests": {
+    "passed": 889,
+    "skipped": 2,
+    "filesPassed": 166,
+    "filesSkipped": 2
+  },
+  "build": "passed",
+  "thumbnail": {
+    "width": 320,
+    "height": 200,
+    "generatedMime": "image/jpeg",
+    "maxBytes": 65536,
+    "storedViews": [
+      "3d",
+      "plan",
+      "elevation"
+    ]
+  },
+  "verifiedInTests": [
+    "concurrent-current-edits-preserved",
+    "captured-scene-single-undo-redo",
+    "cross-project-refused",
+    "previous-scene-compatible",
+    "metadata-and-header-size-bounds",
+    "json-roundtrip",
+    "zip-asset-slot-hash-and-restore",
+    "public-thumbnail-excluded",
+    "time-comparison-reuses-rendered-images",
+    "partial-preview-batch-refused",
+    "cancelled-queue-disposes-before-replacement",
+    "async-frame-encoding-cancellation"
+  ],
+  "native": {
+    "attemptedOrigins": [
+      "http://localhost:8806/",
+      "http://127.0.0.1:8806/",
+      "http://127.0.0.1:8810/"
+    ],
+    "originalLocalScenes": 4,
+    "result": "menu-and-view-clicks-did-not-change-visible-state",
+    "consoleWarningsErrors": [],
+    "actualGeneratedImageVerified": false,
+    "originalSceneDeletionOrCreation": false,
+    "workerSessionConfirmedLive": 17285,
+    "workerRestarted": false
+  },
+  "deployment": {
+    "thisChangeDeployed": false,
+    "priorVersion": "e76f28e9-6ca3-4571-b9c4-33825adfcc79"
+  },
+  "remaining": [
+    "native-generated-image-and-scene-navigation",
+    "undo-reload-thumbnails",
+    "time-comparison-thumbnail-save",
+    "actual-backup-ui-roundtrip",
+    "mobile-layout",
+    "deploy-and-public-verify",
+    "full-product-acceptance"
+  ]
+}

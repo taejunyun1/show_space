@@ -1,10 +1,12 @@
 import {snapModelArtworkTransform,type ModelArtworkSnapGuide,type ModelArtworkSnapOptions} from '../domain/modelArtworkSnap';
+import {appendSceneSnapshot} from '../domain/sceneSnapshot';
+import type {SceneThumbnail} from '../domain/types';
 import {installArtworkTemplate,type ArtworkTemplate} from '../domain/artworkLibrary';
 import {layoutArtworks,type ArtworkLayout} from '../domain/artworkLayout';
 import {updateNote,preserveCurrentNotes,validateProjectNotes,type NoteTarget,type NoteDetails} from '../domain/notes';
 import {addModelArtwork as addModelArtworkToProject,patchModelArtwork as updateModelArtwork,modelArtworkMembers,groupModelArtworks,transformModelArtworks,modelArtworkBounds} from '../domain/modelArtworks';
 import {parseOutdoor,DEFAULT_OUTDOOR,type OutdoorSettings} from '../domain/outdoor';
-import {newLight,patchLight as updateLight,parseLighting,translatedLight,CUSTOM_LIGHTING,DEFAULT_LIGHTING,type ExhibitionLight,type LightingSettings} from '../domain/lighting';
+import {newLight,patchLight as updateLight,parseLighting,translatedLight,CUSTOM_LIGHTING,type ExhibitionLight,type LightingSettings} from '../domain/lighting';
 import {adoptModelSpace,sameModelGeometry} from '../domain/modelSpace'
 import {artworkGroupMembers,groupArtworks,ungroupArtworks,patchGroupedArtwork} from '../domain/artworkGroups'
 import { create } from 'zustand'
@@ -125,7 +127,7 @@ interface EditorState {
   undo(): void
   redo(): void
   loadProject(project: Project, alreadySaved?:boolean): void
-  saveScene(name: string,cameraView?:CameraView): void
+  saveScene(name: string,cameraView?:CameraView,thumbnail?:SceneThumbnail,source?:Project): boolean
   restoreScene(id: string): void
   deleteScene(id: string): void
 }
@@ -468,14 +470,10 @@ export const useEditor = create<EditorState>((set, get) => {
       if(alreadySaved)savedSnapshot=parsed;
       set({ project: parsed, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
     }),
-    saveScene: (name,cameraView) => attempt(() => {
-      const project = get().project
-      const used = new Set(project.scenes.map((scene) => scene.id))
-      let index = 1
-      while (used.has(`scene-${index}`)) index += 1
-      const structure={modelArtworks:clone(project.modelArtworks??[]),outdoor:clone(project.outdoor??DEFAULT_OUTDOOR),lights:clone(project.lights??[]),lighting:clone(project.lighting??DEFAULT_LIGHTING),floorColor:project.floorColor,...(project.floorMaterial?{floorMaterial:clone(project.floorMaterial)}:{}),...(project.importedFloor?{importedFloor:clone(project.importedFloor)}:{}),...(project.referenceModel?{referenceModel:clone(project.referenceModel)}:{}),walls:clone(project.walls),openings:clone(project.openings??[]),dimensions:clone(project.dimensions??[]),unplacedArtworks:clone(project.unplacedArtworks??[])}
-      get().commit(parseProject({ ...project, scenes: [...project.scenes, { id: `scene-${index}`, name, artworks: clone(project.artworks), wallVisibility: Object.fromEntries(project.walls.map((wall) => [wall.id, wall.visible])),structure,...(cameraView?{cameraView:clone(cameraView)}:{}) }] }))
-    }),
+    saveScene: (name,cameraView,thumbnail,source) => {
+      try{const project=get().project;get().commit(appendSceneSnapshot(project,source??project,name,cameraView,thumbnail));return true;}
+      catch(error){set({message:errorMessage(error)});return false;}
+    },
     restoreScene: (id) => attempt(() => {
       const project = get().project
       const scene = project.scenes.find((item) => item.id === id)

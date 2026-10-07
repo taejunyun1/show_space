@@ -1,4 +1,5 @@
 import {wallLength} from './wallGeometry';
+import {parseSceneThumbnail} from './sceneThumbnail';
 export {wallLength} from './wallGeometry';
 import {parseFrameSettings,artworkPresentation,rotatedArtworkOuterSize} from './artworkPresentation';
 import {parseArtworkInformation} from './artworkInformation';
@@ -375,6 +376,7 @@ export function parseProject(input: unknown): Project {
     text(sceneId, '장면 ID'); text(scene.name, '장면 이름')
     if (sceneIds.has(sceneId)) throw new Error(`중복된 장면 ID가 있습니다: ${sceneId}`)
     sceneIds.add(sceneId)
+    if(scene.thumbnail!==undefined)parseSceneThumbnail(scene.thumbnail)
     let sceneWallIds=wallIds
     if(scene.structure!==undefined){
       const structure=object(scene.structure,'장면 구조')

@@ -87,7 +87,10 @@ export interface Scene {
   wallVisibility: Record<string, boolean>
   cameraView?:CameraView
   structure?:SceneStructure
+  thumbnail?:SceneThumbnail
 }
+
+export interface SceneThumbnail {imageUrl:string;widthPx:number;heightPx:number;view:'3d'|'plan'|'elevation'}
 
 export interface PlanReference {
  widthPx:number; heightPx:number; origin:Point; mmPerPixel:number; calibrated:boolean

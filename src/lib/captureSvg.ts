@@ -63,8 +63,7 @@ function toBlob(canvas:HTMLCanvasElement):Promise<Blob>{
  return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG 파일을 만들지 못했습니다.')),'image/png'));
 }
 
-export async function captureSvg(svg:SVGSVGElement,options:CaptureOptions):Promise<Blob>{
- await document.fonts.ready;
+export async function captureSvg(svg:SVGSVGElement,options:Omit<CaptureOptions,'longEdge'>&{longEdge:number}):Promise<Blob>{
  const box=svg.viewBox.baseVal;
  const size=capturePixelSize(box.width,box.height,options.longEdge,options.aspectRatio);
  const fit=captureFit({width:box.width,height:box.height},size);
@@ -79,6 +78,7 @@ export async function captureSvg(svg:SVGSVGElement,options:CaptureOptions):Promi
  if(!options.includeDimensions)clone.querySelectorAll('text,.svg-dimensions,[aria-label="평면 치수선"],[aria-label="벽면 치수선"]').forEach(el=>el.remove());
  if(!options.includeGrid)clone.querySelectorAll<SVGElement>('rect[fill="url(#plan-grid)"]').forEach(el=>{el.setAttribute('fill','#ffffff');el.style.fill='#ffffff';});
  if(!options.includePlan)clone.querySelectorAll('image[data-source-plan]').forEach(el=>el.remove());
+ await document.fonts.ready;
  await replaceArtworkImages(clone,fit.scale);
  const markup=new XMLSerializer().serializeToString(clone),blob=new Blob([markup],{type:'image/svg+xml;charset=utf-8'}),url=URL.createObjectURL(blob);
  try{

@@ -5,8 +5,10 @@ import {DEFAULT_OUTDOOR,localInstants} from '../domain/outdoor';
 import {DEFAULT_COMPARISON_TIMES,appendTimeComparisonScenes,timeComparisonSource,type TimeComparisonOptions,type TimeComparisonFrame} from '../domain/timeComparison';
 import {renderTimeComparison} from '../lib/timeComparison';
 import type {PdfCurrentCamera} from '../lib/pdfRender3d';
+import type {SceneThumbnail} from '../domain/types';
+import {thumbnailFromBlob} from '../lib/sceneThumbnail';
 
-interface ComparisonImage {url:string;frame:TimeComparisonFrame}
+interface ComparisonImage {url:string;frame:TimeComparisonFrame;thumbnail:SceneThumbnail}
 export default function TimeComparisonDialog({onClose,getCamera}:{onClose:()=>void;getCamera:()=>PdfCurrentCamera|undefined}){
  const [project]=useState(()=>structuredClone(useEditor.getState().project)),[camera]=useState(()=>getCamera());
  const initial=project.outdoor??DEFAULT_OUTDOOR;
@@ -22,16 +24,17 @@ export default function TimeComparisonDialog({onClose,getCamera}:{onClose:()=>vo
   if(job.current)return;
   clear();const controller=new AbortController();job.current=controller;setBusy(true);
   try{
-   await renderTimeComparison(project,options,camera,controller.signal,(frame,png,index)=>{
+   await renderTimeComparison(project,options,camera,controller.signal,async(frame,png,index)=>{
+    const blob=new Blob([new Uint8Array(png)],{type:'image/png'}),thumbnail=await thumbnailFromBlob(blob,'3d',controller.signal);
     if(!alive.current||job.current!==controller)return;
-    const url=URL.createObjectURL(new Blob([new Uint8Array(png)],{type:'image/png'}));urls.current.push(url);
-    setImages(previous=>{const next=[...previous];next[index]={url,frame};return next;});
+    const url=URL.createObjectURL(blob);urls.current.push(url);
+    setImages(previous=>{const next=[...previous];next[index]={url,frame,thumbnail};return next;});
    });
   }catch(e){if(alive.current&&job.current===controller&&!controller.signal.aborted)setError(e instanceof Error?e.message:'시간대 비교를 만들지 못했습니다.');}
   finally{if(alive.current&&job.current===controller){job.current=null;setBusy(false);}}
  }
  function saveScenes(){
-  try{const state=useEditor.getState();state.commit(appendTimeComparisonScenes(state.project,project,options,camera?.view));setSaved(true);state.notify('비교한 시간대 네 개를 Scene으로 저장했습니다.');}
+  try{if(images.filter(Boolean).length!==4)throw new Error('네 시간대의 비교 화면을 먼저 만들어주세요.');const state=useEditor.getState();state.commit(appendTimeComparisonScenes(state.project,project,options,camera?.view,images.map(i=>i!.thumbnail)));setSaved(true);state.notify('비교한 시간대 네 개를 미리보기와 함께 Scene으로 저장했습니다.');}
   catch(e){setError(e instanceof Error?e.message:'Scene을 저장하지 못했습니다.');}
  }
  return <dialog ref={dialog} className="export-dialog time-comparison-dialog" aria-label="시간대 비교" onCancel={onClose}>

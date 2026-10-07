@@ -36,3 +36,9 @@ it('appends four complete saved time scenes atomically while preserving newer cu
  expect(parseProject(JSON.parse(JSON.stringify(more)))).toEqual(more);
  expect(()=>appendTimeComparisonScenes({...current,id:'other'},source,options)).toThrow(/프로젝트/);
 });
+it('keeps each rendered preview aligned with its saved time and rejects a partial or invalid batch',()=>{
+ const p=createDemoProject(),url='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a2ioAAAAASUVORK5CYII=',thumbnails=DEFAULT_COMPARISON_TIMES.map(()=>({imageUrl:url,widthPx:1,heightPx:1,view:'3d' as const}));
+ const saved=appendTimeComparisonScenes(p,p,options,undefined,thumbnails);expect(saved.scenes.map(s=>s.thumbnail)).toEqual(thumbnails);expect(saved.scenes.map(s=>s.structure!.outdoor!.time)).toEqual(DEFAULT_COMPARISON_TIMES);
+ expect(()=>appendTimeComparisonScenes(p,p,options,undefined,thumbnails.slice(0,3))).toThrow(/네 시간대/);
+ const invalid=structuredClone(thumbnails);invalid[3].heightPx=200;expect(()=>appendTimeComparisonScenes(p,p,options,undefined,invalid)).toThrow(/크기/);expect(p.scenes).toHaveLength(0);
+});

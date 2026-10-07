@@ -105,6 +105,14 @@ describe('editor history and commands', () => {
     expect(useEditor.getState().project.artworks[0].alongMm).toBe(createDemoProject().artworks[0].alongMm);
     expect(useEditor.getState().project.scenes[0].cameraView).toEqual(cameraView);
   });
+  it('adds the captured Scene with its thumbnail as one undo step while retaining newer edits',()=>{
+    const source=structuredClone(useEditor.getState().project),thumbnail={imageUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a2ioAAAAASUVORK5CYII=',widthPx:1,heightPx:1,view:'3d' as const};
+    useEditor.getState().patchArtwork('artwork-1',{alongMm:2100});const before=structuredClone(useEditor.getState().project),steps=useEditor.getState().past.length;
+    expect(useEditor.getState().saveScene('Captured',undefined,thumbnail,source)).toBe(true);
+    expect(useEditor.getState().past).toHaveLength(steps+1);expect(useEditor.getState().project.artworks[0].alongMm).toBe(2100);expect(useEditor.getState().project.scenes[0].artworks).toEqual(source.artworks);expect(useEditor.getState().project.scenes[0].thumbnail).toEqual(thumbnail);
+    useEditor.getState().undo();expect(useEditor.getState().project).toEqual(before);useEditor.getState().redo();expect(useEditor.getState().project.scenes[0].thumbnail).toEqual(thumbnail);
+    const current=structuredClone(useEditor.getState().project);expect(useEditor.getState().saveScene('Stale',undefined,thumbnail,{...source,id:'other'})).toBe(false);expect(useEditor.getState().project).toEqual(current);
+  });
 
   it('restores a saved venue after its wall and attached artworks were deleted, then undoes once',()=>{
     const demo=createDemoProject();

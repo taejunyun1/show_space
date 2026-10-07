@@ -15,14 +15,18 @@ it('validates all times before rendering and reuses the identical camera seriall
 });
 it('stops stale callbacks and later frames after a pending render is cancelled',async()=>{
  const controller=new AbortController();let calls=0,callbacks=0;
- await expect(renderTimeComparison(createDemoProject(),options,undefined,controller.signal,()=>callbacks++,async()=>{calls++;controller.abort();return new Uint8Array([1]);})).rejects.toThrow();
+ await expect(renderTimeComparison(createDemoProject(),options,undefined,controller.signal,()=>{callbacks++;},async()=>{calls++;controller.abort();return new Uint8Array([1]);})).rejects.toThrow();
  expect(calls).toBe(1);expect(callbacks).toBe(0);
 });
 it('waits for an active cancelled renderer to dispose before starting its replacement',async()=>{
  let release!:()=>void,started!:()=>void,active=0,peak=0,oldCallbacks=0;
  const start=new Promise<void>(r=>started=r),hold=new Promise<void>(r=>release=r),old=new AbortController();
- const first=renderTimeComparison(createDemoProject(),options,undefined,old.signal,()=>oldCallbacks++,async()=>{active++;peak=Math.max(peak,active);started();await hold;active--;return new Uint8Array([1]);});
+ const first=renderTimeComparison(createDemoProject(),options,undefined,old.signal,()=>{oldCallbacks++;},async()=>{active++;peak=Math.max(peak,active);started();await hold;active--;return new Uint8Array([1]);});
  const rejected=expect(first).rejects.toThrow();await start;old.abort();
  const replacement=renderTimeComparison(createDemoProject(),options,undefined,new AbortController().signal,()=>{},async()=>{active++;peak=Math.max(peak,active);await Promise.resolve();active--;return new Uint8Array([2]);});
  release();await rejected;await replacement;expect(peak).toBe(1);expect(oldCallbacks).toBe(0);
+});
+it('waits for preview encoding and stops later frames if it is cancelled during encoding',async()=>{
+ const controller=new AbortController();let renders=0;
+ await expect(renderTimeComparison(createDemoProject(),options,undefined,controller.signal,async()=>{await Promise.resolve();controller.abort();},async()=>{renders++;return new Uint8Array([1]);})).rejects.toThrow();expect(renders).toBe(1);
 });

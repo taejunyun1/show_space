@@ -4,6 +4,7 @@ import {createDemoProject} from '../domain/model';
 import type {Project,ReferenceModel} from '../domain/types';
 import {testGlb} from './glbTestFixture';
 import {exportProjectPackage,importProjectPackage,projectImageUrls,PROJECT_PACKAGE_MAX_BYTES} from './projectPackage';
+import {appendSceneSnapshot} from '../domain/sceneSnapshot';
 
 const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a2ioAAAAASUVORK5CYII=';
 const model:ReferenceModel={name:'원본.glb',dataUrl:'data:model/gltf-binary;base64,'+btoa(String.fromCharCode(...new Uint8Array(testGlb()))),visible:false,sizeMm:[12000,3000,8000],sourceOffsetM:[-6,0,-4],positionMm:[100,0,200],rotationDeg:90,scale:1.5};
@@ -26,6 +27,13 @@ it('restores every stored asset and editing field without a web path or input mu
  expect(blob.type).toBe('application/octet-stream');expect(manifest.assets).toHaveLength(2);expect(Object.keys(zip.files)).toHaveLength(5);expect(manifest.assets.map((a:{mime:string})=>a.mime).sort()).toEqual(['image/png','model/gltf-binary']);
  expect(await importProjectPackage(await blob.arrayBuffer())).toEqual(p);expect(p).toEqual(before);expect(projectImageUrls(p)).toEqual([png]);expect(await zip.file('README.txt')!.async('string')).toContain('내부 메모');
  const stored=await zip.file('project.json')!.async('string');expect(stored).not.toContain('data:image');expect(stored).toContain('비공개 메모 gonggan-asset:그대로');
+});
+it('packs Scene thumbnails as verified image assets and restores their view metadata',async()=>{
+ const source=createDemoProject(),p=appendSceneSnapshot(source,source,'Preview',undefined,{imageUrl:png,widthPx:1,heightPx:1,view:'plan'});
+ const blob=await exportProjectPackage(p,sample),zip=await JSZip.loadAsync(await blob.arrayBuffer()),stored=JSON.parse(await zip.file('project.json')!.async('string'));
+ expect(stored.scenes[0].thumbnail.imageUrl).toMatch(/^gonggan-asset:/);expect(stored.scenes[0].thumbnail.view).toBe('plan');
+ const restored=await importProjectPackage(await blob.arrayBuffer());expect(restored.scenes[0].thumbnail).toEqual(p.scenes[0].thumbnail);expect(projectImageUrls(restored)).toContain(png);
+ const corrupt=await edited(zip=>updateProject(zip,p=>{p.scenes[0].thumbnail={imageUrl:'gonggan-asset:missing',widthPx:1,heightPx:1,view:'3d'};}));await expect(importProjectPackage(corrupt)).rejects.toThrow(/자산|참조/);
 });
 it('embeds sample panels once per unique source and deduplicates identical asset bytes',async()=>{
  const resolve=vi.fn(async()=>png),p=createDemoProject();p.scenes=[{id:'scene',name:'예제',artworks:structuredClone(p.artworks),wallVisibility:{}}];
