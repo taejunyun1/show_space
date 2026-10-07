@@ -24,3 +24,5 @@
 증거: [기록·파일 해시](../validation/2026-10-07-project-history.json), [비교](../validation/2026-10-07-history-comparison.png), [3D 미리보기](../validation/2026-10-07-history-preview.png), [390px](../validation/2026-10-07-history-mobile.png).
 
 이는 이 브라우저의 수동 복원 지점 이력이다. 계정 간/기기 간 버전 목록 동기화, 모든 자동 저장의 영구 이력, 프로젝트 ZIP 안의 전체 버전 목록은 구현하지 않았다. 선택 버전 하나의 ZIP으로 옮길 수 있다. 실제 모바일 GPU·실계정 인증·Library 동기화·협업/영상 등 최종 목표의 다른 요구는 계속 미완료다.
+
+Cloudflare `9fc4e826-9561-4e1f-ac5c-82421ec926d1` 배포 완료. 공개 entry `/assets/index-CrR82Ylp.js` 및 프로젝트 목록→버전 기록 대화상자·브라우저 로컬 안내·복원 지점 저장 폼을 확인했다. 공개 프로젝트는 변경하지 않았으며 콘솔 경고/오류 없음. keep-vars로 기존 설정과 D1/R2 바인딩을 보존했다. 증거: [공개 화면](../validation/2026-10-07-history-public.png).

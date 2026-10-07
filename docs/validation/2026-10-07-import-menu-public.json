@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-07",
+  "scope": "Public import menu revalidation for top-header import request",
+  "deploymentVersion": "9fc4e826-9561-4e1f-ac5c-82421ec926d1",
+  "entry": "/assets/index-CrR82Ylp.js",
+  "headerLabel": "도면·3D 불러오기",
+  "planFormats": [
+    "JPG",
+    "PNG",
+    "PDF"
+  ],
+  "modelFormat": "SketchUp-exported GLB",
+  "rawSkpSupported": false,
+  "projectBackupInSeparateCollapsedSection": true,
+  "fileInputAccepts": {
+    "plan": ".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf",
+    "model": ".glb,model/gltf-binary",
+    "backup": ".json,.zip,application/json,application/zip"
+  },
+  "publicProjectModified": false,
+  "screenshot": "2026-10-07-import-menu-public.png",
+  "limits": [
+    "menu and file input routing revalidated; no real SketchUp export uploaded in this check"
+  ]
+}

@@ -63,7 +63,16 @@
     "historyPointsPreserved": 4
   },
   "deployment": {
-    "status": "pending"
+    "status": "public UI verified",
+    "sourceCommit": "66206bf",
+    "version": "9fc4e826-9561-4e1f-ac5c-82421ec926d1",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entry": "/assets/index-CrR82Ylp.js",
+    "keepVars": true,
+    "publicHistoryDialogOpened": true,
+    "publicProjectModified": false,
+    "consoleErrorsOrWarnings": [],
+    "screenshot": "2026-10-07-history-public.png"
   },
   "limits": [
     "local browser restore-point history, no account synchronization",

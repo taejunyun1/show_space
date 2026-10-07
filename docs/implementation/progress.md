@@ -1248,3 +1248,5 @@ Cloudflare `98126800-7c3b-4dc1-a449-cbe9abfd0118` 배포, 공개 entry `/assets/
 - 프로젝트 카드에서 전체 자산 복원 지점 저장·목록·변경 항목 비교·읽기 전용 3D·안전 백업 후 복원·ZIP·보관/복구·명시적 영구 삭제를 연결했다. 별도 IndexedDB/50지점·200MiB 한도/내용 기반 아카이브 공유, 자동 삭제 없음.
 - 실제 A/B 치수·메모·Scene 저장/재접속/비교, A 복원 후 새 편집 저장, 자동 보관 B 재복원, 737142바이트 ZIP의 CRC/2자산 해시 및 실제 파일 입력 왕복, 390px 가로 넘침 없음 확인. 기존 전시 보존, 직접 만든 프로젝트만 보관. 영구 삭제는 fake IndexedDB 테스트만 수행했다.
 - 전체 918 테스트 통과/선택형 2 제외·최종 빌드 통과. 배포 진행 중. 계정 버전 목록 동기화/모든 자동 저장의 영구 이력·실계정/Library 동기화·협업/영상 및 전체 목표는 미완료. 상세: 2026-10-07-project-history.md, 증거: ../validation/2026-10-07-project-history.json.
+
+Cloudflare `9fc4e826-9561-4e1f-ac5c-82421ec926d1` 배포 완료, 공개 entry `index-CrR82Ylp.js`/프로젝트 카드의 버전 기록 폼과 콘솔 경고·오류 없음 확인. 공개 데이터 변경 없음. 상단 도면·3D 불러오기도 JPG·PNG·PDF/SketchUp GLB 카드, 별도 ZIP·JSON 복원, SKP 직접 지원 불가 안내를 재확인했다. 증거: ../validation/2026-10-07-history-public.png, ../validation/2026-10-07-import-menu-public.png. 계정 동기화 등 전체 목표는 계속 미완료다.
