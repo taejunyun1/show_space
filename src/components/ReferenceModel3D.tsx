@@ -1,7 +1,7 @@
 import {useEffect,useState} from 'react';
 import {type ThreeEvent} from '@react-three/fiber';
 import {Html} from '@react-three/drei';
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {loadStaticModel} from '../lib/loadStaticModel';
 import {Mesh,type Group} from 'three';
 import {inspectStaticArtworkGlb} from '../lib/artworkModelPayload';
 import {checkReferenceModelBounds} from '../lib/modelArtworkGeometry';
@@ -16,7 +16,7 @@ export function ReferenceModel3D({model}:{model:ReferenceModel}){
   if(!model.visible)return;
   const bytes=Uint8Array.from(atob(model.dataUrl.split(',')[1]),c=>c.charCodeAt(0));
   try{inspectStaticArtworkGlb(bytes.buffer);}catch(e){setError(e instanceof Error?e.message:'모델을 읽지 못했습니다.');return;}
-  void new GLTFLoader().parseAsync(bytes.buffer,'').then(gltf=>{loaded=gltf.scenes;if(cancelled){disposeModelAsset(loaded);loaded=null;return;}checkReferenceModelBounds(gltf.scene,model);gltf.scene.traverse(object=>{if(object instanceof Mesh){object.castShadow=true;object.receiveShadow=true;}});setScene(gltf.scene);}).catch(e=>{if(loaded){disposeModelAsset(loaded);loaded=null;}if(!cancelled)setError(e instanceof Error?e.message:'모델을 표시하지 못했습니다. GLB를 다시 내보내세요.');});
+  void loadStaticModel(bytes.buffer).then(gltf=>{loaded=gltf.scenes;if(cancelled){disposeModelAsset(loaded);loaded=null;return;}checkReferenceModelBounds(gltf.scene,model);gltf.scene.traverse(object=>{if(object instanceof Mesh){object.castShadow=true;object.receiveShadow=true;}});setScene(gltf.scene);}).catch(e=>{if(loaded){disposeModelAsset(loaded);loaded=null;}if(!cancelled)setError(e instanceof Error?e.message:'모델을 표시하지 못했습니다. GLB를 다시 내보내세요.');});
   return()=>{cancelled=true;if(loaded){disposeModelAsset(loaded);loaded=null;}};
  },[model.dataUrl,model.visible,model.sizeMm,model.sourceOffsetM]);
 

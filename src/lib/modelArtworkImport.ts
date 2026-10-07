@@ -1,8 +1,7 @@
 import {disposeModelAsset} from './modelAssetResources';
 import {modelAssetBounds} from './modelArtworkGeometry';
 import JSZip from 'jszip';
-import {Mesh,Texture} from 'three';
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {loadStaticModel} from './loadStaticModel';
 import {MODEL_MAX_BYTES} from './glbPayload';
 import {inspectStaticArtworkGlb,modelDataUrl,packEmbeddedGltf,recordValue} from './artworkModelPayload';
 import type {ReferenceModel} from '../domain/types';
@@ -47,10 +46,9 @@ export async function artworkModelBytes(files:readonly File[]):Promise<{bytes:Ar
  return {bytes:packEmbeddedGltf(doc),name:name.split('/').pop()!};
 }
 export async function readModelArtworkFiles(files:readonly File[]):Promise<ReferenceModel>{
- const {bytes,name}=await artworkModelBytes(files),gltf=await new GLTFLoader().parseAsync(bytes,'');
+ const {bytes,name}=await artworkModelBytes(files),gltf=await loadStaticModel(bytes);
  try{
   const bounds=modelAssetBounds(gltf.scene);
-  let pixels=0;const decodedImages=new Set<unknown>();gltf.scene.traverse(o=>{if(o instanceof Mesh)for(const m of Array.isArray(o.material)?o.material:[o.material])for(const v of Object.values(m))if(v instanceof Texture){const image=v.image as {width?:number;height?:number}|undefined;const w=image?.width??0,h=image?.height??0;if(w>8192||h>8192)throw new Error('모델 텍스처는 한 변 8192px 이하여야 합니다.');if(image&&!decodedImages.has(image)){decodedImages.add(image);pixels+=w*h;}}});if(pixels>64_000_000)throw new Error('모델 텍스처의 전체 해상도가 너무 큽니다.');
   return {name:name.slice(0,200),dataUrl:modelDataUrl(bytes),visible:true,sizeMm:bounds.sizeMm,sourceOffsetM:bounds.sourceOffsetM,positionMm:[0,0,0],rotationDeg:0,scale:1};
  }finally{disposeModelAsset(gltf.scenes);}
 }

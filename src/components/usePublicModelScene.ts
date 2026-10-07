@@ -3,7 +3,7 @@ import {localPresentationModelBytes} from '../lib/localPresentationModel';
 import {useEffect,useState} from 'react';
 import {useThree} from '@react-three/fiber';
 import {Mesh,type Group} from 'three';
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {loadStaticModel} from '../lib/loadStaticModel';
 import {inspectStaticArtworkGlb} from '../lib/artworkModelPayload';
 import {publicModelHash} from '../lib/publicModelAsset';
 import {MODEL_MAX_BYTES} from '../lib/glbPayload';
@@ -21,7 +21,7 @@ function acquire(shareId:string,hash:string,localUrl?:string){
   owned.promise=bytes.then(async bytes=>{
    inspectStaticArtworkGlb(bytes);
    if(!localUrl&&await publicModelHash(bytes)!==hash)throw new Error('공유 모델 자산이 손상됐습니다.');
-   const gltf=await new GLTFLoader().parseAsync(bytes,'');owned.scenes=gltf.scenes;return gltf.scene;
+   const gltf=await loadStaticModel(bytes);owned.scenes=gltf.scenes;return gltf.scene;
   }).finally(()=>{if(timer!==undefined)clearTimeout(timer);});
   entry=owned;assets.set(key,owned);
   void owned.promise.then(scene=>{owned.scene=scene;if(!owned.refs){disposeModelAsset(owned.scenes??scene);owned.scene=undefined;if(assets.get(key)===owned)assets.delete(key);}},()=>{if(assets.get(key)===owned)assets.delete(key);});
