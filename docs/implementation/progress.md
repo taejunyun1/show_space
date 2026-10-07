@@ -1235,3 +1235,5 @@ Cloudflare `356b68f2-75ad-4384-972c-505ccb2faf27` 배포 완료, 공개 entry `/
 - 노멀은 선형 색공간/무손실 PNG로 저장한다. Undo·Scene·JSON/ZIP·Library·읽기 전용 공유·PDF·GLB/glTF에 연결하고 private package 자산 슬롯도 확장했다.
 - 최종 전체 906 테스트 통과/선택형 2 제외. 실제 업로드 128×128 모든 픽셀/DirectX 녹색 반전, GLB 세 강도/반복, PDF/발표 렌더, 재접속·Library 적용, ZIP 복원, 제거/Undo, 390px 가로 넘침 없음 확인. 원래 전시는 유지하고 직접 만든 검증 프로젝트/Library만 보관했다.
 - 배포 진행 중. 실계정/Library 동기화·실제 SketchUp/대형 모델/모바일 GPU·협업/영상 등 전체 목표는 미완료. 상세: 2026-10-07-normal-maps.md, 증거: ../validation/2026-10-07-normal-artifacts.json.
+
+Cloudflare `98126800-7c3b-4dc1-a449-cbe9abfd0118` 배포, 공개 entry `/assets/index-DBWUEWWG.js`와 실제 노멀 맵/OpenGL·DirectX 메뉴·콘솔 경고/오류 없음 확인. 기존 탭은 이전 HTML을 유지했으나 서버 응답과 새 탭은 최신 번들을 반환했다. 공개 프로젝트의 배치/Undo는 변경하지 않았다. keep-vars로 기존 설정/D1/R2 바인딩 보존. 전체 목표는 진행 중이다.

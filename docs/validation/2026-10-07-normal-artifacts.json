@@ -104,9 +104,24 @@
       "no real account cloud roundtrip",
       "no real mobile GPU or SketchUp receiver",
       "normal maps outside artwork LOD memory budget"
-    ]
+    ],
+    "build": "TypeScript/Vite passed, 2636 modules"
   },
   "deployment": {
-    "status": "pending"
+    "status": "deployed-public-ui-verified",
+    "sourceCommit": "75a853929c04dc4e53882a02d216e350f6a22833",
+    "versionId": "98126800-7c3b-4dc1-a449-cbe9abfd0118",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entry": "/assets/index-DBWUEWWG.js",
+    "keepVars": true,
+    "publicNormalUploadButtonVisible": true,
+    "publicConventions": [
+      "OpenGL (+Y)",
+      "DirectX (-Y)"
+    ],
+    "publicConsoleErrorsOrWarnings": [],
+    "publicProjectModified": false,
+    "oldTabCachedHtml": "old index-C5Xn9rNJ; server response and fresh tab both verified current entry",
+    "screenshot": "2026-10-07-normal-public.png"
   }
 }

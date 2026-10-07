@@ -32,3 +32,7 @@
 증거: [픽셀·출력·백업](../validation/2026-10-07-normal-artifacts.json), [편집](../validation/2026-10-07-normal-editor.png), [발표](../validation/2026-10-07-normal-readonly.png), [PDF](../validation/2026-10-07-normal-pdf.png), [모바일](../validation/2026-10-07-normal-mobile.png), [제거 전](../validation/2026-10-07-normal-before-remove.png), [제거 후](../validation/2026-10-07-normal-after-remove.png).
 
 §28 수동 노멀 맵/강도 구현을 전달하되 계정 Library 동기화, 실계정·두 기기, 실제 SketchUp/대형 모델·모바일 GPU, 협업/영상 등 전체 목표의 남은 항목을 완료로 집계하지 않는다. 노멀 맵은 작품 이미지 LOD의 192MiB 배분 대상이 아니므로 전체 GPU 메모리 상한도 주장하지 않는다.
+
+## 배포
+
+소스 `75a8539`를 main에 푸시하고 Cloudflare `98126800-7c3b-4dc1-a449-cbe9abfd0118`로 배포했다. 공개 entry `index-DBWUEWWG.js`, 노멀 맵/OpenGL·DirectX 메뉴 및 콘솔 오류 없음 확인. 이전 탭의 캐시와 서버의 최신 응답을 구분해 새 탭에서 검증했다. 생산 프로젝트에 합성 맵을 입력하거나 새 링크를 발행하지 않았다. [공개 화면](../validation/2026-10-07-normal-public.png).
