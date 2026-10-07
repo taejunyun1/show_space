@@ -1,0 +1,57 @@
+{
+  "scope": "Native browser material import, account save, second-origin pull, downloaded local backup and wall application",
+  "mockAuth": true,
+  "realProviderLoginVerified": false,
+  "origins": [
+    "http://localhost:8810",
+    "http://localhost:8812"
+  ],
+  "downloadFile": "공간-재질라이브러리.gonggan-materials (2).json",
+  "templateExactlyEqual": true,
+  "assets": {
+    "texture": {
+      "sha256": "16321bf56c13de36d78923e886db6f3bc0f344ce3dc6ca86528a65d406b596ac",
+      "widthMm": 800,
+      "heightMm": 400
+    },
+    "normal": {
+      "sha256": "673c4cb6019fda0bc77463fa44db6e9e992dfeb91f4f8397778872f0eead05a5",
+      "widthMm": 200,
+      "heightMm": 100
+    }
+  },
+  "normalStrength": 2,
+  "artwork": {
+    "importedWidthMm": 1100,
+    "repeatPullLocalCount": 1,
+    "conflictBlocked": true,
+    "copyPreservesArchivedOriginal": true,
+    "localCountAfterCopy": 2,
+    "installedArtworkCount": 6
+  },
+  "accountIsolationNative": true,
+  "limits": [
+    "No real hosted provider login/two physical devices",
+    "GLB library transfer tested in Node; real SketchUp export not uploaded"
+  ],
+  "mobile": {
+    "viewportWidth": 390,
+    "dialogWidth": 351,
+    "clientWidth": 349,
+    "scrollWidth": 349,
+    "documentWidth": 390
+  },
+  "tests": {
+    "testFiles": 174,
+    "passed": 950,
+    "optionalSkipped": 2,
+    "libraryIntegrationPassed": 18
+  },
+  "productionBuild": "npm run build passed",
+  "cloudCopyNative": {
+    "materialCountBefore": 1,
+    "materialCountAfter": 2,
+    "originalPreserved": true,
+    "sameLocalCount": 1
+  }
+}

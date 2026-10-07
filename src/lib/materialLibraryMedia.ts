@@ -1,7 +1,7 @@
 import {parseMaterialTemplate,type MaterialTemplate} from '../domain/materialLibrary';
 import {MATERIAL_LIBRARY_MAX_BYTES,MATERIAL_LIBRARY_MAX_ITEMS,type MaterialLibraryBackup} from './materialLibrary';
 import {libraryImageBytes} from '../domain/artworkLibrary';
-async function decodeMaterialImage(imageUrl:string){
+export async function decodeMaterialImage(imageUrl:string){
  return new Promise<HTMLImageElement>((resolve,reject)=>{
   const img=new Image(),fail=()=>{clearTimeout(timer);img.onload=null;img.onerror=null;img.src='';reject(new Error('재질 이미지를 읽지 못했습니다.'));},timer=setTimeout(fail,15000);
   img.onload=()=>{clearTimeout(timer);img.onload=null;img.onerror=null;resolve(img);};img.onerror=fail;img.src=imageUrl;

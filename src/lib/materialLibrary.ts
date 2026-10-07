@@ -16,11 +16,11 @@ export function createMaterialLibrary(factory:IDBFactory=globalThis.indexedDB,na
   r.onerror=()=>{connection=undefined;reject(r.error);};r.onblocked=()=>{connection=undefined;reject(new Error('다른 탭을 닫고 다시 시도하세요.'));};
   r.onsuccess=()=>{r.result.onversionchange=()=>{r.result.close();connection=undefined;};resolve(r.result);};
  });
- async function addBatch(inputs:MaterialLibraryBackup['items']){
+ async function addBatch(inputs:MaterialLibraryBackup['items'],ids?:string[]){
   if(!inputs.length||inputs.length>limits.maxItems)throw new Error(`재질은 최대 ${limits.maxItems}개까지 저장합니다.`);
-  const entries=inputs.map(input=>{
+  const entries=inputs.map((input,index)=>{
    if(typeof input?.archived!=='boolean')throw new Error('재질 보관 상태가 올바르지 않습니다.');
-   const template=parseMaterialTemplate(input.template),id=crypto.randomUUID();
+   const template=parseMaterialTemplate(input.template),id=ids?.[index]??crypto.randomUUID();
    if(input.thumbnail!==undefined)libraryImageBytes(input.thumbnail,128*1024,256);
    const summary:MaterialLibrarySummary={id,name:template.name,category:template.category,color:template.color,textured:!!(template.material.texture||template.material.normal),...(input.thumbnail?{thumbnail:input.thumbnail}:{}),archived:input.archived,revision:1,updatedAt:new Date().toISOString(),bytes:size({template,thumbnail:input.thumbnail})+1024};
    return {document:{id,template},summary};
@@ -28,13 +28,22 @@ export function createMaterialLibrary(factory:IDBFactory=globalThis.indexedDB,na
   const db=await open(),tx=db.transaction(['documents','summaries'],'readwrite'),done=finished(tx);
   try{
    const old=await request(tx.objectStore('summaries').getAll()) as MaterialLibrarySummary[];
+   if(entries.some(p=>old.some(s=>s.id===p.summary.id)))throw new Error('로컬 재질 ID가 이미 사용 중입니다.');
    if(old.length+entries.length>limits.maxItems)throw new Error(`재질은 보관된 항목을 포함해 최대 ${limits.maxItems}개입니다.`);
    if(old.reduce((n,s)=>n+s.bytes,0)+entries.reduce((n,e)=>n+e.summary.bytes,0)>limits.maxBytes)throw new Error('재질 라이브러리 용량을 초과했습니다.');
    for(const e of entries){tx.objectStore('documents').put(e.document);tx.objectStore('summaries').put(e.summary);}await done;return entries.map(e=>e.summary);
   }catch(e){try{tx.abort();}catch{/* Already completed. */}await done.catch(()=>{});throw e;}
  }
  return {
+  async importItem(input:MaterialLibraryBackup['items'][number],id:string){return (await addBatch([input],[id]))[0];},
   async add(template:MaterialTemplate,thumbnail?:string){return (await addBatch([{template,thumbnail,archived:false}]))[0];},
+  async replace(id:string,input:MaterialLibraryBackup['items'][number],expectedRevision:number){
+   const template=parseMaterialTemplate(input.template);if(typeof input.archived!=='boolean')throw new Error('재질 보관 상태가 올바르지 않습니다.');if(input.thumbnail!==undefined)libraryImageBytes(input.thumbnail,128*1024,256);
+   const db=await open(),tx=db.transaction(['documents','summaries'],'readwrite'),done=finished(tx);try{const store=tx.objectStore('summaries'),all=await request(store.getAll()) as MaterialLibrarySummary[],old=all.find(s=>s.id===id);if(!old||old.revision!==expectedRevision)throw new Error('다른 탭에서 로컬 재질을 변경했습니다.');
+    const summary:MaterialLibrarySummary={id,name:template.name,category:template.category,color:template.color,textured:!!(template.material.texture||template.material.normal),...(input.thumbnail?{thumbnail:input.thumbnail}:{}),archived:input.archived,revision:old.revision+1,updatedAt:new Date().toISOString(),bytes:size({template,thumbnail:input.thumbnail})+1024};
+    if(all.reduce((n,s)=>n+s.bytes,0)-old.bytes+summary.bytes>limits.maxBytes)throw new Error('재질 라이브러리 용량을 초과했습니다.');tx.objectStore('documents').put({id,template});store.put(summary);await done;return summary;
+   }catch(e){try{tx.abort();}catch{/* Already completed. */}await done.catch(()=>{});throw e;}
+  },
   async list():Promise<MaterialLibrarySummary[]>{const db=await open(),tx=db.transaction('summaries'),done=finished(tx),items=await request(tx.objectStore('summaries').getAll()) as MaterialLibrarySummary[];await done;return items.sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)||a.id.localeCompare(b.id));},
   async read(id:string){const db=await open(),tx=db.transaction(['documents','summaries']),done=finished(tx),[document,summary]=await Promise.all([request(tx.objectStore('documents').get(id)),request(tx.objectStore('summaries').get(id))]);await done;if(!document||!summary)return;return {template:parseMaterialTemplate(document.template),summary:summary as MaterialLibrarySummary};},
   async archive(id:string,archived:boolean,revision:number){const db=await open(),tx=db.transaction('summaries','readwrite'),done=finished(tx);try{const s=await request(tx.objectStore('summaries').get(id)) as MaterialLibrarySummary|undefined;if(!s)throw new Error('재질을 찾을 수 없습니다.');if(s.revision!==revision)throw new Error('다른 탭에서 재질을 변경했습니다. 다시 시도하세요.');tx.objectStore('summaries').put({...s,archived,revision:s.revision+1,updatedAt:new Date().toISOString()});await done;}catch(e){try{tx.abort();}catch{/* Already completed. */}await done.catch(()=>{});throw e;}},

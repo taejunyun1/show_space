@@ -1,3 +1,4 @@
+import {CloudLibraryPanel} from './CloudLibraryPanel';
 import {useLengthFormatter} from './LengthUnits';
 import {useEffect,useRef,useState} from 'react';
 import {Archive,ArchiveRestore,Download,Library,Plus,Upload,X} from 'lucide-react';
@@ -11,7 +12,8 @@ export function ArtworkLibraryDialog({onClose}:{onClose:()=>void}){
  const formatLength = useLengthFormatter();
  const dialog=useRef<HTMLDialogElement>(null),upload=useRef<HTMLInputElement>(null),running=useRef(false),channel=useRef<BroadcastChannel|null>(null);
  const {project,selected,activeWallId}=useEditor();
- const [items,setItems]=useState<ArtworkLibrarySummary[]>([]),[busy,setBusy]=useState(true),[error,setError]=useState(''),[message,setMessage]=useState(''),[query,setQuery]=useState(''),[archived,setArchived]=useState(false),[kind,setKind]=useState('all'),[wallId,setWallId]=useState(activeWallId||project.walls[0]?.id||'');
+ const [items,setItems]=useState<ArtworkLibrarySummary[]>([]),[localBusy,setBusy]=useState(true),[cloudBusy,setCloudBusy]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState(''),[query,setQuery]=useState(''),[archived,setArchived]=useState(false),[kind,setKind]=useState('all'),[wallId,setWallId]=useState(activeWallId||project.walls[0]?.id||'');
+ const busy=localBusy||cloudBusy;
  const refresh=async()=>setItems(await artworkLibrary().list());
  useEffect(()=>{
   dialog.current?.showModal();let cancelled=false;
@@ -21,7 +23,7 @@ export function ArtworkLibraryDialog({onClose}:{onClose:()=>void}){
   window.addEventListener('focus',update);return()=>{cancelled=true;channel.current?.close();channel.current=null;window.removeEventListener('focus',update);};
  },[]);
  async function run(action:()=>Promise<void>){
-  if(running.current)return;running.current=true;setBusy(true);setError('');setMessage('');
+  if(running.current||cloudBusy)return;running.current=true;setBusy(true);setError('');setMessage('');
   try{await action();await refresh();channel.current?.postMessage({changed:true});}
   catch(e){setError(e instanceof Error?e.message:'작품 라이브러리 작업에 실패했습니다.');await refresh().catch(()=>{});}
   finally{running.current=false;setBusy(false);}
@@ -32,7 +34,8 @@ export function ArtworkLibraryDialog({onClose}:{onClose:()=>void}){
  const provisional=!!project.planDraft&&!project.planReference?.calibrated;
  return <dialog ref={dialog} className="export-dialog artwork-library-dialog" aria-label="작품 라이브러리" onCancel={e=>{if(busy)e.preventDefault();else onClose();}}>
   <div className="dialog-header"><div><h2>작품 라이브러리</h2><p>작품 정보와 자산을 보관하고 다른 전시에서 재사용하세요.</p></div><button className="icon-button" aria-label="작품 라이브러리 닫기" disabled={busy} onClick={onClose}><X size={18}/></button></div>
-  <p className="field-hint">이 브라우저에 독립 저장됩니다. 계정의 클라우드와 자동 동기화하지 않습니다. 제목·작가·연도·치수·분류·재료·액자·이미지 또는 모델을 보존하며, 설치 메모·위치·회전·그룹·잠금은 제외합니다.</p>
+  <p className="field-hint">이 브라우저에 독립 저장됩니다. 계정에 보관할 항목은 아래에서 선택해 저장하세요. 제목·작가·연도·치수·분류·재료·액자·이미지 또는 모델을 보존하며, 설치 메모·위치·회전·그룹·잠금은 제외합니다.</p>
+  <CloudLibraryPanel kind="artwork" localItems={items} disabled={localBusy} onBusy={setCloudBusy} onImported={async()=>{await refresh();channel.current?.postMessage({changed:true});}}/>
   <div className="artwork-library-actions"><button className="button primary" disabled={busy||!source} onClick={()=>void run(async()=>{if(!source||!choice)return;const item=await prepareArtworkLibraryInput(choice.type==='modelArtwork'?'model':'image',source);await artworkLibrary().add(item);setMessage(`‘${source.name}’ 작품을 라이브러리에 저장했습니다.`);})}><Library size={16}/>선택 작품 저장</button><button className="button secondary" disabled={busy||!items.length} onClick={()=>void run(async()=>{const backup=await artworkLibrary().backup();downloadBlob(new Blob([JSON.stringify(backup)],{type:'application/json'}),'공간-작품라이브러리.gonggan-artworks.json');setMessage('작품과 자산을 포함한 라이브러리 백업을 저장했습니다.');})}><Download size={16}/>라이브러리 백업</button><button className="button secondary" disabled={busy} onClick={()=>upload.current?.click()}><Upload size={16}/>백업 가져오기</button><input ref={upload} hidden type="file" aria-label="작품 라이브러리 백업 파일" accept=".json,application/json" onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)void run(async()=>{const backup=await readArtworkLibraryBackup(file);const added=await artworkLibrary().restore(backup);setMessage(`${added.length}개 작품을 새 라이브러리 항목으로 복원했습니다.`);});}}/></div>
   {!source&&<p className="field-hint">편집기에서 이미지 작품 또는 3D 작품 하나를 선택하면 저장할 수 있습니다.</p>}
   <div className="artwork-library-tools"><input type="search" aria-label="라이브러리 작품 검색" placeholder="제목·작가·연도·재료 검색" value={query} onChange={e=>setQuery(e.target.value)}/><select aria-label="라이브러리 작품 형식" value={kind} onChange={e=>setKind(e.target.value)}><option value="all">모든 작품</option><option value="image">이미지 작품</option><option value="model">3D 작품</option></select></div>

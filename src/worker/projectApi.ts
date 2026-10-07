@@ -1,6 +1,7 @@
 import {authenticatedUser,authConfig,type AuthEnv,type AuthFetch} from './auth';
 import {CLOUD_PACKAGE_MAX_BYTES,decodeCloudMetadata,uuidPattern,type CloudProjectSummary} from '../domain/cloudProject';
 import {handleHistoryRequest} from './historyApi';
+import {handleLibraryRequest} from './libraryApi';
 export interface ProjectBucket {
  put(key:string,value:ReadableStream,options:{sha256:string;httpMetadata:{contentType:string}}):Promise<{size:number}|null>;
  get(key:string,options?:{range:{offset:number;length:number}}):Promise<{body:ReadableStream;size:number}|null>;
@@ -24,6 +25,7 @@ export async function handleProjectRequest(request:Request,env:ProjectEnv,fetche
   const user=await authenticatedUser(request,env,fetcher);if(!user)return fail(401,'계정 로그인이 필요합니다.');
   if(path==='/api/auth/me')return method==='GET'?json(user):fail(405,'지원하지 않는 요청입니다.');
   const db=env.PROJECTS_DB,bucket=env.PRIVATE_PROJECTS;if(!db||!bucket)return fail(503,'클라우드 프로젝트 저장을 아직 사용할 수 없습니다.');
+  if(path.startsWith('/api/libraries/'))return await handleLibraryRequest(request,db,bucket,user.id);
   if(path.includes('/history'))return await handleHistoryRequest(request,db,bucket,user.id);
   if(path==='/api/projects'){
    if(method!=='GET')return fail(405,'지원하지 않는 요청입니다.');const {results}=await db.prepare('SELECT * FROM cloud_projects WHERE owner_id = ? ORDER BY updated_at DESC, id LIMIT 201').bind(user.id).all<Row>();return json({items:results.slice(0,200).map(summary),truncated:results.length>200});

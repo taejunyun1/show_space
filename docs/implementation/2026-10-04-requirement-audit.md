@@ -45,10 +45,10 @@
 | 1–3 개념·대상, 75–78 UX·차별점·제품 구조·정체성 | 제품 방향 및 인수 기준 | 도면→전시안→공유 흐름; 실사용자 성공 검증 남음 |
 | 4–5 Home·Project | 로컬 프로젝트 목록/생성/복제/보관과 계정/클라우드 코드; 단위 추가 | `ProjectsDialog`, `CloudProjectsPanel`, `lengthUnits`; 원문의 모든 Home 표현을 완료했다고 집계하지 않음 |
 | 6–13 Plan·Recognition·Review·공간·벽·가벽·바닥·문 | 기본 업로드·분석·직접 벽 편집; 문/설비는 후보로 제한 | `ImportDialog`, `PlanImportDialog`, `PlanView`, `floor`, `openings`; 계단/문 직접 편집 확장은 보류 |
-| 14–18 Library·등록·설치형식·프레임·모델 | 로컬 Library 및 이미지/3D 작품 구현 | `artworkLibrary`, `ArtworkInformationEditor`, `FrameEditor`, `ModelArtworks3D`; 계정 Library 동기화는 미구현 |
+| 14–18 Library·등록·설치형식·프레임·모델 | 로컬 Library 및 이미지/3D 작품 구현 | `artworkLibrary`, `ArtworkInformationEditor`, `FrameEditor`, `ModelArtworks3D`; 계정 항목 저장·가져오기·연결 갱신·충돌 보존 구현; 운영 인증과 두 실제 기기 검증은 남음 |
 | 19 Photo to 3D | 유료 후속 | 생성 API/결제 미구현 |
 | 20–26 배치·Snap·높이·다중·시리즈·Elevation·치수 | 핵심 구현 | 그룹/정렬/같은 면 간격/측정; 별도 Series 상품 구조까지 완료로 집계하지 않음 |
-| 27–28 재질 Library·편집, 30 기준 크기 | 로컬 재질 Library·분류·검색·저장/적용·보관·백업 및 실제 크기 Texture 구현 | `materialLibrary`, `MaterialLibraryDialog`, `materials`, `MaterialEditor`, `TextureEditor`; Basic/Advanced 편집 분리와 마감·투명 표현 구현; 수동 Normal map/Strength·독립 반복·공유/출력/백업 보존 구현; 계정 동기화는 남음 |
+| 27–28 재질 Library·편집, 30 기준 크기 | 로컬 재질 Library·분류·검색·저장/적용·보관·백업 및 실제 크기 Texture 구현 | `materialLibrary`, `MaterialLibraryDialog`, `materials`, `MaterialEditor`, `TextureEditor`; Basic/Advanced 편집 분리와 마감·투명 표현 구현; 수동 Normal map/Strength·독립 반복·공유/출력/백업 보존 구현; 계정 항목 저장·가져오기·보관/복구 구현; 운영 인증 및 완전 자동 동기화는 남음 |
 | 29 Material Capture | 후속 유료 생성 | 원본 사진 반복 텍스처 적용은 구현, 생성/왜곡보정/PBR 맵 추정은 미구현 |
 | 31–36 Light·Spot·Target·Kelvin·Outdoor·Sun | 기본 조명·야외 구현 | `lighting`, `outdoor`, `Lighting3D` |
 | 37 시간 비교 | 네 시간대 비교 UI·Time Scene 저장 구현 | `timeComparison`, `TimeComparisonDialog`; 현재/저장 배치의 같은 시점 비교, 날짜/시간/DST 검증, 저장·재접속·Undo 확인. 실제 기기/대형 장면 검증은 남음 |
@@ -106,3 +106,5 @@
 2026-10-07 갱신: [프로젝트 버전 기록](2026-10-07-project-history.md)의 수동 복원 지점 목록·비교·읽기 전용 3D·안전 백업 후 복원·ZIP 출력/실제 복원·보관/복구와 390px를 확인했다. §70의 로컬 Version History/Restore Point가 추가됐으며 계정 버전 목록 동기화/전체 자동 저장 영구 이력과 최종 인수는 남는다.
 
 2026-10-07 갱신: [클라우드 버전 기록](2026-10-07-cloud-history.md)의 계정별 수동 지점 저장·목록·비교·읽기 전용 3D·안전 백업 후 클라우드 복원·ZIP·보관/복구를 추가했다. 실제 로컬 Wrangler D1/R2·모의 인증 A/B·분리된 두 주소에서 치수/메모 복원과 이전 로컬 전시 보존, 3.55MB ZIP/5자산 해시 및 390px를 확인했다. 실제 Supabase 로그인/실기기 왕복은 미완료이며 로컬 기록 자동 업로드나 모든 Auto Save 영구 이력으로 확대하지 않는다.
+
+2026-10-07 갱신: [계정 작품·재질 라이브러리](2026-10-07-cloud-library.md)의 항목별 계정 저장·다른 로컬 저장소로 가져오기·연결 갱신·충돌 시 새 복사본·보관/복구를 구현했다. 이미지/GLB/텍스처/노멀 자산을 보존하고 계정별 CAS·해시 검증을 적용했다. 실제 로컬 D1/R2와 명시적 모의 인증으로 두 origin의 이미지 작품 및 재질 왕복, 반복 가져오기 중복 방지, 충돌 차단/복사, 배치/적용 및 390px를 확인했다. 운영 인증, 두 실제 기기, 완전 자동 Library 동기화, 협업·미디어 확장과 전체 인수는 남는다.

@@ -1,3 +1,4 @@
+import {CloudLibraryPanel} from './CloudLibraryPanel';
 import {useEffect,useRef,useState} from 'react';
 import {Archive,ArchiveRestore,Download,Upload,X} from 'lucide-react';
 import {applyMaterialTemplate,builtinMaterials,materialCategories,materialCategoryLabels,type MaterialCategory,type MaterialTarget,type MaterialTemplate} from '../domain/materialLibrary';
@@ -9,8 +10,9 @@ import {useEditor} from '../state/editor';
 export default function MaterialLibraryDialog({source,target,onClose}:{source:MaterialTemplate;target:MaterialTarget;onClose:()=>void}){
  const dialog=useRef<HTMLDialogElement>(null),upload=useRef<HTMLInputElement>(null),running=useRef(false),channel=useRef<BroadcastChannel|null>(null);
  const original=useRef({source:structuredClone(source),target:{...target},projectId:useEditor.getState().project.id}).current;
- const [items,setItems]=useState<MaterialLibrarySummary[]>([]),[busy,setBusy]=useState(true),[error,setError]=useState(''),[message,setMessage]=useState('');
+ const [items,setItems]=useState<MaterialLibrarySummary[]>([]),[localBusy,setBusy]=useState(true),[cloudBusy,setCloudBusy]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState('');
  const [name,setName]=useState(source.name),[saveCategory,setSaveCategory]=useState<MaterialCategory>(source.category),[query,setQuery]=useState(''),[category,setCategory]=useState('all'),[archived,setArchived]=useState(false);
+ const busy=localBusy||cloudBusy;
  const refresh=async()=>setItems(await materialLibrary().list());
  useEffect(()=>{
   dialog.current?.showModal();let alive=true;
@@ -20,7 +22,7 @@ export default function MaterialLibraryDialog({source,target,onClose}:{source:Ma
   window.addEventListener('focus',update);return()=>{alive=false;channel.current?.close();channel.current=null;window.removeEventListener('focus',update);};
  },[]);
  async function run(action:()=>Promise<void>){
-  if(running.current)return;running.current=true;setBusy(true);setError('');setMessage('');
+  if(running.current||cloudBusy)return;running.current=true;setBusy(true);setError('');setMessage('');
   try{await action();await refresh();channel.current?.postMessage({changed:true});}
   catch(e){setError(e instanceof Error?e.message:'재질 작업에 실패했습니다.');await refresh().catch(()=>{});}
   finally{running.current=false;setBusy(false);}
@@ -34,7 +36,8 @@ export default function MaterialLibraryDialog({source,target,onClose}:{source:Ma
  const visible=items.filter(i=>i.archived===archived&&matches(i)),presets=archived?[]:builtinMaterials.filter(matches);
  return <dialog ref={dialog} className="export-dialog material-library-dialog" aria-label="재질 라이브러리" onCancel={e=>{if(busy)e.preventDefault();else onClose();}}>
   <div className="dialog-header"><div><h2>재질 라이브러리</h2><p>색·물성·텍스처 반복 크기를 저장하고 다시 적용하세요.</p></div><button className="icon-button" disabled={busy} aria-label="재질 라이브러리 닫기" onClick={onClose}><X size={18}/></button></div>
-  <p className="field-hint">이 브라우저에 저장됩니다. 계정 클라우드 동기화는 아직 지원하지 않습니다. 재질 백업으로 다른 브라우저에 옮길 수 있습니다.</p>
+  <p className="field-hint">로컬 저장과 계정 저장은 별도입니다. 아래에서 선택한 재질을 계정에 보관하거나 가져올 수 있으며, 백업 파일로도 옮길 수 있습니다.</p>
+  <CloudLibraryPanel kind="material" localItems={items} disabled={localBusy} onBusy={setCloudBusy} onImported={async()=>{await refresh();channel.current?.postMessage({changed:true});}}/>
   <fieldset className="material-library-save" disabled={busy}><legend>현재 재질 저장</legend><input aria-label="저장할 재질 이름" maxLength={100} value={name} onChange={e=>setName(e.target.value)}/><select aria-label="저장할 재질 분류" value={saveCategory} onChange={e=>setSaveCategory(e.target.value as MaterialCategory)}>{materialCategories.map(c=><option key={c} value={c}>{materialCategoryLabels[c]}</option>)}</select><button className="button primary" disabled={!name.trim()} onClick={()=>void run(async()=>{const template={...original.source,name,category:saveCategory};await materialLibrary().add(template,await materialThumbnail(template));setMessage('현재 재질을 저장했습니다. 적용된 객체는 그대로 유지됩니다.');})}>재질 저장</button></fieldset>
   <div className="artwork-library-actions"><button className="button secondary" disabled={busy||!items.length} onClick={()=>void run(async()=>{const backup=await materialLibrary().backup();downloadBlob(new Blob([JSON.stringify(backup)],{type:'application/json'}),'공간-재질라이브러리.gonggan-materials.json');setMessage('텍스처를 포함한 재질 백업을 저장했습니다.');})}><Download size={15}/>재질 백업</button><button className="button secondary" disabled={busy} onClick={()=>upload.current?.click()}><Upload size={15}/>백업 가져오기</button><input ref={upload} hidden type="file" accept=".json,application/json" aria-label="재질 라이브러리 백업 파일" onChange={e=>{const f=e.currentTarget.files?.[0];e.currentTarget.value='';if(f)void run(async()=>{const added=await materialLibrary().restore(await readMaterialLibraryBackup(f));setMessage(`${added.length}개 재질을 새 항목으로 복원했습니다.`);});}}/></div>
   <div className="artwork-library-tools"><input type="search" aria-label="재질 라이브러리 검색" placeholder="재질 이름·분류 검색" value={query} onChange={e=>setQuery(e.target.value)}/><select aria-label="재질 라이브러리 분류" value={category} onChange={e=>setCategory(e.target.value)}><option value="all">모든 분류</option>{materialCategories.map(c=><option key={c} value={c}>{materialCategoryLabels[c]}</option>)}</select></div>
