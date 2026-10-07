@@ -1,3 +1,4 @@
+import {modelExportOmissions} from '../domain/modelExportScope';
 import {artworkPresentation} from '../domain/artworkPresentation';
 import {artworkFrameGeometry,artworkFrameMaterial,artworkCoverMaterial} from './artworkPresentationGeometry';
 import {placeModelArtwork,checkModelArtworkBounds} from './modelArtworkGeometry';
@@ -5,7 +6,7 @@ import {createExportLighting,disposeLighting} from './sceneLighting';
 import {wallMetricUv,floorMetricUv,repeatingSurfaceTexture,repeatingNormalTexture} from './surfaceUv';
 import {createSurfaceMaterial} from './surfaceMaterial';
 import {videoScreenLayout} from '../domain/mediaArtwork';
-import {BoxGeometry,ExtrudeGeometry,Group,Mesh,MeshBasicMaterial,MeshStandardMaterial,Path,PlaneGeometry,Scene,Shape,Texture,type Material,type Object3D} from 'three';
+import {BoxGeometry,ExtrudeGeometry,Group,Light,Mesh,MeshBasicMaterial,MeshStandardMaterial,Path,PlaneGeometry,Scene,Shape,Texture,type Material,type Object3D} from 'three';
 import {artworkPosition,wallLength} from '../domain/model';
 import {floorWithOpenings} from '../domain/openings';
 import type {Project} from '../domain/types';
@@ -19,7 +20,7 @@ export function buildExportScene(project:Project,textures=new Map<string,Texture
  function normal(result:MeshStandardMaterial,material:Project['floorMaterial'],extentM?:readonly [number,number]){if(material?.normal)result.normalMap=repeatingNormalTexture(materialTextures.get(material.normal.imageUrl)!,material.normal,extentM);return result;}
  function finish(color:string,material:Project['floorMaterial'],roughness:number){const result=createSurfaceMaterial(color,material,roughness) as MeshStandardMaterial;if(material?.texture){const source=materialTextures.get(material.texture.imageUrl);if(!source)throw new Error('표면 텍스처를 준비하지 못했습니다.');result.map=repeatingSurfaceTexture(source,material.texture);}return normal(result,material);}
  for(const a of project.modelArtworks??[])if(a.visible){const source=artworkModels.get(a.id);if(!source)throw new Error('3D 작품 모델을 준비하지 못했습니다.');checkModelArtworkBounds(source,a.model);}
- const scene=new Scene();scene.name=project.name;
+ const scene=new Scene();scene.name=project.name;const omissions=modelExportOmissions(project);if(omissions.projectors||omissions.areaLights)scene.userData={gongganExport:{version:1,units:'meter',omittedLights:omissions}};
  for(const wall of project.walls){
   if(!wall.visible)continue;
   const mesh=new Mesh(wallMetricUv(new BoxGeometry(wallLength(wall)/1000,wall.heightMm/1000,wall.thicknessMm/1000)),finish(wall.color,wall.material,.92));
@@ -54,7 +55,7 @@ export function buildExportScene(project:Project,textures=new Map<string,Texture
   const model=project.referenceModel,root=new Group(),offset=new Group();root.name=model.name;root.position.set(...model.positionMm.map(v=>v/1000) as [number,number,number]);root.rotation.y=model.rotationDeg*Math.PI/180;root.scale.setScalar(model.scale);
   offset.position.set(...model.sourceOffsetM);offset.add(referenceScene.clone(true));root.add(offset);scene.add(root);
  }
- if(project.outdoor?.mode==='outdoor'||project.lights?.some(l=>l.visible&&l.kind==='spot'))scene.add(createExportLighting(project));
+ if(project.outdoor?.mode==='outdoor'||project.lights?.some(l=>l.visible&&l.kind==='spot'&&!l.projection)){const rig=createExportLighting(project);let hasLight=false;rig.traverse(o=>{if(o instanceof Light)hasLight=true;});if(hasLight)scene.add(rig);else disposeLighting(rig);}
  scene.updateMatrixWorld(true);return scene;
 }
 

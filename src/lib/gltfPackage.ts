@@ -1,3 +1,4 @@
+import {modelExportOmissions} from '../domain/modelExportScope';
 import JSZip from 'jszip';
 import type {Project} from '../domain/types';
 
@@ -33,6 +34,7 @@ export function createGltfFiles(input:Record<string,unknown>,project:Project){
  }
  files.set('scene.gltf',encode(JSON.stringify(doc,null,2)));
  const report={format:'gonggan-gltf-export',version:1,projectName:project.name,units:'meter',entry:'scene.gltf',
+  omittedLights:modelExportOmissions(project),
   counts:{nodes:Array.isArray(doc.nodes)?doc.nodes.length:0,meshes:Array.isArray(doc.meshes)?doc.meshes.length:0,materials:Array.isArray(doc.materials)?doc.materials.length:0,images:doc.images?.length??0},
   files:[...files].map(([path,bytes])=>({path,bytes:bytes.byteLength})),
   included:['표시 중인 벽과 실제 바닥','배치 작품·프레임·이미지와 표시 중인 3D 작품 원본 형상·재질','표시 중인 원본 참고 모델','실제 크기·위치·회전·배율','기본 PBR 색·거칠기·금속성·투과·코팅·천 광택 속성','벽·바닥 표면 텍스처·실제 크기 기반 UV와 반복 설정','표시 중인 Spot 조명과 야외 태양·조준 방향·색온도 RGB·강도(KHR_lights_punctual)'],

@@ -1,0 +1,7 @@
+{
+  "passed": false,
+  "scope": "owned synthetic fixture; actual GLB/glTF Blender imports",
+  "blenderVersion": "4.4.1",
+  "projectionAppearanceVerified": false,
+  "error": "Expected ordinary spot"
+}

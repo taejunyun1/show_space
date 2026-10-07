@@ -1,0 +1,17 @@
+{
+  "scope": "independent Blender 4.4.1 receiver; owned synthetic scene only",
+  "successfulReceiverExitCode": 0,
+  "badProjectorCountExitCode": 1,
+  "badLightTypeExitCode": 1,
+  "badCountReportedPassed": false,
+  "badLightReportedPassed": false,
+  "finalAppExportHashesMatchReceiver": true,
+  "projectionPixelsRenderedOrBaked": false,
+  "files": {
+    "scene.glb": "04793e6b1c7afee84bde32433d02864e8ef2967fb9c254a1ba34f6b0b30c2d9c",
+    "scene.gltf": "ef8629804eff6570026c25ed77c1f5291cba82f4760d8cc8962ae1a69485184e",
+    "project.json": "bd6005bcae083e9e2ea854fb3529120dd2c63bfd9e9a15a3c463fa3e1917b3b6",
+    "wrong-projector-count.json": "a783c568db1a145016744757a8a97a22422b2d00742b5cebd920b6eb36011898",
+    "wrong-light-type.glb": "944785c070d6d2d9108dec9b48fd11e4d35e5c9c4139f0f985afc5108808bea6"
+  }
+}

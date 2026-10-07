@@ -1,0 +1,458 @@
+{
+  "schemaVersion": 1,
+  "id": "synthetic-projection-receiver-20261007",
+  "name": "프로젝터 제외 수신 검증",
+  "venue": "성수 갤러리",
+  "walls": [
+    {
+      "id": "wall-a",
+      "name": "벽 A",
+      "start": {
+        "x": 0,
+        "z": 0
+      },
+      "end": {
+        "x": 6000,
+        "z": 0
+      },
+      "heightMm": 3000,
+      "thicknessMm": 120,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "partition"
+    },
+    {
+      "id": "wall-b",
+      "name": "벽 B",
+      "start": {
+        "x": 6000,
+        "z": 0
+      },
+      "end": {
+        "x": 6000,
+        "z": 6000
+      },
+      "heightMm": 3000,
+      "thicknessMm": 120,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "wall-c",
+      "name": "벽 C",
+      "start": {
+        "x": 6000,
+        "z": 6000
+      },
+      "end": {
+        "x": 0,
+        "z": 6000
+      },
+      "heightMm": 3000,
+      "thicknessMm": 120,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "wall-d",
+      "name": "벽 D",
+      "start": {
+        "x": 0,
+        "z": 6000
+      },
+      "end": {
+        "x": 0,
+        "z": 0
+      },
+      "heightMm": 3000,
+      "thicknessMm": 120,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "occluder",
+      "name": "차폐 벽",
+      "start": {
+        "x": 2700,
+        "z": 1560
+      },
+      "end": {
+        "x": 3300,
+        "z": 1560
+      },
+      "heightMm": 2400,
+      "thicknessMm": 120,
+      "color": "#ffffff",
+      "visible": false,
+      "locked": false,
+      "note": "",
+      "role": "partition"
+    }
+  ],
+  "artworks": [],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "바닥 투사",
+      "artworks": [],
+      "wallVisibility": {
+        "wall-a": true,
+        "wall-b": true,
+        "wall-c": true,
+        "wall-d": true,
+        "occluder": false
+      },
+      "structure": {
+        "walls": [
+          {
+            "id": "wall-a",
+            "name": "벽 A",
+            "start": {
+              "x": 0,
+              "z": 0
+            },
+            "end": {
+              "x": 6000,
+              "z": 0
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "partition"
+          },
+          {
+            "id": "wall-b",
+            "name": "벽 B",
+            "start": {
+              "x": 6000,
+              "z": 0
+            },
+            "end": {
+              "x": 6000,
+              "z": 6000
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "boundary"
+          },
+          {
+            "id": "wall-c",
+            "name": "벽 C",
+            "start": {
+              "x": 6000,
+              "z": 6000
+            },
+            "end": {
+              "x": 0,
+              "z": 6000
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "boundary"
+          },
+          {
+            "id": "wall-d",
+            "name": "벽 D",
+            "start": {
+              "x": 0,
+              "z": 6000
+            },
+            "end": {
+              "x": 0,
+              "z": 0
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "boundary"
+          },
+          {
+            "id": "occluder",
+            "name": "차폐 벽",
+            "start": {
+              "x": 2700,
+              "z": 1560
+            },
+            "end": {
+              "x": 3300,
+              "z": 1560
+            },
+            "heightMm": 2400,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": false,
+            "locked": false,
+            "note": "",
+            "role": "partition"
+          }
+        ],
+        "openings": [],
+        "dimensions": [],
+        "unplacedArtworks": [],
+        "modelArtworks": [],
+        "lights": [
+          {
+            "projection": {
+              "throwRatio": 1.5,
+              "aspectRatio": 1.7777777777777777,
+              "brightnessLumens": 1500,
+              "fit": "contain",
+              "imageUrl": "data:image/png;base64,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"
+            },
+            "id": "light-1",
+            "name": "프로젝터 1",
+            "kind": "spot",
+            "position": {
+              "x": 3000,
+              "y": 3000,
+              "z": 3000
+            },
+            "target": {
+              "x": 3000,
+              "y": 0,
+              "z": 3000
+            },
+            "intensity": 15,
+            "kelvin": 4000,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true,
+            "locked": false,
+            "note": "PRIVATE_PROJECTOR_NOTE"
+          }
+        ],
+        "lighting": {
+          "ambient": 0.12,
+          "hemisphere": 0.15,
+          "fill": 0,
+          "environment": 0.08
+        },
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "floorColor": "#f1f1ed",
+        "importedFloor": [
+          [
+            {
+              "x": 0,
+              "z": 0
+            },
+            {
+              "x": 6000,
+              "z": 0
+            },
+            {
+              "x": 6000,
+              "z": 6000
+            },
+            {
+              "x": 0,
+              "z": 6000
+            }
+          ]
+        ]
+      }
+    }
+  ],
+  "floorColor": "#f1f1ed",
+  "importedFloor": [
+    [
+      {
+        "x": 0,
+        "z": 0
+      },
+      {
+        "x": 6000,
+        "z": 0
+      },
+      {
+        "x": 6000,
+        "z": 6000
+      },
+      {
+        "x": 0,
+        "z": 6000
+      }
+    ]
+  ],
+  "lights": [
+    {
+      "projection": {
+        "throwRatio": 1.5,
+        "aspectRatio": 1.7777777777777777,
+        "brightnessLumens": 1500,
+        "fit": "contain",
+        "imageUrl": "data:image/png;base64,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"
+      },
+      "id": "light-1",
+      "name": "프로젝터 1",
+      "kind": "spot",
+      "position": {
+        "x": 3000,
+        "y": 1500,
+        "z": 3060
+      },
+      "target": {
+        "x": 3000,
+        "y": 1500,
+        "z": 60
+      },
+      "intensity": 15,
+      "kelvin": 4000,
+      "beamDeg": 40,
+      "penumbra": 0.3,
+      "distanceMm": 0,
+      "widthMm": 1000,
+      "heightMm": 500,
+      "shadow": true,
+      "visible": true,
+      "locked": false,
+      "note": "PRIVATE_PROJECTOR_NOTE"
+    },
+    {
+      "id": "area-excluded",
+      "name": "면 조명 2",
+      "kind": "area",
+      "position": {
+        "x": 3000,
+        "y": 2800,
+        "z": 1280
+      },
+      "target": {
+        "x": 3000,
+        "y": 1500,
+        "z": 80
+      },
+      "intensity": 15,
+      "kelvin": 4000,
+      "beamDeg": 40,
+      "penumbra": 0.3,
+      "distanceMm": 0,
+      "widthMm": 1000,
+      "heightMm": 500,
+      "shadow": false,
+      "visible": true,
+      "locked": false,
+      "note": "PRIVATE_AREA_NOTE"
+    },
+    {
+      "id": "normal-spot",
+      "name": "수신 스팟",
+      "kind": "spot",
+      "position": {
+        "x": 1000,
+        "y": 2700,
+        "z": 4500
+      },
+      "target": {
+        "x": 3000,
+        "y": 1300,
+        "z": 60
+      },
+      "intensity": 75,
+      "kelvin": 4000,
+      "beamDeg": 48,
+      "penumbra": 0.25,
+      "distanceMm": 0,
+      "widthMm": 1000,
+      "heightMm": 500,
+      "shadow": true,
+      "visible": true,
+      "locked": false,
+      "note": ""
+    },
+    {
+      "id": "hidden-area",
+      "name": "면 조명 2",
+      "kind": "area",
+      "position": {
+        "x": 3000,
+        "y": 2800,
+        "z": 1280
+      },
+      "target": {
+        "x": 3000,
+        "y": 1500,
+        "z": 80
+      },
+      "intensity": 15,
+      "kelvin": 4000,
+      "beamDeg": 40,
+      "penumbra": 0.3,
+      "distanceMm": 0,
+      "widthMm": 1000,
+      "heightMm": 500,
+      "shadow": false,
+      "visible": false,
+      "locked": false,
+      "note": ""
+    }
+  ],
+  "lighting": {
+    "ambient": 0.12,
+    "hemisphere": 0.15,
+    "fill": 0,
+    "environment": 0.08
+  },
+  "referenceModel": {
+    "name": "reference-space",
+    "dataUrl": "data:model/gltf-binary;base64,Z2xURgIAAABsCAAACAUAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAifSwic2NlbmUiOjAsInNjZW5lcyI6W3sibm9kZXMiOlswLDEsMl19XSwibm9kZXMiOlt7Im1lc2giOjAsInRyYW5zbGF0aW9uIjpbOS41MjUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MCwidHJhbnNsYXRpb24iOlsxMC40NzUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MSwidHJhbnNsYXRpb24iOlsxMCwzLjk3NSw1XSwic2NhbGUiOlsxLjIsMC4yNSwwLjldfV0sIm1lc2hlcyI6W3sicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MCwiTk9STUFMIjoxLCJURVhDT09SRF8wIjozfSwiaW5kaWNlcyI6MiwibWF0ZXJpYWwiOjB9XX0seyJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjowLCJOT1JNQUwiOjEsIlRFWENPT1JEXzAiOjN9LCJpbmRpY2VzIjoyLCJtYXRlcmlhbCI6MX1dfV0sIm1hdGVyaWFscyI6W3sibmFtZSI6ImJyb3duIG1ldGFsIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC42LDAuMjIsMC4wNCwxXSwibWV0YWxsaWNGYWN0b3IiOjAuNSwicm91Z2huZXNzRmFjdG9yIjowLjM1fX0seyJuYW1lIjoiYmx1ZSBjYXAiLCJwYnJNZXRhbGxpY1JvdWdobmVzcyI6eyJiYXNlQ29sb3JGYWN0b3IiOlswLjAzLDAuMTYsMC41NSwxXSwibWV0YWxsaWNGYWN0b3IiOjAuMTUsInJvdWdobmVzc0ZhY3RvciI6MC40NX19XSwiYWNjZXNzb3JzIjpbeyJidWZmZXJWaWV3IjowLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMzIiwibWluIjpbLTAuNSwtMC41LC0wLjVdLCJtYXgiOlswLjUsMC41LDAuNV19LHsiYnVmZmVyVmlldyI6MSwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMyJ9LHsiYnVmZmVyVmlldyI6MiwiY29tcG9uZW50VHlwZSI6NTEyMywiY291bnQiOjM2LCJ0eXBlIjoiU0NBTEFSIn0seyJidWZmZXJWaWV3IjozLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMyIn1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoyODh9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoyODgsImJ5dGVMZW5ndGgiOjI4OH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjc2OCwiYnl0ZUxlbmd0aCI6NzJ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo1NzYsImJ5dGVMZW5ndGgiOjE5Mn1dLCJidWZmZXJzIjpbeyJieXRlTGVuZ3RoIjo4NDB9XX0gSAMAAEJJTgAAAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAIAAQACAAMAAQAEAAYABQAGAAcABQAIAAoACQAKAAsACQAMAA4ADQAOAA8ADQAQABIAEQASABMAEQAUABYAFQAWABcAFQA=",
+    "sizeMm": [
+      1200,
+      2100,
+      900
+    ],
+    "sourceOffsetM": [
+      -10,
+      -2,
+      -5
+    ],
+    "visible": true,
+    "positionMm": [
+      4000,
+      0,
+      4000
+    ],
+    "rotationDeg": 25,
+    "scale": 1
+  }
+}

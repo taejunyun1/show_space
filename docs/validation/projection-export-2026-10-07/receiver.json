@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "scope": "owned synthetic fixture; actual GLB/glTF Blender imports",
+  "blenderVersion": "4.4.1",
+  "projectionAppearanceVerified": false,
+  "glb": {
+    "sha256": "04793e6b1c7afee84bde32433d02864e8ef2967fb9c254a1ba34f6b0b30c2d9c",
+    "omittedLights": {
+      "projectors": 2,
+      "areaLights": 1
+    },
+    "lightDefinitions": 1,
+    "receivedLights": 1,
+    "walls": 4,
+    "floorAreaM2": 36.00000847710436,
+    "referenceMeshes": 3,
+    "maxSpotPositionErrorM": 0.0,
+    "maxSpotDirectionError": 1.1920928955078125e-07,
+    "projectorImageAbsent": true,
+    "privateNotesAbsent": true
+  },
+  "gltf": {
+    "sha256": "ef8629804eff6570026c25ed77c1f5291cba82f4760d8cc8962ae1a69485184e",
+    "omittedLights": {
+      "projectors": 2,
+      "areaLights": 1
+    },
+    "lightDefinitions": 1,
+    "receivedLights": 1,
+    "walls": 4,
+    "floorAreaM2": 36.00000847710436,
+    "referenceMeshes": 3,
+    "maxSpotPositionErrorM": 0.0,
+    "maxSpotDirectionError": 1.1920928955078125e-07,
+    "projectorImageAbsent": true,
+    "privateNotesAbsent": true
+  }
+}

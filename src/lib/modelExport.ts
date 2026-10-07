@@ -1,4 +1,4 @@
-import {CanvasTexture,SRGBColorSpace,TextureLoader,NoColorSpace,type Object3D,type Texture} from 'three';
+import {CanvasTexture,SRGBColorSpace,Mesh,TextureLoader,NoColorSpace,type Object3D,type Texture} from 'three';
 import {GLTFExporter} from 'three/examples/jsm/exporters/GLTFExporter.js';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {buildExportScene,disposeExportScene} from './exportScene';
@@ -40,7 +40,7 @@ export async function prepareExportScene(project:Project,onProgress:(message:str
   }
   for(const a of project.modelArtworks??[])if(a.visible){onProgress('3D 작품 모델 준비 중');let source=modelCache.get(a.model.dataUrl);if(!source){const bytes=Uint8Array.from(atob(a.model.dataUrl.split(',')[1]),c=>c.charCodeAt(0));source=(await new GLTFLoader().parseAsync(bytes.buffer,'')).scene;modelCache.set(a.model.dataUrl,source);}artworkModels.set(a.id,source);}
   scene=buildExportScene(project,textures,referenceScene,materialTextures,artworkModels);
-  if(!scene.children.length)throw new Error('내보낼 벽·바닥·작품 또는 3D 모델이 없습니다.');
+  let hasGeometry=false;scene.traverseVisible(o=>{if(o instanceof Mesh&&o.geometry.getAttribute('position')?.count>=3)hasGeometry=true;});if(!hasGeometry)throw new Error('내보낼 벽·바닥·작품 또는 3D 모델이 없습니다.');
   return scene;
  }catch(error){
   if(scene)disposeExportScene(scene);else{if(referenceScene)disposeExportScene(referenceScene);modelCache.forEach(m=>disposeExportScene(m));new Set(textures.values()).forEach(texture=>texture.dispose());}

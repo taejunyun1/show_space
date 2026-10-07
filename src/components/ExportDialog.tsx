@@ -1,3 +1,4 @@
+import {modelExportOmissionNotice} from '../domain/modelExportScope';
 import {X,FileJson,FileText,Image,Download,Box,Files,LoaderCircle} from 'lucide-react';
 import {useEffect,useRef,useState} from 'react';
 import {useEditor} from '../state/editor';
@@ -5,7 +6,7 @@ import {downloadBlob} from '../lib/art';
 import {MODEL_MAX_BYTES} from '../lib/glbPayload';
 
 export function ExportDialog({onClose,onPng,onPdf}:{onClose:()=>void;onPng:()=>void;onPdf:()=>void}){
- const project=useEditor(s=>s.project),ref=useRef<HTMLDialogElement>(null);
+ const project=useEditor(s=>s.project),omission=modelExportOmissionNotice(project),ref=useRef<HTMLDialogElement>(null);
  const [busy,setBusy]=useState(false),[progress,setProgress]=useState(''),[error,setError]=useState('');
  const exporting=useRef(false);
  useEffect(()=>{ref.current?.showModal();},[]);
@@ -20,7 +21,7 @@ export function ExportDialog({onClose,onPng,onPdf}:{onClose:()=>void;onPng:()=>v
   try{
    const {exportProjectGlb,exportProjectGltf}=await import('../lib/modelExport');
    const blob=await (format==='glb'?exportProjectGlb:exportProjectGltf)(project,setProgress);downloadBlob(blob,`${project.name}.${format==='glb'?'glb':'gltf.zip'}`);
-   useEditor.getState().notify(format==='gltf'?'glTF ZIP 다운로드를 시작했습니다. 압축을 풀고 scene.gltf를 여세요.':blob.size>MODEL_MAX_BYTES?'GLB를 저장했습니다. 파일이 12MB를 넘어 현재 앱에서는 다시 불러올 수 없습니다.':'벽·바닥·작품을 GLB로 저장했습니다.');onClose();
+   const delivered=format==='gltf'?'glTF ZIP 다운로드를 시작했습니다. 압축을 풀고 scene.gltf를 여세요.':blob.size>MODEL_MAX_BYTES?'GLB를 저장했습니다. 파일이 12MB를 넘어 현재 앱에서는 다시 불러올 수 없습니다.':'벽·바닥·작품을 GLB로 저장했습니다.';useEditor.getState().notify(delivered+(omission?' '+omission:''));onClose();
   }catch(e){setError(e instanceof Error?e.message:'3D 모델을 내보내지 못했습니다.');}
   finally{exporting.current=false;setBusy(false);setProgress('');}
  }
@@ -30,6 +31,7 @@ export function ExportDialog({onClose,onPng,onPdf}:{onClose:()=>void;onPng:()=>v
   <button className="export-option" disabled={busy} onClick={()=>{downloadBlob(new Blob([JSON.stringify(project,null,2)],{type:'application/json'}),`${project.name}.json`);onClose();}}><FileJson size={25}/><span><strong>프로젝트 파일</strong><small>치수, 메모, 조명·야외 시간, Scene과 등록 자산 · JSON · 예제 이미지는 웹 경로 참조</small></span><Download size={18}/></button>
   <button className="export-option" disabled={busy} onClick={()=>{onClose();onPng();}}><Image size={25}/><span><strong>현재 화면 이미지</strong><small>3D·평면도·벽면도를 옵션과 해상도로 저장 · PNG</small></span><Download size={18}/></button>
   <button className="export-option" disabled={busy} onClick={()=>{onClose();onPdf();}}><FileText size={25}/><span><strong>전시안 PDF</strong><small>배치안 선택 · 3D·평면·벽면도 · 한글 · 치수 목록</small></span><Download size={18}/></button>
+  {omission&&<p className="warning" role="note">{omission}</p>}
   <button className="export-option" disabled={busy} onClick={()=>void exportModel()}><Box size={25}/><span><strong>3D 모델</strong><small>표시 중인 벽·바닥·작품·원본 모델 · 실제 크기 · GLB</small><small>작품 이미지·Spot·태양 포함 · 프로젝터 투사·Area·환경·시간 설정 제외</small></span>{busy?<LoaderCircle className="spin" size={18}/>:<Download size={18}/>}</button>
   <button className="export-option" disabled={busy} onClick={()=>void exportModel('gltf')}><Files size={25}/><span><strong>glTF 파일 묶음</strong><small>다른 3D 프로그램 전달용 · glTF + 바이너리 + 이미지 · ZIP</small><small>포함·제외 항목과 치수 단위 안내 포함</small></span><Download size={18}/></button>
   {busy&&<p className="dialog-footnote" role="status" aria-live="polite">{progress}</p>}
