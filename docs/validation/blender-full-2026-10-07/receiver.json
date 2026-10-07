@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "status": "complete",
+  "blenderVersion": "4.4.1",
+  "projectId": "synthetic-receiver-20261007",
+  "glbSHA256": "9803156ccdf763643db94bb28f86636e4fd5daf72b8e506cf46e17c93cf7c1b9",
+  "walls": {
+    "count": 5,
+    "maxWorldBoundsErrorM": 4.76837158203125e-07
+  },
+  "floor": {
+    "topAreaM2": 28.00000307074306,
+    "volumeM3": 4.480000579714463,
+    "thicknessM": 0.16,
+    "courtyardEmpty": true,
+    "doorwayClearWidthM": 1,
+    "controlRaysPassed": true
+  },
+  "referenceModel": {
+    "meshParts": 3,
+    "scale": 2,
+    "rotationDeg": -30,
+    "maxWorldBoundsErrorM": 1.9073486328125e-06,
+    "sourceOffsetNormalized": true
+  },
+  "modelArtworks": [
+    {
+      "id": "model-artwork-1",
+      "sizeMm": [
+        1800,
+        1400,
+        600
+      ],
+      "meshParts": 3,
+      "rotationXYZ": {
+        "x": 17,
+        "y": 37,
+        "z": -13
+      },
+      "maxWorldBoundsErrorM": 1.6689300537109375e-06,
+      "publicMetadataPreserved": true
+    }
+  ],
+  "lights": {
+    "spotDirectionAndConePassed": true,
+    "projectorNotMisrepresented": true,
+    "photometricEquivalenceChecked": false
+  },
+  "externalDependencies": false,
+  "privateAppNotesAbsent": true,
+  "scope": [
+    "synthetic-world-geometry",
+    "courtyard-floor",
+    "doorway-clearance",
+    "reference-placement",
+    "independent-model-placement",
+    "hidden-model-exclusion",
+    "public-model-metadata",
+    "spot-direction"
+  ],
+  "notChecked": [
+    "native-upload-UI",
+    "arbitrary-user-models",
+    "SketchUp-import",
+    "material-render-fidelity",
+    "projector-projection",
+    "lighting-photometric-equivalence"
+  ],
+  "renderRequested": true,
+  "render": "overview.png"
+}

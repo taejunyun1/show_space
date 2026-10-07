@@ -1,0 +1,48 @@
+{
+  "fixture": "synthetic-receiver-20261007",
+  "positive": {
+    "exitCode": 0,
+    "passed": true,
+    "rendered": true
+  },
+  "negative": [
+    {
+      "case": "wrong-artwork",
+      "exitCode": 1,
+      "passed": false,
+      "expectedReason": "artwork width 100mm mismatch"
+    },
+    {
+      "case": "wrong-floor",
+      "exitCode": 1,
+      "passed": false,
+      "expectedReason": "courtyard area and volume mismatch"
+    }
+  ],
+  "browserUiSubstitute": false,
+  "newDeployment": false,
+  "artifacts": {
+    "overview.png": "bcc793d70792963a5a469f7d0141fed8f388aa16202d88c15977e9f4ed8411d9",
+    "project.json": "0831eec1e5da8761c1666f799952a67d072d46b8a91e89ea2b64319293a5b893",
+    "receiver.json": "aa81eb37def39649c5553fbf817c9a9f539e9f7c66a1d74f1418f4568c8f4290",
+    "scene.glb": "9803156ccdf763643db94bb28f86636e4fd5daf72b8e506cf46e17c93cf7c1b9",
+    "wrong-artwork-receiver.json": "c522ff32740958b9f11ced87273b87b184385c99cce0e92243ca83bebd520421",
+    "wrong-artwork.json": "d7a1403bf5dafee344244dfccc19df219597639db872579208c19ff12a9107bb",
+    "wrong-floor-receiver.json": "c522ff32740958b9f11ced87273b87b184385c99cce0e92243ca83bebd520421",
+    "wrong-floor.json": "a0fa1ce59925e062b3a2caf9dcf66944ba9b8a947fb06220393f1fa751c49965"
+  },
+  "checks": {
+    "fullSuiteTestsPassed": 1001,
+    "fullSuiteTestsSkipped": 5,
+    "explicitReceiverFixturePassed": 1,
+    "typecheck": "passed",
+    "diffCheck": "passed"
+  },
+  "operationalAuth": {
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/api/auth/config",
+    "status": 200,
+    "enabled": false,
+    "supabaseSecretNamesPresent": false,
+    "publicConfigurationRequested": true
+  }
+}
