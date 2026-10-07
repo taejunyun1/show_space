@@ -531,6 +531,15 @@ export async function hydrateEditor(reader: () => Promise<unknown> = readDraft):
   }
 }
 
+let saveCurrentAutosave:(()=>Promise<void>)|undefined;
+/** Explicit Save uses the same serialized, revision-checked writer as Auto Save. */
+export async function saveCurrentDraft():Promise<void>{
+  const state=useEditor.getState();
+  if(!state.hydrated)throw new Error('저장된 작업을 아직 불러오고 있습니다.');
+  if(state.previewProject||state.wallGesture||state.artworkGesture||state.lightGesture||state.modelArtworkGesture||state.outdoorGesture||state.rotatingArtworkId)throw new Error('이동·회전을 마친 뒤 저장하세요.');
+  if(!saveCurrentAutosave)throw new Error('로컬 저장을 사용할 수 없습니다. 현재 작업을 내보내기로 백업하세요.');
+  await saveCurrentAutosave();
+}
 let flushCurrentAutosave:()=>Promise<void>=async()=>{};
 export const flushAutosave=()=>flushCurrentAutosave();
 /** Recovery retains this queue even after React unmounts the editor. */
@@ -543,17 +552,29 @@ export function startAutosave(
   let lastProject = useEditor.getState().project
   let queued = Promise.resolve()
   let revision = 0
-  let pending:Project|undefined,error:unknown;
+  let pending:Project|undefined,error:unknown,lastScheduled:Project|undefined,lastWritten:Project|undefined;
   const schedule=()=>{
     if(timer)clearTimeout(timer);timer=undefined;
     if(!pending)return;
-    const snapshot=pending;pending=undefined;const scheduledRevision=revision;
+    const snapshot=pending;pending=undefined;lastScheduled=snapshot;const scheduledRevision=revision;
     queued=queued.then(()=>writer(snapshot)).then(()=>{
-      error=undefined;
+      error=undefined;lastWritten=snapshot;
       if(scheduledRevision===revision&&useEditor.getState().project.id===snapshot.id)useEditor.setState({saveStatus:'saved'});
     },(failure:unknown)=>{error=failure;if(useEditor.getState().project.id===snapshot.id)useEditor.setState({saveStatus:'error',message:`프로젝트를 저장하지 못했습니다. ${errorMessage(failure)}`});});
   };
   const flush=async()=>{schedule();await queued;if(error)throw error;};
+  const save=async()=>{
+    const snapshot=useEditor.getState().project;
+    // Reuse a pending/in-flight write; a settled failure needs an explicit retry.
+    if(pending!==snapshot&&(error||lastScheduled!==snapshot&&lastWritten!==snapshot)){
+      revision++;pending=snapshot;useEditor.setState({saveStatus:'saving'});
+    }
+    await flush();
+    if(useEditor.getState().project!==snapshot)throw new Error('저장 중 작업이 변경됐습니다. 현재 작업의 자동 저장 상태를 확인하거나 다시 저장하세요.');
+    if(lastWritten!==snapshot)throw new Error('현재 작업의 로컬 저장을 확인하지 못했습니다.');
+    useEditor.setState({saveStatus:'saved'});
+  };
+  saveCurrentAutosave=save;
   flushCurrentAutosave=flush;
   const browser=typeof window==='undefined'?undefined:window;
   let guarding=false;
@@ -585,5 +606,5 @@ export function startAutosave(
     revision++;pending=state.project;
     timer = setTimeout(schedule, debounceMs)
   })
-  return () => { schedule();unsubscribe();browser?.removeEventListener('beforeunload',beforeUnload);browser?.removeEventListener('pagehide',schedule);browser?.document.removeEventListener('visibilitychange',hidden);if(flushCurrentAutosave===flush)flushCurrentAutosave=async()=>{}; }
+  return () => { schedule();unsubscribe();browser?.removeEventListener('beforeunload',beforeUnload);browser?.removeEventListener('pagehide',schedule);browser?.document.removeEventListener('visibilitychange',hidden);if(flushCurrentAutosave===flush)flushCurrentAutosave=async()=>{};if(saveCurrentAutosave===save)saveCurrentAutosave=undefined; }
 }
