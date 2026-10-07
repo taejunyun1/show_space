@@ -1,7 +1,7 @@
 {
   "date": "2026-10-07",
   "requirement": "source document 2 section 49 Presentation PDF",
-  "status": "implemented-native-verified-awaiting-deployment",
+  "status": "deployed-public-native-verified",
   "tests": {
     "fullPassed": 897,
     "skipped": 2,
@@ -308,7 +308,33 @@
     "local duplicated artwork-information panels remain an unexplained separate observation"
   ],
   "deployment": {
-    "thisChangeDeployed": false,
-    "priorVersion": "356b68f2-75ad-4384-972c-505ccb2faf27"
+    "thisChangeDeployed": true,
+    "version": "bed10a79-7167-4910-afd1-adaae0158740",
+    "priorVersion": "356b68f2-75ad-4384-972c-505ccb2faf27",
+    "sourceCommit": "e20d053",
+    "entry": "/assets/index-C5Xn9rNJ.js",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "keepVars": true
+  },
+  "public": {
+    "pdfFile": "여백의 기록-전시안 (10).pdf",
+    "pdfBytes": 3709146,
+    "pdfSha256": "d868e6189fccf46edff64d127c2b428e7876fcb61ea7794db49d30169da63bc6",
+    "pages": 3,
+    "orderedViews": [
+      "cover",
+      "image detail",
+      "plan"
+    ],
+    "reorderViaNativeButton": true,
+    "downloadParsedAndDetailRendered": true,
+    "projectUnchanged": true,
+    "importMenuVerified": [
+      "JPG/PNG/PDF",
+      "SketchUp-exported GLB",
+      "collapsed ZIP/JSON backup"
+    ],
+    "skpDirectUnsupportedClearlyDisplayed": true,
+    "initialOldBundleError": "Before intentional reload an old index-BvJ_8NK6.js requested Gallery3D-CzFEyzXb.js and failed. After reload current index-C5Xn9rNJ.js loaded; PDF download and editor succeeded. Captured log retained the earlier error; not claimed empty."
   }
 }
