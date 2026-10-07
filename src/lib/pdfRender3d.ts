@@ -7,6 +7,7 @@ import {disposeExportScene} from './exportScene';
 import {needsSurfaceEnvironment,surfaceEnvironment,SURFACE_ENVIRONMENT_INTENSITY} from './surfaceEnvironment';
 import type {CameraView} from '../domain/types';
 import type {PdfSection} from './pdfLayout';
+import {fitPdfPerspective} from './pdfCameraFit';
 export interface PdfCurrentCamera {view:CameraView;width:number;height:number;cutaway:boolean;fit?:boolean}
 
 /** Render a detached snapshot, leaving selection, project, Undo and live camera untouched. */
@@ -26,6 +27,7 @@ export async function renderPdf3d(section:PdfSection,current?:PdfCurrentCamera,o
    let extentX=1,extentY=1;for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){const p=new Vector3(x,y,z).applyMatrix4(camera.matrixWorldInverse);extentX=Math.max(extentX,Math.abs(p.x));extentY=Math.max(extentY,Math.abs(p.y));}
    camera.zoom=Math.min(width/(extentX*2),height/(extentY*2))*.8;camera.updateProjectionMatrix();
   }
+  if(section.fitCamera&&!source&&camera instanceof PerspectiveCamera)fitPdfPerspective(camera,new Box3().setFromObject(scene));
   const cutaway=source?.cutaway??true;
   const hidden=new Set<string>();
   if(cutaway&&camera instanceof OrthographicCamera)for(const wall of section.project.walls){const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z;if(wall.role!=='partition'&&-dz*(camera.position.x-(wall.start.x+wall.end.x)/2000)+dx*(camera.position.z-(wall.start.z+wall.end.z)/2000)<=0){const object=scene.getObjectByName(`wall-${wall.id}`);if(object)object.visible=false;hidden.add(wall.id);}}

@@ -56,7 +56,7 @@
 | 43–45 Navigation·Eye·Human Scale | 기본 시점/손 이동 중심; 사용자 결정으로 범위 축소 | 원문의 모든 Walk/인체 참조 형상 요구를 구현했다고 집계하지 않음 |
 | 46 Scene | 구조·배치·시점 및 자동 미리보기 저장 구현 | 실제 3D·평면·벽면·네 시간대 JPEG, Undo/Redo, 재접속 및 ZIP 복원 해시 일치 확인; Cloudflare 배포/공개 3D·390px 확인 |
 | 47 Presentation Mode | 로컬 별도 발표 화면 · 전체 화면 · Scene 탐색 · 작품 정보 · 읽기 전용 Orbit | 2026-10-07 native ANCA/GLB/모바일 검증, Walk는 사용자 축소 결정으로 제외. 대형 장면/실기기는 남음 |
-| 48–53 Screenshot·PDF·Share·발표 공유·선택 정보·Export | 기본 구현과 개별 검증 존재 | `CaptureDialog`, `PdfDialog`, `SharedViewer`, `sharePresentation`, `exportScene` |
+| 48–53 Screenshot·PDF·Share·발표 공유·선택 정보·Export | 기본 구현 및 §49 PDF의 표지/평면/3D/벽면/상세/치수 목록 순서 구성 구현 | 실제 ANCA 12p, 모델/이미지 상세 3p, 390px 및 897 테스트; 공개 배포 진행 |
 | 54 SketchUp Export | GLB 교환 경로, SKP 전용 내보내기는 후속 | 실제 SketchUp 재수입 모델 검증 남음 |
 | 55 Metadata | JSON/백업/중립 모델에 정보 보존 | 도구별 metadata·단위 수신 검증 남음 |
 | 56–57 Collaboration·Comment | 미구현 확장 | 동시 공동 편집/권한/댓글 기능; 고정 공개 링크와 개인 클라우드 저장은 별개 |
@@ -98,3 +98,5 @@
 2026-10-07 후속 갱신: 브라우저 검증 연결을 새로 잡은 뒤 §46의 실제 Scene 미리보기·Undo/Redo·새로고침·시간대 네 Scene·ZIP 다운로드/복원 이미지 해시 일치와 390px 목록을 확인했다. 모바일 가림 및 3D 치수 레이어를 수정했다. 앞선 미검증 기록은 이 후속 결과로 갱신한다. 전체 제품 목표의 실계정·실기기·사용자 인수 등은 계속 남는다.
 
 2026-10-07 공개 갱신: §46 자동 미리보기는 Cloudflare `356b68f2-75ad-4384-972c-505ccb2faf27`로 배포하고 공개 HTTPS 실제 JPEG 생성/모바일 목록/콘솔 오류 없음 확인까지 마쳤다. 전체 제품 목표 완료로 확대하지 않는다.
+
+2026-10-07 PDF 갱신: [페이지 구성](2026-10-07-pdf-presentation.md)에서 §49 선택 Scene 혼합 순서와 여섯 보기, 페이지별 시점/벽면/작품/제목을 구현했다. 실제 12페이지 및 독립 3D/이미지 상세 3페이지 출력·긴 설명 보존·메모 제외·원본 작업 보존을 확인했다. 앞선 PDF 보기 확장 대기는 이 구현으로 갱신한다. 전체 제품 인수는 계속 미완료다.

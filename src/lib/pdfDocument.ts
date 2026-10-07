@@ -9,6 +9,7 @@ import {resolveMeasurement} from '../domain/measurements';
 import {installationZones} from '../domain/installationZones';
 import {elevationArtPlacement,fitPdfDrawing,type PdfOptions,type PdfSection} from './pdfLayout';
 import type {Point,Project} from '../domain/types';
+import {artworkTypeLabels,presentationTypeLabels} from '../domain/artworkInformation';
 
 export interface PdfAssets {fontBytes:Uint8Array;images:Map<string,Uint8Array>;previews:Map<number,Uint8Array>}
 const W=841.89,H=595.28,ink=rgb(.14,.19,.25),muted=rgb(.36,.42,.49),blue=rgb(.21,.36,.8),light=rgb(.78,.82,.87);
@@ -84,12 +85,12 @@ function elevation(page:PDFPage,font:PDFFont,section:PdfSection,images:Map<strin
  scaleNote(page,font,fit);
 }
 function schedules(doc:PDFDocument,font:PDFFont,section:PdfSection){
- let page=header(doc,font,section,'치수 목록 · 표시 중인 벽과 배치 작품'),y=H-126;
+ let page=header(doc,font,section,section.title??'치수 목록 · 표시 중인 벽과 배치 작품'),y=H-126;
  const row=(value:string,size=9)=>{
   const lines:string[]=[];let current='',width=0;
   for(const char of value.normalize('NFC').replace(/[\r\n\t]/g,' ')){const next=font.widthOfTextAtSize(char,size);if(current&&width+next>W-84){lines.push(current);current='';width=0;}current+=char;width+=next;}
   lines.push(current);
-  for(const value of lines){if(y<65){page=header(doc,font,section,'치수 목록 · 계속');y=H-126;}text(page,font,value,42,y,size,W-84);y-=19;}
+  for(const value of lines){if(y<65){page=header(doc,font,section,section.title?`${section.title} · 계속`:'치수 목록 · 계속');y=H-126;}text(page,font,value,42,y,size,W-84);y-=19;}
  };
  row('벽 번호 · 이름 / 길이 × 높이 × 두께 (mm)',11);
  for(const [i,w] of section.project.walls.entries())if(w.visible)row(`${i+1}. ${w.name} / ${mm(wallLength(w))} × ${mm(w.heightMm)} × ${mm(w.thicknessMm)}`);
@@ -113,6 +114,46 @@ function schedules(doc:PDFDocument,font:PDFFont,section:PdfSection){
 
 }
 
+function cover(doc:PDFDocument,font:PDFFont,section:PdfSection){
+ const page=doc.addPage([W,H]);page.drawRectangle({x:0,y:0,width:W,height:H,color:rgb(.96,.97,.98)});
+ line(page,48,410,150,410,blue,3);text(page,font,section.title??section.project.name,48,351,34,W-96,16);
+ text(page,font,section.project.venue,48,310,16,W-96,12);text(page,font,`전시안 · ${section.name}`,48,268,12);
+ const p=section.project,count=p.artworks.filter(a=>a.visible&&p.walls.some(w=>w.id===a.wallId&&w.visible)).length+(p.modelArtworks??[]).filter(a=>a.visible).length;
+ text(page,font,`표시 작품 ${count}개 · 표시 벽 ${p.walls.filter(w=>w.visible).length}개`,48,228,10);
+ text(page,font,'공간 · 전시 공간과 작품 배치',48,48,10);text(page,font,'내부 메모·원본 도면 제외',48,29,8);
+}
+
+function detail(doc:PDFDocument,font:PDFFont,section:PdfSection,images:Map<string,PDFImage>,preview?:Uint8Array){
+ const art=section.artwork??section.modelArtwork;if(!art)throw new Error('상세 페이지의 작품을 찾지 못했습니다.');
+ const heading=section.title??`작품 상세 · ${art.name}`;let page=header(doc,font,section,heading);
+ const box={x:44,y:82,width:480,height:360};
+ if(section.artwork){
+  const a=section.artwork,image=images.get(a.imageUrl);if(!image)throw new Error('상세 작품 이미지를 준비하지 못했습니다.');
+  const p=artworkPresentation(a),scale=Math.min(box.width/p.widthMm,box.height/p.heightMm),cx=box.x+box.width/2,cy=box.y+box.height/2;
+  const rect=(w:number,h:number)=>({x:cx-w*scale/2,y:cy-h*scale/2,width:w*scale,height:h*scale});
+  page.drawRectangle({...rect(p.widthMm,p.heightMm),color:color(frameColors[a.frame])});
+  if(p.framed&&p.settings.matWidthMm>0)page.drawRectangle({...rect(p.innerWidthMm,p.innerHeightMm),color:color(p.settings.matColor)});
+  page.drawImage(image,rect(a.widthMm,a.heightMm));text(page,font,'정면 이미지 · 액자·매트 포함',44,60,8);
+ }else{
+  if(!preview)throw new Error('3D 작품 상세 이미지를 준비하지 못했습니다.');
+  // The image is embedded by the caller before this synchronous drawing function.
+  const image=images.get(`detail-preview:${section.modelArtwork!.id}`)!;
+  const scale=Math.min(box.width/image.width,box.height/image.height);page.drawImage(image,{x:box.x+(box.width-image.width*scale)/2,y:box.y+(box.height-image.height*scale)/2,width:image.width*scale,height:image.height*scale});
+  text(page,font,'3D 작품 · 저장된 크기와 회전',44,60,8);
+ }
+ let y=H-130;
+ const row=(value:string,size=10)=>{
+  let lineValue='',width=0;const values:string[]=[];
+  for(const char of value.normalize('NFC').replace(/[\r\n\t]/g,' ')){const next=font.widthOfTextAtSize(char,size);if(lineValue&&width+next>W-606){values.push(lineValue);lineValue='';width=0;}lineValue+=char;width+=next;}values.push(lineValue);
+  for(const lineValue of values){if(y<76){page=header(doc,font,section,`${heading} · 정보 계속`);y=H-126;}text(page,font,lineValue,558,y,size,W-606,size);y-=size+7;}y-=6;
+ };
+ row(art.name,13);if(art.artist)row(`작가 ${art.artist}`);if(art.year)row(`연도 ${art.year}`);
+ row(`크기 ${mm(art.widthMm)} × ${mm(art.heightMm)} × ${mm(art.depthMm)} mm`);
+ if(art.artworkType)row(`종류 ${artworkTypeLabels[art.artworkType]}`);if(art.presentationType)row(`설치 형식 ${presentationTypeLabels[art.presentationType]}`);
+ if(section.artwork){const p=artworkPresentation(section.artwork);if(p.framed)row(`액자 외곽 ${mm(p.widthMm)} × ${mm(p.heightMm)} × ${mm(p.depthMm)} mm`);}
+ if(art.medium)row(`재료 ${art.medium}`);if(art.description)row(art.description,9);
+}
+
 export async function buildExhibitionPdf(sections:PdfSection[],options:PdfOptions,assets:PdfAssets):Promise<Uint8Array>{
  if(!sections.length)throw new Error('내보낼 PDF 페이지가 없습니다.');
  const doc=await PDFDocument.create();doc.registerFontkit(fontkit);doc.setTitle(sections[0].project.name);doc.setCreator('공간 — 전시 시뮬레이터');doc.setSubject('전시 배치 · 실제 치수 mm');
@@ -121,12 +162,17 @@ export async function buildExhibitionPdf(sections:PdfSection[],options:PdfOption
  const font=await doc.embedFont(assets.fontBytes,{subset:false,features:{calt:false,locl:false,liga:false,kern:false}}),images=new Map<string,PDFImage>();
  for(const [url,bytes] of assets.images)images.set(url,await doc.embedPng(bytes));
  for(const [index,section] of sections.entries()){
-  const page=header(doc,font,section,section.kind==='3d'?'3D 공간':section.kind==='plan'?'평면도':`${section.wall!.name} · ${section.side==='back'?'B':'A'}면 벽면도`);
+  if(section.kind==='cover'){cover(doc,font,section);continue;}
+  if(section.kind==='schedule'){schedules(doc,font,section);continue;}
+  if(section.kind==='detail'){
+   const bytes=assets.previews.get(index);if(section.modelArtwork&&bytes)images.set(`detail-preview:${section.modelArtwork.id}`,await doc.embedPng(bytes));detail(doc,font,section,images,bytes);continue;
+  }
+  const page=header(doc,font,section,section.title??(section.kind==='3d'?'3D 공간':section.kind==='plan'?'평면도':`${section.wall!.name} · ${section.side==='back'?'B':'A'}면 벽면도`));
   if(section.kind==='3d'){
    const bytes=assets.previews.get(index);if(!bytes)throw new Error('PDF 3D 이미지를 준비하지 못했습니다.');const image=await doc.embedPng(bytes),s=Math.min((W-72)/image.width,390/image.height);page.drawImage(image,{x:(W-image.width*s)/2,y:65+(390-image.height*s)/2,width:image.width*s,height:image.height*s});text(page,font,'3D 이미지는 시각 참고용입니다. 실제 치수는 평면·벽면도 또는 치수 목록을 확인하세요.',36,42,8);
   }else if(section.kind==='plan')plan(page,font,section.project);else elevation(page,font,section,images);
  }
- if(options.includeSchedule){const seen=new Set<Project>();for(const section of sections)if(!seen.has(section.project)){seen.add(section.project);schedules(doc,font,section);}}
+ if(options.includeSchedule&&options.pages===undefined){const seen=new Set<Project>();for(const section of sections)if(!seen.has(section.project)){seen.add(section.project);schedules(doc,font,section);}}
  doc.getPages().forEach((page,i)=>text(page,font,`${i+1} / ${doc.getPageCount()}`,W-75,22,8,40));
  // PDF CMaps allow at most 100 mappings per bfchar block. pdf-lib emits all
  // 22,451 CJK mappings in one block; split them for compliant readers.

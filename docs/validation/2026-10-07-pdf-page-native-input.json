@@ -1,0 +1,204 @@
+[
+  {
+    "fields": [
+      {
+        "label": "페이지 1 배치안",
+        "value": ""
+      },
+      {
+        "label": "페이지 1 보기",
+        "value": "cover"
+      },
+      {
+        "label": "페이지 1 제목",
+        "value": "ANCA · 전시안 검증 표지"
+      }
+    ],
+    "label": "1. 표지"
+  },
+  {
+    "fields": [
+      {
+        "label": "페이지 2 배치안",
+        "value": "scene-4"
+      },
+      {
+        "label": "페이지 2 보기",
+        "value": "plan"
+      },
+      {
+        "label": "페이지 2 제목",
+        "value": "02 · Scene D 평면도"
+      }
+    ],
+    "label": "2. 평면도"
+  },
+  {
+    "fields": [
+      {
+        "label": "페이지 3 배치안",
+        "value": "scene-4"
+      },
+      {
+        "label": "페이지 3 보기",
+        "value": "3d"
+      },
+      {
+        "label": "페이지 3 제목",
+        "value": "03 · Scene D 사시 투시"
+      },
+      {
+        "label": "페이지 3 시점",
+        "value": "perspective"
+      }
+    ],
+    "label": "3. 3D 시점"
+  },
+  {
+    "fields": [
+      {
+        "label": "페이지 4 배치안",
+        "value": ""
+      },
+      {
+        "label": "페이지 4 보기",
+        "value": "elevation"
+      },
+      {
+        "label": "페이지 4 제목",
+        "value": "04 · 현재 벽 A면"
+      },
+      {
+        "label": "페이지 4 벽",
+        "value": "auto-wall-1"
+      },
+      {
+        "label": "페이지 4 벽면",
+        "value": "front"
+      }
+    ],
+    "label": "4. 벽면도"
+  },
+  {
+    "fields": [
+      {
+        "label": "페이지 5 배치안",
+        "value": "scene-1"
+      },
+      {
+        "label": "페이지 5 보기",
+        "value": "detail"
+      },
+      {
+        "label": "페이지 5 제목",
+        "value": "05 · Scene A 작품 상세"
+      },
+      {
+        "label": "페이지 5 작품",
+        "value": "artwork-1"
+      }
+    ],
+    "label": "5. 작품 상세"
+  },
+  {
+    "fields": [
+      {
+        "label": "페이지 6 배치안",
+        "value": ""
+      },
+      {
+        "label": "페이지 6 보기",
+        "value": "schedule"
+      },
+      {
+        "label": "페이지 6 제목",
+        "value": "06 · 현재 치수 목록"
+      }
+    ],
+    "label": "6. 치수 목록"
+  },
+  {
+    "fields": [
+      {
+        "label": "페이지 7 배치안",
+        "value": ""
+      },
+      {
+        "label": "페이지 7 보기",
+        "value": "3d"
+      },
+      {
+        "label": "페이지 7 제목",
+        "value": "07 · 현재 정면"
+      },
+      {
+        "label": "페이지 7 시점",
+        "value": "front"
+      }
+    ],
+    "label": "7. 3D 시점"
+  },
+  {
+    "fields": [
+      {
+        "label": "페이지 8 배치안",
+        "value": ""
+      },
+      {
+        "label": "페이지 8 보기",
+        "value": "3d"
+      },
+      {
+        "label": "페이지 8 제목",
+        "value": "08 · 현재 좌측면"
+      },
+      {
+        "label": "페이지 8 시점",
+        "value": "left"
+      }
+    ],
+    "label": "8. 3D 시점"
+  },
+  {
+    "fields": [
+      {
+        "label": "페이지 9 배치안",
+        "value": ""
+      },
+      {
+        "label": "페이지 9 보기",
+        "value": "3d"
+      },
+      {
+        "label": "페이지 9 제목",
+        "value": "09 · 현재 우측면"
+      },
+      {
+        "label": "페이지 9 시점",
+        "value": "right"
+      }
+    ],
+    "label": "9. 3D 시점"
+  },
+  {
+    "fields": [
+      {
+        "label": "페이지 10 배치안",
+        "value": ""
+      },
+      {
+        "label": "페이지 10 보기",
+        "value": "3d"
+      },
+      {
+        "label": "페이지 10 제목",
+        "value": "10 · 현재 버드아이뷰"
+      },
+      {
+        "label": "페이지 10 시점",
+        "value": "bird"
+      }
+    ],
+    "label": "10. 3D 시점"
+  }
+]
