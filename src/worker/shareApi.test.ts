@@ -204,6 +204,22 @@ it('stops oversized chunked publication input before consuming the entire stream
  const request=new Request(`https://example.test/api/shares/${id}/publish`,{method:'POST',headers:{authorization:'Bearer private-owner-token-for-testing'},body,duplex:'half'} as RequestInit);
  expect((await handleShareRequest(request,{SHARES:bucket,OWNER_TOKEN:'private-owner-token-for-testing'})).status).toBe(400);expect(cancelled).toBe(true);expect(produced).toBeLessThan(10);
 });
+it.each([undefined,'12'])('stops oversized streamed images with content-length %s before storing or consuming the whole body',async contentLength=>{
+ const {bucket,call}=setup(),{id}=await(await call('POST','/api/shares',undefined,true)).json() as {id:string};let produced=0,cancelled=false;
+ const body=new ReadableStream<Uint8Array>({pull(controller){const chunk=new Uint8Array(600_000);if(produced===0)chunk.set(png);produced++;controller.enqueue(chunk);if(produced===20)controller.close();},cancel(){cancelled=true;}},{highWaterMark:0});
+ const request=new Request(`https://example.test/api/shares/${id}/images/0`,{method:'PUT',headers:{authorization:'Bearer private-owner-token-for-testing',...(contentLength?{'content-length':contentLength}:{})},body,duplex:'half'} as RequestInit);
+ expect((await handleShareRequest(request,{SHARES:bucket,OWNER_TOKEN:'private-owner-token-for-testing'})).status).toBe(413);
+ expect(cancelled).toBe(true);expect(produced).toBe(9);expect([...bucket.data.keys()].filter(k=>k.startsWith(`shares/${id}/`))).toEqual([]);
+});
+it('accepts the exact image byte limit without altering bytes and leaves existing images intact on a broken stream',async()=>{
+ const {bucket,call}=setup(),{id}=await(await call('POST','/api/shares',undefined,true)).json() as {id:string},bytes=new Uint8Array(5_000_000);bytes.set(png);bytes[bytes.length-1]=42;
+ expect((await call('PUT',`/api/shares/${id}/images/0`,bytes.buffer,true)).status).toBe(204);
+ expect(Buffer.from(bucket.data.get(`shares/${id}/images/0`)!.bytes).equals(Buffer.from(bytes))).toBe(true);
+ let produced=0;const body=new ReadableStream<Uint8Array>({pull(controller){if(produced++===0)controller.enqueue(png);else controller.error(new Error('input disconnected'));}},{highWaterMark:0});
+ const request=new Request(`https://example.test/api/shares/${id}/images/0`,{method:'PUT',headers:{authorization:'Bearer private-owner-token-for-testing'},body,duplex:'half'} as RequestInit);
+ const response=await handleShareRequest(request,{SHARES:bucket,OWNER_TOKEN:'private-owner-token-for-testing'});
+ expect(response.status).toBe(400);expect(await response.text()).not.toContain('input disconnected');expect(Buffer.from(bucket.data.get(`shares/${id}/images/0`)!.bytes).equals(Buffer.from(bytes))).toBe(true);
+});
 it('honors the publication-wide details flag on server input and excludes private Note from every Scene',async()=>{
  const {call}=setup(),p=createDemoProject();p.artworks=[];
  const base=createPublicShare(p,{includeDimensions:false}).snapshot;

@@ -141,7 +141,20 @@ export async function handleShareRequest(request:Request,env:ShareEnv,authFetch:
     if(entry.status!=='draft')return error(409,'발행된 공유는 변경할 수 없습니다.');
     if(!validImageId(imageId))return error(400,'이미지 번호가 올바르지 않습니다.');
     if(Number(request.headers.get('content-length'))>5_000_000)return error(413,'작품 이미지는 5MB 이하만 공유할 수 있습니다.');
-    const bytes=await request.arrayBuffer();
+    let bytes:ArrayBuffer;
+    try{
+      const reader=request.body?.getReader();if(!reader)return error(413,'작품 이미지는 5MB 이하만 공유할 수 있습니다.');
+      const chunks:Uint8Array[]=[];let length=0;
+      try{
+        while(true){
+          const {done,value}=await reader.read();if(done)break;
+          length+=value.byteLength;
+          if(length>5_000_000){try{await reader.cancel();}catch{/* The size rejection still applies if the sender has disconnected. */}return error(413,'작품 이미지는 5MB 이하만 공유할 수 있습니다.');}
+          chunks.push(value);
+        }
+      }finally{reader.releaseLock();}
+      const raw=new Uint8Array(length);let offset=0;for(const chunk of chunks){raw.set(chunk,offset);offset+=chunk.byteLength;}bytes=raw.buffer;
+    }catch{return error(400,'이미지 전송이 중단됐습니다. 다시 시도해주세요.');}
     if(!bytes.byteLength||bytes.byteLength>5_000_000)return error(413,'작품 이미지는 5MB 이하만 공유할 수 있습니다.');
     const type=imageType(new Uint8Array(bytes));
     if(!type)return error(415,'PNG, JPG, WebP 작품 이미지만 공유할 수 있습니다.');

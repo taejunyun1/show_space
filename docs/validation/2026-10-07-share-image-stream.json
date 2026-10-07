@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-07",
+  "scope": "share image upload Request/ReadableStream regression, memory storage",
+  "imageMaxBytes": 5000000,
+  "regressionsFailedBeforeFix": 3,
+  "missingAndUnderstatedLength": {"response": 413, "chunkBytes": 600000, "chunksProduced": 9, "chunksAvailable": 20, "cancelled": true, "storedAssets": 0},
+  "exactLimit": {"response": 204, "storedBytesIdentical": true},
+  "disconnectedStream": {"response": 400, "existingImageBytesIdentical": true},
+  "relatedTestsPassed": 31,
+  "fullTestsPassed": 1010,
+  "optionalTestsSkipped": 6,
+  "typescriptBuildPassed": true,
+  "viteBuildPassed": true,
+  "nativeBrowserVerified": false,
+  "productionDeployed": false,
+  "fullAcceptanceComplete": false
+}
