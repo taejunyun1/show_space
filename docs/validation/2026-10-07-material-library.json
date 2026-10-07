@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-07",
+  "projectId": "3065bd45-b859-4dda-9aba-898f27c800e3",
+  "files": [
+    {
+      "name": "ANCA 연속 검증 · 저장 보호-전시안 (2).pdf",
+      "bytes": 4166580,
+      "sha256": "1734fa4b3664f65ada26465e020da988e8553ee0102b3aad4191f0cd795f5aea"
+    },
+    {
+      "name": "공간-재질라이브러리.gonggan-materials.json",
+      "bytes": 1008672,
+      "sha256": "40ab0481542b96f1277f465f7cdb42818e2b2ab5492c95dbc049e849e2c21535"
+    },
+    {
+      "name": "ANCA 연속 검증 · 저장 보호 (4).json",
+      "bytes": 26606097,
+      "sha256": "fcc1b745e87403e2fd8111f3f04f75bfddd18f8e0b5abddf58b099e3da4af442"
+    }
+  ],
+  "pdf": {
+    "pages": 12,
+    "format": "A4 landscape",
+    "currentAndSceneD3DTextureVisuallyVerified": true,
+    "privateInstallationMarkerAbsent": true,
+    "planAndElevationUseTechnicalSolidColors": true
+  },
+  "materialLibrary": {
+    "categories": [
+      "architecture",
+      "artwork",
+      "floor",
+      "glass",
+      "metal",
+      "fabric",
+      "custom"
+    ],
+    "builtins": 15,
+    "persistedTemplateCountBeforeRestore": 2,
+    "nativeRestoredTemplateCount": 4,
+    "nativeRestoreCompleted": true,
+    "nativeReloadVerified": true,
+    "nativeArchiveRestoreVerified": true,
+    "nativeSearchVerified": true,
+    "nativeBackupTextureDimensions": [
+      {
+        "name": "ANCA 반복 2×1m",
+        "widthMm": 2000,
+        "heightMm": 1000,
+        "thumbnailIncluded": false
+      },
+      {
+        "name": "ANCA 텍스처 2×1m",
+        "widthMm": 2000,
+        "heightMm": 1000,
+        "thumbnailIncluded": true
+      }
+    ],
+    "privateInstallationMarkerAbsent": true,
+    "wallApplication": {
+      "target": "auto-wall-2",
+      "lengthBeforeAndAfterMetres": 5.86481,
+      "textureMetres": [
+        2,
+        1
+      ],
+      "undoRemovesTexture": true
+    },
+    "nativeFloorApplicationTextureMetres": [
+      2,
+      1
+    ],
+    "nativeArtworkApplication": {
+      "sizeMetres": [
+        0.4,
+        1.2
+      ],
+      "presetAfter": "white-paint",
+      "presetAfterUndo": "matte-photo-paper",
+      "imageAndFramePreservation": "pure domain assertions + full native JSON comparison after Undo"
+    },
+    "fullNativeProjectJSONUnchangedAfterUndo": true,
+    "mobileViewport": [
+      390,
+      844
+    ],
+    "mobileDialogClientAndScrollWidth": [
+      349,
+      349
+    ],
+    "nativeConsoleWarningsErrors": [],
+    "fileChooserUploadWallTimeSeconds": 1070.8055,
+    "localOnly": true,
+    "accountSync": false
+  },
+  "checks": {
+    "testsPassed": 864,
+    "optionalBenchmarksSkipped": 2,
+    "build": "passed"
+  },
+  "remaining": [
+    "Actual authentication and account library synchronization",
+    "Basic/Advanced material editor separation",
+    "Other source-document-2 extensions and remaining full-scope acceptance"
+  ]
+}

@@ -48,7 +48,7 @@
 | 14–18 Library·등록·설치형식·프레임·모델 | 로컬 Library 및 이미지/3D 작품 구현 | `artworkLibrary`, `ArtworkInformationEditor`, `FrameEditor`, `ModelArtworks3D`; 계정 Library 동기화는 미구현 |
 | 19 Photo to 3D | 유료 후속 | 생성 API/결제 미구현 |
 | 20–26 배치·Snap·높이·다중·시리즈·Elevation·치수 | 핵심 구현 | 그룹/정렬/같은 면 간격/측정; 별도 Series 상품 구조까지 완료로 집계하지 않음 |
-| 27–28 재질 Library·편집, 30 기준 크기 | 프리셋 및 실제 크기 Texture 구현 | `materials`, `MaterialEditor`, `TextureEditor`; 계정 재질 Library 별도 관리 미구현 |
+| 27–28 재질 Library·편집, 30 기준 크기 | 로컬 재질 Library·분류·검색·저장/적용·보관·백업 및 실제 크기 Texture 구현 | `materialLibrary`, `MaterialLibraryDialog`, `materials`, `MaterialEditor`, `TextureEditor`; 계정 동기화와 Basic/Advanced 편집 분리는 남음 |
 | 29 Material Capture | 후속 유료 생성 | 원본 사진 반복 텍스처 적용은 구현, 생성/왜곡보정/PBR 맵 추정은 미구현 |
 | 31–36 Light·Spot·Target·Kelvin·Outdoor·Sun | 기본 조명·야외 구현 | `lighting`, `outdoor`, `Lighting3D` |
 | 37 시간 비교 | 후속 확장 | 시간 조절/Scene 저장은 가능; 독립 비교 UI 미구현 |
@@ -84,3 +84,5 @@
 [객체 검색 및 벽면 인수](2026-10-06-object-search.md): 같은 ANCA 프로젝트에서 재질/벽/조명 검색 선택, 벽 외곽 스냅 실제 드래그와 -90° 회전 핸들, Undo로 원래 내용 보존을 확인했다. 직접 Texture·실제 인증·외부 GLB 수신 인수 등은 남아 있다.
 
 2026-10-07 갱신: [직접 텍스처 및 Blender 수신](2026-10-07-texture-receiver.md)에서 같은 프로젝트의 이미지 업로드→2×1m 반복→재접속→Scene D 복원→PNG/JSON/GLB→로컬 읽기 전용 공유를 확인했다. Blender 4.4.1에서 직선 벽 17개와 이미지 작품 10개의 크기, 두 내장 이미지와 벽 반복 설정을 대조했다. 위 표 §15/27–30/31–35 및 문서 2 §27–30/48–55의 부분 수신 증거가 추가된 것이며, 실제 SketchUp 재수입·조명 외관·바닥/개구부/참고 모델/독립 3D 작품 전체 수신은 미검증이다. 현재 Texture Scene의 PDF·실제 인증·대표 기기·사용자 지표와 문서 2 확장도 남는다.
+
+2026-10-07 후속: [재질 라이브러리 및 PDF](2026-10-07-material-library.md)에서 현재 Texture 배치와 Scene D의 A4 PDF 12페이지/두 3D 텍스처 페이지를 확인했다. 로컬 독립 재질 Library의 7분류/15프리셋/색·물성·텍스처 저장·재적용·Undo·검색·보관/복구·JSON 백업/복원·재접속·390px UI를 구현·검증했다. 계정 동기화, §28의 Basic/Advanced 분리와 다른 후속 확장은 계속 남는다.
