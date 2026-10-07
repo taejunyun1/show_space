@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-07",
+  "before": {
+    "publicEntry": "index-DBWUEWWG.js",
+    "firstArtworkInformationSections": 1,
+    "secondArtworkInformationSections": 2,
+    "wallInformationSections": 1
+  },
+  "cause": "ArtworkInformationEditor and MaterialEditor were sibling elements with the same React key",
+  "fix": "distinct information and material keys scoped to project and object",
+  "tests": {
+    "relatedPassed": 11,
+    "build": "TypeScript/Vite passed"
+  },
+  "localNewTab": "net::ERR_BLOCKED_BY_CLIENT; no network filter bypass attempted",
+  "publicAfter": "pending"
+}

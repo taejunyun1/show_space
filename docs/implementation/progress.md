@@ -1237,3 +1237,7 @@ Cloudflare `356b68f2-75ad-4384-972c-505ccb2faf27` 배포 완료, 공개 entry `/
 - 배포 진행 중. 실계정/Library 동기화·실제 SketchUp/대형 모델/모바일 GPU·협업/영상 등 전체 목표는 미완료. 상세: 2026-10-07-normal-maps.md, 증거: ../validation/2026-10-07-normal-artifacts.json.
 
 Cloudflare `98126800-7c3b-4dc1-a449-cbe9abfd0118` 배포, 공개 entry `/assets/index-DBWUEWWG.js`와 실제 노멀 맵/OpenGL·DirectX 메뉴·콘솔 경고/오류 없음 확인. 기존 탭은 이전 HTML을 유지했으나 서버 응답과 새 탭은 최신 번들을 반환했다. 공개 프로젝트의 배치/Undo는 변경하지 않았다. keep-vars로 기존 설정/D1/R2 바인딩 보존. 전체 목표는 진행 중이다.
+
+## 2026-10-07 — 작품 정보 중복 폼 수정
+- 실제 공개 웹의 작품1→작품2→벽 선택에서 정보 폼 수 1→2→1을 재현했다. 정보/재질 형제 컴포넌트의 같은 React key를 구분해 오래된 폼이 남는 원인을 제거한다. 프로젝트 데이터/치수/저장 구조는 유지한다.
+- 관련 테스트 11개 및 빌드 통과. 로컬 새 탭은 브라우저 차단으로 UI 검증하지 못했고 공개 배포 후 반복 전환 검증을 진행한다. 상세: 2026-10-07-inspector-reconciliation.md.
