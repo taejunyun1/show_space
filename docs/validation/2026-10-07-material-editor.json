@@ -60,5 +60,12 @@
     "Manual normal-map support and normal strength",
     "Account library synchronization and real authentication acceptance",
     "Other source document 2 extensions and full-scope acceptance"
-  ]
+  ],
+  "deployment": {
+    "versionId": "73b6fa26-e6b7-417e-bfb7-69d8cbcdf3ca",
+    "entry": "/assets/index-DfUkWKWP.js",
+    "nativeBasicAndAdvancedOpened": true,
+    "consoleWarningsErrors": [],
+    "productionProjectChanges": false
+  }
 }
