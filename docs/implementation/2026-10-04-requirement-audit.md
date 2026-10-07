@@ -47,7 +47,7 @@
 | 6–13 Plan·Recognition·Review·공간·벽·가벽·바닥·문 | 기본 업로드·분석·직접 벽 편집; 문/설비는 후보로 제한 | `ImportDialog`, `PlanImportDialog`, `PlanView`, `floor`, `openings`; 계단/문 직접 편집 확장은 보류 |
 | 14–18 Library·등록·설치형식·프레임·모델 | 로컬 Library 및 이미지/3D 작품 구현 | `artworkLibrary`, `ArtworkInformationEditor`, `FrameEditor`, `ModelArtworks3D`; 계정 항목 저장·가져오기·연결 갱신·충돌 보존 구현; 운영 인증과 두 실제 기기 검증은 남음 |
 | 19 Photo to 3D | 유료 후속 | 생성 API/결제 미구현 |
-| 20–26 배치·Snap·높이·다중·시리즈·Elevation·치수 | 핵심 구현 | 그룹/정렬/같은 면 간격/측정; 별도 Series 상품 구조까지 완료로 집계하지 않음 |
+| 20–26 배치·Snap·높이·다중·시리즈·Elevation·치수 | 핵심 및 §24 시리즈 자동 배열 도구 구현 | 그룹/정렬/측정과 작품 선택·순서·수량·간격·벽/면·미배치 일괄 설치·미리보기. 기존 Artwork·그룹/Scene 사용; 별도 Series 상품 컬렉션은 포함하지 않으며 새 도구의 실브라우저 인수는 보류 |
 | 27–28 재질 Library·편집, 30 기준 크기 | 로컬 재질 Library·분류·검색·저장/적용·보관·백업 및 실제 크기 Texture 구현 | `materialLibrary`, `MaterialLibraryDialog`, `materials`, `MaterialEditor`, `TextureEditor`; Basic/Advanced 편집 분리와 마감·투명 표현 구현; 수동 Normal map/Strength·독립 반복·공유/출력/백업 보존 구현; 계정 항목 저장·가져오기·보관/복구 구현; 운영 인증 및 완전 자동 동기화는 남음 |
 | 29 Material Capture | 후속 유료 생성 | 원본 사진 반복 텍스처 적용은 구현, 생성/왜곡보정/PBR 맵 추정은 미구현 |
 | 31–36 Light·Spot·Target·Kelvin·Outdoor·Sun | 기본 조명·야외 구현 | `lighting`, `outdoor`, `Lighting3D` |
@@ -127,3 +127,5 @@
 2026-10-07 공유 전송 갱신: [이미지 스트림 제한](2026-10-07-share-image-stream.md)에서 Content-Length 없는/과소 신고 이미지의 전체 버퍼링을 제거했다. 실제 Request/ReadableStream 회귀로 제한 초과 시 조기 취소·413·미저장과 정확한 제한 크기 원본 저장, 전송 실패 시 기존 이미지 보존을 확인했다. 전체 1,010 통과. 실제 운영 수신 메모리·브라우저·계정 로그인·배포와 원문 전체 인수는 미완료다.
 
 2026-10-07 공유 전송 후속: 별도 로컬 Wrangler HTTP·R2와 합성 A/B·기존 키에서 초과 스트림 413/미업로드 발행 409, 정확한 제한 크기 저장·발행·동일 바이트 조회를 확인했다. 테스트 공유 3개를 회수하고 스냅샷/이미지 410을 확인한 뒤 Worker를 종료했다. 실제 운영/로그인/브라우저 및 원문 전체 인수로 확대하지 않는다.
+
+2026-10-07 사용자 결정 및 시리즈 갱신: 인증 설정·브라우저 연결 대기를 별도로 보류하고 [시리즈 자동 배열](2026-10-07-artwork-series.md)을 추가했다. 기존/미배치 작품의 순서·수량·간격·A/B면·가로/세로·그룹과 원자적 설치를 연결했다. 7점·250mm, 외곽/회전, 그룹 보호, 단일 Undo/Redo, Scene·JSON·ZIP·공유 데이터 보존 및 정적 UI 제어를 검증했다. 전체 1,021 통과/선택 7 제외. 실제 새 UI 조작·운영 배포·전체 인수는 계속 미완료이며 후속 Archive·Comment·IES/Lux·AI 범위는 계획에 남는다.

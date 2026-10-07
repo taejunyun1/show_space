@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-07",
+  "scope": "product-plan 1.1 and document 2 section 24 series auto arrangement",
+  "syntheticSevenWorks": {"count": 7, "initialUnplaced": 3, "wallWidthMm": 12000, "gapMm": 250, "outerWidthMm": 4300, "outerHeightMm": 600, "firstAlongMm": 4050, "lastAlongMm": 7950},
+  "orderedCountAndBackFaceVerified": true,
+  "rotatedFrameMatVerticalGapsVerified": true,
+  "unselectedWorksPreserved": true,
+  "existingOuterOverlapReported": true,
+  "invalidEditsAtomic": true,
+  "singleUndoRedoAndNoOpVerified": true,
+  "staleProjectAndRedoPreservationVerified": true,
+  "sceneJsonZipPublicSnapshotDataVerified": true,
+  "zipImageDecode": "explicit test double",
+  "reactControlsUnitErrorMarkupVerified": true,
+  "newTestsPassed": 11,
+  "fullTestsPassed": 1021,
+  "optionalTestsSkipped": 7,
+  "typescriptBuildPassed": true,
+  "viteBuildPassed": true,
+  "nativeBrowserVerified": false,
+  "productionDeployed": false,
+  "fullAcceptanceComplete": false
+}

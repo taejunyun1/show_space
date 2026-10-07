@@ -3,6 +3,7 @@ import {appendSceneSnapshot} from '../domain/sceneSnapshot';
 import type {SceneThumbnail} from '../domain/types';
 import {installArtworkTemplate,type ArtworkTemplate} from '../domain/artworkLibrary';
 import {layoutArtworks,type ArtworkLayout} from '../domain/artworkLayout';
+import {applyArtworkSeries,type ArtworkSeriesOptions} from '../domain/artworkSeries';
 import {updateNote,preserveCurrentNotes,validateProjectNotes,type NoteTarget,type NoteDetails} from '../domain/notes';
 import {addModelArtwork as addModelArtworkToProject,patchModelArtwork as updateModelArtwork,modelArtworkMembers,groupModelArtworks,transformModelArtworks,modelArtworkBounds} from '../domain/modelArtworks';
 import {parseOutdoor,DEFAULT_OUTDOOR,type OutdoorSettings} from '../domain/outdoor';
@@ -124,6 +125,7 @@ interface EditorState {
   deleteSelected(): void
   spaceSelected(gap: number): void
   layoutSelectedArtworks(layout:ArtworkLayout):void
+  arrangeArtworkSeries(options:ArtworkSeriesOptions,expectedProjectId:string):boolean
   undo(): void
   redo(): void
   loadProject(project: Project, alreadySaved?:boolean): void
@@ -445,6 +447,14 @@ export const useEditor = create<EditorState>((set, get) => {
       set({selected:[],...(selections.some(s=>s.type==='modelArtwork')?{measurementDraft:null}:{})})
     }),
     spaceSelected: (gap) => get().layoutSelectedArtworks({kind:'spacing',axis:'horizontal',gapMm:gap}),
+    arrangeArtworkSeries:(options,expectedProjectId)=>{
+      try{
+        const {project}=get();if(project.id!==expectedProjectId)throw new Error('프로젝트가 바뀌어 시리즈 배열을 취소했습니다.');
+        const next=applyArtworkSeries(project,options);if(next!==project)get().commit(next);
+        set({selected:options.artworkIds.slice(0,options.count).map(id=>({type:'artwork',id})),activeWallId:options.wallId,view:'elevation',activeTool:'select',message:next===project?'이미 같은 시리즈 배치입니다.':`${options.count}점의 시리즈를 배열했습니다.`});
+        return true;
+      }catch(error){set({message:errorMessage(error)});return false;}
+    },
     layoutSelectedArtworks: (layout) => attempt(() => {
       const {project,selected}=get();
       if(selected.some(item=>item.type!=='artwork'))throw new Error('같은 벽면의 이미지 작품만 선택해 주세요.');
