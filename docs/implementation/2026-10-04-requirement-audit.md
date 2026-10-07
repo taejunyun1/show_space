@@ -153,3 +153,5 @@
 2026-10-07 표면 캡처 갱신: [texture/normal 준비·실패 검사](2026-10-07-capture-surface-readiness.md)를 표시 벽·존재하는 모든 바닥 surface·이미지 작품 normal에 연결했다. 현재 주소/반복 크기/노멀 강도와 실제 Material map을 확인하며, 없는 바닥·숨김/삭제 벽과 영상의 미사용 슬롯은 제외한다. 실제 Three TextureLoader/native PNG decoder의 정상 normal RGBA·NoColorSpace 및 손상 본문 오류를 확인했다. 새 회귀 8개, 전체 1,133 통과/선택 10 제외와 빌드 통과. 실제 R3F commit/WebGL·전체 PNG/PDF 픽셀과 원문 24단계·사용자 모델·기기/계정·배포 인수는 미완료 상태를 유지한다.
 
 2026-10-07 누적 공개 배포: 소스 `8fb69dc`, Worker `e31372f0-c30b-4ea6-bc36-b8ca3803dc27`를 100% 활성화하고 운영 D1 0004/0005 추가 schema를 적용했다. [배포 기록](../deployment/cloudflare.md)의 공개 HTML/JS/MJS/CSS 64개 해시 및 익명 API 거부 6개를 확인했다. 인증은 `enabled:false`를 유지한다. 앞선 구현의 운영 배포/추가 schema 대기는 이 기록으로 갱신하지만 실제 로그인·협업 UI·브라우저/GPU 픽셀·24단계·실기기/사용자 인수는 완료로 바꾸지 않는다.
+
+2026-10-07 협업 화면 전환 갱신: [댓글 context 격리](2026-10-07-comment-context-isolation.md)에서 계정/공개 범위를 누락한 조건식 우선순위 오류를 수정했다. 실제 React createRoot/StrictMode·Zustand·ReviewClient를 jsdom에서 실행해 로그인/로그아웃·A/B 전환, 이전 목록/입력/권한 제거, 지연 세션/저장/변경/회수 응답 차단 및 같은 계정 충돌 초안 유지를 검증했다. 새 회귀 8개, 전체 1,141 통과/선택 10 제외와 빌드 통과. 이번 변경은 재배포하지 않으며 실제 인증·브라우저/GPU·기기·24단계 인수는 별도로 남긴다.
