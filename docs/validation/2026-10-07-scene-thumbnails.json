@@ -1,6 +1,6 @@
 {
   "date": "2026-10-07",
-  "status": "native-verified-awaiting-deployment",
+  "status": "native-and-public-verified-deployed",
   "tests": {
     "passed": 889,
     "skipped": 2,
@@ -35,12 +35,25 @@
     "async-frame-encoding-cancellation"
   ],
   "deployment": {
-    "thisChangeDeployed": false,
-    "priorVersion": "e76f28e9-6ca3-4571-b9c4-33825adfcc79"
+    "thisChangeDeployed": true,
+    "priorVersion": "e76f28e9-6ca3-4571-b9c4-33825adfcc79",
+    "version": "356b68f2-75ad-4384-972c-505ccb2faf27",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entry": "/assets/index-BvJ_8NK6.js",
+    "css": "/assets/index-Byme6gLZ.css",
+    "sourceCommit": "6348ca5",
+    "keepVars": true,
+    "bindingsPreserved": [
+      "PROJECTS_DB",
+      "SHARES",
+      "PRIVATE_PROJECTS",
+      "ASSETS"
+    ]
   },
   "remaining": [
-    "deploy-and-public-verify",
-    "full-product-acceptance"
+    "full-product-acceptance",
+    "real-account-and-device-cloud-roundtrip",
+    "actual-mobile-device-validation"
   ],
   "previousNativeAttempt": {
     "attemptedOrigins": [
@@ -170,6 +183,28 @@
     "2026-10-07-scene-thumbnail-elevation.jpg",
     "2026-10-07-scene-thumbnail-local.png",
     "2026-10-07-scene-thumbnail-times.png",
-    "2026-10-07-scene-thumbnail-mobile.png"
-  ]
+    "2026-10-07-scene-thumbnail-mobile.png",
+    "2026-10-07-scene-thumbnail-public.png",
+    "2026-10-07-scene-thumbnail-public-mobile.png"
+  ],
+  "public": {
+    "generated3dScene": true,
+    "imageDecoded": true,
+    "width": 320,
+    "height": 200,
+    "mime": "image/jpeg",
+    "mobileViewport": {
+      "width": 390,
+      "height": 844,
+      "popoverX": 18,
+      "popoverWidth": 360,
+      "position": "fixed"
+    },
+    "consoleWarningsErrors": [],
+    "originalFiveArtworksRetained": true,
+    "originalNoScenesRestoredByUndo": true,
+    "cloudProjectOrShareWrite": false,
+    "viewportReset": true,
+    "tabRestoredAsDeliverable": true
+  }
 }

@@ -54,7 +54,7 @@
 | 37 시간 비교 | 네 시간대 비교 UI·Time Scene 저장 구현 | `timeComparison`, `TimeComparisonDialog`; 현재/저장 배치의 같은 시점 비교, 날짜/시간/DST 검증, 저장·재접속·Undo 확인. 실제 기기/대형 장면 검증은 남음 |
 | 38–42 Note·Inspector | 핵심 구현 | 비공개 설치 메모/체크 항목/참고 이미지/벽·작품 검사 패널 |
 | 43–45 Navigation·Eye·Human Scale | 기본 시점/손 이동 중심; 사용자 결정으로 범위 축소 | 원문의 모든 Walk/인체 참조 형상 요구를 구현했다고 집계하지 않음 |
-| 46 Scene | 구조·배치·시점 및 자동 미리보기 저장 구현 | 실제 3D·평면·벽면·네 시간대 JPEG, Undo/Redo, 재접속 및 ZIP 복원 해시 일치 확인; 배포 검증 진행 |
+| 46 Scene | 구조·배치·시점 및 자동 미리보기 저장 구현 | 실제 3D·평면·벽면·네 시간대 JPEG, Undo/Redo, 재접속 및 ZIP 복원 해시 일치 확인; Cloudflare 배포/공개 3D·390px 확인 |
 | 47 Presentation Mode | 로컬 별도 발표 화면 · 전체 화면 · Scene 탐색 · 작품 정보 · 읽기 전용 Orbit | 2026-10-07 native ANCA/GLB/모바일 검증, Walk는 사용자 축소 결정으로 제외. 대형 장면/실기기는 남음 |
 | 48–53 Screenshot·PDF·Share·발표 공유·선택 정보·Export | 기본 구현과 개별 검증 존재 | `CaptureDialog`, `PdfDialog`, `SharedViewer`, `sharePresentation`, `exportScene` |
 | 54 SketchUp Export | GLB 교환 경로, SKP 전용 내보내기는 후속 | 실제 SketchUp 재수입 모델 검증 남음 |
@@ -96,3 +96,5 @@
 2026-10-07 갱신: [Scene 자동 미리보기](2026-10-07-scene-thumbnails.md)의 저장·복원·취소·공개 제외 테스트를 통과했다. 실제 로컬 UI 입력이 화면 변화로 이어지지 않아 이미지 생성과 재접속 인수 및 이 변경의 배포는 대기한다. §46 전체 완료로 판정하지 않는다.
 
 2026-10-07 후속 갱신: 브라우저 검증 연결을 새로 잡은 뒤 §46의 실제 Scene 미리보기·Undo/Redo·새로고침·시간대 네 Scene·ZIP 다운로드/복원 이미지 해시 일치와 390px 목록을 확인했다. 모바일 가림 및 3D 치수 레이어를 수정했다. 앞선 미검증 기록은 이 후속 결과로 갱신한다. 전체 제품 목표의 실계정·실기기·사용자 인수 등은 계속 남는다.
+
+2026-10-07 공개 갱신: §46 자동 미리보기는 Cloudflare `356b68f2-75ad-4384-972c-505ccb2faf27`로 배포하고 공개 HTTPS 실제 JPEG 생성/모바일 목록/콘솔 오류 없음 확인까지 마쳤다. 전체 제품 목표 완료로 확대하지 않는다.
