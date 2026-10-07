@@ -1,3 +1,4 @@
+import {parseProjectionScalars,MAX_PROJECTORS,type ProjectionScalars} from './projection';
 import {parsePublicVideo,PUBLIC_VIDEO_ASSETS_MAX,type PublicVideoArtwork} from './publicVideo';
 import {parseLengthUnit, type LengthUnit} from './lengthUnits';
 import {parseFrameSettings,type FrameSettings} from './artworkPresentation';
@@ -17,7 +18,7 @@ import type {Point,Project,WorldPoint,CameraView,ModelArtwork,ReferenceModel} fr
 export type PublicSurfaceMaterial=Omit<SurfaceMaterial,'texture'|'normal'>&{texture?:{imageId:string;widthMm:number;heightMm:number};normal?:{imageId:string;widthMm:number;heightMm:number;strength:number}};
 export type PublicModelArtwork=ArtworkInformation&Pick<ModelArtwork,'id'|'name'|'artist'|'year'|'kind'|'widthMm'|'heightMm'|'depthMm'|'position'|'rotation'>&{modelId:string;sizeMm:[number,number,number];sourceOffsetM:[number,number,number]};
 export type PublicReferenceModel=Pick<ReferenceModel,'sizeMm'|'sourceOffsetM'|'positionMm'|'rotationDeg'|'scale'>&{modelId:string};
-export type PublicLight=Pick<ExhibitionLight,'id'|'name'|'kind'|'position'|'target'|'intensity'|'kelvin'|'beamDeg'|'penumbra'|'distanceMm'|'widthMm'|'heightMm'|'shadow'|'visible'>;
+export type PublicLight=Pick<ExhibitionLight,'id'|'name'|'kind'|'position'|'target'|'intensity'|'kelvin'|'beamDeg'|'penumbra'|'distanceMm'|'widthMm'|'heightMm'|'shadow'|'visible'>&{projection?:ProjectionScalars&{imageId:string}};
 function publicLight(l:ExhibitionLight):PublicLight{return {id:l.id,name:l.name,kind:l.kind,position:{...l.position},target:{...l.target},intensity:l.intensity,kelvin:l.kelvin,beamDeg:l.beamDeg,penumbra:l.penumbra,distanceMm:l.distanceMm,widthMm:l.widthMm,heightMm:l.heightMm,shadow:l.shadow,visible:l.visible};}
 export interface PublicSceneSnapshot {
   displayUnit?:LengthUnit;
@@ -74,7 +75,7 @@ export function createReadonlyLayout(project:Project,options:PublicShareOptions)
   const snapshot:PublicShareSnapshot={
     ...(project.displayUnit?{displayUnit:project.displayUnit}:{}),
     ...(options.includeArtworkDetails?{includeArtworkDetails:true}:{}),
-    ...(referenceModel?{referenceModel}:{}),...(modelArtworks.length?{modelArtworks}:{}),schemaVersion:1,...(project.outdoor?{outdoor:parseOutdoor(project.outdoor)}:{}),name:project.name,venue:project.venue,...(project.lights!==undefined?{lights:project.lights.filter(l=>l.visible).map(publicLight)}:{}),...(project.lighting?{lighting:project.lighting}:{}),floorColor:project.floorColor,...(project.floorMaterial?{floorMaterial:material(project.floorMaterial)}:{}),...(project.importedFloor?{importedFloor:structuredClone(project.importedFloor)}:{}),
+    ...(referenceModel?{referenceModel}:{}),...(modelArtworks.length?{modelArtworks}:{}),schemaVersion:1,...(project.outdoor?{outdoor:parseOutdoor(project.outdoor)}:{}),name:project.name,venue:project.venue,...(project.lights!==undefined?{lights:project.lights.filter(l=>l.visible).map(l=>({...publicLight(l),...(l.projection?{projection:{...parseProjectionScalars(l.projection),imageId:imageId(l.projection.imageUrl)}}:{})}))}:{}),...(project.lighting?{lighting:project.lighting}:{}),floorColor:project.floorColor,...(project.floorMaterial?{floorMaterial:material(project.floorMaterial)}:{}),...(project.importedFloor?{importedFloor:structuredClone(project.importedFloor)}:{}),
     walls:visibleWalls.map(wall=>({id:wall.id,name:wall.name,start:{...wall.start},end:{...wall.end},heightMm:wall.heightMm,thicknessMm:wall.thicknessMm,color:wall.color,...(wall.material?{material:material(wall.material)}:{}),...(wall.role?{role:wall.role}:{})})),
     artworks:artworks.map((art,index)=>({...(art.video?{video:parsePublicVideo({...art.video,dataUrl:undefined,videoId:options.videoAssetIds?.get(art.id)})}:{}),id:art.id,name:art.name,artist:art.artist,...publicArtworkInformation(art,!!options.includeArtworkDetails),wallId:art.wallId,wallSide:art.wallSide??'front',widthMm:art.widthMm,heightMm:art.heightMm,depthMm:art.depthMm,alongMm:art.alongMm,centerHeightMm:art.centerHeightMm,...(art.rotationDeg===undefined?{}:{rotationDeg:art.rotationDeg}),frame:art.frame,...(art.frameSettings?{frameSettings:parseFrameSettings(art.frameSettings)}:{}),...(art.material?{material:material(art.material)}:{}),imageId:String(index),...(artPanel(art.imageUrl)!==null?{spritePanel:artPanel(art.imageUrl)!}:{})})),
     openings:openingSegments({walls:project.walls,openings:(project.openings??[]).filter(opening=>[opening.start,opening.end].every(anchor=>!anchor.wallId||wallIds.has(anchor.wallId)))}).map(opening=>({id:opening.id,kind:opening.kind,start:{...opening.start},end:{...opening.end}})),
@@ -104,7 +105,7 @@ const id=(value:unknown)=>{const v=str(value,100);if(!/^[a-zA-Z0-9_.:-]+$/.test(
 function publicLayouts(snapshot:PublicShareSnapshot):PublicSceneSnapshot[]{return [snapshot,...(snapshot.scenes??[]).map(scene=>scene.snapshot)];}
 export function publicModelIds(snapshot:PublicShareSnapshot){return [...new Set(publicLayouts(snapshot).flatMap(s=>[...(s.modelArtworks?.map(a=>a.modelId)??[]),...(s.referenceModel?[s.referenceModel.modelId]:[])]))];}
 export function publicVideoIds(snapshot:PublicShareSnapshot){return [...new Set(publicLayouts(snapshot).flatMap(s=>s.artworks.flatMap(a=>a.video?[a.video.videoId]:[])))];}
-export function publicImageIds(snapshot:PublicShareSnapshot){return [...new Set(publicLayouts(snapshot).flatMap(s=>[...s.artworks.map(a=>a.imageId),...[s.floorMaterial,...s.walls.map(w=>w.material),...s.artworks.map(a=>a.material)].flatMap(m=>[m?.texture?.imageId,m?.normal?.imageId])]).filter((id):id is string=>id!==undefined))];}
+export function publicImageIds(snapshot:PublicShareSnapshot){return [...new Set(publicLayouts(snapshot).flatMap(s=>[...s.artworks.map(a=>a.imageId),...(s.lights??[]).flatMap(l=>l.projection?[l.projection.imageId]:[]),...[s.floorMaterial,...s.walls.map(w=>w.material),...s.artworks.map(a=>a.material)].flatMap(m=>[m?.texture?.imageId,m?.normal?.imageId])]).filter((id):id is string=>id!==undefined))];}
 function publicMaterial(input:unknown):PublicSurfaceMaterial{
  const raw=record(input),{texture:_,normal:__,...scalar}=parseSurfaceMaterial({...raw,texture:undefined,normal:undefined});
  const image=(value:unknown)=>{const texture=record(value),imageId=str(texture.imageId,4);if(!/^(0|[1-9][0-9]{0,3})$/.test(imageId))throw new Error('공유 텍스처 ID가 올바르지 않습니다.');return {imageId,...textureSize(texture)};};
@@ -130,7 +131,14 @@ function parsePublicScene(input:unknown,includeDetails=false):PublicSceneSnapsho
   const importedFloor=raw.importedFloor===undefined?undefined:list(raw.importedFloor,40).map(loop=>list(loop,1000).map(point));
   if(importedFloor)validateImportedFloor(importedFloor);
   const camera=raw.camera===undefined?undefined:(()=>{const c=record(raw.camera);const vec=(value:unknown):[number,number,number]=>{if(!Array.isArray(value)||value.length!==3)throw new Error('공유 카메라가 올바르지 않습니다.');return [num(value[0],-1e5,1e5),num(value[1],-1e5,1e5),num(value[2],-1e5,1e5)];};if(c.projection!==undefined&&!['orthographic','perspective'].includes(String(c.projection)))throw new Error('공유 투영 방식이 올바르지 않습니다.');return {position:vec(c.position),target:vec(c.target),zoom:num(c.zoom,0.001,10000),...(c.projection==='perspective'?{projection:'perspective' as const,fov:num(c.fov??50,20,100)}:{})};})();
-  const lights=raw.lights===undefined?undefined:parseLights(list(raw.lights,20).map(value=>({...record(value),locked:false,note:'',noteDetails:undefined})),entityIds).filter(l=>l.visible).map(publicLight);
+  const rawLights=raw.lights===undefined?undefined:list(raw.lights,20).map(record);
+  let projectors=0;
+  const lights=rawLights===undefined?undefined:parseLights(rawLights.map(value=>({...value,projection:undefined,locked:false,note:'',noteDetails:undefined})),entityIds).map((light,index)=>{
+   const value=rawLights[index].projection;if(value===undefined)return publicLight(light);
+   if(light.kind!=='spot'||Math.hypot(light.position.x-light.target.x,light.position.y-light.target.y,light.position.z-light.target.z)<100||++projectors>MAX_PROJECTORS)throw new Error('공유 프로젝터 종류·거리·개수가 올바르지 않습니다.');
+   const p=record(value),imageId=str(p.imageId,4);if(!/^(0|[1-9][0-9]{0,3})$/.test(imageId))throw new Error('공유 프로젝터 이미지 ID가 올바르지 않습니다.');
+   return {...publicLight(light),projection:{...parseProjectionScalars(p),imageId}};
+  }).filter(l=>l.visible);
   const lighting=raw.lighting===undefined?undefined:parseLighting(raw.lighting);
   return {...(referenceModel?{referenceModel}:{}),...(modelArtworks?{modelArtworks}:{}),...(raw.outdoor===undefined?{}:{outdoor:parseOutdoor(raw.outdoor)}),...(lights?{lights}:{}),...(lighting?{lighting}:{}),schemaVersion:1,...(raw.displayUnit===undefined?{}:{displayUnit:parseLengthUnit(raw.displayUnit)}),name:str(raw.name),venue:str(raw.venue),floorColor:color(raw.floorColor),...(raw.floorMaterial===undefined?{}:{floorMaterial:publicMaterial(raw.floorMaterial)}),walls,artworks,openings,zones,...(importedFloor?{importedFloor}:{}),...(dimensions?{dimensions}:{}),...(camera?{camera}:{})};
 }

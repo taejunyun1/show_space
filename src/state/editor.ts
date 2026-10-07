@@ -82,7 +82,7 @@ interface EditorState {
   setCaptureMode(clean:boolean,includeDimensions?:boolean):void
   notify(message: string | null): void
   commit(next: Project): void
-  addLight(kind:'spot'|'area'):void
+  addLight(kind:'spot'|'area'|'projector'):void
   patchLight(id:string,patch:Partial<ExhibitionLight>):void
   patchLighting(patch:LightingSettings):void
   outdoorGesture:{base:Project}|null

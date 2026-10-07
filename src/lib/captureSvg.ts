@@ -47,6 +47,15 @@ async function replaceArtworkImages(clone:SVGSVGElement,pixelsPerUnit:number){
   image.setAttribute('href',canvas.toDataURL('image/png'));image.setAttribute('preserveAspectRatio','none');
   item.replaceWith(image);
  }
+ // SVG image requests are disabled when an SVG is rasterised as an Image.
+ // Embed fitted poster pixels while retaining the nested SVG's meet/slice clip.
+ for(const item of [...clone.querySelectorAll<SVGImageElement>('image[data-video-poster]')]){
+  const url=item.getAttribute('href');if(!url)throw new Error('영상 포스터가 없습니다.');
+  const source=await loadImage(url),canvas=document.createElement('canvas'),scale=Math.min(1,2048/Math.max(source.naturalWidth,source.naturalHeight));
+  canvas.width=Math.max(1,Math.round(source.naturalWidth*scale));canvas.height=Math.max(1,Math.round(source.naturalHeight*scale));
+  const ctx=canvas.getContext('2d');if(!ctx)throw new Error('영상 포스터를 만들 수 없습니다.');
+  ctx.drawImage(source,0,0,canvas.width,canvas.height);item.setAttribute('href',canvas.toDataURL('image/png'));
+ }
 }
 
 function inlineStyles(source:SVGSVGElement,clone:SVGSVGElement){

@@ -1,3 +1,4 @@
+import {MAX_PROJECTORS} from './projection';
 import {wallLength} from './wallGeometry';
 import {parseVideoArtwork} from './mediaArtwork';
 import {parseSceneThumbnail} from './sceneThumbnail';
@@ -213,6 +214,7 @@ export function duplicateSelection(project: Project, selection: EntitySelection)
   if (selection.type === 'light') {
     const source=project.lights?.find(l=>l.id===selection.id);if(!source)throw new Error('조명을 찾을 수 없습니다.');
     if((project.lights?.length??0)>=MAX_LIGHTS)throw new Error(`조명은 최대 ${MAX_LIGHTS}개까지 만들 수 있습니다.`);
+    if(source.projection&&(project.lights??[]).filter(l=>l.projection).length>=MAX_PROJECTORS)throw new Error('프로젝터는 최대 2개까지 만들 수 있습니다.');
     const id=uniqueId('light',[...project.walls,...project.artworks,...(project.unplacedArtworks??[]),...(project.lights??[]),...(project.modelArtworks??[])].map(o=>o.id));
     const copy=parseLight({...source,...translatedLight(source,{...source.position,x:source.position.x+400}),id,name:source.name+' 복사본',locked:false});
     return {project:{...project,lights:[...project.lights!,copy]},selection:{type:'light',id}};

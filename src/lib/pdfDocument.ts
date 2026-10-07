@@ -1,3 +1,4 @@
+import {pdfArtworkImageKey} from './videoPoster';
 import {artworkElevationDimensions,installationDimensionLabel} from '../domain/artworkElevationDimensions';
 import {artworkPresentation,frameColors,rotatedArtworkOuterSize} from '../domain/artworkPresentation';
 import {modelArtworkFootprint} from '../domain/modelArtworks';
@@ -67,7 +68,7 @@ function elevation(page:PDFPage,font:PDFFont,section:PdfSection,images:Map<strin
  for(const art of artworks){
   const pose=elevationArtPlacement(art,wall,side),angle=pose.angle*Math.PI/180,cx=fit.x(pose.x),cy=fit.y(pose.y),width=art.widthMm*fit.scale,h=art.heightMm*fit.scale;
   const lower=(w:number,h:number)=>({x:cx-w/2*Math.cos(angle)+h/2*Math.sin(angle),y:cy-w/2*Math.sin(angle)-h/2*Math.cos(angle)});
-  const presentation=artworkPresentation(art),outerW=presentation.widthMm*fit.scale,outerH=presentation.heightMm*fit.scale,frame=lower(outerW,outerH),image=images.get(art.imageUrl);if(!image)throw new Error('벽면도 작품 이미지를 준비하지 못했습니다.');
+  const presentation=artworkPresentation(art),outerW=presentation.widthMm*fit.scale,outerH=presentation.heightMm*fit.scale,frame=lower(outerW,outerH),image=images.get(pdfArtworkImageKey(art));if(!image)throw new Error('벽면도 작품 이미지를 준비하지 못했습니다.');
   page.drawRectangle({...frame,width:outerW,height:outerH,rotate:degrees(pose.angle),color:color(frameColors[art.frame])});
   if(presentation.framed&&presentation.settings.matWidthMm>0){const iw=presentation.innerWidthMm*fit.scale,ih=presentation.innerHeightMm*fit.scale;page.drawRectangle({...lower(iw,ih),width:iw,height:ih,rotate:degrees(pose.angle),color:color(presentation.settings.matColor)});}
   page.drawImage(image,{...lower(width,h),width,height:h,rotate:degrees(pose.angle)});
@@ -128,7 +129,7 @@ function detail(doc:PDFDocument,font:PDFFont,section:PdfSection,images:Map<strin
  const heading=section.title??`작품 상세 · ${art.name}`;let page=header(doc,font,section,heading);
  const box={x:44,y:82,width:480,height:360};
  if(section.artwork){
-  const a=section.artwork,image=images.get(a.imageUrl);if(!image)throw new Error('상세 작품 이미지를 준비하지 못했습니다.');
+  const a=section.artwork,image=images.get(pdfArtworkImageKey(a));if(!image)throw new Error('상세 작품 이미지를 준비하지 못했습니다.');
   const p=artworkPresentation(a),scale=Math.min(box.width/p.widthMm,box.height/p.heightMm),cx=box.x+box.width/2,cy=box.y+box.height/2;
   const rect=(w:number,h:number)=>({x:cx-w*scale/2,y:cy-h*scale/2,width:w*scale,height:h*scale});
   page.drawRectangle({...rect(p.widthMm,p.heightMm),color:color(frameColors[a.frame])});

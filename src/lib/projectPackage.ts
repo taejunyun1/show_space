@@ -19,7 +19,7 @@ function assetSlots(input:unknown):Slot[]{
  const object=(value:unknown):Record<string,unknown>=>{if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('백업 프로젝트 구조가 올바르지 않습니다.');return value as Record<string,unknown>;};
  const list=(value:unknown):unknown[]=>{if(!Array.isArray(value))throw new Error('백업 작품/Scene 목록이 올바르지 않습니다.');return value;};
  const note=(value:unknown)=>{const n=object(value);if(n.noteDetails!==undefined)for(const i of list(object(n.noteDetails).images))slots.push({object:object(i),key:'imageUrl',kind:'image'});};
- const lights=(value:unknown)=>{if(value!==undefined)for(const l of list(value))note(l);};
+ const lights=(value:unknown)=>{if(value!==undefined)for(const l of list(value)){note(l);const light=object(l);if(light.projection!==undefined)slots.push({object:object(light.projection),key:'imageUrl',kind:'image'});}};
  const material=(value:unknown)=>{if(value!==undefined){const m=object(value);for(const key of ['texture','normal'])if(m[key]!==undefined)slots.push({object:object(m[key]),key:'imageUrl',kind:'image'});}};
  const walls=(value:unknown)=>{for(const item of list(value)){const w=object(item);note(w);material(w.material);}};
  const artworks=(value:unknown)=>{for(const item of list(value)){const a=object(item);note(a);slots.push({object:a,key:'imageUrl',kind:'image'});if(a.video!==undefined)slots.push({object:object(a.video),key:'dataUrl',kind:'video'});material(a.material);}};

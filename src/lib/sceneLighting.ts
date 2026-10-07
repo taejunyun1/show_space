@@ -1,10 +1,12 @@
+import type {ProjectionScalars} from '../domain/projection';
+import {projectorRenderKey} from './projectorLighting';
 import {AmbientLight,Color,DirectionalLight,Group,HemisphereLight,Object3D,RectAreaLight,SpotLight,SRGBColorSpace,Vector3} from 'three';
 import {RectAreaLightUniformsLib} from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import {DEFAULT_LIGHTING,kelvinRgb,spotShadowIds,type ExhibitionLight,type LightingSettings} from '../domain/lighting';
 import {outdoorAppearance,type OutdoorSettings} from '../domain/outdoor';
 import {projectSpatialBounds} from '../domain/referenceModel';
 import type {Point} from '../domain/types';
-export type RenderLight=Omit<ExhibitionLight,'locked'|'note'>;
+export type RenderLight=Omit<ExhibitionLight,'locked'|'note'|'projection'>&{projection?:ProjectionScalars&{imageUrl?:string;imageId?:string}};
 export interface LightingSource {lights?:RenderLight[];lighting?:LightingSettings;outdoor?:OutdoorSettings;walls?:Array<{start:Point;end:Point;heightMm:number;thicknessMm?:number}>;artworks?:Array<{widthMm:number;heightMm:number;depthMm:number;centerHeightMm:number}>;importedFloor?:Point[][];referenceModel?:Parameters<typeof projectSpatialBounds>[0]['referenceModel'];modelArtworks?:Parameters<typeof projectSpatialBounds>[0]['modelArtworks']}
 let initialized=false;
 export function createLightObject(kind:RenderLight['kind']){
@@ -19,6 +21,7 @@ export function updateLightObject(group:Group,data:RenderLight,castShadow:boolea
  if(lamp instanceof SpotLight){
   const target=lamp.target;target.position.set(data.target.x/1000,data.target.y/1000,data.target.z/1000);target.updateMatrixWorld(true);
   if(!castShadow||lamp.shadow.mapSize.x!==shadowSize){lamp.shadow.dispose();lamp.shadow.map=null;lamp.shadow.mapPass=null;}
+  lamp.shadow.focus=1;lamp.shadow.aspect=1;lamp.shadow.camera.up.set(0,1,0);lamp.map=null;
   lamp.angle=data.beamDeg*Math.PI/360;lamp.penumbra=data.penumbra;lamp.distance=data.distanceMm/1000;lamp.decay=2;lamp.castShadow=castShadow;
   lamp.shadow.mapSize.set(shadowSize,shadowSize);lamp.shadow.bias=-.0001;lamp.shadow.normalBias=.015;lamp.shadow.camera.near=.02;lamp.shadow.camera.far=Math.max(.03,lamp.distance||Math.max(20,lamp.position.distanceTo(target.position)*4));lamp.shadow.needsUpdate=true;
  }else{lamp.width=data.widthMm/1000;lamp.height=data.heightMm/1000;lamp.lookAt(data.target.x/1000,data.target.y/1000,data.target.z/1000);}
@@ -39,14 +42,14 @@ export function createOutdoorLighting(source:LightingSource,base=true,shadowSize
  sun.shadow.mapSize.set(shadowSize,shadowSize);sun.shadow.bias=-.0001;sun.shadow.normalBias=.02;Object.assign(sun.shadow.camera,{left:-radius,right:radius,top:radius,bottom:-radius,near:.02,far:radius*4});sun.shadow.camera.updateProjectionMatrix();
  group.add(sun,target);group.updateMatrixWorld(true);return group;
 }
-export function sceneSpotShadowIds(source:LightingSource,budget=4){const outdoor=outdoorAppearance(source.outdoor);return spotShadowIds(source.lights??[]).slice(0,Math.max(0,Math.min(4,budget)-(outdoor&&outdoor.sunIntensity>0&&source.outdoor?.shadow?1:0)));}
+export function sceneSpotShadowIds(source:LightingSource,budget=4){const outdoor=outdoorAppearance(source.outdoor),sun=outdoor&&outdoor.sunIntensity>0&&source.outdoor?.shadow?1:0,projectors=(source.lights??[]).filter(l=>l.visible&&l.projection&&l.projection.brightnessLumens>0).length;return spotShadowIds(source.lights??[]).slice(0,Math.max(0,Math.min(4,Math.max(budget,projectors+sun))-sun));}
 /** DOM and R3F commit independently; export must wait for the actual preview rig. */
 export function lightingProfileReady(scene:Object3D,source:LightingSource,profile:{shadowBudget:number;spotShadowSize:number;baseShadowSize:number}){
  const base=scene.getObjectByName(source.outdoor?.mode==='outdoor'?'outdoor-lighting':'base-lighting');if(!base)return false;
  if(source.outdoor?.mode==='outdoor'){const appearance=outdoorAppearance(source.outdoor)!,sun=base.getObjectByName('outdoor-sun');if((appearance.sunIntensity>0)!==(sun instanceof DirectionalLight))return false;if(sun instanceof DirectionalLight&&(sun.intensity!==appearance.sunIntensity||sun.castShadow!==source.outdoor.shadow))return false;}
  let baseReady=true;base.traverse(o=>{if(o instanceof DirectionalLight&&o.shadow.mapSize.x!==profile.baseShadowSize)baseReady=false;});if(!baseReady)return false;
  const shadowIds=new Set(sceneSpotShadowIds(source,profile.shadowBudget));
- return (source.lights??[]).filter(l=>l.visible).every(l=>{const lamp=scene.getObjectByName(`light-${l.id}`)?.getObjectByName('emitter');return l.kind==='area'?lamp instanceof RectAreaLight:lamp instanceof SpotLight&&lamp.castShadow===shadowIds.has(l.id)&&lamp.shadow.mapSize.x===profile.spotShadowSize;});
+ return (source.lights??[]).filter(l=>l.visible).every(l=>{const object=scene.getObjectByName(`light-${l.id}`),lamp=object?.getObjectByName('emitter');return l.kind==='area'?lamp instanceof RectAreaLight:lamp instanceof SpotLight&&lamp.castShadow===shadowIds.has(l.id)&&lamp.shadow.mapSize.x===profile.spotShadowSize&&(!l.projection||!!lamp.map&&object?.userData.projectorReady===true&&object.userData.projectorRenderKey===projectorRenderKey(l));});
 }
 export function createSceneLighting(source:LightingSource,{base=true,area=true}={}){
  const group=new Group();group.name='gonggan-lighting';const visible=(source.lights??[]).filter(l=>l.visible),shadows=new Set(sceneSpotShadowIds(source));
@@ -58,7 +61,7 @@ export function createSceneLighting(source:LightingSource,{base=true,area=true}=
 export function disposeLighting(object:Object3D){object.traverse(o=>{if(o instanceof SpotLight||o instanceof DirectionalLight)o.shadow.dispose();});}
 /** glTF stores local -Z direction rather than Three's independent target object. */
 export function createExportLighting(source:LightingSource){
- const rig=createSceneLighting(source,{base:false,area:false});rig.updateMatrixWorld(true);
+ const rig=createSceneLighting({...source,lights:source.lights?.filter(l=>!l.projection)},{base:false,area:false});rig.updateMatrixWorld(true);
  const lights:Array<SpotLight|DirectionalLight>=[];rig.traverse(object=>{if(object instanceof SpotLight||object instanceof DirectionalLight)lights.push(object);});
  for(const object of lights){const target=object.target,aim=target.getWorldPosition(new Vector3());object.lookAt(aim);target.removeFromParent();target.position.set(0,0,-1);object.add(target);}
  rig.updateMatrixWorld(true);return rig;

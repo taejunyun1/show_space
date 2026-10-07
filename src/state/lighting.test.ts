@@ -16,3 +16,10 @@ it('restores independent Scene lighting, preserves old Scenes, and packages all 
  const backup=await exportProjectPackage(saved,async()=>''),restored=await importProjectPackage(await backup.arrayBuffer());expect(restored).toEqual(saved);
  const legacy=structuredClone(saved);delete legacy.scenes[0].structure!.lights;delete legacy.scenes[0].structure!.lighting;s.loadProject(legacy);s.restoreScene('scene-1');expect(useEditor.getState().project.lights).toEqual(saved.lights);
 });
+it('edits projector settings with Undo, bounds duplicates and restores independent images/aims from Scenes',()=>{
+ const s=useEditor.getState();s.addLight('projector');const first=useEditor.getState().project.lights![0],before=structuredClone(first);
+ s.patchLight(first.id,{projection:{...first.projection!,throwRatio:3,fit:'cover'}});s.saveScene('프로젝터 배치');
+ expect(useEditor.getState().project.lights![0].projection!.fit).toBe('cover');s.patchLight(first.id,{target:{...first.target,y:0}});s.restoreScene('scene-1');expect(useEditor.getState().project.lights![0].target).toEqual(before.target);
+ s.select({type:'light',id:first.id});s.duplicateSelected();expect(useEditor.getState().project.lights).toHaveLength(2);s.duplicateSelected();expect(useEditor.getState().project.lights).toHaveLength(2);s.undo();expect(useEditor.getState().project.lights).toHaveLength(1);s.redo();expect(useEditor.getState().project.lights).toHaveLength(2);
+ s.select({type:'light',id:useEditor.getState().project.lights![1].id});s.lockSelected(true);const locked=structuredClone(useEditor.getState().project);s.patchLight(useEditor.getState().selected[0].id,{projection:{...first.projection!,brightnessLumens:0}});s.deleteSelected();expect(useEditor.getState().project).toEqual(locked);
+});

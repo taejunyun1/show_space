@@ -1,3 +1,4 @@
+import {prepareProjectorMaps} from './projectorLighting';
 import {outdoorAppearance} from '../domain/outdoor';
 import {createSceneLighting,disposeLighting} from './sceneLighting';
 import {ACESFilmicToneMapping,SRGBColorSpace,PCFSoftShadowMap,Box3,Color,Mesh,OrthographicCamera,PerspectiveCamera,Vector3,WebGLRenderer,type Scene} from 'three';
@@ -15,7 +16,7 @@ export async function renderPdf3d(section:PdfSection,current?:PdfCurrentCamera,o
  if(!Number.isInteger(outputEdge)||outputEdge<1||outputEdge>3840)throw new Error('3D 이미지 해상도가 올바르지 않습니다.');
  const source=section.current?current:undefined,fit=source?.fit===true&&source.view.projection!=='perspective',longEdge=source?Math.max(source.width,source.height):1920;
  const width=source&&!fit?Math.max(1,Math.round(outputEdge*source.width/longEdge)):outputEdge,height=source&&!fit?Math.max(1,Math.round(outputEdge*source.height/longEdge)):Math.max(1,Math.round(outputEdge*1200/1920));
- const scene=await prepareExportScene(section.project) as Scene;let renderer:WebGLRenderer|undefined,environment:ReturnType<typeof surfaceEnvironment>|undefined;
+ const scene=await prepareExportScene(section.project) as Scene;let disposeProjectors:(()=>void)|undefined;let renderer:WebGLRenderer|undefined,environment:ReturnType<typeof surfaceEnvironment>|undefined;
  try{
   const view=source?.view??section.camera??createStandardView(section.project,'bird',{width,height});
   const frameWidth=fit?width:source?.width??width,frameHeight=fit?height:source?.height??height;
@@ -32,10 +33,10 @@ export async function renderPdf3d(section:PdfSection,current?:PdfCurrentCamera,o
   const hidden=new Set<string>();
   if(cutaway&&camera instanceof OrthographicCamera)for(const wall of section.project.walls){const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z;if(wall.role!=='partition'&&-dz*(camera.position.x-(wall.start.x+wall.end.x)/2000)+dx*(camera.position.z-(wall.start.z+wall.end.z)/2000)<=0){const object=scene.getObjectByName(`wall-${wall.id}`);if(object)object.visible=false;hidden.add(wall.id);}}
   for(const art of section.project.artworks)if(hidden.has(art.wallId)){const object=scene.getObjectByName(`artwork-${art.id}`);if(object)object.visible=false;}
-  scene.background=new Color(outdoorAppearance(section.project.outdoor)?.background??'#e9edf1');const exported=scene.getObjectByName('gonggan-lighting');if(exported){scene.remove(exported);disposeLighting(exported);}scene.add(createSceneLighting(section.project));
+  scene.background=new Color(outdoorAppearance(section.project.outdoor)?.background??'#e9edf1');const exported=scene.getObjectByName('gonggan-lighting');if(exported){scene.remove(exported);disposeLighting(exported);}const lighting=createSceneLighting(section.project);scene.add(lighting);disposeProjectors=await prepareProjectorMaps(lighting,section.project.lights??[]);
   scene.traverse(o=>{if(o instanceof Mesh){o.castShadow=true;o.receiveShadow=true;}});
   renderer=new WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.toneMapping=ACESFilmicToneMapping;renderer.outputColorSpace=SRGBColorSpace;renderer.shadowMap.enabled=true;renderer.shadowMap.type=PCFSoftShadowMap;renderer.setSize(width,height,false);renderer.setPixelRatio(1);if(needsSurfaceEnvironment(section.project)){environment=surfaceEnvironment(renderer,section.project.outdoor);scene.environment=environment.texture;scene.environmentIntensity=outdoorAppearance(section.project.outdoor)?.environment??section.project.lighting?.environment??SURFACE_ENVIRONMENT_INTENSITY;}renderer.render(scene,camera);
   const blob=await new Promise<Blob>((resolve,reject)=>renderer!.domElement.toBlob(b=>b?resolve(b):reject(new Error('PDF 3D 이미지를 만들지 못했습니다.')),'image/png'));
   return new Uint8Array(await blob.arrayBuffer());
- }finally{environment?.dispose();renderer?.dispose();renderer?.forceContextLoss();disposeExportScene(scene);}
+ }finally{disposeProjectors?.();environment?.dispose();renderer?.dispose();renderer?.forceContextLoss();disposeExportScene(scene);}
 }

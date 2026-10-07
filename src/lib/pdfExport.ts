@@ -1,3 +1,4 @@
+import {pdfArtworkImageKey,framedVideoPoster} from './videoPoster';
 import {pdfSections,pdfNeeds3d,pdfPreviewSection,type PdfOptions} from './pdfLayout';
 import {queueTemporaryRender} from './temporaryRenderQueue';
 import {buildExhibitionPdf,type PdfAssets} from './pdfDocument';
@@ -14,9 +15,9 @@ export async function exportProjectPdf(project:Project,options:PdfOptions,curren
  const assets:PdfAssets={fontBytes,images:new Map(),previews:new Map()};
  const {artworkTexture}=await import('./modelExport');
  for(const section of sections)for(const artwork of section.kind==='detail'&&section.artwork?[section.artwork]:section.kind==='elevation'?section.project.artworks.filter(a=>a.visible&&a.wallId===section.wall!.id&&(a.wallSide??'front')===section.side):[]){
-  if(!artwork.imageUrl||assets.images.has(artwork.imageUrl))continue;
+  const key=pdfArtworkImageKey(artwork);if(!artwork.imageUrl||assets.images.has(key))continue;
   onProgress(`작품 이미지 준비 중 · ${assets.images.size+1}`);const texture=await artworkTexture(artwork.imageUrl);
-  try{const url=(texture.image as HTMLCanvasElement).toDataURL('image/png');assets.images.set(artwork.imageUrl,Uint8Array.from(atob(url.split(',')[1]),c=>c.charCodeAt(0)));}finally{texture.dispose();}
+  try{const image=texture.image as HTMLCanvasElement,canvas=artwork.video?framedVideoPoster(image,artwork.widthMm,artwork.heightMm,artwork.video):image,url=canvas.toDataURL('image/png');assets.images.set(key,Uint8Array.from(atob(url.split(',')[1]),c=>c.charCodeAt(0)));}finally{texture.dispose();}
  }
  if(sections.some(pdfNeeds3d)){
   const {renderPdf3d}=await import('./pdfRender3d');

@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-07",
+  "scope": "video 2D/PDF framing and projector first implementation",
+  "checks": {
+    "testFilesPassed": 184,
+    "testFilesSkipped": 4,
+    "testsPassed": 995,
+    "testsSkipped": 4,
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "diffCheck": "passed"
+  },
+  "videoEvidence": {
+    "nativeEditorElevation": "2026-10-07-video-elevation-contain.png",
+    "nativePngCapture": "2026-10-07-video-elevation-capture.png",
+    "capturePixels": [
+      1920,
+      980
+    ],
+    "actualPdfRenderedPages": [
+      "2026-10-07-video-pdf-contain.png",
+      "2026-10-07-video-pdf-cover.png"
+    ],
+    "pdfChecks": [
+      "current contain and saved Scene cover have separate posters",
+      "actual rendered RGB and black bars",
+      "private NOTE excluded"
+    ]
+  },
+  "projectorNativeEvidence": {
+    "screenshots": [
+      "2026-10-07-projector-wall.png",
+      "2026-10-07-projector-occlusion.png",
+      "2026-10-07-projector-throw-ratio.png",
+      "2026-10-07-projector-floor-scene.png"
+    ],
+    "verified": [
+      "wall projection",
+      "occlusion",
+      "throw ratio 1.5 to 3 halves dimensions",
+      "saved Scene floor projection"
+    ],
+    "qualification": "Native screenshots precede final contain/cover map bake; final raster framing verified by Canvas pixel tests."
+  },
+  "localWorker": {
+    "currentAndSelectedScenePublished": true,
+    "originalImageBytesPreserved": true,
+    "publicAllowlistChecked": true,
+    "syntheticOwnerOnly": true,
+    "generatedSharesRevoked": true,
+    "revokeStatus": 204,
+    "revokedReadStatus": 410,
+    "productionAccountUsed": false
+  },
+  "pendingNativeVerification": [
+    "final image upload and contain/cover controls",
+    "two simultaneous projectors",
+    "zero brightness and locked editing UI",
+    "imported GLB surface",
+    "public and presentation 3D projector",
+    "projector PNG and PDF 3D output"
+  ],
+  "blocker": {
+    "tool": "CUA",
+    "message": "failed to write kernel assets: No such file or directory",
+    "userActionRequired": false
+  },
+  "deployment": {
+    "newChangesDeployed": false,
+    "previousVerifiedVersion": "993c93e9-d7f2-49b3-83fe-c5786fee5435",
+    "previousDeployedSource": "109a1d5271b0cc4e923e69411ff0f18f1b946282",
+    "reason": "Complete remaining native checks before deployment."
+  }
+}
