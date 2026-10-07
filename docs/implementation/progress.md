@@ -1196,3 +1196,9 @@ Cloudflare 버전 `460df9b1-6905-4cd6-81a2-fecd14b4c655` 배포. 공개 entry `/
 - 전체 GPU VRAM 256MiB/대형 모델/모바일 실기기/입력 p95/실계정·두 기기/신규 실제 공유 왕복/24단계 인수는 미완료다. 전체 목표는 진행 중. 상세 2026-10-04-artwork-texture-lod.md와 ../validation/2026-10-04-artwork-texture-lod.json.
 
 같은 렌더러의 전체→근접→전체 반복 후 100개512px/133.33MiB/GPU texture104개로 돌아옴을 확인했다. Cloudflare `988c8b9d-0e3b-47a5-89fd-c8cd3519cdb1` 배포, 공개 entry `/assets/index-BlUsTePV.js`·정상 작품/품질 선택·콘솔 경고/오류 없음. keep-vars로 설정/바인딩 보존.
+
+## 2026-10-07 — 재질 기본·고급 편집
+- 기본 화면에 무광/새틴/유광 마감과 불투명/반투명/유리 투명 표현을 추가하고 기존 세부 물성을 고급 설정에 모았다. 텍스처와 실제 반복 크기는 기본에 유지한다.
+- 기존 재질은 펼침/접힘으로 변환하지 않는다. 마감은 roughness/clearcoat만, 투명 표현은 opacity/transmission만 바꿔 치수·텍스처를 유지한다. 잠금·Undo를 실제 UI에서 확인했다.
+- 867개 테스트 통과, 선택 벤치마크 2개 제외, 빌드 통과. 390×844 dialog 가로 넘침 없음. 새 JSON 출력 다운로드가 이번 도구에서 관찰되지 않아 전체 JSON 대조 성공은 주장하지 않는다.
+- §28 Normal map/Strength, 계정 동기화 및 나머지 확장은 남음. 전체 목표는 진행 중. 상세: 2026-10-07-material-editor.md.

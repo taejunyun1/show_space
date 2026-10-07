@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-07",
+  "projectId": "3065bd45-b859-4dda-9aba-898f27c800e3",
+  "basic": [
+    "preset",
+    "color except artwork images",
+    "finish",
+    "transparency mode and amount",
+    "texture and real size except artwork images"
+  ],
+  "advanced": [
+    "roughness",
+    "metalness",
+    "opacity",
+    "transmission",
+    "thickness",
+    "ior",
+    "clearcoat",
+    "sheen"
+  ],
+  "native": {
+    "wall": "auto-wall-1",
+    "finishAfterGlossy": {
+      "roughness": 0.12,
+      "clearcoat": 0.5
+    },
+    "finishAfterUndo": {
+      "roughness": 0.92,
+      "clearcoat": 0
+    },
+    "textureMetresBeforeAndAfter": [
+      2,
+      1
+    ],
+    "detailsToggleCreatesNoHistory": true,
+    "transmissionAfterBasic65Percent": 0.65,
+    "opacityDuringTransmission": 1,
+    "advancedOpacity40PercentResetsTransmission": 0,
+    "allEditsUndone": true,
+    "lockedMaterialControlsDisabled": true,
+    "floorDialogVerified": true,
+    "mobileViewport": [
+      390,
+      844
+    ],
+    "mobileDialogClientScrollWidth": [
+      349,
+      349
+    ],
+    "consoleWarningsErrors": [],
+    "freshJSONDownloadVerified": false,
+    "JSONDownloadObservation": "Two export attempts produced no newly observed file or download event; no full native JSON equality claim for this turn."
+  },
+  "checks": {
+    "testsPassed": 867,
+    "optionalBenchmarksSkipped": 2,
+    "build": "passed"
+  },
+  "remaining": [
+    "Manual normal-map support and normal strength",
+    "Account library synchronization and real authentication acceptance",
+    "Other source document 2 extensions and full-scope acceptance"
+  ]
+}
