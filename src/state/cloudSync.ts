@@ -30,7 +30,7 @@ export async function syncCloudProject(project:Project,manual=false):Promise<voi
    const {exportProjectBackup}=await import('../lib/projectBackup');status(project.id,userId,'saving');const file=await exportProjectBackup(stored.project);guard();
    pending={requestId:crypto.randomUUID(),link:{userId,localProjectId:project.id,cloudProjectId:link?.cloudProjectId??crypto.randomUUID(),revision:link?.revision??0,localRevision:stored.summary.revision,autoSync:link?.autoSync??manual},file,metadata:{name:stored.project.name,venue:stored.project.venue,sourceProjectId:stored.project.id}};
    await repo.saveCloudPending(pending);await send(pending);
-  }catch(error){if(error instanceof ProjectConflictError||error instanceof CloudProjectError&&error.status===409){if(pending)await repo.saveCloudPending({...pending,blocked:true});status(project.id,userId,'conflict',error.message);}else status(project.id,userId,pending?'queued':'error',error instanceof Error?error.message:'클라우드 저장을 완료하지 못했습니다.');if(manual)throw error;}
+  }catch(error){if(error instanceof ProjectConflictError||error instanceof CloudProjectError&&[403,404,409].includes(error.status)){if(pending)await repo.saveCloudPending({...pending,blocked:true});status(project.id,userId,'conflict',error.message);}else status(project.id,userId,pending?'queued':'error',error instanceof Error?error.message:'클라우드 저장을 완료하지 못했습니다.');if(manual)throw error;}
  })();jobs.set(key,work);try{await work;}finally{jobs.delete(key);controllers.delete(controller);projectControllers.delete(key);}
 }
 export function startCloudAutosave():()=>void{

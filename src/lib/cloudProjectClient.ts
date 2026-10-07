@@ -11,6 +11,7 @@ export function createCloudProjectClient(token:string,fetcher:CloudFetch=fetch,s
  return {
   metadata,
   async list():Promise<CloudProjectSummary[]>{const value=await (await checked(await call('/api/projects'))).json() as {items?:unknown;truncated?:boolean};if(!Array.isArray(value.items)||value.items.length>200||value.truncated)throw new Error('클라우드 프로젝트 목록을 모두 읽지 못했습니다.');return value.items.map(parseCloudSummary);},
+  async listShared():Promise<CloudProjectSummary[]>{const value=await (await checked(await call('/api/projects/shared'))).json() as {items?:unknown;truncated?:boolean};if(!Array.isArray(value.items)||value.items.length>200||value.truncated)throw new Error('공동 프로젝트 목록을 모두 읽지 못했습니다.');return value.items.map(parseCloudSummary);},
   async save(id:string,expectedRevision:number,file:Blob,meta:CloudProjectMetadata):Promise<CloudProjectSummary>{
    if(file.size<22||file.size>CLOUD_PACKAGE_MAX_BYTES)throw new Error('클라우드 프로젝트 파일은 80MiB 이하여야 합니다.');const path=projectPath(id),hash=await cloudPackageHash(await file.arrayBuffer());
    const matches=(r:CloudProjectSummary)=>r.id===id&&r.revision===expectedRevision+1&&r.sha256===hash&&r.bytes===file.size&&r.sourceProjectId===meta.sourceProjectId&&r.name===meta.name&&r.venue===meta.venue&&!r.archived;

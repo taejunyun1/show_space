@@ -38,3 +38,7 @@ it('retains the upload package when an explicit cancel interrupts acknowledgemen
 it('does not claim that another tab’s newest local snapshot is the current visible draft',async()=>{
  const {syncCloudProject,useCloudSync}=await import('./cloudSync');await repo.save({...editor.getState().project,name:'다른 탭 수정'},1);await expect(syncCloudProject(editor.getState().project,true)).rejects.toThrow('다른 탭');expect(mocks.export).not.toHaveBeenCalled();expect(mocks.save).not.toHaveBeenCalled();expect(useCloudSync.getState().current?.status).toBe('conflict');
 });
+
+it('preserves pending local work after role revocation and stops automatic privileged retries',async()=>{
+ const {syncCloudProject,useCloudSync}=await import('./cloudSync');mocks.save.mockRejectedValueOnce(new CloudProjectError('편집 권한이 변경됐습니다.',403));await expect(syncCloudProject(editor.getState().project,true)).rejects.toThrow('편집 권한');const pending=await repo.cloudPending(userA,'project-1');expect(pending?.blocked).toBe(true);await syncCloudProject(editor.getState().project);expect(mocks.save).toHaveBeenCalledTimes(1);expect(useCloudSync.getState().current?.status).toBe('conflict');expect(await repo.read('project-1')).toBeDefined();
+});

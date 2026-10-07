@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-07",
+  "requirements": "Source 2 sections 56-57",
+  "implemented": [
+    "owner/editor/viewer/commenter roles",
+    "recipient-bound expiring copied invitations",
+    "atomic grant and invite consumption",
+    "private detached project viewer",
+    "editor-only revision CAS original saves",
+    "separate private project opinions",
+    "role revocation blocks commit and autosync retries"
+  ],
+  "tests": {
+    "newRegression": 23,
+    "fullPassed": 1075,
+    "optionalSkipped": 9,
+    "nativeSeparatelyPassed": 1,
+    "typescriptViteBuild": "passed"
+  },
+  "nativeScope": "actual local HTTP/R2/D1 with explicit synthetic verified identities",
+  "productionDeployed": false,
+  "migrationRemoteApplied": false,
+  "unverified": [
+    "real Supabase and login redirect",
+    "browser interaction of new UI",
+    "two real devices/accounts",
+    "full MVP acceptance"
+  ],
+  "deferredByUser": [
+    "authentication setup",
+    "browser automation connection"
+  ],
+  "outOfCurrentScope": [
+    "real-time cursor and object locks",
+    "IES/Lux",
+    "AI",
+    "paid photo-to-material or 3D generation"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "scope": "actual local Wrangler HTTP/R2/D1 and batch",
+  "identityProvider": "explicit synthetic verified A/B/C; no real Supabase",
+  "production": false,
+  "projectId": "fea1d8a7-bbf1-4004-a680-f36ac360625f",
+  "privatePackageRead": true,
+  "recipientBinding": true,
+  "atomicInviteAccept": true,
+  "editorSave": true,
+  "ownerArchiveRestriction": true,
+  "privateComments": true,
+  "roleDowngrade": true,
+  "revokedAccess": true,
+  "oldTokenNoRegrant": true,
+  "archived": true,
+  "finalDatabase": [
+    {
+      "archived": 1,
+      "project_revision": 3,
+      "role": "viewer",
+      "revoked": 1,
+      "member_revision": 3,
+      "invitation_status": "accepted"
+    }
+  ],
+  "verifierExitCode": 130,
+  "verifierPortClosed": true,
+  "localTemporaryStateRetainedForReproduction": true
+}

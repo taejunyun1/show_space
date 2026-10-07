@@ -1,6 +1,7 @@
+import {projectRole,type ProjectRole} from './collaboration';
 export const CLOUD_PACKAGE_MAX_BYTES=80*1024*1024;
 export interface CloudProjectMetadata {name:string;venue:string;sourceProjectId:string}
-export interface CloudProjectSummary extends CloudProjectMetadata {id:string;revision:number;sha256:string;bytes:number;createdAt:string;updatedAt:string;archived:boolean}
+export interface CloudProjectSummary extends CloudProjectMetadata {id:string;revision:number;sha256:string;bytes:number;createdAt:string;updatedAt:string;archived:boolean;role?:ProjectRole}
 export interface CloudProjectLink {userId:string;localProjectId:string;cloudProjectId:string;revision:number;localRevision:number;autoSync:boolean}
 export interface CloudSavePending {requestId:string;link:CloudProjectLink;file:Blob;metadata:CloudProjectMetadata;blocked?:boolean}
 export const uuidPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -14,7 +15,7 @@ export function decodeCloudMetadata(value:string|null){if(!value||value.length>5
 export function parseCloudSummary(value:unknown):CloudProjectSummary{
  const meta=parseCloudMetadata(value),r=value as Record<string,unknown>;
  if(typeof r.id!=='string'||!uuidPattern.test(r.id)||!Number.isSafeInteger(r.revision)||(r.revision as number)<1||typeof r.sha256!=='string'||!/^([0-9a-f]{64})$/.test(r.sha256)||!Number.isSafeInteger(r.bytes)||(r.bytes as number)<22||(r.bytes as number)>CLOUD_PACKAGE_MAX_BYTES||typeof r.createdAt!=='string'||!Number.isFinite(Date.parse(r.createdAt))||typeof r.updatedAt!=='string'||!Number.isFinite(Date.parse(r.updatedAt))||typeof r.archived!=='boolean')throw new Error('클라우드 프로젝트 응답이 올바르지 않습니다.');
- return {...meta,id:r.id,revision:r.revision as number,sha256:r.sha256,bytes:r.bytes as number,createdAt:r.createdAt,updatedAt:r.updatedAt,archived:r.archived};
+ return {...meta,id:r.id,revision:r.revision as number,sha256:r.sha256,bytes:r.bytes as number,createdAt:r.createdAt,updatedAt:r.updatedAt,archived:r.archived,...(r.role!==undefined?{role:projectRole(r.role)}:{})};
 }
 export function parseCloudLink(value:unknown):CloudProjectLink{
  const r=value as CloudProjectLink;

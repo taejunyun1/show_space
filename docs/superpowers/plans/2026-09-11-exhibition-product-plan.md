@@ -23,7 +23,7 @@
 
 ## 2. 현재 개발 우선순위
 
-2026-10-07 사용자 결정: 운영 인증 설정과 브라우저 연결 대기는 별도로 보류하고 나머지 구현을 계속한다. 후속 1.1의 [시리즈 자동 배열](../../implementation/2026-10-07-artwork-series.md)을 기존 Artwork·그룹·Scene 구조로 추가했고, 1.2의 [전시 Archive 탐색·재사용](../../implementation/2026-10-07-project-archive.md)에 7개 기록·과거 Scene·비공개 사진·원본 유지 복사본을 연결했다. 내부 Note와 구분한 [협업 Comment](../../implementation/2026-10-07-review-comments.md)도 별도 D1 레코드·댓글 허용 링크·의견/답글·권한/CAS/중단으로 연결했다. 다음 독립 구현은 프로젝트 역할/초대·공동 작업이다. 운영 인증·실제 브라우저·기기 인수는 완료로 바꾸지 않는다. IES/Lux·AI 및 사진 생성/결제는 기존 별도 검증·후속 유료 범위를 유지한다.
+2026-10-07 사용자 결정: 운영 인증 설정과 브라우저 연결 대기는 별도로 보류하고 나머지 구현을 계속한다. 후속 1.1의 [시리즈 자동 배열](../../implementation/2026-10-07-artwork-series.md)을 기존 Artwork·그룹·Scene 구조로 추가했고, 1.2의 [전시 Archive 탐색·재사용](../../implementation/2026-10-07-project-archive.md)에 7개 기록·과거 Scene·비공개 사진·원본 유지 복사본을 연결했다. 내부 Note와 구분한 [협업 Comment](../../implementation/2026-10-07-review-comments.md)도 별도 D1 레코드·댓글 허용 링크·의견/답글·권한/CAS/중단으로 연결했다. [프로젝트 역할/초대·공동 작업](../../implementation/2026-10-07-project-collaboration.md)에 Owner·Editor·Viewer·Commenter, 확인 이메일 초대, 원자적 수락, 편집자 CAS 저장과 별도 비공개 의견을 연결했다. 다음 독립 작업은 남은 프로젝터/GLB 전달 검증과 원문 요구 누락 점검이다. 실시간 Cursor·Object Lock은 후순위로 유지한다. 운영 인증·실제 브라우저·기기 인수는 완료로 바꾸지 않는다. IES/Lux·AI 및 사진 생성/결제는 기존 별도 검증·후속 유료 범위를 유지한다.
 
 1. JPG·PNG·PDF 및 SketchUp에서 내보낸 GLB 불러오기, 단위 전환과 직접 편집의 일관성을 마무리한다. `.skp` 직접 파싱은 지원한다고 표시하지 않는다.
 2. 로그인·클라우드 저장은 실제 인증 설정이 연결되면 두 계정·두 기기에서 검증한다. 설정 대기 중에도 편집·내보내기 검증을 계속한다.
