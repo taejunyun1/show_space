@@ -1,0 +1,38 @@
+{
+  "accountIsolation": true,
+  "publicOwnerMetadataAbsent": true,
+  "sourceImagePreserved": true,
+  "revoked": true,
+  "identityProvider": "explicit local synthetic A/B; no real Supabase login",
+  "production": false,
+  "date": "2026-10-07",
+  "checks": {
+    "fullSuiteTestsPassed": 1007,
+    "fullSuiteTestsSkipped": 6,
+    "relatedFinalTestsPassed": 40,
+    "explicitLocalWorkerTestPassed": 1,
+    "localWorkerRuns": 2,
+    "typecheck": "passed",
+    "build": "passed",
+    "diffCheck": "passed"
+  },
+  "nativeUi": {
+    "verified": false,
+    "error": "failed to write kernel assets: No such file or directory"
+  },
+  "productionAuth": {
+    "lastVerifiedHttpStatus": 200,
+    "enabled": false,
+    "realSupabaseConfigured": false,
+    "publicConfigurationRequested": true,
+    "operationalShareMutationAttempted": false
+  },
+  "deployment": {
+    "deployed": false,
+    "pending": [
+      "real account and two devices",
+      "native share controls and identity change",
+      "projector and presentation capture"
+    ]
+  }
+}

@@ -17,7 +17,7 @@
   },
   "limits": {
     "inputBytes": 20971520,
-    "preservedOriginalBytes": 5242880,
+    "preservedOriginalBytes": 5000000,
     "decodedPixels": 60000000,
     "optimizedSourceEdge": 2048,
     "renderedProjectionMapEdge": 1024

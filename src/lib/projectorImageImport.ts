@@ -9,7 +9,7 @@ export async function readProjectorImage(file:File,signal?:AbortSignal):Promise<
  const valid=file.type==='image/png'?starts([137,80,78,71,13,10,26,10]):file.type==='image/jpeg'?starts([255,216,255]):starts([82,73,70,70])&&new TextDecoder().decode(header.slice(8,12))==='WEBP';
  if(!valid)throw new Error('투사 이미지는 실제 JPG·PNG·WebP 파일을 선택해주세요.');
  signal?.throwIfAborted();
- if(file.size>5*1024*1024){const imageUrl=await readImage(file);signal?.throwIfAborted();parseSurfaceTexture({imageUrl,widthMm:1,heightMm:1});return {imageUrl,optimized:true};}
+ if(file.size>5_000_000){const imageUrl=await readImage(file);signal?.throwIfAborted();parseSurfaceTexture({imageUrl,widthMm:1,heightMm:1});return {imageUrl,optimized:true};}
  let bitmap:ImageBitmap;
  try{bitmap=await createImageBitmap(file);}catch{signal?.throwIfAborted();throw new Error('투사 이미지를 읽지 못했습니다. 파일을 확인해주세요.');}
  try{

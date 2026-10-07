@@ -45,9 +45,9 @@ it('rejects undecodable and excessive dimensions without leaving decoded bitmap 
  decoder();const broken=new Uint8Array(bytes);broken.fill(0,33);await expect(readProjectorImage(new File([broken],'broken.png',{type:'image/png'}))).rejects.toThrow(/읽지 못/);
  for(const size of [[0,1],[10000,10000]]){const close=vi.fn();vi.stubGlobal('createImageBitmap',async()=>({width:size[0],height:size[1],close}));await expect(readProjectorImage(file)).rejects.toThrow(/픽셀/);expect(close).toHaveBeenCalledOnce();}
 });
-it('still accepts a source over 5MiB with explicit optimized output inside the stored image budget',async()=>{
+it('optimizes sources above the actual 5,000,000-byte public share limit while accepting the 20MiB input budget',async()=>{
  const canvas=createCanvas(32,16),ctx=canvas.getContext('2d');ctx.fillStyle='#ed2312';ctx.fillRect(0,0,32,16);
- const original=canvas.toBuffer('image/png'),bytes=new Uint8Array(5*1024*1024+1);bytes.set(original);
+ const original=canvas.toBuffer('image/png'),bytes=new Uint8Array(5_000_001);bytes.set(original);
  const close=vi.fn();vi.stubGlobal('createImageBitmap',async()=>Object.assign(canvas,{close}));
  vi.stubGlobal('document',{createElement:()=>createCanvas(1,1)});
  const result=await readProjectorImage(new File([bytes],'large.png',{type:'image/png'}));expect(result.optimized).toBe(true);expect(result.imageUrl).toMatch(/^data:image\/webp;base64,/);expect(result.imageUrl.length).toBeLessThan(7_000_000);expect(close).toHaveBeenCalledOnce();

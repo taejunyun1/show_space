@@ -4,6 +4,7 @@ import {publicVideoBytes,publicVideoHash} from '../lib/publicVideoAsset';
 import {MODEL_MAX_BYTES} from '../lib/glbPayload';
 import {publicModelBytes,publicModelHash,PUBLIC_MODELS_MAX_BYTES,PUBLIC_MODEL_ASSETS_MAX} from '../lib/publicModelAsset';
 import {parsePublicShare,publicModelIds,publicImageIds,publicVideoIds,PUBLIC_SNAPSHOT_MAX_BYTES,type PublicShareSnapshot} from '../domain/publicShare';
+import {authenticatedUser,authConfig,type AuthEnv,type AuthFetch} from './auth';
 
 export interface ShareBucket {
   put(key:string,value:string|ArrayBuffer|ReadableStream,options?:{httpMetadata?:{contentType?:string}}):Promise<unknown>;
@@ -12,13 +13,15 @@ export interface ShareBucket {
   list(options:{prefix:string;cursor?:string;limit?:number}):Promise<{objects:Array<{key:string}>;truncated:boolean;cursor?:string}>;
   delete(keys:string|string[]):Promise<unknown>;
 }
-export interface ShareEnv {SHARES:ShareBucket;OWNER_TOKEN?:string;ASSETS?:{fetch(request:Request):Promise<Response>}}
-interface Meta {id:string;status:'draft'|'active'|'revoked';createdAt:string;name:string;includeDimensions:boolean;sceneCount?:number;includeArtworkDetails?:boolean}
+export interface ShareEnv extends AuthEnv {SHARES:ShareBucket;OWNER_TOKEN?:string;ASSETS?:{fetch(request:Request):Promise<Response>}}
+interface Meta {id:string;ownerId?:string;status:'draft'|'active'|'revoked';createdAt:string;name:string;includeDimensions:boolean;sceneCount?:number;includeArtworkDetails?:boolean}
 const noStore={'cache-control':'no-store','x-content-type-options':'nosniff'};
 const json=(value:unknown,status=200)=>Response.json(value,{status,headers:noStore});
 const error=(status:number,message:string)=>json({error:message},status);
 const validImageId=(value:string)=>/^(0|[1-9][0-9]{0,3})$/.test(value);
 const metaKey=(id:string)=>`meta/${id}.json`;
+const ownerIndexKey=(ownerId:string,id:string)=>`owners/${ownerId}/${id}.json`;
+const summary=({id,status,createdAt,name,includeDimensions,sceneCount,includeArtworkDetails}:Meta)=>({id,status,createdAt,name,includeDimensions,...(sceneCount!==undefined?{sceneCount}:{}),...(includeArtworkDetails!==undefined?{includeArtworkDetails}:{})});
 const snapshotKey=(id:string)=>`shares/${id}/snapshot.json`;
 const modelKey=(id:string,hash:string)=>`shares/${id}/models/${hash}.glb`;
 const videoKey=(id:string,hash:string)=>`shares/${id}/videos/${hash}`;
@@ -51,7 +54,7 @@ async function boundedJson(request:Request):Promise<unknown>{
   return JSON.parse(new TextDecoder().decode(bytes));
 }
 
-export async function handleShareRequest(request:Request,env:ShareEnv):Promise<Response>{
+export async function handleShareRequest(request:Request,env:ShareEnv,authFetch:AuthFetch=fetch):Promise<Response>{
   const {pathname}=new URL(request.url),method=request.method;
   if(!pathname.startsWith('/api/'))return error(404,'주소를 찾을 수 없습니다.');
   const publicMatch=pathname.match(/^\/api\/public\/([0-9a-f]{48})(?:\/(images|models|videos)\/(\d{1,4}|[0-9a-f]{64}))?$/);
@@ -85,18 +88,26 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
     return new Response(image.body,{headers:{...noStore,'content-type':image.httpMetadata?.contentType??'application/octet-stream'}});
   }
   if(pathname.startsWith('/api/public/'))return error(404,'공유 링크를 찾을 수 없습니다.');
-  if(!env.OWNER_TOKEN||env.OWNER_TOKEN.length<20)return error(503,'작성자 인증이 설정되지 않았습니다.');
-  if(!ownerAuthorized(request,env.OWNER_TOKEN))return error(401,'작성자 인증이 필요합니다.');
+  if(request.headers.has('origin')&&request.headers.get('origin')!==new URL(request.url).origin)return error(403,'같은 사이트에서 요청해주세요.');
+  const legacy=ownerAuthorized(request,env.OWNER_TOKEN);let ownerId:string|undefined;
+  if(!legacy){
+    if(!authConfig(env)){if(!env.OWNER_TOKEN||env.OWNER_TOKEN.length<20)return error(503,'작성자 인증이 설정되지 않았습니다.');return error(401,'작성자 인증이 필요합니다.');}
+    try{const user=await authenticatedUser(request,env,authFetch);if(!user)return error(401,'계정 로그인이 필요합니다.');ownerId=user.id;}catch{return error(503,'계정 인증을 확인하지 못했습니다. 잠시 후 다시 시도해주세요.');}
+  }
+  const owns=(entry:Meta)=>legacy?entry.ownerId===undefined:entry.ownerId===ownerId;
+  const target=/^\/api\/shares\/([0-9a-f]{48})(?:\/|$)/.exec(pathname);
+  if(target){const entry=await meta(env.SHARES,target[1]);if(!entry||!owns(entry))return error(404,'공유 작업을 찾을 수 없습니다.');}
   if(pathname==='/api/shares'){
     if(method==='POST'){
       const id=[...crypto.getRandomValues(new Uint8Array(24))].map(byte=>byte.toString(16).padStart(2,'0')).join('');
-      const entry:Meta={id,status:'draft',createdAt:new Date().toISOString(),name:'공유 준비 중',includeDimensions:false};
-      await saveMeta(env.SHARES,entry);
+      const entry:Meta={id,...(ownerId?{ownerId}:{}),status:'draft',createdAt:new Date().toISOString(),name:'공유 준비 중',includeDimensions:false};
+      try{await saveMeta(env.SHARES,entry);if(ownerId)await env.SHARES.put(ownerIndexKey(ownerId,id),id);}catch{try{await env.SHARES.delete([metaKey(id),...(ownerId?[ownerIndexKey(ownerId,id)]:[])]);}catch{/* An unreachable draft can be cleaned up later. */}return error(503,'공유 작업을 저장하지 못했습니다. 다시 시도해주세요.');}
       return json({id},201);
     }
     if(method==='GET'){
-      const listing=await env.SHARES.list({prefix:'meta/',limit:1000});
-      const items=(await Promise.all(listing.objects.filter(object=>/^meta\/[0-9a-f]{48}\.json$/.test(object.key)).map(object=>env.SHARES.get(object.key).then(async entry=>entry?JSON.parse(await entry.text()) as Meta:null)))).filter((entry):entry is Meta=>!!entry&&entry.status!=='draft').sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+      const prefix=ownerId?`owners/${ownerId}/`:'meta/',listing=await env.SHARES.list({prefix,limit:1000});
+      const ids=listing.objects.filter(o=>o.key.startsWith(prefix)&&/^[0-9a-f]{48}\.json$/.test(o.key.slice(prefix.length))).map(o=>o.key.slice(prefix.length,-5));
+      const items=(await Promise.all(ids.map(id=>meta(env.SHARES,id)))).filter((entry):entry is Meta=>!!entry&&owns(entry)&&entry.status!=='draft').sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).map(summary);
       return json({items,truncated:listing.truncated});
     }
     return error(405,'지원하지 않는 요청입니다.');
@@ -165,7 +176,7 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
       await env.SHARES.delete(listing.objects.map(object=>object.key));
       if(!listing.truncated)break;
     }
-    if(entry.status==='draft')await env.SHARES.delete(metaKey(id));
+    if(entry.status==='draft')await env.SHARES.delete([metaKey(id),...(entry.ownerId?[ownerIndexKey(entry.ownerId,id)]:[])]);
     return new Response(null,{status:204,headers:noStore});
   }
   return error(404,'주소를 찾을 수 없습니다.');
