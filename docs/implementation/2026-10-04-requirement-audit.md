@@ -51,7 +51,7 @@
 | 27–28 재질 Library·편집, 30 기준 크기 | 로컬 재질 Library·분류·검색·저장/적용·보관·백업 및 실제 크기 Texture 구현 | `materialLibrary`, `MaterialLibraryDialog`, `materials`, `MaterialEditor`, `TextureEditor`; Basic/Advanced 편집 분리와 마감·투명 표현 구현; 계정 동기화 및 Normal map/Strength는 남음 |
 | 29 Material Capture | 후속 유료 생성 | 원본 사진 반복 텍스처 적용은 구현, 생성/왜곡보정/PBR 맵 추정은 미구현 |
 | 31–36 Light·Spot·Target·Kelvin·Outdoor·Sun | 기본 조명·야외 구현 | `lighting`, `outdoor`, `Lighting3D` |
-| 37 시간 비교 | 후속 확장 | 시간 조절/Scene 저장은 가능; 독립 비교 UI 미구현 |
+| 37 시간 비교 | 네 시간대 비교 UI·Time Scene 저장 구현 | `timeComparison`, `TimeComparisonDialog`; 현재/저장 배치의 같은 시점 비교, 날짜/시간/DST 검증, 저장·재접속·Undo 확인. 실제 기기/대형 장면 검증은 남음 |
 | 38–42 Note·Inspector | 핵심 구현 | 비공개 설치 메모/체크 항목/참고 이미지/벽·작품 검사 패널 |
 | 43–45 Navigation·Eye·Human Scale | 기본 시점/손 이동 중심; 사용자 결정으로 범위 축소 | 원문의 모든 Walk/인체 참조 형상 요구를 구현했다고 집계하지 않음 |
 | 46 Scene | 구조·배치·시점 저장 구현 | `sceneProject`, `state/editor`; 실제 전시 A/B 인수 남음 |
@@ -88,3 +88,5 @@
 2026-10-07 후속: [재질 라이브러리 및 PDF](2026-10-07-material-library.md)에서 현재 Texture 배치와 Scene D의 A4 PDF 12페이지/두 3D 텍스처 페이지를 확인했다. 로컬 독립 재질 Library의 7분류/15프리셋/색·물성·텍스처 저장·재적용·Undo·검색·보관/복구·JSON 백업/복원·재접속·390px UI를 구현·검증했다. 계정 동기화, §28의 Basic/Advanced 분리와 다른 후속 확장은 계속 남는다.
 
 2026-10-07 갱신: [재질 기본·고급 편집](2026-10-07-material-editor.md)에서 표면 마감·투명 표현과 기존 고급 물성을 분리했다. 실제 벽의 2×1m 텍스처 유지, 변경/Undo, 펼침 비변경, 잠금과 모바일 dialog 폭을 확인했다. §28의 Normal Strength는 수동 normal-map 입력과 함께 남아 있으며 사진→재질 생성으로 대체하지 않는다.
+
+2026-10-07 갱신: [시간대 비교](2026-10-07-time-comparison.md)에서 §37의 09/13/17/20시를 한 화면에서 비교하고 네 개의 Time Scene으로 저장한다. ANCA 실제 브라우저 생성/Scene 저장/17시 복원/Undo/재접속과 모바일 가로 넘침을 확인했다. 전체 제품 및 원문 전체 인수 완료를 뜻하지 않는다.

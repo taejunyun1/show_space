@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-07",
+  "projectId": "3065bd45-b859-4dda-9aba-898f27c800e3",
+  "requirements": [
+    "source2 section37 Time Comparison"
+  ],
+  "implementation": {
+    "defaultTimes": [
+      "09:00",
+      "13:00",
+      "17:00",
+      "20:00"
+    ],
+    "currentAndStoredSceneSources": true,
+    "fixedCurrentCamera": true,
+    "detachedImages": true,
+    "sequentialRenderingIncludingCancelledReplacement": true,
+    "fourScenesSavedAtomicallyWithUndo": true
+  },
+  "native": {
+    "date": "2026-07-21",
+    "zone": "Asia/Seoul",
+    "imageSizes": [
+      [
+        1001,
+        1024
+      ],
+      [
+        1001,
+        1024
+      ],
+      [
+        1001,
+        1024
+      ],
+      [
+        1001,
+        1024
+      ]
+    ],
+    "sunElevationDegrees": [
+      40.2,
+      72.5,
+      31.6,
+      -2.5
+    ],
+    "nightDirectSunOff": true,
+    "savedSceneDCompared": true,
+    "sceneCountBeforeAfterSave": [
+      4,
+      8
+    ],
+    "restoredSceneTime": "17:00",
+    "afterUndoOriginalTime": "16:30",
+    "afterUndoOriginalSceneCount": 4,
+    "persistedSceneCountAfterReload": 8,
+    "onlyGeneratedFourScenesRemovedAfterPersistenceTest": true,
+    "finalSceneCount": 4,
+    "desktopViewport": [
+      1280,
+      900
+    ],
+    "desktopDialogClientScrollWidth": [
+      1098,
+      1098
+    ],
+    "desktopDialogClientScrollHeight": [
+      808,
+      808
+    ],
+    "mobileViewport": [
+      390,
+      844
+    ],
+    "mobileDialogClientScrollWidth": [
+      349,
+      349
+    ],
+    "mobileGridColumns": "295px",
+    "warningsErrors": [],
+    "fullNativeJSONEqualityVerified": false
+  },
+  "checks": {
+    "testsPassed": 873,
+    "optionalBenchmarksSkipped": 2,
+    "build": "passed"
+  },
+  "remaining": [
+    "Real-device and large-model comparison performance acceptance",
+    "Other source2 extensions, authentication and full-product acceptance"
+  ]
+}
