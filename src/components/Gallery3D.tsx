@@ -235,6 +235,7 @@ function CameraSetup({ reset, hydrated, projectId, onReady, onCameraReady, onCam
       controls.target.fromArray(cameraRequest.view.target);
       if('zoom' in camera)camera.zoom=cameraRequest.view.zoom;
       if('fov' in camera)camera.fov=cameraRequest.view.fov??50;
+      camera.far=Math.max(camera.far,camera.position.distanceTo(controls.target)*4);
       camera.updateProjectionMatrix();
       if('update' in controls&&typeof controls.update==='function')controls.update();
       invalidate();

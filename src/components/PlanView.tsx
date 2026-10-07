@@ -1,3 +1,4 @@
+import {selectionFocusPoints,fitFocusViewport} from '../domain/selectionFocus';
 import {NumberField} from './Controls';
 import {formatLength, lengthFactor} from '../domain/lengthUnits';
 import {artworkPlanSize} from '../domain/artworkPresentation';
@@ -31,6 +32,7 @@ export function PlanView({incomingFile,onFileReceived}:{incomingFile?:File|null;
   const drawInput=useRef<HTMLInputElement>(null);
   const ownDrawProject=useRef<typeof project|null>(null);
   const [viewport, setViewport] = useState<{x:number;z:number;width:number;height:number}|null>(null);
+  const focusRequest=useEditor(s=>s.focusRequest),lastFocus=useRef(focusRequest?.token);
   const panMode=activeTool==='pan';
   const pan = useRef<{pointerId:number;clientX:number;clientY:number;x:number;z:number;scale:number;width:number;height:number}|null>(null);
   const [panning,setPanning] = useState(false);
@@ -70,11 +72,20 @@ export function PlanView({incomingFile,onFileReceived}:{incomingFile?:File|null;
   const minX=Math.min(...bounds.map(p=>p.x))-pad,minZ=Math.min(...bounds.map(p=>p.z))-pad;
   const width=Math.max(...bounds.map(p=>p.x))-minX+pad,height=Math.max(...bounds.map(p=>p.z))-minZ+pad;
   const view=viewport??{x:minX,z:minZ,width,height};
+  useEffect(()=>{
+    if(!focusRequest||lastFocus.current===focusRequest.token)return;
+    lastFocus.current=focusRequest.token;
+    if(focusRequest.projectId!==project.id||focusRequest.view!=='plan')return;
+    if(pan.current||dragRef.current){useEditor.getState().notify('드래그를 마친 뒤 선택 항목을 화면에 맞추세요.');return;}
+    const box=svg.current?.getBoundingClientRect();
+    const focused=fitFocusViewport(selectionFocusPoints(project,focusRequest.selected),{width:box?.width??800,height:box?.height??600},provisional?10:100);
+    if(focused)setViewport(focused);else useEditor.getState().notify('표시 중인 선택 객체가 없습니다.');
+  },[focusRequest,project.id]);
   const zoom=width/view.width;
   const handleRadius=view.width/Math.max(svg.current?.getBoundingClientRect().width??600,1)*10;
   function changeZoom(factor:number) {
-    const nextZoom=Math.max(1,Math.min(16,zoom*factor));
-    const nextWidth=width/nextZoom,nextHeight=height/nextZoom;
+    const nextZoom=factor<1?Math.max(Math.min(1,zoom),zoom*factor):Math.min(Math.max(16,zoom),zoom*factor);
+    const nextWidth=width/nextZoom,nextHeight=view.height*nextWidth/view.width;
     setViewport({x:view.x+(view.width-nextWidth)/2,z:view.z+(view.height-nextHeight)/2,width:nextWidth,height:nextHeight});
   }
   function endPointer(e:React.PointerEvent, cancelled=false) {

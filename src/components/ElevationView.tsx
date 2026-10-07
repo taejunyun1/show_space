@@ -1,3 +1,4 @@
+import {elevationFocus} from '../domain/selectionFocus';
 import {VideoPosterSvg} from './VideoPosterSvg';
 import {formatLength} from '../domain/lengthUnits';
 import {ArtworkElevationDimensions} from './ArtworkElevationDimensions';
@@ -17,6 +18,7 @@ export function ElevationView() {
   const { project, activeWallId, setActiveWall, selected, select, patchArtwork, showDimensions, activeTool, measurementDraft, pickMeasurement, previewProject, artworkGesture, beginArtworkDrag, updateArtworkDrag, finishArtworkDrag } = useEditor();
   const wall = project.walls.find(w => w.id === activeWallId) || project.walls[0];
   const svg = useRef<SVGSVGElement>(null);
+  const focusRequest=useEditor(s=>s.focusRequest),lastFocus=useRef(focusRequest?.token);
   const [rotation,setRotation]=useState<RotationGesture|null>(null);
   const [side,setSide]=useState<'front'|'back'>('front');
   const [viewport,setViewport]=useState<ViewportBox|null>(null);
@@ -27,6 +29,15 @@ export function ElevationView() {
   useEffect(()=>{setViewport(null);pan.current=null;setPanning(false);},[activeWallId]);
   useEffect(()=>{if(activeTool==='pan'){finishArtworkDrag(true);setRotation(null);}else{pan.current=null;setPanning(false);}},[activeTool]);
   useEffect(()=>{const cancel=(event:KeyboardEvent)=>{if(event.key==='Escape'){finishArtworkDrag(true);setRotation(null);}};window.addEventListener('keydown',cancel);return()=>window.removeEventListener('keydown',cancel);},[]);
+  useEffect(()=>{
+    if(!focusRequest||lastFocus.current===focusRequest.token)return;
+    if(focusRequest.projectId!==project.id||focusRequest.view!=='elevation'){lastFocus.current=focusRequest.token;return;}
+    if(rotation||pan.current){lastFocus.current=focusRequest.token;useEditor.getState().notify('이동·회전을 마친 뒤 선택 항목을 화면에 맞추세요.');return;}
+    const box=svg.current?.getBoundingClientRect(),focused=elevationFocus(project,focusRequest.selected,{width:box?.width??800,height:box?.height??600});
+    if(!focused){lastFocus.current=focusRequest.token;useEditor.getState().notify('벽면도에서 볼 벽 또는 작품을 선택하세요.');return;}
+    if(activeWallId!==focused.wallId){setActiveWall(focused.wallId);return;}
+    lastFocus.current=focusRequest.token;setSide(focused.side);setViewport(focused.view);
+  },[focusRequest,activeWallId,project.id]);
   if (!wall) return null;
   const width = wallLength(wall), height = wall.heightMm;
   const view=viewport??{x:-700,z:-650,width:width+1400,height:height+1600};

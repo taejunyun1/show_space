@@ -50,6 +50,8 @@ interface EditorState {
   measurementDraft:MeasurementDraft|null
   linkedCorners: boolean
   selected: EntitySelection[]
+  focusRequest:{token:number;projectId:string;view:View;selected:EntitySelection[]}|null
+  focusSelected():void
   view: View
   activeWallId: string
   artworkSnapping:boolean
@@ -185,6 +187,13 @@ export const useEditor = create<EditorState>((set, get) => {
     activeTool: 'select',
     measurementDraft:null,
     linkedCorners: true,
+    focusRequest:null,
+    focusSelected:()=>{
+      const state=get();
+      if(state.previewProject||state.wallGesture||state.artworkGesture||state.lightGesture||state.modelArtworkGesture||state.outdoorGesture||state.rotatingArtworkId){set({message:'이동·회전을 마친 뒤 선택 항목을 화면에 맞추세요.'});return;}
+      if(!state.selected.length){set({message:'화면에 맞출 객체를 선택하세요.'});return;}
+      set({focusRequest:{token:(state.focusRequest?.token??0)+1,projectId:state.project.id,view:state.view,selected:state.selected.map(s=>({...s}))}});
+    },
     selected: firstSelection(initialProject),
     view: '3d',
     activeWallId: 'wall-a',
