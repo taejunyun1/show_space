@@ -55,7 +55,7 @@
 | 38–42 Note·Inspector | 핵심 구현 | 비공개 설치 메모/체크 항목/참고 이미지/벽·작품 검사 패널 |
 | 43–45 Navigation·Eye·Human Scale | 기본 시점/손 이동 중심; 사용자 결정으로 범위 축소 | 원문의 모든 Walk/인체 참조 형상 요구를 구현했다고 집계하지 않음 |
 | 46 Scene | 구조·배치·시점 저장 구현 | `sceneProject`, `state/editor`; 실제 전시 A/B 인수 남음 |
-| 47 Presentation Mode | 공유 화면 및 출력 중심 | 별도 전체 화면 발표 편집/운영 모드까지 완료로 집계하지 않음 |
+| 47 Presentation Mode | 로컬 별도 발표 화면 · 전체 화면 · Scene 탐색 · 작품 정보 · 읽기 전용 Orbit | 2026-10-07 native ANCA/GLB/모바일 검증, Walk는 사용자 축소 결정으로 제외. 대형 장면/실기기는 남음 |
 | 48–53 Screenshot·PDF·Share·발표 공유·선택 정보·Export | 기본 구현과 개별 검증 존재 | `CaptureDialog`, `PdfDialog`, `SharedViewer`, `sharePresentation`, `exportScene` |
 | 54 SketchUp Export | GLB 교환 경로, SKP 전용 내보내기는 후속 | 실제 SketchUp 재수입 모델 검증 남음 |
 | 55 Metadata | JSON/백업/중립 모델에 정보 보존 | 도구별 metadata·단위 수신 검증 남음 |
@@ -90,3 +90,5 @@
 2026-10-07 갱신: [재질 기본·고급 편집](2026-10-07-material-editor.md)에서 표면 마감·투명 표현과 기존 고급 물성을 분리했다. 실제 벽의 2×1m 텍스처 유지, 변경/Undo, 펼침 비변경, 잠금과 모바일 dialog 폭을 확인했다. §28의 Normal Strength는 수동 normal-map 입력과 함께 남아 있으며 사진→재질 생성으로 대체하지 않는다.
 
 2026-10-07 갱신: [시간대 비교](2026-10-07-time-comparison.md)에서 §37의 09/13/17/20시를 한 화면에서 비교하고 네 개의 Time Scene으로 저장한다. ANCA 실제 브라우저 생성/Scene 저장/17시 복원/Undo/재접속과 모바일 가로 넘침을 확인했다. 전체 제품 및 원문 전체 인수 완료를 뜻하지 않는다.
+
+2026-10-07 갱신: [로컬 발표 모드](2026-10-07-presentation-mode.md)를 상단 발표에 연결하고 ANCA Scene A/D·작품 정보·시점 회전·전체 화면 진입/복귀와 원래 편집 상태 보존을 확인했다. 로컬 발표는 공개 발행 예산을 적용하지 않으며 공개 API 검증은 유지했다. §46 자동 썸네일과 전체 목표의 인증·성능·사용자 인수 및 나머지 확장은 아직 미완료다.

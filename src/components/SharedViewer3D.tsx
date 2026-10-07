@@ -1,3 +1,4 @@
+import {useReadonlyAssets,readonlyImageUrl,type ReadonlyAssets} from './ReadonlyAssets';
 import {formatLength} from '../domain/lengthUnits';
 import {ArtworkTextureQuality,useArtworkTextureSize} from './ArtworkTextureQuality';
 import {useArtworkTexture} from './useArtworkTexture';
@@ -32,11 +33,12 @@ type Art=PublicShareSnapshot['artworks'][number];
 type PublicWall=PublicShareSnapshot['walls'][number];
 
 function finish(m?:PublicSurfaceMaterial){return m?{...m,texture:undefined}:undefined;}
-function publicTexture(m:PublicSurfaceMaterial|undefined,shareId:string){return m?.texture?{imageUrl:`/api/public/${shareId}/images/${m.texture.imageId}`,widthMm:m.texture.widthMm,heightMm:m.texture.heightMm}:undefined;}
+function publicTexture(m:PublicSurfaceMaterial|undefined,shareId:string,assets:ReadonlyAssets|null){const url=m?.texture?readonlyImageUrl(shareId,m.texture.imageId,assets):undefined;return m?.texture&&url?{imageUrl:url,widthMm:m.texture.widthMm,heightMm:m.texture.heightMm}:undefined;}
 
 type MeasurePick=(event:ThreeEvent<PointerEvent>)=>void;
 
 function Floor({snapshot,shareId,measuring,onMeasure}:{snapshot:PublicShareSnapshot;shareId:string;measuring:boolean;onMeasure:MeasurePick}){
+  const assets=useReadonlyAssets();
   const shapes=useMemo(()=>{
     const walls:Wall[]=snapshot.walls.map(wall=>({...wall,material:finish(wall.material),visible:true,locked:true,note:''}));
     const virtual:Wall[]=snapshot.openings.map(opening=>({id:`opening-${opening.id}`,name:'',start:opening.start,end:opening.end,heightMm:1,thicknessMm:1,color:'#000000',role:'boundary',visible:false,locked:true,note:''}));
@@ -48,7 +50,7 @@ function Floor({snapshot,shareId,measuring,onMeasure}:{snapshot:PublicShareSnaps
       return shape;
     });
   },[snapshot]);
-  return <>{shapes.map((shape,index)=><mesh receiveShadow key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><FloorSurfaceGeometry shape={shape} flat/><SurfaceFinish color={snapshot.floorColor} material={finish(snapshot.floorMaterial)} texture={publicTexture(snapshot.floorMaterial,shareId)} side={2} roughness={.96}/></mesh>)}</>;
+  return <>{shapes.map((shape,index)=><mesh receiveShadow key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><FloorSurfaceGeometry shape={shape} flat/><SurfaceFinish color={snapshot.floorColor} material={finish(snapshot.floorMaterial)} texture={publicTexture(snapshot.floorMaterial,shareId,assets)} side={2} roughness={.96}/></mesh>)}</>;
 }
 
 function ArtworkImage({url,art,width,height,selected}:{url:string;art:Art;width:number;height:number;selected:boolean}){
@@ -69,6 +71,7 @@ class ArtworkLoadBoundary extends Component<{children:ReactNode;width:number;hei
 }
 
 function PublicArtwork({art,wall,shareId,selected,onSelect,measuring,onMeasure}:{art:Art;wall:PublicWall;shareId:string;selected:boolean;onSelect:(selection:Selection)=>void;measuring:boolean;onMeasure:MeasurePick}){
+  const assets=useReadonlyAssets(),url=readonlyImageUrl(shareId,art.imageId,assets);
   const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz)||1;
   const side=art.wallSide==='back'?-1:1,nx=-dz/length*side,nz=dx/length*side;
   const offset=wall.thicknessMm/2+artworkPresentation(art).depthMm/2+5;
@@ -77,15 +80,16 @@ function PublicArtwork({art,wall,shareId,selected,onSelect,measuring,onMeasure}:
   return <group position={[x,art.centerHeightMm/1000,z]} rotation={[0,Math.atan2(nx,nz),(art.rotationDeg??0)*Math.PI/180]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'artwork',id:art.id});}}>
     <ArtworkPresentationShell artwork={art}/>
     {selected&&<Line points={(()=>{const p=artworkPresentation(art),w=p.widthMm/2000+.02,h=p.heightMm/2000+.02,z=p.depthMm/2000+.005;return [[-w,-h,z],[w,-h,z],[w,h,z],[-w,h,z],[-w,-h,z]];})()} color="#365cf5" lineWidth={2}/>}
-    <ArtworkLoadBoundary key={`${shareId}:${art.imageId}`} width={width} height={height} imageZ={imageZ}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} imageZ={imageZ}/>}><ArtworkImage selected={selected} url={`/api/public/${shareId}/images/${art.imageId}`} art={art} width={width} height={height}/></Suspense></ArtworkLoadBoundary>
+    {url?<ArtworkLoadBoundary key={url} width={width} height={height} imageZ={imageZ}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} imageZ={imageZ}/>}><ArtworkImage selected={selected} url={url} art={art} width={width} height={height}/></Suspense></ArtworkLoadBoundary>:<ArtworkPlaceholder width={width} height={height} imageZ={imageZ} failed/>}
   </group>;
 }
 
 function PublicWallMesh({wall,artworks,shareId,selectedId,onSelect,groups,measuring,onMeasure}:{wall:PublicWall;artworks:Art[];shareId:string;selectedId:string|null;onSelect:(selection:Selection)=>void;groups:Map<string,Group>;measuring:boolean;onMeasure:MeasurePick}){
+  const assets=useReadonlyAssets();
   const register=useCallback((group:Group|null)=>{if(group)groups.set(wall.id,group);else groups.delete(wall.id);},[groups,wall.id]);
   const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz);
   if(!length)return null;
-  return <group ref={register}><mesh castShadow receiveShadow position={[(wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000]} rotation={[0,-Math.atan2(dz,dx),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'wall',id:wall.id});}}><WallSurfaceGeometry length={length/1000} height={wall.heightMm/1000} depth={wall.thicknessMm/1000}/><SurfaceFinish color={selectedId===wall.id?'#cfdbff':wall.color} material={finish(wall.material)} texture={publicTexture(wall.material,shareId)} roughness={.92}/></mesh>{artworks.map(art=><PublicArtwork key={art.id} art={art} wall={wall} shareId={shareId} selected={selectedId===art.id} onSelect={onSelect} measuring={measuring} onMeasure={onMeasure}/>)}</group>;
+  return <group ref={register}><mesh castShadow receiveShadow position={[(wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000]} rotation={[0,-Math.atan2(dz,dx),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'wall',id:wall.id});}}><WallSurfaceGeometry length={length/1000} height={wall.heightMm/1000} depth={wall.thicknessMm/1000}/><SurfaceFinish color={selectedId===wall.id?'#cfdbff':wall.color} material={finish(wall.material)} texture={publicTexture(wall.material,shareId,assets)} roughness={.92}/></mesh>{artworks.map(art=><PublicArtwork key={art.id} art={art} wall={wall} shareId={shareId} selected={selectedId===art.id} onSelect={onSelect} measuring={measuring} onMeasure={onMeasure}/>)}</group>;
 }
 
 function CutawayVisibility({walls,groups,cutaway}:{walls:readonly Wall[];groups:ReadonlyMap<string,Group>;cutaway:boolean}){

@@ -55,7 +55,8 @@ export interface PublicShareOptions {
   camera?:PublicShareSnapshot['camera'];
 }
 
-export function createPublicShare(project:Project,options:PublicShareOptions){
+/** Build viewing data from an already validated project; local presentation has no publication byte budget. */
+export function createReadonlyLayout(project:Project,options:PublicShareOptions){
   const m=project.referenceModel?.visible?project.referenceModel:undefined;
   if(m&&!options.referenceAssetId)throw new Error('전시장 모델의 공개 자산을 먼저 준비해야 합니다.');
   const referenceModel:PublicReferenceModel|undefined=m?{modelId:options.referenceAssetId!,sizeMm:[...m.sizeMm],sourceOffsetM:[...m.sourceOffsetM],positionMm:[...m.positionMm],rotationDeg:m.rotationDeg,scale:m.scale}:undefined;
@@ -77,7 +78,13 @@ export function createPublicShare(project:Project,options:PublicShareOptions){
     ...(options.includeDimensions?{dimensions:(project.dimensions??[]).filter(dim=>(!dim.elevationWallId||wallIds.has(dim.elevationWallId))&&[dim.start,dim.end].every(anchor=>anchor.kind==='wall'?wallIds.has(anchor.wallId):anchor.kind==='modelArtwork'?(project.modelArtworks??[]).some(a=>a.visible&&a.id===anchor.modelArtworkId):true)).map(dim=>{const resolved=resolveMeasurement(project,dim);return {id:dim.id,view:dim.view,...(dim.elevationWallId?{elevationWallId:dim.elevationWallId}:{}),start:resolved.start,end:resolved.end,distanceMm:resolved.distanceMm};})}:{}),
     ...(options.camera?{camera:options.camera}:{})
   };
-  return {snapshot:parsePublicShare(snapshot),uploads};
+  return {snapshot,uploads};
+}
+
+/** Public publication always passes through the bounded, untrusted-input allowlist. */
+export function createPublicShare(project:Project,options:PublicShareOptions){
+ const {snapshot,uploads}=createReadonlyLayout(project,options);
+ return {snapshot:parsePublicShare(snapshot),uploads};
 }
 
 const record=(value:unknown):Record<string,unknown>=>{if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('공유 데이터 형식이 올바르지 않습니다.');return value as Record<string,unknown>;};
