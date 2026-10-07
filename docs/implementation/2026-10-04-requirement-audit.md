@@ -149,3 +149,5 @@
 2026-10-07 모델 Texture 갱신: [텍스처 디코딩 실패 보호](2026-10-07-model-texture-decode.md)를 모델 입력·편집·공유/발표·GLB/glTF 출력에 연결했다. 실제 GLTFLoader의 null map 성공을 손상 PNG로 재현하고 native decoder의 정상 RGBA·확장 map·복제 공유·실패 자원 해제를 확인했다. 새 회귀 8개, 전체 1,115 통과/선택 10 제외 및 빌드 통과. 원본 프로젝트·공개/백업 byte 보존과 무텍스처 모델을 유지한다. 모든 브라우저 decoder/WebGL 업로드·캡처 모델 준비 상태·실제 UI와 전체 전시 흐름 인수까지 완료로 확대하지 않는다.
 
 2026-10-07 캡처 모델 갱신: [3D PNG 모델 준비/실패 전달](2026-10-07-capture-model-readiness.md)을 전시장 GLB·모든 표시 3D 작품에 연결했다. 이전 source/bounds 상태를 제외하고 실패/시간 초과/프로젝트 변경을 전달하며, 숨김/삭제된 벽의 이미지 대기는 제외한다. PDF 3D·3D 작품 상세·전시장은 실제 loader/native PNG 실패가 renderer 생성 전에 중단되는 경계를 확인했다. 새 회귀 10개, 전체 1,125 통과/선택 10 제외 및 빌드 통과. 실제 React/R3F commit·WebGL 픽셀과 surface texture/normal 준비·전체 흐름 인수는 별도로 남긴다.
+
+2026-10-07 표면 캡처 갱신: [texture/normal 준비·실패 검사](2026-10-07-capture-surface-readiness.md)를 표시 벽·존재하는 모든 바닥 surface·이미지 작품 normal에 연결했다. 현재 주소/반복 크기/노멀 강도와 실제 Material map을 확인하며, 없는 바닥·숨김/삭제 벽과 영상의 미사용 슬롯은 제외한다. 실제 Three TextureLoader/native PNG decoder의 정상 normal RGBA·NoColorSpace 및 손상 본문 오류를 확인했다. 새 회귀 8개, 전체 1,133 통과/선택 10 제외와 빌드 통과. 실제 R3F commit/WebGL·전체 PNG/PDF 픽셀과 원문 24단계·사용자 모델·기기/계정·배포 인수는 미완료 상태를 유지한다.

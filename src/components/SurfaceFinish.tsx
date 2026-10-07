@@ -1,3 +1,4 @@
+import {captureSurfaceStatus} from '../lib/captureSurface';
 import {useEffect,useMemo,useState} from 'react';
 import {Html} from '@react-three/drei';
 import {TextureLoader,type Texture,type Side} from 'three';
@@ -20,6 +21,6 @@ function useSurfaceTexture(texture?:SurfaceTexture,normal=false,extentM?:readonl
  return {map,failed:!!url&&source?.url===url&&source.failed};
 }
 export function SurfaceFinish({color,material,roughness,map,side,texture,normalExtentM}:{color:string;material?:SurfaceMaterial;roughness:number;map?:Texture;side?:Side;texture?:SurfaceTexture;normalExtentM?:readonly [number,number]}){
- const loaded=useSurfaceTexture(texture),normal=useSurfaceTexture(material?.normal,true,normalExtentM),surfaceMap=loaded.map??map;
- return <>{material?<meshPhysicalMaterial {...physicalMaterialParameters(color,material)} map={surfaceMap??null} normalMap={normal.map??null} side={side} onUpdate={m=>{m.needsUpdate=true;}}/>:<meshStandardMaterial color={color} roughness={roughness} map={surfaceMap??null} side={side} onUpdate={m=>{m.needsUpdate=true;}}/>} {(loaded.failed||normal.failed)&&<Html center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label">{normal.failed?'노멀 맵':'텍스처'}를 불러오지 못했습니다</span></Html>}</>;
+ const loaded=useSurfaceTexture(texture),normal=useSurfaceTexture(material?.normal,true,normalExtentM),surfaceMap=loaded.map??map,captureSurface=captureSurfaceStatus(texture,material?.normal,loaded,normal);
+ return <>{material?<meshPhysicalMaterial userData={{captureSurface}} {...physicalMaterialParameters(color,material)} map={surfaceMap??null} normalMap={normal.map??null} side={side} onUpdate={m=>{m.needsUpdate=true;}}/>:<meshStandardMaterial userData={{captureSurface}} color={color} roughness={roughness} map={surfaceMap??null} side={side} onUpdate={m=>{m.needsUpdate=true;}}/>} {(loaded.failed||normal.failed)&&<Html center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label">{normal.failed?'노멀 맵':'텍스처'}를 불러오지 못했습니다</span></Html>}</>;
 }
