@@ -7,20 +7,21 @@ import {disposeExportScene} from './exportScene';
 import {needsSurfaceEnvironment,surfaceEnvironment,SURFACE_ENVIRONMENT_INTENSITY} from './surfaceEnvironment';
 import type {CameraView} from '../domain/types';
 import type {PdfSection} from './pdfLayout';
-export interface PdfCurrentCamera {view:CameraView;width:number;height:number;cutaway:boolean}
+export interface PdfCurrentCamera {view:CameraView;width:number;height:number;cutaway:boolean;fit?:boolean}
 
 /** Render a detached snapshot, leaving selection, project, Undo and live camera untouched. */
 export async function renderPdf3d(section:PdfSection,current?:PdfCurrentCamera,outputEdge=1920):Promise<Uint8Array>{
  if(!Number.isInteger(outputEdge)||outputEdge<1||outputEdge>3840)throw new Error('3D 이미지 해상도가 올바르지 않습니다.');
- const source=section.current?current:undefined,longEdge=source?Math.max(source.width,source.height):1920;
- const width=source?Math.max(1,Math.round(outputEdge*source.width/longEdge)):outputEdge,height=source?Math.max(1,Math.round(outputEdge*source.height/longEdge)):Math.max(1,Math.round(outputEdge*1200/1920));
+ const source=section.current?current:undefined,fit=source?.fit===true&&source.view.projection!=='perspective',longEdge=source?Math.max(source.width,source.height):1920;
+ const width=source&&!fit?Math.max(1,Math.round(outputEdge*source.width/longEdge)):outputEdge,height=source&&!fit?Math.max(1,Math.round(outputEdge*source.height/longEdge)):Math.max(1,Math.round(outputEdge*1200/1920));
  const scene=await prepareExportScene(section.project) as Scene;let renderer:WebGLRenderer|undefined,environment:ReturnType<typeof surfaceEnvironment>|undefined;
  try{
   const view=source?.view??section.camera??createStandardView(section.project,'bird',{width,height});
-  const camera=view.projection==='perspective'?new PerspectiveCamera(view.fov??50,width/height,.02,10000):new OrthographicCamera(-(source?.width??width)/2,(source?.width??width)/2,(source?.height??height)/2,-(source?.height??height)/2,.01,10000);
+  const frameWidth=fit?width:source?.width??width,frameHeight=fit?height:source?.height??height;
+  const camera=view.projection==='perspective'?new PerspectiveCamera(view.fov??50,width/height,.02,10000):new OrthographicCamera(-frameWidth/2,frameWidth/2,frameHeight/2,-frameHeight/2,.01,10000);
   camera.position.set(...view.position);camera.lookAt(new Vector3(...view.target));camera.zoom=view.zoom;camera.updateProjectionMatrix();camera.updateMatrixWorld(true);
   // A Scene remembers direction, but not the old browser's viewport. Fit that direction.
-  if(section.camera&&!source&&camera instanceof OrthographicCamera){
+  if((section.camera&&!source||fit)&&camera instanceof OrthographicCamera){
    const box=new Box3().setFromObject(scene),center=box.getCenter(new Vector3()),offset=camera.position.clone().sub(new Vector3(...view.target));camera.position.copy(center.clone().add(offset));camera.lookAt(center);camera.zoom=1;camera.updateMatrixWorld(true);
    let extentX=1,extentY=1;for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){const p=new Vector3(x,y,z).applyMatrix4(camera.matrixWorldInverse);extentX=Math.max(extentX,Math.abs(p.x));extentY=Math.max(extentY,Math.abs(p.y));}
    camera.zoom=Math.min(width/(extentX*2),height/(extentY*2))*.8;camera.updateProjectionMatrix();

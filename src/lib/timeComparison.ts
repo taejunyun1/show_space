@@ -7,7 +7,7 @@ let rendering:Promise<unknown>=Promise.resolve();
 export async function renderTimeComparison(project:Project,options:TimeComparisonOptions,camera:PdfCurrentCamera|undefined,signal:AbortSignal,onFrame:(frame:TimeComparisonFrame,png:Uint8Array,index:number)=>void,render?:ComparisonRenderer){
  const frames=timeComparisonFrames(project,options);
  signal.throwIfAborted();
- const renderer=render??(async(frame,current)=>{const {renderPdf3d}=await import('./pdfRender3d');return renderPdf3d({project:frame.project,name:frame.name,kind:'3d',current:true},current,1024);});
+ const renderer=render??(async(frame,current)=>{const {renderPdf3d}=await import('./pdfRender3d');return renderPdf3d({project:frame.project,name:frame.name,kind:'3d',current:true},current?{...current,fit:true}:undefined,1024);});
  for(const [index,frame] of frames.entries()){
   signal.throwIfAborted();
   // Cancellation cannot interrupt an active image decode/GPU render. A replacement job

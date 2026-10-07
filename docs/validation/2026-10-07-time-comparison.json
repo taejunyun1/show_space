@@ -15,7 +15,8 @@
     "fixedCurrentCamera": true,
     "detachedImages": true,
     "sequentialRenderingIncludingCancelledReplacement": true,
-    "fourScenesSavedAtomicallyWithUndo": true
+    "fourScenesSavedAtomicallyWithUndo": true,
+    "orthographicPreviewFit": "Shared direction and cutaway; detached 1024x640 whole-space fit, live and stored camera unchanged"
   },
   "native": {
     "date": "2026-07-21",
@@ -78,7 +79,25 @@
     ],
     "mobileGridColumns": "295px",
     "warningsErrors": [],
-    "fullNativeJSONEqualityVerified": false
+    "fullNativeJSONEqualityVerified": false,
+    "fittedImageSizes": [
+      [
+        1024,
+        640
+      ],
+      [
+        1024,
+        640
+      ],
+      [
+        1024,
+        640
+      ],
+      [
+        1024,
+        640
+      ]
+    ]
   },
   "checks": {
     "testsPassed": 873,
@@ -88,5 +107,30 @@
   "remaining": [
     "Real-device and large-model comparison performance acceptance",
     "Other source2 extensions, authentication and full-product acceptance"
-  ]
+  ],
+  "deployment": {
+    "versionId": "ab3ea649-06c0-4d6c-8f65-a72a31167833",
+    "entry": "/assets/index-CfPlGPCf.js",
+    "nativeFourImagesCompleted": true,
+    "imageSizes": [
+      [
+        1024,
+        810
+      ],
+      [
+        1024,
+        810
+      ],
+      [
+        1024,
+        810
+      ],
+      [
+        1024,
+        810
+      ]
+    ],
+    "consoleWarningsErrors": [],
+    "productionProjectOrShareWrites": false
+  }
 }
