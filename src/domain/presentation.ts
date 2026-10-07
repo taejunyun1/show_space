@@ -11,9 +11,11 @@ export function presentationLayout(project:Project,sceneId:string|null,currentCa
  function register(url:string){let id=modelIds.get(url);if(!id){id=(modelIds.size+1).toString(16).padStart(64,'0');modelIds.set(url,id);models.set(id,url);}return id;}
  const referenceAssetId=source.referenceModel?.visible?register(source.referenceModel.dataUrl):undefined;
  for(const art of source.modelArtworks??[])if(art.visible)ids.set(art.id,register(art.model.dataUrl));
+ const videos=new Map<string,string>(),videoIds=new Map<string,string>(),sources=new Map<string,string>();
+ for(const art of source.artworks)if(art.visible&&source.walls.some(w=>w.id===art.wallId&&w.visible)&&art.video){let id=sources.get(art.video.dataUrl);if(!id){id=(sources.size+1).toString(16).padStart(64,'0');sources.set(art.video.dataUrl,id);videos.set(id,art.video.dataUrl);}videoIds.set(art.id,id);}
  const camera=scene?scene.cameraView:currentCamera;
- const {snapshot,uploads}=createReadonlyLayout(source,{includeDimensions:true,includeArtworkDetails:true,camera:camera?structuredClone(camera):undefined,referenceAssetId,modelAssetIds:ids});
- return {snapshot,images:new Map(uploads.map(u=>[u.imageId,u.sourceUrl])),models};
+ const {snapshot,uploads}=createReadonlyLayout(source,{includeDimensions:true,includeArtworkDetails:true,camera:camera?structuredClone(camera):undefined,referenceAssetId,modelAssetIds:ids,videoAssetIds:videoIds});
+ return {snapshot,images:new Map(uploads.map(u=>[u.imageId,u.sourceUrl ])),models,videos};
 }
 
 export function adjacentPresentationScene(ids:readonly string[],current:string|null,step:-1|1):string|null{

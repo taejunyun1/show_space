@@ -23,3 +23,11 @@ it('replaces a changed source without letting an old lease destroy its replaceme
 it('reports playback rejection and real metadata mismatches, and clamps seeking without mutating project data',async()=>{
  const {runtime,made}=fixture(),a=runtime.open('a',media);made[0].play=async()=>{throw new Error('browser policy');};await expect(a.session.play()).rejects.toThrow();expect(a.session.snapshot.error).toContain('재생');a.session.seek(999);expect(a.session.video.currentTime).toBe(3);expect(media).not.toHaveProperty('currentTime');made[0].videoWidth=1280;made[0].dispatchEvent(new Event('loadedmetadata'));expect(a.session.snapshot.ready).toBe(false);expect(a.session.snapshot.error).toContain('원본');a.release();
 });
+it('opens only a validated same-origin public asset and does not revoke a non-Blob URL',()=>{
+ const {runtime,made,revoke}=fixture(),a=runtime.openPublic('readonly','b'.repeat(48),{videoId:'a'.repeat(64),widthPx:640,heightPx:360,durationSeconds:3,loop:true,fit:'contain'});
+ expect(a.session.source).toBe(`/api/public/${'b'.repeat(48)}/videos/${'a'.repeat(64)}`);expect(made[0].preload).toBe('metadata');expect(a.session.snapshot.ready).toBe(false);made[0].dispatchEvent(new Event('loadedmetadata'));expect(made[0].preload).toBe('auto');expect(a.session.snapshot.ready).toBe(true);runtime.pauseAll();a.release();expect(revoke).not.toHaveBeenCalled();expect(()=>runtime.openPublic('bad','evil',{videoId:'a'.repeat(64),widthPx:640,heightPx:360,durationSeconds:3,loop:true,fit:'contain'})).toThrow();expect(made).toHaveLength(1);
+});
+
+it('keeps browser-policy play rejection retryable after validated decoding, but blocks corrupt metadata',async()=>{
+ const {runtime,made}=fixture(),lease=runtime.open('retry',media),v=made[0];v.dispatchEvent(new Event('loadedmetadata'));const play=v.play.bind(v);v.play=async()=>{throw new Error('policy');};await expect(lease.session.play()).rejects.toThrow();expect(lease.session.snapshot.ready).toBe(true);v.play=play;await lease.session.play();expect(lease.session.snapshot.error).toBeUndefined();v.videoWidth=1920;v.dispatchEvent(new Event('loadedmetadata'));await expect(lease.session.play()).rejects.toThrow(/원본/);expect(v.paused).toBe(true);lease.release();
+});

@@ -1,10 +1,13 @@
+import {VIDEO_MAX_BYTES} from '../domain/mediaArtwork';
+import {PUBLIC_VIDEO_ASSETS_MAX,PUBLIC_VIDEOS_MAX_BYTES} from '../domain/publicVideo';
+import {publicVideoBytes,publicVideoHash} from '../lib/publicVideoAsset';
 import {MODEL_MAX_BYTES} from '../lib/glbPayload';
 import {publicModelBytes,publicModelHash,PUBLIC_MODELS_MAX_BYTES,PUBLIC_MODEL_ASSETS_MAX} from '../lib/publicModelAsset';
-import {parsePublicShare,publicModelIds,publicImageIds,PUBLIC_SNAPSHOT_MAX_BYTES,type PublicShareSnapshot} from '../domain/publicShare';
+import {parsePublicShare,publicModelIds,publicImageIds,publicVideoIds,PUBLIC_SNAPSHOT_MAX_BYTES,type PublicShareSnapshot} from '../domain/publicShare';
 
 export interface ShareBucket {
   put(key:string,value:string|ArrayBuffer|ReadableStream,options?:{httpMetadata?:{contentType?:string}}):Promise<unknown>;
-  get(key:string):Promise<{body:ReadableStream;text():Promise<string>;size:number;httpMetadata?:{contentType?:string}}|null>;
+  get(key:string,options?:{range:{offset:number;length:number}}):Promise<{body:ReadableStream;text():Promise<string>;size:number;httpMetadata?:{contentType?:string}}|null>;
   head(key:string):Promise<{size:number}|null>;
   list(options:{prefix:string;cursor?:string;limit?:number}):Promise<{objects:Array<{key:string}>;truncated:boolean;cursor?:string}>;
   delete(keys:string|string[]):Promise<unknown>;
@@ -18,6 +21,7 @@ const validImageId=(value:string)=>/^(0|[1-9][0-9]{0,3})$/.test(value);
 const metaKey=(id:string)=>`meta/${id}.json`;
 const snapshotKey=(id:string)=>`shares/${id}/snapshot.json`;
 const modelKey=(id:string,hash:string)=>`shares/${id}/models/${hash}.glb`;
+const videoKey=(id:string,hash:string)=>`shares/${id}/videos/${hash}`;
 const imageKey=(id:string,imageId:string)=>`shares/${id}/images/${imageId}`;
 
 function ownerAuthorized(request:Request,token?:string){
@@ -50,7 +54,7 @@ async function boundedJson(request:Request):Promise<unknown>{
 export async function handleShareRequest(request:Request,env:ShareEnv):Promise<Response>{
   const {pathname}=new URL(request.url),method=request.method;
   if(!pathname.startsWith('/api/'))return error(404,'주소를 찾을 수 없습니다.');
-  const publicMatch=pathname.match(/^\/api\/public\/([0-9a-f]{48})(?:\/(images|models)\/(\d{1,4}|[0-9a-f]{64}))?$/);
+  const publicMatch=pathname.match(/^\/api\/public\/([0-9a-f]{48})(?:\/(images|models|videos)\/(\d{1,4}|[0-9a-f]{64}))?$/);
   if(publicMatch){
     if(method!=='GET')return error(405,'읽기 전용 링크입니다.');
     const [,id,assetKind,assetId]=publicMatch,entry=await meta(env.SHARES,id);
@@ -61,6 +65,19 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
     if(!snapshot)return error(404,'공유 화면을 찾을 수 없습니다.');
     if(assetId===undefined)return json(snapshot);
     if(assetKind==='models'){if(!publicModelIds(snapshot).includes(assetId))return error(404,'3D 작품 모델을 찾을 수 없습니다.');const model=await env.SHARES.get(modelKey(id,assetId));if(!model)return error(404,'3D 작품 모델을 찾을 수 없습니다.');return new Response(model.body,{headers:{...noStore,'content-type':'model/gltf-binary'}});}
+    if(assetKind==='videos'){
+      if(!publicVideoIds(snapshot).includes(assetId))return error(404,'영상 작품을 찾을 수 없습니다.');
+      const key=videoKey(id,assetId),info=await env.SHARES.head(key);if(!info||info.size<=0||info.size>VIDEO_MAX_BYTES)return error(404,'영상 작품을 찾을 수 없습니다.');
+      const requested=request.headers.get('range');let range:{offset:number;length:number}|undefined;
+      if(requested){
+        const match=/^bytes=(\d*)-(\d*)$/.exec(requested);let start=0,end=info.size-1;
+        if(match&&(match[1]||match[2])){if(match[1]){start=Number(match[1]);if(match[2])end=Math.min(end,Number(match[2]));}else{const suffix=Number(match[2]);start=Math.max(0,info.size-suffix);if(suffix<=0)start=info.size;}}
+        if(!match||!(match[1]||match[2])||!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start>=info.size||start>end)return new Response(null,{status:416,headers:{...noStore,'content-range':`bytes */${info.size}`}});
+        range={offset:start,length:end-start+1};
+      }
+      const video=await env.SHARES.get(key,range?{range}:undefined);if(!video||!['video/mp4','video/webm'].includes(video.httpMetadata?.contentType??''))return error(404,'영상 작품을 찾을 수 없습니다.');
+      return new Response(video.body,{status:range?206:200,headers:{...noStore,'accept-ranges':'bytes','content-type':video.httpMetadata!.contentType!,'content-length':String(range?.length??info.size),...(range?{'content-range':`bytes ${range.offset}-${range.offset+range.length-1}/${info.size}`}:{})}});
+    }
     const imageId=assetId;
     if(!validImageId(imageId)||!publicImageIds(snapshot).includes(imageId))return error(404,'작품 이미지를 찾을 수 없습니다.');
     const image=await env.SHARES.get(imageKey(id,imageId));
@@ -94,6 +111,17 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
     const key=modelKey(id,hash);if(!(await env.SHARES.head(key))){const listing=await env.SHARES.list({prefix:`shares/${id}/models/`,limit:PUBLIC_MODEL_ASSETS_MAX+1});let total=bytes.byteLength;for(const item of listing.objects)total+=(await env.SHARES.head(item.key))?.size??0;if(listing.truncated||listing.objects.length>=PUBLIC_MODEL_ASSETS_MAX||total>PUBLIC_MODELS_MAX_BYTES)return error(413,'공유 모델 자산은 51개·총합 80MiB 이하여야 합니다.');await env.SHARES.put(key,bytes,{httpMetadata:{contentType:'model/gltf-binary'}});}
     return new Response(null,{status:204,headers:noStore});
   }
+  const videoUpload=pathname.match(/^\/api\/shares\/([0-9a-f]{48})\/videos\/([0-9a-f]{64})$/);
+  if(videoUpload){
+    if(method!=='PUT')return error(405,'지원하지 않는 요청입니다.');
+    const [,id,hash]=videoUpload,entry=await meta(env.SHARES,id);if(!entry)return error(404,'공유 작업을 찾을 수 없습니다.');if(entry.status!=='draft')return error(409,'발행된 공유는 변경할 수 없습니다.');
+    const mime=request.headers.get('content-type')?.split(';')[0];if(mime!=='video/mp4'&&mime!=='video/webm')return error(415,'MP4·WebM 영상만 공유할 수 있습니다.');
+    if(Number(request.headers.get('content-length'))>VIDEO_MAX_BYTES)return error(413,'공유 영상은 16MiB 이하여야 합니다.');
+    let bytes:ArrayBuffer;
+    try{const reader=request.body?.getReader();if(!reader)throw new Error('영상 원본이 없습니다.');const chunks:Uint8Array[]=[];let length=0;try{while(true){const {done,value}=await reader.read();if(done)break;length+=value.length;if(length>VIDEO_MAX_BYTES){await reader.cancel();return error(413,'공유 영상은 16MiB 이하여야 합니다.');}chunks.push(value);}}finally{reader.releaseLock();}const raw=new Uint8Array(length);let offset=0;for(const c of chunks){raw.set(c,offset);offset+=c.length;}bytes=publicVideoBytes(raw.buffer,mime);if(await publicVideoHash(bytes)!==hash)throw new Error('공유 영상 원본의 해시가 일치하지 않습니다.');}catch(e){return error(400,(e as Error).message);}
+    const key=videoKey(id,hash);if(!(await env.SHARES.head(key))){const listing=await env.SHARES.list({prefix:`shares/${id}/videos/`,limit:PUBLIC_VIDEO_ASSETS_MAX+1});let total=bytes.byteLength;for(const item of listing.objects)total+=(await env.SHARES.head(item.key))?.size??0;if(listing.truncated||listing.objects.length>=PUBLIC_VIDEO_ASSETS_MAX||total>PUBLIC_VIDEOS_MAX_BYTES)return error(413,'공유 영상 자산은 20개·총합 80MiB 이하여야 합니다.');await env.SHARES.put(key,bytes,{httpMetadata:{contentType:mime}});}
+    return new Response(null,{status:204,headers:noStore});
+  }
   const imageUpload=pathname.match(/^\/api\/shares\/([0-9a-f]{48})\/images\/(\d{1,4})$/);
   if(imageUpload){
     if(method!=='PUT')return error(405,'지원하지 않는 요청입니다.');
@@ -118,6 +146,7 @@ export async function handleShareRequest(request:Request,env:ShareEnv):Promise<R
     let snapshot:PublicShareSnapshot;
     try{snapshot=parsePublicShare(await boundedJson(request));}catch(e){return error(400,(e as Error).message);}
     let modelBytes=0;for(const hash of publicModelIds(snapshot)){const model=await env.SHARES.head(modelKey(id,hash));if(!model)return error(409,'3D 작품 모델 업로드가 완료되지 않았습니다.');modelBytes+=model.size;}if(modelBytes>PUBLIC_MODELS_MAX_BYTES)return error(413,'공유 모델 자산 총합은 80MiB 이하여야 합니다.');
+    let videoBytes=0;for(const hash of publicVideoIds(snapshot)){const video=await env.SHARES.head(videoKey(id,hash));if(!video)return error(409,'영상 원본 업로드가 완료되지 않았습니다.');if(video.size>VIDEO_MAX_BYTES)return error(413,'공유 영상은 16MiB 이하여야 합니다.');videoBytes+=video.size;}if(videoBytes>PUBLIC_VIDEOS_MAX_BYTES)return error(413,'공유 영상 자산 총합은 80MiB 이하여야 합니다.');
     for(const imageId of publicImageIds(snapshot))if(!(await env.SHARES.head(imageKey(id,imageId))))return error(409,'작품/표면 이미지 업로드가 완료되지 않았습니다.');
     await env.SHARES.put(snapshotKey(id),JSON.stringify(snapshot),{httpMetadata:{contentType:'application/json'}});
     await saveMeta(env.SHARES,{...entry,status:'active',name:snapshot.name,includeDimensions:!!snapshot.dimensions,sceneCount:snapshot.scenes?.length??0,includeArtworkDetails:!!snapshot.includeArtworkDetails});

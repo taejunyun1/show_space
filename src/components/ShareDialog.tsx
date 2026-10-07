@@ -33,7 +33,7 @@ export function ShareDialog({project,onClose,getCamera}:{project:Project;onClose
     }catch(e){setError((e as Error).message);}finally{setBusy(false);}
   }
   async function revoke(id:string){
-    if(!window.confirm('이 공유 링크를 중단할까요? 이후 새 열람과 이미지·3D 모델 요청이 차단됩니다.'))return;
+    if(!window.confirm('이 공유 링크를 중단할까요? 이후 새 열람과 이미지·3D 모델·영상 요청이 차단됩니다.'))return;
     setBusy(true);setError('');
     try{await revokePublicShare(id,ownerToken.trim());setItems(await listPublicShares(ownerToken.trim()));if(link.endsWith(id))setLink('');}catch(e){setError((e as Error).message);}finally{setBusy(false);}
   }
@@ -43,6 +43,7 @@ export function ShareDialog({project,onClose,getCamera}:{project:Project;onClose
     <p className="share-explain">링크를 가진 사람은 로그인 없이 열람할 수 있습니다. 원본 도면·내부 메모·선택하지 않은 Scene은 포함하지 않습니다. 나중에 편집해도 이미 만든 링크는 바뀌지 않습니다.</p>
     {project.outdoor?.mode==='outdoor'&&<p className="share-explain">야외의 위치 좌표·날짜·시간·북쪽 방향을 포함해 같은 태양과 그림자로 표시합니다.</p>}
     {project.modelArtworks?.some(a=>a.visible)&&<p className="share-explain">표시 중인 3D 작품의 형상·재질과 작품 정보를 포함합니다. 공유 화면에서는 이동·회전·삭제할 수 없습니다.</p>}
+    {(project.artworks.some(a=>a.video)||project.scenes.some(s=>s.artworks.some(a=>a.video)))&&<p className="share-explain">표시되는 영상 스크린의 원본 영상도 공개합니다. 열람자는 배치를 수정할 수 없으며 재생·소리만 조절합니다. 원본 하나 16MiB, 전체 Scene 합계 80MiB·20개까지입니다.</p>}
     <label className="share-key">작성자 키<input type="password" disabled={busy} autoComplete="off" aria-label="작성자 키" value={ownerToken} onChange={e=>setOwnerToken(e.target.value)} placeholder="공유 서버의 작성자 키"/></label>
     <label className="share-check"><input type="checkbox" checked={includeDimensions} disabled={busy} onChange={e=>setIncludeDimensions(e.target.checked)}/> 치수 공개</label>
     <label className="share-check"><input type="checkbox" checked={includeArtworkDetails} disabled={busy} onChange={e=>setIncludeArtworkDetails(e.target.checked)}/> 작품 상세 정보 공개</label>

@@ -62,7 +62,7 @@
 | 56–57 Collaboration·Comment | 미구현 확장 | 동시 공동 편집/권한/댓글 기능; 고정 공개 링크와 개인 클라우드 저장은 별개 |
 | 58 Installation Mode | 독립 현장 모드 구현 | 잠긴 평면/벽면·작품 검색·설치 치수·임시 줄자·메모; 768px/390px 브라우저 검증, 실물 태블릿 인수 남음 |
 | 59 Checklist | 작품별 5단계 및 전체 현장 집계 구현 | 출력·액자·운송·설치·조명 확인, 추가 체크 집계; JSON/Undo/Scene 보존·공개 제외 검증 |
-| 60 Media Artwork | 편집기 실제 VideoTexture·Playback·Aspect Ratio·원본/Scene/ZIP/Library 보존의 로컬 인수 완료 | 공유·발표 영상 재생, 실제 WebM·모바일·공개 배포 인수는 진행 중 |
+| 60 Media Artwork | 편집기·발표·읽기 전용 3D 실제 VideoTexture/Playback 및 원본/Scene/ZIP/Library 보존 구현 | 실제 MP4 로컬 Worker/Range seek·발행/회수, VP9 WebM·JSON 복원·390px 확인. 운영 영상 발행·실제 기기·2D 포스터 비율 인수는 남음 |
 | 61 Projection | 미구현 확장 | 분류 입력과 프로젝터 실제 투사 Geometry 시뮬레이션을 구별 |
 | 62 Advanced Lighting | 기본 조명 이후 확장 | IES·조도 분석 등 미구현 |
 | 63–65 렌더 품질·Environment·성능 | 편집/미리보기/캡처 분리와 환경 근사, 이미지 LOD 구현 | 물리적 정답/전체 VRAM/대표 실기기 성능 완료 아님 |
@@ -113,3 +113,5 @@
 2026-10-07 갱신: [화면 오류 복구](2026-10-07-screen-recovery.md)를 추가했다. 격리된 실제 앱/IndexedDB에서 lazy 파일 누락 시 편집 유지, 저장 실패 시 재시작 중단, JSON 백업 실제 복원과 기존 프로젝트 보존, 전체 렌더 오류 뒤 큐/초안 유지 및 390px 복구 화면을 검증했다. 실패한 큐는 revision 검사 writer로 재시도하며 다른 탭 수정은 덮어쓰지 않는다. React bootstrap 자체 누락/모든 비동기 오류나 원문 전체 완료로 확대하지 않는다.
 
 2026-10-07 갱신: [영상 작품 1차 구현](2026-10-07-media-artwork.md)의 실제 MP4 입력·3D 프레임 변경·비율/크롭·ZIP 실제 복원·Library 배치·잠금·PNG 캡처를 격리된 로컬 프로젝트에서 확인했다. 영상 원본은 ZIP에서 동일 해시로 중복 없이 보존한다. 전체 975 테스트 통과/선택 2 제외이며, 영상 공유·발표 재생·운영 배포·WebM 실제 입력·모바일 및 §61 등은 남아 있다. 원문 전체 완료로 확대하지 않는다.
+
+2026-10-07 후속 갱신: [영상 공유·발표](2026-10-07-video-sharing.md)에 detached 로컬 발표와 공개 읽기 전용 3D VideoTexture, R2 원본 중복 제거·Range seek·발행/회수 검증을 추가했다. 실제 MP4 로컬 공유/선택 Scene/390px 조작, VP9 WebM 입력, 정상 포스터 MP4·WebM JSON 실제 복원을 확인했다. 전체 983 통과/선택 3 제외. 운영 영상 발행 왕복·실제 Safari/모바일·오디오/다수 영상 성능·2D 포스터 비율과 §61은 남아 있으며 원문 전체 완료로 확대하지 않는다.

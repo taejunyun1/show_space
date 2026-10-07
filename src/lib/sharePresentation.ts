@@ -1,3 +1,5 @@
+import {preparePublicVideos,type PublicVideoCache,type PublicVideoAsset} from './publicVideoAsset';
+import {PUBLIC_VIDEO_ASSETS_MAX,PUBLIC_VIDEOS_MAX_BYTES} from '../domain/publicVideo';
 import type {Project} from '../domain/types';
 import {sceneProject} from '../domain/sceneProject';
 import {createPublicShare,parsePublicShare,PUBLIC_SCENES_MAX,type PublicShareOptions,type PublicSceneSnapshot} from '../domain/publicShare';
@@ -9,6 +11,7 @@ export async function prepareSharePresentation(project:Project,options:PublicSha
  if(selected.length>PUBLIC_SCENES_MAX)throw new Error(`공유 Scene은 ${PUBLIC_SCENES_MAX}개 이하로 선택하세요.`);
  const scenes=selected.map(id=>{const scene=project.scenes.find(s=>s.id===id);if(!scene)throw new Error('선택한 Scene을 찾지 못했습니다.');return scene;});
  const models=new Map<string,ArrayBuffer>(),modelCache:PublicModelCache=new Map(),images=new Map<string,string>(),uploads:Array<{imageId:string;sourceUrl:string}>=[];
+ const videos=new Map<string,PublicVideoAsset>(),videoCache:PublicVideoCache=new Map();let videoTotal=0;
  let total=0;
  async function prepare(p:Project,view?:PublicShareOptions['camera']):Promise<PublicSceneSnapshot>{
   const hasModels=p.referenceModel?.visible||p.modelArtworks?.some(a=>a.visible);
@@ -18,7 +21,8 @@ export async function prepareSharePresentation(project:Project,options:PublicSha
    if(total>80*1024*1024||models.size>=51)throw new Error('전체 Scene의 공유 모델 자산은 80MiB·51개 이하여야 합니다.');
    models.set(hash,bytes);
   }
-  const result=createPublicShare(p,{includeDimensions:options.includeDimensions,includeArtworkDetails:options.includeArtworkDetails,camera:view,modelAssetIds:assets.ids,referenceAssetId:assets.referenceId}),remap=new Map<string,string>();
+  const videoAssets=await preparePublicVideos(p,videoCache);for(const [hash,asset] of videoAssets.uploads)if(!videos.has(hash)){videoTotal+=asset.bytes.byteLength;if(videoTotal>PUBLIC_VIDEOS_MAX_BYTES||videos.size>=PUBLIC_VIDEO_ASSETS_MAX)throw new Error('전체 Scene의 공유 영상 자산은 80MiB·20개 이하여야 합니다.');videos.set(hash,asset);}
+  const result=createPublicShare(p,{videoAssetIds:videoAssets.ids,includeDimensions:options.includeDimensions,includeArtworkDetails:options.includeArtworkDetails,camera:view,modelAssetIds:assets.ids,referenceAssetId:assets.referenceId}),remap=new Map<string,string>();
   for(const upload of result.uploads){
    let imageId=images.get(upload.sourceUrl);
    if(imageId===undefined){imageId=String(uploads.length);images.set(upload.sourceUrl,imageId);uploads.push({imageId,sourceUrl:upload.sourceUrl});}
@@ -32,5 +36,5 @@ export async function prepareSharePresentation(project:Project,options:PublicSha
  const snapshot=await prepare(project,camera??options.camera);
  const publishedScenes=[];
  for(const scene of scenes)publishedScenes.push({id:scene.id,name:scene.name,snapshot:await prepare(sceneProject(project,scene),scene.cameraView)});
- return {snapshot:parsePublicShare({...snapshot,...(publishedScenes.length?{scenes:publishedScenes}:{})}),uploads,models};
+ return {snapshot:parsePublicShare({...snapshot,...(publishedScenes.length?{scenes:publishedScenes}:{})}),uploads,models,videos};
 }

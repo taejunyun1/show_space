@@ -11,7 +11,7 @@ class MemoryBucket implements ShareBucket {
     const bytes=typeof value==='string'?new TextEncoder().encode(value):value instanceof ArrayBuffer?new Uint8Array(value):new Uint8Array(await new Response(value).arrayBuffer());
     this.data.set(key,{bytes,contentType:options?.httpMetadata?.contentType});
   }
-  async get(key:string){const found=this.data.get(key);return found?{body:new Blob([new Uint8Array(found.bytes)]).stream(),text:async()=>new TextDecoder().decode(found.bytes),size:found.bytes.length,httpMetadata:{contentType:found.contentType}}:null;}
+  async get(key:string,options?:{range:{offset:number;length:number}}){const found=this.data.get(key);if(!found)return null;const r=options?.range,bytes=r?found.bytes.slice(r.offset,r.offset+r.length):found.bytes;return {body:new Blob([new Uint8Array(bytes)]).stream(),text:async()=>new TextDecoder().decode(bytes),size:found.bytes.length,httpMetadata:{contentType:found.contentType}};}
   async head(key:string){const found=this.data.get(key);return found?{size:found.bytes.length}:null;}
   async list(options:{prefix:string;cursor?:string;limit?:number}){return {objects:[...this.data.keys()].filter(key=>key.startsWith(options.prefix)).map(key=>({key})),truncated:false};}
   async delete(keys:string|string[]){for(const key of Array.isArray(keys)?keys:[keys])this.data.delete(key);}
@@ -238,4 +238,34 @@ it('validates frame settings on direct publication including Scenes and preserve
  expect(JSON.stringify(snapshot)).not.toMatch(/PRIVATE|SECRET/);
  await call('DELETE',`/api/shares/${id}`,undefined,true);
  expect((await call('GET',`/api/public/${id}`)).status).toBe(410);
+});
+
+it('requires exact authorized video bytes before publication, serves only referenced sources, and revokes video bytes with the link',async()=>{
+ const {publicVideoHash}=await import('../lib/publicVideoAsset'),{testVideoArtwork}=await import('../lib/videoArtworkTestFixture'),{videoPayload}=await import('../domain/mediaArtwork'),bucket=new MemoryBucket(),env={SHARES:bucket,OWNER_TOKEN:'private-owner-token-for-testing'};
+ const call=(method:string,path:string,body?:BodyInit,authorized=true,mime='video/mp4',extra?:Record<string,string>)=>handleShareRequest(new Request('https://example.test'+path,{method,headers:{...(authorized?{authorization:'Bearer '+env.OWNER_TOKEN}:{}),'content-type':mime,...extra},body}),env);
+ const {id}=await (await call('POST','/api/shares')).json() as {id:string},media=testVideoArtwork(),bytes=videoPayload(media.dataUrl).bytes.slice().buffer,hash=await publicVideoHash(bytes),url=`/api/shares/${id}/videos/${hash}`;
+ const p=createDemoProject();p.artworks=p.artworks.slice(0,1);p.artworks[0].video=media;const snapshot=createPublicShare(p,{includeDimensions:false,videoAssetIds:new Map([[p.artworks[0].id,hash]])}).snapshot;
+ await call('PUT',`/api/shares/${id}/images/0`,png.buffer);
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(snapshot),true,'application/json')).status).toBe(409);
+ expect((await call('PUT',url,bytes,false)).status).toBe(401);expect((await call('PUT',url,bytes,true,'text/html')).status).toBe(415);expect((await call('PUT',url,bytes,true,'video/webm')).status).toBe(400);expect((await call('PUT',`/api/shares/${id}/videos/${'f'.repeat(64)}`,bytes)).status).toBe(400);
+ expect((await call('PUT',url,bytes,true,'video/mp4',{'content-length':String(16*1024*1024+1)})).status).toBe(413);
+ expect((await call('PUT',url,bytes)).status).toBe(204);expect((await call('PUT',url,bytes)).status).toBe(204);
+ expect((await call('GET',`/api/public/${id}/videos/${hash}`,undefined,false)).status).toBe(404);
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(snapshot),true,'application/json')).status).toBe(201);
+ const response=await call('GET',`/api/public/${id}/videos/${hash}`,undefined,false);expect(response.status).toBe(200);expect(response.headers.get('cache-control')).toBe('no-store');expect(response.headers.get('content-type')).toBe('video/mp4');expect(await response.arrayBuffer()).toEqual(bytes);
+ for(const [requested,start,end] of [['bytes=0-1',0,1],['bytes=8-',8,15],['bytes=-4',12,15]] as const){const partial=await call('GET',`/api/public/${id}/videos/${hash}`,undefined,false,'video/mp4',{range:requested});expect(partial.status).toBe(206);expect(partial.headers.get('content-range')).toBe(`bytes ${start}-${end}/16`);expect(new Uint8Array(await partial.arrayBuffer())).toEqual(new Uint8Array(bytes).slice(start,end+1));}
+ for(const range of ['bytes=99-','bytes=-0','bytes=4-2','bytes=0-1,3-4','bytes=-'])expect((await call('GET',`/api/public/${id}/videos/${hash}`,undefined,false,'video/mp4',{range})).status).toBe(416);
+ expect((await call('GET',`/api/public/${id}/videos/${'f'.repeat(64)}`,undefined,false)).status).toBe(404);expect((await call('PUT',url,bytes)).status).toBe(409);
+ expect((await call('DELETE',`/api/shares/${id}`)).status).toBe(204);expect((await call('GET',`/api/public/${id}/videos/${hash}`,undefined,false)).status).toBe(410);expect([...bucket.data.keys()].some(k=>k.startsWith(`shares/${id}/`))).toBe(false);
+});
+it('rejects streamed oversized video bodies without trusting Content-Length, and enforces video asset count and byte totals',async()=>{
+ const {publicVideoHash}=await import('../lib/publicVideoAsset'),{testVideoArtwork}=await import('../lib/videoArtworkTestFixture'),{videoPayload}=await import('../domain/mediaArtwork'),bucket=new MemoryBucket(),env={SHARES:bucket,OWNER_TOKEN:'private-owner-token-for-testing'},auth={authorization:'Bearer '+env.OWNER_TOKEN,'content-type':'video/mp4'};
+ const create=()=>handleShareRequest(new Request('https://example.test/api/shares',{method:'POST',headers:auth}),env);
+ const {id}=await (await create()).json() as {id:string},bytes=videoPayload(testVideoArtwork().dataUrl).bytes.slice().buffer,hash=await publicVideoHash(bytes),url=`https://example.test/api/shares/${id}/videos/${hash}`;
+ const request=new Request(url,{method:'PUT',headers:auth,body:new ReadableStream({start(c){c.enqueue(new Uint8Array(16*1024*1024));c.enqueue(new Uint8Array(1));c.close();}}),duplex:'half'} as RequestInit);
+ expect((await handleShareRequest(request,env)).status).toBe(413);expect(await bucket.head(`shares/${id}/videos/${hash}`)).toBeNull();
+ for(let i=0;i<20;i++)await bucket.put(`shares/${id}/videos/${i.toString(16).padStart(64,'0')}`,bytes);
+ expect((await handleShareRequest(new Request(url,{method:'PUT',headers:auth,body:bytes}),env)).status).toBe(413);
+ await bucket.delete([...bucket.data.keys()].filter(k=>k.startsWith(`shares/${id}/videos/`)));const originalHead=bucket.head.bind(bucket);bucket.head=async key=>key.endsWith('/oversized')?{size:80*1024*1024}:originalHead(key);await bucket.put(`shares/${id}/videos/oversized`,bytes);
+ expect((await handleShareRequest(new Request(url,{method:'PUT',headers:auth,body:bytes}),env)).status).toBe(413);
 });

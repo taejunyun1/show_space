@@ -1,0 +1,40 @@
+{
+  "share": {
+    "screenRectangle": [
+      450,
+      410,
+      475,
+      423
+    ],
+    "changedPixels": 321,
+    "totalPixels": 325
+  },
+  "presentation": {
+    "screenRectangle": [
+      333,
+      404,
+      350,
+      414
+    ],
+    "changedPixels": 170,
+    "totalPixels": 170
+  },
+  "webm": {
+    "codec": "VP9",
+    "bytes": 124244,
+    "sha256": "4c8f19ec3b66a99ff57e75f0d0ee6d8af0b953e729e4405e343aa18f479e03be"
+  },
+  "revoke": {
+    "revokeStatus": 204,
+    "snapshotStatus": 410,
+    "videoStatus": 410
+  },
+  "nativeWorkerShare": {
+    "url": "http://127.0.0.1:8814/s/0c376729d8db679227a6866ace6c5e89fc77655c88db07cc",
+    "id": "0c376729d8db679227a6866ace6c5e89fc77655c88db07cc",
+    "hash": "e9c8d94044a6d82ad1aeee0943d11090e7843f21340899057f6c90f6d23f767e",
+    "bytes": 382181,
+    "sceneId": "scene-1",
+    "artworkId": "artwork-6"
+  }
+}

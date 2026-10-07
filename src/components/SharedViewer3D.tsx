@@ -1,4 +1,6 @@
-import {useReadonlyAssets,readonlyImageUrl,type ReadonlyAssets} from './ReadonlyAssets';
+import {VideoArtworkScreen} from './VideoArtworkScreen';
+import {readonlyVideoSessionKey} from '../domain/publicVideo';
+import {useReadonlyAssets,readonlyImageUrl,readonlyVideoSource,type ReadonlyAssets} from './ReadonlyAssets';
 import {formatLength} from '../domain/lengthUnits';
 import {ArtworkTextureQuality,useArtworkTextureSize} from './ArtworkTextureQuality';
 import {useArtworkTexture} from './useArtworkTexture';
@@ -53,12 +55,13 @@ function Floor({snapshot,shareId,measuring,onMeasure}:{snapshot:PublicShareSnaps
   return <>{shapes.map((shape,index)=><mesh receiveShadow key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><FloorSurfaceGeometry shape={shape} flat/><SurfaceFinish color={snapshot.floorColor} material={finish(snapshot.floorMaterial,shareId,assets)} texture={publicTexture(snapshot.floorMaterial,shareId,assets)} side={2} roughness={.96}/></mesh>)}</>;
 }
 
-function ArtworkImage({url,art,width,height,selected,shareId}:{url:string;art:Art;width:number;height:number;selected:boolean;shareId:string}){
+function ArtworkImage({url,art,width,height,selected,shareId,videoScope}:{url:string;art:Art;width:number;height:number;selected:boolean;shareId:string;videoScope:string}){
   const assets=useReadonlyAssets();
   const textureSize=useArtworkTextureSize(art.id);
   const {texture,failed,ready,appliedSize}=useArtworkTexture(url,art.spritePanel??null,textureSize);
   if(failed)throw new Error('공유 작품 이미지 로딩 실패');
-  return <mesh userData={{artworkTextureReady:ready,artworkTextureSize:textureSize,artworkTextureAppliedSize:appliedSize,artworkTextureRequest:{id:art.id,key:JSON.stringify([url,art.spritePanel??null]),width,height,selected}}} position={[0,0,artworkPresentation(art).imageZMm/1000]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={finish(art.material,shareId,assets)} normalExtentM={[width,height]} map={texture} roughness={.9}/></mesh>;
+  const source=art.video?readonlyVideoSource(shareId,art.video.videoId,assets):undefined;
+  return <group userData={{artworkTextureReady:ready,artworkTextureSize:textureSize,artworkTextureAppliedSize:appliedSize,artworkTextureRequest:{id:art.id,key:JSON.stringify([url,art.spritePanel??null]),width,height,selected}}}>{art.video&&source?<VideoArtworkScreen sessionKey={readonlyVideoSessionKey(videoScope,art.id)} media={{...art.video,dataUrl:source}} poster={texture} widthMm={art.widthMm} heightMm={art.heightMm} z={artworkPresentation(art).imageZMm/1000}/>:<mesh position={[0,0,artworkPresentation(art).imageZMm/1000]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={finish(art.material,shareId,assets)} normalExtentM={[width,height]} map={texture} roughness={.9}/></mesh>}</group>;
 }
 
 function ArtworkPlaceholder({width,height,imageZ,failed=false}:{width:number;height:number;imageZ:number;failed?:boolean}){
@@ -71,7 +74,7 @@ class ArtworkLoadBoundary extends Component<{children:ReactNode;width:number;hei
   render(){return this.state.failed?<ArtworkPlaceholder width={this.props.width} height={this.props.height} imageZ={this.props.imageZ} failed/>:this.props.children;}
 }
 
-function PublicArtwork({art,wall,shareId,selected,onSelect,measuring,onMeasure}:{art:Art;wall:PublicWall;shareId:string;selected:boolean;onSelect:(selection:Selection)=>void;measuring:boolean;onMeasure:MeasurePick}){
+function PublicArtwork({art,wall,shareId,videoScope,selected,onSelect,measuring,onMeasure}:{art:Art;wall:PublicWall;shareId:string;videoScope:string;selected:boolean;onSelect:(selection:Selection)=>void;measuring:boolean;onMeasure:MeasurePick}){
   const assets=useReadonlyAssets(),url=readonlyImageUrl(shareId,art.imageId,assets);
   const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz)||1;
   const side=art.wallSide==='back'?-1:1,nx=-dz/length*side,nz=dx/length*side;
@@ -81,16 +84,16 @@ function PublicArtwork({art,wall,shareId,selected,onSelect,measuring,onMeasure}:
   return <group position={[x,art.centerHeightMm/1000,z]} rotation={[0,Math.atan2(nx,nz),(art.rotationDeg??0)*Math.PI/180]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'artwork',id:art.id});}}>
     <ArtworkPresentationShell artwork={art}/>
     {selected&&<Line points={(()=>{const p=artworkPresentation(art),w=p.widthMm/2000+.02,h=p.heightMm/2000+.02,z=p.depthMm/2000+.005;return [[-w,-h,z],[w,-h,z],[w,h,z],[-w,h,z],[-w,-h,z]];})()} color="#365cf5" lineWidth={2}/>}
-    {url?<ArtworkLoadBoundary key={url} width={width} height={height} imageZ={imageZ}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} imageZ={imageZ}/>}><ArtworkImage selected={selected} shareId={shareId} url={url} art={art} width={width} height={height}/></Suspense></ArtworkLoadBoundary>:<ArtworkPlaceholder width={width} height={height} imageZ={imageZ} failed/>}
+    {url?<ArtworkLoadBoundary key={url} width={width} height={height} imageZ={imageZ}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} imageZ={imageZ}/>}><ArtworkImage selected={selected} shareId={shareId} videoScope={videoScope} url={url} art={art} width={width} height={height}/></Suspense></ArtworkLoadBoundary>:<ArtworkPlaceholder width={width} height={height} imageZ={imageZ} failed/>}
   </group>;
 }
 
-function PublicWallMesh({wall,artworks,shareId,selectedId,onSelect,groups,measuring,onMeasure}:{wall:PublicWall;artworks:Art[];shareId:string;selectedId:string|null;onSelect:(selection:Selection)=>void;groups:Map<string,Group>;measuring:boolean;onMeasure:MeasurePick}){
+function PublicWallMesh({wall,artworks,shareId,videoScope,selectedId,onSelect,groups,measuring,onMeasure}:{wall:PublicWall;artworks:Art[];shareId:string;videoScope:string;selectedId:string|null;onSelect:(selection:Selection)=>void;groups:Map<string,Group>;measuring:boolean;onMeasure:MeasurePick}){
   const assets=useReadonlyAssets();
   const register=useCallback((group:Group|null)=>{if(group)groups.set(wall.id,group);else groups.delete(wall.id);},[groups,wall.id]);
   const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz);
   if(!length)return null;
-  return <group ref={register}><mesh castShadow receiveShadow position={[(wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000]} rotation={[0,-Math.atan2(dz,dx),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'wall',id:wall.id});}}><WallSurfaceGeometry length={length/1000} height={wall.heightMm/1000} depth={wall.thicknessMm/1000}/><SurfaceFinish color={selectedId===wall.id?'#cfdbff':wall.color} material={finish(wall.material,shareId,assets)} texture={publicTexture(wall.material,shareId,assets)} roughness={.92}/></mesh>{artworks.map(art=><PublicArtwork key={art.id} art={art} wall={wall} shareId={shareId} selected={selectedId===art.id} onSelect={onSelect} measuring={measuring} onMeasure={onMeasure}/>)}</group>;
+  return <group ref={register}><mesh castShadow receiveShadow position={[(wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000]} rotation={[0,-Math.atan2(dz,dx),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'wall',id:wall.id});}}><WallSurfaceGeometry length={length/1000} height={wall.heightMm/1000} depth={wall.thicknessMm/1000}/><SurfaceFinish color={selectedId===wall.id?'#cfdbff':wall.color} material={finish(wall.material,shareId,assets)} texture={publicTexture(wall.material,shareId,assets)} roughness={.92}/></mesh>{artworks.map(art=><PublicArtwork key={art.id} art={art} wall={wall} shareId={shareId} videoScope={videoScope} selected={selectedId===art.id} onSelect={onSelect} measuring={measuring} onMeasure={onMeasure}/>)}</group>;
 }
 
 function CutawayVisibility({walls,groups,cutaway}:{walls:readonly Wall[];groups:ReadonlyMap<string,Group>;cutaway:boolean}){
@@ -112,7 +115,7 @@ function CameraSetup({frame,reset,snapshot}:{frame:NonNullable<PublicShareSnapsh
   return null;
 }
 
-export default function SharedViewer3D({snapshot,shareId,selectedId,referenceSelected=false,onSelect,reset,cutaway,measuring,measurePoints,onMeasurePoint}:{snapshot:PublicShareSnapshot;shareId:string;selectedId:string|null;referenceSelected?:boolean;onSelect:(selection:Selection|null)=>void;reset:number;cutaway:boolean;measuring:boolean;measurePoints:WorldPoint[];onMeasurePoint:(point:WorldPoint)=>void}){
+export default function SharedViewer3D({snapshot,shareId,videoScope=shareId,selectedId,referenceSelected=false,onSelect,reset,cutaway,measuring,measurePoints,onMeasurePoint}:{snapshot:PublicShareSnapshot;shareId:string;videoScope?:string;selectedId:string|null;referenceSelected?:boolean;onSelect:(selection:Selection|null)=>void;reset:number;cutaway:boolean;measuring:boolean;measurePoints:WorldPoint[];onMeasurePoint:(point:WorldPoint)=>void}){
   const wallGroups=useRef(new Map<string,Group>());
   const cutawayWalls=useMemo<Wall[]>(()=>snapshot.walls.map(wall=>({...wall,material:undefined,visible:true,locked:true,note:''})),[snapshot.walls]);
   const frame=useMemo<NonNullable<PublicShareSnapshot['camera']>>(()=>{
@@ -133,7 +136,7 @@ export default function SharedViewer3D({snapshot,shareId,selectedId,referenceSel
   return <div className="shared-3d"><Canvas shadows orthographic={frame.projection!=='perspective'} frameloop="demand" dpr={[1,1.5]} camera={{position:frame.position,zoom:frame.zoom,fov:frame.fov??50,near:.01,far:2000}} gl={{antialias:true}} onPointerMissed={()=>{if(!active)onSelect(null);}}>
     <SurfaceEnvironment enabled={needsSurfaceEnvironment(snapshot)} outdoor={snapshot.outdoor} intensity={outdoorAppearance(snapshot.outdoor)?.environment??snapshot.lighting?.environment}/><ArtworkTextureQuality><color attach="background" args={[outdoorAppearance(snapshot.outdoor)?.background??'#e9edf1']}/><Lighting3D source={snapshot.lighting?snapshot:{...snapshot,lighting:{ambient:1.3,hemisphere:0,fill:1.8,environment:.35}}}/>
     <CameraSetup frame={frame} reset={reset} snapshot={snapshot}/><Floor snapshot={snapshot} shareId={shareId} measuring={active} onMeasure={pick}/>
-    {snapshot.walls.map(wall=><PublicWallMesh key={wall.id} wall={wall} artworks={snapshot.artworks.filter(art=>art.wallId===wall.id)} shareId={shareId} selectedId={selectedId} onSelect={onSelect} groups={wallGroups.current} measuring={active} onMeasure={pick}/>)}
+    {snapshot.walls.map(wall=><PublicWallMesh key={wall.id} wall={wall} artworks={snapshot.artworks.filter(art=>art.wallId===wall.id)} shareId={shareId} videoScope={videoScope} selectedId={selectedId} onSelect={onSelect} groups={wallGroups.current} measuring={active} onMeasure={pick}/>)}
     <CutawayVisibility walls={cutawayWalls} groups={wallGroups.current} cutaway={frame.projection!=='perspective'&&cutaway}/>
     {snapshot.openings.map(opening=><group key={opening.id}><Line points={[[opening.start.x/1000,.025,opening.start.z/1000],[opening.end.x/1000,.025,opening.end.z/1000]]} color={opening.kind==='window'?'#2785b8':'#16816b'} dashed dashSize={.1} gapSize={.08}/><Html center position={[(opening.start.x+opening.end.x)/2000,.12,(opening.start.z+opening.end.z)/2000]} style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="shared-3d-dimension">{opening.kind==='door'?'출입구':opening.kind==='stair-access'?'계단 통로':'창문'}</span></Html></group>)}
     {snapshot.referenceModel&&<PublicReferenceModel3D model={snapshot.referenceModel} shareId={shareId} selected={referenceSelected} onSelect={()=>onSelect({kind:'referenceModel',id:'referenceModel'})} measuring={active} onMeasure={pick}/>}
