@@ -1,0 +1,30 @@
+{
+  "scope": "real local Worker HTTP/R2; synthetic PNG with trailing padding",
+  "identityProvider": "explicit synthetic A/B and legacy key; no real Supabase",
+  "production": false,
+  "checks": [
+    {
+      "principal": "A",
+      "oversizedStatus": 413,
+      "missingImageStatus": 409,
+      "exactLimitStatus": 204,
+      "bytesIdentical": true
+    },
+    {
+      "principal": "B",
+      "oversizedStatus": 413,
+      "missingImageStatus": 409,
+      "exactLimitStatus": 204,
+      "bytesIdentical": true
+    },
+    {
+      "principal": "legacy",
+      "oversizedStatus": 413,
+      "missingImageStatus": 409,
+      "exactLimitStatus": 204,
+      "bytesIdentical": true
+    }
+  ],
+  "cleanupComplete": true,
+  "complete": true
+}
