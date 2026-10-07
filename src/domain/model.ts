@@ -193,12 +193,13 @@ export function addWall(project: Project): Project {
   return { ...project, walls: [...project.walls, wall] }
 }
 
-export function addArtwork(project: Project, imageUrl = '/artworks/artwork-1.png', name = '새 작품'): Project {
+export function addArtwork(project: Project, imageUrl = '/artworks/artwork-1.png', name = '새 작품',wallId=project.walls[0]?.id): Project {
   if (!project.walls.length) throw new Error('작품을 배치할 벽이 없습니다.')
+  const wall=project.walls.find(w=>w.id===wallId);if(!wall)throw new Error('선택한 설치 벽이 없어 작품 추가를 취소했습니다. 벽을 다시 선택해 주세요.');
   if (project.artworks.length+(project.unplacedArtworks?.length??0) >= artworkLimit) throw new Error(`작품은 최대 ${artworkLimit}개까지 만들 수 있습니다.`)
   const id = uniqueId('artwork', [...project.walls, ...project.artworks, ...(project.unplacedArtworks??[]),...(project.lights??[]),...(project.modelArtworks??[])].map(item => item.id))
-  const artwork: Artwork = { id, name, artist: '', widthMm: 900, heightMm: 1200, depthMm: 30, wallId: project.walls[0].id, alongMm: 450, centerHeightMm: 1500, frame: 'natural', imageUrl, visible: true, locked: false, note: '' }
-  artwork.alongMm = Math.min(rotatedArtworkOuterSize(artwork).widthMm / 2, wallLength(project.walls[0]) / 2)
+  const artwork: Artwork = { id, name, artist: '', widthMm: 900, heightMm: 1200, depthMm: 30, wallId: wall.id, alongMm: 450, centerHeightMm: 1500, frame: 'natural', imageUrl, visible: true, locked: false, note: '' }
+  artwork.alongMm = Math.min(rotatedArtworkOuterSize(artwork).widthMm / 2, wallLength(wall) / 2)
   validateArtwork(artwork, new Set(project.walls.map(wall => wall.id)))
   return { ...project, artworks: [...project.artworks, artwork] }
 }

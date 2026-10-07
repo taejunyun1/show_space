@@ -10,6 +10,7 @@ import {searchProjectObjects,type OutlinerObjectType} from '../domain/outlinerSe
 import { Library, Lightbulb, Box, Plus, Eye, EyeOff, LockKeyhole, PanelTop, Layers, ImagePlus, Film, Search, X } from 'lucide-react';
 import { useEditor } from '../state/editor';
 import { artStyle, readImage } from '../lib/art';
+type ImportTask={projectId:string;wallId:string};
 
 export function Outliner() {
  const formatLength = useLengthFormatter();
@@ -28,19 +29,28 @@ export function Outliner() {
   const videoUpload=useRef<HTMLInputElement>(null);
   const upload = useRef<HTMLInputElement>(null),modelUpload=useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const mounted=useRef(false),importTask=useRef<ImportTask|null>(null);
+  useEffect(()=>{
+    mounted.current=true;
+    // Subscribe to each transition, including A→B→A inside one React batch.
+    const unsubscribe=useEditor.subscribe((next,previous)=>{if(next.project.id!==previous.project.id){importTask.current=null;setBusy(false);}});
+    return()=>{unsubscribe();mounted.current=false;importTask.current=null;};
+  },[]);
   const [floorMaterialOpen,setFloorMaterialOpen]=useState(false),[lightingOpen,setLightingOpen]=useState(false),[outdoorOpen,setOutdoorOpen]=useState(false);
   const unplaced = project.unplacedArtworks ?? [];
 
-  async function uploadArtwork(file: File) {
-    setBusy(true);
-    try { addArtwork(await readImage(file), file.name.replace(/\.[^.]+$/, '')); }
-    catch (e) { notify(e instanceof Error ? e.message : '이미지를 읽지 못했습니다.'); }
-    finally { setBusy(false); }
+  async function runImport<T>(load:()=>Promise<T>,apply:(value:T,task:ImportTask)=>void,status?:string){
+    if(importTask.current||!mounted.current)return;
+    const state=useEditor.getState(),task={projectId:state.project.id,wallId:state.activeWallId};importTask.current=task;setBusy(true);
+    const current=()=>mounted.current&&importTask.current===task&&useEditor.getState().project.id===task.projectId;
+    if(status)notify(status);
+    try{const value=await load();if(current())apply(value,task);}
+    catch(error){if(current())notify(error instanceof Error?error.message:'작품 파일을 읽지 못했습니다.');}
+    finally{if(current()){importTask.current=null;setBusy(false);}}
   }
-
-  async function uploadVideoArtwork(file:File){const state=useEditor.getState(),original=state.project.id,wallId=state.activeWallId;setBusy(true);notify('영상을 읽고 첫 프레임을 준비하고 있습니다…');try{const {readVideoArtworkFile}=await import('../lib/videoArtworkImport');const template=await readVideoArtworkFile(file);useEditor.getState().installLibraryArtwork(template,original,wallId);useEditor.getState().setView('3d');notify('영상 스크린을 추가했습니다. 오른쪽에서 재생과 화면 비율을 조절하세요.');}catch(e){notify(e instanceof Error?e.message:'영상을 읽지 못했습니다.');}finally{setBusy(false);}}
-
-  async function uploadModelArtworks(files:File[]){const original=useEditor.getState().project.id;setBusy(true);notify('3D 작품과 자산을 읽고 있습니다…');try{const {readModelArtworkFiles}=await import('../lib/modelArtworkImport');const model=await readModelArtworkFiles(files);useEditor.getState().addModelArtwork(model,original);}catch(e){notify(e instanceof Error?e.message:'3D 작품을 읽지 못했습니다.');}finally{setBusy(false);}}
+  async function uploadArtwork(file:File){await runImport(()=>readImage(file),(imageUrl,task)=>useEditor.getState().addArtwork(imageUrl,file.name.replace(/\.[^.]+$/, ''),task));}
+  async function uploadVideoArtwork(file:File){await runImport(async()=>{const {readVideoArtworkFile}=await import('../lib/videoArtworkImport');return readVideoArtworkFile(file);},(template,task)=>{const state=useEditor.getState();state.installLibraryArtwork(template,task.projectId,task.wallId);state.setView('3d');notify('영상 스크린을 추가했습니다. 오른쪽에서 재생과 화면 비율을 조절하세요.');},'영상을 읽고 첫 프레임을 준비하고 있습니다…');}
+  async function uploadModelArtworks(files:File[]){await runImport(async()=>{const {readModelArtworkFiles}=await import('../lib/modelArtworkImport');return readModelArtworkFiles(files);},(model,task)=>useEditor.getState().addModelArtwork(model,task.projectId),'3D 작품과 자산을 읽고 있습니다…');}
   return <><aside className="outliner">
     <div className="panel-heading"><h1>전시 구성</h1><span className="count">{project.artworks.length + unplaced.length+(project.modelArtworks?.length??0)}</span></div>
     <div className="segment"><button className={tab === 'all' ? 'selected' : ''} onClick={() => setTab('all')}>공간</button><button className={tab === 'artwork' ? 'selected' : ''} onClick={() => setTab('artwork')}>작품</button></div>

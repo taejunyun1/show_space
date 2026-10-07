@@ -157,3 +157,5 @@
 2026-10-07 협업 화면 전환 갱신: [댓글 context 격리](2026-10-07-comment-context-isolation.md)에서 계정/공개 범위를 누락한 조건식 우선순위 오류를 수정했다. 실제 React createRoot/StrictMode·Zustand·ReviewClient를 jsdom에서 실행해 로그인/로그아웃·A/B 전환, 이전 목록/입력/권한 제거, 지연 세션/저장/변경/회수 응답 차단 및 같은 계정 충돌 초안 유지를 검증했다. 새 회귀 8개, 전체 1,141 통과/선택 10 제외와 빌드 통과. 이번 변경은 재배포하지 않으며 실제 인증·브라우저/GPU·기기·24단계 인수는 별도로 남긴다.
 
 2026-10-08 프로젝터 캡처 갱신: [이미지 실패 격리·캡처 준비](2026-10-08-projector-capture-failures.md)에서 decoder/framing 실패를 해당 조명에 기록하고 3D 화면 유지 및 캡처 즉시 오류 전달을 연결했다. 실제 R3F reconciler/Three TextureLoader/native PNG·Canvas로 소스/fit 교체·지연 decode·StrictMode·해제·누락 자산과 숨김을 확인했다. 새 회귀 7개, 전체 1,148 통과/선택 10 제외와 빌드 통과. 프로젝터 polling에서 큰 base64의 반복 JSON화를 제거했다. 실제 GPU 투사/차폐·최종 PNG/PDF 픽셀·브라우저/기기/24단계 인수와 이 변경의 배포는 여전히 남는다.
+
+2026-10-08 작품 입력/배열 갱신: [가져오기 전환 보호·시리즈 UI 흐름](2026-10-08-artwork-import-workflow.md)에서 이미지가 선택한 벽을 무시하거나 처리 후 새 프로젝트에 들어가는 오류를 수정했다. 영상/모델도 같은 작업 폐기·메시지/뷰/busy 보호를 적용한다. 실제 React Outliner/NumberField/시리즈 창/벽면도에서 순서·2점·35cm·B면 배열·그룹·Undo/Redo를 연결했고 프로젝트 전환/삭제 벽/unmount/중복 입력과 명령 경계 거절을 확인했다. 새 회귀 13개, 전체 1,161 통과/선택 10 제외와 빌드 통과. jsdom UI와 decoder 완료 제어 근거이며 실제 브라우저 파일 선택·픽셀·기기·원문 24단계 전체 인수 및 이번 변경의 배포는 남긴다.

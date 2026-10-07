@@ -111,7 +111,7 @@ interface EditorState {
   patchNote(target:NoteTarget,patch:{text?:string;details?:NoteDetails}):void
   renameProject(name: string): void
   patchProject(patch: Pick<Partial<Project>, 'displayUnit' | 'referenceModel' | 'floorColor' | 'floorMaterial' | 'venue' | 'planImageUrl' | 'planOpacity' | 'planReference' | 'planLabels' | 'planAnalysis' | 'sourcePlan' | 'planDraft'>): void
-  addArtwork(imageUrl?: string, name?: string): void
+  addArtwork(imageUrl?: string, name?: string,target?:{projectId:string;wallId:string}): void
   installLibraryArtwork(template:ArtworkTemplate,expectedProjectId:string,wallId?:string):void
   placeUnplaced(id:string):void
   adoptModelWalls(walls:Wall[],expected:ReferenceModel,importedFloor?:Point[][]):void
@@ -337,9 +337,10 @@ export const useEditor = create<EditorState>((set, get) => {
     moveWallEndpoint: (id,endpoint,point) => attempt(()=>get().commit(updateWallEndpoint(get().project,id,endpoint,point,get().linkedCorners))),
     renameProject: (name) => get().commit({ ...get().project, name }),
     patchProject: (patch) => get().commit({ ...get().project, ...patch }),
-    addArtwork: (imageUrl, name) => attempt(() => {
+    addArtwork: (imageUrl, name,target) => attempt(() => {
+      if(target&&get().project.id!==target.projectId)throw new Error('프로젝트가 바뀌어 이미지 작품 추가를 취소했습니다.');
       if(get().project.planDraft&&!get().project.planReference?.calibrated)throw new Error('실제 작품 크기를 배치하려면 도면의 두 점 축척을 먼저 보정하세요.');
-      const next = addArtworkToProject(get().project, imageUrl, name)
+      const next = addArtworkToProject(get().project, imageUrl, name,target?.wallId??validWall(get().project,get().activeWallId))
       const created = next.artworks[next.artworks.length - 1]
       get().commit(next)
       set({ selected: [{ type: 'artwork', id: created.id }], activeWallId: created.wallId })
