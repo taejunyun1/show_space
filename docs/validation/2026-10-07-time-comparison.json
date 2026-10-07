@@ -109,26 +109,41 @@
     "Other source2 extensions, authentication and full-product acceptance"
   ],
   "deployment": {
-    "versionId": "ab3ea649-06c0-4d6c-8f65-a72a31167833",
-    "entry": "/assets/index-CfPlGPCf.js",
+    "versionId": "ab978454-2236-4506-bb9b-c55a0edcd4b8",
+    "previousVersionId": "ab3ea649-06c0-4d6c-8f65-a72a31167833",
+    "entry": "/assets/index-CU-u97hu.js",
     "nativeFourImagesCompleted": true,
     "imageSizes": [
       [
         1024,
-        810
+        640
       ],
       [
         1024,
-        810
+        640
       ],
       [
         1024,
-        810
+        640
       ],
       [
         1024,
-        810
+        640
       ]
+    ],
+    "desktopViewport": [
+      1280,
+      720
+    ],
+    "previewDisplayedHeightPixels": 92.90625,
+    "nativeKeyboardTimeChangedTo18": true,
+    "thirdTimeAfterChange": "18:00",
+    "thirdSunElevationAfterChange": 20.4,
+    "staleImagesClearedOnTimeChange": true,
+    "default17TimeRestored": true,
+    "latestMobileDialogClientScrollWidth": [
+      349,
+      349
     ],
     "consoleWarningsErrors": [],
     "productionProjectOrShareWrites": false
