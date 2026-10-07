@@ -6,6 +6,7 @@ import type {View} from '../state/editor';
 export function CaptureDialog({view,hasPlan,sourceSize,onClose,onCapture}:{view:View;hasPlan:boolean;sourceSize:()=>CaptureRatio;onClose:()=>void;onCapture:(options:CaptureOptions)=>Promise<void>}){
  const dialog=useRef<HTMLDialogElement>(null);
  const running=useRef(false);
+ const mounted=useRef(false);
  const [source,setSource]=useState(sourceSize);
  const [longEdge,setLongEdge]=useState<CaptureOptions['longEdge']>(1920);
  const [ratio,setRatio]=useState('current');
@@ -19,7 +20,7 @@ export function CaptureDialog({view,hasPlan,sourceSize,onClose,onCapture}:{view:
  let output:CaptureRatio|undefined,ratioError='';
  try{output=capturePixelSize(source.width,source.height,longEdge,aspectRatio);}
  catch(cause){ratioError=cause instanceof Error?cause.message:'캡처 비율을 확인해 주세요.';}
- useEffect(()=>{dialog.current?.showModal();},[]);
+ useEffect(()=>{mounted.current=true;dialog.current?.showModal();return()=>{mounted.current=false;};},[]);
  useEffect(()=>{
   const workspace=dialog.current?.parentElement;if(!workspace)return;
   const observer=new ResizeObserver(()=>{
@@ -35,9 +36,9 @@ export function CaptureDialog({view,hasPlan,sourceSize,onClose,onCapture}:{view:
   if(running.current||ratioError)return;
   running.current=true;
   setBusy(true);setError('');
-  try{await onCapture({longEdge,aspectRatio,includeDimensions,includeGrid,includePlan,transparentBackground,includeEnvironment});onClose();}
-  catch(cause){setError(cause instanceof Error?cause.message:'PNG 저장에 실패했습니다.');}
-  finally{running.current=false;setBusy(false);}
+  try{await onCapture({longEdge,aspectRatio,includeDimensions,includeGrid,includePlan,transparentBackground,includeEnvironment});if(mounted.current)onClose();}
+  catch(cause){if(mounted.current)setError(cause instanceof Error?cause.message:'PNG 저장에 실패했습니다.');}
+  finally{running.current=false;if(mounted.current)setBusy(false);}
  }
  return <dialog className="export-dialog capture-dialog" ref={dialog} onCancel={event=>{if(busy)event.preventDefault();else onClose();}} onClick={event=>{if(event.target===event.currentTarget&&!busy)onClose();}}>
   <div className="dialog-header"><div><h2>{view==='plan'?'평면도':view==='elevation'?'벽면도':'3D 공간'} 캡처</h2><p>현재 시점을 PNG로 저장합니다. 선택 표시와 편집 핸들은 제외됩니다.</p></div><button className="icon-button" aria-label="닫기" disabled={busy} onClick={onClose}><X size={18}/></button></div>

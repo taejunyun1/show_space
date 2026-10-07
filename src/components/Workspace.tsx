@@ -65,12 +65,25 @@ export function Workspace({ captureRef,cameraGetterRef,incomingPlan,onPlanReceiv
   const provisional=!!project.planDraft&&!project.planReference?.calibrated;
   const sceneName = useRef<HTMLInputElement>(null);
   const [savingScene,setSavingScene]=useState(false),sceneJob=useRef<AbortController|null>(null);
-  useEffect(()=>{setSavingScene(false);return()=>{sceneJob.current?.abort();sceneJob.current=null;};},[project.id]);
+  const mounted=useRef(false),captureJob=useRef<AbortController|null>(null);
+  useEffect(()=>{
+    mounted.current=true;
+    // Observe every transition, including A→B→A before React renders again.
+    const unsubscribe=useEditor.subscribe((next,previous)=>{
+      if(next.project.id!==previous.project.id){
+        sceneJob.current?.abort();sceneJob.current=null;setSavingScene(false);
+        if(sceneName.current)sceneName.current.value='';
+      }
+      if(next.project!==previous.project||next.previewProject!==previous.previewProject||next.view!==previous.view)captureJob.current?.abort();
+      if(next.project.id!==previous.project.id||next.view!==previous.view)setCaptureOpen(false);
+    });
+    return()=>{unsubscribe();mounted.current=false;sceneJob.current?.abort();sceneJob.current=null;captureJob.current?.abort();};
+  },[]);
   const sceneSaveDisabled=savingScene||!useEditor.getState().hydrated||!!previewProject;
   function cancelSceneSave(){sceneJob.current?.abort();sceneJob.current=null;setSavingScene(false);}
   async function saveCurrentScene(){
     const state=useEditor.getState();
-    if(sceneJob.current||!state.hydrated||state.previewProject)return;
+    if(!mounted.current||sceneJob.current||!state.hydrated||state.previewProject)return;
     const controller=new AbortController();sceneJob.current=controller;setSavingScene(true);
     const source=structuredClone({...state.project,scenes:[]}),rawName=sceneName.current?.value??'',name=rawName.trim()||`Scene ${String.fromCharCode(65+state.project.scenes.length)}`;
     const camera=view==='3d'?structuredClone(cameraGetterRef.current?.()):undefined,box=stageRef.current?.getBoundingClientRect();
@@ -99,7 +112,10 @@ export function Workspace({ captureRef,cameraGetterRef,incomingPlan,onPlanReceiv
     finally{if(sceneJob.current===controller){sceneJob.current=null;setSavingScene(false);}}
   }
   const capture3D=useRef<((options:CaptureOptions)=>Promise<Blob>)|null>(null);
-  const captureReady = useCallback((capture:(options:CaptureOptions)=>Promise<Blob>) => { capture3D.current=capture; }, []);
+  const captureReady = useCallback((capture:(options:CaptureOptions)=>Promise<Blob>) => {
+    capture3D.current=capture;
+    return ()=>{if(capture3D.current===capture)capture3D.current=null;};
+  }, []);
   const cameraReady = useCallback((getView:(()=>CameraView3D)|null)=>{cameraGetterRef.current=getView;},[cameraGetterRef]);
   const cameraApplied = useCallback((token:number)=>{setCameraRequest(current=>current?.token===token?null:current);},[]);
   function openScene(id:string){
@@ -115,16 +131,24 @@ export function Workspace({ captureRef,cameraGetterRef,incomingPlan,onPlanReceiv
     const box=source?.getBoundingClientRect();return {width:box?.width??0,height:box?.height??0};
   }
   async function captureCurrent(options:CaptureOptions){
-    let blob:Blob;
-    if(view==='3d'){
-      if(!capture3D.current)throw new Error('3D 화면을 불러온 뒤 다시 시도해 주세요.');
-      blob=await capture3D.current(options);
-    }else{
-      const svg=document.querySelector<SVGSVGElement>(view==='plan'?'.viewport-stage .drawing-view:not(.elevation)>svg':'.viewport-stage .elevation>svg');
-      if(!svg)throw new Error('도면 화면을 찾지 못했습니다.');
-      blob=await captureSvg(svg,options);
+    if(!mounted.current)return;
+    if(captureJob.current)throw new Error('이전 캡처가 끝난 뒤 다시 시도해 주세요.');
+    const controller=new AbortController();captureJob.current=controller;
+    try{
+      let blob:Blob;
+      if(view==='3d'){
+        if(!capture3D.current)throw new Error('3D 화면을 불러온 뒤 다시 시도해 주세요.');
+        blob=await capture3D.current(options);
+      }else{
+        const svg=stageRef.current?.querySelector<SVGSVGElement>(view==='plan'?'.drawing-view:not(.elevation)>svg':'.elevation>svg');
+        if(!svg)throw new Error('도면 화면을 찾지 못했습니다.');
+        blob=await captureSvg(svg,options);
+      }
+      if(controller.signal.aborted)throw new Error('캡처 중 전시 내용이나 보기가 변경됐습니다. 다시 캡처해 주세요.');
+      downloadBlob(blob,`${project.name}-${view==='plan'?'평면도':view==='elevation'?'벽면도':'3D'}.png`);
+    }finally{
+      if(captureJob.current===controller)captureJob.current=null;
     }
-    downloadBlob(blob,`${project.name}-${view==='plan'?'평면도':view==='elevation'?'벽면도':'3D'}.png`);
   }
   return <main className="workspace"><div className="viewport-label">{view === '3d' ? '공간 미리보기' : view === 'plan' ? '평면도' : '벽면도'}<span>{project.planDraft?provisional?'축척 미정 · 도면 px로 벽을 수정하세요':'축척 보정됨 · 구조선 후보 · 바닥 경계 미확정':activeTool==='pan'?'손 도구 · 드래그해 시점을 이동하세요':selected.some(s=>s.type==='modelArtwork')?'3D 작품 · 이동 화살표 또는 회전 도구를 사용하세요':view === '3d' ? '작품을 다른 벽으로 드래그하거나 파란 점으로 회전하세요' : '실제 치수로 배치를 조정하세요'}</span></div>{showFloorHint&&<div className="floor-empty-state" role="status"><span>바닥 경계가 아직 연결되지 않았습니다. 벽과 작품은 계속 편집할 수 있습니다.</span>{!previewProject&&canRestoreDemoBoundary(project)&&<button type="button" onClick={()=>useEditor.getState().restoreDemoSpace()}>기본 공간 배치 복원</button>}</div>}<div className="viewport-toolbar"><IconButton label="선택 도구" active={activeTool==='select'} onClick={()=>setTool('select')}><MousePointer2 size={18}/></IconButton><IconButton label="손 도구 · 화면 이동" active={activeTool==='pan'} onClick={()=>setTool('pan')}><Hand size={18}/></IconButton><IconButton label={selected.some(s=>s.type==='modelArtwork')?'3D 작품 이동':'벽 이동'} active={activeTool==='move'} onClick={()=>setTool('move')}><Move size={18}/></IconButton><IconButton label={selected.some(s=>s.type==='modelArtwork')?'3D 작품 회전':'벽 회전'} active={activeTool==='rotate'} onClick={()=>setTool('rotate')}><RotateCw size={18}/></IconButton><IconButton label="두 점으로 벽 그리기" active={activeTool==='draw'} onClick={()=>{setView('plan');setTool('draw');}}><PencilLine size={18}/></IconButton><span className="toolbar-divider" /><IconButton label="벽 추가" onClick={() => { useEditor.getState().addWall(); setView('plan'); }}><PanelTop size={18} /></IconButton><IconButton label="선택 항목 잠금" disabled={!selected.length} onClick={()=>lockSelected(true)}><LockKeyhole size={18}/></IconButton><IconButton label="선택 항목 잠금 해제" disabled={!selected.length} onClick={()=>lockSelected(false)}><UnlockKeyhole size={18}/></IconButton><IconButton label="줄자 측정" active={activeTool==='measure'} onClick={()=>setTool('measure')}><MoveDiagonal2 size={18}/></IconButton><IconButton label="작품 스냅 · 모서리·중심·10mm" active={useEditor.getState().artworkSnapping} disabled={view==='plan'&&!selected.some(s=>s.type==='modelArtwork')} onClick={useEditor.getState().toggleArtworkSnapping}><Magnet size={18}/></IconButton><IconButton label="치수 표시" active={showDimensions} onClick={toggleDimensions}><Ruler size={18} /></IconButton><IconButton label="현재 화면 캡처" onClick={()=>setCaptureOpen(true)}><Camera size={18}/></IconButton><span className="toolbar-divider" /><IconButton label="선택 항목 화면 맞춤 · F" disabled={!selected.length||!!previewProject} onClick={focusSelected}><Focus size={18}/></IconButton><IconButton label="기본 시점으로" onClick={() => {setProjection('orthographic');setCameraRequest(null);setReset(n => n + 1);}} disabled={view !== '3d'}><Scan size={18} /></IconButton></div>{view==='3d'&&<div className="render-quality-switch" role="group" aria-label="3D 렌더 품질"><button aria-pressed={quality==='edit'} onClick={()=>setQuality('edit')} title="화면 해상도와 그림자를 줄여 빠르게 편집합니다">빠른 편집</button><button aria-pressed={quality==='preview'} onClick={()=>setQuality('preview')} title="그림자와 화면 해상도를 높여 확인합니다">미리보기</button></div>}{view==='3d'&&<div className="view-presets" role="group" aria-label="3D 시점"><div className="view-preset-buttons"><button onClick={()=>standardView('front')}>정면</button><button onClick={()=>standardView('left')}>좌측면</button><button onClick={()=>standardView('right')}>우측면</button><button onClick={()=>standardView('bird')}>버드아이뷰</button><span className="toolbar-divider"/><button aria-label="시점 왼쪽 15도 회전" onClick={()=>rotateView(-15)}>↶ 15°</button><button aria-label="시점 오른쪽 15도 회전" onClick={()=>rotateView(15)}>↷ 15°</button></div><details className="view-more"><summary>기타 시점</summary><div><button disabled={!!previewProject} onClick={()=>setTimeComparisonOpen(true)}>시간대 비교</button><button onClick={()=>eyeView()}>눈높이 시점</button><label>높이 <select aria-label="눈높이" value={eyeHeight} onChange={e=>eyeView(Number(e.target.value))}>{![1200,1600,1800].includes(eyeHeight)&&<option value={eyeHeight}>{Math.round(eyeHeight/10)} cm · 저장 시점</option>}<option value={1200}>120 cm</option><option value={1600}>160 cm</option><option value={1800}>180 cm</option></select></label></div></details></div>}{view === '3d' && projection==='orthographic' && <label className="cutaway-toggle"><input type="checkbox" checked={cutaway} onChange={e => setCutaway(e.target.checked)} />벽 자동 숨김</label>}<div className="viewport-stage" ref={stageRef}>{view === '3d' ? <RenderBoundary><Suspense fallback={<div className="loading-canvas"><Box size={30} strokeWidth={1.2} /><span>공간을 불러오는 중</span></div>}><Gallery3D quality={quality} projection={projection} eyeHeight={eyeHeight} reset={reset} onCaptureReady={captureReady} onCameraReady={cameraReady} onCameraApplied={cameraApplied} cameraRequest={cameraRequest} cutaway={cutaway} /></Suspense></RenderBoundary> : view === 'plan' ? <PlanView incomingFile={incomingPlan} onFileReceived={onPlanReceived}/> : <ElevationView />}</div><OutdoorTimeSlider/><MeasurementPanel/><div className="view-navigation"><button className={view === '3d' ? 'active' : ''} disabled={provisional} title={provisional?'두 점 축척 보정 후 열 수 있습니다.':undefined} onClick={() => setView('3d')}>3D</button><button className={view === 'plan' ? 'active' : ''} onClick={() => setView('plan')}>평면도</button><button className={view === 'elevation' ? 'active' : ''} disabled={provisional} title={provisional?'두 점 축척 보정 후 열 수 있습니다.':undefined} onClick={() => { const art = project.artworks.find(a => a.id === selected[0]?.id); if (art) setActiveWall(art.wallId); setView('elevation'); }}>벽면도</button></div><button className={`scene-toggle ${sceneOpen ? 'active' : ''}`} onClick={() => setSceneOpen(!sceneOpen)}><RotateCcw size={14} />Scene {project.scenes.length > 0 && <span>{project.scenes.length}</span>}</button>{sceneOpen && <div className="scene-popover"><strong>배치안 저장</strong><p>벽·문 구조, 작품 배치·조명·야외 환경과 시간을 함께 저장합니다. 3D에서 저장하면 시점도 기억합니다.</p><div className="scene-create"><input aria-label="Scene 이름" ref={sceneName} placeholder={`Scene ${String.fromCharCode(65 + project.scenes.length)}`} maxLength={60} /><button className="icon-button active" aria-label="현재 Scene 저장" disabled={sceneSaveDisabled} onClick={()=>void saveCurrentScene()}>{savingScene?<LoaderCircle className="spin" size={17}/>:<Plus size={17}/>}</button></div>{savingScene&&<div className="scene-save-progress" role="status"><span>미리보기 만드는 중…</span><button onClick={cancelSceneSave}>취소</button></div>}{project.scenes.map(s => <div className="scene-row" key={s.id}><button className="scene-open" onClick={() => openScene(s.id)}>{s.thumbnail?<img className="scene-thumbnail" src={s.thumbnail.imageUrl} width={s.thumbnail.widthPx} height={s.thumbnail.heightPx} alt={`${s.name} 미리보기`}/>:<span className="scene-thumbnail scene-thumbnail-empty" aria-label="미리보기 없음"><Box size={20}/></span>}<span className="scene-description"><strong>{s.name}</strong><small>{s.artworks.length+(s.structure?.modelArtworks?.length??0)}개 작품{s.structure?' · 구조 포함':''}{s.cameraView?' · 저장된 시점':''}</small></span></button><IconButton label={`${s.name} 삭제`} onClick={() => deleteScene(s.id)}><Trash2 size={14} /></IconButton></div>)}</div>}{timeComparisonOpen&&<ScreenRecoveryBoundary name="시간대 비교" onClose={()=>setTimeComparisonOpen(false)}><Suspense fallback={null}><TimeComparisonDialog key={project.id} onClose={()=>setTimeComparisonOpen(false)} getCamera={()=>{const camera=cameraGetterRef.current?.(),box=stageRef.current?.getBoundingClientRect();return camera&&box&&box.width>0&&box.height>0?{view:camera,width:box.width,height:box.height,cutaway}:undefined;}}/></Suspense></ScreenRecoveryBoundary>}{captureOpen&&<CaptureDialog sourceSize={captureSourceSize} view={view} hasPlan={!!project.planImageUrl} onCapture={captureCurrent} onClose={()=>setCaptureOpen(false)}/>}</main>;
 }
