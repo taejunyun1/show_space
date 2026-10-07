@@ -53,7 +53,7 @@
 | 31–36 Light·Spot·Target·Kelvin·Outdoor·Sun | 기본 조명·야외 구현 | `lighting`, `outdoor`, `Lighting3D` |
 | 37 시간 비교 | 네 시간대 비교 UI·Time Scene 저장 구현 | `timeComparison`, `TimeComparisonDialog`; 현재/저장 배치의 같은 시점 비교, 날짜/시간/DST 검증, 저장·재접속·Undo 확인. 실제 기기/대형 장면 검증은 남음 |
 | 38–42 Note·Inspector | 핵심 구현 | 비공개 설치 메모/체크 항목/참고 이미지/벽·작품 검사 패널 |
-| 43–45 Navigation·Eye·Human Scale | 기본 시점/손 이동 중심; 사용자 결정으로 범위 축소 | 원문의 모든 Walk/인체 참조 형상 요구를 구현했다고 집계하지 않음 |
+| 43–45 Navigation·Eye·Human Scale | 기본 시점/손 이동 및 선택 Frame/Focus 구현; 사용자 결정으로 카메라 범위 축소 | [Focus](2026-10-07-selection-focus.md)의 형상/카메라 검증. 실제 UI는 별도이며 Walk/인체 참조 형상 전체 요구를 구현했다고 집계하지 않음 |
 | 46 Scene | 구조·배치·시점 및 자동 미리보기 저장 구현 | 실제 3D·평면·벽면·네 시간대 JPEG, Undo/Redo, 재접속 및 ZIP 복원 해시 일치 확인; Cloudflare 배포/공개 3D·390px 확인 |
 | 47 Presentation Mode | 로컬 별도 발표 화면 · 전체 화면 · Scene 탐색 · 작품 정보 · 읽기 전용 Orbit | 2026-10-07 native ANCA/GLB/모바일 검증, Walk는 사용자 축소 결정으로 제외. 대형 장면/실기기는 남음 |
 | 48–53 Screenshot·PDF·Share·발표 공유·선택 정보·Export | 기본 구현 및 §49 PDF의 표지/평면/3D/벽면/상세/치수 목록 순서 구성 구현 | 실제 ANCA 12p, 모델/이미지 상세 3p, 390px 및 897 테스트; 공개 배포와 실제 공개 PDF 3p 확인 |
@@ -141,3 +141,5 @@
 2026-10-07 선택 시점 갱신: [Frame/Focus·F 단축키](2026-10-07-selection-focus.md)를 3D·평면도·벽면도에 연결했다. 회전 벽/액자/모델의 실제 형상 경계, 18개 실제 Three 카메라 투영 조합, B면·px·다중 선택·숨김/진행 중 transform 보호와 프로젝트/히스토리 불변을 검증했다. 새 회귀 9개, 전체 1,087 통과/선택 10 제외, 빌드 통과. §43/67 누락 구현을 보완하며 실제 브라우저 입력·화면 픽셀/전체 전시 흐름·계정/기기/운영 배포 인수는 계속 미완료다.
 
 2026-10-07 Save 갱신: [실제 Save 단축키·상단 로컬 저장](2026-10-07-manual-save.md)을 기존 revision-checked Auto Save 대기열에 연결했다. 원문 §67 Save가 내보내기였던 누락을 수정하고 즉시/중복/실패 재시도/다른 탭 CAS/저장 중 수정·프로젝트 전환 보호를 확인했다. 새 회귀 6개, 전체 1,093 통과/선택 10 제외와 빌드 통과. 실제 브라우저 단축키·기기 저장 및 전체 인수는 남는다. 원문 §48의 투명 배경/Environment 캡처 옵션도 현재 빠져 있어 다음 독립 구현으로 올린다.
+
+2026-10-07 캡처 갱신: [투명 배경 PNG·환경 포함 옵션](2026-10-07-capture-background.md)을 3D/평면/벽면에 연결했다. 실제 PNG encode/decode의 투명 여백·부분 alpha·SVG 격자 픽셀, Scene 배경/환경 참조와 renderer clear adapter 복원을 확인했다. 새 회귀 5개, 전체 1,098 통과/선택 10 제외와 빌드 통과. §48의 두 누락 옵션은 구현했으나 renderer adapter를 실제 GPU 렌더로 집계하지 않는다. 실제 브라우저·프로젝터 픽셀·24단계 전체 흐름·실계정/기기·배포 인수는 계속 미완료다.

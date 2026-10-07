@@ -1,7 +1,8 @@
+import {paintCaptureBackground,capturePlanGridFill} from './captureBackground';
 import {artPanel} from './art';
 
 export interface CaptureRatio {width:number;height:number}
-export interface CaptureOptions {longEdge:1920|2560|3840;aspectRatio?:CaptureRatio;includeDimensions:boolean;includeGrid:boolean;includePlan:boolean}
+export interface CaptureOptions {longEdge:1920|2560|3840;aspectRatio?:CaptureRatio;includeDimensions:boolean;includeGrid:boolean;includePlan:boolean;transparentBackground?:boolean;includeEnvironment?:boolean}
 
 export function capturePixelSize(width:number,height:number,longEdge:number,aspectRatio?:CaptureRatio){
  if(![width,height,longEdge].every(Number.isFinite)||width<=0||height<=0||longEdge<1||longEdge>8192)throw new Error('캡처 해상도가 올바르지 않습니다.');
@@ -85,7 +86,7 @@ export async function captureSvg(svg:SVGSVGElement,options:Omit<CaptureOptions,'
  clone.querySelectorAll<SVGElement>('line.selectable[stroke="#365cf5"]').forEach(el=>{el.setAttribute('stroke','#697789');el.style.stroke='#697789';});
  clone.querySelectorAll<SVGElement>('g.selectable rect[fill="#365cf5"]').forEach(el=>{el.setAttribute('fill','#c5ad8e');el.style.fill='#c5ad8e';});
  if(!options.includeDimensions)clone.querySelectorAll('text,.svg-dimensions,[aria-label="평면 치수선"],[aria-label="벽면 치수선"]').forEach(el=>el.remove());
- if(!options.includeGrid)clone.querySelectorAll<SVGElement>('rect[fill="url(#plan-grid)"]').forEach(el=>{el.setAttribute('fill','#ffffff');el.style.fill='#ffffff';});
+ clone.querySelectorAll<SVGElement>('rect[fill="url(#plan-grid)"]').forEach(el=>{const fill=capturePlanGridFill(options);el.setAttribute('fill',fill);el.style.fill=fill;});
  if(!options.includePlan)clone.querySelectorAll('image[data-source-plan]').forEach(el=>el.remove());
  await document.fonts.ready;
  await replaceArtworkImages(clone,fit.scale);
@@ -93,7 +94,7 @@ export async function captureSvg(svg:SVGSVGElement,options:Omit<CaptureOptions,'
  try{
   const image=await loadImage(url),canvas=document.createElement('canvas');canvas.width=size.width;canvas.height=size.height;
   const ctx=canvas.getContext('2d');if(!ctx)throw new Error('PNG 캔버스를 만들 수 없습니다.');
-  ctx.fillStyle='#fff';ctx.fillRect(0,0,size.width,size.height);ctx.drawImage(image,0,0,size.width,size.height);
+  paintCaptureBackground(ctx,size.width,size.height,options.transparentBackground?null:'#ffffff');ctx.drawImage(image,0,0,size.width,size.height);
   return await toBlob(canvas);
  }finally{URL.revokeObjectURL(url);}
 }

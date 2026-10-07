@@ -10,6 +10,7 @@ export function CaptureDialog({view,hasPlan,sourceSize,onClose,onCapture}:{view:
  const [longEdge,setLongEdge]=useState<CaptureOptions['longEdge']>(1920);
  const [ratio,setRatio]=useState('current');
  const [customWidth,setCustomWidth]=useState('16'),[customHeight,setCustomHeight]=useState('9');
+ const [transparentBackground,setTransparentBackground]=useState(false),[includeEnvironment,setIncludeEnvironment]=useState(true);
  const [includeDimensions,setIncludeDimensions]=useState(true);
  const [includeGrid,setIncludeGrid]=useState(view!=='elevation');
  const [includePlan,setIncludePlan]=useState(true);
@@ -34,7 +35,7 @@ export function CaptureDialog({view,hasPlan,sourceSize,onClose,onCapture}:{view:
   if(running.current||ratioError)return;
   running.current=true;
   setBusy(true);setError('');
-  try{await onCapture({longEdge,aspectRatio,includeDimensions,includeGrid,includePlan});onClose();}
+  try{await onCapture({longEdge,aspectRatio,includeDimensions,includeGrid,includePlan,transparentBackground,includeEnvironment});onClose();}
   catch(cause){setError(cause instanceof Error?cause.message:'PNG 저장에 실패했습니다.');}
   finally{running.current=false;setBusy(false);}
  }
@@ -45,6 +46,8 @@ export function CaptureDialog({view,hasPlan,sourceSize,onClose,onCapture}:{view:
    <label>긴 변 해상도<select disabled={busy} value={longEdge} onChange={event=>setLongEdge(Number(event.target.value) as CaptureOptions['longEdge'])}><option value={1920}>1920 px · 1080p (16:9)</option><option value={2560}>2560 px · 1440p (16:9)</option><option value={3840}>3840 px · 4K (16:9)</option></select></label>
    <p className="capture-size" role="status">{output?`저장 크기 ${output.width.toLocaleString()} × ${output.height.toLocaleString()} px`:ratioError}</p>
    <p className="field-hint">출력 비율이 다르면 배경 여백을 추가합니다. 현재 화면의 비율과 배치는 유지됩니다.</p>
+   <label><input type="checkbox" disabled={busy} checked={transparentBackground} onChange={event=>setTransparentBackground(event.target.checked)}/> 투명 배경 PNG</label>
+   {view==='3d'&&<><label><input type="checkbox" disabled={busy} checked={includeEnvironment} onChange={event=>setIncludeEnvironment(event.target.checked)}/> 환경 배경·반사 포함</label><p className="field-hint">투명 배경에서는 배경만 제외합니다. 환경 포함을 끄면 환경 반사도 제외하고, 스팟·태양 조명은 유지합니다.</p></>}
    <label><input type="checkbox" disabled={busy} checked={includeDimensions} onChange={event=>setIncludeDimensions(event.target.checked)}/> 치수와 주석 표시</label>
    {view!=='elevation'&&<label><input type="checkbox" disabled={busy} checked={includeGrid} onChange={event=>setIncludeGrid(event.target.checked)}/> 격자 표시</label>}
    {view==='plan'&&hasPlan&&<label><input type="checkbox" disabled={busy} checked={includePlan} onChange={event=>setIncludePlan(event.target.checked)}/> 원본 도면 표시</label>}
