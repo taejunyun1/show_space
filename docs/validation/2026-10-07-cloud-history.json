@@ -43,7 +43,10 @@
     ],
     "secondOriginRestoredA": true,
     "firstExistingLocalProjectsPreserved": true,
-    "nativePermanentDeletion": false
+    "nativePermanentDeletion": false,
+    "consoleErrorsOrWarnings": [],
+    "testTabsClosed": true,
+    "testServersStopped": true
   },
   "localApi": {
     "projectId": "09879d1e-f330-486d-b936-d213429c578a",
@@ -87,6 +90,17 @@
     "testProviderNotInProductionBundle": true
   },
   "deployment": {
-    "status": "pending"
+    "status": "deployed; auth integration still disabled",
+    "sourceCommit": "c3461c4",
+    "version": "dd43473f-4747-486e-b899-83c097f7df23",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entry": "/assets/index-CzWCOy4t.js",
+    "remoteMigration": "0002_cloud_history.sql applied successfully",
+    "keepVars": true,
+    "existingBindingsPreserved": true,
+    "publicAccountUi": "계정 로그인을 아직 사용할 수 없습니다.",
+    "publicConsoleErrorsOrWarnings": [],
+    "publicProjectModified": false,
+    "screenshot": "2026-10-07-cloud-history-public-auth.png"
   }
 }
