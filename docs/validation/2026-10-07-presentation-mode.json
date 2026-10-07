@@ -1,16 +1,31 @@
 {
   "date": "2026-10-07",
   "feature": "local interactive Presentation Mode, source document 2 section 47",
-  "tests": {"passed": 880, "skippedOptionalBenchmarks": 2, "build": "passed"},
+  "tests": {
+    "passed": 880,
+    "skippedOptionalBenchmarks": 2,
+    "build": "passed"
+  },
   "local": {
     "origin": "http://localhost:8806",
     "projectId": "3065bd45-b859-4dda-9aba-898f27c800e3",
-    "walls": 17, "artworks": 10, "originalSavedScenes": 4,
-    "nativeSceneNavigation": ["current", "D texture", "C via ArrowLeft", "A"],
+    "walls": 17,
+    "artworks": 10,
+    "originalSavedScenes": 4,
+    "nativeSceneNavigation": [
+      "current",
+      "D texture",
+      "C via ArrowLeft",
+      "A"
+    ],
     "nativeFullscreenEnterAndButtonExit": true,
     "fullscreenDomPropertyAvailable": false,
     "nativeOrbitRotation": true,
-    "nativeSelectedArtworkDimensionsM": [0.4, 1.2, 0.03],
+    "nativeSelectedArtworkDimensionsM": [
+      0.4,
+      1.2,
+      0.03
+    ],
     "privateNoteInPresentationUi": false,
     "editorDeleteDuplicateUndoShortcutsBlocked": true,
     "nativeOriginalEditorFieldsAndUndoPreserved": true,
@@ -19,15 +34,44 @@
     "referenceModelNativeVisibleAtXmm": 6000,
     "referenceModelImportAndPositionUndone": true,
     "independentModelNativeRoundtripThisTurn": false,
-    "mobileViewport": [390, 844],
-    "mobileDialogWidthAndScrollWidth": [390, 390],
+    "mobileViewport": [
+      390,
+      844
+    ],
+    "mobileDialogWidthAndScrollWidth": [
+      390,
+      390
+    ],
     "mobileStageHeightPx": 472.0234375,
     "viewportRestored": true,
     "existingShareImageTextureRegression": true,
     "newPublicationCreated": false,
-    "existingShareConsoleWarningsErrors": []
+    "existingShareConsoleWarningsErrors": [],
+    "nativeReloadOriginalScene4AndNoReferenceModel": true
   },
-  "capacity": {"savedScenesInUnitTest": 30, "imageArtworksWith2000CharacterDescriptionsInUnitTest": 500, "gpuCapacityProven": false},
-  "deployment": {"status": "pending"},
-  "remaining": ["Automatic Scene thumbnails", "Expanded presentation PDF views/order", "Account synchronization and real two-account/two-device authentication", "Representative devices, large-scene performance and user acceptance", "Actual SketchUp compatibility", "Remaining source document extensions", "Investigate duplicated artwork information fields in editor"]
+  "capacity": {
+    "savedScenesInUnitTest": 30,
+    "imageArtworksWith2000CharacterDescriptionsInUnitTest": 500,
+    "gpuCapacityProven": false
+  },
+  "deployment": {
+    "status": "verified",
+    "versionId": "e76f28e9-6ca3-4571-b9c4-33825adfcc79",
+    "url": "https://gonggan-exhibition-preview.taejunyun.workers.dev/",
+    "entry": "/assets/index-CH087z2W.js",
+    "codeCommit": "b9d3ed4",
+    "nativePresentationAndArtworkInformation": true,
+    "nativeFullscreenEnterAndExit": true,
+    "consoleWarningsErrors": [],
+    "productionProjectSceneOrShareWrites": false
+  },
+  "remaining": [
+    "Automatic Scene thumbnails",
+    "Expanded presentation PDF views/order",
+    "Account synchronization and real two-account/two-device authentication",
+    "Representative devices, large-scene performance and user acceptance",
+    "Actual SketchUp compatibility",
+    "Remaining source document extensions",
+    "Investigate duplicated artwork information fields in editor"
+  ]
 }

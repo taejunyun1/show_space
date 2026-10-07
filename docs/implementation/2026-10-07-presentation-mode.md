@@ -21,3 +21,5 @@
 증거: [기계 판독 기록](../validation/2026-10-07-presentation-mode.json), [Scene D](../validation/2026-10-07-presentation-scene-d.png), [GLB](../validation/2026-10-07-presentation-glb.png), [모바일](../validation/2026-10-07-presentation-mobile.png).
 
 전체 목표는 진행 중이다. Scene 자동 썸네일(§46), 발표 PDF의 시점 종류/순서 확장, 계정 라이브러리 동기화·실제 인증/두 계정·기기, 대표 하드웨어/대형 장면 및 실제 사용자 인수 검증, 문서 2의 추가 기능이 남는다. 편집기 작품 정보가 두 번 보이는 현상도 native DOM에서 재확인했으며 원인과 수정은 별도 후속 항목이다.
+
+Cloudflare `e76f28e9-6ca3-4571-b9c4-33825adfcc79` 배포 완료. 공개 entry `/assets/index-CH087z2W.js`, 실제 3D·작품 선택/치수·전체 화면 진입/버튼 복귀와 콘솔 경고/오류 없음을 확인했다. 공개 프로젝트·Scene·R2 공유 자산 쓰기는 하지 않았다. 로컬 모델 검증을 Undo한 뒤 재접속하여 원래 Scene 4개와 모델 없음 상태도 확인했다. [배포 화면](../validation/2026-10-07-presentation-production.png)
