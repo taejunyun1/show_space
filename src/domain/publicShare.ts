@@ -45,6 +45,7 @@ export const PUBLIC_SCENES_MAX=20;
 export const PUBLIC_IMAGES_MAX=1000;
 export const PUBLIC_SNAPSHOT_MAX_BYTES=1_000_000;
 export interface PublicShareSnapshot extends PublicSceneSnapshot {
+ commentsEnabled?:boolean;
  includeArtworkDetails?:boolean;
  scenes?:Array<{id:string;name:string;snapshot:PublicSceneSnapshot}>;
 }
@@ -147,7 +148,8 @@ function parsePublicScene(input:unknown,includeDetails=false):PublicSceneSnapsho
 export function parsePublicShare(input:unknown):PublicShareSnapshot{
  const raw=record(input);
  if(raw.includeArtworkDetails!==undefined&&typeof raw.includeArtworkDetails!=='boolean')throw new Error('작품 상세 정보 공개 설정이 올바르지 않습니다.');
- const includeDetails=raw.includeArtworkDetails===true,snapshot:PublicShareSnapshot={...parsePublicScene({...raw,scenes:undefined},includeDetails),...(includeDetails?{includeArtworkDetails:true}:{})};
+ if(raw.commentsEnabled!==undefined&&typeof raw.commentsEnabled!=='boolean')throw new Error('댓글 공개 설정이 올바르지 않습니다.');
+ const includeDetails=raw.includeArtworkDetails===true,snapshot:PublicShareSnapshot={...parsePublicScene({...raw,scenes:undefined},includeDetails),...(includeDetails?{includeArtworkDetails:true}:{}),...(raw.commentsEnabled===true?{commentsEnabled:true}:{})};
  if(raw.scenes!==undefined){
   const scenes=list(raw.scenes,PUBLIC_SCENES_MAX).map(value=>{const s=record(value);return {id:id(s.id),name:str(s.name),snapshot:parsePublicScene(s.snapshot,includeDetails)};});
   if(new Set(scenes.map(s=>s.id)).size!==scenes.length)throw new Error('공유 Scene ID가 중복됐습니다.');

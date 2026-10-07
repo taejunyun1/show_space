@@ -1,4 +1,4 @@
-import {useEffect,useRef,useState} from 'react';
+import {lazy,Suspense,useEffect,useRef,useState} from 'react';
 import {Copy,Link2,LoaderCircle,Trash2,X} from 'lucide-react';
 import {PUBLIC_SCENES_MAX} from '../domain/publicShare';
 import type {Project} from '../domain/types';
@@ -6,10 +6,13 @@ import type {CameraView3D} from './cameraView3d';
 import {listPublicShares,publishPublicShare,revokePublicShare,type ShareListItem} from '../lib/shareClient';
 import {cloudSession,useAuth} from '../state/auth';
 import {AccountDialog} from './AccountDialog';
+import {ScreenRecoveryBoundary} from './ScreenRecoveryBoundary';
+const ShareReviewDialog=lazy(()=>import('./ShareReviewDialog'));
 
 export function ShareDialog({project,onClose,getCamera}:{project:Project;onClose:()=>void;getCamera?:()=>CameraView3D|null}){
   const ref=useRef<HTMLDialogElement>(null);
   const [ownerToken,setOwnerToken]=useState('');
+  const [allowComments,setAllowComments]=useState(false),[reviewId,setReviewId]=useState<string>();
   const [includeDimensions,setIncludeDimensions]=useState(false);
   const [includeArtworkDetails,setIncludeArtworkDetails]=useState(false);
   const [sceneIds,setSceneIds]=useState<string[]>([]);
@@ -25,7 +28,7 @@ export function ShareDialog({project,onClose,getCamera}:{project:Project;onClose
   async function credential(){if(legacy){if(ownerToken.trim().length<20)throw new Error('작성자 키를 입력해 주세요.');return ownerToken.trim();}const session=await cloudSession();if(session.userId!==auth.user?.id)throw new Error('로그인 계정이 변경됐습니다. 다시 시도해주세요.');return session.token;}
   const uncalibrated=!!project.planDraft&&!project.planReference?.calibrated;
   useEffect(()=>{alive.current=true;ref.current?.showModal();return()=>{alive.current=false;epoch.current++;};},[]);
-  useEffect(()=>{setItems(null);setLink('');setError('');setBusy(false);setResultOwner('');},[identity]);
+  useEffect(()=>{setItems(null);setLink('');setError('');setBusy(false);setResultOwner('');setReviewId(undefined);},[identity]);
   async function refresh(){
     const operation=++epoch.current;setBusy(true);setError('');
     try{const token=await credential(),next=await listPublicShares(token);if(current(operation)){setItems(next);setResultOwner(identity);}}catch(e){if(current(operation))setError((e as Error).message);}finally{if(current(operation))setBusy(false);}
@@ -33,7 +36,7 @@ export function ShareDialog({project,onClose,getCamera}:{project:Project;onClose
   async function create(){
     const operation=++epoch.current;setBusy(true);setError('');setLink('');
     try{
-      const token=await credential(),url=await publishPublicShare(project,{includeDimensions,includeArtworkDetails,sceneIds},token,getCamera?.()??undefined);
+      const token=await credential(),url=await publishPublicShare(project,{includeDimensions,includeArtworkDetails,sceneIds,allowComments},token,getCamera?.()??undefined);
       if(!current(operation))return;setLink(url);setResultOwner(identity);
       const next=await listPublicShares(token);if(!current(operation))return;setItems(next);
       try{await navigator.clipboard.writeText(url);}catch{/* Link remains available for manual copy. */}
@@ -53,6 +56,8 @@ export function ShareDialog({project,onClose,getCamera}:{project:Project;onClose
     {(project.artworks.some(a=>a.video)||project.scenes.some(s=>s.artworks.some(a=>a.video)))&&<p className="share-explain">표시되는 영상 스크린의 원본 영상도 공개합니다. 열람자는 배치를 수정할 수 없으며 재생·소리만 조절합니다. 원본 하나 16MiB, 전체 Scene 합계 80MiB·20개까지입니다.</p>}
     {auth.status!=='disabled'&&<label className="share-check"><input type="checkbox" checked={legacyMode} disabled={busy} onChange={e=>setLegacyMode(e.target.checked)}/> 기존 작성자 키로 관리</label>}
     {legacy?<label className="share-key">작성자 키<input type="password" disabled={busy} autoComplete="off" aria-label="작성자 키" value={ownerToken} onChange={e=>{epoch.current++;setItems(null);setLink('');setError('');setOwnerToken(e.target.value);}} placeholder="공유 서버의 작성자 키"/></label>:<div className="share-explain">{auth.status==='signedIn'?<p>{auth.user?.email||'로그인한 계정'}으로 링크를 만듭니다. 이 계정에서 만든 링크만 관리합니다.</p>:<><p>{auth.status==='loading'?'계정 연결 확인 중…':'계정에 로그인하면 작성자 키 없이 링크를 만들 수 있습니다.'}</p><button className="button secondary" disabled={busy||auth.status==='loading'} onClick={()=>setAccountOpen(true)}>계정 로그인</button></>}</div>}
+    <label className="share-check"><input type="checkbox" checked={allowComments} disabled={busy} onChange={e=>setAllowComments(e.target.checked)}/> 협업 댓글 허용</label>
+    {allowComments&&<p className="share-explain">로그인한 열람자가 의견·답글을 남기고 링크를 가진 모든 사람이 읽을 수 있습니다. 객체 배치는 잠긴 상태를 유지합니다. 내부 메모와 별도로 저장합니다.</p>}
     <label className="share-check"><input type="checkbox" checked={includeDimensions} disabled={busy} onChange={e=>setIncludeDimensions(e.target.checked)}/> 치수 공개</label>
     <label className="share-check"><input type="checkbox" checked={includeArtworkDetails} disabled={busy} onChange={e=>setIncludeArtworkDetails(e.target.checked)}/> 작품 상세 정보 공개</label>
     <p className="share-explain">이름·작가·연도는 기본 공개합니다. 상세 정보 공개를 켜면 재료·작품 설명·작품 종류·설치 형식을 선택한 모든 배치에 포함합니다. 내부 설치 메모는 포함하지 않습니다.</p>
@@ -62,6 +67,6 @@ export function ShareDialog({project,onClose,getCamera}:{project:Project;onClose
     <div className="share-actions"><button className="button primary" disabled={busy||uncalibrated||!canManage} onClick={()=>void create()}>{busy?<LoaderCircle size={16} className="spin"/>:<Link2 size={16}/>} 링크 만들기</button><button className="button secondary" disabled={busy||!canManage} onClick={()=>void refresh()}>공유 목록</button></div>
     {error&&<p className="share-error" role="alert">{error}</p>}
     {resultOwner===identity&&link&&<div className="share-created"><strong>새 링크</strong><div><input aria-label="생성된 공유 링크" readOnly value={link} onFocus={e=>e.currentTarget.select()}/><button className="button secondary" onClick={()=>void copy(link)}><Copy size={15}/> 복사</button></div></div>}
-    {resultOwner===identity&&items&&<div className="share-list"><strong>만든 링크</strong>{items.length===0?<p>아직 만든 링크가 없습니다.</p>:items.map(item=><div className="share-row" key={item.id}><span><b>{item.name}</b><small>{new Date(item.createdAt).toLocaleDateString('ko-KR')} · {item.includeDimensions?'치수 공개':'치수 비공개'}{item.includeArtworkDetails?' · 작품 상세 공개':''}{item.sceneCount?` · Scene ${item.sceneCount}개`:''} · {item.status==='revoked'?'중단됨':'열람 가능'}</small></span>{item.status==='active'&&<><button aria-label={`${item.name} 링크 복사`} title="링크 복사" onClick={()=>void copy(`${location.origin}/s/${item.id}`)}><Copy size={15}/></button><button aria-label={`${item.name} 공유 중단`} title="공유 중단" disabled={busy} onClick={()=>void revoke(item.id)}><Trash2 size={15}/></button></>}</div>)}</div>}
-  </dialog>{accountOpen&&<AccountDialog onClose={()=>setAccountOpen(false)}/>}</>;
+    {resultOwner===identity&&items&&<div className="share-list"><strong>만든 링크</strong>{items.length===0?<p>아직 만든 링크가 없습니다.</p>:items.map(item=><div className="share-row" key={item.id}><span><b>{item.name}</b><small>{new Date(item.createdAt).toLocaleDateString('ko-KR')} · {item.includeDimensions?'치수 공개':'치수 비공개'}{item.includeArtworkDetails?' · 작품 상세 공개':''}{item.sceneCount?` · Scene ${item.sceneCount}개`:''}{item.commentsEnabled?' · 댓글 허용':''} · {item.status==='revoked'?'중단됨':'열람 가능'}</small></span>{item.status==='active'&&<>{item.commentsEnabled&&<button className="button secondary" disabled={busy} onClick={()=>setReviewId(item.id)}>댓글 관리</button>}<button aria-label={`${item.name} 링크 복사`} title="링크 복사" onClick={()=>void copy(`${location.origin}/s/${item.id}`)}><Copy size={15}/></button><button aria-label={`${item.name} 공유 중단`} title="공유 중단" disabled={busy} onClick={()=>void revoke(item.id)}><Trash2 size={15}/></button></>}</div>)}</div>}
+  </dialog>{reviewId&&<ScreenRecoveryBoundary name="공유 댓글 관리" onClose={()=>setReviewId(undefined)}><Suspense fallback={null}><ShareReviewDialog shareId={reviewId} identity={identity} credential={credential} onClose={()=>setReviewId(undefined)}/></Suspense></ScreenRecoveryBoundary>}{accountOpen&&<AccountDialog onClose={()=>setAccountOpen(false)}/>}</>;
 }

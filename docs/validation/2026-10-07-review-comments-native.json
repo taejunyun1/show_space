@@ -1,0 +1,19 @@
+{
+  "scope": "actual local Wrangler HTTP/R2/D1",
+  "identityProvider": "explicit synthetic A/B and legacy; no real Supabase",
+  "production": false,
+  "commenterWrite": true,
+  "publicIdentityAbsent": true,
+  "sceneAnchor": true,
+  "replyRetryIdempotent": true,
+  "ownerModeration": true,
+  "concurrentConflict": true,
+  "layoutUnchanged": true,
+  "revoked": true,
+  "cleanupComplete": true,
+  "localD1ThreadCountAfterRevocation": 0,
+  "testWorkerStopped": true,
+  "nativeBrowserVerified": false,
+  "realAccountVerified": false,
+  "productionDeployed": false
+}

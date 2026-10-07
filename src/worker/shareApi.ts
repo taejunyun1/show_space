@@ -5,6 +5,8 @@ import {MODEL_MAX_BYTES} from '../lib/glbPayload';
 import {publicModelBytes,publicModelHash,PUBLIC_MODELS_MAX_BYTES,PUBLIC_MODEL_ASSETS_MAX} from '../lib/publicModelAsset';
 import {parsePublicShare,publicModelIds,publicImageIds,publicVideoIds,PUBLIC_SNAPSHOT_MAX_BYTES,type PublicShareSnapshot} from '../domain/publicShare';
 import {authenticatedUser,authConfig,type AuthEnv,type AuthFetch} from './auth';
+import {handleCommentRequest} from './commentApi';
+import type {ProjectDatabase} from './projectApi';
 
 export interface ShareBucket {
   put(key:string,value:string|ArrayBuffer|ReadableStream,options?:{httpMetadata?:{contentType?:string}}):Promise<unknown>;
@@ -13,15 +15,15 @@ export interface ShareBucket {
   list(options:{prefix:string;cursor?:string;limit?:number}):Promise<{objects:Array<{key:string}>;truncated:boolean;cursor?:string}>;
   delete(keys:string|string[]):Promise<unknown>;
 }
-export interface ShareEnv extends AuthEnv {SHARES:ShareBucket;OWNER_TOKEN?:string;ASSETS?:{fetch(request:Request):Promise<Response>}}
-interface Meta {id:string;ownerId?:string;status:'draft'|'active'|'revoked';createdAt:string;name:string;includeDimensions:boolean;sceneCount?:number;includeArtworkDetails?:boolean}
+export interface ShareEnv extends AuthEnv {PROJECTS_DB?:ProjectDatabase;SHARES:ShareBucket;OWNER_TOKEN?:string;ASSETS?:{fetch(request:Request):Promise<Response>}}
+interface Meta {id:string;ownerId?:string;status:'draft'|'active'|'revoked';createdAt:string;name:string;includeDimensions:boolean;sceneCount?:number;includeArtworkDetails?:boolean;commentsEnabled?:boolean}
 const noStore={'cache-control':'no-store','x-content-type-options':'nosniff'};
 const json=(value:unknown,status=200)=>Response.json(value,{status,headers:noStore});
 const error=(status:number,message:string)=>json({error:message},status);
 const validImageId=(value:string)=>/^(0|[1-9][0-9]{0,3})$/.test(value);
 const metaKey=(id:string)=>`meta/${id}.json`;
 const ownerIndexKey=(ownerId:string,id:string)=>`owners/${ownerId}/${id}.json`;
-const summary=({id,status,createdAt,name,includeDimensions,sceneCount,includeArtworkDetails}:Meta)=>({id,status,createdAt,name,includeDimensions,...(sceneCount!==undefined?{sceneCount}:{}),...(includeArtworkDetails!==undefined?{includeArtworkDetails}:{})});
+const summary=({id,status,createdAt,name,includeDimensions,sceneCount,includeArtworkDetails,commentsEnabled}:Meta)=>({id,status,createdAt,name,includeDimensions,...(sceneCount!==undefined?{sceneCount}:{}),...(includeArtworkDetails!==undefined?{includeArtworkDetails}:{}),...(commentsEnabled?{commentsEnabled:true}:{})});
 const snapshotKey=(id:string)=>`shares/${id}/snapshot.json`;
 const modelKey=(id:string,hash:string)=>`shares/${id}/models/${hash}.glb`;
 const videoKey=(id:string,hash:string)=>`shares/${id}/videos/${hash}`;
@@ -57,6 +59,8 @@ async function boundedJson(request:Request):Promise<unknown>{
 export async function handleShareRequest(request:Request,env:ShareEnv,authFetch:AuthFetch=fetch):Promise<Response>{
   const {pathname}=new URL(request.url),method=request.method;
   if(!pathname.startsWith('/api/'))return error(404,'주소를 찾을 수 없습니다.');
+  const comment=pathname.match(/^\/api\/public\/([0-9a-f]{48})\/comments(?:\/([0-9a-f-]{36}))?$/);
+  if(comment)return handleCommentRequest(request,env,comment[1],comment[2],{entry:()=>meta(env.SHARES,comment[1]),snapshot:()=>readSnapshot(env.SHARES,comment[1]),legacy:()=>ownerAuthorized(request,env.OWNER_TOKEN)},authFetch);
   const publicMatch=pathname.match(/^\/api\/public\/([0-9a-f]{48})(?:\/(images|models|videos)\/(\d{1,4}|[0-9a-f]{64}))?$/);
   if(publicMatch){
     if(method!=='GET')return error(405,'읽기 전용 링크입니다.');
@@ -168,12 +172,15 @@ export async function handleShareRequest(request:Request,env:ShareEnv,authFetch:
     if(!entry)return error(404,'공유 작업을 찾을 수 없습니다.');
     if(entry.status!=='draft')return error(409,'발행된 공유는 변경할 수 없습니다.');
     let snapshot:PublicShareSnapshot;
+    const review=request.headers.get('x-review-comments');if(review!==null&&review!=='true'&&review!=='false')return error(400,'댓글 공개 설정이 올바르지 않습니다.');
+    if(review==='true'){if(!env.PROJECTS_DB)return error(503,'댓글 저장 연결이 아직 준비되지 않았습니다.');try{await env.PROJECTS_DB.prepare('SELECT COUNT(*) AS count FROM review_threads WHERE share_id = ?').bind(id).first();}catch{return error(503,'댓글 저장 연결이 아직 준비되지 않았습니다.');}}
     try{snapshot=parsePublicShare(await boundedJson(request));}catch(e){return error(400,(e as Error).message);}
+    delete snapshot.commentsEnabled;if(review==='true')snapshot.commentsEnabled=true;try{snapshot=parsePublicShare(snapshot);}catch(e){return error(400,(e as Error).message);}
     let modelBytes=0;for(const hash of publicModelIds(snapshot)){const model=await env.SHARES.head(modelKey(id,hash));if(!model)return error(409,'3D 작품 모델 업로드가 완료되지 않았습니다.');modelBytes+=model.size;}if(modelBytes>PUBLIC_MODELS_MAX_BYTES)return error(413,'공유 모델 자산 총합은 80MiB 이하여야 합니다.');
     let videoBytes=0;for(const hash of publicVideoIds(snapshot)){const video=await env.SHARES.head(videoKey(id,hash));if(!video)return error(409,'영상 원본 업로드가 완료되지 않았습니다.');if(video.size>VIDEO_MAX_BYTES)return error(413,'공유 영상은 16MiB 이하여야 합니다.');videoBytes+=video.size;}if(videoBytes>PUBLIC_VIDEOS_MAX_BYTES)return error(413,'공유 영상 자산 총합은 80MiB 이하여야 합니다.');
     for(const imageId of publicImageIds(snapshot))if(!(await env.SHARES.head(imageKey(id,imageId))))return error(409,'작품/표면 이미지 업로드가 완료되지 않았습니다.');
     await env.SHARES.put(snapshotKey(id),JSON.stringify(snapshot),{httpMetadata:{contentType:'application/json'}});
-    await saveMeta(env.SHARES,{...entry,status:'active',name:snapshot.name,includeDimensions:!!snapshot.dimensions,sceneCount:snapshot.scenes?.length??0,includeArtworkDetails:!!snapshot.includeArtworkDetails});
+    await saveMeta(env.SHARES,{...entry,status:'active',name:snapshot.name,includeDimensions:!!snapshot.dimensions,sceneCount:snapshot.scenes?.length??0,includeArtworkDetails:!!snapshot.includeArtworkDetails,...(review==='true'?{commentsEnabled:true}:{})});
     return json({id},201);
   }
   const share=pathname.match(/^\/api\/shares\/([0-9a-f]{48})$/);
@@ -183,6 +190,7 @@ export async function handleShareRequest(request:Request,env:ShareEnv,authFetch:
     if(!entry)return error(404,'공유 작업을 찾을 수 없습니다.');
     // Mark revoked before removing data; repeat DELETE can finish an interrupted cleanup.
     if(entry.status!=='draft'&&entry.status!=='revoked')await saveMeta(env.SHARES,{...entry,status:'revoked'});
+    if(entry.commentsEnabled&&env.PROJECTS_DB){try{const removed=await env.PROJECTS_DB.prepare('DELETE FROM review_threads WHERE share_id = ?').bind(id).run();if(!removed.success)throw new Error();}catch{return error(503,'공유는 중단됐지만 댓글 정리를 완료하지 못했습니다. 공유 중단을 다시 실행해 주세요.');}}
     while(true){
       const listing=await env.SHARES.list({prefix:`shares/${id}/`,limit:1000});
       if(!listing.objects.length)break;

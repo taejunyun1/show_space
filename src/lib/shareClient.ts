@@ -5,7 +5,7 @@ export type ShareFetch=(input:string,init?:RequestInit)=>Promise<Response>;
 const auth=(ownerToken:string)=>({authorization:`Bearer ${ownerToken}`});
 async function checked(response:Response){if(response.ok)return response;let message=`요청에 실패했습니다 (${response.status}).`;try{const body=await response.json() as {error?:string};if(body.error)message=body.error;}catch{/* Non-JSON errors still carry the status. */}throw new Error(message);}
 
-export async function publishPublicShare(project:Project,options:PublicShareOptions,ownerToken:string,camera?:PublicShareOptions['camera'],fetcher:ShareFetch=fetch,origin=location.origin):Promise<string>{
+export async function publishPublicShare(project:Project,options:PublicShareOptions&{allowComments?:boolean},ownerToken:string,camera?:PublicShareOptions['camera'],fetcher:ShareFetch=fetch,origin=location.origin):Promise<string>{
   const {snapshot,uploads,models,videos}=await prepareSharePresentation(project,options,camera);
   const created=await checked(await fetcher('/api/shares',{method:'POST',headers:auth(ownerToken)}));
   const {id}=await created.json() as {id:string};
@@ -19,7 +19,7 @@ export async function publishPublicShare(project:Project,options:PublicShareOpti
     }
     for(const [hash,bytes] of models)await checked(await fetcher(`/api/shares/${id}/models/${hash}`,{method:'PUT',headers:{...auth(ownerToken),'content-type':'model/gltf-binary'},body:bytes}));
     for(const [hash,asset] of videos)await checked(await fetcher(`/api/shares/${id}/videos/${hash}`,{method:'PUT',headers:{...auth(ownerToken),'content-type':asset.mime},body:asset.bytes}));
-    await checked(await fetcher(`/api/shares/${id}/publish`,{method:'POST',headers:{...auth(ownerToken),'content-type':'application/json'},body:JSON.stringify(snapshot)}));
+    await checked(await fetcher(`/api/shares/${id}/publish`,{method:'POST',headers:{...auth(ownerToken),'content-type':'application/json',...(options.allowComments?{'x-review-comments':'true'}:{})},body:JSON.stringify(snapshot)}));
     return `${origin}/s/${id}`;
   }catch(error){
     try{await fetcher(`/api/shares/${id}`,{method:'DELETE',headers:auth(ownerToken)});}catch{/* A draft can be cleaned up later. */}
@@ -27,7 +27,7 @@ export async function publishPublicShare(project:Project,options:PublicShareOpti
   }
 }
 
-export interface ShareListItem {id:string;status:'active'|'revoked';createdAt:string;name:string;includeDimensions:boolean;sceneCount?:number;includeArtworkDetails?:boolean}
+export interface ShareListItem {id:string;status:'active'|'revoked';createdAt:string;name:string;includeDimensions:boolean;sceneCount?:number;includeArtworkDetails?:boolean;commentsEnabled?:boolean}
 export async function listPublicShares(ownerToken:string,fetcher:ShareFetch=fetch):Promise<ShareListItem[]>{
   const response=await checked(await fetcher('/api/shares',{headers:auth(ownerToken)}));
   const body=await response.json() as {items:ShareListItem[]};
