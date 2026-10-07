@@ -33,3 +33,7 @@
 공개 운영 사이트에서의 영상 발행/회수 왕복, 실제 Safari/모바일 코덱, 오디오 포함 다수 동시 영상의 장시간 성능은 별도 인수다. 벽면 2D 도면의 영상 포스터 비율/크롭 표시도 후속 보완이다. PDF·GLB·glTF는 정지 포스터이며 영상 애니메이션 전달을 지원한다고 주장하지 않는다. 실제 계정·두 기기 왕복과 원문 전체 인수/확장 항목은 그대로 남는다.
 
 R2 구간 읽기는 [Cloudflare 공식 API](https://developers.cloudflare.com/r2/api/workers/workers-api-reference/#ranged-reads)를 확인했다.
+
+## 공개 배포 확인
+
+소스 커밋 `109a1d5271b0cc4e923e69411ff0f18f1b946282`를 GitHub main에 푸시하고 Cloudflare Worker `993c93e9-d7f2-49b3-83fe-c5786fee5435`로 배포했다. 기존 D1/R2 바인딩을 유지하며 마이그레이션/운영 자산 수정은 없다. 공개 앱을 실제 브라우저에서 다시 열어 `/assets/index-KpRqJVgy.js`, 영상 작품 추가, 도면·3D 불러오기 메뉴를 확인했다. `2026-10-07-video-deployed-import-menu.png`에 JPG·PNG·PDF, SketchUp export GLB, 저장 프로젝트 복원 선택이 표시된다. `.skp` 직접 입력은 지원하지 않는다고 명시한다. 이는 운영 영상 발행/회수 왕복 및 실기기 인수 증거를 대신하지 않는다.
