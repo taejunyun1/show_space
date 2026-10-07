@@ -2,7 +2,7 @@ import {artworkPresentation} from '../domain/artworkPresentation';
 import {artworkFrameGeometry,artworkFrameMaterial,artworkCoverMaterial} from './artworkPresentationGeometry';
 import {placeModelArtwork,checkModelArtworkBounds} from './modelArtworkGeometry';
 import {createExportLighting,disposeLighting} from './sceneLighting';
-import {wallMetricUv,floorMetricUv,repeatingSurfaceTexture} from './surfaceUv';
+import {wallMetricUv,floorMetricUv,repeatingSurfaceTexture,repeatingNormalTexture} from './surfaceUv';
 import {createSurfaceMaterial} from './surfaceMaterial';
 import {BoxGeometry,ExtrudeGeometry,Group,Mesh,MeshStandardMaterial,Path,PlaneGeometry,Scene,Shape,Texture,type Material,type Object3D} from 'three';
 import {artworkPosition,wallLength} from '../domain/model';
@@ -13,8 +13,10 @@ import type {Project} from '../domain/types';
 /** Build from stored geometry, independent of the editor camera, grid and selection. */
 export function buildExportScene(project:Project,textures=new Map<string,Texture>(),referenceScene?:Object3D,materialTextures=new Map<string,Texture>(),artworkModels=new Map<string,Object3D>()):Scene{
  if(project.planReference&&!project.planReference.calibrated)throw new Error('도면 축척을 설정한 뒤 3D 모델을 내보내세요.');
- for(const m of [project.floorMaterial,...project.walls.filter(w=>w.visible).map(w=>w.material)])if(m?.texture&&!materialTextures.has(m.texture.imageUrl))throw new Error('표면 텍스처를 준비하지 못했습니다.');
- function finish(color:string,material:Project['floorMaterial'],roughness:number){const result=createSurfaceMaterial(color,material,roughness) as MeshStandardMaterial;if(material?.texture){const source=materialTextures.get(material.texture.imageUrl);if(!source)throw new Error('표면 텍스처를 준비하지 못했습니다.');result.map=repeatingSurfaceTexture(source,material.texture);}return result;}
+ const finishes=[project.floorMaterial,...project.walls.filter(w=>w.visible).map(w=>w.material),...project.artworks.filter(a=>a.visible&&a.imageUrl&&project.walls.some(w=>w.id===a.wallId&&w.visible)).map(a=>a.material)];
+ for(const m of finishes){if(m?.texture&&!materialTextures.has(m.texture.imageUrl))throw new Error('표면 텍스처를 준비하지 못했습니다.');if(m?.normal&&!materialTextures.has(m.normal.imageUrl))throw new Error('노멀 맵을 준비하지 못했습니다.');}
+ function normal(result:MeshStandardMaterial,material:Project['floorMaterial'],extentM?:readonly [number,number]){if(material?.normal)result.normalMap=repeatingNormalTexture(materialTextures.get(material.normal.imageUrl)!,material.normal,extentM);return result;}
+ function finish(color:string,material:Project['floorMaterial'],roughness:number){const result=createSurfaceMaterial(color,material,roughness) as MeshStandardMaterial;if(material?.texture){const source=materialTextures.get(material.texture.imageUrl);if(!source)throw new Error('표면 텍스처를 준비하지 못했습니다.');result.map=repeatingSurfaceTexture(source,material.texture);}return normal(result,material);}
  for(const a of project.modelArtworks??[])if(a.visible){const source=artworkModels.get(a.id);if(!source)throw new Error('3D 작품 모델을 준비하지 못했습니다.');checkModelArtworkBounds(source,a.model);}
  const scene=new Scene();scene.name=project.name;
  for(const wall of project.walls){
@@ -39,7 +41,7 @@ export function buildExportScene(project:Project,textures=new Map<string,Texture
   if(p.framed){const backing=new Mesh(new BoxGeometry(iw,ih,back),new MeshStandardMaterial({color:'#eee8dc',roughness:.95}));backing.name='backing';backing.position.z=-d/2+back/2;group.add(backing);}
   if(p.framed&&p.settings.matWidthMm>0){const mat=new Mesh(new PlaneGeometry(iw,ih),new MeshStandardMaterial({color:p.settings.matColor,roughness:.95}));mat.name='mat';mat.position.z=(p.imageZMm-.05)/1000;group.add(mat);}
   if(p.coverThicknessMm>0){const cover=new Mesh(new BoxGeometry(iw,ih,p.coverThicknessMm/1000),artworkCoverMaterial(artwork));cover.name='front-cover';cover.position.z=d/2-p.coverThicknessMm/2000;group.add(cover);}
-  const image=new Mesh(new PlaneGeometry(w,h),Object.assign(createSurfaceMaterial('#ffffff',artwork.material,.9),{map:textures.get(artwork.id)??null}));image.name='image';image.position.z=p.imageZMm/1000;group.add(image);scene.add(group);
+  const image=new Mesh(new PlaneGeometry(w,h),normal(Object.assign(createSurfaceMaterial('#ffffff',artwork.material,.9),{map:textures.get(artwork.id)??null}) as MeshStandardMaterial,artwork.material,[w,h]));image.name='image';image.position.z=p.imageZMm/1000;group.add(image);scene.add(group);
  }
  for(const a of project.modelArtworks??[])if(a.visible){const source=artworkModels.get(a.id);if(!source)throw new Error('3D 작품 모델을 준비하지 못했습니다.');const root=placeModelArtwork(a,source);root.traverse(o=>{if(o!==root)o.userData={};if(o instanceof Mesh){o.castShadow=true;o.receiveShadow=true;for(const material of Array.isArray(o.material)?o.material:[o.material])material.userData={};}});scene.add(root);}
  if(project.referenceModel?.visible&&referenceScene){

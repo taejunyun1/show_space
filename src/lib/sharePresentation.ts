@@ -26,7 +26,7 @@ export async function prepareSharePresentation(project:Project,options:PublicSha
   }
   const snapshot=result.snapshot;
   for(const art of snapshot.artworks)art.imageId=remap.get(art.imageId)!;
-  for(const material of [snapshot.floorMaterial,...snapshot.walls.map(w=>w.material)])if(material?.texture)material.texture.imageId=remap.get(material.texture.imageId)!;
+  for(const material of [snapshot.floorMaterial,...snapshot.walls.map(w=>w.material),...snapshot.artworks.map(a=>a.material)]){if(material?.texture)material.texture.imageId=remap.get(material.texture.imageId)!;if(material?.normal)material.normal.imageId=remap.get(material.normal.imageId)!;}
   return snapshot;
  }
  const snapshot=await prepare(project,camera??options.camera);

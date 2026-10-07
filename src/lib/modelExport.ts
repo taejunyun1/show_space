@@ -1,4 +1,4 @@
-import {CanvasTexture,SRGBColorSpace,type Object3D,type Texture} from 'three';
+import {CanvasTexture,SRGBColorSpace,TextureLoader,NoColorSpace,type Object3D,type Texture} from 'three';
 import {GLTFExporter} from 'three/examples/jsm/exporters/GLTFExporter.js';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {buildExportScene,disposeExportScene} from './exportScene';
@@ -14,6 +14,12 @@ export async function artworkTexture(url:string):Promise<Texture>{
  ctx.drawImage(image,(panel??0)*width,0,width,height,0,0,canvas.width,canvas.height);
  const texture=new CanvasTexture(canvas);texture.colorSpace=SRGBColorSpace;return texture;
 }
+/** No lossy photo encoder or sRGB transfer function for tangent normal vectors. */
+export async function normalMapTexture(url:string):Promise<Texture>{
+ return new Promise((resolve,reject)=>{let active=true;const timer=setTimeout(()=>{active=false;reject(new Error('노멀 맵을 읽지 못했습니다.'));},15000);
+  new TextureLoader().load(url,map=>{clearTimeout(timer);if(!active){map.dispose();return;}map.colorSpace=NoColorSpace;resolve(map);},undefined,()=>{clearTimeout(timer);active=false;reject(new Error('노멀 맵을 읽지 못했습니다.'));});
+ });
+}
 
 export async function prepareExportScene(project:Project,onProgress:(message:string)=>void=()=>{}){
  if(project.planReference&&!project.planReference.calibrated)throw new Error('도면 축척을 설정한 뒤 3D 모델을 내보내세요.');
@@ -26,6 +32,8 @@ export async function prepareExportScene(project:Project,onProgress:(message:str
   }
   const materialUrls=new Set([project.floorMaterial?.texture?.imageUrl,...project.walls.filter(w=>w.visible).map(w=>w.material?.texture?.imageUrl)].filter((url):url is string=>!!url));
   for(const [index,url] of [...materialUrls].entries()){onProgress(`표면 텍스처 준비 중 · ${index+1}/${materialUrls.size}`);materialTextures.set(url,await artworkTexture(url));}
+  const normalUrls=new Set([project.floorMaterial,...project.walls.filter(w=>w.visible).map(w=>w.material),...artworks.map(a=>a.material)].map(m=>m?.normal?.imageUrl).filter((url):url is string=>!!url));
+  for(const [index,url] of [...normalUrls].entries()){onProgress(`노멀 맵 준비 중 · ${index+1}/${normalUrls.size}`);if(!materialTextures.has(url))materialTextures.set(url,await normalMapTexture(url));}
   if(project.referenceModel?.visible){
    onProgress('불러온 3D 모델 준비 중');
    const bytes=Uint8Array.from(atob(project.referenceModel.dataUrl.split(',')[1]),c=>c.charCodeAt(0));referenceScene=(await new GLTFLoader().parseAsync(bytes.buffer,'')).scene;

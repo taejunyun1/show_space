@@ -16,6 +16,7 @@ export function parseMaterialTemplate(input:unknown):MaterialTemplate{
  if(typeof t.color!=='string'||!/^#[0-9a-f]{6}$/i.test(t.color))throw new Error('재질 색상이 올바르지 않습니다.');
  const material=parseSurfaceMaterial(t.material);
  if(material.texture)libraryImageBytes(material.texture.imageUrl);
+ if(material.normal)libraryImageBytes(material.normal.imageUrl,5_000_000,1024);
  return {name:t.name.trim(),category:t.category,color:t.color.toLowerCase(),material};
 }
 const presetCategory=(id:MaterialPresetId):MaterialCategory=>['glass','acrylic','mirror'].includes(id)?'glass':['metal','stainless-steel'].includes(id)?'metal':id==='fabric'?'fabric':id==='epoxy-floor'?'floor':['matte-photo-paper','glossy-photo-paper','baryta','canvas'].includes(id)?'artwork':'architecture';

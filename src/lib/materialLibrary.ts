@@ -22,7 +22,7 @@ export function createMaterialLibrary(factory:IDBFactory=globalThis.indexedDB,na
    if(typeof input?.archived!=='boolean')throw new Error('재질 보관 상태가 올바르지 않습니다.');
    const template=parseMaterialTemplate(input.template),id=crypto.randomUUID();
    if(input.thumbnail!==undefined)libraryImageBytes(input.thumbnail,128*1024,256);
-   const summary:MaterialLibrarySummary={id,name:template.name,category:template.category,color:template.color,textured:!!template.material.texture,...(input.thumbnail?{thumbnail:input.thumbnail}:{}),archived:input.archived,revision:1,updatedAt:new Date().toISOString(),bytes:size({template,thumbnail:input.thumbnail})+1024};
+   const summary:MaterialLibrarySummary={id,name:template.name,category:template.category,color:template.color,textured:!!(template.material.texture||template.material.normal),...(input.thumbnail?{thumbnail:input.thumbnail}:{}),archived:input.archived,revision:1,updatedAt:new Date().toISOString(),bytes:size({template,thumbnail:input.thumbnail})+1024};
    return {document:{id,template},summary};
   });
   const db=await open(),tx=db.transaction(['documents','summaries'],'readwrite'),done=finished(tx);

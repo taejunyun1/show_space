@@ -48,7 +48,7 @@
 | 14–18 Library·등록·설치형식·프레임·모델 | 로컬 Library 및 이미지/3D 작품 구현 | `artworkLibrary`, `ArtworkInformationEditor`, `FrameEditor`, `ModelArtworks3D`; 계정 Library 동기화는 미구현 |
 | 19 Photo to 3D | 유료 후속 | 생성 API/결제 미구현 |
 | 20–26 배치·Snap·높이·다중·시리즈·Elevation·치수 | 핵심 구현 | 그룹/정렬/같은 면 간격/측정; 별도 Series 상품 구조까지 완료로 집계하지 않음 |
-| 27–28 재질 Library·편집, 30 기준 크기 | 로컬 재질 Library·분류·검색·저장/적용·보관·백업 및 실제 크기 Texture 구현 | `materialLibrary`, `MaterialLibraryDialog`, `materials`, `MaterialEditor`, `TextureEditor`; Basic/Advanced 편집 분리와 마감·투명 표현 구현; 계정 동기화 및 Normal map/Strength는 남음 |
+| 27–28 재질 Library·편집, 30 기준 크기 | 로컬 재질 Library·분류·검색·저장/적용·보관·백업 및 실제 크기 Texture 구현 | `materialLibrary`, `MaterialLibraryDialog`, `materials`, `MaterialEditor`, `TextureEditor`; Basic/Advanced 편집 분리와 마감·투명 표현 구현; 수동 Normal map/Strength·독립 반복·공유/출력/백업 보존 구현; 계정 동기화는 남음 |
 | 29 Material Capture | 후속 유료 생성 | 원본 사진 반복 텍스처 적용은 구현, 생성/왜곡보정/PBR 맵 추정은 미구현 |
 | 31–36 Light·Spot·Target·Kelvin·Outdoor·Sun | 기본 조명·야외 구현 | `lighting`, `outdoor`, `Lighting3D` |
 | 37 시간 비교 | 네 시간대 비교 UI·Time Scene 저장 구현 | `timeComparison`, `TimeComparisonDialog`; 현재/저장 배치의 같은 시점 비교, 날짜/시간/DST 검증, 저장·재접속·Undo 확인. 실제 기기/대형 장면 검증은 남음 |
@@ -56,7 +56,7 @@
 | 43–45 Navigation·Eye·Human Scale | 기본 시점/손 이동 중심; 사용자 결정으로 범위 축소 | 원문의 모든 Walk/인체 참조 형상 요구를 구현했다고 집계하지 않음 |
 | 46 Scene | 구조·배치·시점 및 자동 미리보기 저장 구현 | 실제 3D·평면·벽면·네 시간대 JPEG, Undo/Redo, 재접속 및 ZIP 복원 해시 일치 확인; Cloudflare 배포/공개 3D·390px 확인 |
 | 47 Presentation Mode | 로컬 별도 발표 화면 · 전체 화면 · Scene 탐색 · 작품 정보 · 읽기 전용 Orbit | 2026-10-07 native ANCA/GLB/모바일 검증, Walk는 사용자 축소 결정으로 제외. 대형 장면/실기기는 남음 |
-| 48–53 Screenshot·PDF·Share·발표 공유·선택 정보·Export | 기본 구현 및 §49 PDF의 표지/평면/3D/벽면/상세/치수 목록 순서 구성 구현 | 실제 ANCA 12p, 모델/이미지 상세 3p, 390px 및 897 테스트; 공개 배포 진행 |
+| 48–53 Screenshot·PDF·Share·발표 공유·선택 정보·Export | 기본 구현 및 §49 PDF의 표지/평면/3D/벽면/상세/치수 목록 순서 구성 구현 | 실제 ANCA 12p, 모델/이미지 상세 3p, 390px 및 897 테스트; 공개 배포와 실제 공개 PDF 3p 확인 |
 | 54 SketchUp Export | GLB 교환 경로, SKP 전용 내보내기는 후속 | 실제 SketchUp 재수입 모델 검증 남음 |
 | 55 Metadata | JSON/백업/중립 모델에 정보 보존 | 도구별 metadata·단위 수신 검증 남음 |
 | 56–57 Collaboration·Comment | 미구현 확장 | 동시 공동 편집/권한/댓글 기능; 고정 공개 링크와 개인 클라우드 저장은 별개 |
@@ -100,3 +100,5 @@
 2026-10-07 공개 갱신: §46 자동 미리보기는 Cloudflare `356b68f2-75ad-4384-972c-505ccb2faf27`로 배포하고 공개 HTTPS 실제 JPEG 생성/모바일 목록/콘솔 오류 없음 확인까지 마쳤다. 전체 제품 목표 완료로 확대하지 않는다.
 
 2026-10-07 PDF 갱신: [페이지 구성](2026-10-07-pdf-presentation.md)에서 §49 선택 Scene 혼합 순서와 여섯 보기, 페이지별 시점/벽면/작품/제목을 구현했다. 실제 12페이지 및 독립 3D/이미지 상세 3페이지 출력·긴 설명 보존·메모 제외·원본 작업 보존을 확인했다. 앞선 PDF 보기 확장 대기는 이 구현으로 갱신한다. 전체 제품 인수는 계속 미완료다.
+
+2026-10-07 갱신: [수동 노멀 맵/강도](2026-10-07-normal-maps.md)의 벽·바닥·이미지 작품 입력, OpenGL/DirectX 픽셀, GLB 강도/반복, PDF·발표·ZIP·Library와 맵 제거/Undo를 검증했다. 최종 전체 906 테스트 통과/선택 2 제외. §28의 수동 normal-map 입력/강도 구현은 완료이며 사진→재질 생성, 계정 Library 동기화와 전체 인수는 계속 남는다.

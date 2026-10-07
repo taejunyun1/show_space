@@ -28,6 +28,7 @@ export function parseArtworkTemplate(value:unknown):ArtworkTemplate{
  if(input.kind==='image'){
   libraryImageBytes(raw.imageUrl);
   const a:ImageDesign={...shared,frame:raw.frame as Artwork['frame'],imageUrl:raw.imageUrl as string,...(raw.frameSettings!==undefined?{frameSettings:parseFrameSettings(raw.frameSettings)}:{}),...(raw.material!==undefined?{material:parseSurfaceMaterial(raw.material)}:{})};
+  if(a.material?.normal)libraryImageBytes(a.material.normal.imageUrl,5_000_000,1024);
   const p=createDemoProject();parseProject({...p,artworks:[{...a,id:'template',wallId:p.walls[0].id,alongMm:0,centerHeightMm:1500,visible:true,locked:false,note:''}]});
   return structuredClone({kind:'image',artwork:a});
  }

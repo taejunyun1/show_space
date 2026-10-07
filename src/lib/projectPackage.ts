@@ -19,7 +19,7 @@ function assetSlots(input:unknown):Slot[]{
  const list=(value:unknown):unknown[]=>{if(!Array.isArray(value))throw new Error('백업 작품/Scene 목록이 올바르지 않습니다.');return value;};
  const note=(value:unknown)=>{const n=object(value);if(n.noteDetails!==undefined)for(const i of list(object(n.noteDetails).images))slots.push({object:object(i),key:'imageUrl',kind:'image'});};
  const lights=(value:unknown)=>{if(value!==undefined)for(const l of list(value))note(l);};
- const material=(value:unknown)=>{if(value!==undefined){const m=object(value);if(m.texture!==undefined)slots.push({object:object(m.texture),key:'imageUrl',kind:'image'});}};
+ const material=(value:unknown)=>{if(value!==undefined){const m=object(value);for(const key of ['texture','normal'])if(m[key]!==undefined)slots.push({object:object(m[key]),key:'imageUrl',kind:'image'});}};
  const walls=(value:unknown)=>{for(const item of list(value)){const w=object(item);note(w);material(w.material);}};
  const artworks=(value:unknown)=>{for(const item of list(value)){const a=object(item);note(a);slots.push({object:a,key:'imageUrl',kind:'image'});material(a.material);}};
  const model=(value:unknown)=>{if(value!==undefined){note(value);slots.push({object:object(value),key:'dataUrl',kind:'model'});}};

@@ -1,4 +1,4 @@
-import {RepeatWrapping,SRGBColorSpace,type BufferGeometry,type Texture} from 'three';
+import {RepeatWrapping,SRGBColorSpace,NoColorSpace,type BufferGeometry,type Texture} from 'three';
 import type {SurfaceTexture} from '../domain/surfaceTexture';
 /** Each UV unit is one meter. All six box faces retain the requested texel scale. */
 export function wallMetricUv<T extends BufferGeometry>(geometry:T){
@@ -25,4 +25,9 @@ export function floorMetricUv<T extends BufferGeometry>(geometry:T,shapeYSign:1|
 export function repeatingSurfaceTexture(source:Texture,size:Pick<SurfaceTexture,'widthMm'|'heightMm'>){
  const texture=source.clone();texture.colorSpace=SRGBColorSpace;texture.wrapS=texture.wrapT=RepeatWrapping;
  texture.repeat.set(1000/size.widthMm,1000/size.heightMm);texture.needsUpdate=true;return texture;
+}
+/** Normal vectors are linear data; artwork UVs are 0..1 rather than metric UVs. */
+export function repeatingNormalTexture(source:Texture,size:Pick<SurfaceTexture,'widthMm'|'heightMm'>,extentM:readonly [number,number]=[1,1]){
+ const texture=repeatingSurfaceTexture(source,size);texture.colorSpace=NoColorSpace;
+ texture.repeat.set(extentM[0]*1000/size.widthMm,extentM[1]*1000/size.heightMm);return texture;
 }

@@ -1,7 +1,8 @@
 import {parseSurfaceTexture,type SurfaceTexture} from './surfaceTexture';
+import {parseSurfaceNormal,type SurfaceNormal} from './surfaceNormal';
 export const materialPresetIds=['white-paint','matte-paint','concrete','wood','metal','stainless-steel','glass','acrylic','mirror','fabric','matte-photo-paper','glossy-photo-paper','baryta','canvas','epoxy-floor'] as const;
 export type MaterialPresetId=typeof materialPresetIds[number];
-export interface SurfaceMaterial {texture?:SurfaceTexture;preset:MaterialPresetId;roughness:number;metalness:number;opacity:number;transmission:number;thicknessMm:number;ior:number;clearcoat:number;sheen:number}
+export interface SurfaceMaterial {texture?:SurfaceTexture;normal?:SurfaceNormal;preset:MaterialPresetId;roughness:number;metalness:number;opacity:number;transmission:number;thicknessMm:number;ior:number;clearcoat:number;sheen:number}
 const base={metalness:0,opacity:1,transmission:0,thicknessMm:0,ior:1.5,clearcoat:0,sheen:0};
 const preset=(id:MaterialPresetId,label:string,color:string,roughness:number,patch:Partial<SurfaceMaterial>={})=>({id,label,color,material:{...base,preset:id,roughness,...patch} as SurfaceMaterial});
 export const materialPresets=[
@@ -22,5 +23,5 @@ export function parseSurfaceMaterial(input:unknown):SurfaceMaterial{
  const roughness=unit('roughness'),metalness=unit('metalness'),opacity=unit('opacity'),transmission=unit('transmission'),clearcoat=unit('clearcoat'),sheen=unit('sheen');
  if(!Number.isFinite(m.thicknessMm)||m.thicknessMm<0||m.thicknessMm>2000||!Number.isFinite(m.ior)||m.ior<1||m.ior>2.333)throw new Error('재질 두께/굴절률이 올바르지 않습니다.');
  if(transmission>0&&opacity!==1)throw new Error('빛을 투과하는 재질은 불투명도 100%를 유지해야 합니다.');
- return {preset:m.preset,roughness,metalness,opacity,transmission,thicknessMm:m.thicknessMm,ior:m.ior,clearcoat,sheen,...(m.texture===undefined?{}:{texture:parseSurfaceTexture(m.texture)})};
+ return {preset:m.preset,roughness,metalness,opacity,transmission,thicknessMm:m.thicknessMm,ior:m.ior,clearcoat,sheen,...(m.texture===undefined?{}:{texture:parseSurfaceTexture(m.texture)}),...(m.normal===undefined?{}:{normal:parseSurfaceNormal(m.normal)})};
 }

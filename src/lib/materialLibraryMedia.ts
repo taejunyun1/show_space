@@ -1,13 +1,16 @@
 import {parseMaterialTemplate,type MaterialTemplate} from '../domain/materialLibrary';
 import {MATERIAL_LIBRARY_MAX_BYTES,MATERIAL_LIBRARY_MAX_ITEMS,type MaterialLibraryBackup} from './materialLibrary';
 import {libraryImageBytes} from '../domain/artworkLibrary';
-export async function materialThumbnail(input:MaterialTemplate){
- const template=parseMaterialTemplate(input),texture=template.material.texture;
- if(!texture)return;
- const image=await new Promise<HTMLImageElement>((resolve,reject)=>{
-  const img=new Image(),fail=()=>{clearTimeout(timer);img.onload=null;img.onerror=null;img.src='';reject(new Error('재질 텍스처 이미지를 읽지 못했습니다.'));},timer=setTimeout(fail,15000);
-  img.onload=()=>{clearTimeout(timer);img.onload=null;img.onerror=null;resolve(img);};img.onerror=fail;img.src=texture.imageUrl;
+async function decodeMaterialImage(imageUrl:string){
+ return new Promise<HTMLImageElement>((resolve,reject)=>{
+  const img=new Image(),fail=()=>{clearTimeout(timer);img.onload=null;img.onerror=null;img.src='';reject(new Error('재질 이미지를 읽지 못했습니다.'));},timer=setTimeout(fail,15000);
+  img.onload=()=>{clearTimeout(timer);img.onload=null;img.onerror=null;resolve(img);};img.onerror=fail;img.src=imageUrl;
  });
+}
+export async function materialThumbnail(input:MaterialTemplate){
+ const template=parseMaterialTemplate(input),texture=template.material.texture??template.material.normal;
+ if(!texture)return;
+ const image=await decodeMaterialImage(texture.imageUrl);
  const scale=Math.min(1,256/Math.max(image.naturalWidth,image.naturalHeight)),canvas=document.createElement('canvas');
  canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
  const ctx=canvas.getContext('2d');if(!ctx)throw new Error('재질 썸네일을 만들지 못했습니다.');ctx.drawImage(image,0,0,canvas.width,canvas.height);
@@ -21,7 +24,7 @@ export async function readMaterialLibraryBackup(file:File):Promise<MaterialLibra
  const items:MaterialLibraryBackup['items']=[];
  for(const item of value.items){
   if(typeof item?.archived!=='boolean')throw new Error('재질 보관 상태가 올바르지 않습니다.');
-  const template=parseMaterialTemplate(item.template),thumbnail=await materialThumbnail(template);items.push({template,archived:item.archived,...(thumbnail?{thumbnail}:{})});
+  const template=parseMaterialTemplate(item.template);if(template.material.texture&&template.material.normal)await decodeMaterialImage(template.material.normal.imageUrl);const thumbnail=await materialThumbnail(template);items.push({template,archived:item.archived,...(thumbnail?{thumbnail}:{})});
  }
  return {format:'gonggan-material-library',schemaVersion:1,items};
 }

@@ -32,7 +32,7 @@ type Selection={kind:'wall'|'artwork'|'modelArtwork'|'referenceModel';id:string}
 type Art=PublicShareSnapshot['artworks'][number];
 type PublicWall=PublicShareSnapshot['walls'][number];
 
-function finish(m?:PublicSurfaceMaterial){return m?{...m,texture:undefined}:undefined;}
+function finish(m:PublicSurfaceMaterial|undefined,shareId:string,assets:ReadonlyAssets|null){if(!m)return;const {texture:_,normal,...scalar}=m;const url=normal?readonlyImageUrl(shareId,normal.imageId,assets):undefined;return {...scalar,...(normal&&url?{normal:{imageUrl:url,widthMm:normal.widthMm,heightMm:normal.heightMm,strength:normal.strength}}:{})};}
 function publicTexture(m:PublicSurfaceMaterial|undefined,shareId:string,assets:ReadonlyAssets|null){const url=m?.texture?readonlyImageUrl(shareId,m.texture.imageId,assets):undefined;return m?.texture&&url?{imageUrl:url,widthMm:m.texture.widthMm,heightMm:m.texture.heightMm}:undefined;}
 
 type MeasurePick=(event:ThreeEvent<PointerEvent>)=>void;
@@ -40,7 +40,7 @@ type MeasurePick=(event:ThreeEvent<PointerEvent>)=>void;
 function Floor({snapshot,shareId,measuring,onMeasure}:{snapshot:PublicShareSnapshot;shareId:string;measuring:boolean;onMeasure:MeasurePick}){
   const assets=useReadonlyAssets();
   const shapes=useMemo(()=>{
-    const walls:Wall[]=snapshot.walls.map(wall=>({...wall,material:finish(wall.material),visible:true,locked:true,note:''}));
+    const walls:Wall[]=snapshot.walls.map(wall=>({...wall,material:undefined,visible:true,locked:true,note:''}));
     const virtual:Wall[]=snapshot.openings.map(opening=>({id:`opening-${opening.id}`,name:'',start:opening.start,end:opening.end,heightMm:1,thicknessMm:1,color:'#000000',role:'boundary',visible:false,locked:true,note:''}));
     return (snapshot.importedFloor?floorFromLoops(snapshot.importedFloor):deriveFloor([...walls,...virtual])).surfaces.map(surface=>{
       const shape=new Shape();
@@ -50,14 +50,15 @@ function Floor({snapshot,shareId,measuring,onMeasure}:{snapshot:PublicShareSnaps
       return shape;
     });
   },[snapshot]);
-  return <>{shapes.map((shape,index)=><mesh receiveShadow key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><FloorSurfaceGeometry shape={shape} flat/><SurfaceFinish color={snapshot.floorColor} material={finish(snapshot.floorMaterial)} texture={publicTexture(snapshot.floorMaterial,shareId,assets)} side={2} roughness={.96}/></mesh>)}</>;
+  return <>{shapes.map((shape,index)=><mesh receiveShadow key={index} rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} onPointerDown={measuring?onMeasure:undefined}><FloorSurfaceGeometry shape={shape} flat/><SurfaceFinish color={snapshot.floorColor} material={finish(snapshot.floorMaterial,shareId,assets)} texture={publicTexture(snapshot.floorMaterial,shareId,assets)} side={2} roughness={.96}/></mesh>)}</>;
 }
 
-function ArtworkImage({url,art,width,height,selected}:{url:string;art:Art;width:number;height:number;selected:boolean}){
+function ArtworkImage({url,art,width,height,selected,shareId}:{url:string;art:Art;width:number;height:number;selected:boolean;shareId:string}){
+  const assets=useReadonlyAssets();
   const textureSize=useArtworkTextureSize(art.id);
   const {texture,failed,ready,appliedSize}=useArtworkTexture(url,art.spritePanel??null,textureSize);
   if(failed)throw new Error('공유 작품 이미지 로딩 실패');
-  return <mesh userData={{artworkTextureReady:ready,artworkTextureSize:textureSize,artworkTextureAppliedSize:appliedSize,artworkTextureRequest:{id:art.id,key:JSON.stringify([url,art.spritePanel??null]),width,height,selected}}} position={[0,0,artworkPresentation(art).imageZMm/1000]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={finish(art.material)} map={texture} roughness={.9}/></mesh>;
+  return <mesh userData={{artworkTextureReady:ready,artworkTextureSize:textureSize,artworkTextureAppliedSize:appliedSize,artworkTextureRequest:{id:art.id,key:JSON.stringify([url,art.spritePanel??null]),width,height,selected}}} position={[0,0,artworkPresentation(art).imageZMm/1000]}><planeGeometry args={[width,height]}/><SurfaceFinish color="#ffffff" material={finish(art.material,shareId,assets)} normalExtentM={[width,height]} map={texture} roughness={.9}/></mesh>;
 }
 
 function ArtworkPlaceholder({width,height,imageZ,failed=false}:{width:number;height:number;imageZ:number;failed?:boolean}){
@@ -80,7 +81,7 @@ function PublicArtwork({art,wall,shareId,selected,onSelect,measuring,onMeasure}:
   return <group position={[x,art.centerHeightMm/1000,z]} rotation={[0,Math.atan2(nx,nz),(art.rotationDeg??0)*Math.PI/180]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'artwork',id:art.id});}}>
     <ArtworkPresentationShell artwork={art}/>
     {selected&&<Line points={(()=>{const p=artworkPresentation(art),w=p.widthMm/2000+.02,h=p.heightMm/2000+.02,z=p.depthMm/2000+.005;return [[-w,-h,z],[w,-h,z],[w,h,z],[-w,h,z],[-w,-h,z]];})()} color="#365cf5" lineWidth={2}/>}
-    {url?<ArtworkLoadBoundary key={url} width={width} height={height} imageZ={imageZ}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} imageZ={imageZ}/>}><ArtworkImage selected={selected} url={url} art={art} width={width} height={height}/></Suspense></ArtworkLoadBoundary>:<ArtworkPlaceholder width={width} height={height} imageZ={imageZ} failed/>}
+    {url?<ArtworkLoadBoundary key={url} width={width} height={height} imageZ={imageZ}><Suspense fallback={<ArtworkPlaceholder width={width} height={height} imageZ={imageZ}/>}><ArtworkImage selected={selected} shareId={shareId} url={url} art={art} width={width} height={height}/></Suspense></ArtworkLoadBoundary>:<ArtworkPlaceholder width={width} height={height} imageZ={imageZ} failed/>}
   </group>;
 }
 
@@ -89,7 +90,7 @@ function PublicWallMesh({wall,artworks,shareId,selectedId,onSelect,groups,measur
   const register=useCallback((group:Group|null)=>{if(group)groups.set(wall.id,group);else groups.delete(wall.id);},[groups,wall.id]);
   const dx=wall.end.x-wall.start.x,dz=wall.end.z-wall.start.z,length=Math.hypot(dx,dz);
   if(!length)return null;
-  return <group ref={register}><mesh castShadow receiveShadow position={[(wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000]} rotation={[0,-Math.atan2(dz,dx),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'wall',id:wall.id});}}><WallSurfaceGeometry length={length/1000} height={wall.heightMm/1000} depth={wall.thicknessMm/1000}/><SurfaceFinish color={selectedId===wall.id?'#cfdbff':wall.color} material={finish(wall.material)} texture={publicTexture(wall.material,shareId,assets)} roughness={.92}/></mesh>{artworks.map(art=><PublicArtwork key={art.id} art={art} wall={wall} shareId={shareId} selected={selectedId===art.id} onSelect={onSelect} measuring={measuring} onMeasure={onMeasure}/>)}</group>;
+  return <group ref={register}><mesh castShadow receiveShadow position={[(wall.start.x+wall.end.x)/2000,wall.heightMm/2000,(wall.start.z+wall.end.z)/2000]} rotation={[0,-Math.atan2(dz,dx),0]} onPointerDown={measuring?onMeasure:undefined} onClick={event=>{event.stopPropagation();if(!measuring)onSelect({kind:'wall',id:wall.id});}}><WallSurfaceGeometry length={length/1000} height={wall.heightMm/1000} depth={wall.thicknessMm/1000}/><SurfaceFinish color={selectedId===wall.id?'#cfdbff':wall.color} material={finish(wall.material,shareId,assets)} texture={publicTexture(wall.material,shareId,assets)} roughness={.92}/></mesh>{artworks.map(art=><PublicArtwork key={art.id} art={art} wall={wall} shareId={shareId} selected={selectedId===art.id} onSelect={onSelect} measuring={measuring} onMeasure={onMeasure}/>)}</group>;
 }
 
 function CutawayVisibility({walls,groups,cutaway}:{walls:readonly Wall[];groups:ReadonlyMap<string,Group>;cutaway:boolean}){
@@ -113,7 +114,7 @@ function CameraSetup({frame,reset,snapshot}:{frame:NonNullable<PublicShareSnapsh
 
 export default function SharedViewer3D({snapshot,shareId,selectedId,referenceSelected=false,onSelect,reset,cutaway,measuring,measurePoints,onMeasurePoint}:{snapshot:PublicShareSnapshot;shareId:string;selectedId:string|null;referenceSelected?:boolean;onSelect:(selection:Selection|null)=>void;reset:number;cutaway:boolean;measuring:boolean;measurePoints:WorldPoint[];onMeasurePoint:(point:WorldPoint)=>void}){
   const wallGroups=useRef(new Map<string,Group>());
-  const cutawayWalls=useMemo<Wall[]>(()=>snapshot.walls.map(wall=>({...wall,material:finish(wall.material),visible:true,locked:true,note:''})),[snapshot.walls]);
+  const cutawayWalls=useMemo<Wall[]>(()=>snapshot.walls.map(wall=>({...wall,material:undefined,visible:true,locked:true,note:''})),[snapshot.walls]);
   const frame=useMemo<NonNullable<PublicShareSnapshot['camera']>>(()=>{
     if(snapshot.camera)return snapshot.camera;
     const bounds=projectSpatialBounds(snapshot),minX=bounds.minX/1000,maxX=bounds.maxX/1000,minZ=bounds.minZ/1000,maxZ=bounds.maxZ/1000;

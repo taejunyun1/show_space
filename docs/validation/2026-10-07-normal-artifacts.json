@@ -1,0 +1,112 @@
+{
+  "uploadPixelChecks": {
+    "wall": {
+      "size": [
+        128,
+        128
+      ],
+      "allPixelsMatch": true,
+      "sha256": "ba74a0e605affceefa312ec240c6049b63053fbf49f2b8333f4074c0a4b66cfc",
+      "strength": 2
+    },
+    "floor": {
+      "size": [
+        128,
+        128
+      ],
+      "allPixelsMatch": true,
+      "sha256": "1db13468ec539921a2ae08a489893b0c5e15fe849b8a99724bafdbf82554e38c",
+      "strength": 1.5
+    },
+    "artwork": {
+      "size": [
+        128,
+        128
+      ],
+      "allPixelsMatch": true,
+      "sha256": "ba74a0e605affceefa312ec240c6049b63053fbf49f2b8333f4074c0a4b66cfc",
+      "strength": 1
+    }
+  },
+  "glbNormals": [
+    {
+      "scale": 2,
+      "repeat": [
+        2,
+        2
+      ],
+      "imagePixelsMatchWithGLTFVerticalFlip": true
+    },
+    {
+      "scale": 1.5,
+      "repeat": [
+        1,
+        2
+      ],
+      "imagePixelsMatchWithGLTFVerticalFlip": true
+    },
+    {
+      "scale": 1,
+      "repeat": [
+        1.8,
+        2.4
+      ],
+      "imagePixelsMatchWithGLTFVerticalFlip": true
+    }
+  ],
+  "glbBytes": 761236,
+  "glbSha256": "56497b51b5631a0962142545aa7e28fb7178d90a80ce1f582f3ad02cc7588788",
+  "nativeBackup": {
+    "file": "검증 · 노멀 맵 20261007.gonggan.zip",
+    "bytes": 744985,
+    "sha256": "2c5ec5375793075e8e46c543ed0f089ea0a43d016f3f92d22334ef466e646e1e",
+    "assets": 4,
+    "allAssetHashesVerified": true,
+    "normalSlotsChecked": 6,
+    "sceneStrengths": [
+      2,
+      1.5
+    ]
+  },
+  "nativeMaterialLibraryBackup": {
+    "normalHashMatch": true,
+    "strength": 1.5,
+    "widthMm": 1000,
+    "heightMm": 500,
+    "unrelatedItemsKept": true
+  },
+  "validation": {
+    "date": "2026-10-07",
+    "testsPassed": 906,
+    "optionalBenchmarksSkipped": 2,
+    "nativeUi": {
+      "reloadPreserved": true,
+      "wallZeroUndoTo200": true,
+      "floorRemoveVisiblyCleared": true,
+      "floorRemoveUndoTo150": true,
+      "presentationRendered": true,
+      "pdfScene3dRendered": true,
+      "zipImportedIntoNewProject": true,
+      "mobileViewport": [
+        390,
+        844
+      ],
+      "dialogWidth": 351,
+      "dialogClientWidth": 349,
+      "dialogScrollWidth": 349,
+      "originalProjectReturned": "ANCA 연속 검증 · 저장 보호",
+      "ownTestProjectsRecoverablyArchived": 2,
+      "ownNormalLibraryRecoverablyArchived": true,
+      "consoleErrorsOrWarnings": []
+    },
+    "limits": [
+      "manual normal map only, no photo generation",
+      "no real account cloud roundtrip",
+      "no real mobile GPU or SketchUp receiver",
+      "normal maps outside artwork LOD memory budget"
+    ]
+  },
+  "deployment": {
+    "status": "pending"
+  }
+}

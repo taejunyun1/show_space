@@ -4,6 +4,7 @@ import {publicArtworkInformation,type ArtworkInformation} from './artworkInforma
 import {parseOutdoor,type OutdoorSettings} from './outdoor';
 import {parseLights,parseLighting,type ExhibitionLight,type LightingSettings} from './lighting';
 import {textureSize} from './surfaceTexture';
+import {normalStrength} from './surfaceNormal';
 import {parseSurfaceMaterial,type SurfaceMaterial} from './materials';
 import {validateImportedFloor} from './importedFloor';
 import {installationZones} from './installationZones';
@@ -12,7 +13,7 @@ import {openingSegments} from './openings';
 import {artPanel} from '../lib/art';
 import type {Point,Project,WorldPoint,CameraView,ModelArtwork,ReferenceModel} from './types';
 
-export type PublicSurfaceMaterial=Omit<SurfaceMaterial,'texture'>&{texture?:{imageId:string;widthMm:number;heightMm:number}};
+export type PublicSurfaceMaterial=Omit<SurfaceMaterial,'texture'|'normal'>&{texture?:{imageId:string;widthMm:number;heightMm:number};normal?:{imageId:string;widthMm:number;heightMm:number;strength:number}};
 export type PublicModelArtwork=ArtworkInformation&Pick<ModelArtwork,'id'|'name'|'artist'|'year'|'kind'|'widthMm'|'heightMm'|'depthMm'|'position'|'rotation'>&{modelId:string;sizeMm:[number,number,number];sourceOffsetM:[number,number,number]};
 export type PublicReferenceModel=Pick<ReferenceModel,'sizeMm'|'sourceOffsetM'|'positionMm'|'rotationDeg'|'scale'>&{modelId:string};
 export type PublicLight=Pick<ExhibitionLight,'id'|'name'|'kind'|'position'|'target'|'intensity'|'kelvin'|'beamDeg'|'penumbra'|'distanceMm'|'widthMm'|'heightMm'|'shadow'|'visible'>;
@@ -66,7 +67,8 @@ export function createReadonlyLayout(project:Project,options:PublicShareOptions)
   const wallIds=new Set(visibleWalls.map(wall=>wall.id));
   const artworks=project.artworks.filter(art=>art.visible&&wallIds.has(art.wallId)&&!!art.imageUrl);
   const uploads=artworks.map((art,index)=>({imageId:String(index),sourceUrl:art.imageUrl})),textureIds=new Map<string,string>();
-  const material=(m:SurfaceMaterial):PublicSurfaceMaterial=>{const parsed=parseSurfaceMaterial(m),{texture,...finish}=parsed;if(!texture)return finish;let imageId=textureIds.get(texture.imageUrl);if(!imageId){imageId=String(uploads.length);textureIds.set(texture.imageUrl,imageId);uploads.push({imageId,sourceUrl:texture.imageUrl});}return {...finish,texture:{imageId,widthMm:texture.widthMm,heightMm:texture.heightMm}};};
+  const imageId=(sourceUrl:string)=>{let found=textureIds.get(sourceUrl);if(found===undefined){found=String(uploads.length);textureIds.set(sourceUrl,found);uploads.push({imageId:found,sourceUrl});}return found;};
+  const material=(m:SurfaceMaterial):PublicSurfaceMaterial=>{const {texture,normal,...finish}=parseSurfaceMaterial(m);return {...finish,...(texture?{texture:{imageId:imageId(texture.imageUrl),widthMm:texture.widthMm,heightMm:texture.heightMm}}:{}),...(normal?{normal:{imageId:imageId(normal.imageUrl),widthMm:normal.widthMm,heightMm:normal.heightMm,strength:normal.strength}}:{})};};
   const snapshot:PublicShareSnapshot={
     ...(project.displayUnit?{displayUnit:project.displayUnit}:{}),
     ...(options.includeArtworkDetails?{includeArtworkDetails:true}:{}),
@@ -99,12 +101,11 @@ const id=(value:unknown)=>{const v=str(value,100);if(!/^[a-zA-Z0-9_.:-]+$/.test(
 
 function publicLayouts(snapshot:PublicShareSnapshot):PublicSceneSnapshot[]{return [snapshot,...(snapshot.scenes??[]).map(scene=>scene.snapshot)];}
 export function publicModelIds(snapshot:PublicShareSnapshot){return [...new Set(publicLayouts(snapshot).flatMap(s=>[...(s.modelArtworks?.map(a=>a.modelId)??[]),...(s.referenceModel?[s.referenceModel.modelId]:[])]))];}
-export function publicImageIds(snapshot:PublicShareSnapshot){return [...new Set(publicLayouts(snapshot).flatMap(s=>[...s.artworks.map(a=>a.imageId),s.floorMaterial?.texture?.imageId,...s.walls.map(w=>w.material?.texture?.imageId)]).filter((id):id is string=>id!==undefined))];}
+export function publicImageIds(snapshot:PublicShareSnapshot){return [...new Set(publicLayouts(snapshot).flatMap(s=>[...s.artworks.map(a=>a.imageId),...[s.floorMaterial,...s.walls.map(w=>w.material),...s.artworks.map(a=>a.material)].flatMap(m=>[m?.texture?.imageId,m?.normal?.imageId])]).filter((id):id is string=>id!==undefined))];}
 function publicMaterial(input:unknown):PublicSurfaceMaterial{
- const raw=record(input),{texture:_,...scalar}=parseSurfaceMaterial({...raw,texture:undefined});
- if(raw.texture===undefined)return scalar;
- const texture=record(raw.texture),imageId=str(texture.imageId,4);if(!/^(0|[1-9][0-9]{0,3})$/.test(imageId))throw new Error('공유 텍스처 ID가 올바르지 않습니다.');
- return {...scalar,texture:{imageId,...textureSize(texture)}};
+ const raw=record(input),{texture:_,normal:__,...scalar}=parseSurfaceMaterial({...raw,texture:undefined,normal:undefined});
+ const image=(value:unknown)=>{const texture=record(value),imageId=str(texture.imageId,4);if(!/^(0|[1-9][0-9]{0,3})$/.test(imageId))throw new Error('공유 텍스처 ID가 올바르지 않습니다.');return {imageId,...textureSize(texture)};};
+ return {...scalar,...(raw.texture===undefined?{}:{texture:image(raw.texture)}),...(raw.normal===undefined?{}:{normal:{...image(raw.normal),strength:normalStrength(record(raw.normal).strength)}})};
 }
 /** Rebuilds the public allowlist on the server as well as in the editor. */
 function parsePublicScene(input:unknown,includeDetails=false):PublicSceneSnapshot{

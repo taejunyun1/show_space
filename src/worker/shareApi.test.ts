@@ -84,6 +84,20 @@ it('refuses publication until every referenced surface image has uploaded',async
  const {snapshot}=createPublicShare(p,{includeDimensions:false}),created=await call('POST','/api/shares',undefined,true),{id}=await created.json() as {id:string};
  expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(snapshot),true)).status).toBe(409);
 });
+it('requires normal-only assets before publication and serves exact PNG data with bounded scalar strength',async()=>{
+ const {call}=setup(),p=createDemoProject();p.artworks=[];
+ const imageUrl='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a2ioAAAAASUVORK5CYII=';
+ p.floorMaterial={...materialPreset('concrete').material,normal:{imageUrl,widthMm:1000,heightMm:500,strength:0}};
+ const {snapshot}=createPublicShare(p,{includeDimensions:false}),{id}=await(await call('POST','/api/shares',undefined,true)).json() as {id:string};
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(snapshot),true)).status).toBe(409);
+ const bytes=Uint8Array.from(atob(imageUrl.split(',')[1]),c=>c.charCodeAt(0));
+ expect((await call('PUT',`/api/shares/${id}/images/0`,bytes.buffer,true)).status).toBe(204);
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify({...snapshot,floorMaterial:{...snapshot.floorMaterial,normal:{...snapshot.floorMaterial!.normal,strength:8}}}),true)).status).toBe(400);
+ expect((await call('POST',`/api/shares/${id}/publish`,JSON.stringify(snapshot),true)).status).toBe(201);
+ const published=await(await call('GET',`/api/public/${id}`)).json() as typeof snapshot;expect(published.floorMaterial?.normal).toEqual({imageId:'0',widthMm:1000,heightMm:500,strength:0});
+ expect(new Uint8Array(await(await call('GET',`/api/public/${id}/images/0`)).arrayBuffer())).toEqual(bytes);
+ expect((await call('DELETE',`/api/shares/${id}`,undefined,true)).status).toBe(204);expect((await call('GET',`/api/public/${id}/images/0`)).status).toBe(410);
+});
 
 it('publishes visible Spot/Area and illumination settings without exposing notes, locks or accepting invalid Kelvin',async()=>{
  const {newLight,CUSTOM_LIGHTING}=await import('../domain/lighting'),{call}=setup(),p=createDemoProject();p.artworks=[];const spot=newLight(p,'spot');p.lights=[{...spot,note:'PRIVATE LIGHT NOTE',locked:true},{...spot,id:'area-light',kind:'area'},{...spot,id:'hidden-light',visible:false}];p.lighting=CUSTOM_LIGHTING;
