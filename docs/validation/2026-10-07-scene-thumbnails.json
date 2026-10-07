@@ -1,11 +1,12 @@
 {
   "date": "2026-10-07",
-  "status": "implemented-awaiting-native-ui-acceptance",
+  "status": "native-verified-awaiting-deployment",
   "tests": {
     "passed": 889,
     "skipped": 2,
     "filesPassed": 166,
-    "filesSkipped": 2
+    "filesSkipped": 2,
+    "note": "889-test suite passed for thumbnail implementation in preceding continuation; this continuation added two CSS rules and verified with build and native UI."
   },
   "build": "passed",
   "thumbnail": {
@@ -33,7 +34,15 @@
     "cancelled-queue-disposes-before-replacement",
     "async-frame-encoding-cancellation"
   ],
-  "native": {
+  "deployment": {
+    "thisChangeDeployed": false,
+    "priorVersion": "e76f28e9-6ca3-4571-b9c4-33825adfcc79"
+  },
+  "remaining": [
+    "deploy-and-public-verify",
+    "full-product-acceptance"
+  ],
+  "previousNativeAttempt": {
     "attemptedOrigins": [
       "http://localhost:8806/",
       "http://127.0.0.1:8806/",
@@ -47,17 +56,120 @@
     "workerSessionConfirmedLive": 17285,
     "workerRestarted": false
   },
-  "deployment": {
-    "thisChangeDeployed": false,
-    "priorVersion": "e76f28e9-6ca3-4571-b9c4-33825adfcc79"
+  "native": {
+    "origin": "http://localhost:8806/",
+    "browserSessionResetResolvedInputObservation": true,
+    "workerSessionConfirmedLive": 17285,
+    "workerRestarted": false,
+    "originalLocalScenes": 4,
+    "createdScenes": 7,
+    "totalBeforeCleanup": 11,
+    "actualGeneratedImageVerified": true,
+    "images": [
+      {
+        "name": "검증 E · 3D 미리보기",
+        "view": "3d",
+        "width": 320,
+        "height": 200,
+        "bytes": 2752,
+        "sha256": "7940fbad07b5c19098181c8ac8144570dce53bf73694f09e54702dcc33d4f3a0"
+      },
+      {
+        "name": "검증 F · 평면도",
+        "view": "plan",
+        "width": 320,
+        "height": 200,
+        "bytes": 5450,
+        "sha256": "d9d13e0e90d6384539a08a3c33b3fbcbf7eaa4cead8594ea227bbf17807f72ce"
+      },
+      {
+        "name": "검증 G · 벽면도",
+        "view": "elevation",
+        "width": 320,
+        "height": 200,
+        "bytes": 6745,
+        "sha256": "b74e225a3767d7ca099a1e1c03b9ac1c1809a7deaa0511882a2468cf3e468de2"
+      },
+      {
+        "name": "시간 비교 · 2026-07-21 09:00",
+        "view": "3d",
+        "width": 320,
+        "height": 200,
+        "bytes": 3029,
+        "sha256": "f52284663e05a6286551cdf8748915ffe2f90fde2ac1a24c4090bede83350361"
+      },
+      {
+        "name": "시간 비교 · 2026-07-21 13:00",
+        "view": "3d",
+        "width": 320,
+        "height": 200,
+        "bytes": 3079,
+        "sha256": "0a16c986847a7537c68c4b40b12354be60d14c79558cfac7a238f9eaf138ead9"
+      },
+      {
+        "name": "시간 비교 · 2026-07-21 17:00",
+        "view": "3d",
+        "width": 320,
+        "height": 200,
+        "bytes": 3062,
+        "sha256": "e198e4f9767ccbcb49e93a1e52c3a25d9d70771bf15556080f1811664dd0a26b"
+      },
+      {
+        "name": "시간 비교 · 2026-07-21 20:00",
+        "view": "3d",
+        "width": 320,
+        "height": 200,
+        "bytes": 3705,
+        "sha256": "eac33e94ca4a8e488c34222adc92b5d9d879f866cd8f0c3bc2cd13e867e9dff2"
+      }
+    ],
+    "decodedAllSeven": true,
+    "undoRedoSingleSceneVerified": true,
+    "reloadRetainedAllSeven": true,
+    "restoredZipCopyReloadRetainedAllSeven": true,
+    "nativeRestoredImageHashesMatchZipAssets": true,
+    "zip": {
+      "fileName": "ANCA 연속 검증 · 저장 보호.gonggan.zip",
+      "bytes": 642884,
+      "sha256": "929155501230fc6cbf10d456b443e2e717d3c6bf051f13cead7dd7827050c9c5",
+      "crcError": null,
+      "assetCount": 9,
+      "observerDownloadEventTimedOut": true,
+      "actualFreshFileVerified": true
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "popover": {
+        "x": 18,
+        "y": 112,
+        "width": 360,
+        "height": 450
+      },
+      "scrollVerified": true,
+      "sidebarOcclusionFoundAndFixed": true
+    },
+    "dimensionHtmlAbovePopoverFoundAndFixed": true,
+    "cleanup": {
+      "onlyOwnSevenScenesRemovedFromOriginal": true,
+      "originalFourScenesRetained": true,
+      "currentOutdoorTime": "16:30",
+      "restoredCopyArchivedRecoverably": true,
+      "backupFileRetained": true
+    },
+    "limitations": [
+      "ANCA floor boundary unclosed; not a full accurate venue reconstruction",
+      "mobile browser viewport only; actual mobile device not verified",
+      "local duplicate artwork information panels remain an unexplained separate observation"
+    ]
   },
-  "remaining": [
-    "native-generated-image-and-scene-navigation",
-    "undo-reload-thumbnails",
-    "time-comparison-thumbnail-save",
-    "actual-backup-ui-roundtrip",
-    "mobile-layout",
-    "deploy-and-public-verify",
-    "full-product-acceptance"
+  "buildAfterCssFix": "passed",
+  "proofs": [
+    "2026-10-07-scene-thumbnail-3d.jpg",
+    "2026-10-07-scene-thumbnail-plan.jpg",
+    "2026-10-07-scene-thumbnail-elevation.jpg",
+    "2026-10-07-scene-thumbnail-local.png",
+    "2026-10-07-scene-thumbnail-times.png",
+    "2026-10-07-scene-thumbnail-mobile.png"
   ]
 }
