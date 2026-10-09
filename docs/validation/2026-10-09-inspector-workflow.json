@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-09",
+  "baselineSource": "bb4686ea06c5ee951184831b16029c90d89379e9",
+  "baseline": {
+    "productionFiles": [
+      "src/components/Inspector.tsx",
+      "src/components/FloorMaterialDialog.tsx"
+    ],
+    "sameTestsAndTransport": true,
+    "passed": 4,
+    "failed": 9,
+    "total": 13
+  },
+  "targeted": {
+    "command": "npx vitest run src/components/Inspector.workflow.test.tsx",
+    "passed": 13,
+    "failed": 0
+  },
+  "suite": {
+    "command": "npm test",
+    "passed": 1253,
+    "skipped": 10,
+    "filesPassed": 225,
+    "filesSkipped": 10
+  },
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "includesTypeScript": true,
+    "existingLargeChunkWarning": true
+  },
+  "evidence": {
+    "ui": "Actual React StrictMode Inspector, FloorMaterialDialog, material/texture/normal/number/layout/light controls",
+    "state": "Actual Zustand and production group/layout/material/light/Scene commands plus JSON parser",
+    "nativeInput": "Actual 32x16 PNG/native decode/WebP encoder and DirectX normal green-channel conversion",
+    "adapters": [
+      "Store commands are object selection input boundary",
+      "Controlled delayed decoder results in lifecycle cases",
+      "Native File/Image/Canvas and jsdom dialog transport"
+    ],
+    "observed": [
+      "Equal-valued object selection and batched selection/project transitions reset numeric drafts",
+      "Late wall/floor material results and old processing/error states discarded",
+      "Locked/unlocked wall retires pending normal",
+      "Within-batch deferred result rejects retired context",
+      "350mm gap and shared group delta/B face/1650mm center height preserved",
+      "5500K/120cd/35 degrees not length-scaled; X and target translate by 300mm",
+      "Same-target preset/roughness edits preserved at image completion",
+      "2000x1000mm texture and 500x250mm normal/1.5 strength preserved in Scene/JSON",
+      "DirectX native pixel green 200 converts to 55; bitmap resources closed"
+    ]
+  },
+  "limitations": [
+    "In-flight image computation is discarded rather than forcibly stopped",
+    "Not real browser canvas selection/input or GPU material/lighting proof",
+    "Scene/JSON checks are in-memory, not IndexedDB/cloud durability checks",
+    "Whole 24-step acceptance, actual accounts/devices, performance metrics and SketchUp receiver incomplete"
+  ],
+  "deployment": "Not deployed this turn; documented 8fb69dc deployment was not refreshed live"
+}
