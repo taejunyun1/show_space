@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-09",
+  "baselineSource": "0caecad69bb8796d79bd4888e92cace883e3afbf",
+  "baseline": {
+    "productionFiles": [
+      "src/components/Header.tsx"
+    ],
+    "sameTestsAndTransport": true,
+    "passed": 3,
+    "failed": 14,
+    "total": 17
+  },
+  "targeted": {
+    "command": "npx vitest run src/components/Header.importWorkflow.test.tsx",
+    "passed": 17,
+    "failed": 0
+  },
+  "suite": {
+    "command": "npm test",
+    "passed": 1236,
+    "skipped": 10,
+    "filesPassed": 223,
+    "filesSkipped": 10
+  },
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "includesTypeScript": true,
+    "existingLargeChunkWarning": true
+  },
+  "evidence": {
+    "ui": "Actual React createRoot/StrictMode/act Header and ImportDialog; Zustand",
+    "storage": "Actual project library and revision-checked autosave queue using fresh fake-indexeddb per test",
+    "nativeInput": [
+      "Actual Three GLTFLoader and bounds for generated full venue GLB",
+      "Actual ZIP CRC/hash restore and JSON parser",
+      "Native PNG decode; two artworks, model, Scene and private notes preserved"
+    ],
+    "adapters": [
+      "Controlled decoder/save delays for lifecycle cases",
+      "Node File/Blob/ArrayBuffer realm for binary transport",
+      "jsdom dialog.showModal",
+      "Download Blob transport spy",
+      "Unopened account/notes/projects dialogs omitted"
+    ],
+    "observed": [
+      "Project A→B→A invalidates late results",
+      "Unmount ignores late input",
+      "Old progress/error/finally cannot change new import",
+      "Existing exact draft save rejects concurrent edits",
+      "Copied project saved before success",
+      "Quota failure keeps original library entry and editable unsaved copy",
+      "Corrupt JSON image rejected before replacement",
+      "GLB source bytes/12x3x8m bounds/Undo preserved"
+    ]
+  },
+  "limitations": [
+    "Decoder already started is discarded rather than forcibly stopped",
+    "Queued writes may finish after project switch/unmount",
+    "New copy is visible before durable write and remains unsaved on write failure",
+    "Not actual browser file input/download/GPU proof",
+    "Synthetic inputs do not certify arbitrary user files or SketchUp receiver",
+    "Real PDF worker, 24-step acceptance, accounts/devices and metrics incomplete"
+  ],
+  "deployment": "Not deployed this turn; documented 8fb69dc deployment was not refreshed live"
+}
