@@ -7,7 +7,7 @@ import type {PlanAnalysis} from './analyzePlan';
 import { detectPlanLabels } from '../domain/planLabels';
 import type { PlanLabel } from '../domain/planLabels';
 import { pdfPlanTexts } from './pdfPlanTexts';
-import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+import workerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 import type { RenderTask } from 'pdfjs-dist';
 
 export interface PlanPage {
@@ -92,7 +92,9 @@ export async function loadPlanFile(file: File): Promise<PlanFile> {
     };
   }
 
-  const { getDocument, GlobalWorkerOptions, OPS } = await import('pdfjs-dist');
+  // Keep both parser and worker on the compatibility build: the standard worker
+  // requires newer typed-array codecs even to read document fingerprints.
+  const { getDocument, GlobalWorkerOptions, OPS } = await import('pdfjs-dist/legacy/build/pdf.mjs');
   GlobalWorkerOptions.workerSrc = workerUrl;
   const loadingTask = getDocument({
     data: new Uint8Array(await file.arrayBuffer()),

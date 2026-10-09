@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-09",
+  "baselineSource": "0527969c81cc1210031d9fb8eb145ff5b5f18ed8",
+  "baseline": {
+    "productionFiles": [
+      "src/lib/planImport.ts"
+    ],
+    "sameTestsAndTransport": true,
+    "passed": 0,
+    "failed": 4,
+    "total": 4,
+    "failure": "n.toHex is not a function in standard PDF.js worker fingerprint calculation"
+  },
+  "targeted": {
+    "command": "GONGGAN_PDF_INPUT_PROOF=1 npx vitest run src/components/PlanPdf.workflow.test.tsx src/lib/planImport.test.ts",
+    "passed": 22,
+    "failed": 0,
+    "newTests": 4
+  },
+  "suite": {
+    "command": "npm test",
+    "passed": 1240,
+    "skipped": 10,
+    "filesPassed": 224,
+    "filesSkipped": 10
+  },
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "includesTypeScript": true,
+    "existingLargeChunkWarning": true,
+    "pdfParserMinifiedKB": 495.64,
+    "pdfParserGzipKB": 151.46,
+    "pdfWorkerMinifiedKB": 1317.03
+  },
+  "evidence": {
+    "parser": "Actual installed PDF.js 6.3.289 legacy parser and worker code, same-thread Node transport",
+    "ui": "Actual React/StrictMode PlanImportDialog and PlanView with Zustand",
+    "render": "Actual native Canvas, PDF text layer/operator list, PNG black wall and white interior pixels",
+    "input": [
+      "Generated two-page cover/vector floorplan PDF with 8000mm/6000mm/DOOR/AC/FIRE HYDRANT",
+      "Generated real PDF embedding 300x250 PNG wall raster"
+    ],
+    "adapters": [
+      "Worker asset URL points to actual local module",
+      "Native File/Image/Canvas/DOMMatrix/Path2D",
+      "jsdom dialog/SVG coordinate transport",
+      "Wall/sign worker transport executes production pixel functions on main thread",
+      "OCR explicitly returns empty texts",
+      "Placement callback spy in manual-page scenario"
+    ],
+    "observed": [
+      "Automatic floorplan page 2 selection",
+      "900/2400/4800 pixel renders and vector coordinate scaling survive preview",
+      "PDF text candidates preserved through draft adoption",
+      "Project identity/name/internal note and Undo/Redo retained",
+      "Low-resolution scanned PDF yields unscaled editable walls",
+      "100px/100cm calibration produces 10mm per pixel with original image unchanged"
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "docs/validation/2026-10-09-pdf-vector-input.pdf",
+      "bytes": 1263,
+      "sha256": "b3bcad5d1c322a6e9447440d383629d296f916e5550c128145944e58885ab361"
+    },
+    {
+      "path": "docs/validation/2026-10-09-pdf-scanned-input.pdf",
+      "bytes": 1483,
+      "sha256": "84e705f1c96889299505cd2af3262a9218dcb9776528df6b9665cccb52cc5a98"
+    },
+    {
+      "path": "docs/validation/2026-10-09-pdf-plan-render.png",
+      "bytes": 46868,
+      "sha256": "ce4bd65da0052fe4dc69cf60ee2441de6a8073a24cfde20da24b348d39387789"
+    }
+  ],
+  "limitations": [
+    "Synthetic fixtures do not certify arbitrary user PDFs",
+    "OCR number accuracy and actual browser worker/GPU/device acceptance not verified",
+    "No specific Safari/Firefox compatibility claim",
+    "24-step acceptance, real accounts/devices, metrics and SketchUp receiver incomplete",
+    "Compatibility build adds parser/worker bytes; load time/memory not measured"
+  ],
+  "deployment": "Not deployed this turn; recorded 8fb69dc production source was not refreshed live"
+}

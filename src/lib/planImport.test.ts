@@ -3,7 +3,7 @@ vi.mock('./pdfSignImages',()=>({pdfSignImages:vi.fn().mockResolvedValue([])}));
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({ getDocument: vi.fn() }));
-vi.mock('pdfjs-dist', () => ({ getDocument: mocks.getDocument, GlobalWorkerOptions: {}, OPS: {setFillRGBColor:4,constructPath:5,fill:22,eoFill:23} }));
+vi.mock('pdfjs-dist/legacy/build/pdf.mjs', () => ({ getDocument: mocks.getDocument, GlobalWorkerOptions: {}, OPS: {setFillRGBColor:4,constructPath:5,fill:22,eoFill:23} }));
 import { loadPlanFile } from './planImport';
 
 const file = { name: 'plan.pdf', type: 'application/pdf', size: 100, arrayBuffer: async () => new ArrayBuffer(10) } as File;
