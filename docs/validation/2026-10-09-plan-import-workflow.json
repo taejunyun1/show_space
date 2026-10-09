@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-09",
+  "baselineSource": "fdfeb632561587bedfc9ec9ca40db6f8ffd3c55f",
+  "baseline": {
+    "productionFiles": [
+      "src/components/PlanImportDialog.tsx",
+      "src/components/PlanRegionEditor.tsx",
+      "src/components/PlanView.tsx"
+    ],
+    "sameTestsAndTransport": true,
+    "passed": 7,
+    "failed": 7,
+    "total": 14
+  },
+  "targeted": {
+    "command": "npx vitest run src/components/PlanImport.workflow.test.tsx",
+    "passed": 14,
+    "failed": 0
+  },
+  "suite": {
+    "command": "npm test",
+    "passed": 1219,
+    "skipped": 10,
+    "filesPassed": 222,
+    "filesSkipped": 10
+  },
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "includesTypeScript": true,
+    "existingLargeChunkWarning": true
+  },
+  "evidence": {
+    "ui": "Actual React createRoot/StrictMode/act, Zustand and dialog/plan/region/number/preview components",
+    "geometry": "Actual editable draft adoption, scale and connected endpoint commands, parser and Undo/Redo",
+    "nativeInput": "Generated real 1000x800 JPEG with white background and two 8px black wall strokes, native local decode/Canvas",
+    "nativeInputPipeline": [
+      "loadPlanFile",
+      "analyzePlan",
+      "detectPlanWalls",
+      "detectPlanSymbols",
+      "detectWallCandidates",
+      "pageSignSymbols",
+      "buildEditablePlanDraft",
+      "PlanView adoption"
+    ],
+    "adapters": [
+      "jsdom dialog, SVG matrix/bounds/pointer capture",
+      "deferred lifecycle decoder/page/crop results",
+      "synthetic PDF selection and render responses",
+      "actual native Image/Canvas transport for JPEG case",
+      "worker message transport executes production pixel algorithms on main thread",
+      "empty OCR response explicitly substituted in JPEG case"
+    ],
+    "observed": [
+      "batched project transition invalidates imports/calibration anchors",
+      "replacement pending/failure hides old preview",
+      "late documents destroyed",
+      "late crop result and finally cannot change new job",
+      "100px calibrated to 100cm gives 10mm/px and 8000mm wall",
+      "connected wall endpoints retained through same-drawing evidence refresh",
+      "PDF automatic/manual/high-resolution UI dispatch",
+      "real JPEG produces at least two editable walls with unknown scale"
+    ]
+  },
+  "limitations": [
+    "Not real browser pointer, PDF worker or GPU proof",
+    "JPEG fixture cannot certify numbers or arbitrary user drawing recognition",
+    "Zero-wall venue is not supported by current project parser",
+    "24-step end-to-end acceptance, real accounts/devices, metrics and SketchUp receiver incomplete",
+    "In-flight crop computation discarded rather than forcibly stopped"
+  ],
+  "deployment": "Not deployed this turn; documented 8fb69dc deployment was not refreshed live"
+}

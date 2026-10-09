@@ -49,6 +49,11 @@ export function PlanView({incomingFile,onFileReceived}:{incomingFile?:File|null;
   const unit=project.displayUnit??'mm',factor=provisional?1:lengthFactor(unit);
   const draftEdits=useMemo(()=>project.planDraft?draftEditSummary(project):null,[project]);
   function clearDraw(){setDrawStart(null);setDrawHover(null);setDrawEnd(null);setDrawLength('');}
+  useEffect(()=>useEditor.subscribe((next,previous)=>{
+    if(next.project.id===previous.project.id)return;
+    setImportFile(null);setReviewLabels(false);setReviewCandidates(false);setCalibrating(false);setAnchors([]);setViewport(null);clearDraw();ownDrawProject.current=null;
+    pan.current=null;setPanning(false);dragRef.current=null;setDrag(null);modelDrag.current=null;
+  }),[]);
   useEffect(()=>{if(activeTool!=='draw'||calibrating)clearDraw();},[activeTool,calibrating,unit]);
   useEffect(()=>{if(ownDrawProject.current!==project)clearDraw();ownDrawProject.current=null;},[project.id,project.walls,reference]);
   useEffect(()=>{if(drawEnd){drawInput.current?.focus();drawInput.current?.select();}},[drawEnd]);
