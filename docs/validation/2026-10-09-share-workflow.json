@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-09",
+  "baselineSource": "871431b9a5d0be14aa530f461d58839cfc3dfed2",
+  "baseline": {
+    "productionFiles": [
+      "src/components/ShareDialog.tsx",
+      "src/lib/shareClient.ts"
+    ],
+    "passed": 13,
+    "failed": 15,
+    "total": 28,
+    "sameTestsAndTransport": true
+  },
+  "targeted": {
+    "command": "npx vitest run src/components/ShareDialog.workflow.test.tsx src/lib/shareClient.test.ts src/components/ShareDialog.test.tsx",
+    "passed": 28,
+    "failed": 0,
+    "newUiTests": 13,
+    "newClientTests": 5
+  },
+  "suite": {
+    "command": "npm test",
+    "passed": 1205,
+    "skipped": 10,
+    "filesPassed": 221,
+    "filesSkipped": 10
+  },
+  "typecheck": {
+    "command": "npx tsc -b",
+    "exitCode": 0
+  },
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "existingLargeChunkWarning": true
+  },
+  "evidence": {
+    "ui": "Actual React createRoot/StrictMode/act and Zustand in jsdom",
+    "server": "Actual handleShareRequest/auth/public parser and native Request/Response, SQLite in-memory schema, synthetic R2 and authentication response",
+    "adapters": [
+      "dialog.showModal",
+      "clipboard",
+      "controlled cloudSession",
+      "native Node streaming Blob"
+    ],
+    "cancellation": [
+      "before creation",
+      "after creation server write before response",
+      "before upload server write",
+      "after final publication server write before response",
+      "pending source read"
+    ],
+    "observed": [
+      "no abandoned credential request",
+      "batched account/project A-B-A invalidates operation",
+      "new account operation remains busy during old cleanup",
+      "clicked camera and selected Scene frozen",
+      "private notes and unselected Scene excluded",
+      "public snapshot/image 200 before revocation",
+      "public snapshot/image 410 after revocation",
+      "cancelled draft 404",
+      "cancelled active share 410",
+      "image assets removed after terminal response and cleanup"
+    ]
+  },
+  "limitations": [
+    "No real browser/GPU/operational HTTP/login proof",
+    "No rollback guarantee for unknown ID, failed DELETE, network loss or browser exit",
+    "Final publication may be publicly readable while its response is pending",
+    "24-step acceptance, real devices, metrics and SketchUp receiver incomplete"
+  ],
+  "deployment": "Not deployed this turn; latest documented deployment source 8fb69dc was not refreshed live"
+}

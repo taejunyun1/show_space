@@ -1,6 +1,7 @@
 /** Synthetic service bridge for tests. Never imported by production. */
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
+import {URL as FileURL} from 'node:url';
 import {handleShareRequest,type ShareBucket} from './shareApi';
 import type {ProjectDatabase,ProjectStatement} from './projectApi';
 import type {AuthFetch} from './auth';
@@ -17,7 +18,7 @@ class Bucket implements ShareBucket {
  async delete(keys:string|string[]){for(const key of Array.isArray(keys)?keys:[keys])this.data.delete(key);}
 }
 export function commentFixture(){
- const sql=new DatabaseSync(':memory:');sql.exec(readFileSync(new URL('../../migrations/0004_review_comments.sql',import.meta.url),'utf8'));const state={throwAfterWrite:false};
+ const sql=new DatabaseSync(':memory:');sql.exec(readFileSync(new FileURL('../../migrations/0004_review_comments.sql',import.meta.url),'utf8'));const state={throwAfterWrite:false};
  const db:ProjectDatabase={prepare(query:string):ProjectStatement{let values:unknown[]=[];return {bind(...args){values=args;return this;},async first<T>(){return (sql.prepare(query).get(...values as Parameters<ReturnType<DatabaseSync['prepare']>['get']>)??null) as T|null;},async all<T>(){return {results:sql.prepare(query).all(...values as Parameters<ReturnType<DatabaseSync['prepare']>['all']>) as T[]};},async run(){const r=sql.prepare(query).run(...values as Parameters<ReturnType<DatabaseSync['prepare']>['run']>);if(state.throwAfterWrite){state.throwAfterWrite=false;throw new Error('synthetic lost D1 response');}return {success:true,meta:{changes:Number(r.changes)}};}};}};
  const bucket=new Bucket(),legacy='legacy-owner-token-for-comments',users={'account-a':'11111111-1111-4111-8111-111111111111','account-b':'22222222-2222-4222-8222-222222222222','account-c':'33333333-3333-4333-8333-333333333333'};
  const auth:AuthFetch=async(_input,init)=>{const token=new Headers(init?.headers).get('authorization')?.replace('Bearer ','')??'',id=users[token as keyof typeof users];return id?Response.json({id,email:'private-account@example.test',role:'authenticated',aud:'authenticated',is_anonymous:false,created_at:'2026-10-07T00:00:00Z'}):Response.json({message:'invalid JWT'},{status:401});};
