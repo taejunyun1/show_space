@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-10",
+  "baselineSource": "bd9b36791e0a39c5a2913577601842012368b182",
+  "baseline": {
+    "productionFiles": [
+      "src/components/MaterialLibraryDialog.tsx",
+      "src/components/ArtworkLibraryDialog.tsx"
+    ],
+    "sameTestsAndTransport": true,
+    "passed": 6,
+    "failed": 16,
+    "total": 22
+  },
+  "targeted": {
+    "command": "npx vitest run src/components/Library.workflow.test.tsx",
+    "passed": 22,
+    "failed": 0,
+    "coveredAgainInFinalSuite": true
+  },
+  "suite": {
+    "command": "npm test",
+    "passed": 1275,
+    "skipped": 10,
+    "filesPassed": 226,
+    "filesSkipped": 10
+  },
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "includesTypeScript": true,
+    "existingLargeChunkWarning": true
+  },
+  "evidence": {
+    "ui": "Actual React StrictMode MaterialLibraryDialog and ArtworkLibraryDialog",
+    "storage": "Actual production repositories with isolated fake-indexeddb factories; second repository reads the same database",
+    "assets": "Actual native PNG decoder and Canvas thumbnail processing; real backup Blob/JSON and damaged PNG rejection",
+    "state": "Production material application/artwork installation, Undo/Redo and project parser",
+    "adapters": [
+      "Node File/Blob and native Image/Canvas bridge",
+      "jsdom dialog/input transport; download Blob payload spy",
+      "Controlled completion in lifecycle cases",
+      "CloudLibraryPanel excluded; local workflow only"
+    ],
+    "observed": [
+      "Project A-B-A and unmount reject deferred apply/download",
+      "Preparation/decode finishing after retirement starts no new write/restore",
+      "Material selection/lock roundtrips retire pending apply",
+      "Newest list response survives out-of-order focus responses",
+      "Gesture rejects apply without history; idle retry succeeds",
+      "Material texture/normal sizes and strength preserved in storage/backup/restore/application",
+      "Artwork assets/metadata portable; private installation data excluded; new copy on chosen wall",
+      "Search/archive/recover and one Undo/Redo verified",
+      "Accepted database writes survive unmount; retired dialog does not continue"
+    ]
+  },
+  "limitations": [
+    "Accepted storage transactions are not cancelled or rolled back",
+    "In-flight native image computation is not forcibly aborted",
+    "IndexedDB evidence uses fake-indexeddb; not browser disk/restart/device durability",
+    "Video/model library UI and real cloud authentication excluded from this new workflow suite",
+    "Not real browser/GPU, full 24-step acceptance, accounts/devices, user metrics or SketchUp receiver proof"
+  ],
+  "deployment": "Not deployed this turn; documented 8fb69dc deployment not refreshed live"
+}
