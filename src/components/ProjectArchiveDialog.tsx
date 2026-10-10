@@ -1,3 +1,5 @@
+import {useProjectDialogScope} from './useProjectDialogScope';
+import {requireProjectSwitchReady} from './projectSwitchGuard';
 import {lazy,Suspense,useEffect,useMemo,useRef,useState} from 'react';
 import {RefreshCw,X} from 'lucide-react';
 import {ARCHIVE_SECTIONS,archiveLayout,archiveYear,filterArchiveProjects,type ArchiveSection,type ArchiveSummary} from '../domain/projectArchive';
@@ -16,6 +18,7 @@ const PresentationMode=lazy(()=>import('./PresentationMode'));
 type Detail={summary:ArchiveSummary;project:Project};
 type Tagged<T>={context:string;value:T};
 export default function ProjectArchiveDialog({onClose,onReused}:{onClose:()=>void;onReused:()=>void}){
+ const originalProjectId=useRef(useEditor.getState().project.id),scope=useProjectDialogScope(originalProjectId.current,onClose);
  const dialog=useRef<HTMLDialogElement>(null),auth=useAuth(),[source,setSource]=useState<'local'|'cloud'>('local');
  const context=source==='local'?'local':`cloud:${auth.user?.id??'signedOut'}:${!!auth.config?.cloudEnabled}`;
  const liveContext=useRef(context);liveContext.current=context;
@@ -29,13 +32,13 @@ export default function ProjectArchiveDialog({onClose,onReused}:{onClose:()=>voi
  useEffect(()=>{mounted.current=true;dialog.current?.showModal();return()=>{mounted.current=false;controller.current?.abort();};},[]);
  // Tagged data is hidden synchronously on account/source changes, before this effect runs.
  useEffect(()=>{controller.current?.abort();working.current=false;setDetail(undefined);setPreview(undefined);setSceneId(null);setYear('');setError(undefined);void refresh();return()=>{controller.current?.abort();};},[context]); // eslint-disable-line react-hooks/exhaustive-deps
- function begin(){controller.current?.abort();const c=new AbortController(),captured=context;controller.current=c;setPending({context:captured,value:true});setError(undefined);
-  const guard=()=>{if(!mounted.current||c.signal.aborted||liveContext.current!==captured||source==='cloud'&&useAuth.getState().user?.id!==auth.user?.id)throw new Error('아카이브 작업이 취소되었습니다.');};
+ function begin(){controller.current?.abort();const c=new AbortController(),captured=context,version=scope.begin();controller.current=c;setPending({context:captured,value:true});setError(undefined);
+  const guard=()=>{if(version===undefined||!scope.current(version)||!mounted.current||c.signal.aborted||liveContext.current!==captured||source==='cloud'&&useAuth.getState().user?.id!==auth.user?.id)throw new Error('아카이브 작업이 취소되었습니다.');};
   return {c,captured,guard};
  }
  async function client(guard:()=>void,c:AbortController){const session=await cloudSession();guard();if(session.userId!==auth.user?.id)throw new Error('로그인 계정이 바뀌었습니다.');return createCloudProjectClient(session.token,fetch,c.signal);}
- function fail(e:unknown,c:AbortController,captured:string){if(mounted.current&&!c.signal.aborted&&liveContext.current===captured)setError({context:captured,value:e instanceof Error?e.message:'아카이브 작업을 완료하지 못했습니다.'});}
- function finish(c:AbortController,captured:string){if(mounted.current&&controller.current===c){setPending({context:captured,value:false});working.current=false;}}
+ function fail(e:unknown,c:AbortController,captured:string){if(scope.begin()!==undefined&&mounted.current&&!c.signal.aborted&&liveContext.current===captured)setError({context:captured,value:e instanceof Error?e.message:'아카이브 작업을 완료하지 못했습니다.'});}
+ function finish(c:AbortController,captured:string){if(scope.begin()!==undefined&&mounted.current&&controller.current===c){setPending({context:captured,value:false});working.current=false;}}
  async function refresh(){
   const {c,captured,guard}=begin();setDetail(undefined);setPreview(undefined);setSceneId(null);
   try{if(source==='cloud'&&(!auth.user||!auth.config?.cloudEnabled)){setItems({context:captured,value:[]});return;}
@@ -46,9 +49,9 @@ export default function ProjectArchiveDialog({onClose,onReused}:{onClose:()=>voi
   try{const value=source==='local'?await readLocalArchiveProject(item.id,item.revision):await readCloudArchiveProject(await client(guard,c),item.id,item.revision,guard);guard();setDetail({context:captured,value});setCopyName((value.project.name+' 재사용').slice(0,200));setSection('space');}
   catch(e){fail(e,c,captured);}finally{finish(c,captured);}
  }
- async function reuse(){if(!record||working.current||busy)return;working.current=true;const originalId=useEditor.getState().project.id,{c,captured,guard}=begin();
-  const current=()=>{guard();if(useEditor.getState().project.id!==originalId)throw new Error('현재 프로젝트가 바뀌어 재사용을 중단했습니다.');};
-  try{await flushAutosave();current();const saved=await saveArchiveCopy(record.project,copyName,projectLibrary(),current);current();const next=await openLocalProject(saved.project.id);current();useEditor.getState().loadProject(next,true);onReused();}
+ async function reuse(){if(!record||working.current||busy)return;working.current=true;const snapshot=useEditor.getState().project,{c,captured,guard}=begin();
+  const current=()=>{guard();requireProjectSwitchReady(snapshot);};
+  try{current();await flushAutosave();current();const saved=await saveArchiveCopy(record.project,copyName,projectLibrary(),current);current();const next=await openLocalProject(saved.project.id,current);current();useEditor.getState().loadProject(next,true);onReused();}
   catch(e){fail(e,c,captured);}finally{finish(c,captured);}
  }
  return <dialog ref={dialog} className="export-dialog archive-dialog" aria-label="전시 아카이브" onCancel={e=>{if(working.current)e.preventDefault();else onClose();}}><div className="dialog-header"><h2>전시 아카이브</h2><button className="icon-button" aria-label="전시 아카이브 닫기" disabled={working.current} onClick={onClose}><X size={18}/></button></div>

@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-11",
+  "baselineSource": "e2fa89d878222d0a130040a8038e2fc1f550d8e5",
+  "baseline": {
+    "productionFiles": [
+      "src/components/ProjectsDialog.tsx",
+      "src/components/ProjectArchiveDialog.tsx",
+      "src/lib/persistence.ts",
+      "src/lib/projectLibrary.ts"
+    ],
+    "sameTestsAndTransport": true,
+    "passed": 6,
+    "failed": 13,
+    "total": 19
+  },
+  "targeted": {
+    "command": "npx vitest run src/components/Projects.workflow.test.tsx src/lib/projectLibrary.test.ts src/lib/projectArchive.test.ts",
+    "passed": 30,
+    "failed": 0,
+    "newWorkflowTests": 19
+  },
+  "suite": {
+    "command": "npm test",
+    "passed": 1294,
+    "skipped": 10,
+    "filesPassed": 227,
+    "filesSkipped": 10
+  },
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "includesTypeScript": true,
+    "existingLargeChunkWarning": true
+  },
+  "evidence": {
+    "ui": "Actual React StrictMode project/archive/records/unit inputs, including parent lazy dialog navigation",
+    "state": "Production Zustand commands, autosave queue, persistence and revision tracking",
+    "storage": "Production project repositories and isolated fake-indexeddb; second repository and readDraft",
+    "assets": "Synthetic complete-venue GLB bytes/native encoded PNG/private photos preserved as project data, not GPU/decoder proof",
+    "adapters": [
+      "jsdom dialog/input events",
+      "Controlled completion gates and QuotaExceededError injection",
+      "CloudProjectsPanel/AccountDialog/PresentationMode excluded"
+    ],
+    "observed": [
+      "12m x 8m outdoor creation and latest current draft preservation",
+      "Open/copy/archive/recover and active project/revision consistency",
+      "Project roundtrip/unmount rejects old replacement and new duplicate writes",
+      "Same-project editing and gestures reject replacement; retry preserves added edits",
+      "Accepted staged copy remains inactive after closed dialog",
+      "Stored archived Scene browsing leaves editor unchanged",
+      "Archive reuse preserves full source data/revision and new copy",
+      "Parent dialog closes once; failed autosave recovery copy closes list",
+      "Stale archive card rejects another repository revision",
+      "IDB summary query event edit aborts activation before active setting write"
+    ]
+  },
+  "limitations": [
+    "Accepted writes are not forcibly cancelled or rolled back; inactive staged copies can remain",
+    "Changes after active-setting write submission are not an atomic rollback guarantee",
+    "fake-indexeddb evidence does not prove browser disk/restart/device durability",
+    "No real auth/cloud/GPU; 3D preview excluded",
+    "Whole 24-step acceptance, actual devices/user metrics and SketchUp receiver remain incomplete"
+  ],
+  "deployment": "Not deployed this turn; documented 8fb69dc deployment not refreshed live"
+}

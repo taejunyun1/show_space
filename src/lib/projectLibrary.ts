@@ -39,7 +39,11 @@ export function createProjectLibrary(factory:IDBFactory=globalThis.indexedDB,nam
     async list():Promise<ProjectSummary[]>{const db=await open(),tx=db.transaction('summaries'),done=finished(tx),items=await request(tx.objectStore('summaries').getAll());await done;return (items as ProjectSummary[]).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)||a.id.localeCompare(b.id));},
     async read(id:string):Promise<StoredProject|undefined>{const db=await open(),tx=db.transaction(['documents','summaries']),done=finished(tx);const [document,summary]=await Promise.all([request(tx.objectStore('documents').get(id)),request(tx.objectStore('summaries').get(id))]);await done;if(!document||!summary)return undefined;return {project:parseProject(document.project),summary};},
     async activeId():Promise<string|undefined>{const db=await open(),tx=db.transaction('settings'),done=finished(tx),id=await request(tx.objectStore('settings').get('active'));await done;return typeof id==='string'?id:undefined;},
-    async activate(id:string):Promise<void>{const db=await open(),tx=db.transaction(['summaries','settings'],'readwrite'),done=finished(tx),s=await request(tx.objectStore('summaries').get(id));if(!s||s.archived){tx.abort();await done.catch(()=>{});throw new Error('열 수 있는 프로젝트가 없습니다.');}tx.objectStore('settings').put(id,'active');await done;},
+    async activate(id:string,guard:()=>void=()=>{}):Promise<void>{
+      guard();const db=await open();guard();const tx=db.transaction(['summaries','settings'],'readwrite'),done=finished(tx);
+      try{const summary=await request(tx.objectStore('summaries').get(id));guard();if(!summary||summary.archived)throw new Error('열 수 있는 프로젝트가 없습니다.');tx.objectStore('settings').put(id,'active');await done;}
+      catch(error){try{tx.abort();}catch{/* Already settled. */}await done.catch(()=>{});throw error;}
+    },
     async save(value:Project,expectedRevision:number,activate=false):Promise<ProjectSummary>{
       const project=structuredClone(parseProject(value)),db=await open(),tx=db.transaction(['documents','summaries','settings'],'readwrite'),done=finished(tx),summaries=tx.objectStore('summaries');
       const previous=await request(summaries.get(project.id)) as ProjectSummary|undefined;

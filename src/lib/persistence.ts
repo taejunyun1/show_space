@@ -26,8 +26,13 @@ export async function writeDraft(project: Project, writer?: Writer): Promise<voi
   const summary=await projectLibrary().save(project,revisions.get(project.id)??0,activeId!==project.id);
   revisions.set(project.id,summary.revision);activeId=project.id;
 }
-export async function openLocalProject(id:string):Promise<Project>{const stored=await projectLibrary().read(id);if(!stored||stored.summary.archived)throw new Error('프로젝트를 찾을 수 없습니다.');await projectLibrary().activate(id);return remember(stored);}
-export async function saveNewLocalProject(project:Project):Promise<Project>{const summary=await projectLibrary().save(project,0,true);return remember({project,summary});}
+export async function openLocalProject(id:string,guard:()=>void=()=>{}):Promise<Project>{guard();const stored=await projectLibrary().read(id);guard();if(!stored||stored.summary.archived)throw new Error('프로젝트를 찾을 수 없습니다.');await projectLibrary().activate(id,guard);guard();return remember(stored);}
+/** Guarded copies are saved inactive before the separate guarded activation. */
+export async function saveNewLocalProject(project:Project,guard?:()=>void):Promise<Project>{
+ guard?.();const summary=await projectLibrary().save(project,0,!guard);
+ if(guard){guard();return openLocalProject(project.id,guard);}
+ return remember({project,summary});
+}
 
 /** Conditional replacement also updates this tab's acknowledged revision before editing resumes. */
 export async function replaceLocalProject(project:Project,expectedRevision:number):Promise<Project>{const summary=await projectLibrary().save(project,expectedRevision,true);return remember({project,summary});}
