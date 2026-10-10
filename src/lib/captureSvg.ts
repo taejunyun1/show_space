@@ -79,7 +79,9 @@ export async function captureSvg(svg:SVGSVGElement,options:Omit<CaptureOptions,'
  const fit=captureFit({width:box.width,height:box.height},size);
  const clone=svg.cloneNode(true) as SVGSVGElement;
  inlineStyles(svg,clone);
- clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('width',String(size.width));clone.setAttribute('height',String(size.height));
+ // Namespace declarations must use the XMLNS namespace. A plain attribute
+ // can duplicate XMLSerializer's generated xmlns and make the image invalid.
+ clone.setAttributeNS('http://www.w3.org/2000/xmlns/','xmlns','http://www.w3.org/2000/svg');clone.setAttribute('width',String(size.width));clone.setAttribute('height',String(size.height));
  clone.setAttribute('preserveAspectRatio','xMidYMid meet');
  clone.querySelectorAll('.drag-handle,[data-capture-draft]').forEach(el=>el.remove());
  clone.querySelectorAll('g.draggable-art rect[stroke="#365cf5"],g.selectable rect[stroke="#365cf5"],.svg-dimensions.blue').forEach(el=>el.remove());

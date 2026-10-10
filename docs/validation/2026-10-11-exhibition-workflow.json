@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-11",
+  "projectId": "0ad4aa12-0516-465a-b07a-523e05ffef11",
+  "walls": 4,
+  "artworks": 10,
+  "sceneNames": [
+    "Scene A",
+    "Scene B"
+  ],
+  "pdfPages": 12,
+  "capture": {
+    "width": 1920,
+    "height": 1041
+  },
+  "steps": [
+    "Persisted empty project hydrated through App",
+    "Header PDF -> automatic page 2 -> editable draft and door/equipment labels",
+    "50cm two-point scale calibration through actual PlanView",
+    "Ten real native PNG uploads via Outliner and cm size editing via Inspector",
+    "Ten-point grouped array and 25cm spacing through production dialog",
+    "Spot/Kelvin -> bird/front camera requests -> Scene A/B, including actual native thumbnail encoding with GPU adapter",
+    "Restore Scene A -> actual elevation SVG/native PNG capture at 1920px",
+    "Manual save -> independent repository/readDraft exact project and Scene data",
+    "Current/Scene A/Scene B vector PDF and Korean text inspection, with private notes excluded",
+    "Exact ZIP/asset restore -> two-Scene public payload with private notes excluded"
+  ],
+  "limitations": [
+    "jsdom/native Canvas/fake-indexeddb, not actual browser or disk durability",
+    "OCR empty and worker transport adapted; production PDF parser/pixel algorithms",
+    "GPU transport and 3D Scene preview image renderer adapted, no 3D pixel proof",
+    "Native SVG rasterizer skips embedded image href pixels; ten embedded images decode separately and SVG XML is verified; PNG evidence covers wall/frame geometry and dimensions",
+    "No actual login/public API publication/SketchUp/real-device/full 24-step acceptance"
+  ],
+  "verification": {
+    "baseline": {
+      "source": "b537e5f84de797d7fecfe84c5c7b4e10c9e718fd",
+      "exitCode": 1,
+      "testSha256": "854215ce3dbb58b2758e4bc238742331c55550888e2b787974de4852ff3f7918",
+      "productionFiles": [
+        "src/lib/captureSvg.ts"
+      ],
+      "sameTestsAndTransport": true,
+      "failed": 1,
+      "passed": 0
+    },
+    "fixed": {
+      "command": "GONGGAN_EXHIBITION_PROOF=1 npx vitest run src/components/Exhibition.workflow.test.tsx",
+      "passed": 1,
+      "failed": 0
+    },
+    "suite": {
+      "command": "npm test",
+      "passed": 1314,
+      "skipped": 10,
+      "filesPassed": 229,
+      "filesSkipped": 10
+    },
+    "build": {
+      "command": "npm run build",
+      "exitCode": 0,
+      "includesTypeScript": true,
+      "existingLargeChunkWarning": true
+    },
+    "diffCheck": "passed",
+    "deployment": "Not deployed"
+  },
+  "artifactSha256": {
+    "2026-10-11-exhibition-elevation.png": "250c171a21704c4da535af4f01b0ffd9d792ac6e157bf9b25f2f41bab3f0df81",
+    "2026-10-11-exhibition-elevation.svg": "0b355ac9a8b0ae22336e13098aebe11e1bda6bf072ef002014b9095a4dc9f6f6",
+    "2026-10-11-exhibition-input.pdf": "f78e3b0d3eda89f968f7db476e2e1a89b85d149bac5d52c30d3a25dee29f1838",
+    "2026-10-11-exhibition-output.pdf": "b5dc3b1c5fb842a0607e38d6964e1c4c9ded5a5ae99f980d9ad3d02840665744",
+    "2026-10-11-exhibition.gonggan.zip": "ab692ba9b79997f36b8cf9c192dbaba400bbd9ef0fc91e0ccfafbba12ebde6b5"
+  }
+}
