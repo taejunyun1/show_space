@@ -55,6 +55,6 @@ export function ProjectsDialog({onClose}:{onClose:()=>void}){
  {!busy&&!visible.length&&<p className="field-hint">{query?'검색 결과가 없습니다.':archived?'보관된 프로젝트가 없습니다.':'저장된 프로젝트가 없습니다.'}</p>}
  <CloudProjectsPanel disabled={localBusy} onBusy={setCloudBusy} onLocalChange={refresh}/>
  {archiveOpen&&<ScreenRecoveryBoundary name="전시 아카이브" onClose={()=>setArchiveOpen(false)}><Suspense fallback={null}><ProjectArchiveDialog onClose={()=>setArchiveOpen(false)} onReused={()=>{setArchiveOpen(false);if(scope.begin()!==undefined)onClose();}}/></Suspense></ScreenRecoveryBoundary>}
- {historyProjectId&&<ScreenRecoveryBoundary name="프로젝트 버전 기록" onClose={()=>setHistoryProjectId(undefined)}><Suspense fallback={null}><ProjectHistoryDialog projectId={historyProjectId} onClose={()=>setHistoryProjectId(undefined)} onRestored={()=>{setHistoryProjectId(undefined);onClose();}}/></Suspense></ScreenRecoveryBoundary>}
+ {historyProjectId&&<ScreenRecoveryBoundary name="프로젝트 버전 기록" onClose={()=>setHistoryProjectId(undefined)}><Suspense fallback={null}><ProjectHistoryDialog projectId={historyProjectId} onClose={()=>setHistoryProjectId(undefined)} onRestored={()=>{setHistoryProjectId(undefined);if(scope.begin()!==undefined)onClose();}}/></Suspense></ScreenRecoveryBoundary>}
  </dialog>;
 }

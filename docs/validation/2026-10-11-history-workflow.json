@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-11",
+  "baselineSource": "567997a68066e58b83def5eef26d4517cba5eaa2",
+  "baseline": {
+    "productionFiles": ["src/components/ProjectHistoryDialog.tsx", "src/components/ProjectsDialog.tsx", "src/lib/projectHistoryActions.ts", "src/lib/persistence.ts", "src/lib/projectLibrary.ts"],
+    "sameTestsAndTransport": true,
+    "testSha256": "e3e958959a84f0294bd9eee0e1a263aee839e005f3f2983655b3c4338b570b7c",
+    "passed": 6,
+    "failed": 13,
+    "total": 19
+  },
+  "targeted": {
+    "command": "npx vitest run src/components/ProjectHistory.workflow.test.tsx src/lib/projectHistory.test.ts src/lib/historyPersistence.test.ts src/lib/projectLibrary.test.ts",
+    "passed": 37,
+    "failed": 0,
+    "newWorkflowTests": 19,
+    "finalAdditionalAssertionCoveredByFullSuite": true
+  },
+  "suite": {"command": "npm test", "passed": 1313, "skipped": 10, "filesPassed": 228, "filesSkipped": 10},
+  "build": {"command": "npm run build", "exitCode": 0, "includesTypeScript": true, "existingLargeChunkWarning": true},
+  "evidence": {
+    "ui": "Actual React StrictMode history and parent ProjectsDialog lazy workflow",
+    "state": "Production Zustand, autosave queue, persistence and acknowledged revisions",
+    "storage": "Production project/history repositories, isolated fake-indexeddb, independent repository/readDraft",
+    "assets": "Actual native PNG decode/Canvas encode, ZIP CRC/hash/import/export; synthetic GLB bytes and all project/Scene/private data preserved",
+    "adapters": ["jsdom dialog/input events", "Controlled completion gates/storage failures", "Download payload spy", "3D preview transport and CloudProjectsPanel excluded"],
+    "observed": [
+      "Save, compare, full restore, pre-restore rescue point and next autosave",
+      "Archive/recover/exact ZIP backup and explicit delete confirmation/cancel",
+      "Unmount/project roundtrip/new edit rejects obsolete work",
+      "Comparison invalidated by edits; damaged native image rejected",
+      "Safety-point quota and other repository revision conflict preserve current project",
+      "Actual IDB summary event edit aborts replacement transaction",
+      "Accepted rescue point remains visible after rejected replacement",
+      "Accepted replacement acknowledges revision 3 while retaining new edit; next autosave writes revision 4",
+      "Other project restore preserves original project data and closes parent once"
+    ]
+  },
+  "limitations": [
+    "Native computation and accepted writes are not forcibly cancelled or atomically rolled back",
+    "Accepted rescue points may remain; accepted restored DB content can precede the next latest-edit autosave",
+    "fake-indexeddb does not prove actual browser disk/restart/device durability",
+    "No actual OS download, real auth/cloud or browser/GPU preview",
+    "Full 24-step acceptance, user metrics, actual devices and SketchUp receiver remain incomplete"
+  ],
+  "deployment": "Not deployed this turn; documented 8fb69dc deployment not refreshed live",
+  "next": "Same-project floorplan to ten artworks to Scene A/B to output/re-read, without claiming full browser/auth acceptance"
+}

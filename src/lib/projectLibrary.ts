@@ -44,12 +44,13 @@ export function createProjectLibrary(factory:IDBFactory=globalThis.indexedDB,nam
       try{const summary=await request(tx.objectStore('summaries').get(id));guard();if(!summary||summary.archived)throw new Error('열 수 있는 프로젝트가 없습니다.');tx.objectStore('settings').put(id,'active');await done;}
       catch(error){try{tx.abort();}catch{/* Already settled. */}await done.catch(()=>{});throw error;}
     },
-    async save(value:Project,expectedRevision:number,activate=false):Promise<ProjectSummary>{
-      const project=structuredClone(parseProject(value)),db=await open(),tx=db.transaction(['documents','summaries','settings'],'readwrite'),done=finished(tx),summaries=tx.objectStore('summaries');
-      const previous=await request(summaries.get(project.id)) as ProjectSummary|undefined;
-      if((previous?.revision??0)!==expectedRevision||previous?.archived){tx.abort();await done.catch(()=>{});throw new ProjectConflictError();}
-      const now=new Date().toISOString(),summary:ProjectSummary={id:project.id,name:project.name,venue:project.venue,revision:expectedRevision+1,createdAt:previous?.createdAt??now,updatedAt:now,archived:false};
-      try{tx.objectStore('documents').put({id:project.id,project});summaries.put(summary);if(activate)tx.objectStore('settings').put(project.id,'active');await done;return summary;}catch(error){try{tx.abort();}catch{/* The transaction may already be aborted. */}await done.catch(()=>{});throw error;}
+    async save(value:Project,expectedRevision:number,activate=false,guard:()=>void=()=>{}):Promise<ProjectSummary>{
+      guard();const project=structuredClone(parseProject(value)),db=await open();guard();const tx=db.transaction(['documents','summaries','settings'],'readwrite'),done=finished(tx),summaries=tx.objectStore('summaries');
+      try{const previous=await request(summaries.get(project.id)) as ProjectSummary|undefined;guard();
+       if((previous?.revision??0)!==expectedRevision||previous?.archived)throw new ProjectConflictError();
+       const now=new Date().toISOString(),summary:ProjectSummary={id:project.id,name:project.name,venue:project.venue,revision:expectedRevision+1,createdAt:previous?.createdAt??now,updatedAt:now,archived:false};
+       tx.objectStore('documents').put({id:project.id,project});summaries.put(summary);if(activate)tx.objectStore('settings').put(project.id,'active');await done;return summary;
+      }catch(error){try{tx.abort();}catch{/* The transaction may already be aborted. */}await done.catch(()=>{});throw error;}
     },
     async archive(id:string,archived:boolean,expectedRevision:number):Promise<void>{const db=await open(),tx=db.transaction(['summaries','settings'],'readwrite'),done=finished(tx),store=tx.objectStore('summaries');const [s,active]=await Promise.all([request(store.get(id)),request(tx.objectStore('settings').get('active'))]);if(!s||s.revision!==expectedRevision){tx.abort();await done.catch(()=>{});throw new ProjectConflictError();}if(archived&&active===id){tx.abort();await done.catch(()=>{});throw new Error('현재 프로젝트는 닫은 뒤 보관해주세요.');}store.put({...s,archived,revision:s.revision+1,updatedAt:new Date().toISOString()});await done;},
   };

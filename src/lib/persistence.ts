@@ -35,4 +35,9 @@ export async function saveNewLocalProject(project:Project,guard?:()=>void):Promi
 }
 
 /** Conditional replacement also updates this tab's acknowledged revision before editing resumes. */
-export async function replaceLocalProject(project:Project,expectedRevision:number):Promise<Project>{const summary=await projectLibrary().save(project,expectedRevision,true);return remember({project,summary});}
+export async function replaceLocalProject(project:Project,expectedRevision:number,guard:()=>void=()=>{}):Promise<Project>{
+ guard();const summary=await projectLibrary().save(project,expectedRevision,true,guard);
+ // The committed revision is real even if a later edit retires the UI result.
+ revisions.set(project.id,Math.max(revisions.get(project.id)??0,summary.revision));
+ guard();return remember({project,summary});
+}
