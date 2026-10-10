@@ -1,0 +1,124 @@
+{
+  "date": "2026-10-11",
+  "projectId": "e4f85449-3402-4130-9f85-7cbab346911c",
+  "walls": 4,
+  "artworks": 10,
+  "sceneNames": [
+    "Scene A",
+    "Scene B"
+  ],
+  "pdfPages": 12,
+  "glbImages": 11,
+  "texture": {
+    "widthMm": 2000,
+    "heightMm": 1000
+  },
+  "outdoor": "09:00",
+  "privateReferenceImages": 1,
+  "capture": {
+    "width": 1920,
+    "height": 1041
+  },
+  "steps": [
+    "Persisted empty project hydrated through App",
+    "Header PDF -> automatic page 2 -> editable draft and door/equipment labels",
+    "50cm two-point scale calibration through actual PlanView",
+    "Real wall texture upload -> 2m x 1m physical repeat through Inspector",
+    "Ten real native PNG uploads via Outliner and cm size editing via Inspector",
+    "Ten-point grouped array and 25cm spacing through production dialog",
+    "Actual project NOTE, checklist/done and native private reference image",
+    "Spot/Kelvin -> bird/front camera requests -> Scene A/B, including actual native thumbnail encoding with GPU adapter",
+    "Outdoor dialog 09:00 -> slider 17:00 -> restore Scene A time and texture",
+    "Restore Scene A -> actual elevation SVG/native PNG capture at 1920px",
+    "Manual save -> independent repository/readDraft exact project and Scene data",
+    "Current/Scene A/Scene B vector PDF and Korean text inspection, with private notes excluded",
+    "Exact ZIP/asset restore -> two-Scene public payload with private notes excluded",
+    "Actual GLTFExporter GLB -> embedded 11 images, private-note exclusion, Spot/sun -> GLTFLoader geometry read"
+  ],
+  "limitations": [
+    "jsdom/native Canvas/fake-indexeddb, not actual browser or disk durability",
+    "OCR empty and worker transport adapted; production PDF parser/pixel algorithms",
+    "GPU transport and 3D Scene preview image renderer adapted, no 3D pixel proof",
+    "Native SVG rasterizer skips embedded image href pixels; ten embedded images decode separately and SVG XML is verified; PNG evidence covers wall/frame geometry and dimensions",
+    "No actual login/public API publication/SketchUp/real-device/full 24-step acceptance"
+  ],
+  "verification": {
+    "sourceBeforeExtension": "82672f5b8397b715c33e8e84fd2ab00e99eb68b6",
+    "testSha256": "e18f2e307318dda4c07608a93f4573e5f6d3cbfa4ca44b729f5334033b47e396",
+    "workflow": {
+      "command": "GONGGAN_EXHIBITION_PROOF=1 npx vitest run src/components/Exhibition.workflow.test.tsx",
+      "passed": 1,
+      "failed": 0,
+      "newTestCount": 0,
+      "existingWorkflowExtended": true
+    },
+    "suite": {
+      "command": "npm test",
+      "passed": 1314,
+      "skipped": 10,
+      "filesPassed": 229,
+      "filesSkipped": 10
+    },
+    "build": {
+      "command": "npm run build",
+      "exitCode": 0,
+      "includesTypeScript": true,
+      "existingLargeChunkWarning": true
+    },
+    "diffCheck": "passed",
+    "deployment": "Not deployed"
+  },
+  "pixelVerification": {
+    "embeddedImagesOpaqueSamplePassed": 11,
+    "glTFLoaderArtworkSourceSampleRGBAEqual": 10,
+    "publicUploadSources": 11,
+    "privateNotePhotoIncludedInPublicUploads": false,
+    "nativeCanvasDataMethodHiddenInDOMAdapter": true,
+    "browserGPUVerified": false
+  },
+  "receiver": {
+    "report": "2026-10-11-exhibition-extended-receiver/receiver.json",
+    "passed": true,
+    "blenderVersion": "4.4.1",
+    "glbSHA256": "8ea08764ac71ab33ff7578b18039e89594589ae4a57e57936f627ead86c274af",
+    "walls": 4,
+    "artworks": 10,
+    "images": 11,
+    "allPacked": true,
+    "maxWallBoundsErrorM": 1.2261526922685562e-06,
+    "maxArtworkImageSizeErrorM": 2.384185793236071e-08,
+    "scope": [
+      "solid-straight-walls",
+      "mounted-image-dimensions",
+      "packed-images",
+      "wall-texture-repeat"
+    ],
+    "notChecked": [
+      "floor",
+      "openings",
+      "reference-models",
+      "independent-3d-artworks",
+      "artwork-placement",
+      "lighting-fidelity",
+      "SketchUp-compatibility"
+    ],
+    "renders": [
+      "overview.png",
+      "texture-wall.png"
+    ],
+    "renderEngine": "Cycles CPU 24 samples 1200 x 900",
+    "sandboxMetalFailureResolvedByAuthorizedLocalExecution": true
+  },
+  "artifactSha256": {
+    "2026-10-11-exhibition-extended-elevation.png": "e9a2ce88f475bfe5bcf8e0b3005c9a64e40d5111d4587a7d9b9b8f39e0e801e5",
+    "2026-10-11-exhibition-extended-elevation.svg": "c1c968654886b43f35b284a295a5aa5cf345b4febeb118cfeb43c1f63aebab3f",
+    "2026-10-11-exhibition-extended-input.pdf": "fb4cd29c90883daa241dd1bd46fa06dbedfdd64ebcd7e5fa0bb255460aab3b5e",
+    "2026-10-11-exhibition-extended-output.pdf": "d9861dedd807e0d6a694454961844baa5b73f170bb425211f777b9300929d6cd",
+    "2026-10-11-exhibition-extended-project.json": "9e72d64dd5021cdc0713bd6f8408d90b050a598f509ddbdde1cef9beb9484cf6",
+    "2026-10-11-exhibition-extended.glb": "8ea08764ac71ab33ff7578b18039e89594589ae4a57e57936f627ead86c274af",
+    "2026-10-11-exhibition-extended.gonggan.zip": "b49fec72a0898f4c9891ff8cc7cfc9883c14cf6d5ae3648c2224c44f8916a46d",
+    "2026-10-11-exhibition-extended-receiver/overview.png": "535b5da19b08325ce98119507d30af56fe36fb9e69a88f367c148d17551094c6",
+    "2026-10-11-exhibition-extended-receiver/receiver.json": "4e644c4af4e77192c0570472167ca2aea96c6a64bed916ade32f1d6b626c0149",
+    "2026-10-11-exhibition-extended-receiver/texture-wall.png": "84bb5c37a89def5dd9fba0a598fa020c5ff5b6a54136c79e417b287e8a0fa2d3"
+  }
+}

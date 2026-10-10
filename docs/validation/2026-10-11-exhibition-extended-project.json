@@ -1,0 +1,2563 @@
+{
+  "schemaVersion": 1,
+  "id": "e4f85449-3402-4130-9f85-7cbab346911c",
+  "name": "연속 검증 전시",
+  "venue": "성수 갤러리",
+  "walls": [
+    {
+      "id": "auto-wall-1",
+      "name": "자동 벽 1",
+      "role": "partition",
+      "start": {
+        "x": 1597.1428571428569,
+        "z": 1677.9777206512424
+      },
+      "end": {
+        "x": 9602.857142857141,
+        "z": 1677.9777206512424
+      },
+      "heightMm": 3500,
+      "thicknessMm": 150,
+      "color": "#b59a76",
+      "visible": true,
+      "locked": false,
+      "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.",
+      "material": {
+        "metalness": 0,
+        "opacity": 1,
+        "transmission": 0,
+        "thicknessMm": 0,
+        "ior": 1.5,
+        "clearcoat": 0,
+        "sheen": 0,
+        "preset": "wood",
+        "roughness": 0.65,
+        "texture": {
+          "widthMm": 2000,
+          "heightMm": 1000,
+          "imageUrl": "data:image/webp;base64,UklGRlQCAABXRUJQVlA4WAoAAAAgAAAAPwAAHwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggZgAAAHAEAJ0BKkAAIAA+LRSHQqGhDf6qAAwBYlAGFZu1DXyAcmEd+gnngvt1EdUAAP7viQf/tCG5trBcU3/6vRcyw7cd8WRF/YgZe7xOg1KshR/vl9Cr7YeboDY9/+ZfbxirBYVv2DwAAA=="
+        }
+      }
+    },
+    {
+      "id": "auto-wall-2",
+      "name": "자동 벽 2",
+      "role": "partition",
+      "start": {
+        "x": 1597.1428571428569,
+        "z": 7522.022279348757
+      },
+      "end": {
+        "x": 9602.857142857141,
+        "z": 7522.022279348757
+      },
+      "heightMm": 3000,
+      "thicknessMm": 150,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+    },
+    {
+      "id": "auto-wall-3",
+      "name": "자동 벽 3",
+      "role": "partition",
+      "start": {
+        "x": 1678.5714285714284,
+        "z": 1596.5724078834617
+      },
+      "end": {
+        "x": 1678.5714285714284,
+        "z": 7603.427592116537
+      },
+      "heightMm": 3000,
+      "thicknessMm": 150,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+    },
+    {
+      "id": "auto-wall-4",
+      "name": "자동 벽 4",
+      "role": "partition",
+      "start": {
+        "x": 9521.42857142857,
+        "z": 1596.5724078834617
+      },
+      "end": {
+        "x": 9521.42857142857,
+        "z": 7603.427592116537
+      },
+      "heightMm": 3000,
+      "thicknessMm": 150,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+    }
+  ],
+  "artworks": [
+    {
+      "id": "artwork-1",
+      "name": "작품 01",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "wallId": "auto-wall-1",
+      "alongMm": 1570.3571428571422,
+      "centerHeightMm": 1500,
+      "frame": "natural",
+      "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAW8ISPrHhgAP70vu//+fmd24v6rf//tSz9qWftSz/tMQAAAAAA",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "wallSide": "front",
+      "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+    },
+    {
+      "id": "artwork-2",
+      "name": "작품 02",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "wallId": "auto-wall-1",
+      "alongMm": 2265.357142857142,
+      "centerHeightMm": 1500,
+      "frame": "natural",
+      "imageUrl": "data:image/webp;base64,UklGRjYCAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggSAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAXBxnD4QiwAP7vZJf//lP3yn75T9/yn7//7g49g49g4/iakAbeAAAAAA==",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "wallSide": "front",
+      "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+    },
+    {
+      "id": "artwork-3",
+      "name": "작품 03",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "wallId": "auto-wall-1",
+      "alongMm": 2960.357142857142,
+      "centerHeightMm": 1500,
+      "frame": "natural",
+      "imageUrl": "data:image/webp;base64,UklGRioCAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggPAAAADADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAAArSI+sebLAA/vlyv//+uXf/9cu//65d/65d+g+K+AAAAA==",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "wallSide": "front",
+      "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+    },
+    {
+      "id": "artwork-4",
+      "name": "작품 04",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "wallId": "auto-wall-1",
+      "alongMm": 3655.357142857142,
+      "centerHeightMm": 1500,
+      "frame": "natural",
+      "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAAPADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AH6AABZviIPrGoAA/u9kl//+X+qY2T/8wA///BmD0+Z/8EEAAAAA",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "wallSide": "front",
+      "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+    },
+    {
+      "id": "artwork-5",
+      "name": "작품 05",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "wallId": "auto-wall-1",
+      "alongMm": 4350.357142857142,
+      "centerHeightMm": 1500,
+      "frame": "natural",
+      "imageUrl": "data:image/webp;base64,UklGRjACAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggQgAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAVGmMcPgzAAP7uXj//+YJX5Bu1D//9ZRfWUX1lF/1goAAAAA==",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "wallSide": "front",
+      "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+    },
+    {
+      "id": "artwork-6",
+      "name": "작품 06",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "wallId": "auto-wall-1",
+      "alongMm": 5045.357142857142,
+      "centerHeightMm": 1500,
+      "frame": "natural",
+      "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAX/5p8ISLAAP7xcg//+ema8wf14f//tdr9rtftdr/tXIAAAAAA",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "wallSide": "front",
+      "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+    },
+    {
+      "id": "artwork-7",
+      "name": "작품 07",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "wallId": "auto-wall-1",
+      "alongMm": 5740.357142857142,
+      "centerHeightMm": 1500,
+      "frame": "natural",
+      "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAW8ISPrHhgAP7w1wP//y0L5aF8tC/5aF//9uz+uz+uz/q4AAAA",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "wallSide": "front",
+      "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+    },
+    {
+      "id": "artwork-8",
+      "name": "작품 08",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "wallId": "auto-wall-1",
+      "alongMm": 6435.357142857142,
+      "centerHeightMm": 1500,
+      "frame": "natural",
+      "imageUrl": "data:image/webp;base64,UklGRigCAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggOgAAADADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAAAtPQm0xjZAA/vp5X///Wwf/+tg//9bB/9bBYeQAAAA=",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "wallSide": "front",
+      "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+    },
+    {
+      "id": "artwork-9",
+      "name": "작품 09",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "wallId": "auto-wall-1",
+      "alongMm": 7130.357142857142,
+      "centerHeightMm": 1500,
+      "frame": "natural",
+      "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAAPADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AH6AABZviIPrGoAA/vDXA///LP0TaH/+Whf//gTBLeI/+AAAAAAA",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "wallSide": "front",
+      "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+    },
+    {
+      "id": "artwork-10",
+      "name": "작품 10",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "wallId": "auto-wall-1",
+      "alongMm": 875.3571428571422,
+      "centerHeightMm": 1500,
+      "frame": "natural",
+      "imageUrl": "data:image/webp;base64,UklGRjACAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggQgAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAVGmMcPgzAAP7wOEP//JTX+NuWr//9XbfV231dt/1KAAAAAA==",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "wallSide": "front",
+      "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "Scene A",
+      "artworks": [
+        {
+          "id": "artwork-1",
+          "name": "작품 01",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 1570.3571428571422,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAW8ISPrHhgAP70vu//+fmd24v6rf//tSz9qWftSz/tMQAAAAAA",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-2",
+          "name": "작품 02",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 2265.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjYCAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggSAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAXBxnD4QiwAP7vZJf//lP3yn75T9/yn7//7g49g49g4/iakAbeAAAAAA==",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-3",
+          "name": "작품 03",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 2960.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRioCAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggPAAAADADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAAArSI+sebLAA/vlyv//+uXf/9cu//65d/65d+g+K+AAAAA==",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-4",
+          "name": "작품 04",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 3655.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAAPADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AH6AABZviIPrGoAA/u9kl//+X+qY2T/8wA///BmD0+Z/8EEAAAAA",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-5",
+          "name": "작품 05",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 4350.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjACAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggQgAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAVGmMcPgzAAP7uXj//+YJX5Bu1D//9ZRfWUX1lF/1goAAAAA==",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-6",
+          "name": "작품 06",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 5045.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAX/5p8ISLAAP7xcg//+ema8wf14f//tdr9rtftdr/tXIAAAAAA",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-7",
+          "name": "작품 07",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 5740.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAW8ISPrHhgAP7w1wP//y0L5aF8tC/5aF//9uz+uz+uz/q4AAAA",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-8",
+          "name": "작품 08",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 6435.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRigCAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggOgAAADADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAAAtPQm0xjZAA/vp5X///Wwf/+tg//9bB/9bBYeQAAAA=",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-9",
+          "name": "작품 09",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 7130.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAAPADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AH6AABZviIPrGoAA/vDXA///LP0TaH/+Whf//gTBLeI/+AAAAAAA",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-10",
+          "name": "작품 10",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 875.3571428571422,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjACAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggQgAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAVGmMcPgzAAP7wOEP//JTX+NuWr//9XbfV231dt/1KAAAAAA==",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        }
+      ],
+      "wallVisibility": {
+        "auto-wall-1": true,
+        "auto-wall-2": true,
+        "auto-wall-3": true,
+        "auto-wall-4": true
+      },
+      "structure": {
+        "walls": [
+          {
+            "id": "auto-wall-1",
+            "name": "자동 벽 1",
+            "role": "partition",
+            "start": {
+              "x": 1597.1428571428569,
+              "z": 1677.9777206512424
+            },
+            "end": {
+              "x": 9602.857142857141,
+              "z": 1677.9777206512424
+            },
+            "heightMm": 3500,
+            "thicknessMm": 150,
+            "color": "#b59a76",
+            "visible": true,
+            "locked": false,
+            "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.",
+            "material": {
+              "metalness": 0,
+              "opacity": 1,
+              "transmission": 0,
+              "thicknessMm": 0,
+              "ior": 1.5,
+              "clearcoat": 0,
+              "sheen": 0,
+              "preset": "wood",
+              "roughness": 0.65,
+              "texture": {
+                "widthMm": 2000,
+                "heightMm": 1000,
+                "imageUrl": "data:image/webp;base64,UklGRlQCAABXRUJQVlA4WAoAAAAgAAAAPwAAHwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggZgAAAHAEAJ0BKkAAIAA+LRSHQqGhDf6qAAwBYlAGFZu1DXyAcmEd+gnngvt1EdUAAP7viQf/tCG5trBcU3/6vRcyw7cd8WRF/YgZe7xOg1KshR/vl9Cr7YeboDY9/+ZfbxirBYVv2DwAAA=="
+              }
+            }
+          },
+          {
+            "id": "auto-wall-2",
+            "name": "자동 벽 2",
+            "role": "partition",
+            "start": {
+              "x": 1597.1428571428569,
+              "z": 7522.022279348757
+            },
+            "end": {
+              "x": 9602.857142857141,
+              "z": 7522.022279348757
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+          },
+          {
+            "id": "auto-wall-3",
+            "name": "자동 벽 3",
+            "role": "partition",
+            "start": {
+              "x": 1678.5714285714284,
+              "z": 1596.5724078834617
+            },
+            "end": {
+              "x": 1678.5714285714284,
+              "z": 7603.427592116537
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+          },
+          {
+            "id": "auto-wall-4",
+            "name": "자동 벽 4",
+            "role": "partition",
+            "start": {
+              "x": 9521.42857142857,
+              "z": 1596.5724078834617
+            },
+            "end": {
+              "x": 9521.42857142857,
+              "z": 7603.427592116537
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+          }
+        ],
+        "openings": [],
+        "dimensions": [],
+        "unplacedArtworks": [],
+        "modelArtworks": [],
+        "lights": [
+          {
+            "id": "light-1",
+            "name": "스팟 조명 1",
+            "kind": "spot",
+            "position": {
+              "x": 3167.499999999999,
+              "y": 3300,
+              "z": 2972.9777206512426
+            },
+            "target": {
+              "x": 3167.499999999999,
+              "y": 1500,
+              "z": 1772.9777206512424
+            },
+            "intensity": 120,
+            "kelvin": 5500,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true,
+            "locked": false,
+            "note": ""
+          }
+        ],
+        "lighting": {
+          "ambient": 0.12,
+          "hemisphere": 0.15,
+          "fill": 0,
+          "environment": 0.08
+        },
+        "outdoor": {
+          "mode": "outdoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-10-11",
+          "time": "09:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "floorColor": "#f1f1ed"
+      },
+      "cameraView": {
+        "projection": "orthographic",
+        "position": [
+          -4.408684750197576,
+          16.763027125296365,
+          14.608684750197575
+        ],
+        "target": [
+          5.6,
+          1.75,
+          4.6
+        ],
+        "zoom": 30.950400226162635
+      },
+      "thumbnail": {
+        "imageUrl": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCADIAUADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAj/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//9k=",
+        "widthPx": 320,
+        "heightPx": 200,
+        "view": "3d"
+      }
+    },
+    {
+      "id": "scene-2",
+      "name": "Scene B",
+      "artworks": [
+        {
+          "id": "artwork-1",
+          "name": "작품 01",
+          "artist": "",
+          "widthMm": 500,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 1570.3571428571422,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAW8ISPrHhgAP70vu//+fmd24v6rf//tSz9qWftSz/tMQAAAAAA",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-2",
+          "name": "작품 02",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 2265.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjYCAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggSAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAXBxnD4QiwAP7vZJf//lP3yn75T9/yn7//7g49g49g4/iakAbeAAAAAA==",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-3",
+          "name": "작품 03",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 2960.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRioCAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggPAAAADADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAAArSI+sebLAA/vlyv//+uXf/9cu//65d/65d+g+K+AAAAA==",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-4",
+          "name": "작품 04",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 3655.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAAPADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AH6AABZviIPrGoAA/u9kl//+X+qY2T/8wA///BmD0+Z/8EEAAAAA",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-5",
+          "name": "작품 05",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 4350.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjACAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggQgAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAVGmMcPgzAAP7uXj//+YJX5Bu1D//9ZRfWUX1lF/1goAAAAA==",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-6",
+          "name": "작품 06",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 5045.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAX/5p8ISLAAP7xcg//+ema8wf14f//tdr9rtftdr/tXIAAAAAA",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-7",
+          "name": "작품 07",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 5740.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAW8ISPrHhgAP7w1wP//y0L5aF8tC/5aF//9uz+uz+uz/q4AAAA",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-8",
+          "name": "작품 08",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 6435.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRigCAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggOgAAADADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAAAtPQm0xjZAA/vp5X///Wwf/+tg//9bB/9bBYeQAAAA=",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-9",
+          "name": "작품 09",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 7130.357142857142,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjICAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAAAAPADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AH6AABZviIPrGoAA/vDXA///LP0TaH/+Whf//gTBLeI/+AAAAAAA",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        },
+        {
+          "id": "artwork-10",
+          "name": "작품 10",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "wallId": "auto-wall-1",
+          "alongMm": 875.3571428571422,
+          "centerHeightMm": 1500,
+          "frame": "natural",
+          "imageUrl": "data:image/webp;base64,UklGRjACAABXRUJQVlA4WAoAAAAgAAAAPwAALwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggQgAAALADAJ0BKkAAMAA+MRiLRCIhoRFUACADBLOAOwB+AAAVGmMcPgzAAP7wOEP//JTX+NuWr//9XbfV231dt/1KAAAAAA==",
+          "visible": true,
+          "locked": false,
+          "note": "",
+          "wallSide": "front",
+          "groupId": "6eaa9e22-204e-461c-9350-513a02ef31fd"
+        }
+      ],
+      "wallVisibility": {
+        "auto-wall-1": true,
+        "auto-wall-2": true,
+        "auto-wall-3": true,
+        "auto-wall-4": true
+      },
+      "structure": {
+        "walls": [
+          {
+            "id": "auto-wall-1",
+            "name": "자동 벽 1",
+            "role": "partition",
+            "start": {
+              "x": 1597.1428571428569,
+              "z": 1677.9777206512424
+            },
+            "end": {
+              "x": 9602.857142857141,
+              "z": 1677.9777206512424
+            },
+            "heightMm": 3500,
+            "thicknessMm": 150,
+            "color": "#b59a76",
+            "visible": true,
+            "locked": false,
+            "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다.",
+            "material": {
+              "metalness": 0,
+              "opacity": 1,
+              "transmission": 0,
+              "thicknessMm": 0,
+              "ior": 1.5,
+              "clearcoat": 0,
+              "sheen": 0,
+              "preset": "wood",
+              "roughness": 0.65,
+              "texture": {
+                "widthMm": 2000,
+                "heightMm": 1000,
+                "imageUrl": "data:image/webp;base64,UklGRlQCAABXRUJQVlA4WAoAAAAgAAAAPwAAHwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggZgAAAHAEAJ0BKkAAIAA+LRSHQqGhDf6qAAwBYlAGFZu1DXyAcmEd+gnngvt1EdUAAP7viQf/tCG5trBcU3/6vRcyw7cd8WRF/YgZe7xOg1KshR/vl9Cr7YeboDY9/+ZfbxirBYVv2DwAAA=="
+              }
+            }
+          },
+          {
+            "id": "auto-wall-2",
+            "name": "자동 벽 2",
+            "role": "partition",
+            "start": {
+              "x": 1597.1428571428569,
+              "z": 7522.022279348757
+            },
+            "end": {
+              "x": 9602.857142857141,
+              "z": 7522.022279348757
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+          },
+          {
+            "id": "auto-wall-3",
+            "name": "자동 벽 3",
+            "role": "partition",
+            "start": {
+              "x": 1678.5714285714284,
+              "z": 1596.5724078834617
+            },
+            "end": {
+              "x": 1678.5714285714284,
+              "z": 7603.427592116537
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+          },
+          {
+            "id": "auto-wall-4",
+            "name": "자동 벽 4",
+            "role": "partition",
+            "start": {
+              "x": 9521.42857142857,
+              "z": 1596.5724078834617
+            },
+            "end": {
+              "x": 9521.42857142857,
+              "z": 7603.427592116537
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+          }
+        ],
+        "openings": [],
+        "dimensions": [],
+        "unplacedArtworks": [],
+        "modelArtworks": [],
+        "lights": [
+          {
+            "id": "light-1",
+            "name": "스팟 조명 1",
+            "kind": "spot",
+            "position": {
+              "x": 3167.499999999999,
+              "y": 3300,
+              "z": 2972.9777206512426
+            },
+            "target": {
+              "x": 3167.499999999999,
+              "y": 1500,
+              "z": 1772.9777206512424
+            },
+            "intensity": 120,
+            "kelvin": 5500,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true,
+            "locked": false,
+            "note": ""
+          }
+        ],
+        "lighting": {
+          "ambient": 0.12,
+          "hemisphere": 0.15,
+          "fill": 0,
+          "environment": 0.08
+        },
+        "outdoor": {
+          "mode": "outdoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-10-11",
+          "time": "17:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "floorColor": "#f1f1ed"
+      },
+      "cameraView": {
+        "projection": "orthographic",
+        "position": [
+          5.6,
+          1.75,
+          17.612112342314113
+        ],
+        "target": [
+          5.6,
+          1.75,
+          4.6
+        ],
+        "zoom": 63.963449457452896
+      },
+      "thumbnail": {
+        "imageUrl": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCADIAUADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAj/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//9k=",
+        "widthPx": 320,
+        "heightPx": 200,
+        "view": "3d"
+      }
+    }
+  ],
+  "floorColor": "#f1f1ed",
+  "planImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACWAAAAfQCAYAAABGuGRGAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAACAASURBVHic7N15tNdz/sDx1225l3JR2qwRRWNNo06ci5LOWBJnMDoZkpg6yL7NsZYRxWAw1jJjXw5pDGPr2JuULUmSkm5p00Kluqn7++fnHp/7vbf7/b5ljObx+Gver/t5f96fe+e/ztPnU1RZWVkZAAAAAAAAAAAAFKzez/0AAAAAAAAAAAAAv1QCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQCLAAAAAAAAAAAgEQNfu4HAAAAAH75Fi1aFBMmTIgPPvggZs2aFV999VWsXr06mjVrFq1atYq99947OnToEG3btv3RZ61ZsybGjx8fH3zwQcycOTOWLFkSDRs2jObNm0fbtm2jY8eO0b59+ygqKvrRZ3399dfx73//Oz788MP48ssvY9myZdGoUaPYZpttYtddd41OnTrFdttt96PPqaysjMmTJ8e7774bU6dOjUWLFkVlZWU0adIk2rRpU/X3Kykp+dFnAQAAAAAblgALAAAASLZo0aIYMWJE3HjjjbFgwYI6rz/ttNNi0KBBscceexR81rp16+If//hHXHfddfH222+v99pjjjkmzj333CgrKyv4nIiIFStWxIgRI+KGG26I8vLy9V579tlnx6BBg6JNmzZJZ7333nvxpz/9KZ566qn1XrfffvvFeeedF8cee2w0aOCfdAAAAADgv0VRZWVl5c/9EAAAAMAvz8cffxwDBgyIN954o6B9paWlcffdd8cJJ5yQ956VK1fGpZdeGrfccktBZw0dOjQuuOCCgoKl2bNnR//+/eOFF17Ie0+LFi3innvuiaOOOirvPZWVlTFy5Mjo379/3nsiIk466aS4+eabo0mTJgXtAwAAAAB+GgIsAAAAoGAzZ86Mww8/PKZMmZJ8j0cffTR+97vf1Xnd2rVr46yzzoo77rgj6Zwrrrgirrrqqrw+Sbhw4cI4+uijY+zYsUlnjR49Ou8Ia8SIEQXHV9/r1atXPPDAA1FaWpq0HwAAAADYcOr93A8AAAAA/LKsWbMmzj777Jz4ql+/fvHqq6/GggULoqKiIlatWhVffvllvPjii9G7d++c+5x00knxySef1HnevffemxNftW/fPu68886YPn16LF++PJYvXx4zZsyI++67Lzp06JC5dvDgwfHkk0/Wec66devikksuyYmvevToEU899VSUl5fHqlWrYvHixfHRRx/FtddeG02bNs1ce8opp8TUqVPrPGv8+PE58VVxcXFcddVVMXHixFi8eHGsWrUqysvL49lnn82JukaPHh3XXHNNnecAAAAAAD89b8ACAAAACjJ69Og4+uijM7Nhw4bF+eefH/Xq1fzfeq1duzb+/Oc/x0UXXZSZn3baaXH33XfXetasWbOiQ4cOsXjx4qpZ165dY+TIkbHjjjvWuGfu3LnRt2/fePHFF6tmbdu2jbFjx0azZs1qPeu5556LI444IjMbOHBgDB8+PBo3blzjnvHjx8exxx4b5eXlVbM+ffrEAw88UOsbtyoqKqJXr17x/PPPV8223nrreOSRR+Kggw6qcc/q1avjkksuiZtvvjkzf+utt2L//fev9XcCAAAAAH563oAFAAAAFOSJJ57IrI8++ug455xzao2vIiLq168f5513XvTr1y8zv+eee2LevHm17hs5cmQmviotLY0777yz1vgq/j9muu222zKzadOmxejRo2vds3bt2hg+fHhm1rVr17jhhhtqja8iIjp16pQTRT300EPx3nvv1brnxRdfzMRXERG33XZbrfFVRERJSUkMHTo0ysrKMvMRI0bUugcAAAAA+M8QYAEAAAB5W7p0aTz00EOZWd++faNhw4Z17q1fv34MGDAgZ/7pp5/WeP2iRYvi1ltvzcyGDBkS7dq1q/Ostm3bxhVXXJGZ3XXXXbF69eoarx87dmy8+uqrmdnVV18djRo1qvOsnj17xiGHHJKZPfbYY7Vef//992fWxx9/fPTq1avOczbZZJO48MILM7ORI0fW+vcDAAAAAP4zGvzcDwAAAAD8cixcuDBn1r59+7z313TtkiVLarz2jTfeyLz9Kv7/bVv5Ovzww2Pw4MFV6wkTJsSkSZPi17/+dc611d9IVVZWlven/Ro2bBjHHXdcjBkzpmo2YsSIuOqqq3ICrhkzZuS8QezEE0+M+vXr53XWwQcfHE2bNs38XV5//fW8orQNpbKyMj7//POYNm1afP3111FcXBwtW7aM9u3bx5ZbbrnevXPmzImZM2fGV199FevWrYtmzZrFdtttFzvttNP/zPMBAAAAsPERYAEAAAB5W7VqVc6suLg47/1FRUU5s5KSkhqvfeWVVzLrPn36ROvWrfM+a5999ok2bdrEjBkzqmbvvvtuToBVUVERTz75ZGbWu3fvvKOoiMiJtRYvXhwfffRRdOrUKTMfN25cZl1aWhoHH3xw3ueUlpZG79694/bbb6+avfHGG9G/f/+871GXgw8+OF577bWq9cSJE2OvvfaKiIhXX301brnllnj66adz9jVt2jTOOeecOOOMM6Jp06ZV88rKynjllVfiwQcfjPvuu6/GM4855pgYOHBgHHroob/45wMAAADgf49PEAIAAAB522KLLXJm8+bNy3v/559/njNr1apVzuy7776LUaNGZWb5vpHqeyUlJdGtW7fM7K233sq57tNPP42pU6dmZvvss09BZ7Vr1y5KS0szs/fffz/nuuoB1pFHHpmzry777rtvZv3oo4/GihUrCrpHodasWRNXX311dO3atca4Kf4/Orviiivi+OOPj/nz50dExMqVK+PSSy+NQw45pNa4KSJi1KhR0aNHjxg2bFhUVlZudM8HAAAAwMZNgAUAAADkbbvttosOHTpkZs8880ze+6u/aap169Y1fj5v1qxZUV5enpntscceBT/v3nvvnVm/9dZbOQHNZ599lrNvt912K+ickpKSOOywwzKz6dOnZ9aVlZXx5ptvZmbV35CVj1133TWzrqioiDlz5hR8n3x99913cdlll8VVV12V1/VjxoyJiy++OFavXh0XXHBBXH/99XmfdfHFF8c///nPjer5AAAAANj4+QQhAAAAkLd69erF6aefHgMHDqyaXXvttdGlS5c48sgj17v3X//6V04kc8YZZ0SjRo1yrq3pTVk77LBDwc9bfc+MGTNiyZIlmU/QTZs2LXNNhw4dokmTJgWfVT0kq37fr776KuetWG3atCn4nG233TZnNnfu3BpDtg3hhhtuiEceeaRq3b9//+jWrVs0a9Ysvv3225gwYUIMHz48Kioqqq75+9//HitXrozHH3+8anbAAQfEcccdF7vsskvUq1cvZs+eHY888kjOpyYvvPDC6NatWzRu3HijeD4AAAAANn4CLAAAAKAgffr0iWeeeSaee+65qlnPnj1jyJAhcdJJJ+VET4sWLYqHH344Bg0alJmXlZXF6aefXuMZ338i7oe22mqrgp+1pj3z58/PBFizZ8/O/LzQt199r2XLlpn12LFjo7KyMoqKiiIiYsGCBTl7mjdvXvA5P3z2782dO7fg++Tr+7iprKwsbrrppujYsWPm57169YqjjjoqunfvHsuWLaua/zBuuvPOO6Nv375RUlKS2XvyySfHX//61zj33HOrZlOnTo1x48bFIYccslE8HwAAAAAbP58gBAAAAApSWloa99xzTxx77LGZ+eWXXx6tW7eOI444Is4555w477zz4rjjjotmzZrlxFc9evSIhx9+OLbYYosaz6geYLVt2zZKS0sLftaaYqUVK1Zk1rNmzcqsU960FRHRrFmzzHrBggWxevXqqvVXX31V5558lJaWRosWLTKz5cuXF3yfQnTu3DmeeOKJnLjpe506dYpLLrmkxp/df//98Yc//CEnboqIKC4ujjPPPDMnZpo4ceJG9XwAAAAAbNy8AQsAAAAo2DbbbBMPPPBAHH300fGnP/0ppkyZUvWzH74ZqyZDhw6Ns846a72fcPvmm29yzktRU1SzatWqzHrevHmZ9WabbbbBzlq9enVssskmEbVEUjV9frEuRUVF0bx588wbtVauXFnwfQpx3XXX5bzhq7rOnTvnzA4//PDo06fPevc1aNAgevToEWPGjKmazZgxY6N6PgAAAAA2bt6ABQAAACRZvHhxTJ06NaZPn17QvjfffDPee++99V5TPZJaX6y1PsXFxTmzH76VKiJiyZIlmXVNIVU+aguwaju3tufLx5ZbbplZ/5QBVllZWZSVldV5XatWrXJmvXv3jnr16v7np+pvAlu4cOFG83wAAAAAbPwEWAAAAEDBxowZE2VlZTFkyJCoqKgoaO+zzz4bBx54YAwbNizWrFlT4zUbKsCqX79+zmzdunWZ9ZdffplZf//GqkI1aJD7ovHKysqq/13T3yk1wKr+jD88Z0M79NBDa/w7VrfpppvmzH71q1/ldUb1v92333670TwfAAAAABs/ARYAAABQkDFjxkT37t1zPsPWr1+/eOmll2Lu3LmxatWqWL16dcyfPz9ef/31uOCCC3Luc/HFF8c111xT4xk1xUwp1q5dmzOrHi9Vf5tUqu+++y5n9sPAKp9IKF/VA7XUaCwfu+22W17X1fQmqepvjspX9Uhuff7bnw8AAACAjZ8ACwAAAMjbvHnz4tRTT83MSktLY/To0TFixIjo3r17tGrVKkpKSqK4uDhatGgRZWVlMXz48HjnnXeic+fOmb2DBw+Ol156KeecRo0aZdY1fb4vHzW9Yav6pwKrf5qutrdy/dizaoqkaoq28rF8+fLM+qcMsH5MoFb9/8efwn/78wEAAACw8RNgAQAAAHm777774osvvsjMHnzwwTjqqKPq3NuxY8d44IEHYvvtt8/Mb7nllpw3ClUPY7755puk5125cmXOrPq9mzRpUueefFT/LF1paWmdAVZqWFb97WOpn2jMx4+JlIqKijbos9Tkv/35AAAAANj4CbAAAACAvKxcuTLuvffezKxPnz7Rs2fPvO/Rtm3buPTSSzOzZ599Nj777LPMbPPNN8+sP/7446isrCz4mWsKt5o3b77e9cKFCws+JyJi6dKlmXWXLl0ynx0sLS2tc08+li9fHsuWLcvMWrZsWfB98rWhPgf5U/lvfz4AAAAANn4CLAAAACAvn332Wc6bl4455piC3yLUo0ePnNnkyZMz6+222y6zXrBgQdJbsBYtWpRZl5aWRrNmzTKznXfeObP+8ssvCz4nagi32rZtm1lvvfXWOXsWL15c8DlLlizJmVX/jCIAAAAA8J8jwAIAAADyMm/evJxZu3btCr5PmzZtomnTpplZ9VBq2223zdk3Z86cgs+aPXt2Zt21a9fMW6kiIlq3bp1Zjxs3LtauXVvwWdOnT8+s27Rpk1m3atUqiouLM7Py8vKCz5k7d27ObJtttin4PgAAAADAhiHAAgAAAPKycuXKnNlmm21W8H2Kioqiffv2mdnq1asz6x122CFnX/W3b+VjypQpmfX++++fc81OO+2UWZeXlxcce61duzZee+21zGzPPffMrEtKSnLe/jV16tSCzokaQq8ePXrEVlttVfB9AAAAAIANQ4AFAAAA5KW0tDRn9u233ybdq/qn97bccsvMulmzZtGrV6/M7O233y7ojO+++y5efvnlzGzvvffOuW6vvfbKmX3wwQcFnfXZZ5/FF198kZntvvvuOdd169Yts37++eejsrKyoLPefffdzPrAAw8saD8AAAAAsGEJsAAAAIC8NGnSJGc2bdq0gu+zdOnSnDdTtWzZMue67t27Z9ajRo3KeVPW+kycODEmT55ctS4uLo6OHTvmXLfVVlvF8ccfn5mNGTMm73MiIt58883MulevXjV+FrBTp06Z9dtvvx0ff/xx3uesWLEiHn/88czsgAMOKOhZAQAAAIANS4AFAAAA5GXnnXeOpk2bZmajRo0q+D7jxo3LmdX0Zqrqb3aaPHlyQWHUY489llkPGDAgmjdvXuO1RxxxRGZ95513xqxZs/I6Z+XKlTFy5MjMrHrQ9b0OHTrkfH7xqaeeyuuciIjnnnsuysvLq9bt27ePLl265L0fAAAAANjwBFgAAABAXkpLS6N3796Z2f333x8vvfRS3vdYsWJF3HzzzZlZ3759awyj9tprrzjxxBMzs2HDhsWyZcvqPOf111+P4cOHZ2bHHHNMrdf37Nkztt9++6p1RUVF/OUvf8nr84B33XVXjB07tmrdtGnTOPTQQ2u8tlGjRnHmmWdmZtdcc03OG8FqMmfOnBgyZEhmdtppp0VJSUmdewEAAACAn44ACwAAAMjb73//+5zZgAEDYvz48XXuXbp0aZx//vnxwgsvZOYDBw6sdc+pp56aWb/22mtx+eWXr/dThB988EGccsopmdmxxx6b80atH2rSpEmcc845mdmNN94Yf/vb32rdExHx6KOPxrnnnpuZXXbZZbW+aSsi4re//W20aNGial1RURGDBg2KIprR0AAAIABJREFU+fPn17pn/vz5ceaZZ8akSZOqZltvvXX06dNnvc8HAAAAAPz0BFgAAABA3jp37hwXXnhhZjZjxowoKyuLwYMHx8SJE3PiqDlz5sQjjzwSv/nNb+Kuu+7K/Oziiy+OTp061XreQQcdFAMGDMjMbrnlljj55JNjwoQJsWbNmqr57Nmz4/bbb48DDzwwZsyYUTUvLi6Oyy+/POrVW/8/g/Tr1y86duyYM/vjH/8Y06ZNq3ob1rp162LSpElx0UUX5bwR7IADDoh+/fqt95yWLVvG9ddfn5m9/PLL0bNnz3j22WdjxYoVVfOlS5fGU089FYcddlg8/fTTmT3Dhg3LhFwAAAAAwM+jwc/9AAAAAMAvy5VXXhkLFy7MvB2qoqIirrzyyrjyyiujtLQ0dtttt9hiiy2ivLw8pk6dWuN9evXqFZdffvl6zyoqKorBgwfHhx9+mPnM32OPPRaPPfZYbL/99tGuXbv4/PPPM9HVD917772x11571fl7bbnllnHHHXfEIYcckvnM4dChQ2Po0KHRvn37aNWqVUycODEWL16cs79FixZx6623xhZbbFHnWSeeeGKMHz8+7rjjjqrZhAkT4sgjj4zi4uLo0qVLfPPNN/H+++/XuH/QoEE58RcAAAAA8PMQYAEAAAAFady4cdx2222x/fbbx5AhQ3J+vmzZspgwYcJ673HqqafG8OHDo3HjxnWe17x583jooYeib9++8dprr2V+Vl5eHuXl5bXuveuuu2r8bGJt9ttvvxg9enSccMIJsWDBgszPpkyZElOmTKlxX5s2beL++++PDh065HVOgwYNYtiwYbF27dq4++67Mz+rqKjI+T1/6Kyzzorrrrsu6tevn9dZAAAAAMBPyycIAQAAgII1btw4Bg8eHG+99VaceOKJee/r2LFjPPzww3HHHXdEkyZN8t634447xqhRo+p8Y9b3unfvHm+88UacfvrpeZ/x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l19+edxwww2x++67t+o5pVIpnn/++RgzZkxs3LixcG7RokVRV1eX3iOEzx8A6KS6dPQGAAAAAAAA4N9q9uzZheMxY8bEaaedVpi98sor8d5776XX2LRpU4wfP75sPmHChLjnnntaHV/F/8Uxp5xySjz99NNl5yZOnBibNm1K7xMAoLMSYAEAAAAAAEAHWLNmTTz44IOF2ciRI2PIkCHRv3//wvyll15KrzNlypRoaGgozC699NK47bbbonv37qlnDh8+PO68887C7M0334zFixen9wkA0FkJsAAAAAAAAKADLFy4sHB85plnRm1tbfTp0ycuvPDCwrlp06bFzz//3OY1vv/++5g8eXJhVlNTEzfffHO7XmkYETFu3LgYMGBAYTZr1qx2PRMAoDMSYAEAAAAAAMA2ViqVYsaMGYXZWWedtfnPI0eOLJxbsWJFvP76621e58UXX4wvv/yyMJs4cWLstttubX7W/+rXr19cfvnlhdmsWbO8hhAA+Nfp1tEbAAAAAAAAgH+b999/PxYsWLD5uEePHjFs2LDNx4MHD47a2tpYsWLF5tkLL7wQdXV1bVrn8ccfLxz36NEjjj/++Hbt/c/q6uri1FNPLcy++uqrqK2trdgaAAB/dwIsAAAAAAAA2Mbmzp1bOL7iiitip5122nzcq1evOO+88+KWW27ZPJs6dWpMnDgxdtxxx1at8c0338S8efMKs0svvTR23XXXdu///x122GHx7LPPVux5AACdkVcQAgAAAAAAwDb0008/RX19fWF28sknl103YsSIwvHGjRujoaGh1essX768bDZ48OA27RUAgL8mwAIAAAAAAIBtaOnSpbFy5crNx/vtt18MGTKk7LpDDz00DjjggMLsmWeeafU6y5YtK5t5NSAAQOUJsAAAAAAAAGAb+t+IauzYsbHddtuVXde9e/cYM2ZMYTZz5sz4/PPPW7XOmjVrymY1NTVt3i8AAFsmwAIAAAAAAIBtZPXq1TFlypTCbNSoUS1eX1dXVzZbuHBhq9basGFD2axfv36tuhcAgNYTYAEAAAAAAMA2smDBgsLxiBEjyl4z+GcHHXRQHHHEEYXZjBkzoqmp6S/XWr9+feF4wIAB0a1btzbvGQCALRNgAQAAAAAAwDbQ1NQU06dPL8zOPffcqKqqavGerl27xjnnnFOYLVmyJD744IO/XO+7774rHO++++5t3jMAAH9NgAUAAAAAAADbwHvvvReLFy8uzI477ri/vK+51xDOnz//L+/bbrvttngMAEBlCLAAAAAAAABgG5g7d27h+OKLL27Vt1INHDiwLMKaNm1a/Prrr1u8r3fv3oXjtWvXtmm/AAC0jpc8AwAAAAAAwFb2448/xtSpUwuzZcuWxbnnntuq+9etW1c4/uijj+KNN96IY445psV7dt5557L1mpqaoksX39EAAFBJAiwAAAAAAADYypYuXRqrVq0qzN56661466230s+cO3fuFgOs/v37l82+/fbbsjALAID2EWABAAAAAADAVvb0009X/Jn19fUxYcKE6NevX7PnBwwYUDZbsWJFRQOsUqkU99xzT/z222+bZ4ccckgMGzasYmsAAPzdCbAAAAAAAABgK2psbCx7/WAlrF+/PpYsWRKnn356s+dra2vLZh9//HEMGTKkYntobGyMa665pjCbPXt2xZ4PANAZeMEzAAAAAAAAbEXz588vHO+xxx6xadOmKJVKbfrvl19+KYuqthQ77b333rHDDjsUZnPmzIlSqVSxn+2dd94pm9XU1FTs+QAAnYEACwAAAAAAALaSpqammD59emF20UUXRe/evdv8rJ49e8Z5551XmD3++OPxxRdfNHv99ttvH+ecc05h9txzz8Xy5cvbvHZL5syZUzjeZ599Yp999qnY8wEAOgMBFgAAAAAAAGwl7777bjQ0NBRmo0aNSj+vrq6ubLZo0aIWrz/hhBPKZo8++mh6/T9btmxZTJs2rTA7//zzo2fPnhV5PgBAZyHAAgAAAAAAgK1k7ty5heODDz44Dj300PTzDjvssLLXEM6cObPF1woOGzYsDjjggMLsrrvuitdffz29h4iIUqkUkydPLpufeOKJ7XouAEBnJMACAAAAAACAreDHH3+M+vr6wmzMmDHRvXv39DObew3hokWL4sMPP2z2+l69esX48ePL5tddd100Njam9zFlypSYOnVqYXbVVVfFQQcdlH4mAEBnJcACAAAAAACArWDJkiWxatWqwmz48OHtfm5zryFcsGBBi9efeeaZZd9M9dprr8XYsWNj9erVbV5/9uzZcdlllxVm1dXVcfXVV7f5WQAA/wQCLAAAAAAAANgKnnnmmcJxXV1d7L///u1+bnOvIXzsscfit99+a/b6nj17xuTJk6N///6F+eLFi+PII4+M6dOnt3jvn23YsCFuuOGGOOOMM8rOPfTQQ1FTU9PmnwUA4J+gqtTSC6EBYAuqqqo6dH1/fQEAAAAAf2dffvll7LnnnoXZlClT4pJLLqnI82+99da45ZZbCrOlS5fG0KFDW7xn6dKlcdJJJ8XGjRvLzg0cODBGjx4dQ4YMierq6ujbt2906dIl1q9fH19//XW8/PLLUV9fH+vWrSu7984774zrrruuIj8X+PwBgM5IgAVAil+AAAAAAABa9vDDD8e4ceMKs5UrV8Zee+1Vkee/+uqrZbHV+PHj44477tjifa+99lpcdtllsWzZsorsY9KkSXH11VdHly5evENl+PwBgM7Iv4QAAAAAAACggv7444+YPn16YTZ69OiKxVfRwmsIH3nkkfj++++3eN+RRx4ZCxYsiAsuuKBd6x944IHx0ksvxbXXXiu+AgD+9XwDFgAp/g8UAAAAAIDmbdiwIebNm1eY7bfffjFo0KCKrrN48eJYu3ZtYTZ06NCyVx82p6mpKV555ZV48MEHY+bMma1ec+DAgXHllVfG2WefHX379k3tG7bE5w8AdEYCLABS/AIEAAAAAND5lUqlWLlyZbz77rvx9ttvx2effRarV6+Ojz/+OPr27RsDBgyIfffdNwYOHBiDBg2KQw45JHr06NHR2+YfzOcPAHRGAiwAUvwCBAAAAAAAVJrPHwDojLyQGQAAAAAAAAAAIEmABQAAAAAAAAAAkCTAAgAAAAAAAAAASBJgAQAAAAAAAAAAJAmwAAAAAAAAAAAAkgRYAAAAAAAAAAAASQIsAAAAAAAAAACAJAEWAAAAAAAAAABAkgALAAAAAAAAAAAgSYAFAAAAAAAAAACQJMACAAAAAAAAAABIEmABAAAAAAAAAAAkCbAAAAAAAAAAAACSBFgAAAAAAAAAAABJAiwAAAAAAAAAAIAkARYAAAAAAAAAAECSAAsAAAAAAAAAACBJgAUAAAAAAAAAAJAkwAIAAAAAAAAAAEgSYAEAAAAAAAAAACQJsAAAAAAAAAAAAJIEWAAAAAAAAAAAAEkCLAAAAAAAAAAAgCQBFgAAAAAAAAAAQJIACwAAAAAAAAAAIEmABQAAAAAAAAAAkCTAAgAAAAAAAAAASBJgAQAAAAAAAAAAJAmwAAAAAAAAAAAAkgRYAAAAAAAAAAAASQIsAAAAAAAAAACAJAEWAAAAAAAAAABAkgALAAAAAAAAAAAgSYAFAAAAAAAAAACQJMACAAAAAAAAAABIEmABAAAAAAAAAAAkCbAAAAAAAAAAAACSBFgAAAAAAAAAAABJAiwAAAAAAAAAAIAkARYAAAAAAAAAAECSAAsAAAAAAAAAACBJgAUAAAAAAAAAAJAkwAIAAAAAAAAAAEgSYAEAAAAAAAAAACQJsAAAAAAAAAAAAJIEWAAAAAAAAAAAAEkCLAAAAAAAAAAAgCQBFgAAAAAAAAAAQJIACwAAAAAAAAAAIEmABQAAAAAAAAAAkCTAAgAAAAAAAAAASBJgAQAAAAAAAAAAJAmwAAAAAAAAAAAAkgRYAAAAAAAAAAAASQIsAAAAAAAAAACAJAEWAAAAAAAAAABAkgALAAAAAAAAAAAgSYAFAAAAAAAAAACQJMACAAAAAAAAAABIEmABAAAAAAAAAAAkCbAAAAAAAAAAAACSBFgAAAAAAAAAAABJAiwAAAAAAAAAAIAkARYAAAAAAAAAAECSAAsAAAAAAAAAACBJgAUAAAAAAAAAAJAkwAIAAAAAAAAAAEgSYAEAAAAAAAAAACQJsAAAAAAAAAAAAJIEWAAAAAAAAAAAAEkCLAAAAAAAAAAAgCQBFgAAAAAAAAAAQJIACwAAAAAAAAAAIEmABQAAAAAAAAAAkCTAAgAAAAAAAAAASBJgAQAAAAAAAAAAJAmwAAAAAAAAAAAAkgRYAAAAAAAAAAAASQIsAAAAAAAAAACAJAEWAAAAAAAAAABAkgALAAAAAAAAAAAgSYAFAAAAAAAAAACQJMACAAAAAAAAAABIEmABAAAAAAAAAAAkCbAAAAAAAAAAAACSBFgAAAAAAAAAAABJAiwAAAAAAAAAAIAkARYAAAAAAAAAAECSAAsAAAAAAAAAACBJgAUAAAAAAAAAAJAkwAIAAAAAAAAAAEgSYAEAAAAAAAAAACQJsAAAAAAAAAAAAJIEWAAAAAAAAAAAAEkCLAAAAAAAAAAAgCQBFgAAAAAAAAAAQJIACwAAAAAAAAAAIEmABQAAAAAAAAAAkCTAAgAAAAAAAAAASBJgAQAAAAAAAAAAJAmwAAAAAAAAAAAAkgRYAAAAAAAAAAAASQIsAAAAAAAAAACAJAEWAAAAAAAAAABAkgALAAAAAAAAAAAgSYAFAAAAAAAAAACQJMACAAAAAAAAAABIEmABAAAAAAAAAAAkCbAAAAAAAAAAAACSBFgAAAAAAAAAAABJAiwAAAAAAAAAAIAkARYAAAAAAAAAAECSAAsAAAAAAAAAACBJgAUAAAAAAAAAAJAkwAIAAAAAAAAAAEgSYAEAAAAAAAAAACQJsAAAAAAAAAAAAJIEWAAAAAAAAAAAAEkCLAAAAAAAAAAAgCQBFgAAAAAAAAAAQJIACwAAAAAAAAAAIEmABQAAAAAAAAAAkCTAAgAAAAAAAAAASBJgAQAAAAAAAAAAJAmwAAAAAAAAAAAAkgRYAAAAAAAAAAAASQIsAAAAAAAAAACAJAEWAAAAAAAAAABAkgALAAAAAAAAAAAgSYAFAAAAAAAAAACQJMACAAAAAAAAAABIEmABAAAAAAAAAAAkCbAAAAAAAAAAAACSBFgAAAAAAAAAAABJAiwAAAAAAAAAAIAkARYAAAAAAAAAAECSAAsAAAAAAAAAACBJgAUAAAAAAAAAAJAkwAIAAAAAAAAAAEgSYAEAAAAAAAAAACQJsAAAAAAAAAAAAJIEWAAAAAAAAAAAAEkCLAAAAAAAAAAAgCQBFgAAAAAAAAAAQJIACwAAAAAAAAAAIEmABQAAAAAAAAAAkCTAAgAAAAAAAAAASBJgAQAAAAAAAAAAJAmwAAAAAAAAAAAAkgRYAAAAAAAAAAAASQIsAAAAAAAAAACAJAEWAAAAAAAAAABAkgALAAAAAAAAAAAgSYAFAAAAAAAAAACQJMACAAAAAAAAAABIEmABAAAAAAAAAAAkCbAAAAAAAAAAAACSBFgAAAAAAAAAAABJAiwAAAAAAAAAAIAkARYAAAAAAAAAAECSAAsAAAAAAAAAACBJgAUAAAAAAAAAAJAkwAIAAAAAAAAAAEgSYAEAAAAAAAAAACQJsAAAAAAAAAAAAJIEWAAAAAAAAAAAAEkCLAAAAAAAAAAAgCQBFgAAAAAAAAAAQJIACwAAAAAAAAAAIEmABQAAAAAAAAAAkCTAAgAAAAAAAAAASBJgAQAAAAAAAAAAJAmwAAAAAAAAAAAAkgRYAAAAAAAAAAAASQIsAAAAAAAAAACAJAEWAAAAAAAAAABAkgALAAAAAAAAAAAgSYAFAAAAAAAAAACQJMACAAAAAAAAAABIEmABAAAAAAAAAAAkCbAAAAAAAAAAAACSBFgAAAAAAAAAAABJAiwAAAAAAAAAAIAkARYAAAAAAAAAAECSAAsAAAAAAAAAACBJgAUAAAAAAAAAAJAkwAIAAAAAAAAAAEgSYAEAAAAAAAAAACQJsAAAAAAAAAAAAJIEWAAAAAAAAAAAAEkCLAAAAAAAAAAAgCQBFgAAAAAAAAAAQJIACwAAAAAAAAAAIEmABQAAAAAAAAAAkCTAAgAAAAAAAAAASBJgAQAAAAAAAAAAJAmwAAAAAAAAAAAAkgRYAAAAAAAAAAAASQIsAAAAAAAAAACAJAEWAAAAAAAAAABAkgALAAAAAAAAAAAgSYAFAAAAAAAAAACQJMACAAAAAAAAAABIEmD9l707Dc6qvB8+/kMxUTQIyCIooihgal2VoT89AAAgAElEQVQiQqsMVhCZcUWtOiIuaOmuVh3XuhSXVtyKa8VWsUUdax3XqmMdqDsFLCogMoAEJSwFFWQTE5Y8L56S4eROyH1fwL9N+vm88vrlXPd1Ep1xmHw5BwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEA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VsbVV18dd999d2b+7rvvxhFHHFHv9wQ0fZ6ABQAAAAAAAACN0D333JOJr4444ogYNWpUvfFVRERxcXHcfPPN0atXr8z8pZdeqnfP6NGjM/FVSUlJjBo1qt74Kv4dM91///2Z2ezZs+OFF16od8/69evjjjvuyMz69esXd955Z73xVURE7969c6KoJ554It5///1697z22muZ+Coi4v777683vop//+xuvfXW6Nu3b2b+yCOP1LsH+N8gwAIAAAAAAACARqa8vDzuvffezOyuu+6Kdu3aNbh35513jgsvvDAze+WVV+q89ssvv4z77rsvM7v55puje/fuDZ7TrVu3uOGGGzKzhx56KCorK+u8fvz48fHGG29kZjfeeGO0aNGiwbNOPPHEOProozOzp556qt7rx4wZk1mfccYZMWjQoAbP2XHHHeOKK67IzEaPHh2zZs1qcC/QdDX/T98AAAAAAAAAAFCYv/71r5n1BRdcEN/97nfz3l/72okTJ0ZlZWUUFxdn5m+//Xbm6VcRESeffHLe5xx33HFx00031azfe++9mDZtWhx22GE519Z+IlXfvn3zfrXfDjvsEKeffnqMGzeuZvbII4/E8OHDcwKu8vLyePrppzOzs88+O7bffvu8zjrqqKOiTZs2mZ/LW2+9lVeUtrVUV1fH3LlzY/bs2bF8+fIoKiqKDh06RGlpabRq1WqzexcsWBCffvppfPHFF7Fhw4Zo27Zt7LnnnrHPPvv8z9wfbG0CLAAAAAAAAABoRKqrq+O5557LzM4666yCPqN79+5RXV3d4HWvv/56Zj1kyJDo0qVL3ucccsgh0bVr1ygvL6+ZTZ48OSfAqqqqimeeeSYzGzx4cN5RVPz7FYybWrp0aXz00UfRu3fvzHzChAmZdUlJSRx11FF5n1NSUhKDBw+OBx54oGb29ttvx7Bhw/L+jIYcddRR8eabb9asp0yZEgcddFBERLzxxhtxzz33xPPPP5+zr02bNnHJJZfEz3/+82jTpk3NvLq6Ol5//fV4/PHH49FHH63zzFNOOSV++tOfxjHHHNPo7w/+r3kFIQAAAAAAAAA0InPnzs3ELx07dizo6Vf5WrduXU7ole8TqTYqLi6O/v37Z2bvvvtuznWzZs2KmTNnZmaHHHJIQWd17949SkpKMrMPPvgg57raAdYJJ5yQs68hhx56aGb95z//OVavXl3QZxRq7dq1ceONN0a/fv3qjJvi39HZDTfcEGeccUYsXrw4IiLWrFkT11xzTRx99NH1xk0REc8991wMHDgwbr/99rzivMZ2f7AtCbAAAAAAAAAAoBH56KOPMusTTjghdt55561+zrx586KioiIz+/a3v13w5xx88MGZ9bvvvpsT0HzyySc5+/bff/+CzikuLo5jjz02M5szZ05mXV1dHe+8805mVvsJWfno0aNHZl1VVRULFiwo+HPytW7durjuuuti+PDheV0/bty4uOqqq6KysjIuv/zyuO222/I+66qrroqXXnqpSd0fbGteQQgAAAAAAAAAjcisWbMy6wMPPDCzXrRoUbz11lvx0UcfxaJFi2LZsmXRrl272GuvvaJXr17Rq1evaNWqVYPnzJ07N2e21157FXy/tfeUl5fHsmXLMq+gmz17duaasrKyaN26dcFnde/ePbOu/blffPFFzlOxunbtWvA5e+yxR85s0aJFOedvLXfeeWc8+eSTNethw4ZF//79o23btvH111/He++9F3fccUdUVVXVXPOnP/0p1qxZE3/5y19qZn369InTTz899ttvv9huu+1i/vz58eSTT+a8avKKK66I/v375x32/bffH2xrAiwAAAAAAAAAaEQ+/vjjzHrfffeNiIiFCxfGXXfdFb/97W83u79Lly5x+eWXx7nnnhstW7as97qNr4jb1G677Vbw/da1Z/HixZkAa/78+ZmvF/r0q406dOiQWY8fPz6qq6ujWbNmERGxZMmSnD3t2rUr+JxN732jRYsWFfw5+doYN/Xt2zdGjhwZPXv2zHx90KBBcdJJJ8WAAQNi5cqVNfNN46ZRo0bF0KFDo7i4OLP3vPPOi9/97ndx6aWX1sxmzpwZEyZMiKOPPrpJ3B9sa15BCAAAAAAAAACNSO3X9bVp0yYmT54cAwcObDC+ioj47LPP4qKLLoqTTz4553WGm6odYHXr1i1KSkoKvt+6YqXVq1dn1vPmzcusU560FRHRtm3bzHrJkiVRWVlZs/7iiy8a3JOPkpKSaN++fWa2atWqgj+nEN/5znfi6aefzombNurdu3dcffXVdX5tzJgx8eMf/zgnboqIKCoqigsvvDAnZpoyZUqTuj/YlgRYAAAAAAAAANBIrF+/PiZOnJiZVVRUxCmnnBLTp08v6LNef/31OO644+qNsFas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1bp167jkkksys7vuuiv++Mc/bvZ7+vOf/xyXXnppZnbdddfV+6StiIjvf//70b59+5p1VVVVXHzxxbF48eJ69yxevDguvPDCmDZtWs2sY8eOMWTIkM3eH9D0CbAAAAAAAAAAoJHZY4894s4778zM3n333Rg4cGA89thj8fnnn2e+tnbt2hg/fnyceeaZ8dBDD2W+NnLkyOjUqVO9Z33ve9+Ln/zkJ5nZPffcE+edd1689957sXbt2pr5/Pnz44EHHogjjzwyysvLa+ZFRUVx/fXXx3bbbT5TuOCCC6Jnz545s1/+8pcxe/bsmqdhbdiwIaZNmxZXXnllDB48OHN9nz594oILLtjsOR06dMh5CtjYsWPjxBNPjJdffjlWr15dM//qq6/i2WefjWOPPTbnVY+33357JuQC/jc1/0/fAAAAAAAAAABQuMGDB8eCBQviyiuvrJnNnj07zj333IiIGDBgQOyxxx6xcuXKmDZtWsyePWRcnmwAACAASURBVDvnM6699to49dRTN3tOs2bN4qabboqpU6dmXvP31FNPxVNPPRWdO3eO7t27x9y5czPR1aYefvjhOOiggxr8nlq1ahUPPvhgHH300ZnXHN56661x6623Rmlpaey+++4xZcqUWLp0ac7+9u3bx3333Re77rprg2edffbZMWnSpHjwwQdrZu+9916ccMIJUVRUFIcffnisWLEi87SwTV188cU58Rfwv0mABQAAAAAAAACNULNmzeKKK66I9u3bx9ChQ3O+Pnbs2M3uv/HGG+Paa6+NZs2aNXhWu3bt4oknnoihQ4fGm2++mflaRUVFVFRU1Lv3oYceinPOOafBMzbq1atXvPDCC3HmmWfGkiVLMl+bMWNGzJgxo859Xbt2jTFjxkRZWVle5zRv3jxuv/32WL9+ffz+97/PfK2qqirn+9zURRddFCNGjIjtt98+r7OAps0rCAEAAAAAAACgETvvvPNi2rRpcfbZZ+d1fb9+/WLs2LFx/fXXFxQQ7b333vHcc8/F9ddfn9f1AwYMiLfffjt+9KMf5X3Gpvf4zjvv5P09DRs2LMaOHRt9+vQp6Jxddtkl7r///hg9enR06dKlweu7desWjz/+eIwcOTJ22mmngs4Cmq5m1RtfkAoABcjnb0JsS/73BQAAAAAATY/fP2yZ6urqmDp1arz11lsxadKkmDt3bsybNy/23Xff2HPPPeOQQw6JPn36RFlZWRQXF2/RWZ9++mmMGzcuJkyYENOmTYu5c+fGbrvtFt27d4+ePXvGkUceGYcffngUFRVt8ff0/vvvxxtvvBH//Oc/Y/r06bFgwYLo0qVLHHDAAdGzZ8/o379/HHjggVv838+yZcti3LhxMX78+Pjggw9izpw5sd1228V+++0Xhx56aBxxxBHRr1+/vF5vuKVmzJgRa9eurVnvvffe0bJlywb3ffPNNzFr1qzMrLS0NHbYYYcG9y5evDgWL15csy4qKor999+/Ud4f/F8TYAGQxB+AAAAAAACArc3vHwBojLyCEAAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAAAAIJEACwAAAAAAAP4fu3YsAAAAADDI33oOu4sjAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAAACAScACAAAAAAAAAACYBCwAAAAAAAAAAIBJwAIAAAAAAAAAAJgELAAAAAAAAAAAgEnAAgAAAAAAAAAAmAQsAAAAAAAAACD27j7e6/n+H/jznDolOaHrC8n6fltSaVQq9BVysVzUUrPRsDHEMMYWupKImau5mMtCCotM1CqltVaLZskQ377ffrMoLaLrOjmd3z9f3bz7fKpz3udzOpX7/XY7t9vej/f7/Xo9z3Eax3l4vwFISQELAAAAAAAAAAAgJQUsAAAAAAAAAACAlBSwAAAAAAAAAAAAUlLAAgAAAAAAAAAASEkBCwAAAAAAAAAAICUFLAAAAAAAAAAAgJQUsAAAAAAAAAAAAFJSwAIAAAAAAAAAAEhJAQsAAAAAAAAAACAlBSwAAAAAAAAAAICUFLAAAAAAAAAAAABSUsACAAAAAAAAAABISQELAAAAAAAAAAAgJQUsAAAAAAAAAACAlBSwAAAAAAAAAAAAUlLAAgAAAAAAAAAASEkBCwAAAAAAAAAAICUFLAAAAAAAAAAAgJQUsAAAAAAAAAAAAFJSwAIAAAAAAAAAAEhJAQsAAAAAAAAAACAlBSwAAAAAAAAAAICUFLAAAAAAAAAAAABSUsACAAAAAAAAAABISQELAAAAAAAAAAAgJQUsAAAAAAAAAACAlBSwAGA3cNJJJ0VeXl6FfNSpUyfrnps3b8649qabbtrhnNnuKevHwQcfHB06dIgf/OAHMXDgwHj++efjo48+KvPX7Lbbbquwr9lXHy+++GKZ59qRcePGZeyxcOHCnKzdq1evxLq9evXKuObFF1/M2L9bt26xfv36nMxQXFwcP/zhDzP2uOeeezKuPe2001L9NWncuHF07tw5zjvvvBgxYkRMnTo1Vq9eXa65L7744nL/GTv88MOjZ8+ecc0118STTz4Z77zzTpSUlJRrru3p379/xgw9e/Ys97q//e1vM9atXr16Tr5HBw0alFj3mmuuybjmkEMOqfA/0199HHLIIeX+nAAAAAAAAL5StbIHAAC+WZYsWRJLliyJN998M5FffvnlceWVV8a3v/3tSpttb9ezZ884//zz48knn9yazZw5M0aPHh2XXHJJudd/5ZVX4tlnn01kxx13XPz0pz8t99pfWbZsWSxbtixef/31rVmjRo3iyiuvjB//+MfRoEGDnO1VWitXroyVK1fGP/7xj0R++umnxy9+8Yvo1q1bzvZatmxZPPTQQxn5hAkT4oMPPoiWLVvmbK+IiKKiohg2bFg8/fTTUaVKlZyuDQAAAAAAsLfwBCwAYLfwwAMPRJcuXWL8+PGVPcpeKz8/PwYPHhy1a9dO5DfccEP861//KtfaX3zxRQwZMiQjHz58eNSsWbNca+/MsmXL4vrrr4+jjz46XnnllQrdqyxeeeWVOP744+Pmm2+OzZs352TNqVOnpjpXHs8++6w/lwAAAAAAADuggAUA7DZWrlwZZ511VkycOLGyR9lrNW/ePEaMGJHIVq5cGXfccUe51n344YdjwYIFiWzAgAFx7LHHlmvdsli8eHGcccYZcf/991fY6//SGDx4cMbXPI2SkpJ45plntnt+zJgx8eWXX5Z7n2wGDRoUK1asqJC1AQAAAAAA9nReQQgAu6Ef/vCHccMNN+Rkrby8vJyssz233HJLXHfddaW+ftOmTbF69epYsmRJzJw5M+68887497//nbjm8ssvj6OOOirq1atX6nU7duwYI0eOLNPsO9OoUaOcrre7OP/88+Oll16KSZMmbc3uv//+6Nu3b/zXf/1XmddbuHBhDBgwIJG1atUqrrnmmlKv0a9fv53+9SsqKoovvvgivvjii1iwYEFMmzYtRo0alXHdFVdcEdWrV0/96sPu3bsnvjY78+WXX8bq1atjxYoVMXfu3Hj88cdj7ty5iWuGDBkSxx9/fHTt2jXVTBERb7/9dkyZMmW7519//fX429/+Fp07d069x/Z88MEHcdddd+WkSLY98+bNK/W1f/nLX6J3796J7KWXXoouXbpUwGQAAAAAAAA7poAFALuhAw44INq0aVPZY5RKfn5+FBQUlPr6goKC2G+//aJx48bRqVOn6NWrV5x//vmJwsqHH34YL7zwQlx66aWlXnfffffdY75mla169eoxbNiwjJLR0KFDY+LEiVGjRo1Sr7Vly5aspZxbb721TAW6vLy8nX4fFRQURM2aNaNJkybRunXrOOecc+Kqq66KYcOGZbwi7+KLL462bdumLiOV9Xu6Ro0a0aBBg2jTpk2cddZZce2112YUyh555JFyFbC2fTLcVVddFVOnTo2FCxduzSZPnlwhBayIiNtuuy3OPPPMCis5leX7pVatWlmzsqwBAAAAAACQK15BCABUqm9/+9txzz33ZOQvvvhipczzTdG+ffsYNmxYIpsxY0aMGTOmTOtMmjQpRo8ench+/OMfx5lnnpmTOXemXbt28cwzz8TPfvazjHNDhgyJjRs37pI5vu7AAw+M22+/Pdq2bZvIn3766Vi+fHmqNTds2BBPPPFEIuvbt2/069cvkY0cOTLWrVuXao9ttWjRIgoLCxPZ4MGDY8OGDTlZHwAAAAAAYG+hgAUAVLpOnTrF6aefnsimTp0aq1atqrSZvgmuvPLKaN++fSIbPHhwfPTRR6W6f/Xq1TF06NBEVrt27Rg4cGDk5++6f8ysVq1a/PrXv44f/OAHiXzq1KkxduzYXTbH19WtWzfOO++8jHzRokWp1vvzn/+cuLd9+/Zx1FFHxUknnZS4bsmSJTFr1qxUe2zrsMMOi1tvvTWRTZs2LZ566qmcrA8AAAAAALC3UMACAHYL3bp1y8g+++yzSpnlm2L//ffPKNgsW7Ys7rzzzlLd/+ijj8abb76ZyG6//fZo3rx5TucsjRo1asSNN96YkT/00EOxefPmXT5P/F9JalsrVqxItda2T4Q777zzoqCgII444ojo4JkABQAAIABJREFU2LFj4tyECRNS7ZHNhRdeGCeeeGIiu+GGG2Lx4sU52wMAAAAAAGBPp4AFAOwW6tatm5Ft2rSpUmb5JjnppJPi8ssvT2T33HNPzJ49e4f3/fd//3fccMMNiey0006LH/3oRxUyZ2m0adMmBgwYkMjmzZsXc+bMqZR5ateunZGl+Z5eunRpPPzww4nslFNOiYiIqlWrZjz56/HHH49///vfZd4nmxo1asTw4cMT2cqVK+OWW26JkpKSnOwBAAAAAACwp1PAAgB2C8XFxRlZjRo1KmWWb5K8vLy4/vrro2nTpol82LBh2y0LlZSUxIgRI6KoqCjjnurVq1fovDtz5plnZmR//OMfK2WWbN/T++67b5nXmTp1auK4V69e0bJly63H3bt3T5wvKiqK1157rcz7bE/nzp0zni42cuTImDRpUs72AAAAAAAA2JMpYAEAu4Vsr2arV69epczyTdOkSZMYMWJEIps6dWqMHTs26/WTJ0+OJ554IpENHz48jjzyyAqdszTat28frVu3TmS5LCOVRbZXaDZs2LBMa5SUlMSYMWMS2dlnn504btOmTRx33HGJbNy4cWXaZ2euvvrqjK/rjTfeGJ9//nlO9wEAAAAAANgTKWABAJWupKQkZsyYkcj69OkTNWvWrLSZvmnOPvvs6Nu3byIbMmRILF26NJGtWbMmbrrppkTWsWPH+NnPfrZL5tyZatWqxcknn5zI5s2bF8uWLdvls7z55puJ42rVqkWLFi3KtMaCBQti2rRpiTVOPPHExDX5+fnx/e9/P5GNHz8+Fi1alGrubOrUqRO33nprxmz3339/zvYAAAAAAADYUylgAQCVbubMmTFlypRE1rt370qb55uoatWqcdNNN0W1atW2ZkuWLIm77747cd3jjz8er7/+eiK75ZZbYv/9999ls+7M11/P95XFixfv0hmWL18eDz74YCLr379/HHjggWVa55VXXkkcX3zxxVmfDHfCCSdkZK+++mqZ9tqZM844Iy688MJENnjw4Jg/f35O9wEAAAAAANjTKGABwG5o06ZNsWLFinJ9rF69urI/jVL529/+FpdddlkiO+6446Jnz55lXqu4uDgnH1u2bMnhZ7hjhx12WOTl5ZX746WXXir3LK1atYrbb789kf3mN7+JuXPnRkTE//7v/8bgwYMT56+44oro3r17uffOpebNm2dkX3zxxS7bf+nSpXHZZZfFkiVLtmaFhYXRv3//Mq2zbt26GDVqVCLb3p+Lli1bxqmnnprIxowZE8XFxWXac0fy8vJi4MCBUb9+/UQ+dOjQKCoqytk+AAAAAAAAexoFLADYDY0cOTLq169fro9tn1y0OygpKYkNGzbEv/71r3j11Vfj6quvjo4dO8bChQu3XtO0adO47777Yt999y3T2jNnzoyqVavm5CPb04S+KX76059Gt27dEtnNN98cmzZtittuuy3WrFmzNW/WrFkMGDAg8vLyKmHS7TvggAMysq/PnWubNm2K5cuXx9y5c+P222+PDh06xPjx4xPXPProo1mfzLUjs2bNSjy5q0WLFnHMMcdkvTYvLy/69OmTyObMmRN///vfy7TnzhxyyCEZryKcMGFCPPPMMzndBwAAAAAAYE9StbIHAAD2bNdff31cf/31OVnriCOOiMceeyzatm2bk/Uou5o1a8bNN98cXbt23ZpNmjQp+vfvn/E0phEjRkTjxo0rYcodq1GjRka2du3aUt8/bdq0nJXKCgsL49FHH42zzz67zPduW+K64IILsn5uX8lWHJw8eXJ07NixzHvvSL9+/eLFF1+MiRMnbs0GDRoUJ554Yhx00EE53QsAAAAAAGBP4AlYAMBu4YILLogpU6bEkUceWdmjfOMde+yxGaW6bctXZ599dvTt23cXT1Y62UpKJSUlu3yOjh07xty5c1OVrz7++ON49NFHE1mPHj12eM+3vvWtjKdgPfHEE7F+/foy778j1atXj2HDhiWyJUuWxO23314pX2cAAAAAAIDKpoAFAOwWxo4dGw899FB89tlnlT3KLjVr1qxYtmxZuT9OPfXUnM51zTXXRKtWrbKeq1atWgwdOjSqVt09H6b65ZdfZmQ7enJURZk3b17ceeed8cEHH5T53ilTpiSOjz/++Dj88MN3el+vXr0Sx4sXL47Zs2eXef+dOfLII+Pmm29OZPfff3+89tprOd8LAAAAAABgd7d7/tYMAL7h+vfvHw8++GBlj1EqzZo1i0aNGpXq2uLi4vjss89i8eLFGeeKiopi8ODBMWfOnBg1alQ0bNiwTHMcd9xx8ac//alM9+wO6tSpU+bPNZvq1avnZJ6v1K1bN0aMGJFR6ImIuOOOO+LQQw/N6X65lO2JTzVr1iz1/YWFhdG6detSXVtSUhJr166Nd999N+v5kSNHxvTp02PcuHGlfhXgli1bYuzYsYns3HPPjfz8nf+3E8cff3xG9vLLL8dJJ51Uqr3L4oorrog//OEP8eabb27NBg8eHEcddVQUFhbmfD8AAAAAAIDdlQIWAFAul156aQwYMKBM92zYsCH++c9/xtSpU+OXv/xlFBUVbT03efLkGDJkSDz88MMVMC1lccYZZ0Tv3r1j/PjxW7NWrVrFhRdeWKlz7czy5cszsrKU3Dp16hSvvvpqmfbcvHlzLF26NF5//fUYNmxYopD14YcfxoUXXhh/+ctfolatWjtd66233orp06cnsnHjxsW0adNKNUthYWGsWbNm6/HDDz8cgwcPjrp165bpc9qZ/fffP2699dY45ZRTtmZz5syJRx55JH7xi1/kdC8AAAAAAIDdmQIWALDL1ahRI1q1ahWtWrWKDh06xLHHHps4/8gjj8SNN94YBx98cKXNSER+fn40adIkkdWvX79MT5OqDEuWLMnItv08cq2goCCaNWsWzZo1i2OPPTZ69eoV8+bN23r+H//4R8yaNStOO+20na41ceLEjGzbVxKWRVFRUcyYMSP69u2beo3tOemkk+Kyyy5LPLHvhhtuiB49emz3FZYAAAAAAAB7m52/xwQAoAIdc8wxMXz48Iz8/fffr5R52PPNnz8/cdy8efNSvyYzFxo3bhzDhg3LyN9+++2d3rtu3bp4/PHHcz7T888/n/M1IyLy8vLi+uuvj6ZNm27NioqK4qabbori4uIK2RMAAAAAAGB3o4AFAFS67373uxnZJ598UimzsGfbsGFDvPLKK4msZ8+eUVBQsEvnOO6446J27dqJLNuTubY1c+bM+PDDD3M+z+9///tYvHhxzteNiDjooIPi1ltvTWTPPfdc4tWVAAAAAAAAezMFLACg0n396TlfWb16daXMwp7tjTfeyCg6denSZZfPUaNGjYx9P/vss53et21p6aKLLoqSkpIyf2R72tarr76ag88su7PPPjt69+6dyG688cb497//XWF7AgAAAAAA7C4UsACASrftk4IiIjZu3Fgps7Bne+aZZxLH1apVi27dulXKLAcddFDieN26dTu8/qOPPsp4/eCZZ56Zau/WrVtH165dE9kzzzxTYa8FLCgoiJtuuimRLVq0KO66664K2Q8AAAAAAGB3ooAFAFS6KlWqZDwFa9OmTZU2D3umefPmxcMPP5zIrrjiiqhXr16lzFNYWJg43lkBa8qUKYnj2rVrx3/913+l2js/Pz/69u2byGbOnBkLFixItV5ptGnTJu64445Edvvtt8fs2bMrbE8AAAAAAIDdgQIWALBbaNy4ceLYE7Aoi1WrVsX111+fkffr169S5omIqFmzZuJ41apV2712y5YtMWbMmER24YUXxv777596/2xP/po8eXLq9Urj0ksvjWOOOSaRDRkyJNasWVOh+wIAAAAAAFQmBSwAYLdQp06dxLECFqW1bt26uPbaa2P69OmJ/KqrrorvfOc7lTbXtgWsTz/9dLvXzp8/P2bMmJHIevToUa79s72G8IknnogNGzaUa90d2W+//WL48OGJbPr06XHvvfdW2J4AAAAAAACVTQELANgtbPukny+++KLSZmHPsWjRorjgggviscceS+StWrWKX/7yl5U2V2QpYC1ZsiSKioqyXjtx4sTEcYsWLaJz587l2j/bawgXLVoUf/3rX8u17s5069YtrrnmmgrdAwAAAAAAYHdStbIHAACIiKhVq1bi+JNPPinT/Zs3b44VK1bkdKaqVavGgQcemNM12b7i4uKdnt+wYUN8/vnnsWjRopg+fXrcfffdGaWmatWqxYMPPpjxWstdbdsCVkTE6tWro27duols7dq1MXLkyER2/vnnxz777FPuGbK9hvCVV16JE044odxr78gvf/nLePnll2PRokUVug8AAAAAAMDuQAELANgtFBYWJo5nzpwZGzduLHUJZc6cOVG/fv2czvSjH/0onnrqqZyuSXajR4+O0aNH52St559/PmvxaFfbd999M7IPP/wwo4A1c+bM+PDDDxPZKaeckpMZvnoN4axZs7Zmjz32WAwcODBq166dkz2yadCgQdxyyy3x/e9/v8L2ANjblJSUxCeffBIff/xxrFixItavXx+bN2+OffbZJ2rWrBkNGjSIxo0bZ/x9pKJ9/vnn8dFHH8Unn3wSa9eujU2bNkX16tVjn332iXr16kXDhg2jSZMmkZeXt0vnAgAAAIDdiQIWALBb2LYMsmbNmpg9e3aceOKJlTYTe5b27dvHAw88EJ06darsUSKyvFYzImL69OnRvn37RPbCCy8kjjt37hxHHHFETmb46jWEXy9grVmzJmbMmBFnnXVWTvbYnt69e8e5554bY8aMqdB9ALJZsWJF6mJ28+bNo2nTpnHooYdG69ato0OHDtGhQ4coKCjI+ZwREe+8805MmjQpJk2aFDNnztzp9d27d4+TTjopTj755Dj88MMjPz8/5zMtXbo0Jk2aFFOmTInnn39+p9e3a9cuevToESeddFIcffTRUb169VT7jho1Kn7yk5+kujf+7ymY//Ef/xFNmjSJFi1axGGHHRZHHHFEdOzYMapVq5Z6XQAAAADYGQUsAGC30Lx584zsxhtvjIMOOihatmxZKTOxZ2jWrFlcd9110a9fv6ylp8py8MEHZ2SDBg2KNm3aRI8ePSIiYsmSJTFq1KjENeeee25UqVIlZ3NkexrYiy++WOEFrCpVqsTgwYNjwoQJsWbNmgrdCyCXFi9eHIsXL06UoTp27BhXXHFF9OnTJ2rUqJGTfd5555244447yvy0zWnTpsW0adPiV7/6VfTu3Tt+/vOfR9euXXMy0/Lly+PBBx+MYcOGlem+BQsWxIIFC2LEiBHRsWPHuO6666Jnz567vPRUVFQUCxcujIULF8a0adO25u3atYvrrrsu+vbtq4gF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dl+NWFHefvvtjOywww7bpTMAAAAAsHdTwAIAAAAopfz8/DjuuOMS2fTp02PVqlUZ186aNStx3KpVq2jatGmFzNW8efNo3rx5Ips9e3bGddlKWYceemiFzJSfnx8nn3xyInv33Xfj448/rpD9sikuLo7HHnsskbVr1y46dOiwy2YAAAAAYO+ngAUAAABQBtmenrR69erE8YoVK+L1119PZN27d4/8/Ir5VzFVq1aNbt26JbJZs2ZFcXFxIvvb3/6WOG7atGkccsghFTJTRETbtm0zsmyvBKwI69ati6FDh8bvf//7RH7jjTdGjRo1dskMAAAAAHwzVK3sAQAAAAD2JAceeGBGtnbt2sTx559/nnFNRT396it169bNyNavXx+FhYVbj999993E+bZt20ZBQUGFzbT//vtnZNt+rXJl8+bNsXbt2liyZEm88cYb8fjjj8fcuXMT11x33XVx1llnVcj+AAAAAHxzKWABAAAAlMG+++6bka1bt26HxxERtWrVqtC5spWd1q1bt7WAtXnz5vjwww8T5+vUqVOhM329/PX1mUqrUaNGOZtl0KBBMXDgwAp7ChkAAAAA31wKWAAAAABlULNmzYyspKQkcZztKU/77bdfhc61zz77ZGRffvnl1v+drfh0wAEHVOhM1atXz8g2b95coXtuq1q1avHCCy/EaaedFnl5ebt0bwAAAAC+GfwnfwAAAABl8PVS01dq1KiROC4uLs64plq1ahU6V7bS19fLYtlmylbayqVspa9sT8WqSEVFRXHPPffEa6+9tkv3BQAAAOCbwxOwAAAAAMogW9Fp29cSZnvyU1levZfGqlWrMrKvP3UrWwEs2z25VN4ngXXs2DGqVKlSqmvXrVsX//znP2PNmjUZ56ZPnx7Tp0+PJ554Is4///xS7w8AAAAApaGABQAAAFAGS5cuzcjq1auXOM72lKdsxaBc+te//pU4btasWRQUFGw9rlmzZtSuXTtWrly5Nfv8888rdKbly5dnZGUpYE2YMCEaNmxY6uu3bNkSn376afzjH/+I++67L1566aXE+QsuuCDatWsX3/nOd0q9JgAAAADsjFcQAgAAAJTB//zP/ySOO3XqlFG4qlu3bsZ9S5YsqbCZNm7cGFOmTElkXbt2TRzn5+fHkUcemcjefvvt2LJlS4XN9fbbb2dkjRo1qrD98vPzo379+nHiiSfGc889FxdddFHGNduWsgAAAACgvBSwAAAAAEqpqKgoo+jUqVOnjOvq168fzZs3T2R//vOfK2yu//f//l/GE7bat2+fcV3btm0Txx988EGFFcOKi4tjxowZiex73/temZ6AVR7Vq1ePoUOHZuSzZs3aJfsDAAAA8M2hgAUAAABQSu+9914sW7YskXXp0iXjuvz8/Dj++OMT2euvvx4ff/xxhcw1Z86cjKx169alyhYuXFghM7311luxePHiRJatrFaRmjRpkvEUrFmzZkVxcfEunQMAAACAvZsCFgAAAEApbftEp4jIeK3fV4455piM7LXXXsv5TCUlJTFu3LhEVq1atTj88MMzrs0268svv5zzmSIiXn311YysQ4cOFbLXjrRs2TJxXFRUFGvXrt3lcwAAAACw91LAAgAAACiFdevWxaOPPprIevbsGS1atMh6/dFHH52RPf3007Fly5aczjV//vyM1yL2798/GjRokHFtmzZtol27donswQcfjKVLl+Z0pjVr1sRTTz2VyNq2bRvHHntsTvcpjXr16mVkRUVFu3wOAAAAAPZeClgAAAAApTB27NiM1/Wdc845kZeXl/X6li1bRq9evRLZ1KlTY+rUqTmd6/7778/IzjrrrKzXFhQUxPnnn5+Rjxw5MqczPfvssxlfq4suuiiqV6+e031KY999983INm/evMvnAAAAAGDvpYAFAAAAsBPvvvtuDBgwIJG1a9cuvvvd7+7wvosuuigjGzp0aKxZsyYnc/3lL3+JUaNGJbJTTz01unTpst17+vTpE9WqVUtkgwYNirfffjsnM61YsSJuu+22RFa7du343ve+l5P1y6pGjRoZmSdgAQAAAJBLClgAAAAAO/DPf/4zLrnkkli5cmUiHzBgQBQWFu7w3pNPPjl69OiRyF5//fUYNGhQuUtAn376afzqV7/KyIcNGxZVq1bd7n1NmzaNQYMGZeTXXHNNLF++vFwzffnllzF06NBYvHhxIr/tttuiadOm5Vo7rWwFrE2bNlXKLAAAAADsnRSwAAAAALZjxowZ0bt375g9e3YiP/fcc7f7mr+vKygoiCFDhmTk9957bwwcODA2btyYaq4VK1bEJZdcEnPmzEnkQ4YMiY4dO+70/v79+0fbtm0T2fTp0+OCCy5IXcLatGlT3HTTTfHggw8m8lNOOSXOO++8VGvmQrZXEK5bt65SZgEAAABg76SABQAAAOz1SkpKori4eIcfGzdujJUrV8b7778ff/jDH6Jfv35xwgknxPz58xNrHXHEETFixIgoKCgo1d5HHXVU3HXXXRn5HXfcEaeffnr86U9/ipKSklJ/HtOnT48zzzwzxo8fnzh36qmnxtVXX12qderUqRP33XdfRj558uTo2rVrPP3002V6StTChQvjxz/+cQwfPjyRN23aNO68886oXr16qdfKtWxPwFq1alWlzAIAAADA3imvpLT/hg8AviYvL69S9/e3LwAAtmfFihVRv379Clm7devW8cILL0TLli3LdN+XX34ZN9xwQ9xxxx1Zz59yyinRo0eP6NSpUzRs2DBq1aoVtWrVii1btsTq1avjo48+irfeeivGjRsXEydOzLi/c+fO8dxzz8XBBx9cprnGjh0b5557btZzRxxxRPTq1SuOOeaY+Na3vrV1pipVqsT69etj6dKl8d5778XkyZPjkUceybi/sLAwJkyYEN26dSvVLKNGjYqf/OQniWzZsmXRsGHDMn1O2/rggw/i0EMPTWSPPfZYXHjhheVaFwAAqBh+/wDAnqhqZQ8AAAAAsCc4++yz4ze/+U0cdNBBZb63atWqMXz48CgsLIzBgwdnnJ8yZUpMmTIl1VynnHJKPPbYY6nmOuecc2KfffaJCy64INasWZM4N3/+/Iynf5VW8+bNY/To0XH00Uenuj+XatWqlZG9/PLLccEFF0SVKlUqZSYAAAAA9i5eQQgAAACwA8e3Qm9KAAAWgklEQVQcc0yMHz8+Ro8enark9JVq1arFwIED46WXXirzE7S2Z+jQofH888+Xa67evXvHrFmz4tRTT83JTP369YsZM2bsFuWriIh69epFq1atEtlLL70Ud9xxRxQXF1faXAAAAADsPbyCEIBUPAIYAIDdVXleQdiiRYto0qRJtGrVKtq2bRtHHXVUfOc738n5k5I+/fTTGDt2bNx7772xePHiMt9/2WWXxaWXXhpt27bN2UybNm2KCRMmxH333RezZs0q8/09e/aMyy67LLp37x75+WX/b/7mz58fb731ViLr06dPFBYWlnmtbU2dOjU+/vjjjLxfv35RUFBQ7vUBAIDc8fsHAPZEClgApOIHIAAAKL/169fHnDlzYu7cufHXv/41pk2bFkVFRRnXderUKbp06RKdOnWKrl27RpMmTSpspuLi4pg/f37Mnj075s6dGzNnzoxly5ZlXNeyZcs4+uij4+ijj47OnTtH69atK/3nBAAAYM9X2T9X+P0DAGkoYAGQih+AAAAg9zZv3hyff/55bNy4MbZs2RLVq1ePWrVqRc2aNSttpi1btsTnn38eGzZsiM2bN0e1atWiZs2asf/++1f6zwUAAMDep7J/zvD7BwDSUMACIBU/AAEAAAAAALnm9w8A7InyK3sAAAAAAAAAAACAPZUCFgAAAAAAAAAAQEoKWAAAAAAAAAAAACkpYAEAAAAAAAAAAKSkgAUAAAAAAAAAAJCSAhYAAAAAAAAAAEBKClgAAAAAAAAAAAApKWABAAAAAAAAAACkpIAFAAAAAAAAAACQkgIWAAAAAAAAAABASgpYAAAAAAAAAAAAKSlgAQAAAAAAAAAApKSABQAAAAAAAAAAkJICFgAAAAAAAAAAQEpVK3sAAEgjLy+vskcAAAAAAAAAAE/AAgAAAAAAAAAASEsBCwAAAAAAAAAAICUFLAAAAAAAAAAAgJQUsAAAAAAAAAAAAFJSwAIAAAAAAAAAAEhJAQsAAAAAAAAAACAlBSwAAAAAAAAAAICUFLAAAAAAAAAAAABSUsACAAAAAAAAAABISQELAAAAAAAAAAAgJQUsAAAAAAAAAACAlBSwAAAAAAAAAAAAUlLAAgAAAAAAAAAASEkBCwAAAAAAAAAAICUFLAAAAAAAAAAAgJQUsAAAAAAAAAAAAFJSwAIAAAAAAAAAAEhJAQsAAAAAAAAAACAlBSwAAAAAAAAAAICUFLAAAAAAAAAAAABSUsACAAAAAAAAAABISQELAAAAAAAAAAAgJQUsAAAAAAAAAACAlBSwAAAAAAAAAAAAUlLAAgAAAAAAAAAASEkBCwAAAAAAAAAAICUFLAAAAAAAAAAAgJQUsAAAAAAAAAAAAFJSwAIAAAAAAAAAAEhJAQsAAAAAAAAAACAlBSwAAAAAAAAAAICUqlb2AADsmUpKSip7BAAAAAAAAACodJ6ABQAAAAAAAAAAkJICFgAAAAAAAAAAQEoKWAAAAAAAAAAAACkpYAEAAAAAAAAAAKSkgAUAAAAAAAAAAJCSAhYAAAAAAAAAAEBKClgAAAAAAAAAAAApKWABAAAAAAAAAACkpIAFAAAAAAAAAACQkgIWAAAAAAAAAABASgpYAAAAAAAAAAAAKSlgAQAAAAAAAAAApKSABQAAAAAAAAAAkJICFgAAAAAAAAAAQEoKWAAAAAAAAAAAACkpYAEAAAAAAAAAAKSkgAUAAAAAAAAAAJCSAhYAAAAAAAAAAEBKClgAAAAAAAAAAAApKWABAAAAAAAAAACkpIAFAAAAAAAAAACQkgIWAAAAAAAAAABASgpYAAAAAAAAAAAAKSlgAQAAAAAAAAAApKSABQAAAAAAAAAAkJICFgAAAAAAAAAAQEoKWAAAAAAAAAAAACkpYAEAAAAAAAAAAKSkgAUAAAAAAAAAAJCSAhYAAAAAAAAAAEBKClgAAAAAAAAAAAApKWABAAAAAAAAAACkpIAFAAAAAAAAAACQkgIWAAAAAAAAAABASgpYAAAAAAAAAAAAKSlgAQAAAAAAAAAApKSABQAAAAAAAAAAkJICFgAAAAAAAAAAQEoKWAAAAAAAAAAAACkpYAEAAAAAAAAAAKSkgAUAAAAAAAAAAJCSAhYAAAAAAAAAAEBKClgAAAAAAAAAAAApKWABAAAAAAAAAACkpIAFAAAAAAAAAACQkgIWAAAAAAAAAABASgpYAAAAAAAAAAAAKSlgAQAAAAAAAAAApKSABQAAAAAAAAAAkJICFgAAAAAAAAAAQEoKWAAAAAAAAAAAACkpYAEAAAAAAAAAAKSkgAUAAAAAAAAAAJCSAhYAAAAAAAAAAEBKClgAAAAAAAAAAAApKWABAAAAAAAAAACkpIAFAAAAAAAAAACQkgIWAAAAAAAAAABASgpYAAAAAAAAAAAAKSlgAQAAAAAAAAAApKSABQAAAAAAAAAAkJICFgAAAAAAAAAAQEoKWAAAAAAAAAAAACkpYAEAAAAAAAAAAKSkgAUAAAAAAAAAAJCSAhYAAAAAAAAAAEBKClgAAAAAAAAAAAApKWABAAAAAAAAAACkpIAFAAAAAAAAAACQkgIWAAAAAAAAAABASgpYAAAAAAAAAAAAKSlgAQAAAAAAAAAApKSABQAAAAAAAAAAkJICFgAAAAAAAAAAQEoKWAAAAAAAAAAAACkpYAEAAAAAAAAAAKSkgAUAAAAAAAAAAJCSAhYAAAAAAAAAAEBKClgAAAAAAAAAAAApKWABAAAAAAAAAACkpIAFAAAAAAAAAACQkgIWAAAAAAAAAABASgpYAAAAAAAAAAAAKSlgAQAAAAAAAAAApKSABQAAAAAAAAAAkJICFgAAAAAAAAAAQEoKWAAAAAAAAAAAACkpYAEAAAAAAAAAAKSkgAUAAAAAAAAAAJCSAhYAAAAAAAAAAEBKClgAAAAAAAAAAAApKWABAAAAAAAAAACkpIAFAAAAAAAAAACQkgIWAAAAAAAAAABASgpYAAAAAAAAAAAAKSlgAQAAAAAAAAAApKSABQAAAAAA/79dOxYAAAAAGORvPYfdxREAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwCFgAAAAAAAAAAwCRgAQAAAAAAAAAATAIWAAAAAAAAAADAJGABAAAAAAAAAABMAhYAAAAAAAAAAMAkYAEAAAAAAAAAAEwBFxaJPoyQ5LAAAAAASUVORK5CYII=",
+  "planOpacity": 0.55,
+  "planLabels": [
+    {
+      "id": "label-1",
+      "kind": "dimension",
+      "text": "8000 mm",
+      "box": {
+        "x": 1040,
+        "y": 272,
+        "width": 200.06400000000008,
+        "height": 48
+      },
+      "source": "pdf-text",
+      "status": "unreviewed",
+      "note": "문자 위치의 치수 후보입니다. 단위와 대상 벽을 확인해야 하며 벽 길이·높이·두께로 자동 적용하지 않습니다."
+    },
+    {
+      "id": "label-2",
+      "kind": "dimension",
+      "text": "6000 mm",
+      "box": {
+        "x": 2040,
+        "y": 952,
+        "width": 200.06399999999985,
+        "height": 48
+      },
+      "source": "pdf-text",
+      "status": "unreviewed",
+      "note": "문자 위치의 치수 후보입니다. 단위와 대상 벽을 확인해야 하며 벽 길이·높이·두께로 자동 적용하지 않습니다."
+    },
+    {
+      "id": "label-3",
+      "kind": "door",
+      "text": "DOOR",
+      "box": {
+        "x": 1080,
+        "y": 1504,
+        "width": 144,
+        "height": 48
+      },
+      "source": "pdf-text",
+      "status": "unreviewed",
+      "note": "문자 위치의 설비·구조 후보입니다. 실제 점유 범위·문 열림 방향·접근 여유 공간은 확인이 필요합니다."
+    },
+    {
+      "id": "label-4",
+      "kind": "air-conditioner",
+      "text": "AC",
+      "box": {
+        "x": 1760,
+        "y": 452,
+        "width": 66.67200000000003,
+        "height": 48
+      },
+      "source": "pdf-text",
+      "status": "unreviewed",
+      "note": "문자 위치의 설비·구조 후보입니다. 실제 점유 범위·문 열림 방향·접근 여유 공간은 확인이 필요합니다."
+    },
+    {
+      "id": "label-5",
+      "kind": "fire-hydrant",
+      "text": "FIRE HYDRANT",
+      "box": {
+        "x": 480,
+        "y": 1472,
+        "width": 354.672,
+        "height": 48
+      },
+      "source": "pdf-text",
+      "status": "unreviewed",
+      "note": "문자 위치의 설비·구조 후보입니다. 실제 점유 범위·문 열림 방향·접근 여유 공간은 확인이 필요합니다."
+    }
+  ],
+  "planAnalysis": {
+    "lines": [
+      {
+        "id": "h-233-233.00-1167.00",
+        "start": {
+          "x": 399.4285714285714,
+          "y": 415.59554413024847
+        },
+        "end": {
+          "x": 2000.5714285714284,
+          "y": 415.59554413024847
+        },
+        "thicknessPx": 32.57142857142857
+      },
+      {
+        "id": "h-915-233.00-1167.00",
+        "start": {
+          "x": 399.4285714285714,
+          "y": 1584.4044558697515
+        },
+        "end": {
+          "x": 2000.5714285714284,
+          "y": 1584.4044558697515
+        },
+        "thicknessPx": 32.57142857142857
+      },
+      {
+        "id": "v-233-233.00-934.00",
+        "start": {
+          "x": 415.71428571428567,
+          "y": 399.31448157669234
+        },
+        "end": {
+          "x": 415.71428571428567,
+          "y": 1600.6855184233075
+        },
+        "thicknessPx": 32.57142857142857
+      },
+      {
+        "id": "v-1148-233.00-934.00",
+        "start": {
+          "x": 1984.2857142857142,
+          "y": 399.31448157669234
+        },
+        "end": {
+          "x": 1984.2857142857142,
+          "y": 1600.6855184233075
+        },
+        "thicknessPx": 32.57142857142857
+      },
+      {
+        "id": "v-282-866.00-886.00",
+        "start": {
+          "x": 486,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 486,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-300-866.00-886.00",
+        "start": {
+          "x": 516.8571428571428,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 516.8571428571428,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-307-866.00-886.00",
+        "start": {
+          "x": 528.8571428571428,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 528.8571428571428,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-327-866.00-886.00",
+        "start": {
+          "x": 563.1428571428571,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 563.1428571428571,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-354-866.00-886.00",
+        "start": {
+          "x": 609.4285714285714,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 609.4285714285714,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-367-866.00-886.00",
+        "start": {
+          "x": 631.7142857142857,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 631.7142857142857,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-393-866.00-886.00",
+        "start": {
+          "x": 675.4285714285714,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 675.4285714285714,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-413-866.00-886.00",
+        "start": {
+          "x": 710.5714285714286,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 710.5714285714286,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-452-866.00-886.00",
+        "start": {
+          "x": 776.5714285714286,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 776.5714285714286,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-465-866.00-886.00",
+        "start": {
+          "x": 799.7142857142857,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 799.7142857142857,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-477-866.00-886.00",
+        "start": {
+          "x": 820.2857142857142,
+          "y": 1484.1473864610111
+        },
+        "end": {
+          "x": 820.2857142857142,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-632-885.00-905.00",
+        "start": {
+          "x": 1086,
+          "y": 1516.7095115681234
+        },
+        "end": {
+          "x": 1086,
+          "y": 1550.9854327335047
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-696-885.00-905.00",
+        "start": {
+          "x": 1195.7142857142856,
+          "y": 1516.7095115681234
+        },
+        "end": {
+          "x": 1195.7142857142856,
+          "y": 1550.9854327335047
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "h-173-702.00-721.00",
+        "start": {
+          "x": 1203.4285714285713,
+          "y": 297.34361610968296
+        },
+        "end": {
+          "x": 1236,
+          "y": 297.34361610968296
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-426-867.00-886.00",
+        "start": {
+          "x": 731.1428571428571,
+          "y": 1485.8611825192802
+        },
+        "end": {
+          "x": 731.1428571428571,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-709-885.00-904.00",
+        "start": {
+          "x": 1216.2857142857142,
+          "y": 1516.7095115681234
+        },
+        "end": {
+          "x": 1216.2857142857142,
+          "y": 1549.2716366752356
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-625-168.00-185.00",
+        "start": {
+          "x": 1072.2857142857142,
+          "y": 287.91773778920304
+        },
+        "end": {
+          "x": 1072.2857142857142,
+          "y": 317.0522707797772
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-634-168.00-185.00",
+        "start": {
+          "x": 1087.7142857142856,
+          "y": 287.91773778920304
+        },
+        "end": {
+          "x": 1087.7142857142856,
+          "y": 317.0522707797772
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-656-168.00-185.00",
+        "start": {
+          "x": 1125.4285714285713,
+          "y": 287.91773778920304
+        },
+        "end": {
+          "x": 1125.4285714285713,
+          "y": 317.0522707797772
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-665-168.00-185.00",
+        "start": {
+          "x": 1140.857142857143,
+          "y": 287.91773778920304
+        },
+        "end": {
+          "x": 1140.857142857143,
+          "y": 317.0522707797772
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1193-565.00-582.00",
+        "start": {
+          "x": 2046,
+          "y": 968.2947729220223
+        },
+        "end": {
+          "x": 2046,
+          "y": 997.4293059125963
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1217-565.00-582.00",
+        "start": {
+          "x": 2087.142857142857,
+          "y": 968.2947729220223
+        },
+        "end": {
+          "x": 2087.142857142857,
+          "y": 997.4293059125963
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1224-565.00-582.00",
+        "start": {
+          "x": 2099.142857142857,
+          "y": 968.2947729220223
+        },
+        "end": {
+          "x": 2099.142857142857,
+          "y": 997.4293059125963
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1248-565.00-582.00",
+        "start": {
+          "x": 2140.285714285714,
+          "y": 968.2947729220223
+        },
+        "end": {
+          "x": 2140.285714285714,
+          "y": 997.4293059125963
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-866-470.00-487.00",
+        "start": {
+          "x": 805.7142857142857,
+          "y": 1485.8611825192802
+        },
+        "end": {
+          "x": 834.8571428571428,
+          "y": 1485.8611825192802
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-1233-565.00-581.00",
+        "start": {
+          "x": 2114.5714285714284,
+          "y": 968.2947729220223
+        },
+        "end": {
+          "x": 2114.5714285714284,
+          "y": 995.7155098543273
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-406-868.00-884.00",
+        "start": {
+          "x": 696.8571428571428,
+          "y": 1487.5749785775492
+        },
+        "end": {
+          "x": 696.8571428571428,
+          "y": 1514.9957155098543
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-874-354.00-370.00",
+        "start": {
+          "x": 606.8571428571428,
+          "y": 1500.4284490145671
+        },
+        "end": {
+          "x": 634.2857142857142,
+          "y": 1500.4284490145671
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-640-169.00-184.00",
+        "start": {
+          "x": 1098,
+          "y": 289.63153384747216
+        },
+        "end": {
+          "x": 1098,
+          "y": 315.33847472150813
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-650-169.00-184.00",
+        "start": {
+          "x": 1115.142857142857,
+          "y": 289.63153384747216
+        },
+        "end": {
+          "x": 1115.142857142857,
+          "y": 315.33847472150813
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1208-566.00-581.00",
+        "start": {
+          "x": 2071.714285714286,
+          "y": 970.0085689802913
+        },
+        "end": {
+          "x": 2071.714285714286,
+          "y": 995.7155098543273
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1239-566.00-581.00",
+        "start": {
+          "x": 2124.8571428571427,
+          "y": 970.0085689802913
+        },
+        "end": {
+          "x": 2124.8571428571427,
+          "y": 995.7155098543273
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1262-568.00-583.00",
+        "start": {
+          "x": 2165.142857142857,
+          "y": 973.4361610968294
+        },
+        "end": {
+          "x": 2165.142857142857,
+          "y": 999.1431019708654
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "h-866-327.00-342.00",
+        "start": {
+          "x": 560.5714285714286,
+          "y": 1485.8611825192802
+        },
+        "end": {
+          "x": 586.2857142857142,
+          "y": 1485.8611825192802
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "h-867-307.00-322.00",
+        "start": {
+          "x": 526.2857142857142,
+          "y": 1486.7180805484147
+        },
+        "end": {
+          "x": 552,
+          "y": 1486.7180805484147
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-867-413.00-428.00",
+        "start": {
+          "x": 708,
+          "y": 1486.7180805484147
+        },
+        "end": {
+          "x": 733.7142857142857,
+          "y": 1486.7180805484147
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-884-327.00-342.00",
+        "start": {
+          "x": 560.5714285714286,
+          "y": 1516.7095115681234
+        },
+        "end": {
+          "x": 586.2857142857142,
+          "y": 1516.7095115681234
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-646-887.00-902.00",
+        "start": {
+          "x": 1108.2857142857142,
+          "y": 1520.1371036846615
+        },
+        "end": {
+          "x": 1108.2857142857142,
+          "y": 1545.8440445586975
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-668-887.00-902.00",
+        "start": {
+          "x": 1146,
+          "y": 1520.1371036846615
+        },
+        "end": {
+          "x": 1146,
+          "y": 1545.8440445586975
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-675-888.00-903.00",
+        "start": {
+          "x": 1158,
+          "y": 1521.8508997429306
+        },
+        "end": {
+          "x": 1158,
+          "y": 1547.5578406169666
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-875-307.00-321.67",
+        "start": {
+          "x": 526.2857142857142,
+          "y": 1502.1422450728362
+        },
+        "end": {
+          "x": 551.4285714285714,
+          "y": 1502.1422450728362
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-1285-568.33-583.00",
+        "start": {
+          "x": 2205.428571428571,
+          "y": 974.0074264495859
+        },
+        "end": {
+          "x": 2205.428571428571,
+          "y": 999.1431019708654
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-702-171.50-186.00",
+        "start": {
+          "x": 1205.142857142857,
+          "y": 293.9160239931448
+        },
+        "end": {
+          "x": 1205.142857142857,
+          "y": 318.76606683804624
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-1270-568.50-583.00",
+        "start": {
+          "x": 2178.8571428571427,
+          "y": 974.293059125964
+        },
+        "end": {
+          "x": 2178.8571428571427,
+          "y": 999.1431019708654
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-1302-568.50-583.00",
+        "start": {
+          "x": 2233.714285714286,
+          "y": 974.293059125964
+        },
+        "end": {
+          "x": 2233.714285714286,
+          "y": 999.1431019708654
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "h-885-696.00-710.50",
+        "start": {
+          "x": 1193.142857142857,
+          "y": 1518.4233076263924
+        },
+        "end": {
+          "x": 1218,
+          "y": 1518.4233076263924
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-678-171.67-186.00",
+        "start": {
+          "x": 1164.857142857143,
+          "y": 294.20165666952295
+        },
+        "end": {
+          "x": 1164.857142857143,
+          "y": 318.76606683804624
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "h-875-413.00-427.33",
+        "start": {
+          "x": 708,
+          "y": 1502.1422450728362
+        },
+        "end": {
+          "x": 732.5714285714284,
+          "y": 1502.1422450728362
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-1048-274.00-288.00",
+        "start": {
+          "x": 1797.4285714285713,
+          "y": 469.58011996572407
+        },
+        "end": {
+          "x": 1797.4285714285713,
+          "y": 493.573264781491
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-284-1029.00-1043.00",
+        "start": {
+          "x": 1764,
+          "y": 487.57497857754925
+        },
+        "end": {
+          "x": 1788,
+          "y": 487.57497857754925
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1218-566.00-580.00",
+        "start": {
+          "x": 2088.8571428571427,
+          "y": 970.0085689802913
+        },
+        "end": {
+          "x": 2088.8571428571427,
+          "y": 994.0017137960582
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1223-566.00-580.00",
+        "start": {
+          "x": 2097.428571428571,
+          "y": 970.0085689802913
+        },
+        "end": {
+          "x": 2097.428571428571,
+          "y": 994.0017137960582
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1249-566.00-580.00",
+        "start": {
+          "x": 2142,
+          "y": 970.0085689802913
+        },
+        "end": {
+          "x": 2142,
+          "y": 994.0017137960582
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1192-567.00-581.00",
+        "start": {
+          "x": 2044.2857142857142,
+          "y": 971.7223650385604
+        },
+        "end": {
+          "x": 2044.2857142857142,
+          "y": 995.7155098543273
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-866-282.00-296.00",
+        "start": {
+          "x": 483.4285714285714,
+          "y": 1485.8611825192802
+        },
+        "end": {
+          "x": 507.4285714285714,
+          "y": 1485.8611825192802
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-407-869.00-883.00",
+        "start": {
+          "x": 698.5714285714286,
+          "y": 1489.2887746358183
+        },
+        "end": {
+          "x": 698.5714285714286,
+          "y": 1513.2819194515853
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-875-327.00-341.00",
+        "start": {
+          "x": 560.5714285714286,
+          "y": 1501.2853470437017
+        },
+        "end": {
+          "x": 584.5714285714286,
+          "y": 1501.2853470437017
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "h-886-632.00-646.00",
+        "start": {
+          "x": 1083.4285714285713,
+          "y": 1519.280205655527
+        },
+        "end": {
+          "x": 1107.4285714285713,
+          "y": 1519.280205655527
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-886-676.00-690.00",
+        "start": {
+          "x": 1158.857142857143,
+          "y": 1519.280205655527
+        },
+        "end": {
+          "x": 1182.857142857143,
+          "y": 1519.280205655527
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-653-888.00-902.00",
+        "start": {
+          "x": 1120.2857142857142,
+          "y": 1521.8508997429306
+        },
+        "end": {
+          "x": 1120.2857142857142,
+          "y": 1545.8440445586975
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-690-888.00-902.00",
+        "start": {
+          "x": 1183.7142857142856,
+          "y": 1521.8508997429306
+        },
+        "end": {
+          "x": 1183.7142857142856,
+          "y": 1545.8440445586975
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-894-696.00-710.00",
+        "start": {
+          "x": 1193.142857142857,
+          "y": 1533.847472150814
+        },
+        "end": {
+          "x": 1217.142857142857,
+          "y": 1533.847472150814
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-710-172.33-186.00",
+        "start": {
+          "x": 1219.7142857142856,
+          "y": 295.3441873750357
+        },
+        "end": {
+          "x": 1219.7142857142856,
+          "y": 318.76606683804624
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-696-172.50-186.00",
+        "start": {
+          "x": 1194.857142857143,
+          "y": 295.62982005141384
+        },
+        "end": {
+          "x": 1194.857142857143,
+          "y": 318.76606683804624
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-719-172.50-186.00",
+        "start": {
+          "x": 1234.2857142857142,
+          "y": 295.62982005141384
+        },
+        "end": {
+          "x": 1234.2857142857142,
+          "y": 318.76606683804624
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-1279-569.50-583.00",
+        "start": {
+          "x": 2194.285714285714,
+          "y": 976.006855184233
+        },
+        "end": {
+          "x": 2194.285714285714,
+          "y": 999.1431019708654
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-1294-569.50-583.00",
+        "start": {
+          "x": 2220,
+          "y": 976.006855184233
+        },
+        "end": {
+          "x": 2220,
+          "y": 999.1431019708654
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-687-172.67-186.00",
+        "start": {
+          "x": 1180.2857142857142,
+          "y": 295.915452727792
+        },
+        "end": {
+          "x": 1180.2857142857142,
+          "y": 318.76606683804624
+        },
+        "thicknessPx": 5.142857142857142
+      },
+      {
+        "id": "v-624-170.00-183.00",
+        "start": {
+          "x": 1070.5714285714284,
+          "y": 291.3453299057412
+        },
+        "end": {
+          "x": 1070.5714285714284,
+          "y": 313.6246786632391
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-635-170.00-183.00",
+        "start": {
+          "x": 1089.4285714285713,
+          "y": 291.3453299057412
+        },
+        "end": {
+          "x": 1089.4285714285713,
+          "y": 313.6246786632391
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-655-170.00-183.00",
+        "start": {
+          "x": 1123.7142857142856,
+          "y": 291.3453299057412
+        },
+        "end": {
+          "x": 1123.7142857142856,
+          "y": 313.6246786632391
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-666-170.00-183.00",
+        "start": {
+          "x": 1142.5714285714284,
+          "y": 291.3453299057412
+        },
+        "end": {
+          "x": 1142.5714285714284,
+          "y": 313.6246786632391
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-173-685.00-698.00",
+        "start": {
+          "x": 1174.2857142857142,
+          "y": 297.34361610968296
+        },
+        "end": {
+          "x": 1196.5714285714284,
+          "y": 297.34361610968296
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1207-567.00-580.00",
+        "start": {
+          "x": 2070,
+          "y": 971.7223650385604
+        },
+        "end": {
+          "x": 2070,
+          "y": 994.0017137960582
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1272-570.00-583.00",
+        "start": {
+          "x": 2181.428571428571,
+          "y": 976.8637532133675
+        },
+        "end": {
+          "x": 2181.428571428571,
+          "y": 999.1431019708654
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-866-307.00-320.00",
+        "start": {
+          "x": 526.2857142857142,
+          "y": 1485.0042844901457
+        },
+        "end": {
+          "x": 548.5714285714286,
+          "y": 1485.0042844901457
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-866-413.00-426.00",
+        "start": {
+          "x": 708,
+          "y": 1485.0042844901457
+        },
+        "end": {
+          "x": 730.2857142857142,
+          "y": 1485.0042844901457
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-867-393.00-406.00",
+        "start": {
+          "x": 673.7142857142857,
+          "y": 1486.7180805484147
+        },
+        "end": {
+          "x": 696,
+          "y": 1486.7180805484147
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-320-872.00-885.00",
+        "start": {
+          "x": 549.4285714285714,
+          "y": 1494.4301628106255
+        },
+        "end": {
+          "x": 549.4285714285714,
+          "y": 1516.7095115681234
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-875-282.00-295.00",
+        "start": {
+          "x": 483.4285714285714,
+          "y": 1501.2853470437017
+        },
+        "end": {
+          "x": 505.71428571428567,
+          "y": 1501.2853470437017
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "h-878-434.00-447.00",
+        "start": {
+          "x": 744,
+          "y": 1506.4267352185088
+        },
+        "end": {
+          "x": 766.2857142857142,
+          "y": 1506.4267352185088
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "h-886-655.00-668.00",
+        "start": {
+          "x": 1122.857142857143,
+          "y": 1519.280205655527
+        },
+        "end": {
+          "x": 1145.142857142857,
+          "y": 1519.280205655527
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-903-632.00-645.00",
+        "start": {
+          "x": 1083.4285714285713,
+          "y": 1548.4147386461011
+        },
+        "end": {
+          "x": 1105.7142857142856,
+          "y": 1548.4147386461011
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-903-676.00-689.00",
+        "start": {
+          "x": 1158.857142857143,
+          "y": 1548.4147386461011
+        },
+        "end": {
+          "x": 1181.142857142857,
+          "y": 1548.4147386461011
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-884-393.00-405.50",
+        "start": {
+          "x": 673.7142857142857,
+          "y": 1516.7095115681234
+        },
+        "end": {
+          "x": 695.1428571428571,
+          "y": 1516.7095115681234
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "v-610-167.00-179.00",
+        "start": {
+          "x": 1046.5714285714284,
+          "y": 286.203941730934
+        },
+        "end": {
+          "x": 1046.5714285714284,
+          "y": 306.7694944301628
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-272-1050.00-1062.00",
+        "start": {
+          "x": 1800,
+          "y": 467.0094258783204
+        },
+        "end": {
+          "x": 1820.5714285714284,
+          "y": 467.0094258783204
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-282-1030.00-1042.00",
+        "start": {
+          "x": 1765.7142857142856,
+          "y": 485.00428449014566
+        },
+        "end": {
+          "x": 1786.2857142857142,
+          "y": 485.00428449014566
+        },
+        "thicknessPx": 3.4285714285714284
+      },
+      {
+        "id": "h-289-1050.00-1062.00",
+        "start": {
+          "x": 1800,
+          "y": 496.1439588688946
+        },
+        "end": {
+          "x": 1820.5714285714284,
+          "y": 496.1439588688946
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1234-567.00-579.00",
+        "start": {
+          "x": 2116.285714285714,
+          "y": 971.7223650385604
+        },
+        "end": {
+          "x": 2116.285714285714,
+          "y": 992.2879177377891
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1238-567.00-579.00",
+        "start": {
+          "x": 2123.142857142857,
+          "y": 971.7223650385604
+        },
+        "end": {
+          "x": 2123.142857142857,
+          "y": 992.2879177377891
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1304-571.00-583.00",
+        "start": {
+          "x": 2236.285714285714,
+          "y": 978.5775492716366
+        },
+        "end": {
+          "x": 2236.285714285714,
+          "y": 999.1431019708654
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-885-632.00-644.00",
+        "start": {
+          "x": 1083.4285714285713,
+          "y": 1517.566409597258
+        },
+        "end": {
+          "x": 1104,
+          "y": 1517.566409597258
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-647-889.00-901.00",
+        "start": {
+          "x": 1110,
+          "y": 1523.5646958011996
+        },
+        "end": {
+          "x": 1110,
+          "y": 1544.1302485004285
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-669-889.00-901.00",
+        "start": {
+          "x": 1147.7142857142856,
+          "y": 1523.5646958011996
+        },
+        "end": {
+          "x": 1147.7142857142856,
+          "y": 1544.1302485004285
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-674-889.00-901.00",
+        "start": {
+          "x": 1156.2857142857142,
+          "y": 1523.5646958011996
+        },
+        "end": {
+          "x": 1156.2857142857142,
+          "y": 1544.1302485004285
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-903-655.00-667.00",
+        "start": {
+          "x": 1122.857142857143,
+          "y": 1548.4147386461011
+        },
+        "end": {
+          "x": 1143.4285714285713,
+          "y": 1548.4147386461011
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-639-171.00-182.00",
+        "start": {
+          "x": 1096.2857142857142,
+          "y": 293.05912596401026
+        },
+        "end": {
+          "x": 1096.2857142857142,
+          "y": 311.91088260496997
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-651-171.00-182.00",
+        "start": {
+          "x": 1116.857142857143,
+          "y": 293.05912596401026
+        },
+        "end": {
+          "x": 1116.857142857143,
+          "y": 311.91088260496997
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-184-609.00-620.00",
+        "start": {
+          "x": 1044,
+          "y": 316.19537275064266
+        },
+        "end": {
+          "x": 1062.857142857143,
+          "y": 316.19537275064266
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-1281-572.00-583.00",
+        "start": {
+          "x": 2196.8571428571427,
+          "y": 980.2913453299057
+        },
+        "end": {
+          "x": 2196.8571428571427,
+          "y": 999.1431019708654
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-866-393.00-404.00",
+        "start": {
+          "x": 673.7142857142857,
+          "y": 1485.0042844901457
+        },
+        "end": {
+          "x": 692.5714285714286,
+          "y": 1485.0042844901457
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-691-889.00-900.00",
+        "start": {
+          "x": 1185.4285714285713,
+          "y": 1523.5646958011996
+        },
+        "end": {
+          "x": 1185.4285714285713,
+          "y": 1542.4164524421592
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "v-652-890.00-901.00",
+        "start": {
+          "x": 1118.5714285714284,
+          "y": 1525.2784918594687
+        },
+        "end": {
+          "x": 1118.5714285714284,
+          "y": 1544.1302485004285
+        },
+        "thicknessPx": 1.7142857142857142
+      },
+      {
+        "id": "h-904-632.00-643.00",
+        "start": {
+          "x": 1083.4285714285713,
+          "y": 1550.1285347043702
+        },
+        "end": {
+          "x": 1102.2857142857142,
+          "y": 1550.1285347043702
+        },
+        "thicknessPx": 1.7142857142857142
+      }
+    ],
+    "issues": [
+      "자동 재분석으로 구조·축척을 확정하지 못해 공간 생성을 보류했습니다. 원본과 분석 결과는 유지합니다."
+    ],
+    "numericCount": 2,
+    "textState": "complete",
+    "lineState": "complete",
+    "stairRegions": [],
+    "selfCheck": {
+      "attempts": 3,
+      "status": "withheld"
+    }
+  },
+  "planReference": {
+    "widthPx": 2400,
+    "heightPx": 2000,
+    "origin": {
+      "x": -400,
+      "z": -400
+    },
+    "mmPerPixel": 5,
+    "calibrated": true
+  },
+  "planDraft": {
+    "kind": "partial",
+    "sourceEvidenceHash": "ae42d327",
+    "originalWalls": [
+      {
+        "id": "auto-wall-1",
+        "name": "자동 벽 1",
+        "role": "partition",
+        "start": {
+          "x": 1597.1428571428569,
+          "z": 1677.9777206512424
+        },
+        "end": {
+          "x": 9602.857142857141,
+          "z": 1677.9777206512424
+        },
+        "heightMm": 3000,
+        "thicknessMm": 150,
+        "color": "#ffffff",
+        "visible": true,
+        "locked": false,
+        "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+      },
+      {
+        "id": "auto-wall-2",
+        "name": "자동 벽 2",
+        "role": "partition",
+        "start": {
+          "x": 1597.1428571428569,
+          "z": 7522.022279348757
+        },
+        "end": {
+          "x": 9602.857142857141,
+          "z": 7522.022279348757
+        },
+        "heightMm": 3000,
+        "thicknessMm": 150,
+        "color": "#ffffff",
+        "visible": true,
+        "locked": false,
+        "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+      },
+      {
+        "id": "auto-wall-3",
+        "name": "자동 벽 3",
+        "role": "partition",
+        "start": {
+          "x": 1678.5714285714284,
+          "z": 1596.5724078834617
+        },
+        "end": {
+          "x": 1678.5714285714284,
+          "z": 7603.427592116537
+        },
+        "heightMm": 3000,
+        "thicknessMm": 150,
+        "color": "#ffffff",
+        "visible": true,
+        "locked": false,
+        "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+      },
+      {
+        "id": "auto-wall-4",
+        "name": "자동 벽 4",
+        "role": "partition",
+        "start": {
+          "x": 9521.42857142857,
+          "z": 1596.5724078834617
+        },
+        "end": {
+          "x": 9521.42857142857,
+          "z": 7603.427592116537
+        },
+        "heightMm": 3000,
+        "thicknessMm": 150,
+        "color": "#ffffff",
+        "visible": true,
+        "locked": false,
+        "note": "축척 보정됨 · 구조선 후보입니다. 실제 벽 여부와 도면상 위치를 확인해 주세요. 자동 구조 초안. 높이 3000 mm·두께 150 mm는 임시값이며 도면에서 측정한 값이 아닙니다."
+      }
+    ]
+  },
+  "displayUnit": "cm",
+  "note": "PRIVATE_EXHIBITION_UPDATED",
+  "noteDetails": {
+    "checklist": [
+      {
+        "id": "59472901-a75c-408d-b91d-0d15cb8f2225",
+        "text": "PRIVATE_INSTALL_CHECK",
+        "done": true
+      }
+    ],
+    "images": [
+      {
+        "id": "34b37679-60f7-4bf6-80f4-8606cb0846a3",
+        "name": "PRIVATE_REFERENCE.png",
+        "imageUrl": "data:image/webp;base64,UklGRjACAABXRUJQVlA4WAoAAAAgAAAALwAAFwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggQgAAALADAJ0BKjAAGAA+MRiKQ6IhoRK0ACADBLOAOwB+AH6AADMBO6AAAP7u09///Qn4oOjH/Qof//2z/wpBi/+2IAAAAA=="
+      }
+    ]
+  },
+  "openings": [],
+  "dimensions": [],
+  "lights": [
+    {
+      "id": "light-1",
+      "name": "스팟 조명 1",
+      "kind": "spot",
+      "position": {
+        "x": 3167.499999999999,
+        "y": 3300,
+        "z": 2972.9777206512426
+      },
+      "target": {
+        "x": 3167.499999999999,
+        "y": 1500,
+        "z": 1772.9777206512424
+      },
+      "intensity": 120,
+      "kelvin": 5500,
+      "beamDeg": 40,
+      "penumbra": 0.3,
+      "distanceMm": 0,
+      "widthMm": 1000,
+      "heightMm": 500,
+      "shadow": true,
+      "visible": true,
+      "locked": false,
+      "note": ""
+    }
+  ],
+  "lighting": {
+    "ambient": 0.12,
+    "hemisphere": 0.15,
+    "fill": 0,
+    "environment": 0.08
+  },
+  "outdoor": {
+    "mode": "outdoor",
+    "latitude": 37.5665,
+    "longitude": 126.978,
+    "timeZone": "Asia/Seoul",
+    "date": "2026-10-11",
+    "time": "09:00",
+    "northDeg": 0,
+    "preset": "clear",
+    "sunIntensity": 3,
+    "shadow": true,
+    "occurrence": "earlier"
+  },
+  "modelArtworks": [],
+  "unplacedArtworks": []
+}
