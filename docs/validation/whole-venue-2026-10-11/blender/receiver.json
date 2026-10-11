@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "blenderVersion": "4.4.1",
+  "scenes": [
+    {
+      "name": "Scene-A",
+      "sha256": "33532ab04f0ba48a369a75cdaa7a9fe603aac08cb32905a2a79b47ed67781ab0",
+      "meshes": 450,
+      "triangles": 5400,
+      "maxWorldBoundsErrorM": 0.0,
+      "emptyCourtyards": 30,
+      "solidFloorHits": 30,
+      "cpuRender": "Scene-A.png"
+    },
+    {
+      "name": "Scene-B",
+      "sha256": "9b9c23ce5e84f9bb3077c68e2435bf4a438f4dab1c6677bc7774a53c7c5f4b34",
+      "meshes": 450,
+      "triangles": 5400,
+      "maxWorldBoundsErrorM": 4.9630190019911424e-06,
+      "emptyCourtyards": 30,
+      "solidFloorHits": 30,
+      "cpuRender": "Scene-B.png"
+    }
+  ],
+  "gpuMeasured": false,
+  "renderRequested": true,
+  "limitations": [
+    "Owned synthetic 30-room venue, not representative user acceptance",
+    "CPU importer/ray/render, not browser/GPU/SketchUp or photometry"
+  ]
+}

@@ -16,7 +16,7 @@ function rectangles(plane:Plane):Face[]{
  plane.triangles.forEach((triangle,i)=>{const key=root(i),g=groups.get(key)??{minT:Infinity,maxT:-Infinity,minY:Infinity,maxY:-Infinity,area:0};for(const p of triangle.points){const t=-plane.nz*p.x+plane.nx*p.z;g.minT=Math.min(g.minT,t);g.maxT=Math.max(g.maxT,t);g.minY=Math.min(g.minY,p.y);g.maxY=Math.max(g.maxY,p.y);}g.area+=triangle.area;groups.set(key,g);});
  return [...groups.values()].filter(g=>{const rectangle=(g.maxT-g.minT)*(g.maxY-g.minY);return rectangle>0&&g.area/rectangle>=.995&&g.area/rectangle<=1.005;}).map(g=>({...g,nx:plane.nx,nz:plane.nz,d:plane.d}));
 }
-export function extractModelWalls(scene:Object3D,model:ReferenceModel):{walls:Wall[];triangles:number;importedFloor?:Point[][]}{
+export function extractModelWalls(scene:Object3D,model:ReferenceModel):{walls:Wall[];triangles:number;importedFloor?:Point[][];unresolvedFloor?:true}{
  const root=scene.clone(true);root.updateMatrixWorld(true);
  const transform=new Matrix4().makeTranslation(...model.positionMm.map(v=>v/1000) as [number,number,number]);
  transform.multiply(new Matrix4().makeRotationY(model.rotationDeg*Math.PI/180)).multiply(new Matrix4().makeScale(model.scale,model.scale,model.scale)).multiply(new Matrix4().makeTranslation(...model.sourceOffsetM));
@@ -91,5 +91,5 @@ export function extractModelWalls(scene:Object3D,model:ReferenceModel):{walls:Wa
   wall.role=importedFloor?(front!==back?'boundary':'partition'):'boundary';
   if(importedFloor?back&&!front:nx*(center.x-mid.x)+nz*(center.z-mid.z)<0){const start=wall.start;wall.start=wall.end;wall.end=start;}
  }
- return {walls,triangles,...(importedFloor?{importedFloor}:{})};
+ return {walls,triangles,...(importedFloor?{importedFloor}:floorPlane?{unresolvedFloor:true as const}:{})};
 }

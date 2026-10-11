@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-11",
+  "sourceHash": "1280dbd22b847a5e089a74d6f9830d6f62ca653b5d955018e824fde137960efe",
+  "rooms": 30,
+  "meshes": 450,
+  "triangles": 5400,
+  "partialWalls": 30,
+  "unresolvedFloor": true,
+  "originalPreservedAsReference": true,
+  "scenes": [
+    {
+      "name": "Scene A",
+      "bounds": {
+        "min": [
+          -36,
+          0,
+          -20
+        ],
+        "max": [
+          36,
+          3,
+          20
+        ]
+      },
+      "sha256": "33532ab04f0ba48a369a75cdaa7a9fe603aac08cb32905a2a79b47ed67781ab0"
+    },
+    {
+      "name": "Scene B",
+      "bounds": {
+        "min": [
+          -46.41229744348775,
+          0.1,
+          -44.38460969082652
+        ],
+        "max": [
+          52.41229744348775,
+          3.6999999999999997,
+          40.38460969082652
+        ]
+      },
+      "sha256": "9b9c23ce5e84f9bb3077c68e2435bf4a438f4dab1c6677bc7774a53c7c5f4b34"
+    }
+  ],
+  "backupAssets": 2,
+  "unplacedArtworks": 5,
+  "exactJsonRestoration": true,
+  "publicModelAssets": 1,
+  "publicScenes": 2,
+  "gltfZipReloaded": true,
+  "courtyardRayProbesPerScene": 30,
+  "solidFloorRayProbesPerScene": 30,
+  "sourceAndProjectUnchanged": true,
+  "gpuMeasured": false,
+  "limitations": [
+    "Owned synthetic venue; partial conversion is protected, not automatic full reconstruction",
+    "Actual loader/Scene/ZIP/public/export paths with native FileReader transport",
+    "No operating publication/browser/GPU/account/device/SketchUp/full 24-step/user acceptance"
+  ]
+}

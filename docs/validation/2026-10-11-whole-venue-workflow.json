@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "44bd04f6c906f01b4cf8da4099332e7de129f2f0",
+  "runtime": {
+    "node": "24.14.0",
+    "three": "0.180.0",
+    "vitest": "4.1.11",
+    "blender": "4.4.1"
+  },
+  "sourceSha256": {
+    "src/components/ReferenceModelControls.tsx": "574e30910b93b7767c912c5cd0357556d6bb25f5e5c13cba910b30c8102c5b90",
+    "src/domain/modelConversionScope.ts": "55a813042a9b86e814c6ff0eded7124757329e445f323d7173ba0668c8187f5a",
+    "src/lib/modelWalls.ts": "1f9f9f0d09b0208572a2307c4f29c810d7b72b546d41cefd7ecd99cc1fc32f88",
+    "src/components/ReferenceModelControls.workflow.test.tsx": "dc5ba829a745686eddb8cdc7b395df3cf0c67a469f98471b3d20199c0bba8bd5",
+    "src/lib/wholeVenue.workflow.test.ts": "5abdb9f2056b069b7aee1b226bb01a15cce71af1c0fdbb132cd4c7c2ac3719a1",
+    "scripts/verify-blender-whole-venue.py": "16dda9d5e77b269ab6b4495db7006d9e3a21458efbfa3eb938249e8570e3b4cb"
+  },
+  "input": {
+    "path": "docs/validation/model-preflight-2026-10-11/venue.glb",
+    "sha256": "1280dbd22b847a5e089a74d6f9830d6f62ca653b5d955018e824fde137960efe",
+    "ownedSynthetic": true,
+    "rooms": 30,
+    "meshes": 450,
+    "triangles": 5400
+  },
+  "baseline": {
+    "procedure": "Same final two workflow test files, temporarily replacing only ReferenceModelControls.tsx and modelWalls.ts with baseline commit contents; both working source files restored byte-for-byte afterward",
+    "newTests": 11,
+    "failed": 9,
+    "passed": 2,
+    "durationMs": 628,
+    "initialAdapterFixtureFailuresExcluded": true
+  },
+  "target": {
+    "command": "GONGGAN_WHOLE_VENUE_PROOF=1 npx vitest run src/lib/wholeVenue.workflow.test.ts src/components/ReferenceModelControls.workflow.test.tsx src/lib/modelWalls.test.ts src/domain/modelSpace.test.ts src/lib/publicReferenceModel.test.ts",
+    "passed": 28,
+    "filesPassed": 5,
+    "durationMs": 685
+  },
+  "full": {
+    "command": "npm test",
+    "passed": 1382,
+    "skipped": 10,
+    "filesPassed": 237,
+    "filesSkipped": 10,
+    "durationSeconds": 9.45
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "viteDurationSeconds": 4.56,
+    "largeChunkNoticeRetained": true
+  },
+  "blender": {
+    "command": "/Applications/Blender.app/Contents/MacOS/Blender --background --factory-startup --python-exit-code 1 --python scripts/verify-blender-whole-venue.py -- --directory docs/validation/whole-venue-2026-10-11 --output-dir docs/validation/whole-venue-2026-10-11/blender --render",
+    "passed": true,
+    "meshesPerScene": 450,
+    "trianglesPerScene": 5400,
+    "emptyCourtyardsPerScene": 30,
+    "solidFloorHitsPerScene": 30,
+    "maxWorldBoundsErrorM": 4.9630190019911424e-06,
+    "negativeControl": "whole-venue-2026-10-11/verifier-checks.json",
+    "cpuRenderPixels": [
+      1000,
+      700
+    ],
+    "bothRendersVisuallyInspected": true
+  },
+  "artifactsSha256": {
+    "docs/validation/whole-venue-2026-10-11/Scene-A.glb": "33532ab04f0ba48a369a75cdaa7a9fe603aac08cb32905a2a79b47ed67781ab0",
+    "docs/validation/whole-venue-2026-10-11/Scene-B.glb": "9b9c23ce5e84f9bb3077c68e2435bf4a438f4dab1c6677bc7774a53c7c5f4b34",
+    "docs/validation/whole-venue-2026-10-11/Scene-B.gltf.zip": "6d53ed4cd893c42203ae46f4d60650cac92be967f804107139f84834db0cedce",
+    "docs/validation/whole-venue-2026-10-11/blender/Scene-A.png": "792d87486739d04bc12dcf668e72d84a77f435ac3c3876d6b26be127fb91fd1e",
+    "docs/validation/whole-venue-2026-10-11/blender/Scene-B.png": "de8420154dd1dc9714f15a7dbbfca58b9d3bb89ccdbc724e605dd173137c144c",
+    "docs/validation/whole-venue-2026-10-11/blender/receiver.json": "8370eb671348690307f526d5f4957a5a227649ed0dc5bd9b66e6cc1d430720c4",
+    "docs/validation/whole-venue-2026-10-11/project.gonggan.zip": "e19b747725c724ce5aee87e1e5fd7ac27ceaee8d9f8b5f9048cc0037ccffbb7d",
+    "docs/validation/whole-venue-2026-10-11/public-model.glb": "90e40d1e18318b277eb11bf2bc2c029922b2f607a9beedc6b564f41fac73fb03",
+    "docs/validation/whole-venue-2026-10-11/public.json": "9b6f726c50d829b81ae978d8fce0442099663e377e6923949a931a143bdd8165",
+    "docs/validation/whole-venue-2026-10-11/verifier-checks.json": "b4f70ffc96d8885df2e5be5177987587f6da7c35bed0fe77392a792e699b7ed6",
+    "docs/validation/whole-venue-2026-10-11/workflow.json": "b562493fad0b86dfb9b845baca015f68fc86f221c64a7ce073e99fc12ab9b6e9"
+  },
+  "localLogs": {
+    "baseline": {
+      "path": "/tmp/show-space-whole-venue-before.log",
+      "sha256": "1fde2404d4ac9d5d157aa3d1144ff4233fbc0512973877a14150b8b3155aef33"
+    },
+    "target": {
+      "path": "/tmp/show-space-whole-venue-target.log",
+      "sha256": "1533b5a23a76a52a2a045489b215a235fc629b52cbbe25d7b6e43688b210028f"
+    },
+    "full": {
+      "path": "/tmp/show-space-whole-venue-full.log",
+      "sha256": "c6dce1ba23897dc78b97f63e59dad57ab4f384b5fba6c5891d9e9fc67c5bb317"
+    },
+    "build": {
+      "path": "/tmp/show-space-whole-venue-build.log",
+      "sha256": "011083f2bd2bc285209b01d7e629d4da6b039301b141ec7025b615b05f59cbc8"
+    },
+    "blender": {
+      "path": "/tmp/show-space-whole-venue-blender.log",
+      "sha256": "44aa54a6b5d6f94f32432a91358a6a7b5d5777c7f39e8a540a7bbbe4193ddbaa"
+    },
+    "negative": {
+      "path": "/tmp/show-space-whole-venue-negative.log",
+      "sha256": "c2d50c45644973c1330525b4baf7b02986d68acb7aa3e8c60dae4944628f5614"
+    }
+  },
+  "deployed": false,
+  "limitations": [
+    "Partial wall/floor conversion protected; fragmented floor reconstruction not solved",
+    "Owned synthetic input, not arbitrary user venue acceptance",
+    "UI uses React/jsdom, native file transport and controlled async test results; not browser/GPU",
+    "Public data validated; no operational URL publication",
+    "No accounts/two devices, FPS/VRAM/p95, full 24-step or user metrics, or SketchUp receiving verification"
+  ]
+}

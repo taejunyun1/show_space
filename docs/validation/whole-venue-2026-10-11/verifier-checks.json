@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-11",
+  "positiveReceiver": "blender/receiver.json",
+  "negativeControl": {
+    "expectedSceneAMinXOffsetMm": 100,
+    "exitCode": 1,
+    "rejected": true,
+    "failure": "AssertionError: Scene-A: world bounds mismatch"
+  },
+  "scope": "Actual Blender importer with intentionally incorrect expected bounds; CPU only"
+}

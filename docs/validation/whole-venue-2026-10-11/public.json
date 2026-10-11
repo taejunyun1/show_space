@@ -1,0 +1,144 @@
+{
+  "referenceModel": {
+    "modelId": "90e40d1e18318b277eb11bf2bc2c029922b2f607a9beedc6b564f41fac73fb03",
+    "sizeMm": [
+      72000,
+      3000,
+      40000
+    ],
+    "sourceOffsetM": [
+      -40,
+      -1.9999999999999998,
+      -21
+    ],
+    "positionMm": [
+      3000,
+      100,
+      -2000
+    ],
+    "rotationDeg": 30,
+    "scale": 1.2
+  },
+  "lights": [],
+  "schemaVersion": 1,
+  "name": "전체 전시장 연결 검증",
+  "venue": "성수 갤러리",
+  "floorColor": "#f1f1ed",
+  "walls": [],
+  "artworks": [],
+  "openings": [],
+  "zones": [],
+  "dimensions": [],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "Scene A",
+      "snapshot": {
+        "referenceModel": {
+          "modelId": "90e40d1e18318b277eb11bf2bc2c029922b2f607a9beedc6b564f41fac73fb03",
+          "sizeMm": [
+            72000,
+            3000,
+            40000
+          ],
+          "sourceOffsetM": [
+            -40,
+            -1.9999999999999998,
+            -21
+          ],
+          "positionMm": [
+            0,
+            0,
+            0
+          ],
+          "rotationDeg": 0,
+          "scale": 1
+        },
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "schemaVersion": 1,
+        "name": "전체 전시장 연결 검증",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [],
+        "artworks": [],
+        "openings": [],
+        "zones": [],
+        "dimensions": []
+      }
+    },
+    {
+      "id": "scene-2",
+      "name": "Scene B",
+      "snapshot": {
+        "referenceModel": {
+          "modelId": "90e40d1e18318b277eb11bf2bc2c029922b2f607a9beedc6b564f41fac73fb03",
+          "sizeMm": [
+            72000,
+            3000,
+            40000
+          ],
+          "sourceOffsetM": [
+            -40,
+            -1.9999999999999998,
+            -21
+          ],
+          "positionMm": [
+            3000,
+            100,
+            -2000
+          ],
+          "rotationDeg": 30,
+          "scale": 1.2
+        },
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "schemaVersion": 1,
+        "name": "전체 전시장 연결 검증",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [],
+        "artworks": [],
+        "openings": [],
+        "zones": [],
+        "dimensions": []
+      }
+    }
+  ]
+}
