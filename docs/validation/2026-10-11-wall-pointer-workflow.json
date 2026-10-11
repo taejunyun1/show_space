@@ -1,0 +1,131 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "acf74627c0d10cee2da949c6e5edb42f56b05e6d",
+  "sourceSha256": {
+    "src/components/PlanView.tsx": "9a461bcae4424c4ab79e1156897c07cf4c8f8f93d1c164b75fdafc256bb6dc1d",
+    "src/components/Gallery3D.tsx": "78435dc715f7cafcda2f8476fc9923342ff01679ab076345aa4b9396855e3fda",
+    "src/components/useEditorPointer.ts": "e0c9766b014c2eedf4bcb72fdb9b0ab22ec19d1db564a4044a7451f68f155c37",
+    "src/state/editor.ts": "6eb606f71e5b42795c16c9895cfea3d7181c8dea7f2498a0eff10fa11edc0ff6",
+    "src/components/PlanView.pointerWorkflow.test.tsx": "8d4b6d7a3dcce4d45291546e78aac7722d14114c9fc832ebbbeb401d0c73bfe4",
+    "src/components/GalleryWall.pointerWorkflow.test.tsx": "8e1c030ead489ae436b5add45cb13e085733d5a88e5dcf0f0114dcf36c16223d"
+  },
+  "input": {
+    "path": "docs/validation/converted-pointer-2026-10-11/project.gonggan.zip",
+    "sha256": "9e3af69ff5c07c574889d3c32d2b6e8f6d97540fe2e1bc05bf5fde01d376f988",
+    "ownedPreviouslyConvertedVenue": true
+  },
+  "baseline": {
+    "command": "npx vitest run src/components/PlanView.pointerWorkflow.test.tsx src/components/GalleryWall.pointerWorkflow.test.tsx",
+    "procedure": "Restore only PlanView.tsx, Gallery3D.tsx and editor.ts from baseline, add GalleryWall export for test access only; all modified sources restored byte-for-byte in finally",
+    "failed": 28,
+    "passed": 10,
+    "tests": 38,
+    "plan": {
+      "failed": 17,
+      "passed": 4
+    },
+    "threeD": {
+      "failed": 11,
+      "passed": 6
+    },
+    "durationSeconds": 1.28,
+    "initialRotationOracleErrorExcluded": "Account for existing 10mm ground ray rounding before computing expected angle"
+  },
+  "target": {
+    "command": "GONGGAN_WALL_POINTER_PROOF=1 npx vitest run src/components/GalleryWall.pointerWorkflow.test.tsx src/components/PlanView.pointerWorkflow.test.tsx src/components/PlanView.floorWorkflow.test.tsx src/components/Painting3D.workflow.test.tsx src/domain/wallEditing.test.ts",
+    "passed": 72,
+    "filesPassed": 5,
+    "durationSeconds": 1.81
+  },
+  "full": {
+    "command": "npm test",
+    "passed": 1459,
+    "skipped": 10,
+    "filesPassed": 244,
+    "filesSkipped": 10,
+    "durationSeconds": 12.01
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "viteDurationSeconds": 4.82,
+    "largeChunkNoticeRetained": true
+  },
+  "connectedWorkflow": {
+    "date": "2026-10-11",
+    "actualR3fWallGeometry": true,
+    "sourceBackup": "docs/validation/converted-pointer-2026-10-11/project.gonggan.zip",
+    "wallCount": 4,
+    "artworkCount": 5,
+    "sceneNames": [
+      "벽 이동",
+      "벽 회전"
+    ],
+    "afterMoveErrorMm": 0.00014817351883910905,
+    "afterMoveArtworkErrorMm": 0,
+    "afterRotationErrorMm": 0.00014817351879076678,
+    "afterRotationArtworkErrorMm": 0,
+    "wrongExpectedTranslationMm": 100,
+    "wrongExpectedGeometryErrorMm": 100.00007229713607,
+    "originalFloorAreaMm2": 74996700,
+    "importedFloorUnchanged": true,
+    "backupExact": true,
+    "limits": [
+      "Synthetic rays/capture target and Texture transport, actual R3F/Three/store/Scene/ZIP",
+      "No browser/GPU/3D capture or independent GLB receiver in this milestone",
+      "No deployment, operational auth, two-device, full 24-step or user metrics acceptance"
+    ]
+  },
+  "archive": {
+    "crcPassed": true,
+    "entries": 9,
+    "assets": 6,
+    "assetSha256": {
+      "assets/images/fcfbd344fc8f914f4e71e99ce279301a4bdf0adee577ca265789d617f10d7fe7.png": "fcfbd344fc8f914f4e71e99ce279301a4bdf0adee577ca265789d617f10d7fe7",
+      "assets/images/81092223bad0818c81cc289c1ff05ee92cb0b059c68cd21f328382b919ee96cf.png": "81092223bad0818c81cc289c1ff05ee92cb0b059c68cd21f328382b919ee96cf",
+      "assets/images/93d5bc762f43095431d28af36a9e5e9b70dae99f6d32498b2cb05791478e939c.png": "93d5bc762f43095431d28af36a9e5e9b70dae99f6d32498b2cb05791478e939c",
+      "assets/images/3abeedd2e25c371bb534fdc9ce00809ddaaa4cbbeeded4820074a723d48f122f.png": "3abeedd2e25c371bb534fdc9ce00809ddaaa4cbbeeded4820074a723d48f122f",
+      "assets/images/8d409a77c1717792a3b94d694b644a233479074bb8c1fc7510f0f54a709fff12.png": "8d409a77c1717792a3b94d694b644a233479074bb8c1fc7510f0f54a709fff12",
+      "assets/models/d04a9015f238a65c350229e7c815133049b27f67e1ce0452d3d08bfb78c4a5f2.glb": "d04a9015f238a65c350229e7c815133049b27f67e1ce0452d3d08bfb78c4a5f2"
+    }
+  },
+  "artifacts": {
+    "docs/validation/wall-pointer-2026-10-11/project.gonggan.zip": {
+      "bytes": 6284,
+      "sha256": "816b02839d9caec8705521bbb8f8af0f5040b7b5cfd754e5dc24f6f82a4e4d08"
+    },
+    "docs/validation/wall-pointer-2026-10-11/project.json": {
+      "bytes": 34054,
+      "sha256": "41449d2ee0acab014857a8f24cab8a475104ed2e67ab3fb7388dc7f6cf75003f"
+    },
+    "docs/validation/wall-pointer-2026-10-11/workflow.json": {
+      "bytes": 873,
+      "sha256": "54d08c802cad97f2a9bc02e017e2981574380a7c0ea5771375cc428931bae0a9"
+    }
+  },
+  "logs": {
+    "baseline": {
+      "path": "/tmp/show-space-wall-pointer-before-final.log",
+      "sha256": "9c22ca5f03476df605b5d37f440ed014122d2dceeaf629469f3ee335ecc15297"
+    },
+    "target": {
+      "path": "/tmp/show-space-wall-target-final.log",
+      "sha256": "4c29ec3e8b404d911283d8da597ae8d9c38939cff3c33d3a2eed816e9c65ed6a"
+    },
+    "full": {
+      "path": "/tmp/show-space-wall-full-final.log",
+      "sha256": "20a071db4754a23a13b4c036faf6e71547ae4d897a7231ef9bd09f9a921124b1"
+    },
+    "build": {
+      "path": "/tmp/show-space-wall-build-final.log",
+      "sha256": "80aa5cda98e4e7d6ab733c1ae44e6716e25c1b049bd6ddefbba80c40cd88c11f"
+    }
+  },
+  "deployed": false,
+  "next": "3D model artwork and light pointer/gizmo ownership, rotation/lock and Scene delivery",
+  "limits": [
+    "Synthetic rays/capture target and Texture transport, actual R3F/Three/store/Scene/ZIP",
+    "No browser/GPU/3D capture or independent GLB receiver in this milestone",
+    "No deployment, operational auth, two-device, full 24-step or user metrics acceptance"
+  ]
+}

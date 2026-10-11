@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-11",
+  "actualR3fWallGeometry": true,
+  "sourceBackup": "docs/validation/converted-pointer-2026-10-11/project.gonggan.zip",
+  "wallCount": 4,
+  "artworkCount": 5,
+  "sceneNames": [
+    "벽 이동",
+    "벽 회전"
+  ],
+  "afterMoveErrorMm": 0.00014817351883910905,
+  "afterMoveArtworkErrorMm": 0,
+  "afterRotationErrorMm": 0.00014817351879076678,
+  "afterRotationArtworkErrorMm": 0,
+  "wrongExpectedTranslationMm": 100,
+  "wrongExpectedGeometryErrorMm": 100.00007229713607,
+  "originalFloorAreaMm2": 74996700,
+  "importedFloorUnchanged": true,
+  "backupExact": true,
+  "limits": [
+    "Synthetic rays/capture target and Texture transport, actual R3F/Three/store/Scene/ZIP",
+    "No browser/GPU/3D capture or independent GLB receiver in this milestone",
+    "No deployment, operational auth, two-device, full 24-step or user metrics acceptance"
+  ]
+}

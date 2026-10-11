@@ -1,0 +1,853 @@
+{
+  "schemaVersion": 1,
+  "id": "wall-3d-pointer-workflow",
+  "name": "변환 공간 직접 편집",
+  "venue": "성수 갤러리",
+  "walls": [
+    {
+      "id": "model-wall-1",
+      "name": "모델 벽 1",
+      "start": {
+        "x": 2095.5540984853355,
+        "z": -128.6586063228963
+      },
+      "end": {
+        "x": -2783.5540984853355,
+        "z": -8857.341393677103
+      },
+      "heightMm": 3750,
+      "thicknessMm": 250,
+      "color": "#e4e4e0",
+      "visible": true,
+      "locked": false,
+      "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+      "role": "boundary"
+    },
+    {
+      "id": "model-wall-2",
+      "name": "모델 벽 2",
+      "start": {
+        "x": -2783.5540984853355,
+        "z": -8857.341393677103
+      },
+      "end": {
+        "x": 7236,
+        "z": -1198
+      },
+      "heightMm": 3750,
+      "thicknessMm": 250,
+      "color": "#e4e4e0",
+      "visible": true,
+      "locked": false,
+      "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+      "role": "boundary"
+    },
+    {
+      "id": "model-wall-3",
+      "name": "모델 벽 3",
+      "start": {
+        "x": -1424,
+        "z": 3802
+      },
+      "end": {
+        "x": 2095.5540984853355,
+        "z": -128.6586063228963
+      },
+      "heightMm": 3750,
+      "thicknessMm": 250,
+      "color": "#e4e4e0",
+      "visible": true,
+      "locked": false,
+      "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+      "role": "boundary"
+    },
+    {
+      "id": "model-wall-4",
+      "name": "모델 벽 4",
+      "start": {
+        "x": 3196,
+        "z": -3196
+      },
+      "end": {
+        "x": -1134,
+        "z": -696
+      },
+      "heightMm": 3750,
+      "thicknessMm": 250,
+      "color": "#e4e4e0",
+      "visible": true,
+      "locked": false,
+      "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+      "role": "partition"
+    }
+  ],
+  "artworks": [
+    {
+      "id": "artwork-1",
+      "name": "고요한 면",
+      "artist": "",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 3479.889998789974,
+      "centerHeightMm": 1580,
+      "frame": "none",
+      "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABaSURBVFiF7dgxEkBQDATQZRxMz4n0nEjPzWh9PWnedpkUeZNyu2k9rhSmrzwOkCTDc9iXsVnO2/k5oPwDAAAAAAAAAAAAAAAAAAAAAAAAAE1P+Ecv+E75BwBu8UMHhGSF1aMAAAAASUVORK5CYII=",
+      "visible": true,
+      "locked": false,
+      "note": "PRIVATE_ART_0",
+      "wallId": "model-wall-1",
+      "wallSide": "front",
+      "rotationDeg": -30
+    },
+    {
+      "id": "artwork-2",
+      "name": "빛의 간격",
+      "artist": "",
+      "widthMm": 500,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 3949.889998789974,
+      "centerHeightMm": 1500,
+      "frame": "none",
+      "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABbSURBVFiF7dihEYBADATAg8HRFWVAfZQBVYEGzaN/YvZcYrITecN1rE8KM1YeB0iSqV3My/6Z73PrCij/AAAAAAAAAAAAAAAAAAAAAAAAAMCvJ+zdC7Yp/wDAC4GaCHy2DBjnAAAAAElFTkSuQmCC",
+      "visible": true,
+      "locked": false,
+      "note": "PRIVATE_ART_1",
+      "wallId": "model-wall-1",
+      "wallSide": "front"
+    },
+    {
+      "id": "artwork-3",
+      "name": "잔상",
+      "artist": "",
+      "widthMm": 600,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 4699.889998789974,
+      "centerHeightMm": 1500,
+      "frame": "none",
+      "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABVSURBVFiF7dixDYAwDATAD2IzGIEsSVZgN6iRaCMXnDt/49OXbud23CmcpfI4QJKsX2G/xmsfe58GKG8AAAAAAAAAAAAAAAAAAAAAAAAAoPkV/x7wAOmDB+GUg5NFAAAAAElFTkSuQmCC",
+      "visible": true,
+      "locked": false,
+      "note": "PRIVATE_ART_2",
+      "wallId": "model-wall-1",
+      "wallSide": "front"
+    },
+    {
+      "id": "artwork-4",
+      "name": "겹쳐진 시간",
+      "artist": "",
+      "widthMm": 700,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 5549.889998789974,
+      "centerHeightMm": 1500,
+      "frame": "none",
+      "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABVSURBVFiF7dixDYAwDATAD2I82CSZJmzCgFBTUCIXnDvrC5++dNtmv1I4S+VxgCRZ34Kzz8e+H+MTQHkDAAAAAAAAAAAAAAAAAAAAAAAAAM2v+PeAG+HmB/VcWVCnAAAAAElFTkSuQmCC",
+      "visible": true,
+      "locked": false,
+      "note": "PRIVATE_ART_3",
+      "wallId": "model-wall-1",
+      "wallSide": "front"
+    },
+    {
+      "id": "artwork-5",
+      "name": "여백",
+      "artist": "",
+      "widthMm": 800,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 6499.889998789974,
+      "centerHeightMm": 1500,
+      "frame": "none",
+      "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABdSURBVFiF7dixEUBQEATQZbSnEQrQAgVohAKJCX7EXPI2u7ng3ly43TodVwrTVx4HSJKhtVz28TFv8/k5oPwDAAAAAAAAAAAAAAAAAAAAAAAAAM2e8I9e8J3yDwDcyykHrg4bfiUAAAAASUVORK5CYII=",
+      "visible": true,
+      "locked": false,
+      "note": "PRIVATE_ART_4",
+      "wallId": "model-wall-1",
+      "wallSide": "front"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "벽 이동",
+      "artworks": [
+        {
+          "id": "artwork-1",
+          "name": "고요한 면",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "alongMm": 3479.889998789974,
+          "centerHeightMm": 1580,
+          "frame": "none",
+          "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABaSURBVFiF7dgxEkBQDATQZRxMz4n0nEjPzWh9PWnedpkUeZNyu2k9rhSmrzwOkCTDc9iXsVnO2/k5oPwDAAAAAAAAAAAAAAAAAAAAAAAAAE1P+Ecv+E75BwBu8UMHhGSF1aMAAAAASUVORK5CYII=",
+          "visible": true,
+          "locked": false,
+          "note": "PRIVATE_ART_0",
+          "wallId": "model-wall-1",
+          "wallSide": "front",
+          "rotationDeg": -30
+        },
+        {
+          "id": "artwork-2",
+          "name": "빛의 간격",
+          "artist": "",
+          "widthMm": 500,
+          "heightMm": 600,
+          "depthMm": 30,
+          "alongMm": 3949.889998789974,
+          "centerHeightMm": 1500,
+          "frame": "none",
+          "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABbSURBVFiF7dihEYBADATAg8HRFWVAfZQBVYEGzaN/YvZcYrITecN1rE8KM1YeB0iSqV3My/6Z73PrCij/AAAAAAAAAAAAAAAAAAAAAAAAAMCvJ+zdC7Yp/wDAC4GaCHy2DBjnAAAAAElFTkSuQmCC",
+          "visible": true,
+          "locked": false,
+          "note": "PRIVATE_ART_1",
+          "wallId": "model-wall-1",
+          "wallSide": "front"
+        },
+        {
+          "id": "artwork-3",
+          "name": "잔상",
+          "artist": "",
+          "widthMm": 600,
+          "heightMm": 600,
+          "depthMm": 30,
+          "alongMm": 4699.889998789974,
+          "centerHeightMm": 1500,
+          "frame": "none",
+          "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABVSURBVFiF7dixDYAwDATAD2IzGIEsSVZgN6iRaCMXnDt/49OXbud23CmcpfI4QJKsX2G/xmsfe58GKG8AAAAAAAAAAAAAAAAAAAAAAAAAoPkV/x7wAOmDB+GUg5NFAAAAAElFTkSuQmCC",
+          "visible": true,
+          "locked": false,
+          "note": "PRIVATE_ART_2",
+          "wallId": "model-wall-1",
+          "wallSide": "front"
+        },
+        {
+          "id": "artwork-4",
+          "name": "겹쳐진 시간",
+          "artist": "",
+          "widthMm": 700,
+          "heightMm": 600,
+          "depthMm": 30,
+          "alongMm": 5549.889998789974,
+          "centerHeightMm": 1500,
+          "frame": "none",
+          "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABVSURBVFiF7dixDYAwDATAD2I82CSZJmzCgFBTUCIXnDvrC5++dNtmv1I4S+VxgCRZ34Kzz8e+H+MTQHkDAAAAAAAAAAAAAAAAAAAAAAAAAM2v+PeAG+HmB/VcWVCnAAAAAElFTkSuQmCC",
+          "visible": true,
+          "locked": false,
+          "note": "PRIVATE_ART_3",
+          "wallId": "model-wall-1",
+          "wallSide": "front"
+        },
+        {
+          "id": "artwork-5",
+          "name": "여백",
+          "artist": "",
+          "widthMm": 800,
+          "heightMm": 600,
+          "depthMm": 30,
+          "alongMm": 6499.889998789974,
+          "centerHeightMm": 1500,
+          "frame": "none",
+          "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABdSURBVFiF7dixEUBQEATQZbSnEQrQAgVohAKJCX7EXPI2u7ng3ly43TodVwrTVx4HSJKhtVz28TFv8/k5oPwDAAAAAAAAAAAAAAAAAAAAAAAAAM2e8I9e8J3yDwDcyykHrg4bfiUAAAAASUVORK5CYII=",
+          "visible": true,
+          "locked": false,
+          "note": "PRIVATE_ART_4",
+          "wallId": "model-wall-1",
+          "wallSide": "front"
+        }
+      ],
+      "wallVisibility": {
+        "model-wall-1": true,
+        "model-wall-2": true,
+        "model-wall-3": true,
+        "model-wall-4": true
+      },
+      "structure": {
+        "walls": [
+          {
+            "id": "model-wall-1",
+            "name": "모델 벽 1",
+            "start": {
+              "x": -4674,
+              "z": -1993
+            },
+            "end": {
+              "x": 3986,
+              "z": -6993
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "visible": true,
+            "locked": false,
+            "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-2",
+            "name": "모델 벽 2",
+            "start": {
+              "x": 3986,
+              "z": -6993
+            },
+            "end": {
+              "x": 7236,
+              "z": -1198
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "visible": true,
+            "locked": false,
+            "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-3",
+            "name": "모델 벽 3",
+            "start": {
+              "x": -1424,
+              "z": 3802
+            },
+            "end": {
+              "x": -4674,
+              "z": -1993
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "visible": true,
+            "locked": false,
+            "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-4",
+            "name": "모델 벽 4",
+            "start": {
+              "x": 3196,
+              "z": -3196
+            },
+            "end": {
+              "x": -1134,
+              "z": -696
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "visible": true,
+            "locked": false,
+            "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+            "role": "partition"
+          }
+        ],
+        "openings": [],
+        "dimensions": [
+          {
+            "id": "dimension-1",
+            "view": "elevation",
+            "start": {
+              "kind": "wall",
+              "wallId": "model-wall-1",
+              "t": 0.10000220007260262,
+              "heightRatio": 0.7333333333333333,
+              "offsetMm": -1.8626861287765698e-13,
+              "fallback": {
+                "x": -4307.980947371261,
+                "y": 2750,
+                "z": -3193.0110003630134
+              }
+            },
+            "end": {
+              "kind": "wall",
+              "wallId": "model-wall-1",
+              "t": 0.2000044001452052,
+              "heightRatio": 0.6,
+              "offsetMm": 0,
+              "fallback": {
+                "x": -3441.9618947425224,
+                "y": 2250,
+                "z": -3693.0220007260264
+              }
+            },
+            "offsetMm": 180,
+            "elevationWallId": "model-wall-1"
+          }
+        ],
+        "unplacedArtworks": [],
+        "modelArtworks": [],
+        "lights": [],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "floorColor": "#f1f1ed",
+        "importedFloor": [
+          [
+            {
+              "x": 3486,
+              "z": -7693
+            },
+            {
+              "x": 7236,
+              "z": -1198
+            },
+            {
+              "x": -1424,
+              "z": 3802
+            },
+            {
+              "x": -5174,
+              "z": -2693
+            }
+          ]
+        ],
+        "referenceModel": {
+          "name": "EditableVenue.glb",
+          "dataUrl": "data:model/gltf-binary;base64,Z2xURgIAAADACAAAXAUAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAifSwic2NlbmUiOjAsInNjZW5lcyI6W3sibm9kZXMiOlswLDEsMiwzLDRdfV0sIm5vZGVzIjpbeyJtZXNoIjowLCJ0cmFuc2xhdGlvbiI6WzAsMS41LC0zXSwic2NhbGUiOls4LDMsMC4yXX0seyJtZXNoIjowLCJ0cmFuc2xhdGlvbiI6Wy00LDEuNSwwXSwic2NhbGUiOlswLjIsMyw2XX0seyJtZXNoIjowLCJ0cmFuc2xhdGlvbiI6WzQsMS41LDBdLCJzY2FsZSI6WzAuMiwzLDZdfSx7Im1lc2giOjAsInRyYW5zbGF0aW9uIjpbMCwxLjUsMF0sInNjYWxlIjpbNCwzLDAuMl19LHsibWVzaCI6MSwidHJhbnNsYXRpb24iOlswLDAuMDc1LDBdLCJzY2FsZSI6WzgsMC4xNSw2XX1dLCJtZXNoZXMiOlt7InByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjAsIk5PUk1BTCI6MSwiVEVYQ09PUkRfMCI6M30sImluZGljZXMiOjIsIm1hdGVyaWFsIjowfV19LHsicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MCwiTk9STUFMIjoxLCJURVhDT09SRF8wIjozfSwiaW5kaWNlcyI6MiwibWF0ZXJpYWwiOjF9XX1dLCJtYXRlcmlhbHMiOlt7Im5hbWUiOiJicm93biBtZXRhbCIsInBick1ldGFsbGljUm91Z2huZXNzIjp7ImJhc2VDb2xvckZhY3RvciI6WzAuNiwwLjIyLDAuMDQsMV0sIm1ldGFsbGljRmFjdG9yIjowLjUsInJvdWdobmVzc0ZhY3RvciI6MC4zNX19LHsibmFtZSI6ImJsdWUgY2FwIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC4wMywwLjE2LDAuNTUsMV0sIm1ldGFsbGljRmFjdG9yIjowLjE1LCJyb3VnaG5lc3NGYWN0b3IiOjAuNDV9fV0sImFjY2Vzc29ycyI6W3siYnVmZmVyVmlldyI6MCwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMyIsIm1pbiI6Wy0wLjUsLTAuNSwtMC41XSwibWF4IjpbMC41LDAuNSwwLjVdfSx7ImJ1ZmZlclZpZXciOjEsImNvbXBvbmVudFR5cGUiOjUxMjYsImNvdW50IjoyNCwidHlwZSI6IlZFQzMifSx7ImJ1ZmZlclZpZXciOjIsImNvbXBvbmVudFR5cGUiOjUxMjMsImNvdW50IjozNiwidHlwZSI6IlNDQUxBUiJ9LHsiYnVmZmVyVmlldyI6MywiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMiJ9XSwiYnVmZmVyVmlld3MiOlt7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MCwiYnl0ZUxlbmd0aCI6Mjg4fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6Mjg4LCJieXRlTGVuZ3RoIjoyODh9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo3NjgsImJ5dGVMZW5ndGgiOjcyfSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6NTc2LCJieXRlTGVuZ3RoIjoxOTJ9XSwiYnVmZmVycyI6W3siYnl0ZUxlbmd0aCI6ODQwfV19ICAgSAMAAEJJTgAAAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAIAAQACAAMAAQAEAAYABQAGAAcABQAIAAoACQAKAAsACQAMAA4ADQAOAA8ADQAQABIAEQASABMAEQAUABYAFQAWABcAFQA=",
+          "visible": false,
+          "sizeMm": [
+            8200,
+            3000,
+            6100
+          ],
+          "sourceOffsetM": [
+            0,
+            0,
+            0.050000000000000044
+          ],
+          "positionMm": [
+            1000,
+            0,
+            -2000
+          ],
+          "rotationDeg": 30,
+          "scale": 1.25
+        }
+      },
+      "cameraView": {
+        "projection": "orthographic",
+        "position": [
+          -15.884765575344204,
+          27.248648363016304,
+          14.970265575344204
+        ],
+        "target": [
+          1.0309999999999997,
+          1.875,
+          -1.9454999999999998
+        ],
+        "zoom": 28.236416628970673
+      }
+    },
+    {
+      "id": "scene-2",
+      "name": "벽 회전",
+      "artworks": [
+        {
+          "id": "artwork-1",
+          "name": "고요한 면",
+          "artist": "",
+          "widthMm": 400,
+          "heightMm": 600,
+          "depthMm": 30,
+          "alongMm": 3479.889998789974,
+          "centerHeightMm": 1580,
+          "frame": "none",
+          "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABaSURBVFiF7dgxEkBQDATQZRxMz4n0nEjPzWh9PWnedpkUeZNyu2k9rhSmrzwOkCTDc9iXsVnO2/k5oPwDAAAAAAAAAAAAAAAAAAAAAAAAAE1P+Ecv+E75BwBu8UMHhGSF1aMAAAAASUVORK5CYII=",
+          "visible": true,
+          "locked": false,
+          "note": "PRIVATE_ART_0",
+          "wallId": "model-wall-1",
+          "wallSide": "front",
+          "rotationDeg": -30
+        },
+        {
+          "id": "artwork-2",
+          "name": "빛의 간격",
+          "artist": "",
+          "widthMm": 500,
+          "heightMm": 600,
+          "depthMm": 30,
+          "alongMm": 3949.889998789974,
+          "centerHeightMm": 1500,
+          "frame": "none",
+          "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABbSURBVFiF7dihEYBADATAg8HRFWVAfZQBVYEGzaN/YvZcYrITecN1rE8KM1YeB0iSqV3My/6Z73PrCij/AAAAAAAAAAAAAAAAAAAAAAAAAMCvJ+zdC7Yp/wDAC4GaCHy2DBjnAAAAAElFTkSuQmCC",
+          "visible": true,
+          "locked": false,
+          "note": "PRIVATE_ART_1",
+          "wallId": "model-wall-1",
+          "wallSide": "front"
+        },
+        {
+          "id": "artwork-3",
+          "name": "잔상",
+          "artist": "",
+          "widthMm": 600,
+          "heightMm": 600,
+          "depthMm": 30,
+          "alongMm": 4699.889998789974,
+          "centerHeightMm": 1500,
+          "frame": "none",
+          "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABVSURBVFiF7dixDYAwDATAD2IzGIEsSVZgN6iRaCMXnDt/49OXbud23CmcpfI4QJKsX2G/xmsfe58GKG8AAAAAAAAAAAAAAAAAAAAAAAAAoPkV/x7wAOmDB+GUg5NFAAAAAElFTkSuQmCC",
+          "visible": true,
+          "locked": false,
+          "note": "PRIVATE_ART_2",
+          "wallId": "model-wall-1",
+          "wallSide": "front"
+        },
+        {
+          "id": "artwork-4",
+          "name": "겹쳐진 시간",
+          "artist": "",
+          "widthMm": 700,
+          "heightMm": 600,
+          "depthMm": 30,
+          "alongMm": 5549.889998789974,
+          "centerHeightMm": 1500,
+          "frame": "none",
+          "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABVSURBVFiF7dixDYAwDATAD2I82CSZJmzCgFBTUCIXnDvrC5++dNtmv1I4S+VxgCRZ34Kzz8e+H+MTQHkDAAAAAAAAAAAAAAAAAAAAAAAAAM2v+PeAG+HmB/VcWVCnAAAAAElFTkSuQmCC",
+          "visible": true,
+          "locked": false,
+          "note": "PRIVATE_ART_3",
+          "wallId": "model-wall-1",
+          "wallSide": "front"
+        },
+        {
+          "id": "artwork-5",
+          "name": "여백",
+          "artist": "",
+          "widthMm": 800,
+          "heightMm": 600,
+          "depthMm": 30,
+          "alongMm": 6499.889998789974,
+          "centerHeightMm": 1500,
+          "frame": "none",
+          "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAYAAABwrHhvAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAABdSURBVFiF7dixEUBQEATQZbSnEQrQAgVohAKJCX7EXPI2u7ng3ly43TodVwrTVx4HSJKhtVz28TFv8/k5oPwDAAAAAAAAAAAAAAAAAAAAAAAAAM2e8I9e8J3yDwDcyykHrg4bfiUAAAAASUVORK5CYII=",
+          "visible": true,
+          "locked": false,
+          "note": "PRIVATE_ART_4",
+          "wallId": "model-wall-1",
+          "wallSide": "front"
+        }
+      ],
+      "wallVisibility": {
+        "model-wall-1": true,
+        "model-wall-2": true,
+        "model-wall-3": true,
+        "model-wall-4": true
+      },
+      "structure": {
+        "walls": [
+          {
+            "id": "model-wall-1",
+            "name": "모델 벽 1",
+            "start": {
+              "x": 2095.5540984853355,
+              "z": -128.6586063228963
+            },
+            "end": {
+              "x": -2783.5540984853355,
+              "z": -8857.341393677103
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "visible": true,
+            "locked": false,
+            "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-2",
+            "name": "모델 벽 2",
+            "start": {
+              "x": -2783.5540984853355,
+              "z": -8857.341393677103
+            },
+            "end": {
+              "x": 7236,
+              "z": -1198
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "visible": true,
+            "locked": false,
+            "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-3",
+            "name": "모델 벽 3",
+            "start": {
+              "x": -1424,
+              "z": 3802
+            },
+            "end": {
+              "x": 2095.5540984853355,
+              "z": -128.6586063228963
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "visible": true,
+            "locked": false,
+            "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-4",
+            "name": "모델 벽 4",
+            "start": {
+              "x": 3196,
+              "z": -3196
+            },
+            "end": {
+              "x": -1134,
+              "z": -696
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "visible": true,
+            "locked": false,
+            "note": "EditableVenue.glb의 닫힌 직선 벽 형상에서 추출",
+            "role": "partition"
+          }
+        ],
+        "openings": [],
+        "dimensions": [
+          {
+            "id": "dimension-1",
+            "view": "elevation",
+            "start": {
+              "kind": "wall",
+              "wallId": "model-wall-1",
+              "t": 0.10000220007260262,
+              "heightRatio": 0.7333333333333333,
+              "offsetMm": -1.8626861287765698e-13,
+              "fallback": {
+                "x": -4307.980947371261,
+                "y": 2750,
+                "z": -3193.0110003630134
+              }
+            },
+            "end": {
+              "kind": "wall",
+              "wallId": "model-wall-1",
+              "t": 0.2000044001452052,
+              "heightRatio": 0.6,
+              "offsetMm": 0,
+              "fallback": {
+                "x": -3441.9618947425224,
+                "y": 2250,
+                "z": -3693.0220007260264
+              }
+            },
+            "offsetMm": 180,
+            "elevationWallId": "model-wall-1"
+          }
+        ],
+        "unplacedArtworks": [],
+        "modelArtworks": [],
+        "lights": [],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "floorColor": "#f1f1ed",
+        "importedFloor": [
+          [
+            {
+              "x": 3486,
+              "z": -7693
+            },
+            {
+              "x": 7236,
+              "z": -1198
+            },
+            {
+              "x": -1424,
+              "z": 3802
+            },
+            {
+              "x": -5174,
+              "z": -2693
+            }
+          ]
+        ],
+        "referenceModel": {
+          "name": "EditableVenue.glb",
+          "dataUrl": "data:model/gltf-binary;base64,Z2xURgIAAADACAAAXAUAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAifSwic2NlbmUiOjAsInNjZW5lcyI6W3sibm9kZXMiOlswLDEsMiwzLDRdfV0sIm5vZGVzIjpbeyJtZXNoIjowLCJ0cmFuc2xhdGlvbiI6WzAsMS41LC0zXSwic2NhbGUiOls4LDMsMC4yXX0seyJtZXNoIjowLCJ0cmFuc2xhdGlvbiI6Wy00LDEuNSwwXSwic2NhbGUiOlswLjIsMyw2XX0seyJtZXNoIjowLCJ0cmFuc2xhdGlvbiI6WzQsMS41LDBdLCJzY2FsZSI6WzAuMiwzLDZdfSx7Im1lc2giOjAsInRyYW5zbGF0aW9uIjpbMCwxLjUsMF0sInNjYWxlIjpbNCwzLDAuMl19LHsibWVzaCI6MSwidHJhbnNsYXRpb24iOlswLDAuMDc1LDBdLCJzY2FsZSI6WzgsMC4xNSw2XX1dLCJtZXNoZXMiOlt7InByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjAsIk5PUk1BTCI6MSwiVEVYQ09PUkRfMCI6M30sImluZGljZXMiOjIsIm1hdGVyaWFsIjowfV19LHsicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MCwiTk9STUFMIjoxLCJURVhDT09SRF8wIjozfSwiaW5kaWNlcyI6MiwibWF0ZXJpYWwiOjF9XX1dLCJtYXRlcmlhbHMiOlt7Im5hbWUiOiJicm93biBtZXRhbCIsInBick1ldGFsbGljUm91Z2huZXNzIjp7ImJhc2VDb2xvckZhY3RvciI6WzAuNiwwLjIyLDAuMDQsMV0sIm1ldGFsbGljRmFjdG9yIjowLjUsInJvdWdobmVzc0ZhY3RvciI6MC4zNX19LHsibmFtZSI6ImJsdWUgY2FwIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC4wMywwLjE2LDAuNTUsMV0sIm1ldGFsbGljRmFjdG9yIjowLjE1LCJyb3VnaG5lc3NGYWN0b3IiOjAuNDV9fV0sImFjY2Vzc29ycyI6W3siYnVmZmVyVmlldyI6MCwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMyIsIm1pbiI6Wy0wLjUsLTAuNSwtMC41XSwibWF4IjpbMC41LDAuNSwwLjVdfSx7ImJ1ZmZlclZpZXciOjEsImNvbXBvbmVudFR5cGUiOjUxMjYsImNvdW50IjoyNCwidHlwZSI6IlZFQzMifSx7ImJ1ZmZlclZpZXciOjIsImNvbXBvbmVudFR5cGUiOjUxMjMsImNvdW50IjozNiwidHlwZSI6IlNDQUxBUiJ9LHsiYnVmZmVyVmlldyI6MywiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMiJ9XSwiYnVmZmVyVmlld3MiOlt7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MCwiYnl0ZUxlbmd0aCI6Mjg4fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6Mjg4LCJieXRlTGVuZ3RoIjoyODh9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo3NjgsImJ5dGVMZW5ndGgiOjcyfSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6NTc2LCJieXRlTGVuZ3RoIjoxOTJ9XSwiYnVmZmVycyI6W3siYnl0ZUxlbmd0aCI6ODQwfV19ICAgSAMAAEJJTgAAAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAIAAQACAAMAAQAEAAYABQAGAAcABQAIAAoACQAKAAsACQAMAA4ADQAOAA8ADQAQABIAEQASABMAEQAUABYAFQAWABcAFQA=",
+          "visible": false,
+          "sizeMm": [
+            8200,
+            3000,
+            6100
+          ],
+          "sourceOffsetM": [
+            0,
+            0,
+            0.050000000000000044
+          ],
+          "positionMm": [
+            1000,
+            0,
+            -2000
+          ],
+          "rotationDeg": 30,
+          "scale": 1.25
+        }
+      },
+      "cameraView": {
+        "projection": "orthographic",
+        "position": [
+          1.0309999999999997,
+          1.875,
+          21.529578078284313
+        ],
+        "target": [
+          1.0309999999999997,
+          1.875,
+          -2.527670696838552
+        ],
+        "zoom": 66.6204024982651
+      }
+    }
+  ],
+  "floorColor": "#f1f1ed",
+  "referenceModel": {
+    "name": "EditableVenue.glb",
+    "dataUrl": "data:model/gltf-binary;base64,Z2xURgIAAADACAAAXAUAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAifSwic2NlbmUiOjAsInNjZW5lcyI6W3sibm9kZXMiOlswLDEsMiwzLDRdfV0sIm5vZGVzIjpbeyJtZXNoIjowLCJ0cmFuc2xhdGlvbiI6WzAsMS41LC0zXSwic2NhbGUiOls4LDMsMC4yXX0seyJtZXNoIjowLCJ0cmFuc2xhdGlvbiI6Wy00LDEuNSwwXSwic2NhbGUiOlswLjIsMyw2XX0seyJtZXNoIjowLCJ0cmFuc2xhdGlvbiI6WzQsMS41LDBdLCJzY2FsZSI6WzAuMiwzLDZdfSx7Im1lc2giOjAsInRyYW5zbGF0aW9uIjpbMCwxLjUsMF0sInNjYWxlIjpbNCwzLDAuMl19LHsibWVzaCI6MSwidHJhbnNsYXRpb24iOlswLDAuMDc1LDBdLCJzY2FsZSI6WzgsMC4xNSw2XX1dLCJtZXNoZXMiOlt7InByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjAsIk5PUk1BTCI6MSwiVEVYQ09PUkRfMCI6M30sImluZGljZXMiOjIsIm1hdGVyaWFsIjowfV19LHsicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MCwiTk9STUFMIjoxLCJURVhDT09SRF8wIjozfSwiaW5kaWNlcyI6MiwibWF0ZXJpYWwiOjF9XX1dLCJtYXRlcmlhbHMiOlt7Im5hbWUiOiJicm93biBtZXRhbCIsInBick1ldGFsbGljUm91Z2huZXNzIjp7ImJhc2VDb2xvckZhY3RvciI6WzAuNiwwLjIyLDAuMDQsMV0sIm1ldGFsbGljRmFjdG9yIjowLjUsInJvdWdobmVzc0ZhY3RvciI6MC4zNX19LHsibmFtZSI6ImJsdWUgY2FwIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC4wMywwLjE2LDAuNTUsMV0sIm1ldGFsbGljRmFjdG9yIjowLjE1LCJyb3VnaG5lc3NGYWN0b3IiOjAuNDV9fV0sImFjY2Vzc29ycyI6W3siYnVmZmVyVmlldyI6MCwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMyIsIm1pbiI6Wy0wLjUsLTAuNSwtMC41XSwibWF4IjpbMC41LDAuNSwwLjVdfSx7ImJ1ZmZlclZpZXciOjEsImNvbXBvbmVudFR5cGUiOjUxMjYsImNvdW50IjoyNCwidHlwZSI6IlZFQzMifSx7ImJ1ZmZlclZpZXciOjIsImNvbXBvbmVudFR5cGUiOjUxMjMsImNvdW50IjozNiwidHlwZSI6IlNDQUxBUiJ9LHsiYnVmZmVyVmlldyI6MywiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMiJ9XSwiYnVmZmVyVmlld3MiOlt7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MCwiYnl0ZUxlbmd0aCI6Mjg4fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6Mjg4LCJieXRlTGVuZ3RoIjoyODh9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo3NjgsImJ5dGVMZW5ndGgiOjcyfSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6NTc2LCJieXRlTGVuZ3RoIjoxOTJ9XSwiYnVmZmVycyI6W3siYnl0ZUxlbmd0aCI6ODQwfV19ICAgSAMAAEJJTgAAAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAIAAQACAAMAAQAEAAYABQAGAAcABQAIAAoACQAKAAsACQAMAA4ADQAOAA8ADQAQABIAEQASABMAEQAUABYAFQAWABcAFQA=",
+    "visible": false,
+    "sizeMm": [
+      8200,
+      3000,
+      6100
+    ],
+    "sourceOffsetM": [
+      0,
+      0,
+      0.050000000000000044
+    ],
+    "positionMm": [
+      1000,
+      0,
+      -2000
+    ],
+    "rotationDeg": 30,
+    "scale": 1.25
+  },
+  "lights": [],
+  "note": "PRIVATE_PROJECT",
+  "importedFloor": [
+    [
+      {
+        "x": 3486,
+        "z": -7693
+      },
+      {
+        "x": 7236,
+        "z": -1198
+      },
+      {
+        "x": -1424,
+        "z": 3802
+      },
+      {
+        "x": -5174,
+        "z": -2693
+      }
+    ]
+  ],
+  "unplacedArtworks": [],
+  "openings": [],
+  "dimensions": [
+    {
+      "id": "dimension-1",
+      "view": "elevation",
+      "start": {
+        "kind": "wall",
+        "wallId": "model-wall-1",
+        "t": 0.10000220007260262,
+        "heightRatio": 0.7333333333333333,
+        "offsetMm": -1.8626861287765698e-13,
+        "fallback": {
+          "x": -4307.980947371261,
+          "y": 2750,
+          "z": -3193.0110003630134
+        }
+      },
+      "end": {
+        "kind": "wall",
+        "wallId": "model-wall-1",
+        "t": 0.2000044001452052,
+        "heightRatio": 0.6,
+        "offsetMm": 0,
+        "fallback": {
+          "x": -3441.9618947425224,
+          "y": 2250,
+          "z": -3693.0220007260264
+        }
+      },
+      "offsetMm": 180,
+      "elevationWallId": "model-wall-1"
+    }
+  ],
+  "modelArtworks": [],
+  "outdoor": {
+    "mode": "indoor",
+    "latitude": 37.5665,
+    "longitude": 126.978,
+    "timeZone": "Asia/Seoul",
+    "date": "2026-06-21",
+    "time": "12:00",
+    "northDeg": 0,
+    "preset": "clear",
+    "sunIntensity": 3,
+    "shadow": true,
+    "occurrence": "earlier"
+  },
+  "lighting": {
+    "ambient": 0.65,
+    "hemisphere": 0.7,
+    "fill": 2.3,
+    "environment": 0.35
+  }
+}

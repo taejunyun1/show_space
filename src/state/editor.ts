@@ -36,7 +36,7 @@ import {snapArtworkPlacement,type ArtworkSnapGuide,type ArtworkSnapOptions} from
 export type View = '3d' | 'plan' | 'elevation'
 type SaveStatus = 'loading' | 'saved' | 'saving' | 'error'
 type EditTool = 'select' | 'pan' | 'move' | 'rotate' | 'draw' | 'measure'
-interface WallGesture {id:string;ids:string[];mode:'move'|'rotate';start:Point;base:Project}
+interface WallGesture {id:string;ids:string[];mode:'move'|'rotate'|'endpoint';endpoint?:'start'|'end';start:Point;base:Project}
 interface ArtworkGesture {id:string;grab:ArtworkFacePoint;base:Project;guides?:ArtworkSnapGuide[]}
 type ArtworkDragHit=ArtworkFacePoint&{wallId?:string;wallSide?:'front'|'back'}
 interface MeasurementDraft {view:View; elevationWallId?:string;start:MeasurementAnchor;end?:MeasurementAnchor}
@@ -74,6 +74,7 @@ interface EditorState {
   patchMeasurement(id:string,patch:Pick<Partial<SavedDimension>,'offsetMm'>):void
   setLinkedCorners(linked:boolean):void
   beginWallTransform(id:string,mode:'move'|'rotate',start:Point):void
+  beginWallEndpoint(id:string,endpoint:'start'|'end'):void
   updateWallTransform(point:Point,snap?:boolean):void
   finishWallTransform(cancel?:boolean):void
   beginArtworkDrag(id:string,hit:ArtworkFacePoint):void
@@ -253,10 +254,17 @@ export const useEditor = create<EditorState>((set, get) => {
         ? [...new Set(selected.filter(item=>item.type==='wall').flatMap(item=>groupMembers(project,item.id).map(w=>w.id)))] : groupMembers(project,id).map(w=>w.id);
       if(project.walls.some(w=>ids.includes(w.id)&&w.locked))throw new Error('잠긴 벽은 이동하거나 회전할 수 없습니다.');
       if(!Number.isFinite(start.x)||!Number.isFinite(start.z))throw new Error('시작점이 올바르지 않습니다.');
-      set({wallGesture:{id,ids,mode,start,base:project},outdoorGesture:null,modelArtworkGesture:null,artworkGesture:null,rotatingArtworkId:null,previewProject:null,selected:ids.map(id=>({type:'wall',id})),activeWallId:id});
+      set({wallGesture:{id,ids,mode,start,base:project},outdoorGesture:null,modelArtworkGesture:null,artworkGesture:null,lightGesture:null,rotatingArtworkId:null,previewProject:null,selected:ids.map(id=>({type:'wall',id})),activeWallId:id});
+    }),
+    beginWallEndpoint:(id,endpoint)=>attempt(()=>{
+      const state=get(),project=state.project,wall=project.walls.find(w=>w.id===id);
+      if(!wall)throw new Error('벽을 찾을 수 없습니다.');
+      if(wall.locked)throw new Error('잠긴 벽은 변경할 수 없습니다.');
+      set({wallGesture:{id,ids:[id],mode:'endpoint',endpoint,start:{...wall[endpoint]},base:project},outdoorGesture:null,modelArtworkGesture:null,artworkGesture:null,lightGesture:null,rotatingArtworkId:null,previewProject:null,activeWallId:id,selected:state.selected.some(s=>s.type==='wall'&&s.id===id)?state.selected:[{type:'wall',id}]});
     }),
     updateWallTransform: (point,snap=false) => attempt(()=>{
       const gesture=get().wallGesture;if(!gesture)return;
+      if(gesture.mode==='endpoint'){set({previewProject:updateWallEndpoint(gesture.base,gesture.id,gesture.endpoint!,point,get().linkedCorners)});return;}
       const points=gesture.base.walls.filter(w=>gesture.ids.includes(w.id)).flatMap(w=>[w.start,w.end]);
       const center={x:(Math.min(...points.map(p=>p.x))+Math.max(...points.map(p=>p.x)))/2,z:(Math.min(...points.map(p=>p.z))+Math.max(...points.map(p=>p.z)))/2};
       const raw={x:point.x-gesture.start.x,z:point.z-gesture.start.z};
