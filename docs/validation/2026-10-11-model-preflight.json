@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-11",
+  "baseCommit": "28b3917b7bef1c7c2f4603f2e6bf6703e4668626",
+  "baseline": {
+    "command": "npx vitest run src/lib/modelPreflight.test.ts src/components/Header.importWorkflow.test.tsx",
+    "sources": "Same final tests; existing artworkModelPayload/loadStaticModel/ImportDialog restored from baseCommit for comparison, then returned to final source byte-for-byte",
+    "passed": 21,
+    "failed": 12,
+    "total": 33
+  },
+  "after": {
+    "command": "GONGGAN_PREFLIGHT_PROOF=1 npx vitest run src/lib/modelPreflight.test.ts src/components/Header.importWorkflow.test.tsx src/lib/modelArtworkImport.test.ts src/lib/loadStaticModel.test.ts src/lib/modelImport.test.ts",
+    "passed": 54,
+    "filesPassed": 5,
+    "newCases": 16
+  },
+  "fullSuite": {
+    "command": "npm test",
+    "passed": 1371,
+    "skipped": 10,
+    "filesPassed": 235,
+    "filesSkipped": 10,
+    "seconds": 10.65
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "seconds": 4.75,
+    "existingLargeChunkNotice": true
+  },
+  "limits": {
+    "sourceFileBytes": 12582912,
+    "primitiveAndInstanceIndexCount": 600000,
+    "hierarchyEdges": 60,
+    "vertexViewCopyBytes": 50331648,
+    "vertexCopyScope": "Referenced unique bufferView copies including row padding; not total CPU/GPU memory"
+  },
+  "validInterleaved": {
+    "positionsNormalsUvsCompared": true,
+    "lastRowPaddingOmittedLoaded": true,
+    "originalSourceRewritten": false,
+    "privateViewCopyPadded": true
+  },
+  "wholeVenue": {
+    "rooms": 30,
+    "meshes": 450,
+    "geometryResources": 1,
+    "bytes": 32764,
+    "sizeMm": [
+      72000,
+      3000,
+      40000
+    ],
+    "sourceOffsetM": [
+      -40,
+      -1.9999999999999998,
+      -21
+    ],
+    "originalBytesPreserved": true,
+    "gpuMeasured": false
+  },
+  "ui": {
+    "actualReactStrictModeHeader": true,
+    "actualMalformedGlbAndFileParser": true,
+    "readablePreflightError": true,
+    "originalDraftAndUndoPreserved": true,
+    "subsequentValidImportAndUndo": true,
+    "realBrowserOrGpu": false
+  },
+  "deployed": false,
+  "limitations": [
+    "Owned synthetic 30-room whole-venue input; not arbitrary user-model/venue acceptance",
+    "Geometry/reader/loader preflight and native/jsdom transport; no FPS/VRAM/p95, GPU pixels, real-device or operating account evidence",
+    "Copied-view budget regression inspects declaration metadata without allocating pathological duplicated buffers in baseline",
+    "Actual operating URL/auth/device/SketchUp/full 24-step/user metrics and later paid material/IES/AI remain"
+  ],
+  "sourceSHA256": {
+    "src/lib/modelAccessorRanges.ts": "4d80dd9cfcba54ccee36653da97f121514afa65ca7cd6bbb851c69befae240fb",
+    "src/lib/artworkModelPayload.ts": "08228c9c3e25535477659d9457344b451c2352662d341e63efc7f77e912eeaa2",
+    "src/lib/loadStaticModel.ts": "8c23389a414fa74291ac1d3c82801c9ed7f7f8d005c891407558661ee9363057",
+    "src/lib/modelPreflight.test.ts": "f4a0d58a9b9219cce97796583e7c7506afe81fbf82f7a249a9a8aa55833df6bb",
+    "src/components/ImportDialog.tsx": "01875649869d8800993baa9b69ac051791e1d2a0394f4a7d1e7b32ec26eb4d8d",
+    "src/components/Header.importWorkflow.test.tsx": "cba43feefbd565154689738a84b1cb5e696e5775452954071ed9416adc7e715f"
+  },
+  "artifactSHA256": {
+    "docs/validation/model-preflight-2026-10-11/venue.glb": "1280dbd22b847a5e089a74d6f9830d6f62ca653b5d955018e824fde137960efe",
+    "docs/validation/model-preflight-2026-10-11/venue.json": "90e69bfb04a97cffedaca35da1ab65356ff36f640f6366e939b870b0773e07db"
+  }
+}

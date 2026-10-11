@@ -7,11 +7,16 @@ import {disposeModelAsset} from './modelAssetResources';
  * including supported material extensions, before exposing a partial model.
  * Unused images and slots ignored by unlit materials need no decoder work. */
 export async function loadStaticModel(bytes:ArrayBuffer){
- inspectStaticArtworkGlb(bytes);
+ const doc=inspectStaticArtworkGlb(bytes);
  const requested:(Texture|null)[]=[],urls=new Set<string>(),manager=new LoadingManager();
  manager.setURLModifier(url=>{if(url.startsWith('blob:'))urls.add(url);return url;});
  const loader=new GLTFLoader(manager);
  loader.register(parser=>{
+  // Valid interleaved views may omit the final row's trailing padding. Three
+  // constructs count*stride typed arrays; pad only this private decoded copy.
+  // Accessor byte ranges have already been checked against the ORIGINAL view.
+  const loadView=parser.loadBufferView.bind(parser);
+  parser.loadBufferView=async index=>{const buffer=await loadView(index),stride=doc.bufferViews[index].byteStride;if(!stride||buffer.byteLength%stride===0)return buffer;const padded=new Uint8Array(Math.ceil(buffer.byteLength/stride)*stride);padded.set(new Uint8Array(buffer));return padded.buffer;};
   const assign=parser.assignTexture.bind(parser);
   parser.assignTexture=async (...args)=>{const texture=await assign(...args);requested.push(texture);return texture;};
   return {name:'GONGGAN_required_texture_check'};

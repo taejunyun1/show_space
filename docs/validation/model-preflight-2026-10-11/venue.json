@@ -1,0 +1,18 @@
+{
+  "rooms": 30,
+  "meshes": 450,
+  "geometryResources": 1,
+  "bytes": 32764,
+  "sizeMm": [
+    72000,
+    3000,
+    40000
+  ],
+  "sourceOffsetM": [
+    -40,
+    -1.9999999999999998,
+    -21
+  ],
+  "originalBytesPreserved": true,
+  "gpuMeasured": false
+}

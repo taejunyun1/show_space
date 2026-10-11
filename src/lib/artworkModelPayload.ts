@@ -1,4 +1,5 @@
 import {base64Bytes} from './base64Bytes';
+import {inspectModelAccessorRanges} from './modelAccessorRanges';
 import {inspectGlb,MODEL_MAX_BYTES} from './glbPayload';
 type RecordValue=Record<string,unknown>;
 export function recordValue(value:unknown):RecordValue{if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('모델 구조 정보가 올바르지 않습니다.');return value as RecordValue;}
@@ -29,10 +30,11 @@ export function inspectStaticArtworkDocument(value:unknown){
  }meshCounts.push(meshCount);}
  let instances=0;for(const n of nodes)if(n.mesh!==undefined){if(!Number.isInteger(n.mesh)||!meshes[Number(n.mesh)])throw new Error('모델 형상 연결이 올바르지 않습니다.');instances+=meshCounts[Number(n.mesh)];if(instances>600000)throw new Error('반복된 모델 형상이 너무 많습니다. 삼각형 약 20만 개 이하로 단순화해주세요.');}
  if(!count)throw new Error('모델에 표시할 형상이 없습니다.');
+ inspectModelAccessorRanges(accessors,views,buffers,meshes);
  // Node cycles and deep trees otherwise cause loader recursion or traversal failure.
  const parents=new Set<number>();for(const n of nodes)if(Array.isArray(n.children))for(const child of n.children){if(parents.has(Number(child)))throw new Error('모델 객체가 여러 부모에 중복 연결됐습니다.');parents.add(Number(child));}
- const active=new Set<number>(),done=new Set<number>();
- function node(index:unknown,depth=0){if(!Number.isInteger(index)||Number(index)<0||!nodes[Number(index)]||depth>60||active.has(Number(index)))throw new Error('모델 객체 연결이 손상됐거나 너무 깊습니다.');if(done.has(Number(index)))return;active.add(Number(index));const n=nodes[Number(index)];if(n.children!==undefined){if(!Array.isArray(n.children))throw new Error('모델 객체 연결이 손상됐습니다.');n.children.forEach(i=>node(i,depth+1));}active.delete(Number(index));done.add(Number(index));}
+ const active=new Set<number>(),heights=new Map<number,number>();
+ function node(index:unknown,depth=0):number{if(!Number.isInteger(index)||Number(index)<0||!nodes[Number(index)]||depth>60||active.has(Number(index)))throw new Error('모델 객체 연결이 손상됐거나 계층이 너무 깊습니다.');const id=Number(index),cached=heights.get(id);if(cached!==undefined)return cached;active.add(id);const n=nodes[id];let height=0;if(n.children!==undefined){if(!Array.isArray(n.children))throw new Error('모델 객체 연결이 손상됐습니다.');for(const child of n.children)height=Math.max(height,node(child,depth+1)+1);}if(height>60)throw new Error('모델 객체 계층이 너무 깊습니다. 그룹을 줄인 뒤 다시 내보내세요.');active.delete(id);heights.set(id,height);return height;}
  for(const n of nodes)for(const [key,length] of [['translation',3],['rotation',4],['scale',3],['matrix',16]] as const)if(n[key]!==undefined&&(!Array.isArray(n[key])||(n[key] as unknown[]).length!==length||(n[key] as unknown[]).some(v=>typeof v!=='number'||!Number.isFinite(v))))throw new Error('모델 객체 좌표가 올바르지 않습니다.');
  nodes.forEach((_,i)=>node(i));
  for(const s of list(doc.scenes)){if(!Array.isArray(s.nodes))throw new Error('모델 장면 연결이 올바르지 않습니다.');const roots=new Set<number>();s.nodes.forEach(i=>{if(roots.has(Number(i))||parents.has(Number(i)))throw new Error('모델 장면에 객체가 중복 연결됐습니다.');roots.add(Number(i));node(i);});}
