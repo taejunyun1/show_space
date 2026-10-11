@@ -10,6 +10,7 @@ import {MODEL_MAX_BYTES} from '../lib/glbPayload';
 import {disposeModelAsset} from '../lib/modelAssetResources';
 import {checkModelAssetBounds} from '../lib/modelArtworkGeometry';
 interface Asset {refs:number;promise:Promise<Group>;controller:AbortController;scenes?:Group[];scene?:Group}
+interface Loaded {shareId:string;hash:string;localUrl?:string;localMode:boolean;boundsKey:string;allowFlat:boolean;source:Group|null;error:string}
 const assets=new Map<string,Asset>();
 async function boundedModelResponse(response:Response){if(!response.ok)throw new Error(response.status===410?'중단된 공유 링크입니다.':'3D 작품 모델을 불러오지 못했습니다.');if(Number(response.headers.get('content-length'))>MODEL_MAX_BYTES)throw new Error('공유 모델 크기가 제한을 초과합니다.');const reader=response.body?.getReader();if(!reader)throw new Error('공유 모델 자산이 없습니다.');const chunks:Uint8Array[]=[];let length=0;try{while(true){const {done,value}=await reader.read();if(done)break;length+=value.length;if(length>MODEL_MAX_BYTES){await reader.cancel();throw new Error('공유 모델 크기가 제한을 초과합니다.');}chunks.push(value);}}finally{reader.releaseLock();}const bytes=new Uint8Array(length);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}return bytes.buffer;}
 function acquire(shareId:string,hash:string,localUrl?:string){
@@ -32,8 +33,15 @@ function acquire(shareId:string,hash:string,localUrl?:string){
 
 /** Shared venue/artwork cache; no editor store, transform controls or private model fields. */
 export function usePublicModelScene(shareId:string,hash:string,bounds:{sizeMm:[number,number,number];sourceOffsetM:[number,number,number]},allowFlat=false){
- const local=useReadonlyAssets(),localUrl=local?.models.get(hash);
- const {invalidate}=useThree(),[source,setSource]=useState<Group|null>(null),[error,setError]=useState('');
- useEffect(()=>{let canceled=false;if(local&&!localUrl){setSource(null);setError('발표 모델 자산을 찾지 못했습니다.');return;}const asset=acquire(shareId,hash,localUrl);setSource(null);setError('');void asset.promise.then(scene=>{if(canceled)return;try{checkModelAssetBounds(scene,bounds,allowFlat);scene.traverse(o=>{if(o instanceof Mesh){o.castShadow=true;o.receiveShadow=true;}});setSource(scene);invalidate();}catch(e){setError(e instanceof Error?e.message:'3D 모델을 불러오지 못했습니다.');invalidate();}},e=>{if(!canceled){setError(e instanceof Error?e.message:'3D 모델을 불러오지 못했습니다.');invalidate();}});return()=>{canceled=true;asset.release();};},[shareId,hash,local,localUrl,bounds,allowFlat,invalidate]);
- return {source,error};
+ const local=useReadonlyAssets(),localMode=local!==null,localUrl=local?.models.get(hash);
+ const boundsKey=JSON.stringify([bounds.sizeMm,bounds.sourceOffsetM]),{invalidate}=useThree(),[loaded,setLoaded]=useState<Loaded|null>(null);
+ useEffect(()=>{
+  let canceled=false;const identity={shareId,hash,localUrl,localMode,boundsKey,allowFlat};
+  if(localMode&&!localUrl){setLoaded({...identity,source:null,error:'발표 모델 자산을 찾지 못했습니다.'});return;}
+  const asset=acquire(shareId,hash,localUrl);setLoaded({...identity,source:null,error:''});
+  void asset.promise.then(scene=>{if(canceled)return;try{checkModelAssetBounds(scene,bounds,allowFlat);scene.traverse(o=>{if(o instanceof Mesh){o.castShadow=true;o.receiveShadow=true;}});setLoaded({...identity,source:scene,error:''});invalidate();}catch(e){setLoaded({...identity,source:null,error:e instanceof Error?e.message:'3D 모델을 불러오지 못했습니다.'});invalidate();}},e=>{if(!canceled){setLoaded({...identity,source:null,error:e instanceof Error?e.message:'3D 모델을 불러오지 못했습니다.'});invalidate();}});
+  return()=>{canceled=true;asset.release();};
+ },[shareId,hash,localMode,localUrl,boundsKey,allowFlat,invalidate]);
+ const matches=loaded?.shareId===shareId&&loaded.hash===hash&&loaded.localUrl===localUrl&&loaded.localMode===localMode&&loaded.boundsKey===boundsKey&&loaded.allowFlat===allowFlat;
+ return {source:matches?loaded.source:null,error:matches?loaded.error:''};
 }

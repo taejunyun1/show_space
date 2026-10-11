@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-11",
+  "baseCommit": "e0cdbe717fff6fa3af7775b141f5c514b2149290",
+  "baseline": {
+    "command": "npx vitest run src/components/ModelInstances.lifecycle.test.tsx",
+    "productSources": "six changed existing model/placement files from HEAD; final test file unchanged",
+    "failed": 6,
+    "passed": 2,
+    "total": 8
+  },
+  "after": {
+    "command": "GONGGAN_MODEL_INSTANCE_PROOF=1 npx vitest run src/components/ModelInstances.lifecycle.test.tsx src/lib/modelArtworkDelivery.test.ts src/domain/modelArtworks.test.ts src/lib/modelImport.test.ts src/lib/loadStaticModel.test.ts",
+    "passed": 28,
+    "filesPassed": 5,
+    "newCases": 8
+  },
+  "fullSuite": {
+    "command": "npm test",
+    "passed": 1354,
+    "skipped": 10,
+    "filesPassed": 233,
+    "filesSkipped": 10
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "seconds": 4.78,
+    "existingLargeChunkNotice": true
+  },
+  "instances": {
+    "sourceNodes": 100,
+    "artworkInstances": 50,
+    "meshObjects": 5000,
+    "uniqueGeometry": 1,
+    "loaderParses": 1,
+    "gesturePreviews": 12,
+    "sourceClonesDuringPreviews": 0,
+    "allInstanceNodesRetained": true,
+    "cancellationRestored": true,
+    "gpuMeasured": false
+  },
+  "receiver": {
+    "fixtureCommand": "GONGGAN_RECEIVER_FIXTURE=1 npx vitest run scripts/receiver-fixture.test.ts",
+    "fixturePassed": 1,
+    "blenderCommand": "/Applications/Blender.app/Contents/MacOS/Blender --background --factory-startup --python-exit-code 1 --python scripts/verify-blender-full-fixture.py -- --glb /tmp/gonggan-full-receiver-20261007/scene.glb --project /tmp/gonggan-full-receiver-20261007/project.json --output-dir /tmp/gonggan-model-instances-receiver-20261011",
+    "exitCode": 0,
+    "version": "4.4.1",
+    "passed": true,
+    "renderRequested": false,
+    "sameBytesAsPreviousFixture": false,
+    "sameBinaryPayloadAsPreviousFixture": true,
+    "previousFileDifference": "Scene-level metadata extras differ; full GLB byte equivalence is not claimed."
+  },
+  "deployed": false,
+  "limitations": [
+    "Owned synthetic model fixtures, not representative user venue acceptance",
+    "Actual React/R3F/Three loader, node transforms and resource sharing; test renderer uses mocked WebGL transport",
+    "Annotation/line/gizmo portals adapted; pointer gesture updates use actual editor commands, not OS drag",
+    "No FPS, GPU pixels/VRAM, real-device input p95 or end-to-end browser capture measurement",
+    "Scene graph reuse preserves 5000 separate Mesh objects; does not reduce draw-call count or replace geometry simplification",
+    "Actual operating account/public URL, arbitrary model and SketchUp acceptance, full 24-step scenario and user metrics remain"
+  ],
+  "sourceSHA256": {
+    "src/components/ModelInstance3D.tsx": "b964ab1117fd45ce99d4e670f58ee9caf43779e1353e42f7bf7db882d5b45a36",
+    "src/components/ModelInstances.lifecycle.test.tsx": "ff0c26660033a37596b045104f317295ac2b441fac5c79d42185fb559cdbc6a2",
+    "src/components/ModelArtworks3D.tsx": "a7fec32a7733a9d29940274c138ef1b8d85460c0d6b86980a06eb6680c9e1067",
+    "src/components/PublicModelArtworks3D.tsx": "fa7697602cc1346c1ed829998bbdcd7470b743202ff78ca62ab2aa325d8ed167",
+    "src/components/PublicReferenceModel3D.tsx": "c27680a12e2773c57a2f1680ab44c9ea8e1f94467c370f3c6cb9babf001f4b36",
+    "src/components/ReferenceModel3D.tsx": "06d2a8158e73e6a66702fc4638f11c04a88116835ab7d3920e396bd5c589db3e",
+    "src/components/usePublicModelScene.ts": "8c73ea7ff4c2e3fd05b35b73cc8d8edf61c13a849732d32c1bd69108011da456",
+    "src/lib/modelArtworkGeometry.ts": "8cd20cead556bf5718654ed3c569e2e39fbd279e9924d207c3384064fecc996b",
+    "scripts/receiver-fixture.test.ts": "c1e06ac5297a872b71ebb576255c88289c97f5c2d1834c7d3ec314c6bbff5799",
+    "scripts/verify-blender-full-fixture.py": "320d979595453b1355adddc0a3f42b1b1729b03e8b859d4093d689dbc924ece0"
+  },
+  "artifactSHA256": {
+    "docs/validation/model-instances-2026-10-11/input.glb": "6352d5d97513826c30410d3fe2df4406010dc52f0b1621a880765142e3d5fa78",
+    "docs/validation/model-instances-2026-10-11/instance-checks.json": "2aaf2c74d768a7dd7bcb390e4de05f99f8466ab96e165ab8515daf0b080cf07b",
+    "docs/validation/model-instances-2026-10-11/project.json": "2a5175f8db509be430e6463a27a5ed0ef990ab8d87111dc639f5e49e059b3b09",
+    "docs/validation/model-instances-2026-10-11/receiver-project.json": "0831eec1e5da8761c1666f799952a67d072d46b8a91e89ea2b64319293a5b893",
+    "docs/validation/model-instances-2026-10-11/receiver.glb": "3994db9f77883397248c94e40917e04040524f7184aeb9b7968029da4ed2a6af",
+    "docs/validation/model-instances-2026-10-11/receiver.json": "86a5d57db9394b39c5eb83a8055a3f48ff11e371b418e5ca7ab32174c6c044f4"
+  }
+}

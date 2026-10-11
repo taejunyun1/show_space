@@ -10,6 +10,7 @@ import {disposeModelAsset} from '../lib/modelAssetResources';
 import type {ReferenceModel} from '../domain/types';
 import {useEditor} from '../state/editor';
 import {fixedAnchor} from '../domain/measurements';
+import {StaticModelInstance3D} from './ModelInstance3D';
 export function ReferenceModel3D({model}:{model:ReferenceModel}){
  const [asset,setAsset]=useState<LoadedCaptureModel>({dataUrl:'',boundsKey:'',scene:null,error:''});
  const boundsKey=captureModelBoundsKey(model),matches=captureModelMatches(model,asset),scene=matches?asset.scene:null,error=matches?asset.error:'';
@@ -29,7 +30,7 @@ export function ReferenceModel3D({model}:{model:ReferenceModel}){
  }
  if(!model.visible)return null;
  return <group name="capture-reference-model" userData={{captureModel:captureModelStatus(model,asset)}} position={model.positionMm.map(v=>v/1000) as [number,number,number]} rotation={[0,model.rotationDeg*Math.PI/180,0]} scale={model.scale} onPointerDown={pick}>
- {scene&&<primitive object={scene} position={model.sourceOffsetM}/>}
+ {scene&&<group position={model.sourceOffsetM}><StaticModelInstance3D source={scene}/></group>}
  {error&&<Html><span className="dimension-label">{error}</span></Html>}
  </group>;
 }

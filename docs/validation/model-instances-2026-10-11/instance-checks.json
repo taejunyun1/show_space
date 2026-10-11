@@ -1,0 +1,12 @@
+{
+  "sourceNodes": 100,
+  "artworkInstances": 50,
+  "meshObjects": 5000,
+  "uniqueGeometry": 1,
+  "loaderParses": 1,
+  "gesturePreviews": 12,
+  "sourceClonesDuringPreviews": 0,
+  "allInstanceNodesRetained": true,
+  "cancellationRestored": true,
+  "gpuMeasured": false
+}
