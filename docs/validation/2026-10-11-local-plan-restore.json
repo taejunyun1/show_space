@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "a32986aa4856ccee5276f35d362bfdf54dacf50f",
+  "runtimeFiles": [
+    "src/state/editor.ts",
+    "src/lib/projectLibrary.ts",
+    "src/lib/persistence.ts"
+  ],
+  "baseline": {
+    "method": "Temporary final-source copy; only three runtime files replaced from baseline; identical final 12 tests",
+    "failed": 8,
+    "passed": 4,
+    "total": 12,
+    "exitCode": 1,
+    "durationSeconds": 2.42
+  },
+  "regression": {
+    "added": 12,
+    "focusedFiles": 2,
+    "focusedTests": 12,
+    "targetFiles": 8,
+    "targetTests": 114,
+    "fullPassedFiles": 252,
+    "fullSkippedFiles": 10,
+    "fullPassed": 1558,
+    "fullSkipped": 10,
+    "fullDurationSeconds": 13.08,
+    "typeScriptAndProductionBuild": true,
+    "viteBuildSeconds": 5.72,
+    "existingLargeChunkWarning": true
+  },
+  "verifiedCases": [
+    "Pending old-project save preserves its draft while keeping selected startup project",
+    "Delayed new-import save and actual IndexedDB revision-query transition cannot reactivate old project",
+    "New imported current project still activates after save",
+    "Committed same-ID restoration retires pending and queued writes plus stale in-flight failure",
+    "Latest hydration request/context owns result and errors; newer dirty status remains unsaved",
+    "Edits made before hydration are queued after hydration retires",
+    "Actual React project cards reopen both projects; fresh IndexedDB connection hydrates without extra write",
+    "Both saved Scene image references, scale, wall coordinates and private note survive; ZIP exact round trip"
+  ],
+  "workflow": {
+    "date": "2026-10-11",
+    "inputBackupSha256": "960603a394cc03cf4f2c5351c6dbcd0932d26fd994b80e96824b159ecb0fb26f",
+    "backupSha256": "8678781f2f8f615c4b7f55fc0d112531386aaaedc75ac39758682ae36073b011",
+    "projectCardOpens": 2,
+    "freshIndexedDbConnection": true,
+    "hydrationDidNotRewrite": true,
+    "initialReopenRevision": 2,
+    "finalRevision": 3,
+    "scenes": [
+      {
+        "name": "도면 A",
+        "widthPx": 1000,
+        "heightPx": 800,
+        "mmPerPixel": 10,
+        "calibrated": true,
+        "imageSha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1"
+      },
+      {
+        "name": "도면 B",
+        "widthPx": 800,
+        "heightPx": 1000,
+        "mmPerPixel": 9.95,
+        "calibrated": false,
+        "imageSha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d"
+      }
+    ],
+    "privateNotePreserved": true,
+    "backupExact": true,
+    "browserStorageMeasured": false,
+    "gpuMeasured": false,
+    "limitations": [
+      "Actual React/jsdom project cards and PlanView; fake-indexeddb supplies the IndexedDB API",
+      "Owned two-JPEG backup; checks exact documents and SVG image references, not browser image/GPU pixels",
+      "Cloud project panel excluded; not real account, browser restart or two-device acceptance"
+    ]
+  },
+  "assets": [
+    {
+      "path": "assets/images/71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d.png",
+      "bytes": 5400,
+      "sha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d"
+    },
+    {
+      "path": "assets/images/edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1.png",
+      "bytes": 5519,
+      "sha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1"
+    }
+  ],
+  "artifacts": {
+    "workflow.json": {
+      "bytes": 1255,
+      "sha256": "73c0293365b947b2e64a99859ca2da1b3f6dc5a2b7cf1e171496573d46c1d6a4"
+    },
+    "project.gonggan.zip": {
+      "bytes": 4350,
+      "sha256": "8678781f2f8f615c4b7f55fc0d112531386aaaedc75ac39758682ae36073b011"
+    }
+  },
+  "limits": [
+    "fake-indexeddb implements IndexedDB API; no real browser storage, reload/crash/quota or multiple real devices",
+    "Owned two-JPEG fixture and exact data/SVG references; no new image decoding or GPU pixel proof",
+    "Cloud panel omitted from local workflow; no real account/public URL acceptance",
+    "Custom writer injection is a testing seam; actual application uses the guarded default writer"
+  ],
+  "deployment": {
+    "performed": false
+  },
+  "original24StepAccepted": false,
+  "allFeaturesComplete": false
+}

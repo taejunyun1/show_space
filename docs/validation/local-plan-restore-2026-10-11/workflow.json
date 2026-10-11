@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-11",
+  "inputBackupSha256": "960603a394cc03cf4f2c5351c6dbcd0932d26fd994b80e96824b159ecb0fb26f",
+  "backupSha256": "8678781f2f8f615c4b7f55fc0d112531386aaaedc75ac39758682ae36073b011",
+  "projectCardOpens": 2,
+  "freshIndexedDbConnection": true,
+  "hydrationDidNotRewrite": true,
+  "initialReopenRevision": 2,
+  "finalRevision": 3,
+  "scenes": [
+    {
+      "name": "도면 A",
+      "widthPx": 1000,
+      "heightPx": 800,
+      "mmPerPixel": 10,
+      "calibrated": true,
+      "imageSha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1"
+    },
+    {
+      "name": "도면 B",
+      "widthPx": 800,
+      "heightPx": 1000,
+      "mmPerPixel": 9.95,
+      "calibrated": false,
+      "imageSha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d"
+    }
+  ],
+  "privateNotePreserved": true,
+  "backupExact": true,
+  "browserStorageMeasured": false,
+  "gpuMeasured": false,
+  "limitations": [
+    "Actual React/jsdom project cards and PlanView; fake-indexeddb supplies the IndexedDB API",
+    "Owned two-JPEG backup; checks exact documents and SVG image references, not browser image/GPU pixels",
+    "Cloud project panel excluded; not real account, browser restart or two-device acceptance"
+  ]
+}

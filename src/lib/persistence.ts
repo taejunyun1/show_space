@@ -21,10 +21,13 @@ export async function readDraft(reader?: Reader): Promise<unknown> {
   try{const summary=await library.save(project,0,true);return remember({project,summary});}catch(error){if(!(error instanceof ProjectConflictError))throw error;const stored=await library.read(project.id);if(!stored)throw error;return remember(stored);}
 }
 
-export async function writeDraft(project: Project, writer?: Writer): Promise<void> {
+export async function writeDraft(project: Project, writer?: Writer,canActivate:()=>boolean=()=>true): Promise<void> {
   if(writer){await writer(DRAFT_KEY,structuredClone(project));return;}
-  const summary=await projectLibrary().save(project,revisions.get(project.id)??0,activeId!==project.id);
-  revisions.set(project.id,summary.revision);activeId=project.id;
+  let activated=false;
+  // Preserve retired work, but recheck its right to select the startup project
+  // inside the transaction after the asynchronous revision read.
+  const summary=await projectLibrary().save(project,revisions.get(project.id)??0,()=>activated=activeId!==project.id&&canActivate());
+  revisions.set(project.id,summary.revision);if(activated)activeId=project.id;
 }
 export async function openLocalProject(id:string,guard:()=>void=()=>{}):Promise<Project>{guard();const stored=await projectLibrary().read(id);guard();if(!stored||stored.summary.archived)throw new Error('프로젝트를 찾을 수 없습니다.');await projectLibrary().activate(id,guard);guard();return remember(stored);}
 /** Guarded copies are saved inactive before the separate guarded activation. */

@@ -547,12 +547,15 @@ export const useEditor = create<EditorState>((set, get) => {
   }
 })
 
+let hydrationRequest=0;
 export async function hydrateEditor(reader: () => Promise<unknown> = readDraft): Promise<void> {
-  const projectAtStart = useEditor.getState().project
+  const request=++hydrationRequest,{project:projectAtStart,projectContextVersion:contextAtStart}=useEditor.getState();
+  const current=()=>request===hydrationRequest&&useEditor.getState().projectContextVersion===contextAtStart;
   try {
     const raw = await reader()
+    if(!current())return;
     if (useEditor.getState().project !== projectAtStart) {
-      useEditor.setState({ hydrated: true, saveStatus: 'saved' })
+      useEditor.setState({ hydrated: true })
       return
     }
     if (raw === undefined) {
@@ -563,6 +566,8 @@ export async function hydrateEditor(reader: () => Promise<unknown> = readDraft):
     savedSnapshot=project;
     useEditor.setState({ project,projectContextVersion:useEditor.getState().projectContextVersion+1,view:safeView(project,useEditor.getState().view),selected: firstSelection(project), activeWallId: validWall(project, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
   } catch (error) {
+    if(!current())return;
+    if(useEditor.getState().project!==projectAtStart){useEditor.setState({hydrated:true});return;}
     useEditor.setState({ hydrated: true, saveStatus: 'error', message: `저장된 프로젝트를 불러오지 못했습니다. ${errorMessage(error)}` })
   }
 }
@@ -581,22 +586,27 @@ export const flushAutosave=()=>flushCurrentAutosave();
 /** Recovery retains this queue even after React unmounts the editor. */
 export const captureAutosaveFlush=()=>flushCurrentAutosave;
 export function startAutosave(
-  writer: (project: Project) => Promise<void> = writeDraft,
+  writer: (project: Project) => Promise<void> = project=>writeDraft(project,undefined,()=>useEditor.getState().project.id===project.id),
   debounceMs = 250,
 ): () => void {
   let timer: ReturnType<typeof setTimeout> | undefined
   let lastProject = useEditor.getState().project
   let queued = Promise.resolve()
   let revision = 0
+  const retired=new Map<string,number>();
   let pending:Project|undefined,error:unknown,lastScheduled:Project|undefined,lastWritten:Project|undefined;
   const schedule=()=>{
     if(timer)clearTimeout(timer);timer=undefined;
     if(!pending)return;
     const snapshot=pending;pending=undefined;lastScheduled=snapshot;const scheduledRevision=revision;
-    queued=queued.then(()=>writer(snapshot)).then(()=>{
+    queued=queued.then(async()=>{
+      if((retired.get(snapshot.id)??0)>scheduledRevision)return false;
+      await writer(snapshot);return true;
+    }).then(written=>{
+      if(!written||(retired.get(snapshot.id)??0)>scheduledRevision)return;
       error=undefined;lastWritten=snapshot;
       if(scheduledRevision===revision&&useEditor.getState().project.id===snapshot.id)useEditor.setState({saveStatus:'saved'});
-    },(failure:unknown)=>{error=failure;if(useEditor.getState().project.id===snapshot.id)useEditor.setState({saveStatus:'error',message:`프로젝트를 저장하지 못했습니다. ${errorMessage(failure)}`});});
+    },(failure:unknown)=>{if((retired.get(snapshot.id)??0)>scheduledRevision)return;error=failure;if(useEditor.getState().project.id===snapshot.id)useEditor.setState({saveStatus:'error',message:`프로젝트를 저장하지 못했습니다. ${errorMessage(failure)}`});});
   };
   const flush=async()=>{schedule();await queued;if(error)throw error;};
   const save=async()=>{
@@ -636,7 +646,13 @@ export function startAutosave(
     refreshGuard();
     if (!state.hydrated || state.project === lastProject) return
     lastProject = state.project
-    if(state.project===savedSnapshot){error=undefined;return;}
+    if(state.project===savedSnapshot){
+      // A committed same-ID restoration supersedes its older queued edits.
+      // A different project's pending edit must still be saved, inactive.
+      retired.set(state.project.id,++revision);
+      if(pending?.id===state.project.id){pending=undefined;if(timer)clearTimeout(timer);timer=undefined;}
+      error=undefined;return;
+    }
     if (timer) clearTimeout(timer)
     useEditor.setState({ saveStatus: 'saving' })
     revision++;pending=state.project;
