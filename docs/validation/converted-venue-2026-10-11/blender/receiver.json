@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "blenderVersion": "4.4.1",
+  "scenes": [
+    {
+      "file": "Scene-A.glb",
+      "sha256": "bf219fb4fc2d8194d0eb408aab873f3895e6058809d01920da8e26a3b43af4a6",
+      "meshes": 15,
+      "installedArtworks": 5,
+      "packedImages": 5,
+      "imagePixels": [
+        32,
+        48
+      ],
+      "physicalPositionMaxErrorM": 0,
+      "gapsMm": [
+        200.00004768371582,
+        200.00004768371582,
+        199.99992847442627,
+        199.99970495700836
+      ],
+      "floorAreaM2": 74.99670565681603,
+      "cpuRender": "Scene-A.png"
+    },
+    {
+      "file": "Scene-B.glb",
+      "sha256": "e33f21eb6e94ed3b561f8de1dd973ea734eabf6a039462e82402e1624e5b3eee",
+      "meshes": 15,
+      "installedArtworks": 5,
+      "packedImages": 5,
+      "imagePixels": [
+        32,
+        48
+      ],
+      "physicalPositionMaxErrorM": 0,
+      "gapsMm": [
+        299.9995946884155,
+        299.9995946884155,
+        299.9997138977051,
+        299.999937415123
+      ],
+      "floorAreaM2": 74.99670565681603,
+      "cpuRender": "Scene-B.png"
+    }
+  ],
+  "gpuMeasured": false,
+  "limitations": [
+    "Owned convertible model only",
+    "CPU importer/geometry/images/render, not browser/GPU/SketchUp acceptance"
+  ]
+}

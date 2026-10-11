@@ -7,7 +7,7 @@ import {FloorMaterialDialog} from './FloorMaterialDialog';
 import {ReferenceModelControls} from './ReferenceModelControls';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {searchProjectObjects,type OutlinerObjectType} from '../domain/outlinerSearch';
-import { Library, Lightbulb, Box, Plus, Eye, EyeOff, LockKeyhole, PanelTop, Layers, ImagePlus, Film, Search, X } from 'lucide-react';
+import { Library, Lightbulb, Box, Plus, Eye, EyeOff, LockKeyhole, LockKeyholeOpen, PanelTop, Layers, ImagePlus, Film, Search, X } from 'lucide-react';
 import { useEditor } from '../state/editor';
 import { artStyle, readImage } from '../lib/art';
 type ImportTask={projectId:string;wallId:string};
@@ -80,10 +80,12 @@ export function Outliner() {
       {matchingUnplaced.length > 0 && <section className="unplaced-section">
         <div className="section-label">미배치 작품<span>{searching?`${matchingUnplaced.length} / `:''}{unplaced.length}</span></div>
         <label className="unplaced-target">배치할 벽<select aria-label="미배치 작품을 배치할 벽" value={activeWallId} onChange={e => setActiveWall(e.target.value)}>{project.walls.map(wall => <option key={wall.id} value={wall.id}>{wall.name}</option>)}</select></label>
+        {provisional&&<p className="field-hint">두 점 축척 보정 후 실제 크기로 배치할 수 있습니다.</p>}
         {matchingUnplaced.map(art => <div className="unplaced-row" key={art.id}>
           <span className="art-thumbnail" style={artStyle(art.imageUrl)} />
-          <span className="entity-text"><strong>{art.name}</strong><small>설치 벽 미지정</small></span>
-          <button aria-label={`${art.name} ${project.walls.find(wall => wall.id === activeWallId)?.name ?? '선택한 벽'}에 배치`} onClick={() => placeUnplaced(art.id)}>배치</button>
+          <span className="entity-text"><strong>{art.name}</strong><small>설치 벽 미지정{art.locked?' · 잠김':''}</small></span>
+          <button aria-label={`${art.name} 미배치 ${art.locked?'잠금 해제':'잠금'}`} aria-pressed={art.locked} onClick={()=>useEditor.getState().toggleUnplacedLock(art.id)}>{art.locked?<LockKeyhole size={13}/>:<LockKeyholeOpen size={13}/>}</button>
+          <button disabled={provisional||art.locked} title={art.locked?'잠금을 해제한 뒤 배치하세요.':provisional?'도면 축척을 먼저 보정하세요.':undefined} aria-label={`${art.name} ${project.walls.find(wall => wall.id === activeWallId)?.name ?? '선택한 벽'}에 배치`} onClick={() => placeUnplaced(art.id)}>배치</button>
         </div>)}
       </section>}
     </div>

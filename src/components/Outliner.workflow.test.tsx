@@ -40,6 +40,18 @@ beforeEach(async()=>{
 });
 afterEach(async()=>{await act(async()=>root.unmount());container.remove();vi.clearAllMocks();});
 
+it('unlocks an unplaced work from the list before installing and preserves lock state through Undo',async()=>{
+ const a=p.unplacedArtworks![0];await act(async()=>useEditor.getState().loadProject({...p,unplacedArtworks:[{...a,locked:true}]},true));
+ const install=()=>container.querySelector<HTMLButtonElement>('.unplaced-row button[aria-label$="에 배치"]')!;
+ expect(install().disabled).toBe(true);await click(`${a.name} 미배치 잠금 해제`);expect(useEditor.getState().project.unplacedArtworks![0]).toEqual({...a,locked:false});expect(install().disabled).toBe(false);await act(async()=>install().click());expect(useEditor.getState().project.artworks.some(item=>item.id===a.id)).toBe(true);
+ await act(async()=>useEditor.getState().undo());expect(useEditor.getState().project.unplacedArtworks![0].locked).toBe(false);await act(async()=>useEditor.getState().undo());expect(useEditor.getState().project.unplacedArtworks![0].locked).toBe(true);
+});
+
+it('disables unplaced installation while plan scale is unresolved',async()=>{
+ await act(async()=>useEditor.getState().loadProject({...p,planImageUrl:png,planReference:{widthPx:1000,heightPx:1000,mmPerPixel:1,origin:{x:0,z:0},calibrated:false},planDraft:{kind:'partial',sourceEvidenceHash:'00000000',originalWalls:p.walls}},true));
+ const install=container.querySelector<HTMLButtonElement>('.unplaced-row button[aria-label$="에 배치"]')!;expect(install.disabled).toBe(true);expect(container.querySelector('.unplaced-section')?.textContent).toContain('축척');
+});
+
 it('imports on the initially selected wall even if another wall is selected while decoding',async()=>{
  await act(async()=>useEditor.getState().setActiveWall(p.walls[1].id));await upload();await act(async()=>useEditor.getState().setActiveWall(p.walls[2].id));await act(async()=>pending[0].resolve(png));
  const added=useEditor.getState().project.artworks.at(-1)!;expect(added.name).toBe('촬영 작품');expect(added.wallId).toBe(p.walls[1].id);expect(useEditor.getState().activeWallId).toBe(p.walls[1].id);expect(useEditor.getState().past).toHaveLength(1);

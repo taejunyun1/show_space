@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-11",
+  "backupZipCrcVerified": true,
+  "backupAssets": 6,
+  "positiveReceiver": "blender/receiver.json",
+  "negativeControl": {
+    "expectedFirstArtworkAlongOffsetMm": 100,
+    "exitCode": 1,
+    "rejected": true,
+    "failure": "AssertionError: artwork-1: physical installation mismatch"
+  },
+  "cpuRendersVisuallyInspected": [
+    "Scene-A.png",
+    "Scene-B.png"
+  ],
+  "initialOccludedRenderReplaced": true
+}

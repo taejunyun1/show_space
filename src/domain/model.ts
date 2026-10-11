@@ -261,8 +261,10 @@ export function deleteSelection(project: Project, selection: EntitySelection): P
 }
 
 export function placeUnplacedArtwork(project:Project,id:string,wallId:string):Project{
+  if(project.planDraft&&!project.planReference?.calibrated)throw new Error('도면 축척을 먼저 보정해 주세요.');
   const artwork=project.unplacedArtworks?.find(item=>item.id===id)
   if(!artwork)throw new Error('미배치 작품을 찾을 수 없습니다.')
+  if(artwork.locked)throw new Error('잠긴 미배치 작품을 해제한 뒤 배치해 주세요.')
   const wall=project.walls.find(item=>item.id===wallId)
   if(!wall)throw new Error('배치할 벽을 찾을 수 없습니다.')
   const size=rotatedArtworkOuterSize(artwork)

@@ -114,6 +114,7 @@ interface EditorState {
   addArtwork(imageUrl?: string, name?: string,target?:{projectId:string;wallId:string}): void
   installLibraryArtwork(template:ArtworkTemplate,expectedProjectId:string,wallId?:string):void
   placeUnplaced(id:string):void
+  toggleUnplacedLock(id:string):void
   adoptModelWalls(walls:Wall[],expected:ReferenceModel,importedFloor?:Point[][]):void
   restoreDemoSpace():void
   addWall(): void
@@ -354,10 +355,17 @@ export const useEditor = create<EditorState>((set, get) => {
       set({selected:[result.selection],...(art?{activeWallId:art.wallId}:{}),...(result.selection.type==='modelArtwork'?{view:'3d' as const}:{}),activeTool:'select',message:'라이브러리 작품을 새 객체로 배치했습니다.'});
     },
     placeUnplaced: (id) => attempt(() => {
-      const wallId=validWall(get().project,get().activeWallId)
-      const next=placeUnplacedArtwork(get().project,id,wallId)
+      const s=get();
+      if(s.previewProject||s.wallGesture||s.artworkGesture||s.lightGesture||s.modelArtworkGesture||s.outdoorGesture||s.rotatingArtworkId)throw new Error('이동·회전을 마친 뒤 미배치 작품을 배치하세요.');
+      const wallId=validWall(s.project,s.activeWallId)
+      const next=placeUnplacedArtwork(s.project,id,wallId)
       get().commit(next)
-      set({selected:[{type:'artwork',id}],activeWallId:wallId})
+      set({selected:[{type:'artwork',id}],activeWallId:wallId,activeTool:'select',measurementDraft:null})
+    }),
+    toggleUnplacedLock:(id)=>attempt(()=>{
+      const s=get();if(s.previewProject||s.wallGesture||s.artworkGesture||s.lightGesture||s.modelArtworkGesture||s.outdoorGesture||s.rotatingArtworkId)throw new Error('이동·회전을 마친 뒤 미배치 작품 잠금을 변경하세요.');
+      if(!s.project.unplacedArtworks?.some(a=>a.id===id))throw new Error('미배치 작품을 찾을 수 없습니다.');
+      get().commit({...s.project,unplacedArtworks:s.project.unplacedArtworks.map(a=>a.id===id?{...a,locked:!a.locked}:a)});
     }),
     adoptModelWalls: (walls,expected,importedFloor) => attempt(()=>{
       const project=get().project;if(!sameModelGeometry(project.referenceModel,expected))throw new Error('모델이 변경되어 벽 추출을 취소했습니다. 다시 시도해주세요.');

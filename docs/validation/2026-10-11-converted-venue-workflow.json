@@ -1,0 +1,120 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "87e1dbe3f23617bf4d7c7b05eace49b8e0b9e2e8",
+  "sourceSha256": {
+    "src/domain/model.ts": "d2a0d6d40b28157136e5c799d2bfbc9ab7bf81d70449408bd148eb574570b050",
+    "src/state/editor.ts": "a57e147b4f3740639f5fa1fb4876c64701db134ab087f71cd5b0365800b22c5f",
+    "src/components/Outliner.tsx": "ccd6fcd591f8bed55bc86235931472f62601a668c485abfeaedeada18e32f879",
+    "src/components/Outliner.workflow.test.tsx": "b23c982178bbf3bde6c5b8040d4a5bbbcd1318d027e02ca797b5e107d8efbcf0",
+    "src/state/unplacedReinstallation.test.ts": "b6e1957f0a78e9891c3b838b94aea28e5d4c468e4f756959c4fbac8d95d93920",
+    "src/lib/convertedVenue.workflow.test.ts": "70f81d085644bb5c3bf0ee6bdd28a9d90faec39db4f6b1e61d0961fc5f21fed7",
+    "scripts/verify-blender-converted-venue.py": "d15727a760b90a553ac74fdd9aa75f718026ad616b13bf8fb836704009e28db6"
+  },
+  "baseline": {
+    "procedure": "Run the same final three workflow files with only model.ts/editor.ts/Outliner.tsx restored temporarily to baseline; current source restored byte-for-byte in finally",
+    "command": "npx vitest run src/state/unplacedReinstallation.test.ts src/components/Outliner.workflow.test.tsx src/lib/convertedVenue.workflow.test.ts",
+    "failed": 8,
+    "passed": 12,
+    "newTests": 9,
+    "durationMs": 850,
+    "initialInvalidPlanFixtureAndExportExpectationErrorsExcluded": true
+  },
+  "target": {
+    "command": "GONGGAN_CONVERTED_VENUE_PROOF=1 npx vitest run src/lib/convertedVenue.workflow.test.ts src/state/unplacedReinstallation.test.ts src/components/Outliner.workflow.test.tsx src/domain/artworkPresentation.test.ts src/state/editor.test.ts",
+    "passed": 73,
+    "filesPassed": 5,
+    "durationMs": 890
+  },
+  "full": {
+    "command": "npm test",
+    "passed": 1391,
+    "skipped": 10,
+    "filesPassed": 239,
+    "filesSkipped": 10,
+    "durationSeconds": 10.91
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "viteDurationSeconds": 4.92,
+    "largeChunkNoticeRetained": true
+  },
+  "input": {
+    "sha256": "d04a9015f238a65c350229e7c815133049b27f67e1ce0452d3d08bfb78c4a5f2",
+    "ownedConvertibleSyntheticFixture": true,
+    "walls": 4,
+    "theoreticalFloorAreaMm2": 75000000,
+    "roundedFloorAreaMm2": 74996700,
+    "floorCornerErrorLessThanMm": 0.8,
+    "pose": {
+      "positionMm": [
+        1000,
+        0,
+        -2000
+      ],
+      "rotationDeg": 30,
+      "scale": 1.25
+    }
+  },
+  "blender": {
+    "command": "/Applications/Blender.app/Contents/MacOS/Blender --background --factory-startup --python-exit-code 1 --python scripts/verify-blender-converted-venue.py -- --directory docs/validation/converted-venue-2026-10-11 --output-dir docs/validation/converted-venue-2026-10-11/blender --render",
+    "passed": true,
+    "version": "4.4.1",
+    "installedArtworksPerScene": 5,
+    "meshesPerScene": 15,
+    "packedImagesPerScene": 5,
+    "nativePixelsCompared": true,
+    "negativeControl": "converted-venue-2026-10-11/verifier-checks.json",
+    "cpuRenderPixels": [
+      1000,
+      700
+    ]
+  },
+  "artifactSha256": {
+    "docs/validation/converted-venue-2026-10-11/Scene-A.glb": "bf219fb4fc2d8194d0eb408aab873f3895e6058809d01920da8e26a3b43af4a6",
+    "docs/validation/converted-venue-2026-10-11/Scene-B.glb": "e33f21eb6e94ed3b561f8de1dd973ea734eabf6a039462e82402e1624e5b3eee",
+    "docs/validation/converted-venue-2026-10-11/blender/Scene-A.png": "abc0b8021e894fc6f367ae3c49e9317ca19f0a5ef6eba33bef49c0c9cd493db4",
+    "docs/validation/converted-venue-2026-10-11/blender/Scene-B.png": "e97727b33c4f710e176259b7b63f51da8b27c0ad441a17d8f0ad7f04e82e3bc2",
+    "docs/validation/converted-venue-2026-10-11/blender/receiver.json": "1834666921575e406dc25f31d84a90534afffd5c70b91d9ab8bc2ba6b467c0bc",
+    "docs/validation/converted-venue-2026-10-11/input.glb": "d04a9015f238a65c350229e7c815133049b27f67e1ce0452d3d08bfb78c4a5f2",
+    "docs/validation/converted-venue-2026-10-11/project.gonggan.zip": "488a621114905a256e7f2d2a2a98f2415d0a5359f5c37b33e030e33da8316438",
+    "docs/validation/converted-venue-2026-10-11/public.json": "4040e2fab02a6e6fce9d1d3b4bcaf9741540b47ff86b6e07a9596b24fd6c1df1",
+    "docs/validation/converted-venue-2026-10-11/verifier-checks.json": "8a846dc81350d1d20b1912c29ec8bf729011fc5bf184cd80d46c3e75e19faf66",
+    "docs/validation/converted-venue-2026-10-11/workflow.json": "08202de1ad94f2b0adecdc0e121a2a149e976d09abc9bc815f66de2adcbe8f39"
+  },
+  "localLogs": {
+    "baseline": {
+      "path": "/tmp/show-space-reinstall-before-final.log",
+      "sha256": "2385922fde10f220e3fcf7677ad39f583599b64f60380c758158a533efb6e938"
+    },
+    "target": {
+      "path": "/tmp/show-space-reinstall-target.log",
+      "sha256": "6d801f6815f206b0e1c90ef8d53b91e3f83956570a11caf0db019e5c8435ed60"
+    },
+    "full": {
+      "path": "/tmp/show-space-reinstall-full.log",
+      "sha256": "851bf089db218abfef08be012fd72044db629cf81fc35e8a51a4b29d52f3ceb3"
+    },
+    "build": {
+      "path": "/tmp/show-space-reinstall-build.log",
+      "sha256": "3e16890297b1515a539dbba41d53af59cc71fcc8f570865ee12aaaeed1d7827b"
+    },
+    "blender": {
+      "path": "/tmp/show-space-reinstall-blender.log",
+      "sha256": "75d437d8a20c6c4f678eb6377dfdc106a9f5dc324f15c148c0204b49508d7034"
+    },
+    "negative": {
+      "path": "/tmp/show-space-reinstall-negative.log",
+      "sha256": "41ece85b6aa437c6e96b8915bb68a1d38d6b90f6e66974bef20f8fd89e68a235"
+    }
+  },
+  "deployed": false,
+  "limitations": [
+    "Owned convertible model only, not arbitrary user reconstruction",
+    "Successful conversion/series/measurements/Scene/backup/public/GLB is actual store and native-file/pixel transport; not a browser/GPU workflow",
+    "Single installation and lock control tested in React/jsdom; no full browser interaction claim",
+    "Input floor/wall coordinates rounded to existing integer millimeters",
+    "Public presentation data only; no operational URL/auth/accounts/two-device acceptance",
+    "Full 24-step/user metrics, GPU/FPS/VRAM/p95, SketchUp receiving and paid image-to-material remain"
+  ]
+}
