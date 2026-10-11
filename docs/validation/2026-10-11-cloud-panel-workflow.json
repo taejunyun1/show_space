@@ -1,0 +1,172 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "b5eb634fc2e6cf8ac5fa27abab64d02b80275336",
+  "runtimeFiles": [
+    "src/components/CloudProjectsPanel.tsx",
+    "src/lib/openCloudProject.ts",
+    "src/state/cloudSync.ts"
+  ],
+  "baseline": {
+    "method": "Temporary final-source copy; only three runtime files replaced from baseline; identical final 15 tests",
+    "failed": 13,
+    "passed": 2,
+    "exitCode": 1,
+    "durationSeconds": 22.12
+  },
+  "regression": {
+    "added": 15,
+    "focusedFiles": 2,
+    "focusedTests": 15,
+    "targetFiles": 8,
+    "targetTests": 74,
+    "fullPassedFiles": 255,
+    "fullSkippedFiles": 10,
+    "fullPassed": 1580,
+    "fullSkipped": 10,
+    "fullDurationSeconds": 12.99,
+    "typeScriptAndProductionBuild": true,
+    "viteBuildSeconds": 5.7,
+    "existingLargeChunkWarning": true
+  },
+  "verifiedCases": [
+    "Actual React StrictMode controls reject delayed session after project switch, same-ID restore, project/account roundtrip",
+    "Cancel releases controls immediately; an old response cannot release a newer request busy state",
+    "Unmount releases parent busy state and suppresses late errors; synchronous double-click starts one request",
+    "Metadata epoch retires stale link controls after batched account roundtrip",
+    "Cloud open rejects active transform and preserves edits made during read; a later retry succeeds",
+    "Conflict-copy staging remains inactive when edits arrive before acknowledgement",
+    "Actual IndexedDB activation query rechecks project guard; verified normal package opens as independent local copy",
+    "Native actual UI save/cancel/retry/pause/Scene restore/manual save with two original PNG assets",
+    "Production Worker accepted first delayed request, identical pending retry returned revision 1, latest restored Scene saved revision 2",
+    "Private file readback/import equals complete project; pause stays false and source hashes/CRC match"
+  ],
+  "workflow": {
+    "date": "2026-10-11",
+    "receivedSha256": "dde8e0e6c6321d4de1132e6c5874a67293d1a8a2e166ca6e72233c6967739070",
+    "actualUiActions": [
+      "save",
+      "cancel",
+      "retry",
+      "pause-auto-save",
+      "restore-Scene-A",
+      "manual-save"
+    ],
+    "retryEnabledBeforeOldResponse": true,
+    "retryStayedBusyAfterOldCompletion": true,
+    "pendingExact": true,
+    "idempotentRetryRevision": 1,
+    "remoteRevision": 2,
+    "localRevision": 2,
+    "autoSync": false,
+    "projectExact": true,
+    "sceneCount": 2,
+    "privateNotePreserved": true,
+    "calls": [
+      {
+        "method": "PUT",
+        "path": "/api/projects/09deb32e-bcc8-4788-86a7-12156b3e7173",
+        "status": 201,
+        "expectedRevision": "0"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/projects/09deb32e-bcc8-4788-86a7-12156b3e7173",
+        "status": 200,
+        "expectedRevision": "0"
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects",
+        "status": 200,
+        "expectedRevision": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/shared",
+        "status": 200,
+        "expectedRevision": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects",
+        "status": 200,
+        "expectedRevision": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/shared",
+        "status": 200,
+        "expectedRevision": null
+      },
+      {
+        "method": "PUT",
+        "path": "/api/projects/09deb32e-bcc8-4788-86a7-12156b3e7173",
+        "status": 200,
+        "expectedRevision": "1"
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects",
+        "status": 200,
+        "expectedRevision": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/shared",
+        "status": 200,
+        "expectedRevision": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/09deb32e-bcc8-4788-86a7-12156b3e7173/meta",
+        "status": 200,
+        "expectedRevision": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/09deb32e-bcc8-4788-86a7-12156b3e7173",
+        "status": 200,
+        "expectedRevision": null
+      }
+    ],
+    "browserGpuMeasured": false,
+    "operationalAuthMeasured": false,
+    "limits": [
+      "Actual React/jsdom buttons, default local/cloud saving and native two-plan image decoder",
+      "fake-indexeddb and production Worker handler with local SQLite/R2/auth fixture",
+      "Transport intentionally ignores AbortSignal; not real browser, account, network cancellation or device acceptance"
+    ]
+  },
+  "assets": [
+    {
+      "path": "assets/images/edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1.png",
+      "bytes": 5519,
+      "sha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1"
+    },
+    {
+      "path": "assets/images/71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d.png",
+      "bytes": 5400,
+      "sha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d"
+    }
+  ],
+  "artifacts": {
+    "workflow.json": {
+      "sha256": "b77b97dcf5b9f500d992ffcaedb4e2fec28b2caead99fab1be04b96d60869ce5",
+      "bytes": 2451
+    },
+    "project.gonggan.zip": {
+      "sha256": "dde8e0e6c6321d4de1132e6c5874a67293d1a8a2e166ca6e72233c6967739070",
+      "bytes": 4350
+    }
+  },
+  "limits": [
+    "Scope tests inject cloud session/client/sync/open adapters; separate native UI case uses actual default saving, client, decoder and Worker",
+    "React/jsdom, fake-indexeddb and local SQLite/R2/auth fixture; not browser rendering or real account/device acceptance",
+    "Native transport intentionally omits AbortSignal from Worker Request to return delayed accepted responses; ownership guards still execute",
+    "No actual operational authentication, browser storage/GPU/3D capture, real users or original full 24-step acceptance"
+  ],
+  "deployment": {
+    "performed": false
+  },
+  "allFeaturesComplete": false
+}

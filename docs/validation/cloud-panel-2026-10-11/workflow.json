@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-11",
+  "receivedSha256": "dde8e0e6c6321d4de1132e6c5874a67293d1a8a2e166ca6e72233c6967739070",
+  "actualUiActions": [
+    "save",
+    "cancel",
+    "retry",
+    "pause-auto-save",
+    "restore-Scene-A",
+    "manual-save"
+  ],
+  "retryEnabledBeforeOldResponse": true,
+  "retryStayedBusyAfterOldCompletion": true,
+  "pendingExact": true,
+  "idempotentRetryRevision": 1,
+  "remoteRevision": 2,
+  "localRevision": 2,
+  "autoSync": false,
+  "projectExact": true,
+  "sceneCount": 2,
+  "privateNotePreserved": true,
+  "calls": [
+    {
+      "method": "PUT",
+      "path": "/api/projects/09deb32e-bcc8-4788-86a7-12156b3e7173",
+      "status": 201,
+      "expectedRevision": "0"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/projects/09deb32e-bcc8-4788-86a7-12156b3e7173",
+      "status": 200,
+      "expectedRevision": "0"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/shared",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/shared",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "PUT",
+      "path": "/api/projects/09deb32e-bcc8-4788-86a7-12156b3e7173",
+      "status": 200,
+      "expectedRevision": "1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/shared",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/09deb32e-bcc8-4788-86a7-12156b3e7173/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/09deb32e-bcc8-4788-86a7-12156b3e7173",
+      "status": 200,
+      "expectedRevision": null
+    }
+  ],
+  "browserGpuMeasured": false,
+  "operationalAuthMeasured": false,
+  "limits": [
+    "Actual React/jsdom buttons, default local/cloud saving and native two-plan image decoder",
+    "fake-indexeddb and production Worker handler with local SQLite/R2/auth fixture",
+    "Transport intentionally ignores AbortSignal; not real browser, account, network cancellation or device acceptance"
+  ]
+}

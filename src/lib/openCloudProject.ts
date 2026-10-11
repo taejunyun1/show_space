@@ -11,5 +11,5 @@ export async function openEditableCloudProject(client:ReturnType<typeof createCl
  const latest=await client.metadata(id);guard();if(latest.revision!==downloaded.summary.revision||!canEditProject(latest.role??'owner')||latest.archived)throw new Error('프로젝트 버전 또는 편집 권한이 변경됐습니다. 다시 열어주세요.');
  const next=copyProject(loaded,loaded.name),repo=projectLibrary(),stored=await repo.save(next,0,false);guard();
  await repo.saveCloudLink({userId,localProjectId:next.id,cloudProjectId:id,revision:latest.revision,localRevision:stored.revision,autoSync:true});guard();
- return openLocalProject(next.id);
+ return openLocalProject(next.id,guard);
 }

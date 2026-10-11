@@ -10,7 +10,7 @@ type Status={projectId:string;userId:string;status:'saving'|'saved'|'queued'|'co
 export const useCloudSync=create<{current:Status|null}>(()=>({current:null}));
 const jobs=new Map<string,Promise<void>>(),controllers=new Set<AbortController>();
 const projectControllers=new Map<string,Set<AbortController>>();
-export function cancelCloudProject(projectId:string){const userId=useAuth.getState().user?.id;if(userId)for(const controller of projectControllers.get(JSON.stringify([userId,projectId]))??[])controller.abort();}
+export function cancelCloudProject(projectId:string,userId=useAuth.getState().user?.id){if(!userId)return;const group=projectControllers.get(JSON.stringify([userId,projectId]));for(const controller of group??[])controller.abort();if(group?.size&&useCloudSync.getState().current?.status==='saving')status(projectId,userId,'queued','클라우드 작업을 취소했습니다. 다시 저장하면 재시도합니다.');}
 const status=(projectId:string,userId:string,state:Status['status'],message='')=>{if(useEditor.getState().project.id===projectId&&useAuth.getState().user?.id===userId)useCloudSync.setState({current:{projectId,userId,status:state,message}});};
 export async function syncCloudProject(project:Project,manual=false):Promise<void>{
  const currentUserId=useAuth.getState().user?.id;if(!currentUserId)throw new Error('계정 로그인이 필요합니다.');const userId:string=currentUserId;const key=JSON.stringify([userId,project.id]),previous=jobs.get(key);
