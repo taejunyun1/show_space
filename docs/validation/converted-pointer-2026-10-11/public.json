@@ -1,0 +1,625 @@
+{
+  "outdoor": {
+    "mode": "indoor",
+    "latitude": 37.5665,
+    "longitude": 126.978,
+    "timeZone": "Asia/Seoul",
+    "date": "2026-06-21",
+    "time": "12:00",
+    "northDeg": 0,
+    "preset": "clear",
+    "sunIntensity": 3,
+    "shadow": true,
+    "occurrence": "earlier"
+  },
+  "lights": [],
+  "lighting": {
+    "ambient": 0.65,
+    "hemisphere": 0.7,
+    "fill": 2.3,
+    "environment": 0.35
+  },
+  "schemaVersion": 1,
+  "name": "변환 공간 직접 편집",
+  "venue": "성수 갤러리",
+  "floorColor": "#f1f1ed",
+  "walls": [
+    {
+      "id": "model-wall-1",
+      "name": "모델 벽 1",
+      "start": {
+        "x": -5174,
+        "z": -2693
+      },
+      "end": {
+        "x": 3486,
+        "z": -7693
+      },
+      "heightMm": 3750,
+      "thicknessMm": 250,
+      "color": "#e4e4e0",
+      "role": "boundary"
+    },
+    {
+      "id": "model-wall-2",
+      "name": "모델 벽 2",
+      "start": {
+        "x": 3486,
+        "z": -7693
+      },
+      "end": {
+        "x": 7236,
+        "z": -1198
+      },
+      "heightMm": 3750,
+      "thicknessMm": 250,
+      "color": "#e4e4e0",
+      "role": "boundary"
+    },
+    {
+      "id": "model-wall-3",
+      "name": "모델 벽 3",
+      "start": {
+        "x": -1424,
+        "z": 3802
+      },
+      "end": {
+        "x": -5174,
+        "z": -2693
+      },
+      "heightMm": 3750,
+      "thicknessMm": 250,
+      "color": "#e4e4e0",
+      "role": "boundary"
+    },
+    {
+      "id": "model-wall-4",
+      "name": "모델 벽 4",
+      "start": {
+        "x": 3196,
+        "z": -3196
+      },
+      "end": {
+        "x": -1134,
+        "z": -696
+      },
+      "heightMm": 3750,
+      "thicknessMm": 250,
+      "color": "#e4e4e0",
+      "role": "partition"
+    }
+  ],
+  "artworks": [
+    {
+      "id": "artwork-1",
+      "name": "고요한 면",
+      "artist": "",
+      "wallId": "model-wall-1",
+      "wallSide": "back",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 3599.889998789974,
+      "centerHeightMm": 1530,
+      "rotationDeg": -60,
+      "frame": "none",
+      "imageId": "0"
+    },
+    {
+      "id": "artwork-2",
+      "name": "빛의 간격",
+      "artist": "",
+      "wallId": "model-wall-1",
+      "wallSide": "back",
+      "widthMm": 500,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 3949.889998789974,
+      "centerHeightMm": 1500,
+      "frame": "none",
+      "imageId": "1"
+    },
+    {
+      "id": "artwork-3",
+      "name": "잔상",
+      "artist": "",
+      "wallId": "model-wall-1",
+      "wallSide": "back",
+      "widthMm": 600,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 4699.889998789974,
+      "centerHeightMm": 1500,
+      "frame": "none",
+      "imageId": "2"
+    },
+    {
+      "id": "artwork-4",
+      "name": "겹쳐진 시간",
+      "artist": "",
+      "wallId": "model-wall-1",
+      "wallSide": "back",
+      "widthMm": 700,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 5549.889998789974,
+      "centerHeightMm": 1500,
+      "frame": "none",
+      "imageId": "3"
+    },
+    {
+      "id": "artwork-5",
+      "name": "여백",
+      "artist": "",
+      "wallId": "model-wall-1",
+      "wallSide": "back",
+      "widthMm": 800,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 6499.889998789974,
+      "centerHeightMm": 1500,
+      "frame": "none",
+      "imageId": "4"
+    }
+  ],
+  "openings": [],
+  "zones": [],
+  "importedFloor": [
+    [
+      {
+        "x": 3486,
+        "z": -7693
+      },
+      {
+        "x": 7236,
+        "z": -1198
+      },
+      {
+        "x": -1424,
+        "z": 3802
+      },
+      {
+        "x": -5174,
+        "z": -2693
+      }
+    ]
+  ],
+  "dimensions": [
+    {
+      "id": "dimension-1",
+      "view": "elevation",
+      "elevationWallId": "model-wall-1",
+      "start": {
+        "x": -4307.980947371261,
+        "y": 2750,
+        "z": -3193.011000363013
+      },
+      "end": {
+        "x": -3441.961894742523,
+        "y": 2250,
+        "z": -3693.022000726026
+      },
+      "distanceMm": 1118.0339887498942
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "직접 편집 A면",
+      "snapshot": {
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "schemaVersion": 1,
+        "name": "변환 공간 직접 편집",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [
+          {
+            "id": "model-wall-1",
+            "name": "모델 벽 1",
+            "start": {
+              "x": -5174,
+              "z": -2693
+            },
+            "end": {
+              "x": 3486,
+              "z": -7693
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-2",
+            "name": "모델 벽 2",
+            "start": {
+              "x": 3486,
+              "z": -7693
+            },
+            "end": {
+              "x": 7236,
+              "z": -1198
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-3",
+            "name": "모델 벽 3",
+            "start": {
+              "x": -1424,
+              "z": 3802
+            },
+            "end": {
+              "x": -5174,
+              "z": -2693
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-4",
+            "name": "모델 벽 4",
+            "start": {
+              "x": 3196,
+              "z": -3196
+            },
+            "end": {
+              "x": -1134,
+              "z": -696
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "role": "partition"
+          }
+        ],
+        "artworks": [
+          {
+            "id": "artwork-1",
+            "name": "고요한 면",
+            "artist": "",
+            "wallId": "model-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 3479.889998789974,
+            "centerHeightMm": 1580,
+            "rotationDeg": -30,
+            "frame": "none",
+            "imageId": "0"
+          },
+          {
+            "id": "artwork-2",
+            "name": "빛의 간격",
+            "artist": "",
+            "wallId": "model-wall-1",
+            "wallSide": "front",
+            "widthMm": 500,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 3949.889998789974,
+            "centerHeightMm": 1500,
+            "frame": "none",
+            "imageId": "1"
+          },
+          {
+            "id": "artwork-3",
+            "name": "잔상",
+            "artist": "",
+            "wallId": "model-wall-1",
+            "wallSide": "front",
+            "widthMm": 600,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 4699.889998789974,
+            "centerHeightMm": 1500,
+            "frame": "none",
+            "imageId": "2"
+          },
+          {
+            "id": "artwork-4",
+            "name": "겹쳐진 시간",
+            "artist": "",
+            "wallId": "model-wall-1",
+            "wallSide": "front",
+            "widthMm": 700,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 5549.889998789974,
+            "centerHeightMm": 1500,
+            "frame": "none",
+            "imageId": "3"
+          },
+          {
+            "id": "artwork-5",
+            "name": "여백",
+            "artist": "",
+            "wallId": "model-wall-1",
+            "wallSide": "front",
+            "widthMm": 800,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 6499.889998789974,
+            "centerHeightMm": 1500,
+            "frame": "none",
+            "imageId": "4"
+          }
+        ],
+        "openings": [],
+        "zones": [],
+        "importedFloor": [
+          [
+            {
+              "x": 3486,
+              "z": -7693
+            },
+            {
+              "x": 7236,
+              "z": -1198
+            },
+            {
+              "x": -1424,
+              "z": 3802
+            },
+            {
+              "x": -5174,
+              "z": -2693
+            }
+          ]
+        ],
+        "dimensions": [
+          {
+            "id": "dimension-1",
+            "view": "elevation",
+            "elevationWallId": "model-wall-1",
+            "start": {
+              "x": -4307.980947371261,
+              "y": 2750,
+              "z": -3193.011000363013
+            },
+            "end": {
+              "x": -3441.961894742523,
+              "y": 2250,
+              "z": -3693.022000726026
+            },
+            "distanceMm": 1118.0339887498942
+          }
+        ]
+      }
+    },
+    {
+      "id": "scene-2",
+      "name": "직접 편집 B면",
+      "snapshot": {
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "schemaVersion": 1,
+        "name": "변환 공간 직접 편집",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [
+          {
+            "id": "model-wall-1",
+            "name": "모델 벽 1",
+            "start": {
+              "x": -5174,
+              "z": -2693
+            },
+            "end": {
+              "x": 3486,
+              "z": -7693
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-2",
+            "name": "모델 벽 2",
+            "start": {
+              "x": 3486,
+              "z": -7693
+            },
+            "end": {
+              "x": 7236,
+              "z": -1198
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-3",
+            "name": "모델 벽 3",
+            "start": {
+              "x": -1424,
+              "z": 3802
+            },
+            "end": {
+              "x": -5174,
+              "z": -2693
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "role": "boundary"
+          },
+          {
+            "id": "model-wall-4",
+            "name": "모델 벽 4",
+            "start": {
+              "x": 3196,
+              "z": -3196
+            },
+            "end": {
+              "x": -1134,
+              "z": -696
+            },
+            "heightMm": 3750,
+            "thicknessMm": 250,
+            "color": "#e4e4e0",
+            "role": "partition"
+          }
+        ],
+        "artworks": [
+          {
+            "id": "artwork-1",
+            "name": "고요한 면",
+            "artist": "",
+            "wallId": "model-wall-1",
+            "wallSide": "back",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 3599.889998789974,
+            "centerHeightMm": 1530,
+            "rotationDeg": -60,
+            "frame": "none",
+            "imageId": "0"
+          },
+          {
+            "id": "artwork-2",
+            "name": "빛의 간격",
+            "artist": "",
+            "wallId": "model-wall-1",
+            "wallSide": "back",
+            "widthMm": 500,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 3949.889998789974,
+            "centerHeightMm": 1500,
+            "frame": "none",
+            "imageId": "1"
+          },
+          {
+            "id": "artwork-3",
+            "name": "잔상",
+            "artist": "",
+            "wallId": "model-wall-1",
+            "wallSide": "back",
+            "widthMm": 600,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 4699.889998789974,
+            "centerHeightMm": 1500,
+            "frame": "none",
+            "imageId": "2"
+          },
+          {
+            "id": "artwork-4",
+            "name": "겹쳐진 시간",
+            "artist": "",
+            "wallId": "model-wall-1",
+            "wallSide": "back",
+            "widthMm": 700,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 5549.889998789974,
+            "centerHeightMm": 1500,
+            "frame": "none",
+            "imageId": "3"
+          },
+          {
+            "id": "artwork-5",
+            "name": "여백",
+            "artist": "",
+            "wallId": "model-wall-1",
+            "wallSide": "back",
+            "widthMm": 800,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 6499.889998789974,
+            "centerHeightMm": 1500,
+            "frame": "none",
+            "imageId": "4"
+          }
+        ],
+        "openings": [],
+        "zones": [],
+        "importedFloor": [
+          [
+            {
+              "x": 3486,
+              "z": -7693
+            },
+            {
+              "x": 7236,
+              "z": -1198
+            },
+            {
+              "x": -1424,
+              "z": 3802
+            },
+            {
+              "x": -5174,
+              "z": -2693
+            }
+          ]
+        ],
+        "dimensions": [
+          {
+            "id": "dimension-1",
+            "view": "elevation",
+            "elevationWallId": "model-wall-1",
+            "start": {
+              "x": -4307.980947371261,
+              "y": 2750,
+              "z": -3193.011000363013
+            },
+            "end": {
+              "x": -3441.961894742523,
+              "y": 2250,
+              "z": -3693.022000726026
+            },
+            "distanceMm": 1118.0339887498942
+          }
+        ]
+      }
+    }
+  ]
+}

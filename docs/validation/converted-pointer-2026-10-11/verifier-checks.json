@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-11",
+  "receiverMatchesCurrentGlbHashes": true,
+  "negativeRotation": {
+    "modifiedExpectationDegrees": 15,
+    "changedGlb": false,
+    "exitCode": 1,
+    "rejected": true,
+    "error": "artwork-1: image corner mismatch",
+    "verifierSha256": "4c7cef5d9d30a608fa93fefa460826e0e16a6a1a75f584514f1f37c93e314911"
+  },
+  "zip": {
+    "sha256": "9e3af69ff5c07c574889d3c32d2b6e8f6d97540fe2e1bc05bf5fde01d376f988",
+    "entries": 11,
+    "assets": 8,
+    "crcPassed": true
+  },
+  "visualInspection": [
+    "Scene-A.png",
+    "Scene-B.png",
+    "blender/Scene-A.png",
+    "blender/Scene-B.png"
+  ],
+  "nativeTextPixelsVerified": false,
+  "nativeTextLimitation": "Small independent SVG rendered with bundled font configuration also had zero non-transparent pixels; dimensions checked in actual SVG markup only."
+}

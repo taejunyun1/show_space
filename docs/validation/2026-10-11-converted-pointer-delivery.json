@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "d0f79eef29c0eb892d8812024a4b76d6e92b5daa",
+  "sourceSha256": {
+    "src/domain/editorGesture.ts": "cb2091ba7964241096cd76616715dcbac3f8ff941ca3535a97da01f51672ff39",
+    "src/state/editor.ts": "135726d18b2cf8411b37d7b7e2cf5497045dadbebaa5e6144190d3b2cc0ef71c",
+    "src/components/Workspace.tsx": "567d35f80c8d8e0c73d00cfb21fa2f39ba240e7c3fc6a780d0e963124a3ddb6c",
+    "src/state/sceneGestureProtection.test.ts": "69c6442c64fada37b85fb82a8422216495b62ff9a8791de4aa57bbff7939b12a",
+    "src/components/Workspace.sceneWorkflow.test.tsx": "27da763582289e16304fac110943d4916913ea212da08109f0a8a77888412cbb",
+    "src/components/ConvertedVenueEditing.workflow.test.tsx": "1e737c897163f21281fddbe0018bab6dd8a0b4b66045177ad8126a4090ddd1b3",
+    "scripts/verify-blender-pointer-delivery.py": "4c7cef5d9d30a608fa93fefa460826e0e16a6a1a75f584514f1f37c93e314911",
+    "package.json": "79369d3a6317bba0908ec594cc55763c40d9b793e85d84fdba101c833f4cb74e",
+    "package-lock.json": "13b18263a442167027fae0ee49cd43aef42a2c9555a05e65bc93ccc643d3ca6c"
+  },
+  "baseline": {
+    "procedure": "Same final three workflow files with only Workspace.tsx/editor.ts restored temporarily to baseline; current source restored byte-for-byte in finally",
+    "command": "npx vitest run src/components/ConvertedVenueEditing.workflow.test.tsx src/components/Workspace.sceneWorkflow.test.tsx src/state/sceneGestureProtection.test.ts",
+    "failed": 12,
+    "passed": 14,
+    "newTests": 12,
+    "durationSeconds": 1.15
+  },
+  "target": {
+    "command": "GONGGAN_CONVERTED_POINTER_PROOF=1 npx vitest run src/components/ConvertedVenueEditing.workflow.test.tsx src/components/Workspace.sceneWorkflow.test.tsx src/state/sceneGestureProtection.test.ts src/components/ElevationView.workflow.test.tsx",
+    "passed": 40,
+    "filesPassed": 4,
+    "durationSeconds": 2.23
+  },
+  "full": {
+    "command": "npm test",
+    "passed": 1403,
+    "skipped": 10,
+    "filesPassed": 241,
+    "filesSkipped": 10,
+    "durationSeconds": 8.44,
+    "earlierLibraryAwaitFailure": true,
+    "isolatedLibraryRecheckPassed": 22,
+    "libraryProductChanges": false,
+    "awaitFailureCauseNotEstablished": true
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "viteDurationSeconds": 4.33,
+    "largeChunkNoticeRetained": true
+  },
+  "nativeCapture": {
+    "actualWorkspaceAndCaptureSvg": true,
+    "sharpSvgDecoderVersion": "0.35.4",
+    "osDownloadTransportReplaced": true,
+    "dimensionsPx": [
+      [
+        1920,
+        901
+      ],
+      [
+        1920,
+        901
+      ]
+    ],
+    "thumbnailDimensionsPx": [
+      [
+        320,
+        200
+      ],
+      [
+        320,
+        200
+      ]
+    ],
+    "rgbSampleErrors": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "textCheckedInSvgMarkupOnly": true,
+    "screenCtmAdapter": "identity"
+  },
+  "blender": {
+    "command": "/Applications/Blender.app/Contents/MacOS/Blender --background --factory-startup --python-exit-code 1 --python scripts/verify-blender-pointer-delivery.py -- --directory docs/validation/converted-pointer-2026-10-11 --output-dir docs/validation/converted-pointer-2026-10-11/blender --render",
+    "version": "4.4.1",
+    "passed": true,
+    "currentGlbHashesVerified": true,
+    "maxImageCornerErrorM": 4.915124923727108e-07,
+    "negativeControl": "converted-pointer-2026-10-11/verifier-checks.json",
+    "cpuRenderPixels": [
+      1000,
+      700
+    ]
+  },
+  "artifactSha256": {
+    "docs/validation/converted-pointer-2026-10-11/Scene-A.glb": "605ce742b449ceb79cf7d6046cf3b5f4e63c685fa527f272e6e14416f6c608b5",
+    "docs/validation/converted-pointer-2026-10-11/Scene-A.png": "68949bcc1f32cf1586923c0397e62b11dd3982e5c6ebacfdccdb7c2fc901255d",
+    "docs/validation/converted-pointer-2026-10-11/Scene-A.svg": "c2f4ee5f952caea7ae99e493c2dbe3e89b10ef7bc38042ca360ff8ba8515bf81",
+    "docs/validation/converted-pointer-2026-10-11/Scene-B.glb": "659febca0d134cc2c6edf859900cec0b9afd231e11e21d399c42a26caf35ef76",
+    "docs/validation/converted-pointer-2026-10-11/Scene-B.png": "464e6bd5e4cf87b3e99da59a38b3dd5fa6e9985db65e7df95220362e66a0a2bb",
+    "docs/validation/converted-pointer-2026-10-11/Scene-B.svg": "b8321c775a73965a6c2546043f5cd09b374f496f6fa117d63063b705c8503e30",
+    "docs/validation/converted-pointer-2026-10-11/blender/Scene-A.png": "bd033d676ffa6f10d5f0bea77f467f2869bbbf29cf0bf925116d0589f0e7f0cc",
+    "docs/validation/converted-pointer-2026-10-11/blender/Scene-B.png": "9cd3c7b00524991fa41e2576eedfc9eaae50d819b117781c07f5d547619013c8",
+    "docs/validation/converted-pointer-2026-10-11/blender/receiver.json": "7c61ea1a0f3e2b82686112317e8b55e6ec34ebdad497910b217abd54fbe286bb",
+    "docs/validation/converted-pointer-2026-10-11/input.glb": "d04a9015f238a65c350229e7c815133049b27f67e1ce0452d3d08bfb78c4a5f2",
+    "docs/validation/converted-pointer-2026-10-11/project.gonggan.zip": "9e3af69ff5c07c574889d3c32d2b6e8f6d97540fe2e1bc05bf5fde01d376f988",
+    "docs/validation/converted-pointer-2026-10-11/public.json": "2131281183c2e8a81b446dedab6e03f9075db778fd16d866dbe78e97c2a566c1",
+    "docs/validation/converted-pointer-2026-10-11/verifier-checks.json": "dafd3fc20a51205f4a72c5aa8f49455d84e4b273a91ce469598a63b89b560978",
+    "docs/validation/converted-pointer-2026-10-11/workflow.json": "c7a9b632026ccde576c4a6cde74e417533731211d3c3ca06539d4ce937e8e32e"
+  },
+  "localLogs": {
+    "baseline": {
+      "path": "/tmp/show-space-gesture-delivery-before-final.log",
+      "sha256": "aa67730da5003c6ca820009f9b3b42493428a389703303453a6c21cbe16684ba"
+    },
+    "target": {
+      "path": "/tmp/show-space-gesture-delivery-target-final.log",
+      "sha256": "1a7fefc6e118c4015f1f13551338bf097d192494ef0ee80e9ee651fb9b25c034"
+    },
+    "full": {
+      "path": "/tmp/show-space-gesture-delivery-full.log",
+      "sha256": "077f449626d1bf178ad6d7a6ab5dabbeefceb428bd3364cdc1aa152b8047ce69"
+    },
+    "build": {
+      "path": "/tmp/show-space-gesture-delivery-build.log",
+      "sha256": "02d889d6919ca9afb3989e66f9dfb5838567d38e2bacf48179fc2253758a4efe"
+    },
+    "blender": {
+      "path": "/tmp/show-space-gesture-delivery-blender.log",
+      "sha256": "34d619a104fef5a1b5fb3e5ea38fa56cf472cfe8ff12cc1695ee51978d1354c9"
+    },
+    "negative": {
+      "path": "/tmp/show-space-gesture-delivery-negative.log",
+      "sha256": "2eeabb11bf711a76788c671ab05c9acf77698d71eb85e66fb2ff5ab6ceb5b677"
+    },
+    "libraryRecheck": {
+      "path": "/tmp/show-space-gesture-library-recheck.log",
+      "sha256": "c31525e2b22f73a6cd828421cf1a8efc434185f5c7b1a1b095e40a62fc213c17"
+    }
+  },
+  "deployed": false,
+  "limitations": [
+    "Actual React/jsdom Workspace/elevation pointer paths, synthetic identity screen CTM and native PNG/file transport",
+    "Actual SVG capture/thumbnail and GLB loaders, with sharp SVG decoder/native Canvas, not browser/GPU 3D capture",
+    "Native SVG decoder omits text pixels; dimension text is checked in actual SVG markup only",
+    "Owned convertible fixture; operational auth/URL/two devices/SketchUp/full 24-step acceptance remain",
+    "Native capture samples only, not full image/color-management comparison",
+    "Free edits may overlap; no automatic collision avoidance claim",
+    "Full 24-step/user metrics, GPU/FPS/VRAM/p95, paid image-to-material remain"
+  ]
+}

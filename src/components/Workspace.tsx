@@ -1,4 +1,5 @@
 import {selectionFocusPoints} from '../domain/selectionFocus';
+import {hasEditorGesture} from '../domain/editorGesture';
 import {isModuleLoadError} from '../lib/screenRecovery';
 import {ScreenRecoveryPanel,ScreenRecoveryBoundary} from './ScreenRecoveryBoundary';
 import {floorWithOpenings} from '../domain/openings';
@@ -70,20 +71,20 @@ export function Workspace({ captureRef,cameraGetterRef,incomingPlan,onPlanReceiv
     mounted.current=true;
     // Observe every transition, including A→B→A before React renders again.
     const unsubscribe=useEditor.subscribe((next,previous)=>{
-      if(next.project.id!==previous.project.id){
+      if(next.project.id!==previous.project.id||hasEditorGesture(next)){
         sceneJob.current?.abort();sceneJob.current=null;setSavingScene(false);
-        if(sceneName.current)sceneName.current.value='';
+        if(next.project.id!==previous.project.id&&sceneName.current)sceneName.current.value='';
       }
-      if(next.project!==previous.project||next.previewProject!==previous.previewProject||next.view!==previous.view)captureJob.current?.abort();
+      if(next.project!==previous.project||next.previewProject!==previous.previewProject||next.view!==previous.view||hasEditorGesture(next))captureJob.current?.abort();
       if(next.project.id!==previous.project.id||next.view!==previous.view)setCaptureOpen(false);
     });
     return()=>{unsubscribe();mounted.current=false;sceneJob.current?.abort();sceneJob.current=null;captureJob.current?.abort();};
   },[]);
-  const sceneSaveDisabled=savingScene||!useEditor.getState().hydrated||!!previewProject;
+  const sceneSaveDisabled=savingScene||!useEditor.getState().hydrated||hasEditorGesture(useEditor.getState());
   function cancelSceneSave(){sceneJob.current?.abort();sceneJob.current=null;setSavingScene(false);}
   async function saveCurrentScene(){
     const state=useEditor.getState();
-    if(!mounted.current||sceneJob.current||!state.hydrated||state.previewProject)return;
+    if(!mounted.current||sceneJob.current||!state.hydrated||hasEditorGesture(state))return;
     const controller=new AbortController();sceneJob.current=controller;setSavingScene(true);
     const source=structuredClone({...state.project,scenes:[]}),rawName=sceneName.current?.value??'',name=rawName.trim()||`Scene ${String.fromCharCode(65+state.project.scenes.length)}`;
     const camera=view==='3d'?structuredClone(cameraGetterRef.current?.()):undefined,box=stageRef.current?.getBoundingClientRect();
@@ -132,6 +133,7 @@ export function Workspace({ captureRef,cameraGetterRef,incomingPlan,onPlanReceiv
   }
   async function captureCurrent(options:CaptureOptions){
     if(!mounted.current)return;
+    if(hasEditorGesture(useEditor.getState()))throw new Error('이동·회전을 마친 뒤 캡처하세요.');
     if(captureJob.current)throw new Error('이전 캡처가 끝난 뒤 다시 시도해 주세요.');
     const controller=new AbortController();captureJob.current=controller;
     try{

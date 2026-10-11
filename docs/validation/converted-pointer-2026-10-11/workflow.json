@@ -1,0 +1,144 @@
+{
+  "date": "2026-10-11",
+  "sourceHash": "d04a9015f238a65c350229e7c815133049b27f67e1ce0452d3d08bfb78c4a5f2",
+  "floorAreaMm2": 74996700,
+  "publicScenes": 2,
+  "publicImages": 5,
+  "publicModels": 0,
+  "artworks": 5,
+  "rotationsDeg": [
+    -30,
+    -60
+  ],
+  "nativeCaptureRgbSampleErrors": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "nativeCaptures": [
+    [
+      1920,
+      901
+    ],
+    [
+      1920,
+      901
+    ]
+  ],
+  "nativeThumbnails": [
+    [
+      320,
+      200
+    ],
+    [
+      320,
+      200
+    ]
+  ],
+  "measurementMm": 1118.033988749895,
+  "scenes": [
+    {
+      "name": "직접 편집 A면",
+      "file": "Scene-A.glb",
+      "sha256": "605ce742b449ceb79cf7d6046cf3b5f4e63c685fa527f272e6e14416f6c608b5",
+      "artworks": [
+        {
+          "id": "artwork-1",
+          "wallSide": "front",
+          "alongMm": 3479.889998789974,
+          "centerHeightMm": 1580,
+          "rotationDeg": -30
+        },
+        {
+          "id": "artwork-2",
+          "wallSide": "front",
+          "alongMm": 3949.889998789974,
+          "centerHeightMm": 1500,
+          "rotationDeg": 0
+        },
+        {
+          "id": "artwork-3",
+          "wallSide": "front",
+          "alongMm": 4699.889998789974,
+          "centerHeightMm": 1500,
+          "rotationDeg": 0
+        },
+        {
+          "id": "artwork-4",
+          "wallSide": "front",
+          "alongMm": 5549.889998789974,
+          "centerHeightMm": 1500,
+          "rotationDeg": 0
+        },
+        {
+          "id": "artwork-5",
+          "wallSide": "front",
+          "alongMm": 6499.889998789974,
+          "centerHeightMm": 1500,
+          "rotationDeg": 0
+        }
+      ]
+    },
+    {
+      "name": "직접 편집 B면",
+      "file": "Scene-B.glb",
+      "sha256": "659febca0d134cc2c6edf859900cec0b9afd231e11e21d399c42a26caf35ef76",
+      "artworks": [
+        {
+          "id": "artwork-1",
+          "wallSide": "back",
+          "alongMm": 3599.889998789974,
+          "centerHeightMm": 1530,
+          "rotationDeg": -60
+        },
+        {
+          "id": "artwork-2",
+          "wallSide": "back",
+          "alongMm": 3949.889998789974,
+          "centerHeightMm": 1500,
+          "rotationDeg": 0
+        },
+        {
+          "id": "artwork-3",
+          "wallSide": "back",
+          "alongMm": 4699.889998789974,
+          "centerHeightMm": 1500,
+          "rotationDeg": 0
+        },
+        {
+          "id": "artwork-4",
+          "wallSide": "back",
+          "alongMm": 5549.889998789974,
+          "centerHeightMm": 1500,
+          "rotationDeg": 0
+        },
+        {
+          "id": "artwork-5",
+          "wallSide": "back",
+          "alongMm": 6499.889998789974,
+          "centerHeightMm": 1500,
+          "rotationDeg": 0
+        }
+      ]
+    }
+  ],
+  "allGlbImageCornerErrorLessThanMm": 0.01,
+  "gpuMeasured": false,
+  "limitations": [
+    "Actual React/jsdom Workspace/elevation pointer paths, synthetic identity screen CTM and native PNG/file transport",
+    "Actual SVG capture/thumbnail and GLB loaders, with sharp SVG decoder/native Canvas, not browser/GPU 3D capture",
+    "Native SVG decoder omits text pixels; dimension text is checked in actual SVG markup only",
+    "Owned convertible fixture; operational auth/URL/two devices/SketchUp/full 24-step acceptance remain"
+  ]
+}

@@ -28,6 +28,7 @@ import type {Point} from '../domain/types'
 import {snapWallTranslation,transformWalls} from '../domain/wallTransform'
 import {addWallBetween,updateWallEndpoint} from '../domain/wallEditing'
 import {addMeasurement,measureDistance,resolveAnchor} from '../domain/measurements'
+import {hasEditorGesture} from '../domain/editorGesture';
 import { readDraft, writeDraft } from '../lib/persistence'
 import type {ArtworkFacePoint} from '../domain/artworkDrag3d'
 import {snapArtworkPlacement,type ArtworkSnapGuide,type ArtworkSnapOptions} from '../domain/artworkSnap'
@@ -511,7 +512,7 @@ export const useEditor = create<EditorState>((set, get) => {
       set({ project: parsed, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
     }),
     saveScene: (name,cameraView,thumbnail,source) => {
-      try{const project=get().project;get().commit(appendSceneSnapshot(project,source??project,name,cameraView,thumbnail));return true;}
+      try{if(hasEditorGesture(get()))throw new Error('이동·회전을 마친 뒤 Scene을 저장하세요.');const project=get().project;get().commit(appendSceneSnapshot(project,source??project,name,cameraView,thumbnail));return true;}
       catch(error){set({message:errorMessage(error)});return false;}
     },
     restoreScene: (id) => attempt(() => {

@@ -115,3 +115,17 @@ it('captures its own actual elevation SVG when another viewport is in the docume
 it('clears a disposed GPU capture adapter before reentering a loading 3D view',async()=>{
  await act(async()=>useEditor.getState().setView('elevation'));adapter.ready=false;await act(async()=>useEditor.getState().setView('3d'));await click('현재 화면 캡처');await click('PNG 저장');expect(adapter.capture).not.toHaveBeenCalled();expect(downloadBlob).not.toHaveBeenCalled();expect(container.querySelector('[role="alert"]')?.textContent).toContain('3D 화면을 불러온');
 });
+
+it.each(['rotation','drag-before-preview'] as const)('waits for %s before Scene saving or capture',async kind=>{
+ await act(async()=>{if(kind==='rotation')useEditor.getState().setArtworkRotationActive(p.artworks[0].id);else useEditor.getState().beginArtworkDrag(p.artworks[0].id,{alongMm:1400,centerHeightMm:1500});});
+ expect(saveButton().disabled).toBe(true);await click('현재 Scene 저장');expect(renderSceneThumbnail).not.toHaveBeenCalled();await click('현재 화면 캡처');await click('PNG 저장');expect(adapter.capture).not.toHaveBeenCalled();expect(downloadBlob).not.toHaveBeenCalled();expect(container.querySelector('[role="alert"]')?.textContent).toContain('이동·회전');
+});
+
+it('retires a Scene thumbnail when rotation starts and ends before a React render',async()=>{
+ await save('회전 전');await act(async()=>{useEditor.getState().setArtworkRotationActive(p.artworks[0].id);useEditor.getState().setArtworkRotationActive(null);});expect(pending[0].signal.aborted).toBe(true);const before=useEditor.getState().project;await act(async()=>pending[0].resolve(thumbnail));expect(useEditor.getState().project).toBe(before);expect(saveButton().disabled).toBe(false);
+ await save('회전 후');await act(async()=>pending[1].resolve(thumbnail));expect(useEditor.getState().project.scenes.map(s=>s.name)).toEqual(['회전 후']);
+});
+
+it('discards a capture across a batched rotation roundtrip and lets the user retry',async()=>{
+ let finish!:(blob:Blob)=>void;adapter.capture.mockImplementationOnce(()=>new Promise(resolve=>finish=resolve));await click('현재 화면 캡처');await click('PNG 저장');await act(async()=>{useEditor.getState().setArtworkRotationActive(p.artworks[0].id);useEditor.getState().setArtworkRotationActive(null);});await act(async()=>finish(new Blob(['old png'])));expect(downloadBlob).not.toHaveBeenCalled();expect(container.querySelector('[role="alert"]')?.textContent).toContain('변경');await click('PNG 저장');expect(downloadBlob).toHaveBeenCalledTimes(1);
+});
