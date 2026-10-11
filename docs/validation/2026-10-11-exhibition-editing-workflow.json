@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-11",
+  "projectId": "5743c732-518a-4344-a2ed-4e8d398b757d",
+  "walls": 4,
+  "floor": {
+    "surfaces": 1,
+    "areaMm2": 47110907.08777083,
+    "glbThicknessMm": 160,
+    "wallRoles": [
+      "boundary",
+      "boundary",
+      "boundary",
+      "boundary"
+    ]
+  },
+  "artworks": 10,
+  "sceneNames": [
+    "Scene A",
+    "Scene B"
+  ],
+  "pdfPages": 12,
+  "glbImages": 11,
+  "texture": {
+    "widthMm": 2000,
+    "heightMm": 1000
+  },
+  "outdoor": "09:00",
+  "privateReferenceImages": 1,
+  "capture": {
+    "width": 1920,
+    "height": 1059
+  },
+  "steps": [
+    "Persisted empty project hydrated through App",
+    "Header PDF -> automatic page 2 -> editable draft and door/equipment labels",
+    "50cm two-point scale calibration through actual PlanView",
+    "Bulk boundary role through Inspector -> actual endpoint pointer snap closes four imported corners -> visible plan floor -> undo/redo -> zoom/Hand pan without data edits",
+    "Real wall texture upload -> 2m x 1m physical repeat through Inspector",
+    "Ten real native PNG uploads via Outliner and cm size editing via Inspector",
+    "Ten-point grouped array and 25cm spacing through production dialog",
+    "Actual project NOTE, checklist/done and native private reference image",
+    "Spot/Kelvin -> bird/front camera requests -> Scene A/B, including actual native thumbnail encoding with GPU adapter",
+    "Outdoor dialog 09:00 -> slider 17:00 -> restore Scene A time and texture",
+    "Restore Scene A -> actual elevation SVG/native PNG capture at 1920px",
+    "Manual save -> independent repository/readDraft exact project and Scene data",
+    "Current/Scene A/Scene B vector PDF and Korean text inspection, with private notes excluded",
+    "Exact ZIP/asset restore -> two-Scene public payload with private notes excluded",
+    "Actual GLTFExporter GLB -> embedded 11 images, private-note exclusion, Spot/sun -> GLTFLoader geometry read"
+  ],
+  "limitations": [
+    "jsdom/native Canvas/fake-indexeddb, not actual browser or disk durability",
+    "OCR empty and worker transport adapted; production PDF parser/pixel algorithms",
+    "GPU transport and 3D Scene preview image renderer adapted, no 3D pixel proof",
+    "Native SVG rasterizer skips embedded image href pixels; ten embedded images decode separately and SVG XML is verified; PNG evidence covers wall/frame geometry and dimensions",
+    "No actual login/public API publication/SketchUp/real-device/full 24-step acceptance"
+  ],
+  "verification": {
+    "baseCommit": "05e173754cb6beaf811b81f8738e9480976ccee1",
+    "baseline": {
+      "testFilesFailed": 2,
+      "testsFailed": 8,
+      "testsPassed": 2,
+      "command": "npx vitest run src/components/PlanView.floorWorkflow.test.tsx src/components/Exhibition.workflow.test.tsx",
+      "scope": "Same final tests with PlanView, Inspector and editor restored to base commit. Missing floor display and new bulk-role behavior are distinguished in the implementation note."
+    },
+    "after": {
+      "testFilesPassed": 2,
+      "testsPassed": 10
+    },
+    "fullSuite": {
+      "testFilesPassed": 230,
+      "testFilesSkipped": 10,
+      "testsPassed": 1323,
+      "testsSkipped": 10
+    },
+    "productionBuildPassed": true,
+    "deployed": false
+  },
+  "sourceSHA256": {
+    "src/components/PlanView.tsx": "8ba754b8833430e84ac1c185ec77f23ee6f759d977b8e5f103a66cf8b4d2f2b4",
+    "src/components/Inspector.tsx": "2369b6df8b6fbe00d54e1dad4aa1c61023f149466be9a0fd637d73e14d108158",
+    "src/state/editor.ts": "75b6ec030c0c70627e312cace14955bf3b51caa6e46d5a632b2cbdccddc074a2",
+    "src/components/PlanView.floorWorkflow.test.tsx": "cbeb6edebda1afdd64bce3a7f1e130e0ba29c16be9236560875f443e231aa1e7",
+    "src/components/Exhibition.workflow.test.tsx": "f62fe63a4ead903950e052866cf3cb01a6e0062d1ad16cbdf0f350a41f4e341d"
+  },
+  "artifactSHA256": {
+    "2026-10-11-exhibition-editing-elevation.png": "959857323b580560980cd00cc12dc718fb25c80f938bf2314a8f0f754fcee06a",
+    "2026-10-11-exhibition-editing-elevation.svg": "d0d1087f33940319d8cc04df16fbebb0699bcb5703e74c28944f13db68b1f5a6",
+    "2026-10-11-exhibition-editing-input.pdf": "56f7dc22fc72de3a542fe35d526caacda6ae1285cbf20c55f6ea6404666e51cd",
+    "2026-10-11-exhibition-editing-output.pdf": "9033edc893d1a83e55f0d76af3f19b48e66488cbaf455feb342f9344c4883b6d",
+    "2026-10-11-exhibition-editing-project.json": "b36eee1a82d10c9332c39642dfc4d62a64017b057f611723790b7a5cff4b3c1b",
+    "2026-10-11-exhibition-editing.glb": "a011602de28856eb35ce0b43db15290d3f5c61ca9dd354462ae9a07490c0506f",
+    "2026-10-11-exhibition-editing.gonggan.zip": "34bdb6a41ea3a58005dcb9af1cd06fd2b661b5de1616f4d78bd9ecca4c535ce7"
+  }
+}

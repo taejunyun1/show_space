@@ -120,6 +120,7 @@ interface EditorState {
   drawWall(start:Point,end:Point):void
   groupSelectedArtworks(): void
   ungroupSelectedArtworks(): void
+  setSelectedWallRole(role:'boundary'|'partition'): void
   groupSelectedWalls(): void
   ungroupSelectedWalls(): void
   duplicateSelected(): void
@@ -392,6 +393,17 @@ export const useEditor = create<EditorState>((set, get) => {
     ungroupSelectedArtworks: () => attempt(()=>{
       const {project,selected}=get();
       get().commit(ungroupArtworks(project,selected.filter(item=>item.type==='artwork').map(item=>item.id)));
+    }),
+    setSelectedWallRole: role => attempt(()=>{
+      const {project,selected}=get();
+      if(!selected.length||selected.some(item=>item.type!=='wall'))throw new Error('용도를 변경할 벽만 선택해 주세요.');
+      if(role!=='boundary'&&role!=='partition')throw new Error('벽 용도가 올바르지 않습니다.');
+      const ids=new Set(selected.flatMap(item=>groupMembers(project,item.id).map(w=>w.id)));
+      const walls=project.walls.filter(w=>ids.has(w.id));
+      if(!walls.length)throw new Error('선택한 벽을 찾을 수 없습니다.');
+      if(walls.some(w=>w.locked))throw new Error('잠긴 벽은 용도를 변경할 수 없습니다.');
+      if(walls.every(w=>(w.role??'boundary')===role))return;
+      get().commit(parseProject({...project,walls:project.walls.map(w=>ids.has(w.id)?{...w,role}:w)}));
     }),
     groupSelectedWalls: () => attempt(()=>{
       const {project,selected}=get();
