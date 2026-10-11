@@ -1,0 +1,180 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "827adf6b9bab40e09734eb0f033628e81217e7c0",
+  "runtimeFiles": [
+    "src/state/cloudSync.ts"
+  ],
+  "baseline": {
+    "method": "Temporary final-source copy; only cloudSync.ts replaced from baseline; identical final 14 tests",
+    "failed": 5,
+    "passed": 9,
+    "exitCode": 1,
+    "durationSeconds": 1.17
+  },
+  "regression": {
+    "added": 7,
+    "focusedFiles": 2,
+    "focusedTests": 14,
+    "targetFiles": 8,
+    "targetTests": 62,
+    "fullPassedFiles": 253,
+    "fullSkippedFiles": 10,
+    "fullPassed": 1565,
+    "fullSkipped": 10,
+    "fullDurationSeconds": 13.64,
+    "typeScriptAndProductionBuild": true,
+    "viteBuildSeconds": 6.02,
+    "existingLargeChunkWarning": true
+  },
+  "verifiedCases": [
+    "Waiting request keeps the original account and is retired on account change/logout/A-B-A",
+    "Explicit cancel retires running and waiting requests but preserves exact pending package",
+    "Acknowledgement for an older local revision cannot display the latest Scene as saved",
+    "Three requests remain serialized when the first request releases and a later job owns the queue tail",
+    "Owned two-plan backup decoded through actual exportProjectBackup image validation",
+    "Production Worker commits revision 1 before response delay/account switch; no account-B write or pending/link",
+    "Exact pending file retry uses existing server idempotency at revision 1, then current restored A/B reach revisions 2/3",
+    "Private API package readback/import equals each restored complete project; account B metadata is 404",
+    "Final original Scene images match two ZIP PNG asset hashes and separate CRC check"
+  ],
+  "workflow": {
+    "date": "2026-10-11",
+    "inputBackupSha256": "8678781f2f8f615c4b7f55fc0d112531386aaaedc75ac39758682ae36073b011",
+    "originalPendingSha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4",
+    "receivedASha256": "acde840d2b56a891c04d9a4a235a1182fb445941f564e1b1ae9bff13438b5847",
+    "receivedBSha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4",
+    "waitingAccountSwitchRejected": true,
+    "originalPendingExact": true,
+    "idempotentRetryRevision": 1,
+    "sceneARemoteRevision": 2,
+    "sceneBRemoteRevision": 3,
+    "localRevision": 3,
+    "privateNotePreserved": true,
+    "scenePlanImagesPreserved": true,
+    "otherAccountListCount": 0,
+    "otherAccountReadDenied": true,
+    "otherAccountLocalQueueAbsent": true,
+    "remainingStoredPackages": 1,
+    "calls": [
+      {
+        "method": "PUT",
+        "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+        "account": "Bearer account-a",
+        "expectedRevision": "0",
+        "status": 201,
+        "sha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+        "account": "Bearer account-a",
+        "expectedRevision": "0",
+        "status": 200,
+        "sha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+        "account": "Bearer account-a",
+        "expectedRevision": "1",
+        "status": 200,
+        "sha256": "acde840d2b56a891c04d9a4a235a1182fb445941f564e1b1ae9bff13438b5847"
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f/meta",
+        "account": "Bearer account-a",
+        "expectedRevision": null,
+        "status": 200,
+        "sha256": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+        "account": "Bearer account-a",
+        "expectedRevision": null,
+        "status": 200,
+        "sha256": null
+      },
+      {
+        "method": "PUT",
+        "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+        "account": "Bearer account-a",
+        "expectedRevision": "2",
+        "status": 200,
+        "sha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4"
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f/meta",
+        "account": "Bearer account-a",
+        "expectedRevision": null,
+        "status": 200,
+        "sha256": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+        "account": "Bearer account-a",
+        "expectedRevision": null,
+        "status": 200,
+        "sha256": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects",
+        "account": "Bearer account-b",
+        "expectedRevision": null,
+        "status": 200,
+        "sha256": null
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f/meta",
+        "account": "Bearer account-b",
+        "expectedRevision": null,
+        "status": 404,
+        "sha256": null
+      }
+    ],
+    "browserGpuMeasured": false,
+    "operationalAuthMeasured": false,
+    "limitations": [
+      "Owned prior two-JPEG/Scene backup; actual exportProjectBackup image checks use native Canvas decoder",
+      "Actual Zustand/default local autosave and cloud queue, fake-indexeddb, cloud client, production Worker with SQLite/R2/auth fixture",
+      "Delayed response ignores abort on purpose; not real server/account/device or browser fetch cancellation acceptance"
+    ]
+  },
+  "assets": [
+    {
+      "path": "assets/images/71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d.png",
+      "bytes": 5400,
+      "sha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d"
+    },
+    {
+      "path": "assets/images/edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1.png",
+      "bytes": 5519,
+      "sha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1"
+    }
+  ],
+  "artifacts": {
+    "workflow.json": {
+      "sha256": "d5b11be2326ac4f193c48033f20b5b541a9e2b77a0a4880e85ce83662b7a9a8b",
+      "bytes": 3626
+    },
+    "project.gonggan.zip": {
+      "sha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4",
+      "bytes": 4354
+    }
+  },
+  "limits": [
+    "Queue unit tests inject session/client/package adapters; native workflow uses real Zustand, default autosave, cloud client and Worker handler",
+    "fake-indexeddb, local SQLite/R2/auth fixture and native Image decoder, not operational browser/accounts/devices",
+    "Delayed-response adapter intentionally ignores AbortSignal to verify acknowledgement ownership; not real network cancellation/GPU proof",
+    "No real two-device collaboration, original 24-step/user success/performance acceptance or SketchUp receiver"
+  ],
+  "deployment": {
+    "performed": false
+  },
+  "allFeaturesComplete": false
+}

@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-11",
+  "inputBackupSha256": "8678781f2f8f615c4b7f55fc0d112531386aaaedc75ac39758682ae36073b011",
+  "originalPendingSha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4",
+  "receivedASha256": "acde840d2b56a891c04d9a4a235a1182fb445941f564e1b1ae9bff13438b5847",
+  "receivedBSha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4",
+  "waitingAccountSwitchRejected": true,
+  "originalPendingExact": true,
+  "idempotentRetryRevision": 1,
+  "sceneARemoteRevision": 2,
+  "sceneBRemoteRevision": 3,
+  "localRevision": 3,
+  "privateNotePreserved": true,
+  "scenePlanImagesPreserved": true,
+  "otherAccountListCount": 0,
+  "otherAccountReadDenied": true,
+  "otherAccountLocalQueueAbsent": true,
+  "remainingStoredPackages": 1,
+  "calls": [
+    {
+      "method": "PUT",
+      "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+      "account": "Bearer account-a",
+      "expectedRevision": "0",
+      "status": 201,
+      "sha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+      "account": "Bearer account-a",
+      "expectedRevision": "0",
+      "status": 200,
+      "sha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+      "account": "Bearer account-a",
+      "expectedRevision": "1",
+      "status": 200,
+      "sha256": "acde840d2b56a891c04d9a4a235a1182fb445941f564e1b1ae9bff13438b5847"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f/meta",
+      "account": "Bearer account-a",
+      "expectedRevision": null,
+      "status": 200,
+      "sha256": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+      "account": "Bearer account-a",
+      "expectedRevision": null,
+      "status": 200,
+      "sha256": null
+    },
+    {
+      "method": "PUT",
+      "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+      "account": "Bearer account-a",
+      "expectedRevision": "2",
+      "status": 200,
+      "sha256": "dc6958387317baae59607cef3df3541d2098285161b682fb2d02a72c326f06c4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f/meta",
+      "account": "Bearer account-a",
+      "expectedRevision": null,
+      "status": 200,
+      "sha256": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f",
+      "account": "Bearer account-a",
+      "expectedRevision": null,
+      "status": 200,
+      "sha256": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects",
+      "account": "Bearer account-b",
+      "expectedRevision": null,
+      "status": 200,
+      "sha256": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/c39043dd-c12a-457c-8b95-0e0b9590ac4f/meta",
+      "account": "Bearer account-b",
+      "expectedRevision": null,
+      "status": 404,
+      "sha256": null
+    }
+  ],
+  "browserGpuMeasured": false,
+  "operationalAuthMeasured": false,
+  "limitations": [
+    "Owned prior two-JPEG/Scene backup; actual exportProjectBackup image checks use native Canvas decoder",
+    "Actual Zustand/default local autosave and cloud queue, fake-indexeddb, cloud client, production Worker with SQLite/R2/auth fixture",
+    "Delayed response ignores abort on purpose; not real server/account/device or browser fetch cancellation acceptance"
+  ]
+}
