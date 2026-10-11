@@ -1,0 +1,435 @@
+{
+  "date": "2026-10-11",
+  "sources": [
+    {
+      "file": "landscape-decoded.png",
+      "sha256": "4c84307611fef06c3ede4065154b0c7112ff9722cab7762a7c848feb3ba36e0f",
+      "bytes": 1544
+    },
+    {
+      "file": "portrait-decoded.png",
+      "sha256": "456f5a0572a2d4880bb1a59a39850cbfb031397b57b2a4907c9386488916bf42",
+      "bytes": 2056
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "벽 · 전체 이미지",
+      "lights": [
+        {
+          "id": "light-1",
+          "position": {
+            "x": 3000,
+            "y": 1500,
+            "z": 4560
+          },
+          "target": {
+            "x": 3000,
+            "y": 1500,
+            "z": 60
+          },
+          "projection": {
+            "throwRatio": 2,
+            "aspectRatio": 1,
+            "brightnessLumens": 2400,
+            "fit": "contain"
+          }
+        },
+        {
+          "id": "light-2",
+          "position": {
+            "x": 3000,
+            "y": 2800,
+            "z": 1280
+          },
+          "target": {
+            "x": 3000,
+            "y": 1500,
+            "z": 80
+          },
+          "projection": {
+            "throwRatio": 1.5,
+            "aspectRatio": 1.7777777777777777,
+            "brightnessLumens": 1800,
+            "fit": "contain"
+          }
+        }
+      ]
+    },
+    {
+      "id": "scene-2",
+      "name": "바닥 · 중앙 잘림",
+      "lights": [
+        {
+          "id": "light-1",
+          "position": {
+            "x": 3000,
+            "y": 3000,
+            "z": 4560
+          },
+          "target": {
+            "x": 3000,
+            "y": 0,
+            "z": 60
+          },
+          "projection": {
+            "throwRatio": 2,
+            "aspectRatio": 1,
+            "brightnessLumens": 0,
+            "fit": "cover"
+          }
+        },
+        {
+          "id": "light-2",
+          "position": {
+            "x": 3000,
+            "y": 2800,
+            "z": 1280
+          },
+          "target": {
+            "x": 3000,
+            "y": 1500,
+            "z": 80
+          },
+          "projection": {
+            "throwRatio": 1.5,
+            "aspectRatio": 1,
+            "brightnessLumens": 1800,
+            "fit": "cover"
+          }
+        }
+      ]
+    }
+  ],
+  "r3fMaps": [
+    {
+      "name": "Scene-A",
+      "maps": [
+        {
+          "size": [
+            1024,
+            1024
+          ],
+          "widthMm": 2250,
+          "heightMm": 2250,
+          "rgbErrors": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "matrixUvErrors": [
+            4.9343245538895844e-17,
+            4.9343245538895844e-17,
+            0,
+            0,
+            1.1102230246251565e-16
+          ],
+          "sha256": "405848fc7d56e960aa31d5aa624ee1d0222123118aa90f0e6e11cd995c44e345"
+        },
+        {
+          "size": [
+            1024,
+            576
+          ],
+          "widthMm": 1179.4537341969422,
+          "heightMm": 663.44272548578,
+          "rgbErrors": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "matrixUvErrors": [
+            6.275351559994718e-16,
+            6.275351559994718e-16,
+            6.661338147750939e-16,
+            6.661338147750939e-16,
+            5.551115123125783e-16
+          ],
+          "sha256": "c5661c3fd48768913a3342c9114bec8398f4bec6655f752942e50381552224b6"
+        }
+      ]
+    },
+    {
+      "name": "Scene-B",
+      "maps": [
+        {
+          "size": [
+            1024,
+            1024
+          ],
+          "widthMm": 2704.163456597992,
+          "heightMm": 2704.163456597992,
+          "rgbErrors": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "matrixUvErrors": [
+            3.2844849579378223e-16,
+            7.771561172376096e-16,
+            4.440892098500626e-16,
+            2.463363718453367e-16,
+            3.885780586188048e-16
+          ],
+          "sha256": "7f9d3b48c3689db625da01225f02d405309c07c7c2befc9a55a289499ca5b9e3"
+        },
+        {
+          "size": [
+            1024,
+            1024
+          ],
+          "widthMm": 1179.4537341969422,
+          "heightMm": 1179.4537341969422,
+          "rgbErrors": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "matrixUvErrors": [
+            2.510140623997887e-16,
+            6.661338147750939e-16,
+            4.440892098500626e-16,
+            2.220446049250313e-16,
+            4.440892098500626e-16
+          ],
+          "sha256": "ea3ec07fb56f4e37de306a19ab127e8f27d2fbcb6c27cd3563db4ce20c1325ea"
+        }
+      ]
+    },
+    {
+      "name": "readonly-B",
+      "maps": [
+        {
+          "size": [
+            1024,
+            1024
+          ],
+          "widthMm": 2704.163456597992,
+          "heightMm": 2704.163456597992,
+          "rgbErrors": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "matrixUvErrors": [
+            3.2844849579378223e-16,
+            7.771561172376096e-16,
+            4.440892098500626e-16,
+            2.463363718453367e-16,
+            3.885780586188048e-16
+          ],
+          "sha256": "7f9d3b48c3689db625da01225f02d405309c07c7c2befc9a55a289499ca5b9e3"
+        },
+        {
+          "size": [
+            1024,
+            1024
+          ],
+          "widthMm": 1179.4537341969422,
+          "heightMm": 1179.4537341969422,
+          "rgbErrors": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "matrixUvErrors": [
+            2.510140623997887e-16,
+            6.661338147750939e-16,
+            4.440892098500626e-16,
+            2.220446049250313e-16,
+            4.440892098500626e-16
+          ],
+          "sha256": "ea3ec07fb56f4e37de306a19ab127e8f27d2fbcb6c27cd3563db4ce20c1325ea"
+        }
+      ]
+    }
+  ],
+  "detachedMaps": [
+    {
+      "size": [
+        1024,
+        1024
+      ],
+      "widthMm": 2250,
+      "heightMm": 2250,
+      "rgbErrors": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "matrixUvErrors": [
+        4.9343245538895844e-17,
+        4.9343245538895844e-17,
+        0,
+        0,
+        1.1102230246251565e-16
+      ],
+      "sha256": "405848fc7d56e960aa31d5aa624ee1d0222123118aa90f0e6e11cd995c44e345"
+    },
+    {
+      "size": [
+        1024,
+        576
+      ],
+      "widthMm": 1179.4537341969422,
+      "heightMm": 663.44272548578,
+      "rgbErrors": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "matrixUvErrors": [
+        6.275351559994718e-16,
+        6.275351559994718e-16,
+        6.661338147750939e-16,
+        6.661338147750939e-16,
+        5.551115123125783e-16
+      ],
+      "sha256": "c5661c3fd48768913a3342c9114bec8398f4bec6655f752942e50381552224b6"
+    },
+    {
+      "size": [
+        1024,
+        1024
+      ],
+      "widthMm": 2704.163456597992,
+      "heightMm": 2704.163456597992,
+      "rgbErrors": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "matrixUvErrors": [
+        3.2844849579378223e-16,
+        7.771561172376096e-16,
+        4.440892098500626e-16,
+        2.463363718453367e-16,
+        3.885780586188048e-16
+      ],
+      "sha256": "7f9d3b48c3689db625da01225f02d405309c07c7c2befc9a55a289499ca5b9e3"
+    },
+    {
+      "size": [
+        1024,
+        1024
+      ],
+      "widthMm": 1179.4537341969422,
+      "heightMm": 1179.4537341969422,
+      "rgbErrors": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "matrixUvErrors": [
+        2.510140623997887e-16,
+        6.661338147750939e-16,
+        4.440892098500626e-16,
+        2.220446049250313e-16,
+        4.440892098500626e-16
+      ],
+      "sha256": "ea3ec07fb56f4e37de306a19ab127e8f27d2fbcb6c27cd3563db4ce20c1325ea"
+    }
+  ],
+  "negativeWrongFitRejected": true,
+  "negativeWrongThrowRatioRejected": true,
+  "publicImages": 2,
+  "backupExact": true,
+  "decoderClosed": 2,
+  "gpuMeasured": false,
+  "limits": [
+    "Actual React/jsdom Inspector, delayed native PNG bitmap and native TextureLoader/Canvas transport",
+    "Actual R3F light maps/capture gates and detached PDF preparation; no GPU projection/occlusion/final PNG/PDF pixels",
+    "Readonly local assets only; no operational share URL/auth/two-device acceptance"
+  ]
+}

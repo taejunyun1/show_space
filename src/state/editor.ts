@@ -43,6 +43,8 @@ interface MeasurementDraft {view:View; elevationWallId?:string;start:Measurement
 
 interface EditorState {
   project: Project
+  /** Loading a document, Scene or history retires deferred inspector edits. */
+  projectContextVersion:number
   previewProject: Project | null
   wallGesture: WallGesture | null
   artworkGesture: ArtworkGesture | null
@@ -199,6 +201,7 @@ export const useEditor = create<EditorState>((set, get) => {
       if(!state.selected.length){set({message:'화면에 맞출 객체를 선택하세요.'});return;}
       set({focusRequest:{token:(state.focusRequest?.token??0)+1,projectId:state.project.id,view:state.view,selected:state.selected.map(s=>({...s}))}});
     },
+    projectContextVersion:0,
     selected: firstSelection(initialProject),
     view: '3d',
     activeWallId: 'wall-a',
@@ -508,18 +511,18 @@ export const useEditor = create<EditorState>((set, get) => {
       const previous = state.past[state.past.length - 1]
       if (!previous) return state
       const project = clone(previous)
-      return { project, view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project,projectContextVersion:state.projectContextVersion+1, view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,past: state.past.slice(0, -1), future: [clone(state.project), ...state.future].slice(0, 50), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     redo: () => set((state) => {
       const next = state.future[0]
       if (!next) return state
       const project = clone(next)
-      return { project,view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
+      return { project,projectContextVersion:state.projectContextVersion+1,view:safeView(project,state.view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,past: [...state.past, clone(state.project)].slice(-50), future: state.future.slice(1), selected: validSelection(project, state.selected), activeWallId: validWall(project, state.activeWallId), message: null }
     }),
     loadProject: (project,alreadySaved=false) => attempt(() => {
       const parsed = parseProject(project)
       if(alreadySaved)savedSnapshot=parsed;
-      set({ project: parsed, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
+      set({ project: parsed,projectContextVersion:get().projectContextVersion+1, view:safeView(parsed,get().view),previewProject:null,wallGesture:null,artworkGesture:null,lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,measurementDraft:null,selected: firstSelection(parsed), activeWallId: validWall(parsed, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
     }),
     saveScene: (name,cameraView,thumbnail,source) => {
       try{if(hasEditorGesture(get()))throw new Error('이동·회전을 마친 뒤 Scene을 저장하세요.');const project=get().project;get().commit(appendSceneSnapshot(project,source??project,name,cameraView,thumbnail));return true;}
@@ -529,7 +532,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const project = get().project
       const scene = project.scenes.find((item) => item.id === id)
       if (!scene) throw new Error('장면을 찾을 수 없습니다.')
-      const commitScene=(next:Project)=>get().commit(preserveCurrentNotes(project,next));
+      const commitScene=(next:Project)=>{get().commit(preserveCurrentNotes(project,next));set(state=>({projectContextVersion:state.projectContextVersion+1}));};
       if(scene.structure){
         commitScene(parseProject({...project,...(scene.structure.modelArtworks!==undefined?{modelArtworks:clone(scene.structure.modelArtworks)}:{}),...(scene.structure.outdoor?{outdoor:clone(scene.structure.outdoor)}:{}),...(scene.structure.lights!==undefined?{lights:clone(scene.structure.lights),lighting:clone(scene.structure.lighting)}:{}),...(scene.structure.floorColor!==undefined?{floorColor:scene.structure.floorColor,floorMaterial:scene.structure.floorMaterial?clone(scene.structure.floorMaterial):undefined}:{}),importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
       }else{
@@ -557,7 +560,7 @@ export async function hydrateEditor(reader: () => Promise<unknown> = readDraft):
     }
     const project = parseProject(raw)
     savedSnapshot=project;
-    useEditor.setState({ project,view:safeView(project,useEditor.getState().view),selected: firstSelection(project), activeWallId: validWall(project, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
+    useEditor.setState({ project,projectContextVersion:useEditor.getState().projectContextVersion+1,view:safeView(project,useEditor.getState().view),selected: firstSelection(project), activeWallId: validWall(project, ''), past: [], future: [], hydrated: true, saveStatus: 'saved', message: null })
   } catch (error) {
     useEditor.setState({ hydrated: true, saveStatus: 'error', message: `저장된 프로젝트를 불러오지 못했습니다. ${errorMessage(error)}` })
   }

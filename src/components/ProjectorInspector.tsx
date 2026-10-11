@@ -7,17 +7,22 @@ import {PROJECTION_PATTERN} from '../domain/projectionPattern';
 import {readProjectorImage} from '../lib/projectorImageImport';
 import {useEditor} from '../state/editor';
 import {useLengthFormatter} from './LengthUnits';
+import {useEditorEditScope} from './useEditorEditScope';
 
 export function ProjectorInspector({light}:{light:ExhibitionLight}){
- const p=light.projection!,g=projectionGeometry({...light,projection:p}),format=useLengthFormatter(),input=useRef<HTMLInputElement>(null),mounted=useRef(true),request=useRef<AbortController|undefined>(undefined),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ const p=light.projection!,g=projectionGeometry({...light,projection:p}),format=useLengthFormatter(),scope=useEditorEditScope(),input=useRef<HTMLInputElement>(null),mounted=useRef(true),request=useRef<AbortController|undefined>(undefined),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;request.current?.abort();};},[]);
+ useEffect(()=>{request.current?.abort();request.current=undefined;setBusy(false);setError('');setNotice('');},[scope.version]);
  const patch=(value:Partial<ProjectionSettings>)=>useEditor.getState().patchLight(light.id,{projection:{...p,...value}});
  async function upload(file:File){
+  const state=useEditor.getState(),source=state.project.lights?.find(l=>l.id===light.id);
+  if(!scope.current()||state.selected[0]?.type!=='light'||state.selected[0].id!==light.id||!source?.projection||source.locked)return;
   request.current?.abort();const controller=new AbortController();request.current=controller;
-  const project=useEditor.getState().project;setBusy(true);setError('');setNotice('');
-  try{const result=await readProjectorImage(file,controller.signal),current=useEditor.getState();if(!mounted.current||controller.signal.aborted||current.selected[0]?.type!=='light'||current.selected[0].id!==light.id)return;if(current.project!==project||current.project.lights?.find(l=>l.id===light.id)!==light)throw new Error('편집 중인 프로젝트가 변경됐습니다. 이미지를 다시 선택해주세요.');patch({imageUrl:result.imageUrl});setNotice(result.optimized?'큰 이미지의 저장 용량을 줄였습니다. 화면에서는 최대 1,024px로 표시합니다.':'원본 이미지 파일을 보존했습니다. 화면에서는 최대 1,024px로 표시합니다.');}
-  catch(cause){if(mounted.current&&!controller.signal.aborted)setError(cause instanceof Error?cause.message:'투사 이미지를 읽지 못했습니다.');}
-  finally{if(mounted.current&&request.current===controller)setBusy(false);}
+  const projectId=state.project.id,sourceUrl=source.projection.imageUrl,current=()=>mounted.current&&scope.current()&&request.current===controller&&!controller.signal.aborted&&useEditor.getState().project.id===projectId;
+  setBusy(true);setError('');setNotice('');
+  try{const result=await readProjectorImage(file,controller.signal);if(!current())return;const latest=useEditor.getState().project.lights?.find(l=>l.id===light.id);if(!latest?.projection||latest.locked||latest.projection.imageUrl!==sourceUrl)return;useEditor.getState().patchLight(light.id,{projection:{...latest.projection,imageUrl:result.imageUrl}});setNotice(result.optimized?'큰 이미지의 저장 용량을 줄였습니다. 화면에서는 최대 1,024px로 표시합니다.':'원본 이미지 파일을 보존했습니다. 화면에서는 최대 1,024px로 표시합니다.');}
+  catch(cause){if(current()&&useEditor.getState().project.lights?.find(l=>l.id===light.id)?.projection?.imageUrl===sourceUrl)setError(cause instanceof Error?cause.message:'투사 이미지를 읽지 못했습니다.');}
+  finally{if(current()){request.current=undefined;setBusy(false);}}
  }
  return <section className="inspector-section" aria-label="프로젝터 설정"><h3>프로젝터 <IconButton label={light.locked?'조명 잠금 해제':'조명 잠금'} active={light.locked} onClick={()=>useEditor.getState().patchLight(light.id,{locked:!light.locked})}>{light.locked?<LockKeyhole size={16}/>:<UnlockKeyhole size={16}/>}</IconButton></h3>
   <img src={p.imageUrl} alt="투사 이미지" style={{width:'100%',maxHeight:160,objectFit:'contain',background:'#171717'}}/>

@@ -1,0 +1,647 @@
+{
+  "schemaVersion": 1,
+  "id": "projector-delivery-20261011",
+  "name": "프로젝터 이미지·Scene 전달",
+  "venue": "성수 갤러리",
+  "walls": [
+    {
+      "id": "wall-a",
+      "name": "벽 A",
+      "start": {
+        "x": 0,
+        "z": 0
+      },
+      "end": {
+        "x": 6000,
+        "z": 0
+      },
+      "heightMm": 3000,
+      "thicknessMm": 120,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "partition"
+    },
+    {
+      "id": "wall-b",
+      "name": "벽 B",
+      "start": {
+        "x": 6000,
+        "z": 0
+      },
+      "end": {
+        "x": 6000,
+        "z": 6000
+      },
+      "heightMm": 3000,
+      "thicknessMm": 120,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "wall-c",
+      "name": "벽 C",
+      "start": {
+        "x": 6000,
+        "z": 6000
+      },
+      "end": {
+        "x": 0,
+        "z": 6000
+      },
+      "heightMm": 3000,
+      "thicknessMm": 120,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "wall-d",
+      "name": "벽 D",
+      "start": {
+        "x": 0,
+        "z": 6000
+      },
+      "end": {
+        "x": 0,
+        "z": 0
+      },
+      "heightMm": 3000,
+      "thicknessMm": 120,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "role": "boundary"
+    },
+    {
+      "id": "occluder",
+      "name": "차폐 벽",
+      "start": {
+        "x": 2700,
+        "z": 1560
+      },
+      "end": {
+        "x": 3300,
+        "z": 1560
+      },
+      "heightMm": 2400,
+      "thicknessMm": 120,
+      "color": "#ffffff",
+      "visible": false,
+      "locked": false,
+      "note": "",
+      "role": "partition"
+    }
+  ],
+  "artworks": [],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "벽 · 전체 이미지",
+      "artworks": [],
+      "wallVisibility": {
+        "wall-a": true,
+        "wall-b": true,
+        "wall-c": true,
+        "wall-d": true,
+        "occluder": false
+      },
+      "structure": {
+        "walls": [
+          {
+            "id": "wall-a",
+            "name": "벽 A",
+            "start": {
+              "x": 0,
+              "z": 0
+            },
+            "end": {
+              "x": 6000,
+              "z": 0
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "partition"
+          },
+          {
+            "id": "wall-b",
+            "name": "벽 B",
+            "start": {
+              "x": 6000,
+              "z": 0
+            },
+            "end": {
+              "x": 6000,
+              "z": 6000
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "boundary"
+          },
+          {
+            "id": "wall-c",
+            "name": "벽 C",
+            "start": {
+              "x": 6000,
+              "z": 6000
+            },
+            "end": {
+              "x": 0,
+              "z": 6000
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "boundary"
+          },
+          {
+            "id": "wall-d",
+            "name": "벽 D",
+            "start": {
+              "x": 0,
+              "z": 6000
+            },
+            "end": {
+              "x": 0,
+              "z": 0
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "boundary"
+          },
+          {
+            "id": "occluder",
+            "name": "차폐 벽",
+            "start": {
+              "x": 2700,
+              "z": 1560
+            },
+            "end": {
+              "x": 3300,
+              "z": 1560
+            },
+            "heightMm": 2400,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": false,
+            "locked": false,
+            "note": "",
+            "role": "partition"
+          }
+        ],
+        "openings": [],
+        "dimensions": [],
+        "unplacedArtworks": [],
+        "modelArtworks": [],
+        "lights": [
+          {
+            "projection": {
+              "throwRatio": 2,
+              "aspectRatio": 1,
+              "brightnessLumens": 2400,
+              "fit": "contain",
+              "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAFoCAIAAABIUN0GAAAACXBIWXMAAAABAAAAAQBPJcTWAAAFuklEQVR4nO3XQQ3DQBAEwXNkPuERRJEJ2IBCxIR8gdGPq0Iwj5Vauz0DGq/fGJ96BAv7HvO66hEsbK8HAMCKBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDACBfTz1BFb13uY96xEs7LzHOZwgGR8wAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAIE/cjoReG6tb4kAAAAASUVORK5CYII="
+            },
+            "id": "light-1",
+            "name": "프로젝터 1",
+            "kind": "spot",
+            "position": {
+              "x": 3000,
+              "y": 1500,
+              "z": 4560
+            },
+            "target": {
+              "x": 3000,
+              "y": 1500,
+              "z": 60
+            },
+            "intensity": 15,
+            "kelvin": 4000,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true,
+            "locked": false,
+            "note": "PRIVATE_PROJECTOR_NOTE"
+          },
+          {
+            "projection": {
+              "throwRatio": 1.5,
+              "aspectRatio": 1.7777777777777777,
+              "brightnessLumens": 1800,
+              "fit": "contain",
+              "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAKACAIAAAA+eHXwAAAACXBIWXMAAAABAAAAAQBPJcTWAAAHuklEQVR4nO3WwQ2EMBAEQdA5/4jxQQz9wUKuimC0j9ae18Ebxly9YBM/h37DWD0A+B7hADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhALJx/ldP2MQ9Vy/Ywjzu1RO24OMAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAsgfjcxHyWIyeLAAAAABJRU5ErkJggg=="
+            },
+            "id": "light-2",
+            "name": "프로젝터 2",
+            "kind": "spot",
+            "position": {
+              "x": 3000,
+              "y": 2800,
+              "z": 1280
+            },
+            "target": {
+              "x": 3000,
+              "y": 1500,
+              "z": 80
+            },
+            "intensity": 15,
+            "kelvin": 4000,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true,
+            "locked": false,
+            "note": ""
+          }
+        ],
+        "lighting": {
+          "ambient": 0.12,
+          "hemisphere": 0.15,
+          "fill": 0,
+          "environment": 0.08
+        },
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "floorColor": "#f1f1ed",
+        "importedFloor": [
+          [
+            {
+              "x": 0,
+              "z": 0
+            },
+            {
+              "x": 6000,
+              "z": 0
+            },
+            {
+              "x": 6000,
+              "z": 6000
+            },
+            {
+              "x": 0,
+              "z": 6000
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "scene-2",
+      "name": "바닥 · 중앙 잘림",
+      "artworks": [],
+      "wallVisibility": {
+        "wall-a": true,
+        "wall-b": true,
+        "wall-c": true,
+        "wall-d": true,
+        "occluder": false
+      },
+      "structure": {
+        "walls": [
+          {
+            "id": "wall-a",
+            "name": "벽 A",
+            "start": {
+              "x": 0,
+              "z": 0
+            },
+            "end": {
+              "x": 6000,
+              "z": 0
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "partition"
+          },
+          {
+            "id": "wall-b",
+            "name": "벽 B",
+            "start": {
+              "x": 6000,
+              "z": 0
+            },
+            "end": {
+              "x": 6000,
+              "z": 6000
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "boundary"
+          },
+          {
+            "id": "wall-c",
+            "name": "벽 C",
+            "start": {
+              "x": 6000,
+              "z": 6000
+            },
+            "end": {
+              "x": 0,
+              "z": 6000
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "boundary"
+          },
+          {
+            "id": "wall-d",
+            "name": "벽 D",
+            "start": {
+              "x": 0,
+              "z": 6000
+            },
+            "end": {
+              "x": 0,
+              "z": 0
+            },
+            "heightMm": 3000,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "role": "boundary"
+          },
+          {
+            "id": "occluder",
+            "name": "차폐 벽",
+            "start": {
+              "x": 2700,
+              "z": 1560
+            },
+            "end": {
+              "x": 3300,
+              "z": 1560
+            },
+            "heightMm": 2400,
+            "thicknessMm": 120,
+            "color": "#ffffff",
+            "visible": false,
+            "locked": false,
+            "note": "",
+            "role": "partition"
+          }
+        ],
+        "openings": [],
+        "dimensions": [],
+        "unplacedArtworks": [],
+        "modelArtworks": [],
+        "lights": [
+          {
+            "projection": {
+              "throwRatio": 2,
+              "aspectRatio": 1,
+              "brightnessLumens": 0,
+              "fit": "cover",
+              "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAFoCAIAAABIUN0GAAAACXBIWXMAAAABAAAAAQBPJcTWAAAFuklEQVR4nO3XQQ3DQBAEwXNkPuERRJEJ2IBCxIR8gdGPq0Iwj5Vauz0DGq/fGJ96BAv7HvO66hEsbK8HAMCKBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDACBfTz1BFb13uY96xEs7LzHOZwgGR8wAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAIE/cjoReG6tb4kAAAAASUVORK5CYII="
+            },
+            "id": "light-1",
+            "name": "프로젝터 1",
+            "kind": "spot",
+            "position": {
+              "x": 3000,
+              "y": 3000,
+              "z": 4560
+            },
+            "target": {
+              "x": 3000,
+              "y": 0,
+              "z": 60
+            },
+            "intensity": 15,
+            "kelvin": 4000,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true,
+            "locked": false,
+            "note": "PRIVATE_PROJECTOR_NOTE"
+          },
+          {
+            "projection": {
+              "throwRatio": 1.5,
+              "aspectRatio": 1,
+              "brightnessLumens": 1800,
+              "fit": "cover",
+              "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAKACAIAAAA+eHXwAAAACXBIWXMAAAABAAAAAQBPJcTWAAAHuklEQVR4nO3WwQ2EMBAEQdA5/4jxQQz9wUKuimC0j9ae18Ebxly9YBM/h37DWD0A+B7hADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhALJx/ldP2MQ9Vy/Ywjzu1RO24OMAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAsgfjcxHyWIyeLAAAAABJRU5ErkJggg=="
+            },
+            "id": "light-2",
+            "name": "프로젝터 2",
+            "kind": "spot",
+            "position": {
+              "x": 3000,
+              "y": 2800,
+              "z": 1280
+            },
+            "target": {
+              "x": 3000,
+              "y": 1500,
+              "z": 80
+            },
+            "intensity": 15,
+            "kelvin": 4000,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true,
+            "locked": false,
+            "note": ""
+          }
+        ],
+        "lighting": {
+          "ambient": 0.12,
+          "hemisphere": 0.15,
+          "fill": 0,
+          "environment": 0.08
+        },
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "floorColor": "#f1f1ed",
+        "importedFloor": [
+          [
+            {
+              "x": 0,
+              "z": 0
+            },
+            {
+              "x": 6000,
+              "z": 0
+            },
+            {
+              "x": 6000,
+              "z": 6000
+            },
+            {
+              "x": 0,
+              "z": 6000
+            }
+          ]
+        ]
+      }
+    }
+  ],
+  "floorColor": "#f1f1ed",
+  "importedFloor": [
+    [
+      {
+        "x": 0,
+        "z": 0
+      },
+      {
+        "x": 6000,
+        "z": 0
+      },
+      {
+        "x": 6000,
+        "z": 6000
+      },
+      {
+        "x": 0,
+        "z": 6000
+      }
+    ]
+  ],
+  "lights": [
+    {
+      "projection": {
+        "throwRatio": 2,
+        "aspectRatio": 1,
+        "brightnessLumens": 0,
+        "fit": "cover",
+        "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAFoCAIAAABIUN0GAAAACXBIWXMAAAABAAAAAQBPJcTWAAAFuklEQVR4nO3XQQ3DQBAEwXNkPuERRJEJ2IBCxIR8gdGPq0Iwj5Vauz0DGq/fGJ96BAv7HvO66hEsbK8HAMCKBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDACBfTz1BFb13uY96xEs7LzHOZwgGR8wAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAAEBBoCAAANAQIABICDAABAQYAAICDAABAQYAAICDAABAQaAgAADQECAASAgwAAQEGAACAgwAAQEGAACAgwAAQEGgIAAA0BAgAEgIMAAEBBgAAgIMAAEBBgAAgIMAIE/cjoReG6tb4kAAAAASUVORK5CYII="
+      },
+      "id": "light-1",
+      "name": "프로젝터 1",
+      "kind": "spot",
+      "position": {
+        "x": 3000,
+        "y": 3000,
+        "z": 4560
+      },
+      "target": {
+        "x": 3000,
+        "y": 0,
+        "z": 60
+      },
+      "intensity": 15,
+      "kelvin": 4000,
+      "beamDeg": 40,
+      "penumbra": 0.3,
+      "distanceMm": 0,
+      "widthMm": 1000,
+      "heightMm": 500,
+      "shadow": true,
+      "visible": true,
+      "locked": false,
+      "note": "PRIVATE_PROJECTOR_NOTE"
+    },
+    {
+      "projection": {
+        "throwRatio": 1.5,
+        "aspectRatio": 1,
+        "brightnessLumens": 1800,
+        "fit": "cover",
+        "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAKACAIAAAA+eHXwAAAACXBIWXMAAAABAAAAAQBPJcTWAAAHuklEQVR4nO3WwQ2EMBAEQdA5/4jxQQz9wUKuimC0j9ae18Ebxly9YBM/h37DWD0A+B7hADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhADLhALJx/ldP2MQ9Vy/Ywjzu1RO24OMAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAMuEAsgfjcxHyWIyeLAAAAABJRU5ErkJggg=="
+      },
+      "id": "light-2",
+      "name": "프로젝터 2",
+      "kind": "spot",
+      "position": {
+        "x": 3000,
+        "y": 2800,
+        "z": 1280
+      },
+      "target": {
+        "x": 3000,
+        "y": 1500,
+        "z": 80
+      },
+      "intensity": 15,
+      "kelvin": 4000,
+      "beamDeg": 40,
+      "penumbra": 0.3,
+      "distanceMm": 0,
+      "widthMm": 1000,
+      "heightMm": 500,
+      "shadow": true,
+      "visible": true,
+      "locked": false,
+      "note": ""
+    }
+  ],
+  "lighting": {
+    "ambient": 0.12,
+    "hemisphere": 0.15,
+    "fill": 0,
+    "environment": 0.08
+  }
+}

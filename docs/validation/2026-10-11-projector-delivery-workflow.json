@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "a865a14ac06117954dea1332186185fdd0973088",
+  "baseline": {
+    "files": 3,
+    "failed": 8,
+    "passed": 18,
+    "tests": 26,
+    "durationSeconds": 2.48,
+    "method": "Temporary source copy; only three runtime files replaced by baseline, no live worktree rollback"
+  },
+  "newRegressionTests": 13,
+  "related": {
+    "files": 6,
+    "passed": 44,
+    "durationSeconds": 1.38
+  },
+  "full": {
+    "passedFiles": 248,
+    "skippedFiles": 10,
+    "passedTests": 1508,
+    "skippedTests": 10,
+    "durationSeconds": 10.22
+  },
+  "build": {
+    "typescriptPassed": true,
+    "vitePassed": true,
+    "viteDurationSeconds": 4.26
+  },
+  "nativeMaps": 10,
+  "nativeRgbSamples": 120,
+  "nativeRgbMaxError": 0,
+  "independentOpticalUvPoints": 50,
+  "opticalUvMaxError": 7.771561172376096e-16,
+  "negativeWrongFitRejected": true,
+  "negativeWrongThrowRatioRejected": true,
+  "backupExact": true,
+  "backupCrcPassed": true,
+  "backupEntries": 5,
+  "allNativeMapHashesPassed": true,
+  "browserGpuMeasured": false,
+  "deploymentPerformed": false,
+  "files": {
+    "Scene-A-map-0.png": {
+      "bytes": 6715,
+      "sha256": "405848fc7d56e960aa31d5aa624ee1d0222123118aa90f0e6e11cd995c44e345"
+    },
+    "Scene-A-map-1.png": {
+      "bytes": 3760,
+      "sha256": "c5661c3fd48768913a3342c9114bec8398f4bec6655f752942e50381552224b6"
+    },
+    "Scene-B-map-0.png": {
+      "bytes": 6768,
+      "sha256": "7f9d3b48c3689db625da01225f02d405309c07c7c2befc9a55a289499ca5b9e3"
+    },
+    "Scene-B-map-1.png": {
+      "bytes": 6681,
+      "sha256": "ea3ec07fb56f4e37de306a19ab127e8f27d2fbcb6c27cd3563db4ce20c1325ea"
+    },
+    "detached-0.png": {
+      "bytes": 6715,
+      "sha256": "405848fc7d56e960aa31d5aa624ee1d0222123118aa90f0e6e11cd995c44e345"
+    },
+    "detached-1.png": {
+      "bytes": 3760,
+      "sha256": "c5661c3fd48768913a3342c9114bec8398f4bec6655f752942e50381552224b6"
+    },
+    "detached-2.png": {
+      "bytes": 6768,
+      "sha256": "7f9d3b48c3689db625da01225f02d405309c07c7c2befc9a55a289499ca5b9e3"
+    },
+    "detached-3.png": {
+      "bytes": 6681,
+      "sha256": "ea3ec07fb56f4e37de306a19ab127e8f27d2fbcb6c27cd3563db4ce20c1325ea"
+    },
+    "project.gonggan.zip": {
+      "bytes": 3211,
+      "sha256": "d1cf4bd2b115648d9723a33b0c99061565244ea9444d66f0a8995b64bf81f975"
+    },
+    "project.json": {
+      "bytes": 28981,
+      "sha256": "883fedd93fa3b326cb7c2d32f9424d21b473c58e2eb3ac1d5be27c0e4713657b"
+    },
+    "public.json": {
+      "bytes": 11733,
+      "sha256": "77fc293eea8e346435b09fa99331c4d0078c8eb548b0d44743ac1accbb8e2478"
+    },
+    "readonly-B-map-0.png": {
+      "bytes": 6768,
+      "sha256": "7f9d3b48c3689db625da01225f02d405309c07c7c2befc9a55a289499ca5b9e3"
+    },
+    "readonly-B-map-1.png": {
+      "bytes": 6681,
+      "sha256": "ea3ec07fb56f4e37de306a19ab127e8f27d2fbcb6c27cd3563db4ce20c1325ea"
+    },
+    "workflow.json": {
+      "bytes": 9301,
+      "sha256": "a85b8607fc94ca11959aa02d808a6060e17cf6a26d64bd032e8742712eedd491"
+    }
+  }
+}

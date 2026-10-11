@@ -15,7 +15,7 @@ export function useEditorEditScope(trackSelection=true){
  useEffect(()=>{
   alive.current=true;setVersion(epoch.current);
   const unsubscribe=useEditor.subscribe((next,previous)=>{
-   if(next.project.id===previous.project.id&&(!trackSelection||selectionContext(next)===selectionContext(previous)))return;
+   if(next.project.id===previous.project.id&&next.projectContextVersion===previous.projectContextVersion&&(!trackSelection||selectionContext(next)===selectionContext(previous)))return;
    epoch.current++;setVersion(epoch.current);
   });
   return()=>{alive.current=false;epoch.current++;unsubscribe();};

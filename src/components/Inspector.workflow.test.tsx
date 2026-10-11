@@ -7,7 +7,7 @@ import {createCanvas,loadImage,type Image as NativeImage,type Canvas} from '@nap
 import {Inspector} from './Inspector';
 import {FloorMaterialDialog} from './FloorMaterialDialog';
 import {LengthUnitContext} from './LengthUnits';
-import {useEditor} from '../state/editor';
+import {useEditor,hydrateEditor} from '../state/editor';
 import {createDemoProject,parseProject} from '../domain/model';
 import {rotatedArtworkOuterSize} from '../domain/artworkPresentation';
 import {newLight} from '../domain/lighting';
@@ -48,6 +48,10 @@ it.each(['texture','normal'] as const)('discards a delayed %s after selection A�
 
 it('does not attach a late floor texture after project A→B→A',async()=>{
  const job=deferred<SurfaceTexture>();vi.mocked(readSurfaceTexture).mockImplementationOnce(()=>job.promise);await mount(true);await file('바닥 재질 텍스처 파일');await act(async()=>{useEditor.getState().loadProject({...p,id:'other-floor-project'});useEditor.getState().loadProject(p);});const before=useEditor.getState().project;await act(async()=>job.resolve(map));expect(useEditor.getState().project).toBe(before);expect(useEditor.getState().project.floorMaterial?.texture).toBeUndefined();
+});
+
+it('retires a pending floor texture when same-ID draft hydration replaces the document',async()=>{
+ const job=deferred<SurfaceTexture>();vi.mocked(readSurfaceTexture).mockImplementationOnce(()=>job.promise);await mount(true);await file('바닥 재질 텍스처 파일');await act(async()=>hydrateEditor(async()=>({...p,floorColor:'#334455'})));const hydrated=useEditor.getState().project;await act(async()=>job.resolve(map));expect(useEditor.getState().project).toBe(hydrated);expect(hydrated.floorColor).toBe('#334455');expect(hydrated.floorMaterial?.texture).toBeUndefined();expect(container.textContent).not.toContain('이미지 처리 중');
 });
 
 it('invalidates a pending normal when its wall is locked and unlocked in one batch',async()=>{
