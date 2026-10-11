@@ -1,0 +1,216 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "40ad4ffe228749c7e535fa2a4e7af44e7a9fe3cf",
+  "sourceSha256": {
+    "src/components/TransformHandles3D.tsx": "d05173840ae7ed059fbfd564bf0edc1979157c76f424ff5b939b63c0e9058b46",
+    "src/components/TransformHandles3D.workflow.test.tsx": "623ae13faf8e8019b058a0face24ec2e02c743f2d84a99a9ada9af3b49fd45a5",
+    "src/components/ModelArtworks3D.tsx": "cc2b9225fa4b47b7e99285cd0a27ae9d48b3a89c965e0ecdfbad6f5d5848f591",
+    "src/components/LightMarkers3D.tsx": "55a00351d371bb858829571854bf67426604a251f1939fb4a174fd8fbf8f6759",
+    "src/state/editor.ts": "96abd0455293c1383ae4c8920e3162886efb424c7d7287a7c6b938248026ef3e",
+    "scripts/verify-blender-transform-handles.py": "369442b94ea7a8ede1981c172242076e55b52c83023834d31234f073372a7f9a"
+  },
+  "baseline": {
+    "command": "npx vitest run src/components/TransformHandles3D.workflow.test.tsx",
+    "procedure": "Restore only ModelArtworks3D.tsx, LightMarkers3D.tsx and editor.ts from baseline; actual original Drei PivotControls retained in tests, no behavior shim or export changes; current product restored byte-for-byte in finally",
+    "failed": 27,
+    "passed": 8,
+    "tests": 35,
+    "durationSeconds": 1.0,
+    "harnessCorrectionsExcluded": [
+      "JSX Quaternion tuple avoids cross-realm constructor assignment",
+      "Use actual emitter node, prepareSharePresentation for Scenes and act for store notifications",
+      "Offset raycast sample 2mm from exact triangle seam, same final sample in baseline/current"
+    ]
+  },
+  "target": {
+    "command": "GONGGAN_TRANSFORM_HANDLES_PROOF=1 npx vitest run src/components/TransformHandles3D.workflow.test.tsx src/components/ModelInstances.lifecycle.test.tsx src/components/Lighting3D.lifecycle.test.tsx src/components/PlanView.pointerWorkflow.test.tsx src/components/GalleryWall.pointerWorkflow.test.tsx src/domain/modelArtworkSnap.test.ts",
+    "passed": 95,
+    "filesPassed": 6,
+    "durationSeconds": 1.19
+  },
+  "full": {
+    "command": "npm test",
+    "passed": 1494,
+    "skipped": 10,
+    "filesPassed": 245,
+    "filesSkipped": 10,
+    "durationSeconds": 10.05
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "viteDurationSeconds": 5.23,
+    "largeChunkNoticeRetained": true
+  },
+  "connectedWorkflow": {
+    "date": "2026-10-11",
+    "actualR3fAndGltfLoader": true,
+    "models": 2,
+    "modelMeshes": 6,
+    "groupReleaseTranslationMm": 400,
+    "groupRotationDeg": 90,
+    "lightReleaseTranslationMm": 600,
+    "lightAimRotationDeg": 90,
+    "modelBoundsErrorsMm": [
+      1.1102230246251565e-12,
+      1.1102230246251565e-12
+    ],
+    "wrongExpectedTranslationMm": 100,
+    "wrongExpectedBoundsErrorMm": 99.99999999999959,
+    "sceneNames": [
+      "그룹 이동",
+      "회전·조명과 잠금"
+    ],
+    "lockStates": [
+      false,
+      true
+    ],
+    "backupExact": true,
+    "publicModels": 2,
+    "publicModelAssets": 1,
+    "scenes": [
+      {
+        "name": "그룹 이동",
+        "file": "scene-A.glb",
+        "sha256": "a31ef905f3a6252a5f733b703b4082cf7853a108273b4dd2d5ecd2318362d87e",
+        "bytes": 13964
+      },
+      {
+        "name": "회전·조명과 잠금",
+        "file": "scene-B.glb",
+        "sha256": "4d40c52c8774002c1aacb20bec7a4a4a8b579e77febd44a8684a9ee4aa4cadad",
+        "bytes": 14036
+      }
+    ],
+    "actualGlbExporterAndLoader": true,
+    "limits": [
+      "Synthetic rays/capture target, annotation and WebGL transports; no browser/GPU",
+      "Actual model decode/geometry/light nodes/Scene/ZIP/public payload, no operational URL/deployment",
+      "No two-device/24-step/SketchUp acceptance"
+    ]
+  },
+  "archive": {
+    "crcPassed": true,
+    "entries": 4,
+    "assets": 1,
+    "assetSha256": {
+      "assets/models/90d2f6cb50b5803577f2e71666d7b42245d0a867f1cbd311a01544b44fe6aab9.glb": "90d2f6cb50b5803577f2e71666d7b42245d0a867f1cbd311a01544b44fe6aab9"
+    }
+  },
+  "independentReceiver": {
+    "command": "/Applications/Blender.app/Contents/MacOS/Blender --background --factory-startup --python-exit-code 1 --python scripts/verify-blender-transform-handles.py -- --directory docs/validation/transform-handles-2026-10-11 --output docs/validation/transform-handles-2026-10-11/receiver.json",
+    "exitCode": 0,
+    "report": {
+      "passed": true,
+      "blenderVersion": "4.4.1",
+      "scenes": [
+        {
+          "name": "그룹 이동",
+          "meshObjects": 11,
+          "modelParts": 6,
+          "modelTriangles": 72,
+          "modelPartVertexErrorsMm": [
+            0.0007729326538183029,
+            0.0007729326538183029
+          ],
+          "lightPositionErrorMm": 0.0,
+          "lightAimVectorError": 1.1920928955078125e-07
+        },
+        {
+          "name": "회전·조명과 잠금",
+          "meshObjects": 11,
+          "modelParts": 6,
+          "modelTriangles": 72,
+          "modelPartVertexErrorsMm": [
+            0.0004777675730550706,
+            0.0004777675730550706
+          ],
+          "lightPositionErrorMm": 0.0,
+          "lightAimVectorError": 2.220446049250313e-16
+        }
+      ],
+      "wrongExpectedTranslationMm": 0,
+      "gpuMeasured": false,
+      "limits": [
+        "Owned synthetic arch, actual independent CPU importer and geometry",
+        "No browser/GPU/SketchUp/operational URL acceptance"
+      ]
+    },
+    "negativeArgument": "--wrong-translation-mm 100",
+    "negativeExitCode": 1,
+    "negativeReport": {
+      "passed": false,
+      "blenderVersion": "4.4.1",
+      "scenes": [],
+      "wrongExpectedTranslationMm": 100.0,
+      "gpuMeasured": false,
+      "limits": [
+        "Owned synthetic arch, actual independent CPU importer and geometry",
+        "No browser/GPU/SketchUp/operational URL acceptance"
+      ],
+      "error": "model-artwork-1: part vertices differ by 100.00076722066488 mm"
+    }
+  },
+  "artifacts": {
+    "docs/validation/transform-handles-2026-10-11/project.gonggan.zip": {
+      "bytes": 3123,
+      "sha256": "d175556d4557a0338a217bd485481cd4f0c726577604a5e3fb22a310c35d285c"
+    },
+    "docs/validation/transform-handles-2026-10-11/project.json": {
+      "bytes": 31529,
+      "sha256": "1feedae376d2f9a34b2e3f661b12fc9fbfdbd8f6590669fa09a1bac2f678726e"
+    },
+    "docs/validation/transform-handles-2026-10-11/public.json": {
+      "bytes": 11964,
+      "sha256": "2d6a3b0ad3ade0586c85c5887bf8f67427c98fca7a26f2187e84d86a25a15441"
+    },
+    "docs/validation/transform-handles-2026-10-11/receiver-negative.json": {
+      "bytes": 357,
+      "sha256": "2e19a6e1722b34c05ab1f802a6904f8869d70ea2267d0464f4b1bbea0c82571b"
+    },
+    "docs/validation/transform-handles-2026-10-11/receiver.json": {
+      "bytes": 948,
+      "sha256": "c183bd852f490acdfd8cdde011dbe7668b6fecdc94ef390f23fda5bb530b1709"
+    },
+    "docs/validation/transform-handles-2026-10-11/scene-A.glb": {
+      "bytes": 13964,
+      "sha256": "a31ef905f3a6252a5f733b703b4082cf7853a108273b4dd2d5ecd2318362d87e"
+    },
+    "docs/validation/transform-handles-2026-10-11/scene-B.glb": {
+      "bytes": 14036,
+      "sha256": "4d40c52c8774002c1aacb20bec7a4a4a8b579e77febd44a8684a9ee4aa4cadad"
+    },
+    "docs/validation/transform-handles-2026-10-11/workflow.json": {
+      "bytes": 1266,
+      "sha256": "128b6e793f5d8ce596a9f4a7420cb3036d43a3dc2e4c8fca9a7e727a08e24d5e"
+    }
+  },
+  "logs": {
+    "baseline": {
+      "path": "/tmp/show-space-transform-before-final35.log",
+      "sha256": "09bf0ca33f33d1c290e61c1be642fe001f7ac2df47ccf40485024f033b9562e2"
+    },
+    "target": {
+      "path": "/tmp/show-space-transform-target-final3.log",
+      "sha256": "3cf86d11e9344d89a21926e7cd888e05aaa45910ac3c80069988d8ccb08f92a5"
+    },
+    "full": {
+      "path": "/tmp/show-space-transform-full-final35.log",
+      "sha256": "6309b2b4acbb8d1c9af8057145d28d25155868c3f103e4e9f8f3700abb92cccc"
+    },
+    "build": {
+      "path": "/tmp/show-space-transform-build-final35.log",
+      "sha256": "18032d9c82c9f9ed2057125b7d36bca7e3d83ffb76bb0ca52ccf4698bc469745"
+    },
+    "receiver": {
+      "path": "/tmp/show-space-transform-blender-final.log",
+      "sha256": "cdc3d784cbb24e9883460fefc892100173525992387327bd7c904d461ad7655d"
+    },
+    "negative": {
+      "path": "/tmp/show-space-transform-blender-negative-final.log",
+      "sha256": "3f38d858617e7e5ca15f3afb0e68fc0fbee6e6d654f950b3ef48133fd33902cb"
+    }
+  },
+  "deployed": false,
+  "next": "Media artwork 2D poster fit/crop, elevation/capture/PDF and Scene/backup delivery; original operational/browser deferrals preserved"
+}

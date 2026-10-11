@@ -1,0 +1,12 @@
+{
+  "passed": false,
+  "blenderVersion": "4.4.1",
+  "scenes": [],
+  "wrongExpectedTranslationMm": 100.0,
+  "gpuMeasured": false,
+  "limits": [
+    "Owned synthetic arch, actual independent CPU importer and geometry",
+    "No browser/GPU/SketchUp/operational URL acceptance"
+  ],
+  "error": "model-artwork-1: part vertices differ by 100.00076722066488 mm"
+}

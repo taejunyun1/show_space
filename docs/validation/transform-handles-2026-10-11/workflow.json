@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-11",
+  "actualR3fAndGltfLoader": true,
+  "models": 2,
+  "modelMeshes": 6,
+  "groupReleaseTranslationMm": 400,
+  "groupRotationDeg": 90,
+  "lightReleaseTranslationMm": 600,
+  "lightAimRotationDeg": 90,
+  "modelBoundsErrorsMm": [
+    1.1102230246251565e-12,
+    1.1102230246251565e-12
+  ],
+  "wrongExpectedTranslationMm": 100,
+  "wrongExpectedBoundsErrorMm": 99.99999999999959,
+  "sceneNames": [
+    "그룹 이동",
+    "회전·조명과 잠금"
+  ],
+  "lockStates": [
+    false,
+    true
+  ],
+  "backupExact": true,
+  "publicModels": 2,
+  "publicModelAssets": 1,
+  "scenes": [
+    {
+      "name": "그룹 이동",
+      "file": "scene-A.glb",
+      "sha256": "a31ef905f3a6252a5f733b703b4082cf7853a108273b4dd2d5ecd2318362d87e",
+      "bytes": 13964
+    },
+    {
+      "name": "회전·조명과 잠금",
+      "file": "scene-B.glb",
+      "sha256": "4d40c52c8774002c1aacb20bec7a4a4a8b579e77febd44a8684a9ee4aa4cadad",
+      "bytes": 14036
+    }
+  ],
+  "actualGlbExporterAndLoader": true,
+  "limits": [
+    "Synthetic rays/capture target, annotation and WebGL transports; no browser/GPU",
+    "Actual model decode/geometry/light nodes/Scene/ZIP/public payload, no operational URL/deployment",
+    "No two-device/24-step/SketchUp acceptance"
+  ]
+}

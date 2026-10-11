@@ -106,6 +106,7 @@ interface EditorState {
   lightGesture:{id:string;base:Project}|null
   beginLightMove(id:string):void
   updateLightMove(position:import('../domain/types').WorldPoint):void
+  updateLightAim(target:import('../domain/types').WorldPoint):void
   finishLightMove(cancel?:boolean):void
   patchArtwork(id: string, patch: Partial<Artwork>): void
   patchWall(id: string, patch: Partial<Wall>): void
@@ -333,8 +334,9 @@ export const useEditor = create<EditorState>((set, get) => {
     updateOutdoorTime:time=>attempt(()=>{const g=get().outdoorGesture;if(!g)return;set({previewProject:{...g.base,outdoor:parseOutdoor({...g.base.outdoor??DEFAULT_OUTDOOR,time})}});}),
     finishOutdoorTime:(cancel=false)=>{const {outdoorGesture,previewProject}=get();set({outdoorGesture:null,previewProject:null});if(!cancel&&outdoorGesture&&previewProject&&JSON.stringify(outdoorGesture.base.outdoor)!==JSON.stringify(previewProject.outdoor))attempt(()=>get().commit(previewProject));},
     patchLighting: lighting=>attempt(()=>get().commit({...get().project,lighting:parseLighting(lighting)})),
-    beginLightMove:id=>attempt(()=>{const p=get().project,l=p.lights?.find(l=>l.id===id);if(!l||l.locked)throw new Error('잠긴 조명은 이동할 수 없습니다.');set({lightGesture:{id,base:p},outdoorGesture:null,previewProject:null});}),
+    beginLightMove:id=>attempt(()=>{const p=get().project,l=p.lights?.find(l=>l.id===id);if(!l||l.locked)throw new Error('잠긴 조명은 이동할 수 없습니다.');set({lightGesture:{id,base:p},wallGesture:null,artworkGesture:null,modelArtworkGesture:null,outdoorGesture:null,rotatingArtworkId:null,previewProject:null});}),
     updateLightMove:position=>attempt(()=>{const g=get().lightGesture;if(!g)return;const l=g.base.lights!.find(l=>l.id===g.id)!;set({previewProject:updateLight(g.base,g.id,translatedLight(l,position))});}),
+    updateLightAim:target=>attempt(()=>{const g=get().lightGesture;if(!g)return;set({previewProject:updateLight(g.base,g.id,{target})});}),
     finishLightMove:(cancel=false)=>{const {lightGesture,previewProject}=get();set({lightGesture:null,modelArtworkGesture:null,outdoorGesture:null,previewProject:null});if(!cancel&&lightGesture&&previewProject&&JSON.stringify(lightGesture.base.lights)!==JSON.stringify(previewProject.lights))attempt(()=>get().commit(previewProject));},
     addModelArtwork:(model,expectedProjectId)=>attempt(()=>{const p=get().project;if(p.id!==expectedProjectId)throw new Error('프로젝트가 바뀌어 3D 작품 가져오기를 취소했습니다.');const result=addModelArtworkToProject(p,model);get().commit(result.project);set({selected:[{type:'modelArtwork',id:result.artwork.id}],view:'3d',activeTool:'select',message:'3D 작품을 등록했습니다. 실제 크기는 오른쪽 숫자 입력으로 조절하세요.'});}),
     patchModelArtwork:(id,patch)=>attempt(()=>{const p=get().project,a=p.modelArtworks?.find(a=>a.id===id);if(!a)throw new Error('3D 작품을 찾을 수 없습니다.');let next=updateModelArtwork(p,id,patch);if(patch.position||patch.rotation){next=transformModelArtworks(p,selectedModelArtworkIds(p,get().selected,id),id,patch.position??a.position,patch.rotation??a.rotation);const {position:_,rotation:__,...other}=patch;if(Object.keys(other).length)next=updateModelArtwork(next,id,other);}get().commit(next);}),

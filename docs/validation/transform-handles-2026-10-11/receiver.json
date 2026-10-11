@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "blenderVersion": "4.4.1",
+  "scenes": [
+    {
+      "name": "\uadf8\ub8f9 \uc774\ub3d9",
+      "meshObjects": 11,
+      "modelParts": 6,
+      "modelTriangles": 72,
+      "modelPartVertexErrorsMm": [
+        0.0007729326538183029,
+        0.0007729326538183029
+      ],
+      "lightPositionErrorMm": 0.0,
+      "lightAimVectorError": 1.1920928955078125e-07
+    },
+    {
+      "name": "\ud68c\uc804\u00b7\uc870\uba85\uacfc \uc7a0\uae08",
+      "meshObjects": 11,
+      "modelParts": 6,
+      "modelTriangles": 72,
+      "modelPartVertexErrorsMm": [
+        0.0004777675730550706,
+        0.0004777675730550706
+      ],
+      "lightPositionErrorMm": 0.0,
+      "lightAimVectorError": 2.220446049250313e-16
+    }
+  ],
+  "wrongExpectedTranslationMm": 0,
+  "gpuMeasured": false,
+  "limits": [
+    "Owned synthetic arch, actual independent CPU importer and geometry",
+    "No browser/GPU/SketchUp/operational URL acceptance"
+  ]
+}

@@ -1,0 +1,622 @@
+{
+  "schemaVersion": 1,
+  "id": "project-1",
+  "name": "여백의 기록",
+  "venue": "성수 갤러리",
+  "walls": [
+    {
+      "id": "wall-a",
+      "name": "벽 A",
+      "start": {
+        "x": -4000,
+        "z": -3000
+      },
+      "end": {
+        "x": 4000,
+        "z": -3000
+      },
+      "heightMm": 3200,
+      "thicknessMm": 160,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": ""
+    },
+    {
+      "id": "wall-b",
+      "name": "벽 B",
+      "start": {
+        "x": 4000,
+        "z": -3000
+      },
+      "end": {
+        "x": 4000,
+        "z": 3000
+      },
+      "heightMm": 3200,
+      "thicknessMm": 160,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": ""
+    },
+    {
+      "id": "wall-c",
+      "name": "벽 C",
+      "start": {
+        "x": 4000,
+        "z": 3000
+      },
+      "end": {
+        "x": -4000,
+        "z": 3000
+      },
+      "heightMm": 3200,
+      "thicknessMm": 160,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": ""
+    },
+    {
+      "id": "wall-d",
+      "name": "벽 D",
+      "start": {
+        "x": -4000,
+        "z": 3000
+      },
+      "end": {
+        "x": -4000,
+        "z": -3000
+      },
+      "heightMm": 3200,
+      "thicknessMm": 160,
+      "color": "#ffffff",
+      "visible": true,
+      "locked": false,
+      "note": ""
+    }
+  ],
+  "artworks": [],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "그룹 이동",
+      "artworks": [],
+      "wallVisibility": {
+        "wall-a": true,
+        "wall-b": true,
+        "wall-c": true,
+        "wall-d": true
+      },
+      "structure": {
+        "walls": [
+          {
+            "id": "wall-a",
+            "name": "벽 A",
+            "start": {
+              "x": -4000,
+              "z": -3000
+            },
+            "end": {
+              "x": 4000,
+              "z": -3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": ""
+          },
+          {
+            "id": "wall-b",
+            "name": "벽 B",
+            "start": {
+              "x": 4000,
+              "z": -3000
+            },
+            "end": {
+              "x": 4000,
+              "z": 3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": ""
+          },
+          {
+            "id": "wall-c",
+            "name": "벽 C",
+            "start": {
+              "x": 4000,
+              "z": 3000
+            },
+            "end": {
+              "x": -4000,
+              "z": 3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": ""
+          },
+          {
+            "id": "wall-d",
+            "name": "벽 D",
+            "start": {
+              "x": -4000,
+              "z": 3000
+            },
+            "end": {
+              "x": -4000,
+              "z": -3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": ""
+          }
+        ],
+        "openings": [],
+        "dimensions": [],
+        "unplacedArtworks": [],
+        "modelArtworks": [
+          {
+            "id": "model-artwork-1",
+            "name": "translated-arch",
+            "artist": "",
+            "year": "",
+            "kind": "sculpture",
+            "model": {
+              "name": "translated-arch.glb",
+              "dataUrl": "data:model/gltf-binary;base64,Z2xURgIAAABsCAAACAUAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAifSwic2NlbmUiOjAsInNjZW5lcyI6W3sibm9kZXMiOlswLDEsMl19XSwibm9kZXMiOlt7Im1lc2giOjAsInRyYW5zbGF0aW9uIjpbOS41MjUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MCwidHJhbnNsYXRpb24iOlsxMC40NzUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MSwidHJhbnNsYXRpb24iOlsxMCwzLjk3NSw1XSwic2NhbGUiOlsxLjIsMC4yNSwwLjldfV0sIm1lc2hlcyI6W3sicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MCwiTk9STUFMIjoxLCJURVhDT09SRF8wIjozfSwiaW5kaWNlcyI6MiwibWF0ZXJpYWwiOjB9XX0seyJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjowLCJOT1JNQUwiOjEsIlRFWENPT1JEXzAiOjN9LCJpbmRpY2VzIjoyLCJtYXRlcmlhbCI6MX1dfV0sIm1hdGVyaWFscyI6W3sibmFtZSI6ImJyb3duIG1ldGFsIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC42LDAuMjIsMC4wNCwxXSwibWV0YWxsaWNGYWN0b3IiOjAuNSwicm91Z2huZXNzRmFjdG9yIjowLjM1fX0seyJuYW1lIjoiYmx1ZSBjYXAiLCJwYnJNZXRhbGxpY1JvdWdobmVzcyI6eyJiYXNlQ29sb3JGYWN0b3IiOlswLjAzLDAuMTYsMC41NSwxXSwibWV0YWxsaWNGYWN0b3IiOjAuMTUsInJvdWdobmVzc0ZhY3RvciI6MC40NX19XSwiYWNjZXNzb3JzIjpbeyJidWZmZXJWaWV3IjowLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMzIiwibWluIjpbLTAuNSwtMC41LC0wLjVdLCJtYXgiOlswLjUsMC41LDAuNV19LHsiYnVmZmVyVmlldyI6MSwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMyJ9LHsiYnVmZmVyVmlldyI6MiwiY29tcG9uZW50VHlwZSI6NTEyMywiY291bnQiOjM2LCJ0eXBlIjoiU0NBTEFSIn0seyJidWZmZXJWaWV3IjozLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMyIn1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoyODh9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoyODgsImJ5dGVMZW5ndGgiOjI4OH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjc2OCwiYnl0ZUxlbmd0aCI6NzJ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo1NzYsImJ5dGVMZW5ndGgiOjE5Mn1dLCJidWZmZXJzIjpbeyJieXRlTGVuZ3RoIjo4NDB9XX0gSAMAAEJJTgAAAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAIAAQACAAMAAQAEAAYABQAGAAcABQAIAAoACQAKAAsACQAMAA4ADQAOAA8ADQAQABIAEQASABMAEQAUABYAFQAWABcAFQA=",
+              "sizeMm": [
+                1200,
+                2100,
+                900
+              ],
+              "sourceOffsetM": [
+                -10,
+                -2,
+                -5
+              ]
+            },
+            "widthMm": 1200,
+            "heightMm": 2100,
+            "depthMm": 900,
+            "position": {
+              "x": 400,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "groupId": "5782062f-62fd-43c7-a332-bc773631523c"
+          },
+          {
+            "id": "model-artwork-2",
+            "name": "translated-arch",
+            "artist": "",
+            "year": "",
+            "kind": "sculpture",
+            "model": {
+              "name": "translated-arch.glb",
+              "dataUrl": "data:model/gltf-binary;base64,Z2xURgIAAABsCAAACAUAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAifSwic2NlbmUiOjAsInNjZW5lcyI6W3sibm9kZXMiOlswLDEsMl19XSwibm9kZXMiOlt7Im1lc2giOjAsInRyYW5zbGF0aW9uIjpbOS41MjUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MCwidHJhbnNsYXRpb24iOlsxMC40NzUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MSwidHJhbnNsYXRpb24iOlsxMCwzLjk3NSw1XSwic2NhbGUiOlsxLjIsMC4yNSwwLjldfV0sIm1lc2hlcyI6W3sicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MCwiTk9STUFMIjoxLCJURVhDT09SRF8wIjozfSwiaW5kaWNlcyI6MiwibWF0ZXJpYWwiOjB9XX0seyJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjowLCJOT1JNQUwiOjEsIlRFWENPT1JEXzAiOjN9LCJpbmRpY2VzIjoyLCJtYXRlcmlhbCI6MX1dfV0sIm1hdGVyaWFscyI6W3sibmFtZSI6ImJyb3duIG1ldGFsIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC42LDAuMjIsMC4wNCwxXSwibWV0YWxsaWNGYWN0b3IiOjAuNSwicm91Z2huZXNzRmFjdG9yIjowLjM1fX0seyJuYW1lIjoiYmx1ZSBjYXAiLCJwYnJNZXRhbGxpY1JvdWdobmVzcyI6eyJiYXNlQ29sb3JGYWN0b3IiOlswLjAzLDAuMTYsMC41NSwxXSwibWV0YWxsaWNGYWN0b3IiOjAuMTUsInJvdWdobmVzc0ZhY3RvciI6MC40NX19XSwiYWNjZXNzb3JzIjpbeyJidWZmZXJWaWV3IjowLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMzIiwibWluIjpbLTAuNSwtMC41LC0wLjVdLCJtYXgiOlswLjUsMC41LDAuNV19LHsiYnVmZmVyVmlldyI6MSwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMyJ9LHsiYnVmZmVyVmlldyI6MiwiY29tcG9uZW50VHlwZSI6NTEyMywiY291bnQiOjM2LCJ0eXBlIjoiU0NBTEFSIn0seyJidWZmZXJWaWV3IjozLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMyIn1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoyODh9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoyODgsImJ5dGVMZW5ndGgiOjI4OH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjc2OCwiYnl0ZUxlbmd0aCI6NzJ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo1NzYsImJ5dGVMZW5ndGgiOjE5Mn1dLCJidWZmZXJzIjpbeyJieXRlTGVuZ3RoIjo4NDB9XX0gSAMAAEJJTgAAAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAIAAQACAAMAAQAEAAYABQAGAAcABQAIAAoACQAKAAsACQAMAA4ADQAOAA8ADQAQABIAEQASABMAEQAUABYAFQAWABcAFQA=",
+              "sizeMm": [
+                1200,
+                2100,
+                900
+              ],
+              "sourceOffsetM": [
+                -10,
+                -2,
+                -5
+              ]
+            },
+            "widthMm": 1200,
+            "heightMm": 2100,
+            "depthMm": 900,
+            "position": {
+              "x": 400,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "groupId": "5782062f-62fd-43c7-a332-bc773631523c"
+          }
+        ],
+        "lights": [
+          {
+            "id": "light-1",
+            "name": "스팟 조명 1",
+            "kind": "spot",
+            "position": {
+              "x": 0,
+              "y": 3000,
+              "z": -1700
+            },
+            "target": {
+              "x": 0,
+              "y": 1500,
+              "z": -2900
+            },
+            "intensity": 60,
+            "kelvin": 4000,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true,
+            "locked": false,
+            "note": ""
+          }
+        ],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "floorColor": "#f1f1ed"
+      }
+    },
+    {
+      "id": "scene-2",
+      "name": "회전·조명과 잠금",
+      "artworks": [],
+      "wallVisibility": {
+        "wall-a": true,
+        "wall-b": true,
+        "wall-c": true,
+        "wall-d": true
+      },
+      "structure": {
+        "walls": [
+          {
+            "id": "wall-a",
+            "name": "벽 A",
+            "start": {
+              "x": -4000,
+              "z": -3000
+            },
+            "end": {
+              "x": 4000,
+              "z": -3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": ""
+          },
+          {
+            "id": "wall-b",
+            "name": "벽 B",
+            "start": {
+              "x": 4000,
+              "z": -3000
+            },
+            "end": {
+              "x": 4000,
+              "z": 3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": ""
+          },
+          {
+            "id": "wall-c",
+            "name": "벽 C",
+            "start": {
+              "x": 4000,
+              "z": 3000
+            },
+            "end": {
+              "x": -4000,
+              "z": 3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": ""
+          },
+          {
+            "id": "wall-d",
+            "name": "벽 D",
+            "start": {
+              "x": -4000,
+              "z": 3000
+            },
+            "end": {
+              "x": -4000,
+              "z": -3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff",
+            "visible": true,
+            "locked": false,
+            "note": ""
+          }
+        ],
+        "openings": [],
+        "dimensions": [],
+        "unplacedArtworks": [],
+        "modelArtworks": [
+          {
+            "id": "model-artwork-1",
+            "name": "translated-arch",
+            "artist": "",
+            "year": "",
+            "kind": "sculpture",
+            "model": {
+              "name": "translated-arch.glb",
+              "dataUrl": "data:model/gltf-binary;base64,Z2xURgIAAABsCAAACAUAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAifSwic2NlbmUiOjAsInNjZW5lcyI6W3sibm9kZXMiOlswLDEsMl19XSwibm9kZXMiOlt7Im1lc2giOjAsInRyYW5zbGF0aW9uIjpbOS41MjUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MCwidHJhbnNsYXRpb24iOlsxMC40NzUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MSwidHJhbnNsYXRpb24iOlsxMCwzLjk3NSw1XSwic2NhbGUiOlsxLjIsMC4yNSwwLjldfV0sIm1lc2hlcyI6W3sicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MCwiTk9STUFMIjoxLCJURVhDT09SRF8wIjozfSwiaW5kaWNlcyI6MiwibWF0ZXJpYWwiOjB9XX0seyJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjowLCJOT1JNQUwiOjEsIlRFWENPT1JEXzAiOjN9LCJpbmRpY2VzIjoyLCJtYXRlcmlhbCI6MX1dfV0sIm1hdGVyaWFscyI6W3sibmFtZSI6ImJyb3duIG1ldGFsIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC42LDAuMjIsMC4wNCwxXSwibWV0YWxsaWNGYWN0b3IiOjAuNSwicm91Z2huZXNzRmFjdG9yIjowLjM1fX0seyJuYW1lIjoiYmx1ZSBjYXAiLCJwYnJNZXRhbGxpY1JvdWdobmVzcyI6eyJiYXNlQ29sb3JGYWN0b3IiOlswLjAzLDAuMTYsMC41NSwxXSwibWV0YWxsaWNGYWN0b3IiOjAuMTUsInJvdWdobmVzc0ZhY3RvciI6MC40NX19XSwiYWNjZXNzb3JzIjpbeyJidWZmZXJWaWV3IjowLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMzIiwibWluIjpbLTAuNSwtMC41LC0wLjVdLCJtYXgiOlswLjUsMC41LDAuNV19LHsiYnVmZmVyVmlldyI6MSwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMyJ9LHsiYnVmZmVyVmlldyI6MiwiY29tcG9uZW50VHlwZSI6NTEyMywiY291bnQiOjM2LCJ0eXBlIjoiU0NBTEFSIn0seyJidWZmZXJWaWV3IjozLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMyIn1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoyODh9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoyODgsImJ5dGVMZW5ndGgiOjI4OH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjc2OCwiYnl0ZUxlbmd0aCI6NzJ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo1NzYsImJ5dGVMZW5ndGgiOjE5Mn1dLCJidWZmZXJzIjpbeyJieXRlTGVuZ3RoIjo4NDB9XX0gSAMAAEJJTgAAAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAIAAQACAAMAAQAEAAYABQAGAAcABQAIAAoACQAKAAsACQAMAA4ADQAOAA8ADQAQABIAEQASABMAEQAUABYAFQAWABcAFQA=",
+              "sizeMm": [
+                1200,
+                2100,
+                900
+              ],
+              "sourceOffsetM": [
+                -10,
+                -2,
+                -5
+              ]
+            },
+            "widthMm": 1200,
+            "heightMm": 2100,
+            "depthMm": 900,
+            "position": {
+              "x": 400,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 90,
+              "z": 0
+            },
+            "visible": true,
+            "locked": true,
+            "note": "",
+            "groupId": "5782062f-62fd-43c7-a332-bc773631523c"
+          },
+          {
+            "id": "model-artwork-2",
+            "name": "translated-arch",
+            "artist": "",
+            "year": "",
+            "kind": "sculpture",
+            "model": {
+              "name": "translated-arch.glb",
+              "dataUrl": "data:model/gltf-binary;base64,Z2xURgIAAABsCAAACAUAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAifSwic2NlbmUiOjAsInNjZW5lcyI6W3sibm9kZXMiOlswLDEsMl19XSwibm9kZXMiOlt7Im1lc2giOjAsInRyYW5zbGF0aW9uIjpbOS41MjUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MCwidHJhbnNsYXRpb24iOlsxMC40NzUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MSwidHJhbnNsYXRpb24iOlsxMCwzLjk3NSw1XSwic2NhbGUiOlsxLjIsMC4yNSwwLjldfV0sIm1lc2hlcyI6W3sicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MCwiTk9STUFMIjoxLCJURVhDT09SRF8wIjozfSwiaW5kaWNlcyI6MiwibWF0ZXJpYWwiOjB9XX0seyJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjowLCJOT1JNQUwiOjEsIlRFWENPT1JEXzAiOjN9LCJpbmRpY2VzIjoyLCJtYXRlcmlhbCI6MX1dfV0sIm1hdGVyaWFscyI6W3sibmFtZSI6ImJyb3duIG1ldGFsIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC42LDAuMjIsMC4wNCwxXSwibWV0YWxsaWNGYWN0b3IiOjAuNSwicm91Z2huZXNzRmFjdG9yIjowLjM1fX0seyJuYW1lIjoiYmx1ZSBjYXAiLCJwYnJNZXRhbGxpY1JvdWdobmVzcyI6eyJiYXNlQ29sb3JGYWN0b3IiOlswLjAzLDAuMTYsMC41NSwxXSwibWV0YWxsaWNGYWN0b3IiOjAuMTUsInJvdWdobmVzc0ZhY3RvciI6MC40NX19XSwiYWNjZXNzb3JzIjpbeyJidWZmZXJWaWV3IjowLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMzIiwibWluIjpbLTAuNSwtMC41LC0wLjVdLCJtYXgiOlswLjUsMC41LDAuNV19LHsiYnVmZmVyVmlldyI6MSwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMyJ9LHsiYnVmZmVyVmlldyI6MiwiY29tcG9uZW50VHlwZSI6NTEyMywiY291bnQiOjM2LCJ0eXBlIjoiU0NBTEFSIn0seyJidWZmZXJWaWV3IjozLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMyIn1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoyODh9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoyODgsImJ5dGVMZW5ndGgiOjI4OH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjc2OCwiYnl0ZUxlbmd0aCI6NzJ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo1NzYsImJ5dGVMZW5ndGgiOjE5Mn1dLCJidWZmZXJzIjpbeyJieXRlTGVuZ3RoIjo4NDB9XX0gSAMAAEJJTgAAAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAIAAQACAAMAAQAEAAYABQAGAAcABQAIAAoACQAKAAsACQAMAA4ADQAOAA8ADQAQABIAEQASABMAEQAUABYAFQAWABcAFQA=",
+              "sizeMm": [
+                1200,
+                2100,
+                900
+              ],
+              "sourceOffsetM": [
+                -10,
+                -2,
+                -5
+              ]
+            },
+            "widthMm": 1200,
+            "heightMm": 2100,
+            "depthMm": 900,
+            "position": {
+              "x": 400,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 90,
+              "z": 0
+            },
+            "visible": true,
+            "locked": false,
+            "note": "",
+            "groupId": "5782062f-62fd-43c7-a332-bc773631523c"
+          }
+        ],
+        "lights": [
+          {
+            "id": "light-1",
+            "name": "스팟 조명 1",
+            "kind": "spot",
+            "position": {
+              "x": 600.0000000000001,
+              "y": 3000,
+              "z": -1700
+            },
+            "target": {
+              "x": -1320.9372712298534,
+              "y": 3000,
+              "z": -1700.0000000000016
+            },
+            "intensity": 60,
+            "kelvin": 4000,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true,
+            "locked": false,
+            "note": ""
+          }
+        ],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "floorColor": "#f1f1ed"
+      }
+    }
+  ],
+  "floorColor": "#f1f1ed",
+  "lights": [
+    {
+      "id": "light-1",
+      "name": "스팟 조명 1",
+      "kind": "spot",
+      "position": {
+        "x": 600.0000000000001,
+        "y": 3000,
+        "z": -1700
+      },
+      "target": {
+        "x": -1320.9372712298534,
+        "y": 3000,
+        "z": -1700.0000000000016
+      },
+      "intensity": 60,
+      "kelvin": 4000,
+      "beamDeg": 40,
+      "penumbra": 0.3,
+      "distanceMm": 0,
+      "widthMm": 1000,
+      "heightMm": 500,
+      "shadow": true,
+      "visible": true,
+      "locked": false,
+      "note": ""
+    }
+  ],
+  "modelArtworks": [
+    {
+      "id": "model-artwork-1",
+      "name": "translated-arch",
+      "artist": "",
+      "year": "",
+      "kind": "sculpture",
+      "model": {
+        "name": "translated-arch.glb",
+        "dataUrl": "data:model/gltf-binary;base64,Z2xURgIAAABsCAAACAUAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAifSwic2NlbmUiOjAsInNjZW5lcyI6W3sibm9kZXMiOlswLDEsMl19XSwibm9kZXMiOlt7Im1lc2giOjAsInRyYW5zbGF0aW9uIjpbOS41MjUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MCwidHJhbnNsYXRpb24iOlsxMC40NzUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MSwidHJhbnNsYXRpb24iOlsxMCwzLjk3NSw1XSwic2NhbGUiOlsxLjIsMC4yNSwwLjldfV0sIm1lc2hlcyI6W3sicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MCwiTk9STUFMIjoxLCJURVhDT09SRF8wIjozfSwiaW5kaWNlcyI6MiwibWF0ZXJpYWwiOjB9XX0seyJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjowLCJOT1JNQUwiOjEsIlRFWENPT1JEXzAiOjN9LCJpbmRpY2VzIjoyLCJtYXRlcmlhbCI6MX1dfV0sIm1hdGVyaWFscyI6W3sibmFtZSI6ImJyb3duIG1ldGFsIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC42LDAuMjIsMC4wNCwxXSwibWV0YWxsaWNGYWN0b3IiOjAuNSwicm91Z2huZXNzRmFjdG9yIjowLjM1fX0seyJuYW1lIjoiYmx1ZSBjYXAiLCJwYnJNZXRhbGxpY1JvdWdobmVzcyI6eyJiYXNlQ29sb3JGYWN0b3IiOlswLjAzLDAuMTYsMC41NSwxXSwibWV0YWxsaWNGYWN0b3IiOjAuMTUsInJvdWdobmVzc0ZhY3RvciI6MC40NX19XSwiYWNjZXNzb3JzIjpbeyJidWZmZXJWaWV3IjowLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMzIiwibWluIjpbLTAuNSwtMC41LC0wLjVdLCJtYXgiOlswLjUsMC41LDAuNV19LHsiYnVmZmVyVmlldyI6MSwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMyJ9LHsiYnVmZmVyVmlldyI6MiwiY29tcG9uZW50VHlwZSI6NTEyMywiY291bnQiOjM2LCJ0eXBlIjoiU0NBTEFSIn0seyJidWZmZXJWaWV3IjozLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMyIn1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoyODh9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoyODgsImJ5dGVMZW5ndGgiOjI4OH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjc2OCwiYnl0ZUxlbmd0aCI6NzJ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo1NzYsImJ5dGVMZW5ndGgiOjE5Mn1dLCJidWZmZXJzIjpbeyJieXRlTGVuZ3RoIjo4NDB9XX0gSAMAAEJJTgAAAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAIAAQACAAMAAQAEAAYABQAGAAcABQAIAAoACQAKAAsACQAMAA4ADQAOAA8ADQAQABIAEQASABMAEQAUABYAFQAWABcAFQA=",
+        "sizeMm": [
+          1200,
+          2100,
+          900
+        ],
+        "sourceOffsetM": [
+          -10,
+          -2,
+          -5
+        ]
+      },
+      "widthMm": 1200,
+      "heightMm": 2100,
+      "depthMm": 900,
+      "position": {
+        "x": 400,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 90,
+        "z": 0
+      },
+      "visible": true,
+      "locked": true,
+      "note": "",
+      "groupId": "5782062f-62fd-43c7-a332-bc773631523c"
+    },
+    {
+      "id": "model-artwork-2",
+      "name": "translated-arch",
+      "artist": "",
+      "year": "",
+      "kind": "sculpture",
+      "model": {
+        "name": "translated-arch.glb",
+        "dataUrl": "data:model/gltf-binary;base64,Z2xURgIAAABsCAAACAUAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAifSwic2NlbmUiOjAsInNjZW5lcyI6W3sibm9kZXMiOlswLDEsMl19XSwibm9kZXMiOlt7Im1lc2giOjAsInRyYW5zbGF0aW9uIjpbOS41MjUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MCwidHJhbnNsYXRpb24iOlsxMC40NzUsMi45MjUsNV0sInNjYWxlIjpbMC4yNSwxLjg1LDAuOV19LHsibWVzaCI6MSwidHJhbnNsYXRpb24iOlsxMCwzLjk3NSw1XSwic2NhbGUiOlsxLjIsMC4yNSwwLjldfV0sIm1lc2hlcyI6W3sicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MCwiTk9STUFMIjoxLCJURVhDT09SRF8wIjozfSwiaW5kaWNlcyI6MiwibWF0ZXJpYWwiOjB9XX0seyJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjowLCJOT1JNQUwiOjEsIlRFWENPT1JEXzAiOjN9LCJpbmRpY2VzIjoyLCJtYXRlcmlhbCI6MX1dfV0sIm1hdGVyaWFscyI6W3sibmFtZSI6ImJyb3duIG1ldGFsIiwicGJyTWV0YWxsaWNSb3VnaG5lc3MiOnsiYmFzZUNvbG9yRmFjdG9yIjpbMC42LDAuMjIsMC4wNCwxXSwibWV0YWxsaWNGYWN0b3IiOjAuNSwicm91Z2huZXNzRmFjdG9yIjowLjM1fX0seyJuYW1lIjoiYmx1ZSBjYXAiLCJwYnJNZXRhbGxpY1JvdWdobmVzcyI6eyJiYXNlQ29sb3JGYWN0b3IiOlswLjAzLDAuMTYsMC41NSwxXSwibWV0YWxsaWNGYWN0b3IiOjAuMTUsInJvdWdobmVzc0ZhY3RvciI6MC40NX19XSwiYWNjZXNzb3JzIjpbeyJidWZmZXJWaWV3IjowLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMzIiwibWluIjpbLTAuNSwtMC41LC0wLjVdLCJtYXgiOlswLjUsMC41LDAuNV19LHsiYnVmZmVyVmlldyI6MSwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjI0LCJ0eXBlIjoiVkVDMyJ9LHsiYnVmZmVyVmlldyI6MiwiY29tcG9uZW50VHlwZSI6NTEyMywiY291bnQiOjM2LCJ0eXBlIjoiU0NBTEFSIn0seyJidWZmZXJWaWV3IjozLCJjb21wb25lbnRUeXBlIjo1MTI2LCJjb3VudCI6MjQsInR5cGUiOiJWRUMyIn1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoyODh9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoyODgsImJ5dGVMZW5ndGgiOjI4OH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjc2OCwiYnl0ZUxlbmd0aCI6NzJ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo1NzYsImJ5dGVMZW5ndGgiOjE5Mn1dLCJidWZmZXJzIjpbeyJieXRlTGVuZ3RoIjo4NDB9XX0gSAMAAEJJTgAAAAA/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAAAAAAAIAAQACAAMAAQAEAAYABQAGAAcABQAIAAoACQAKAAsACQAMAA4ADQAOAA8ADQAQABIAEQASABMAEQAUABYAFQAWABcAFQA=",
+        "sizeMm": [
+          1200,
+          2100,
+          900
+        ],
+        "sourceOffsetM": [
+          -10,
+          -2,
+          -5
+        ]
+      },
+      "widthMm": 1200,
+      "heightMm": 2100,
+      "depthMm": 900,
+      "position": {
+        "x": 400,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 90,
+        "z": 0
+      },
+      "visible": true,
+      "locked": false,
+      "note": "",
+      "groupId": "5782062f-62fd-43c7-a332-bc773631523c"
+    }
+  ]
+}

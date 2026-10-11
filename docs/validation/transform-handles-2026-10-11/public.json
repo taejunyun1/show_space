@@ -1,0 +1,534 @@
+{
+  "modelArtworks": [
+    {
+      "id": "model-artwork-1",
+      "name": "translated-arch",
+      "artist": "",
+      "year": "",
+      "kind": "sculpture",
+      "widthMm": 1200,
+      "heightMm": 2100,
+      "depthMm": 900,
+      "position": {
+        "x": 400,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 90,
+        "z": 0
+      },
+      "sizeMm": [
+        1200,
+        2100,
+        900
+      ],
+      "sourceOffsetM": [
+        -10,
+        -2,
+        -5
+      ],
+      "modelId": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f"
+    },
+    {
+      "id": "model-artwork-2",
+      "name": "translated-arch",
+      "artist": "",
+      "year": "",
+      "kind": "sculpture",
+      "widthMm": 1200,
+      "heightMm": 2100,
+      "depthMm": 900,
+      "position": {
+        "x": 400,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 90,
+        "z": 0
+      },
+      "sizeMm": [
+        1200,
+        2100,
+        900
+      ],
+      "sourceOffsetM": [
+        -10,
+        -2,
+        -5
+      ],
+      "modelId": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f"
+    }
+  ],
+  "lights": [
+    {
+      "id": "light-1",
+      "name": "스팟 조명 1",
+      "kind": "spot",
+      "position": {
+        "x": 600.0000000000001,
+        "y": 3000,
+        "z": -1700
+      },
+      "target": {
+        "x": -1320.9372712298534,
+        "y": 3000,
+        "z": -1700.0000000000016
+      },
+      "intensity": 60,
+      "kelvin": 4000,
+      "beamDeg": 40,
+      "penumbra": 0.3,
+      "distanceMm": 0,
+      "widthMm": 1000,
+      "heightMm": 500,
+      "shadow": true,
+      "visible": true
+    }
+  ],
+  "schemaVersion": 1,
+  "name": "여백의 기록",
+  "venue": "성수 갤러리",
+  "floorColor": "#f1f1ed",
+  "walls": [
+    {
+      "id": "wall-a",
+      "name": "벽 A",
+      "start": {
+        "x": -4000,
+        "z": -3000
+      },
+      "end": {
+        "x": 4000,
+        "z": -3000
+      },
+      "heightMm": 3200,
+      "thicknessMm": 160,
+      "color": "#ffffff"
+    },
+    {
+      "id": "wall-b",
+      "name": "벽 B",
+      "start": {
+        "x": 4000,
+        "z": -3000
+      },
+      "end": {
+        "x": 4000,
+        "z": 3000
+      },
+      "heightMm": 3200,
+      "thicknessMm": 160,
+      "color": "#ffffff"
+    },
+    {
+      "id": "wall-c",
+      "name": "벽 C",
+      "start": {
+        "x": 4000,
+        "z": 3000
+      },
+      "end": {
+        "x": -4000,
+        "z": 3000
+      },
+      "heightMm": 3200,
+      "thicknessMm": 160,
+      "color": "#ffffff"
+    },
+    {
+      "id": "wall-d",
+      "name": "벽 D",
+      "start": {
+        "x": -4000,
+        "z": 3000
+      },
+      "end": {
+        "x": -4000,
+        "z": -3000
+      },
+      "heightMm": 3200,
+      "thicknessMm": 160,
+      "color": "#ffffff"
+    }
+  ],
+  "artworks": [],
+  "openings": [],
+  "zones": [],
+  "dimensions": [],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "그룹 이동",
+      "snapshot": {
+        "modelArtworks": [
+          {
+            "id": "model-artwork-1",
+            "name": "translated-arch",
+            "artist": "",
+            "year": "",
+            "kind": "sculpture",
+            "widthMm": 1200,
+            "heightMm": 2100,
+            "depthMm": 900,
+            "position": {
+              "x": 400,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "sizeMm": [
+              1200,
+              2100,
+              900
+            ],
+            "sourceOffsetM": [
+              -10,
+              -2,
+              -5
+            ],
+            "modelId": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f"
+          },
+          {
+            "id": "model-artwork-2",
+            "name": "translated-arch",
+            "artist": "",
+            "year": "",
+            "kind": "sculpture",
+            "widthMm": 1200,
+            "heightMm": 2100,
+            "depthMm": 900,
+            "position": {
+              "x": 400,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "sizeMm": [
+              1200,
+              2100,
+              900
+            ],
+            "sourceOffsetM": [
+              -10,
+              -2,
+              -5
+            ],
+            "modelId": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f"
+          }
+        ],
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [
+          {
+            "id": "light-1",
+            "name": "스팟 조명 1",
+            "kind": "spot",
+            "position": {
+              "x": 0,
+              "y": 3000,
+              "z": -1700
+            },
+            "target": {
+              "x": 0,
+              "y": 1500,
+              "z": -2900
+            },
+            "intensity": 60,
+            "kelvin": 4000,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true
+          }
+        ],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "schemaVersion": 1,
+        "name": "여백의 기록",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [
+          {
+            "id": "wall-a",
+            "name": "벽 A",
+            "start": {
+              "x": -4000,
+              "z": -3000
+            },
+            "end": {
+              "x": 4000,
+              "z": -3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff"
+          },
+          {
+            "id": "wall-b",
+            "name": "벽 B",
+            "start": {
+              "x": 4000,
+              "z": -3000
+            },
+            "end": {
+              "x": 4000,
+              "z": 3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff"
+          },
+          {
+            "id": "wall-c",
+            "name": "벽 C",
+            "start": {
+              "x": 4000,
+              "z": 3000
+            },
+            "end": {
+              "x": -4000,
+              "z": 3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff"
+          },
+          {
+            "id": "wall-d",
+            "name": "벽 D",
+            "start": {
+              "x": -4000,
+              "z": 3000
+            },
+            "end": {
+              "x": -4000,
+              "z": -3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff"
+          }
+        ],
+        "artworks": [],
+        "openings": [],
+        "zones": [],
+        "dimensions": []
+      }
+    },
+    {
+      "id": "scene-2",
+      "name": "회전·조명과 잠금",
+      "snapshot": {
+        "modelArtworks": [
+          {
+            "id": "model-artwork-1",
+            "name": "translated-arch",
+            "artist": "",
+            "year": "",
+            "kind": "sculpture",
+            "widthMm": 1200,
+            "heightMm": 2100,
+            "depthMm": 900,
+            "position": {
+              "x": 400,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 90,
+              "z": 0
+            },
+            "sizeMm": [
+              1200,
+              2100,
+              900
+            ],
+            "sourceOffsetM": [
+              -10,
+              -2,
+              -5
+            ],
+            "modelId": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f"
+          },
+          {
+            "id": "model-artwork-2",
+            "name": "translated-arch",
+            "artist": "",
+            "year": "",
+            "kind": "sculpture",
+            "widthMm": 1200,
+            "heightMm": 2100,
+            "depthMm": 900,
+            "position": {
+              "x": 400,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 90,
+              "z": 0
+            },
+            "sizeMm": [
+              1200,
+              2100,
+              900
+            ],
+            "sourceOffsetM": [
+              -10,
+              -2,
+              -5
+            ],
+            "modelId": "d2cc09f32a621e95523c0d427597a96d84bfa6bc947728c58147aec94de4354f"
+          }
+        ],
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [
+          {
+            "id": "light-1",
+            "name": "스팟 조명 1",
+            "kind": "spot",
+            "position": {
+              "x": 600.0000000000001,
+              "y": 3000,
+              "z": -1700
+            },
+            "target": {
+              "x": -1320.9372712298534,
+              "y": 3000,
+              "z": -1700.0000000000016
+            },
+            "intensity": 60,
+            "kelvin": 4000,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true
+          }
+        ],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "schemaVersion": 1,
+        "name": "여백의 기록",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [
+          {
+            "id": "wall-a",
+            "name": "벽 A",
+            "start": {
+              "x": -4000,
+              "z": -3000
+            },
+            "end": {
+              "x": 4000,
+              "z": -3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff"
+          },
+          {
+            "id": "wall-b",
+            "name": "벽 B",
+            "start": {
+              "x": 4000,
+              "z": -3000
+            },
+            "end": {
+              "x": 4000,
+              "z": 3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff"
+          },
+          {
+            "id": "wall-c",
+            "name": "벽 C",
+            "start": {
+              "x": 4000,
+              "z": 3000
+            },
+            "end": {
+              "x": -4000,
+              "z": 3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff"
+          },
+          {
+            "id": "wall-d",
+            "name": "벽 D",
+            "start": {
+              "x": -4000,
+              "z": 3000
+            },
+            "end": {
+              "x": -4000,
+              "z": -3000
+            },
+            "heightMm": 3200,
+            "thicknessMm": 160,
+            "color": "#ffffff"
+          }
+        ],
+        "artworks": [],
+        "openings": [],
+        "zones": [],
+        "dimensions": []
+      }
+    }
+  ]
+}
