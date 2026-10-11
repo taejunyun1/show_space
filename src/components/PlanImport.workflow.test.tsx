@@ -52,6 +52,78 @@ beforeEach(()=>{
 });
 afterEach(async()=>{await act(async()=>root.unmount());container.remove();vi.restoreAllMocks();vi.clearAllMocks();vi.unstubAllGlobals();});
 
+const restorations=['load','Scene','Undo','Redo'] as const;
+function restoration(kind:typeof restorations[number]){
+ const state=useEditor.getState(),original=structuredClone(state.project);
+ if(kind==='load')return ()=>useEditor.getState().loadProject(original);
+ if(kind==='Scene'){state.saveScene('원래 도면');const id=useEditor.getState().project.scenes.at(-1)!.id;return ()=>useEditor.getState().restoreScene(id);}
+ state.renameProject('다른 기록');
+ if(kind==='Redo')state.undo();
+ return ()=>kind==='Undo'?useEditor.getState().undo():useEditor.getState().redo();
+}
+
+it.each(restorations)('retires the ready import on same-ID %s without placing or adopting its stale drawing',async kind=>{
+ const restore=restoration(kind);await renderDialog();expect(container.querySelector('img.plan-import-preview')).not.toBeNull();
+ await act(async()=>restore());const project=useEditor.getState().project,past=useEditor.getState().past;
+ await click('이 도면 배치');await click('벽 초안으로 편집 시작');
+ expect(close).toHaveBeenCalledTimes(1);expect(place).not.toHaveBeenCalled();expect(adopt).not.toHaveBeenCalled();expect(useEditor.getState().project).toBe(project);expect(useEditor.getState().past).toBe(past);
+});
+
+it('disposes both StrictMode decoders arriving after the same-ID Scene is restored',async()=>{
+ const restore=restoration('Scene'),jobs:Array<ReturnType<typeof deferred<PlanFile>>>=[];
+ vi.mocked(loadPlanFile).mockImplementation(()=>{const job=deferred<PlanFile>();jobs.push(job);return job.promise;});
+ await renderDialog();expect(jobs).toHaveLength(2);await act(async()=>restore());
+ for(const job of jobs){const doc=loaded(page('late-scene'));await act(async()=>job.resolve(doc));expect(doc.destroy).toHaveBeenCalledTimes(1);expect(doc.renderPage).not.toHaveBeenCalled();}
+ expect(close).toHaveBeenCalledTimes(1);expect(container.querySelector('img.plan-import-preview')).toBeNull();expect(place).not.toHaveBeenCalled();expect(adopt).not.toHaveBeenCalled();
+});
+
+it('aborts pending automatic PDF selection on a same-ID Scene and rejects its late status and page',async()=>{
+ const restore=restoration('Scene'),job=deferred<Awaited<ReturnType<typeof selectPlanPage>>>();let signal!:AbortSignal,progress!:(message:string)=>void;
+ vi.mocked(loadPlanFile).mockImplementation(async()=>loaded(page(),2));vi.mocked(selectPlanPage).mockImplementation((_document,s,p)=>{signal=s;progress=p;return job.promise;});
+ await renderDialog(new File(['pdf'],'待機.pdf',{type:'application/pdf'}));await act(async()=>restore());
+ expect(signal.aborted).toBe(true);await act(async()=>{progress('RETIRED PDF STATUS');job.resolve({pageNumber:2,page:page('retired-pdf'),inspected:2,verified:true,failures:[]});});
+ expect(close).toHaveBeenCalledTimes(1);expect(container.textContent).not.toContain('RETIRED PDF STATUS');expect(container.querySelector('img.plan-import-preview')).toBeNull();
+});
+
+it.each(restorations)('discards picked calibration anchors across same-ID %s with identical reference coordinates',async kind=>{
+ await renderPlan();await click('벽 초안으로 편집 시작');const restore=restoration(kind);await click('도면 확대');await click('두 점 축척 보정');
+ const svg=container.querySelector('svg.plan-svg')!;Object.defineProperty(svg,'getScreenCTM',{configurable:true,value:()=>({inverse:()=>({a:1,b:0,c:0,d:1,e:0,f:0})})});
+ vi.stubGlobal('DOMPoint',class {constructor(public x:number,public y:number){}matrixTransform(){return {x:this.x,y:this.y};}});
+ await act(async()=>svg.dispatchEvent(new MouseEvent('pointerdown',{bubbles:true,button:0,clientX:100,clientY:100})));expect(container.textContent).toContain('두 번째');
+ const reference=structuredClone(useEditor.getState().project.planReference),viewport=svg.getAttribute('viewBox');await act(async()=>restore());
+ expect(useEditor.getState().project.planReference).toEqual(reference);expect(container.querySelector('.calibration-panel')).toBeNull();
+ expect(svg.getAttribute('viewBox')).toBe(viewport);
+ await click('두 점 축척 보정');expect(container.querySelector('.calibration-panel')?.textContent).toContain('첫 번째');
+});
+
+it('keeps a ready import across normal edits and Scene save, and adopts into the latest project metadata',async()=>{
+ await renderPlan();await act(async()=>{useEditor.getState().commit({...useEditor.getState().project,name:'최신 전시',note:'PRIVATE_LATEST'});useEditor.getState().saveScene('현재 작업');});
+ expect(container.querySelector('img.plan-import-preview')).not.toBeNull();await click('벽 초안으로 편집 시작');
+ expect(useEditor.getState().project).toMatchObject({name:'최신 전시',note:'PRIVATE_LATEST'});expect(useEditor.getState().project.planReference?.calibrated).toBe(false);
+ // Adopting a replacement venue clears its old contents by design; the
+ // previous Scene remains available through the single-step Undo.
+ await act(async()=>useEditor.getState().undo());expect(useEditor.getState().project.scenes).toHaveLength(1);expect(useEditor.getState().project).toMatchObject({name:'최신 전시',note:'PRIVATE_LATEST'});
+});
+
+it('keeps calibration anchors across normal edits and finishes after saving a Scene',async()=>{
+ await renderPlan();await click('벽 초안으로 편집 시작');await click('두 점 축척 보정');
+ const svg=container.querySelector('svg.plan-svg')!;Object.defineProperty(svg,'getScreenCTM',{configurable:true,value:()=>({inverse:()=>({a:1,b:0,c:0,d:1,e:0,f:0})})});
+ vi.stubGlobal('DOMPoint',class {constructor(public x:number,public y:number){}matrixTransform(){return {x:this.x,y:this.y};}});
+ const pick=async(x:number)=>act(async()=>svg.dispatchEvent(new MouseEvent('pointerdown',{bubbles:true,button:0,clientX:x,clientY:100})));
+ await pick(100);await act(async()=>{useEditor.getState().renameProject('보정 중 이름');useEditor.getState().saveScene('보정 전');});
+ expect(container.querySelector('.calibration-panel')?.textContent).toContain('두 번째');await pick(200);await number('보정 실제 길이','100');await click('축척 적용');
+ expect(useEditor.getState().project.planReference).toMatchObject({calibrated:true,mmPerPixel:10});expect(useEditor.getState().project.name).toBe('보정 중 이름');expect(useEditor.getState().project.scenes).toHaveLength(1);
+});
+
+it('preserves the panned and zoomed view on same-ID Scene restore while ending its unfinished Hand drag',async()=>{
+ await renderPlan();await click('벽 초안으로 편집 시작');const restore=restoration('Scene');await click('도면 확대');await click('화면 이동');
+ const svg=container.querySelector('svg.plan-svg')!;Object.defineProperty(svg,'getScreenCTM',{configurable:true,value:()=>({a:1})});Object.defineProperty(SVGElement.prototype,'setPointerCapture',{configurable:true,value:()=>{}});
+ const pointer=async(type:string,x:number,y:number)=>act(async()=>{const e=new MouseEvent(type,{bubbles:true,button:0,clientX:x,clientY:y});Object.defineProperty(e,'pointerId',{value:71});svg.dispatchEvent(e);});
+ const initial=svg.getAttribute('viewBox');await pointer('pointerdown',100,100);await pointer('pointermove',180,140);const moved=svg.getAttribute('viewBox');expect(moved).not.toBe(initial);
+ await act(async()=>restore());expect(svg.getAttribute('viewBox')).toBe(moved);await pointer('pointermove',300,250);await pointer('pointerup',300,250);expect(svg.getAttribute('viewBox')).toBe(moved);
+ await pointer('pointerdown',100,100);await pointer('pointerup',120,110);expect(svg.getAttribute('viewBox')).not.toBe(moved);await click('이동 중');
+});
+
 it('closes an old import on project A→B→A and prevents either placement or adoption',async()=>{
  await renderDialog();await act(async()=>{const p=useEditor.getState().project;useEditor.getState().loadProject({...p,id:'other-plan-project'});useEditor.getState().loadProject(p);});await click('이 도면 배치');await click('벽 초안으로 편집 시작');expect(close).toHaveBeenCalledTimes(1);expect(place).not.toHaveBeenCalled();expect(adopt).not.toHaveBeenCalled();expect(useEditor.getState().past).toHaveLength(0);
 });

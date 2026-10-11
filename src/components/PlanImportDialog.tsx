@@ -13,7 +13,8 @@ type Rendered = Awaited<ReturnType<Loaded['renderPage']>>;
 export function PlanImportDialog({file,existingProject,onClose,onImport,onAdopt}:{file:File;existingProject:Project;onAdopt:(project:Project)=>void;onClose:()=>void;onImport:(image:Rendered)=>void}) {
  const [loadedFile,setLoadedFile]=useState<{file:File;document:Loaded}|null>(null),[page,setPage]=useState(0),[rawPreview,setPreview]=useState<Rendered|null>(null),[previewFile,setPreviewFile]=useState<File|null>(null),[error,setError]=useState(''),[busy,setBusy]=useState(true);
  const document=loadedFile?.file===file?loadedFile.document:null,preview=previewFile===file?rawPreview:null;
- const scope=useProjectDialogScope(existingProject.id,onClose),input=useRef(file);input.current=file;
+ const pageRequest=useRef<AbortController|undefined>(undefined);
+ const scope=useProjectDialogScope(existingProject.id,()=>{pageRequest.current?.abort();onClose();},true),input=useRef(file);input.current=file;
  const canApply=()=>input.current===file&&previewFile===file&&scope.begin()!==undefined&&!busy&&!reading;
  const [detail,setDetail]=useState(false),[magnified,setMagnified]=useState(false);
  const [reading,setReading]=useState(false);
@@ -31,7 +32,7 @@ export function PlanImportDialog({file,existingProject,onClose,onImport,onAdopt}
   if(version!==undefined)void loadPlanFile(file).then(value=>{loaded=value;if(!current()){dispose(value);return;}setLoadedFile({file,document:value});}).catch(e=>{if(current()){setError(e instanceof Error?e.message:'도면을 읽지 못했습니다.');setBusy(false);}});
   return()=>{cancelled=true;generation.current++;if(loaded)dispose(loaded);};
  },[file]);
- useEffect(()=>{if(!document)return;const version=scope.begin();if(version===undefined)return;const revision=++generation.current,c=new AbortController();const current=()=>!c.signal.aborted&&revision===generation.current&&input.current===file&&scope.current(version);setBusy(true);setPreview(null);setError('');setSelectionNote('');setStage('도면을 불러오는 중입니다…');
+ useEffect(()=>{if(!document)return;const version=scope.begin();if(version===undefined)return;const revision=++generation.current,c=new AbortController();pageRequest.current=c;const current=()=>!c.signal.aborted&&revision===generation.current&&input.current===file&&scope.current(version);setBusy(true);setPreview(null);setError('');setSelectionNote('');setStage('도면을 불러오는 중입니다…');
  const run=async()=>{
   if(page===0&&document.pageCount>1){const result=await selectPlanPage(document,c.signal,message=>{if(current())setStage(message);},detail);if(!current())return null;setResolvedPage(result.pageNumber);setSelectionNote(`${result.inspected}페이지를 분석해 ${result.pageNumber}페이지를 선택했습니다. ${result.verified?'공간 생성 검증을 통과했습니다.':'아직 공간을 확정하지 못해 구조 근거가 가장 많은 후보를 표시합니다.'}${result.failures.length?` 읽기·분석 시도 ${result.failures.length}건은 완료하지 못했습니다.`:''}`);return result.page;}
   const number=page||1;setResolvedPage(number);return document.renderPage(number,detail);

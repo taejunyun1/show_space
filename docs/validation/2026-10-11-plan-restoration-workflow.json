@@ -1,0 +1,186 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "5a9c0e647571605a6e8c35d69cc3298ca206e8b8",
+  "baseline": {
+    "passed": 17,
+    "failed": 10,
+    "tests": 27,
+    "durationSeconds": 3.04,
+    "method": "Temporary source copy; only three runtime files replaced. Vite permits shared dependency root; live worktree never rolled back."
+  },
+  "newTests": 13,
+  "related": {
+    "files": 2,
+    "passed": 28,
+    "failed": 0,
+    "results": [
+      {
+        "file": "src/components/Exhibition.workflow.test.tsx",
+        "status": "passed",
+        "tests": [
+          {
+            "title": "keeps one persisted exhibition through real PDF input, ten image uploads, pointer corner closure/Hand/group snap/rotation, texture/notes/outdoor, Scene A/B, native capture, PDF/ZIP/GLB and locked API sharing/revocation",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "src/components/PlanImport.workflow.test.tsx",
+        "status": "passed",
+        "tests": [
+          {
+            "title": "retires the ready import on same-ID load without placing or adopting its stale drawing",
+            "status": "passed"
+          },
+          {
+            "title": "retires the ready import on same-ID Scene without placing or adopting its stale drawing",
+            "status": "passed"
+          },
+          {
+            "title": "retires the ready import on same-ID Undo without placing or adopting its stale drawing",
+            "status": "passed"
+          },
+          {
+            "title": "retires the ready import on same-ID Redo without placing or adopting its stale drawing",
+            "status": "passed"
+          },
+          {
+            "title": "disposes both StrictMode decoders arriving after the same-ID Scene is restored",
+            "status": "passed"
+          },
+          {
+            "title": "aborts pending automatic PDF selection on a same-ID Scene and rejects its late status and page",
+            "status": "passed"
+          },
+          {
+            "title": "discards picked calibration anchors across same-ID load with identical reference coordinates",
+            "status": "passed"
+          },
+          {
+            "title": "discards picked calibration anchors across same-ID Scene with identical reference coordinates",
+            "status": "passed"
+          },
+          {
+            "title": "discards picked calibration anchors across same-ID Undo with identical reference coordinates",
+            "status": "passed"
+          },
+          {
+            "title": "discards picked calibration anchors across same-ID Redo with identical reference coordinates",
+            "status": "passed"
+          },
+          {
+            "title": "keeps a ready import across normal edits and Scene save, and adopts into the latest project metadata",
+            "status": "passed"
+          },
+          {
+            "title": "keeps calibration anchors across normal edits and finishes after saving a Scene",
+            "status": "passed"
+          },
+          {
+            "title": "preserves the panned and zoomed view on same-ID Scene restore while ending its unfinished Hand drag",
+            "status": "passed"
+          },
+          {
+            "title": "closes an old import on project A→B→A and prevents either placement or adoption",
+            "status": "passed"
+          },
+          {
+            "title": "clears the previous file preview while a replacement decoder is pending",
+            "status": "passed"
+          },
+          {
+            "title": "does not leave the previous file available when the replacement fails",
+            "status": "passed"
+          },
+          {
+            "title": "disposes a document arriving after unmount and never renders it",
+            "status": "passed"
+          },
+          {
+            "title": "drops an old crop result after the input page changes without clearing the new crop job",
+            "status": "passed"
+          },
+          {
+            "title": "does not emit crop completion or busy/error callbacks after unmount",
+            "status": "passed"
+          },
+          {
+            "title": "never commits the old drawing through PlanView after switching projects",
+            "status": "passed"
+          },
+          {
+            "title": "places a reference in a minimal venue with finite bounds and retains its identity",
+            "status": "passed"
+          },
+          {
+            "title": "adopts partial walls, calibrates two picked points in cm and preserves a single-step undo",
+            "status": "passed"
+          },
+          {
+            "title": "discards calibration anchors on project A→B→A even when drawing and reference coordinates match",
+            "status": "passed"
+          },
+          {
+            "title": "keeps a directly dragged wall and calibrated scale when placing new evidence for the same drawing",
+            "status": "passed"
+          },
+          {
+            "title": "selects the automatic PDF page, reads another page and rerenders it at high resolution",
+            "status": "passed"
+          },
+          {
+            "title": "ignores automatic PDF selection progress and results after its file is replaced",
+            "status": "passed"
+          },
+          {
+            "title": "decodes a real JPEG, detects its actual wall pixels and adopts its editable draft through PlanView",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  "full": {
+    "passedFiles": 248,
+    "skippedFiles": 10,
+    "passedTests": 1521,
+    "skippedTests": 10,
+    "durationSeconds": 12.33
+  },
+  "build": {
+    "typescriptPassed": true,
+    "vitePassed": true,
+    "viteDurationSeconds": 5.63
+  },
+  "scope": [
+    "Same-ID document/Scene/Undo/Redo retires ready imports and calibration anchors",
+    "Late StrictMode decoders disposed, automatic PDF signal aborted, late page/status rejected",
+    "Normal edits/Scene save keep import and calibration alive",
+    "Same-reference Hand/zoom retained, retired drag ignored, fresh drag accepted",
+    "Existing native JPEG and single-App PDF→10 images→materials/lights→Scene→PNG/PDF/GLB/ZIP→local sharing workflow passed"
+  ],
+  "limitations": [
+    "Controlled decode/PDF/analysis scheduling and jsdom pointer transport in retirement scenarios",
+    "Existing connected exhibition uses native Canvas/fake IndexedDB/SQLite/R2, synthetic input and OCR/GPU adapters",
+    "No actual browser/GPU rendering, operational authentication/sharing URL, user drawings, real devices, FPS/VRAM/p95 or 24-step completion proved"
+  ],
+  "deployed": false,
+  "sourceHashes": {
+    "src/components/useProjectDialogScope.ts": "87d0b1364334b731e0d2b3d2b08b1fe7a0c9b8ff1f61d700078379334e2e88e5",
+    "src/components/PlanImportDialog.tsx": "7a0de0e64f68c9daeba47065dfeeccae640ef934b85f45548a0b58e87d5c793e",
+    "src/components/PlanView.tsx": "8c6043a08bb09716adea9889294657354a5f0a52a5c5a7dcbaeef248e66c070f",
+    "src/components/PlanImport.workflow.test.tsx": "a38a871ec4efe614fd5adbb59e1d1157a8f29e481587535c6cbe77f95486daad",
+    "src/components/Exhibition.workflow.test.tsx": "615b5e07861e5c6198d1947607ae8c32e49c8a0e62b93c538d45882ee20eece1"
+  },
+  "logHashes": {
+    "show-space-plan-restoration-baseline-final.log": "9bb5fcd9660ae26716ecd582b4d4cea6cf2b344071fe0ecbc2eb50095844453b",
+    "show-space-plan-restoration-full-final.log": "c182801d9bce6a14f0180eca3fa8bd3d2367c9b408fb856c5dafc1c131791f13",
+    "show-space-plan-restoration-build-final.log": "7cef23dfb7698d239e0e350b0e20d20b66361f2e055571a8684843262f42f0f0",
+    "show-space-plan-restoration-related.log": "21d0b7a1142f4f4d7a8341922180e6d40a334754470012d406ca211824433588"
+  },
+  "baselineRuntimeHashes": {
+    "src/components/useProjectDialogScope.ts": "6914731fb77bb99f9009bb8b3bb273570aec3963ad7ac42e2579488f488e0f46",
+    "src/components/PlanImportDialog.tsx": "ccbe00ed4c09dcd558e1a7201dd40b0fc4c5f87eec63dc85536ec191a8f491da",
+    "src/components/PlanView.tsx": "9a461bcae4424c4ab79e1156897c07cf4c8f8f93d1c164b75fdafc256bb6dc1d"
+  }
+}
