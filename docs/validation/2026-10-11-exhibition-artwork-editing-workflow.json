@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-11",
+  "projectId": "fb7dc7ad-31ac-4ce5-8e40-9ca6d0f54195",
+  "walls": 4,
+  "floor": {
+    "surfaces": 1,
+    "areaMm2": 47110907.08777083,
+    "glbThicknessMm": 160,
+    "wallRoles": [
+      "boundary",
+      "boundary",
+      "boundary",
+      "boundary"
+    ]
+  },
+  "artworks": 10,
+  "artworkEdit": {
+    "firstRotationDeg": -90,
+    "centerHeightMm": 1750,
+    "groupSize": 10
+  },
+  "sceneNames": [
+    "Scene A",
+    "Scene B"
+  ],
+  "pdfPages": 12,
+  "glbImages": 11,
+  "texture": {
+    "widthMm": 2000,
+    "heightMm": 1000
+  },
+  "outdoor": "09:00",
+  "privateReferenceImages": 1,
+  "capture": {
+    "width": 1920,
+    "height": 1059
+  },
+  "steps": [
+    "Persisted empty project hydrated through App",
+    "Header PDF -> automatic page 2 -> editable draft and door/equipment labels",
+    "50cm two-point scale calibration through actual PlanView",
+    "Bulk boundary role through Inspector -> actual endpoint pointer snap closes four imported corners -> visible plan floor -> undo/redo -> zoom/Hand pan without data edits",
+    "Real wall texture upload -> 2m x 1m physical repeat through Inspector",
+    "Ten real native PNG uploads via Outliner and cm size editing via Inspector",
+    "Ten-point grouped array and 25cm spacing through production dialog",
+    "Actual elevation group pointer drag -> wall-center snap guide -> commit/undo/redo -> ungroup and -90 degree handle rotation -> regroup ten original artworks",
+    "Actual project NOTE, checklist/done and native private reference image",
+    "Spot/Kelvin -> bird/front camera requests -> Scene A/B, including actual native thumbnail encoding with GPU adapter",
+    "Outdoor dialog 09:00 -> slider 17:00 -> restore Scene A time and texture",
+    "Restore Scene A -> actual elevation SVG/native PNG capture at 1920px",
+    "Manual save -> independent repository/readDraft exact project and Scene data",
+    "Current/Scene A/Scene B vector PDF and Korean text inspection, with private notes excluded",
+    "Exact ZIP/asset restore -> two-Scene public payload with private notes excluded",
+    "Actual GLTFExporter GLB -> embedded 11 images, private-note exclusion, Spot/sun -> GLTFLoader geometry read"
+  ],
+  "limitations": [
+    "jsdom/native Canvas/fake-indexeddb, not actual browser or disk durability",
+    "OCR empty and worker transport adapted; production PDF parser/pixel algorithms",
+    "GPU transport and 3D Scene preview image renderer adapted, no 3D pixel proof",
+    "Native SVG rasterizer skips embedded image href pixels; ten embedded images decode separately and SVG XML is verified; PNG evidence covers wall/frame geometry and dimensions",
+    "No actual login/public API publication/SketchUp/real-device/full 24-step acceptance"
+  ],
+  "verification": {
+    "baseCommit": "b1c96362fe37b8e600a62b98b6a925196c90dec4",
+    "baseline": {
+      "testFilesFailed": 2,
+      "testsFailed": 14,
+      "testsPassed": 1,
+      "command": "npx vitest run src/components/ElevationView.workflow.test.tsx src/components/Exhibition.workflow.test.tsx",
+      "scope": "Same final tests with ElevationView restored to base commit; explicit numeric pointer IDs and identity screen-coordinate adapter."
+    },
+    "after": {
+      "testFilesPassed": 2,
+      "testsPassed": 15
+    },
+    "fullSuite": {
+      "testFilesPassed": 231,
+      "testFilesSkipped": 10,
+      "testsPassed": 1337,
+      "testsSkipped": 10
+    },
+    "productionBuildPassed": true,
+    "deployed": false
+  },
+  "sourceSHA256": {
+    "src/components/ElevationView.tsx": "b75c764151a72df1927400b3d2be2f60b2522105bcba2624250acd71f91f7f6f",
+    "src/components/ElevationView.workflow.test.tsx": "c1f649efba4e9cd2ea936288d69cb6b86b51a8e4f30335211089db86240a47f6",
+    "src/components/Exhibition.workflow.test.tsx": "083eddb4c0a8c81fd2d8a49fe9cb8ba8ce39425825e0ad2e4b4a28c89857ead2"
+  },
+  "artifactSHA256": {
+    "2026-10-11-exhibition-artwork-editing-elevation.png": "1600e8c31d8ed128a23338c02f1861401ff0fd940f2856f734e5ffc95e65827f",
+    "2026-10-11-exhibition-artwork-editing-elevation.svg": "e4e26a7cea0168af1c6f2b2118677f3345523b177cce3124ca3e185ad4f7b1c5",
+    "2026-10-11-exhibition-artwork-editing-input.pdf": "16466173a3a0a9bd0cf978464404ad38778696bef53cfae5f73d6acda16a0654",
+    "2026-10-11-exhibition-artwork-editing-output.pdf": "6a662993e90c6b1aff940b66e37fa5ae31ad08a121f025bc167ca63ebda1eaad",
+    "2026-10-11-exhibition-artwork-editing-project.json": "bedbd3814e55293345c3c876f545f0543ba19ffd973de9ffb9fdb3b64ef37916",
+    "2026-10-11-exhibition-artwork-editing.glb": "0eb3f28661e5a2cf5a929fdfa86623095304eba365d97682cefe96b360d917a6",
+    "2026-10-11-exhibition-artwork-editing.gonggan.zip": "10f3b638e2e06685c51860f77063745a60c118aceecec7d52ee7559b04934b3a"
+  }
+}
