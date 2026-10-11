@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-12",
+  "baselineCommit": "3f925c46f8559845ba8aee282d4a2e5e71a57c2e",
+  "runtimeFiles": [
+    "src/components/ProjectCollaborationDialog.tsx",
+    "src/components/ProjectInvitationPage.tsx",
+    "src/lib/openInvitedProject.ts"
+  ],
+  "baseline": {
+    "method": "Temporary current-source copy; only two existing runtime UI files replaced with previous main; new helper unused by old page. Same 15 assertion cases; evidence JSON metadata corrected afterwards without changing assertions. Live checkout unchanged.",
+    "result": {
+      "passed": 1,
+      "failed": 14,
+      "skipped": 0,
+      "passedFiles": 1,
+      "skippedFiles": 0,
+      "files": 1,
+      "seconds": 31.951
+    },
+    "limitations": "Five old-page cases time out waiting for fresh preview/error UI; jsdom old navigation is unimplemented. Native old UI cannot complete the workflow; does not isolate every helper guard."
+  },
+  "regression": {
+    "added": 15,
+    "focusedPassed": 15,
+    "related": {
+      "passed": 63,
+      "failed": 0,
+      "skipped": 1,
+      "passedFiles": 9,
+      "skippedFiles": 1,
+      "files": 10,
+      "seconds": 1.48
+    },
+    "full": {
+      "passed": 1632,
+      "failed": 0,
+      "skipped": 10,
+      "passedFiles": 259,
+      "skippedFiles": 10,
+      "files": 269,
+      "seconds": 12.322
+    },
+    "typeScriptAndProductionBuild": true,
+    "viteBuildSeconds": 4.49,
+    "existingLargeChunkWarning": true,
+    "fullSourceNote": "Full tests passed before final evidence-only Scene metadata field correction. Corrected final tests and proof passed in related run; final TS/build passed."
+  },
+  "input": {
+    "path": "docs/validation/local-plan-restore-2026-10-11/project.gonggan.zip",
+    "sha256": "8678781f2f8f615c4b7f55fc0d112531386aaaedc75ac39758682ae36073b011"
+  },
+  "proof": {
+    "path": "docs/validation/invitation-ui-2026-10-12/workflow.json",
+    "receivedZipSha256": "1b5a324388559343372fd4adf8bc90d404437681efa47bfbdf7962af64c51504",
+    "crcCheckedIndependently": true,
+    "pngAssets": [
+      {
+        "path": "assets/images/71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d.png",
+        "sha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d",
+        "bytes": 5400
+      },
+      {
+        "path": "assets/images/edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1.png",
+        "sha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1",
+        "bytes": 5519
+      }
+    ],
+    "createRetryStatuses": [
+      201,
+      200
+    ],
+    "acceptRetryStatuses": [
+      200,
+      200
+    ],
+    "assertions": {
+      "createRetrySameId": true,
+      "oneGrantAfterAcceptRetry": true,
+      "tokenHashOnly": true,
+      "fragmentRemoved": true,
+      "coldJoinHydration": true,
+      "originalLocalRetained": true,
+      "editableCopyAndCloudLink": true,
+      "originalRemoteBytesRetained": true,
+      "revokedParticipantRead404": true,
+      "revokeClearsCopiedLink": true
+    },
+    "membership": {
+      "role": "commenter",
+      "revision": 4,
+      "revoked": 1
+    }
+  },
+  "limits": [
+    "React/jsdom StrictMode and actual invitation/admin/Team UI with production clients/actions/Worker and native ZIP/image decoder",
+    "fake-indexeddb, local SQLite/R2 and synthetic verified email accounts",
+    "Transport omits AbortSignal deliberately for accepted late responses",
+    "GPU renderer stand-in; no actual browser/GPU/auth/device/email delivery or original 24-step acceptance",
+    "Real navigation verified as callback only; actual browser OAuth/redirect and two devices remain deferred",
+    "No real invitation/email dispatch, deployment or original whole 24-step/real-user acceptance"
+  ]
+}

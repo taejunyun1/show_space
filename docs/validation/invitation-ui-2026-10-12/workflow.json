@@ -1,0 +1,247 @@
+{
+  "version": 1,
+  "date": "2026-10-12",
+  "project": {
+    "cloudId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+    "sourceId": "9bdeba17-c981-424b-84be-5ba520737e3c",
+    "openedId": "481e2454-e32d-48be-8d81-e79b4005b747",
+    "previousId": "18b20b9b-1a9b-4a0a-ad3a-2c5af58c6d30",
+    "revision": 1,
+    "sha256": "1b5a324388559343372fd4adf8bc90d404437681efa47bfbdf7962af64c51504",
+    "bytes": 4356,
+    "scenes": 2,
+    "planDimensions": [
+      [
+        800,
+        1000
+      ],
+      [
+        1000,
+        800
+      ],
+      [
+        800,
+        1000
+      ]
+    ]
+  },
+  "calls": [
+    {
+      "method": "PUT",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 201,
+      "id": "03939a9c-ec0a-4609-8df6-cd0f5fa5e937"
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 200,
+      "id": "03939a9c-ec0a-4609-8df6-cd0f5fa5e937"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/project-invitations/03939a9c-ec0a-4609-8df6-cd0f5fa5e937/preview",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/project-invitations/03939a9c-ec0a-4609-8df6-cd0f5fa5e937/accept",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/project-invitations/03939a9c-ec0a-4609-8df6-cd0f5fa5e937/accept",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 201,
+      "id": "ac06eac9-0035-44c7-8b38-f9bf130e3b4b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations/ac06eac9-0035-44c7-8b38-f9bf130e3b4b",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200
+    }
+  ],
+  "membership": {
+    "role": "commenter",
+    "revision": 4,
+    "revoked": 1
+  },
+  "assertions": {
+    "createRetrySameId": true,
+    "oneGrantAfterAcceptRetry": true,
+    "tokenHashOnly": true,
+    "fragmentRemoved": true,
+    "coldJoinHydration": true,
+    "originalLocalRetained": true,
+    "editableCopyAndCloudLink": true,
+    "originalRemoteBytesRetained": true,
+    "revokedParticipantRead404": true,
+    "revokeClearsCopiedLink": true
+  },
+  "navigation": "onEditorReady callback; no actual browser navigation",
+  "limits": [
+    "React/jsdom StrictMode and actual invitation/admin/Team UI with production clients/actions/Worker and native ZIP/image decoder",
+    "fake-indexeddb, local SQLite/R2 and synthetic verified email accounts",
+    "Transport omits AbortSignal deliberately for accepted late responses",
+    "GPU renderer stand-in; no actual browser/GPU/auth/device/email delivery or original 24-step acceptance"
+  ]
+}
