@@ -1,0 +1,571 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "a92a14cdeda8aa7a0db7669f13fec01f5ea280f4",
+  "runtimeFiles": [
+    "src/components/CloudHistoryDialog.tsx",
+    "src/lib/cloudHistoryActions.ts"
+  ],
+  "baseline": {
+    "method": "Temporary final-source copy, two runtime files replaced from baseline; eight selected final assertions in fresh Vitest processes to isolate late-request effects",
+    "results": [
+      {
+        "file": "src/lib/cloudHistoryActions.lifecycle.test.ts",
+        "pattern": null,
+        "passed": 0,
+        "failed": 3,
+        "exitCode": 1
+      },
+      {
+        "file": "src/components/CloudHistoryDialog.workflow.test.tsx",
+        "pattern": "cancel immediately permits retry",
+        "passed": 0,
+        "failed": 1,
+        "exitCode": 1
+      },
+      {
+        "file": "src/components/CloudHistoryDialog.workflow.test.tsx",
+        "pattern": "blocks duplicate requests",
+        "passed": 0,
+        "failed": 1,
+        "exitCode": 1
+      },
+      {
+        "file": "src/components/CloudHistoryDialog.workflow.test.tsx",
+        "pattern": "preserves a new edit made",
+        "passed": 0,
+        "failed": 1,
+        "exitCode": 1
+      },
+      {
+        "file": "src/components/CloudHistoryDialog.workflow.test.tsx",
+        "pattern": "guards actual IndexedDB activation",
+        "passed": 0,
+        "failed": 1,
+        "exitCode": 1
+      },
+      {
+        "file": "src/components/CloudHistoryDialog.workflow.test.tsx",
+        "pattern": "opens a successful restored",
+        "passed": 1,
+        "failed": 0,
+        "exitCode": 0
+      }
+    ],
+    "passed": 1,
+    "failed": 7,
+    "seconds": 16.46
+  },
+  "regression": {
+    "added": 21,
+    "focusedFiles": 2,
+    "focusedTests": 21,
+    "targetFiles": 6,
+    "targetTests": 63,
+    "fullPassedFiles": 257,
+    "fullSkippedFiles": 10,
+    "fullPassed": 1601,
+    "fullSkipped": 10,
+    "fullDurationSeconds": 12.39,
+    "typeScriptAndProductionBuild": true,
+    "viteBuildSeconds": 4.72,
+    "existingLargeChunkWarning": true
+  },
+  "verifiedCases": [
+    "React StrictMode late results cannot release new request busy; cancel/unmount immediately release parent controls",
+    "Account/project A-B-A, same-ID load, Scene restoration and changed target retire history actions and protected state",
+    "Duplicate clicks start one request; canceled capture failure cannot discard newer exact retry ID",
+    "New edits during restoration or cloud-link staging remain active; actual IndexedDB activation guard aborts a final concurrent edit",
+    "Active transforms reject restoration; successful copy retains original local document and verified cloud link",
+    "Guard checks before read, after file read and after image verification",
+    "Native actual UI capture/cancel/retry uses identical capture ID; private production Worker returns 201 then 200 for one retained point",
+    "Native compare and restore retain both Scene plans, root image/scale/geometry/note and full ZIP equality",
+    "Remote revision 3 restores revision 1 bytes; safety point retains exact revision 2 bytes; other synthetic account reads 404",
+    "Cancel after accepted cloud replacement preserves original local project and already retained remote safety; no remote rollback claim"
+  ],
+  "input": {
+    "path": "docs/validation/local-plan-restore-2026-10-11/project.gonggan.zip",
+    "sha256": "8678781f2f8f615c4b7f55fc0d112531386aaaedc75ac39758682ae36073b011"
+  },
+  "workflows": {
+    "cancel-after-cloud-commit": {
+      "date": "2026-10-11",
+      "receivedSha256": "2ac1d9ea6b4bae760981ec30f005834703d51a599334eca7199fa5cf6d903039",
+      "actualUiActions": [
+        "capture",
+        "cancel",
+        "retry",
+        "refresh",
+        "compare",
+        "restore",
+        "cancel-after-accepted-cloud-replacement"
+      ],
+      "retrySameCaptureId": true,
+      "retryStatuses": [
+        201,
+        200
+      ],
+      "historyCount": 2,
+      "remoteRevision": 3,
+      "safetyMatchesPreviousBytes": true,
+      "localOriginalPreserved": true,
+      "restoredNewLocalCopy": false,
+      "sceneCount": 2,
+      "scenePlansExact": true,
+      "rootPlanExact": true,
+      "calls": [
+        {
+          "method": "PUT",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "status": 201,
+          "expectedRevision": "0"
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "POST",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 201,
+          "expectedRevision": null,
+          "captureId": "76176912-108c-4ae6-a7b4-2960b6ba4395"
+        },
+        {
+          "method": "POST",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null,
+          "captureId": "76176912-108c-4ae6-a7b4-2960b6ba4395"
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/76176912-108c-4ae6-a7b4-2960b6ba4395/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/76176912-108c-4ae6-a7b4-2960b6ba4395",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "PUT",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "status": 200,
+          "expectedRevision": "1"
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/76176912-108c-4ae6-a7b4-2960b6ba4395/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/76176912-108c-4ae6-a7b4-2960b6ba4395",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/76176912-108c-4ae6-a7b4-2960b6ba4395/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/76176912-108c-4ae6-a7b4-2960b6ba4395",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "POST",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 201,
+          "expectedRevision": null,
+          "captureId": "a0a1dee0-be19-49b3-a120-4dd4791cc9e5"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "status": 200,
+          "expectedRevision": "2"
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/a0a1dee0-be19-49b3-a120-4dd4791cc9e5/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/a0a1dee0-be19-49b3-a120-4dd4791cc9e5",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 404,
+          "expectedRevision": null
+        }
+      ],
+      "browserGpuMeasured": false,
+      "operationalAuthMeasured": false,
+      "limits": [
+        "Actual React/jsdom UI with native two-plan image decoder and production history actions/clients",
+        "fake-indexeddb, local SQLite/R2 and synthetic account fixture",
+        "Transport deliberately ignores AbortSignal to return accepted late responses; remote acceptance is not rolled back by UI cancel",
+        "No real browser, GPU, operational account, device or original 24-step acceptance"
+      ]
+    },
+    "open-copy": {
+      "date": "2026-10-11",
+      "receivedSha256": "69fd6c139afb6496c0263fb5a090c10ce07026cbc113a7b826b95cc39110deb6",
+      "actualUiActions": [
+        "capture",
+        "cancel",
+        "retry",
+        "refresh",
+        "compare",
+        "restore",
+        "open-new-local-copy"
+      ],
+      "retrySameCaptureId": true,
+      "retryStatuses": [
+        201,
+        200
+      ],
+      "historyCount": 2,
+      "remoteRevision": 3,
+      "safetyMatchesPreviousBytes": true,
+      "localOriginalPreserved": true,
+      "restoredNewLocalCopy": true,
+      "sceneCount": 2,
+      "scenePlansExact": true,
+      "rootPlanExact": true,
+      "calls": [
+        {
+          "method": "PUT",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "status": 201,
+          "expectedRevision": "0"
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "POST",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 201,
+          "expectedRevision": null,
+          "captureId": "1333a992-875a-4ac9-b381-769e8037976d"
+        },
+        {
+          "method": "POST",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null,
+          "captureId": "1333a992-875a-4ac9-b381-769e8037976d"
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "PUT",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "status": 200,
+          "expectedRevision": "1"
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "POST",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 201,
+          "expectedRevision": null,
+          "captureId": "62841a70-e552-4f9d-a762-618d34139b93"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "status": 200,
+          "expectedRevision": "2"
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/62841a70-e552-4f9d-a762-618d34139b93/meta",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/62841a70-e552-4f9d-a762-618d34139b93",
+          "status": 200,
+          "expectedRevision": null
+        },
+        {
+          "method": "GET",
+          "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+          "status": 404,
+          "expectedRevision": null
+        }
+      ],
+      "browserGpuMeasured": false,
+      "operationalAuthMeasured": false,
+      "limits": [
+        "Actual React/jsdom UI with native two-plan image decoder and production history actions/clients",
+        "fake-indexeddb, local SQLite/R2 and synthetic account fixture",
+        "Transport deliberately ignores AbortSignal to return accepted late responses; remote acceptance is not rolled back by UI cancel",
+        "No real browser, GPU, operational account, device or original 24-step acceptance"
+      ]
+    }
+  },
+  "assets": [
+    {
+      "path": "assets/images/71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d.png",
+      "bytes": 5400,
+      "sha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d"
+    },
+    {
+      "path": "assets/images/edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1.png",
+      "bytes": 5519,
+      "sha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1"
+    }
+  ],
+  "artifacts": {
+    "cancel-after-cloud-commit.gonggan.zip": {
+      "sha256": "2ac1d9ea6b4bae760981ec30f005834703d51a599334eca7199fa5cf6d903039",
+      "bytes": 4351
+    },
+    "cancel-after-cloud-commit.json": {
+      "sha256": "955099421b0a3761c1bdabfbcbe9c4345c055cd4826703cf92099822f751ba01",
+      "bytes": 6418
+    },
+    "open-copy.gonggan.zip": {
+      "sha256": "69fd6c139afb6496c0263fb5a090c10ce07026cbc113a7b826b95cc39110deb6",
+      "bytes": 4354
+    },
+    "open-copy.json": {
+      "sha256": "84c03788444329a72a722c229a9ac435d16cb3c0431cad43ddebd35cc6c80533",
+      "bytes": 6397
+    }
+  },
+  "zipCrcVerified": true,
+  "limits": [
+    "Scope tests inject session/client/action adapters; native workflow separately uses production actions/clients/Worker and real image decoder",
+    "React/jsdom, fake-indexeddb, local SQLite/R2 and synthetic authentication; no operational account or real browser/device acceptance",
+    "Native transport intentionally omits AbortSignal to return already accepted late responses; accepted remote writes are retained",
+    "No GPU/capture/FPS/VRAM/p95, actual users/drawings/SketchUp receiver or original full 24-step acceptance"
+  ],
+  "deployment": {
+    "performed": false
+  },
+  "allFeaturesComplete": false,
+  "finalizedDate": "2026-10-12"
+}

@@ -1,0 +1,219 @@
+{
+  "date": "2026-10-11",
+  "receivedSha256": "69fd6c139afb6496c0263fb5a090c10ce07026cbc113a7b826b95cc39110deb6",
+  "actualUiActions": [
+    "capture",
+    "cancel",
+    "retry",
+    "refresh",
+    "compare",
+    "restore",
+    "open-new-local-copy"
+  ],
+  "retrySameCaptureId": true,
+  "retryStatuses": [
+    201,
+    200
+  ],
+  "historyCount": 2,
+  "remoteRevision": 3,
+  "safetyMatchesPreviousBytes": true,
+  "localOriginalPreserved": true,
+  "restoredNewLocalCopy": true,
+  "sceneCount": 2,
+  "scenePlansExact": true,
+  "rootPlanExact": true,
+  "calls": [
+    {
+      "method": "PUT",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 201,
+      "expectedRevision": "0"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+      "status": 201,
+      "expectedRevision": null,
+      "captureId": "1333a992-875a-4ac9-b381-769e8037976d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+      "status": 200,
+      "expectedRevision": null,
+      "captureId": "1333a992-875a-4ac9-b381-769e8037976d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "PUT",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200,
+      "expectedRevision": "1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/1333a992-875a-4ac9-b381-769e8037976d",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+      "status": 201,
+      "expectedRevision": null,
+      "captureId": "62841a70-e552-4f9d-a762-618d34139b93"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200,
+      "expectedRevision": "2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/62841a70-e552-4f9d-a762-618d34139b93/meta",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history/62841a70-e552-4f9d-a762-618d34139b93",
+      "status": 200,
+      "expectedRevision": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/history",
+      "status": 404,
+      "expectedRevision": null
+    }
+  ],
+  "browserGpuMeasured": false,
+  "operationalAuthMeasured": false,
+  "limits": [
+    "Actual React/jsdom UI with native two-plan image decoder and production history actions/clients",
+    "fake-indexeddb, local SQLite/R2 and synthetic account fixture",
+    "Transport deliberately ignores AbortSignal to return accepted late responses; remote acceptance is not rolled back by UI cancel",
+    "No real browser, GPU, operational account, device or original 24-step acceptance"
+  ]
+}
