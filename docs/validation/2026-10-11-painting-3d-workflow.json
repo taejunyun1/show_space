@@ -1,0 +1,133 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "19f859ba659cec2443cce41832713f699995cc04",
+  "sourceSha256": {
+    "src/components/Gallery3D.tsx": "24ef496c92c104883e3f35ebc90abd6956387ea0b36563fd1bc826de5ec5db8e",
+    "src/components/Painting3D.workflow.test.tsx": "11adcf12c6e6be450c10b9c4f1fdc1274eed219c215a1bf7889040e938c06c2b"
+  },
+  "input": {
+    "path": "docs/validation/converted-pointer-2026-10-11/project.gonggan.zip",
+    "sha256": "9e3af69ff5c07c574889d3c32d2b6e8f6d97540fe2e1bc05bf5fde01d376f988",
+    "ownedPreviouslyConvertedVenue": true
+  },
+  "baseline": {
+    "command": "npx vitest run src/components/Painting3D.workflow.test.tsx",
+    "procedure": "Restore only Gallery3D.tsx from baseline with Painting export added for test access, no behavior shim; current source restored byte-for-byte in finally",
+    "failed": 17,
+    "passed": 1,
+    "newTests": 18,
+    "durationSeconds": 0.751,
+    "initialHarnessIdentityRayPrecisionAndPdfWindowErrorsExcluded": true
+  },
+  "target": {
+    "command": "GONGGAN_PAINTING_3D_PROOF=1 npx vitest run src/components/Painting3D.workflow.test.tsx src/components/ModelInstances.lifecycle.test.tsx src/components/Lighting3D.lifecycle.test.tsx src/components/ElevationView.workflow.test.tsx src/components/Workspace.sceneWorkflow.test.tsx src/components/Delivery.workflow.test.tsx src/domain/artworkDrag3d.test.ts src/components/artworkSnap3d.test.ts src/components/cameraView3d.test.ts src/lib/pdfDocument.test.ts",
+    "passed": 93,
+    "filesPassed": 10,
+    "durationSeconds": 3.15
+  },
+  "full": {
+    "command": "npm test",
+    "passed": 1421,
+    "skipped": 10,
+    "filesPassed": 242,
+    "filesSkipped": 10,
+    "durationSeconds": 8.57
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "viteDurationSeconds": 4.15,
+    "largeChunkNoticeRetained": true
+  },
+  "connectedWorkflow": {
+    "actualR3fHandlers": true,
+    "geometryAndRays": "Actual Three world positions, synthetic pointer rays and capture target; image texture/annotation/GPU transport adapters",
+    "sceneRotationsDeg": [
+      -90,
+      -45
+    ],
+    "r3fImageCornerErrorMm": 1.2287812494330011e-05,
+    "standardViewProjections": 6,
+    "pdf": {
+      "pages": 8,
+      "actualExporterAndFontImageTransport": true,
+      "nativeRasterPixels": [
+        1684,
+        1191
+      ],
+      "rgbSampleErrors": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "imageCornersMaxErrorPt": 1.1718571004216928e-13,
+      "textAndPrivateNoteExclusion": true
+    },
+    "negativeExpectedRoll": {
+      "degrees": 15,
+      "pdfImageCornersErrorPt": [
+        6.5689487055407385,
+        6.568948705540746
+      ],
+      "r3fRejectedAboveMm": 1,
+      "notAnExternalImporterProcess": true
+    },
+    "backupExact": true,
+    "archive": {
+      "crcPassed": true,
+      "entries": 9,
+      "assets": 6
+    }
+  },
+  "artifactSha256": {
+    "docs/validation/painting-3d-2026-10-11/A-wall.png": "bb9026e69c6609b6cdac242661aa35756768921654ece7013da98997ebda6d97",
+    "docs/validation/painting-3d-2026-10-11/B-wall.png": "84f0a21a3fc67b9dc20fdf36ca5e0460f696c98bd26ddaaab9ae7551458f8f6c",
+    "docs/validation/painting-3d-2026-10-11/exhibition.pdf": "03ed0251573e246a0668b9630512eaf67a4f3af29b06dda869a9a5b60add3f5c",
+    "docs/validation/painting-3d-2026-10-11/project.gonggan.zip": "2e0ffba452463793fd2fc75a6d5f07991154fd3f0af4dceaebf66c143a22c962",
+    "docs/validation/painting-3d-2026-10-11/project.json": "011f35a45a5bec631609df80cccdc399851885f70eac76ded73b3a3d2d7535e9",
+    "docs/validation/painting-3d-2026-10-11/workflow.json": "ce625e91f21c79db878589d5d10efc8f4edc543ee5efca9d812968a815183c23"
+  },
+  "localLogs": {
+    "baseline": {
+      "path": "/tmp/show-space-painting-3d-before-final.log",
+      "sha256": "6691c0900e1ccd39a69db30eac0fed64d63f8ad2011f95f197596ed933968dc5"
+    },
+    "target": {
+      "path": "/tmp/show-space-painting-3d-target-final.log",
+      "sha256": "166b6b562a48207e6cc790b430c96a6b26e34296f76506845bf0fc315c4e8c1c"
+    },
+    "full": {
+      "path": "/tmp/show-space-painting-3d-full.log",
+      "sha256": "d00bdd147a832312572a1c56c2b94db4c5dab587bb985b959b3efe8c0123da0a"
+    },
+    "build": {
+      "path": "/tmp/show-space-painting-3d-build.log",
+      "sha256": "6ec225900ac081eefcba820df44e58e9894b530b9c03e06976d787b844842e61"
+    }
+  },
+  "visualInspection": [
+    "painting-3d-2026-10-11/A-wall.png",
+    "painting-3d-2026-10-11/B-wall.png"
+  ],
+  "deployed": false,
+  "limitations": [
+    "Owned previously converted venue backup, actual R3F/Three geometry and handlers, synthetic rays/capture target, image texture adapter",
+    "Actual PDF exporter/font/image decode/page construction and native PDF raster, not browser/GPU 3D capture",
+    "No operational auth/URL/two-device/SketchUp/full 24-step or user metrics acceptance",
+    "Standard camera helpers projected actual image geometry; Workspace button/browser/GPU view acceptance remains",
+    "3D preview image texture was adapted, PDF images were decoded from original saved assets",
+    "Wall pointer paths and final release/ownership need the next implementation step",
+    "Full 24-step/user metrics, GPU/FPS/VRAM/p95 and paid image-to-material remain"
+  ]
+}

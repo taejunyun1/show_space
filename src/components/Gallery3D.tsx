@@ -54,7 +54,9 @@ function useMeasurementSnap(){
  clear:()=>setHint(null),
  marker:active&&hint?<Html position={hint.toArray()} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#16816b'}}>⊙ 모서리</span></Html>:null};
 }
-function Painting({ artwork, wall, groups }: { artwork: Artwork; wall: Wall; groups:Map<string,Group> }) {
+type PaintingScope={project:Project;view:string;tool:string;selection:string;wallId:string;pointerId:number;target:Element;kind:'drag'|'rotate';grab?:{alongMm:number;centerHeightMm:number}};
+const paintingSelection=(state:ReturnType<typeof useEditor.getState>)=>state.selected.map(item=>`${item.type}:${item.id}`).sort().join('|');
+export function Painting({ artwork, wall, groups }: { artwork: Artwork; wall: Wall; groups:Map<string,Group> }) {
   const project=useEditor(s=>s.project);
   const {camera,size}=useThree();
   const measurementSnap=useMeasurementSnap();
@@ -68,18 +70,33 @@ function Painting({ artwork, wall, groups }: { artwork: Artwork; wall: Wall; gro
   const captureClean=useEditor(s=>s.captureClean);
   const rotationGesture=useRef<{start:{x:number;y:number};initial:number;angle:number}|null>(null);
   const [previewAngle,setPreviewAngle]=useState<number|null>(null);
+  const owned=useRef<PaintingScope|null>(null);
+  function currentScope(state=useEditor.getState()){
+    const scope=owned.current;
+    return !!scope&&scope.project===state.project&&scope.view===state.view&&scope.tool===state.activeTool&&scope.wallId===state.activeWallId&&scope.selection===paintingSelection(state)
+      &&(scope.kind==='drag'?state.artworkGesture?.id===artwork.id&&state.artworkGesture.grab===scope.grab:state.rotatingArtworkId===artwork.id);
+  }
+  function release(scope:PaintingScope){try{scope.target.releasePointerCapture(scope.pointerId);}catch{/* Capture may already have been released by the browser. */}}
+  function cancelGesture(render=true){
+    const scope=owned.current;owned.current=null;rotationGesture.current=null;
+    if(render)setPreviewAngle(null);
+    if(!scope)return;
+    const state=useEditor.getState();
+    if(scope.kind==='drag'&&state.artworkGesture?.base===scope.project&&state.artworkGesture.id===artwork.id&&state.artworkGesture.grab===scope.grab)state.finishArtworkDrag(true);
+    if(scope.kind==='rotate'&&state.project===scope.project&&state.rotatingArtworkId===artwork.id)state.setArtworkRotationActive(null);
+    release(scope);
+  }
+  function own(kind:PaintingScope['kind'],event:ThreeEvent<PointerEvent>){
+    const state=useEditor.getState();owned.current={project:state.project,view:state.view,tool:state.activeTool,selection:paintingSelection(state),wallId:state.activeWallId,pointerId:event.pointerId,target:event.target as Element,kind,grab:state.artworkGesture?.grab};
+  }
+  function ownsPointer(event:ThreeEvent<PointerEvent>,kind:PaintingScope['kind']){return owned.current?.kind===kind&&owned.current.pointerId===event.pointerId;}
+  function cancelPointer(event:ThreeEvent<PointerEvent>){if(owned.current?.pointerId!==event.pointerId)return;event.stopPropagation();cancelGesture();}
   useEffect(()=>{
-    const cancel=(event:KeyboardEvent)=>{if(event.key==='Escape'){if(useEditor.getState().artworkGesture?.id===artwork.id)useEditor.getState().finishArtworkDrag(true);rotationGesture.current=null;setPreviewAngle(null);if(useEditor.getState().rotatingArtworkId===artwork.id)useEditor.getState().setArtworkRotationActive(null);}};
+    const unsubscribe=useEditor.subscribe(next=>{if(owned.current&&!currentScope(next))cancelGesture();});
+    const cancel=(event:KeyboardEvent)=>{if(event.key==='Escape')cancelGesture();};
     window.addEventListener('keydown',cancel);
-    return ()=>window.removeEventListener('keydown',cancel);
+    return()=>{unsubscribe();window.removeEventListener('keydown',cancel);cancelGesture(false);};
   },[artwork.id]);
-  useEffect(()=>{
-    if(!selected||artwork.locked||activeTool!=='select'){
-      rotationGesture.current=null;
-      setPreviewAngle(null);
-      if(useEditor.getState().rotatingArtworkId===artwork.id)useEditor.getState().setArtworkRotationActive(null);
-    }
-  },[selected,artwork.locked,activeTool]);
   const { x, y, z, rotationY } = artworkPosition(artwork, wall);
   const presentation=artworkPresentation(artwork),w=presentation.widthMm/1000,h=presentation.heightMm/1000,d=presentation.depthMm/1000;
   function facePoint(event:ThreeEvent<PointerEvent>){
@@ -89,53 +106,61 @@ function Painting({ artwork, wall, groups }: { artwork: Artwork; wall: Wall; gro
     return artworkRotationPoint(wall,artwork,{origin:{x:event.ray.origin.x*1000,y:event.ray.origin.y*1000,z:event.ray.origin.z*1000},direction:{x:event.ray.direction.x,y:event.ray.direction.y,z:event.ray.direction.z}});
   }
   function beginRotation(event:ThreeEvent<PointerEvent>){
-    if(event.button!==0||artwork.locked||activeTool!=='select')return;
+    const state=useEditor.getState();
+    if(state.project!==project||state.view!=='3d'||event.button!==0||artwork.locked||state.activeTool!=='select'||state.selected.length!==1||state.selected[0].type!=='artwork'||state.selected[0].id!==artwork.id||owned.current&&owned.current.pointerId!==event.pointerId)return;
     event.stopPropagation();
     const start=rotationPoint(event);if(!start)return;
-    (event.target as Element).setPointerCapture(event.pointerId);
+    cancelGesture();(event.target as Element).setPointerCapture(event.pointerId);
     const initial=artwork.rotationDeg??0;
     rotationGesture.current={start,initial,angle:initial};
     setPreviewAngle(initial);
-    useEditor.getState().setArtworkRotationActive(artwork.id);
+    useEditor.getState().setArtworkRotationActive(artwork.id);own('rotate',event);
   }
   function moveRotation(event:ThreeEvent<PointerEvent>){
-    const gesture=rotationGesture.current;if(!gesture)return;
+    const gesture=rotationGesture.current;if(!gesture||!ownsPointer(event,'rotate'))return;
+    if(!currentScope()){cancelGesture();return;}
     event.stopPropagation();
     const current=rotationPoint(event);if(!current)return;
     const angle=draggedArtworkAngle(gesture.initial,{x:0,y:0},gesture.start,current);
-    gesture.angle=angle;
-    setPreviewAngle(angle);
+    gesture.angle=angle;setPreviewAngle(angle);
   }
   function finishRotation(event:ThreeEvent<PointerEvent>,cancel=false){
-    const gesture=rotationGesture.current;if(!gesture)return;
-    event.stopPropagation();
-    (event.target as Element).releasePointerCapture(event.pointerId);
-    rotationGesture.current=null;
-    setPreviewAngle(null);
-    useEditor.getState().setArtworkRotationActive(null);
-    if(!cancel&&gesture.angle!==gesture.initial)useEditor.getState().patchArtwork(artwork.id,{rotationDeg:gesture.angle});
+    if(!ownsPointer(event,'rotate'))return;
+    if(cancel||!currentScope()){event.stopPropagation();cancelGesture();return;}
+    moveRotation(event);
+    const scope=owned.current!,gesture=rotationGesture.current!;
+    owned.current=null;rotationGesture.current=null;setPreviewAngle(null);
+    release(scope);useEditor.getState().setArtworkRotationActive(null);
+    if(gesture.angle!==gesture.initial)useEditor.getState().patchArtwork(artwork.id,{rotationDeg:gesture.angle});
   }
   function begin(event:ThreeEvent<PointerEvent>){
-    if(event.button!==0||activeTool==='pan')return;
+    const state=useEditor.getState();
+    if(state.project!==project||state.view!=='3d'||event.button!==0||state.activeTool==='pan'||owned.current&&owned.current.pointerId!==event.pointerId)return;
     event.stopPropagation();
-    if(event.shiftKey||artwork.locked||activeTool==='measure'||activeTool==='rotate'||activeTool==='draw')return;
+    if(event.shiftKey||artwork.locked||state.activeTool==='measure'||state.activeTool==='rotate'||state.activeTool==='draw')return;
     const hit=facePoint(event);if(!hit)return;
-    (event.target as Element).setPointerCapture(event.pointerId);
+    cancelGesture();(event.target as Element).setPointerCapture(event.pointerId);
     useEditor.getState().beginArtworkDrag(artwork.id,hit);
+    if(useEditor.getState().artworkGesture?.id===artwork.id)own('drag',event);
+    else try{(event.target as Element).releasePointerCapture(event.pointerId);}catch{/* A rejected group drag has no capture to retain. */}
   }
   function moving(event:ThreeEvent<PointerEvent>){
-    if(useEditor.getState().artworkGesture?.id!==artwork.id)return;
+    if(!ownsPointer(event,'drag'))return;
+    if(!currentScope()){cancelGesture();return;}
     event.stopPropagation();
-    const walls=useEditor.getState().project.walls.filter(candidate=>candidate.visible&&groups.get(candidate.id)?.visible!==false);
-    const hit=projectArtworkWallRay(walls,artwork,{origin:{x:event.ray.origin.x*1000,y:event.ray.origin.y*1000,z:event.ray.origin.z*1000},direction:{x:event.ray.direction.x,y:event.ray.direction.y,z:event.ray.direction.z}});
-    if(hit){const candidate=project.walls.find(w=>w.id===hit.wallId);if(candidate)useEditor.getState().updateArtworkDrag(hit,{toleranceMm:artworkSnapTolerance3d(camera,candidate,{...artwork,wallSide:hit.wallSide},hit,size),bypass:event.altKey});}
+    const state=useEditor.getState(),source=owned.current!.project.artworks.find(a=>a.id===artwork.id)!;
+    const walls=state.project.walls.filter(candidate=>candidate.visible&&groups.get(candidate.id)?.visible!==false);
+    const hit=projectArtworkWallRay(walls,source,{origin:{x:event.ray.origin.x*1000,y:event.ray.origin.y*1000,z:event.ray.origin.z*1000},direction:{x:event.ray.direction.x,y:event.ray.direction.y,z:event.ray.direction.z}});
+    if(hit){const candidate=state.project.walls.find(w=>w.id===hit.wallId);if(candidate)state.updateArtworkDrag(hit,{toleranceMm:artworkSnapTolerance3d(camera,candidate,{...source,wallSide:hit.wallSide},hit,size),bypass:event.altKey});}
   }
   function finish(event:ThreeEvent<PointerEvent>,cancel=false){
-    if(useEditor.getState().artworkGesture?.id!==artwork.id)return;
-    event.stopPropagation();(event.target as Element).releasePointerCapture(event.pointerId);
-    useEditor.getState().finishArtworkDrag(cancel);
+    if(!ownsPointer(event,'drag'))return;
+    if(cancel||!currentScope()){event.stopPropagation();cancelGesture();return;}
+    moving(event);
+    const scope=owned.current!;owned.current=null;
+    release(scope);useEditor.getState().finishArtworkDrag();
   }
-  return <>{measurementSnap.marker}<group userData={{artworkImageReady:!!texture,artworkImageFailed:!!failed,artworkTextureReady:ready,artworkTextureSize:textureSize,artworkTextureAppliedSize:appliedSize,artworkTextureRequest:{id:artwork.id,key:JSON.stringify([artwork.imageUrl,artPanel(artwork.imageUrl)]),width:artwork.widthMm/1000,height:artwork.heightMm/1000,selected}}} name={`artwork-${artwork.id}`} position={[x / 1000, y / 1000, z / 1000]} rotation={[0, rotationY, (previewAngle??artwork.rotationDeg??0)*Math.PI/180]} onPointerDown={begin} onPointerMove={e=>{measurementSnap.hover(e);moving(e);}} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)} onClick={e => { if(activeTool==='pan')return; e.stopPropagation(); if(activeTool==='measure'){useEditor.getState().pickMeasurement(wallAnchor(project,wall.id,modelPoint(measurementSnap.point(e))),'3d');return;} if(e.delta<4)useEditor.getState().select({ type: 'artwork', id: artwork.id }, e.shiftKey); }} onPointerOver={e => { if(activeTool==='pan')return; e.stopPropagation(); document.body.style.cursor = artwork.locked?'pointer':'grab'; }} onPointerOut={() => { measurementSnap.clear();if(!dragging)document.body.style.cursor = 'auto'; }}><ArtworkPresentationShell artwork={artwork}/>{failed&&<Html center><span className="dimension-label">작품 이미지를 불러오지 못했습니다</span></Html>}{artwork.video?<VideoArtworkScreen sessionKey={videoSessionKey(project.id,artwork.id)} media={artwork.video} poster={texture} widthMm={artwork.widthMm} heightMm={artwork.heightMm} z={presentation.imageZMm/1000}/>:(<mesh name="image" position={[0,0,presentation.imageZMm/1000]}><planeGeometry args={[artwork.widthMm/1000,artwork.heightMm/1000]}/><SurfaceFinish color="#ffffff" material={artwork.material} map={texture} normalExtentM={[artwork.widthMm/1000,artwork.heightMm/1000]} roughness={.9}/></mesh>)}{installationConflict&&<Html position={[0,h/2+.15,0]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#a22'}}>계단·추정 범위와 겹침</span></Html>}{selected && !captureClean && <Line points={[[-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008]]} color="#365cf5" lineWidth={2} />}{selected&&singleSelection&&!artwork.locked&&activeTool==='select'&&!captureClean&&<group><Line points={[[0,h/2+.045,d/2+.05],[0,h/2+.24,d/2+.05]]} color="#365cf5" lineWidth={3}/><mesh position={[0,h/2+.24,d/2+.05]} onPointerDown={beginRotation} onPointerMove={moveRotation} onPointerUp={e=>finishRotation(e)} onPointerCancel={e=>finishRotation(e,true)} onClick={e=>e.stopPropagation()} onPointerOver={e=>{e.stopPropagation();document.body.style.cursor='grab';}} onPointerOut={()=>{document.body.style.cursor='auto';}}><sphereGeometry args={[.115,16,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh></group>}</group></>;
+  return <>{measurementSnap.marker}<group userData={{artworkImageReady:!!texture,artworkImageFailed:!!failed,artworkTextureReady:ready,artworkTextureSize:textureSize,artworkTextureAppliedSize:appliedSize,artworkTextureRequest:{id:artwork.id,key:JSON.stringify([artwork.imageUrl,artPanel(artwork.imageUrl)]),width:artwork.widthMm/1000,height:artwork.heightMm/1000,selected}}} name={`artwork-${artwork.id}`} position={[x / 1000, y / 1000, z / 1000]} rotation={[0, rotationY, (previewAngle??artwork.rotationDeg??0)*Math.PI/180]} onPointerDown={begin} onPointerMove={e=>{measurementSnap.hover(e);moving(e);}} onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)} onLostPointerCapture={cancelPointer} onClick={e => { if(activeTool==='pan')return; e.stopPropagation(); if(activeTool==='measure'){useEditor.getState().pickMeasurement(wallAnchor(project,wall.id,modelPoint(measurementSnap.point(e))),'3d');return;} if(e.delta<4)useEditor.getState().select({ type: 'artwork', id: artwork.id }, e.shiftKey); }} onPointerOver={e => { if(activeTool==='pan')return; e.stopPropagation(); document.body.style.cursor = artwork.locked?'pointer':'grab'; }} onPointerOut={() => { measurementSnap.clear();if(!dragging)document.body.style.cursor = 'auto'; }}><ArtworkPresentationShell artwork={artwork}/>{failed&&<Html center><span className="dimension-label">작품 이미지를 불러오지 못했습니다</span></Html>}{artwork.video?<VideoArtworkScreen sessionKey={videoSessionKey(project.id,artwork.id)} media={artwork.video} poster={texture} widthMm={artwork.widthMm} heightMm={artwork.heightMm} z={presentation.imageZMm/1000}/>:(<mesh name="image" position={[0,0,presentation.imageZMm/1000]}><planeGeometry args={[artwork.widthMm/1000,artwork.heightMm/1000]}/><SurfaceFinish color="#ffffff" material={artwork.material} map={texture} normalExtentM={[artwork.widthMm/1000,artwork.heightMm/1000]} roughness={.9}/></mesh>)}{installationConflict&&<Html position={[0,h/2+.15,0]} center style={{pointerEvents:'none',whiteSpace:'nowrap'}}><span className="dimension-label" style={{color:'#a22'}}>계단·추정 범위와 겹침</span></Html>}{selected && !captureClean && <Line points={[[-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, -h / 2 - 0.055, d / 2 + 0.008], [w / 2 + 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, h / 2 + 0.055, d / 2 + 0.008], [-w / 2 - 0.055, -h / 2 - 0.055, d / 2 + 0.008]]} color="#365cf5" lineWidth={2} />}{selected&&singleSelection&&!artwork.locked&&activeTool==='select'&&!captureClean&&<group><Line points={[[0,h/2+.045,d/2+.05],[0,h/2+.24,d/2+.05]]} color="#365cf5" lineWidth={3}/><mesh position={[0,h/2+.24,d/2+.05]} onPointerDown={beginRotation} onPointerMove={moveRotation} onPointerUp={e=>finishRotation(e)} onPointerCancel={e=>finishRotation(e,true)} onLostPointerCapture={cancelPointer} onClick={e=>e.stopPropagation()} onPointerOver={e=>{e.stopPropagation();document.body.style.cursor='grab';}} onPointerOut={()=>{document.body.style.cursor='auto';}}><sphereGeometry args={[.115,16,12]}/><meshBasicMaterial color="#365cf5" depthTest={false}/></mesh></group>}</group></>;
 }
 const ground=new Plane(new Vector3(0,1,0),0);
 function groundPoint(e:ThreeEvent<PointerEvent>){const hit=e.ray.intersectPlane(ground,new Vector3());return hit?{x:Math.round(hit.x*100)*10,z:Math.round(hit.z*100)*10}:null;}
