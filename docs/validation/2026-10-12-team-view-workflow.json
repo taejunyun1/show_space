@@ -1,0 +1,298 @@
+{
+  "date": "2026-10-12",
+  "baselineCommit": "ebbb9e78980e1aac3f5209f3806f90023a1c2ca2",
+  "runtimeFiles": [
+    "src/components/TeamProjectDialog.tsx",
+    "src/components/ReviewCommentsPanel.tsx",
+    "src/components/ProjectArchiveContents.tsx"
+  ],
+  "baseline": {
+    "method": "Temporary final-source copy, only three runtime files replaced from previous main; identical final 24 tests",
+    "passed": 11,
+    "failed": 13,
+    "durationSeconds": 3.05
+  },
+  "regression": {
+    "added": 16,
+    "focusedFiles": 2,
+    "focusedTests": 24,
+    "targetFiles": 11,
+    "targetTests": 71,
+    "fullPassedFiles": 258,
+    "fullSkippedFiles": 10,
+    "fullPassed": 1617,
+    "fullSkipped": 10,
+    "fullDurationSeconds": 13.52,
+    "typeScriptAndProductionBuild": true,
+    "viteBuildSeconds": 5.72,
+    "existingLargeChunkWarning": true
+  },
+  "verifiedCases": [
+    "Team read ownership retires during account/project roundtrip, same-ID load, Scene restore, target change, cancel and unmount",
+    "Private records/preview disappear on server access verification failure; known viewer/archived state disables comment write actions",
+    "Comments actor epoch synchronously retires batched A-B-A identity transitions, resetting scoped drafts and thread card state",
+    "Cancel preserves exact comment draft IDs/body; late accepted response cannot clear replacement draft or busy",
+    "Private comment 403 suppresses write controls while retaining readable opinions and same-account draft for permission refresh",
+    "Selected Scene records use their own calibrated plan: root Scene B uncalibrated; Scene A 10 mm/px displays 1 cm/px",
+    "Actual native private invitation accepted by synthetic B; viewer -> commenter -> editor -> viewer -> revoked membership revision 5",
+    "Actual private read/Scene/Presentation snapshot geometry and document/editor/startup unchanged",
+    "Accepted comment retry returns 201/200, identical thread ID and exactly one separate opinion",
+    "Viewer write 403 and revoked read 404; parent hides private records/comments after polling; remote ZIP/revision 1 unchanged",
+    "A private edit 403 hides an already open inline editor while keeping the original text readable"
+  ],
+  "input": {
+    "path": "docs/validation/local-plan-restore-2026-10-11/project.gonggan.zip",
+    "sha256": "8678781f2f8f615c4b7f55fc0d112531386aaaedc75ac39758682ae36073b011"
+  },
+  "workflow": {
+    "date": "2026-10-12",
+    "receivedSha256": "fe49d5fdee9495d4a038f739d0a84340c897293f307c1bc43d4099244d5750b0",
+    "actualUiActions": [
+      "private-viewer-open",
+      "Scene-A-records",
+      "locked-presentation",
+      "commenter-refresh",
+      "comment-create",
+      "comment-cancel",
+      "exact-comment-retry",
+      "editor-refresh",
+      "viewer-poll",
+      "revocation-poll"
+    ],
+    "sceneScaleCorrect": true,
+    "lockedPresentationGeometryExact": true,
+    "remoteRevision": 1,
+    "layoutBytesUnchanged": true,
+    "localEditorStateUnchanged": true,
+    "localStartupUnchanged": true,
+    "commentCount": 1,
+    "commentRetryStatuses": [
+      201,
+      200
+    ],
+    "finalRole": "viewer",
+    "finalMemberRevision": 5,
+    "revoked": true,
+    "viewerWriteStatus": 403,
+    "revokedReadStatus": 404,
+    "calls": [
+      {
+        "method": "PUT",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        "status": 201
+      },
+      {
+        "method": "POST",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+        "status": 201
+      },
+      {
+        "method": "POST",
+        "path": "/api/project-invitations/4ab79373-cb1a-491f-ae0b-b3d9c6f14e02/accept",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+        "status": 201,
+        "commentId": "1422bc74-4ae5-4060-a2c7-fa3176dba197"
+      },
+      {
+        "method": "POST",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+        "status": 200,
+        "commentId": "1422bc74-4ae5-4060-a2c7-fa3176dba197"
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+        "status": 403,
+        "commentId": "5bf9234f-f4b2-4f5a-b5e6-7d852995354a"
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+        "status": 404
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 404
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 404
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        "status": 200
+      }
+    ],
+    "browserGpuMeasured": false,
+    "operationalAuthMeasured": false,
+    "limits": [
+      "Actual React/jsdom Team/ReviewComments/Presentation UI with production clients/actions/Worker and native two-plan image decode",
+      "GPU transport only is a stand-in; no browser rendering or GPU acceptance",
+      "fake-indexeddb, local SQLite/R2, synthetic invitation/account and interval clock",
+      "Transport omits AbortSignal to return accepted late responses; no rollback or real network claim",
+      "No operational invitations/accounts/devices or original 24-step acceptance"
+    ]
+  },
+  "assets": [
+    {
+      "path": "assets/images/71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d.png",
+      "bytes": 5400,
+      "sha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d"
+    },
+    {
+      "path": "assets/images/edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1.png",
+      "bytes": 5519,
+      "sha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1"
+    }
+  ],
+  "artifacts": {
+    "project.gonggan.zip": {
+      "bytes": 4351,
+      "sha256": "fe49d5fdee9495d4a038f739d0a84340c897293f307c1bc43d4099244d5750b0"
+    },
+    "workflow.json": {
+      "bytes": 6131,
+      "sha256": "4326f729f3db6630dce3b1b870a5eb60a4b0447a636e6d0a575149cad219988e"
+    }
+  },
+  "zipCrcVerified": true,
+  "limits": [
+    "Actual React/jsdom Team/ReviewComments/Presentation UI with production clients/actions/Worker and native two-plan image decode",
+    "GPU transport only is a stand-in; no browser rendering or GPU acceptance",
+    "fake-indexeddb, local SQLite/R2, synthetic invitation/account and interval clock",
+    "Transport omits AbortSignal to return accepted late responses; no rollback or real network claim",
+    "No operational invitations/accounts/devices or original 24-step acceptance",
+    "Real browser/GPU/capture/FPS/VRAM/p95, operational login/real accounts/devices/shared URLs, actual users and original full 24-step acceptance remain unverified"
+  ],
+  "deployment": {
+    "performed": false
+  },
+  "allFeaturesComplete": false
+}

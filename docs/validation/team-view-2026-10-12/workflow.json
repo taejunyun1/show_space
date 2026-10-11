@@ -1,0 +1,216 @@
+{
+  "date": "2026-10-12",
+  "receivedSha256": "fe49d5fdee9495d4a038f739d0a84340c897293f307c1bc43d4099244d5750b0",
+  "actualUiActions": [
+    "private-viewer-open",
+    "Scene-A-records",
+    "locked-presentation",
+    "commenter-refresh",
+    "comment-create",
+    "comment-cancel",
+    "exact-comment-retry",
+    "editor-refresh",
+    "viewer-poll",
+    "revocation-poll"
+  ],
+  "sceneScaleCorrect": true,
+  "lockedPresentationGeometryExact": true,
+  "remoteRevision": 1,
+  "layoutBytesUnchanged": true,
+  "localEditorStateUnchanged": true,
+  "localStartupUnchanged": true,
+  "commentCount": 1,
+  "commentRetryStatuses": [
+    201,
+    200
+  ],
+  "finalRole": "viewer",
+  "finalMemberRevision": 5,
+  "revoked": true,
+  "viewerWriteStatus": 403,
+  "revokedReadStatus": 404,
+  "calls": [
+    {
+      "method": "PUT",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/invitations",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/project-invitations/4ab79373-cb1a-491f-ae0b-b3d9c6f14e02/accept",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 201,
+      "commentId": "1422bc74-4ae5-4060-a2c7-fa3176dba197"
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 200,
+      "commentId": "1422bc74-4ae5-4060-a2c7-fa3176dba197"
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 403,
+      "commentId": "5bf9234f-f4b2-4f5a-b5e6-7d852995354a"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/members/bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/comments",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "status": 200
+    }
+  ],
+  "browserGpuMeasured": false,
+  "operationalAuthMeasured": false,
+  "limits": [
+    "Actual React/jsdom Team/ReviewComments/Presentation UI with production clients/actions/Worker and native two-plan image decode",
+    "GPU transport only is a stand-in; no browser rendering or GPU acceptance",
+    "fake-indexeddb, local SQLite/R2, synthetic invitation/account and interval clock",
+    "Transport omits AbortSignal to return accepted late responses; no rollback or real network claim",
+    "No operational invitations/accounts/devices or original 24-step acceptance"
+  ]
+}

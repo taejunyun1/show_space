@@ -83,3 +83,24 @@ it('cancels deferred owner credentials when ownership changes and rejects a late
  await act(async()=>resolves.forEach(resolve=>resolve('owner-A-token')));expect(requests).toHaveLength(1);
  await click('새로고침');const old=requests[1];await mount({credential:async()=> 'owner-C-token',credentialIdentity:'owner-C'});expect(old.init.signal?.aborted).toBe(true);await settle(requests[2],page('C 의견'));await settle(old,{error:'이전 공유 회수'},410);expect(container.textContent).toContain('C 의견');expect(container.querySelector('[role="alert"]')).toBeNull();
 });
+
+it('retires a list and private drafts during a batched A-B-A account roundtrip',async()=>{
+ await account('A');await mount();await settle(requests[0],page('이전 A 의견'));await input(compose()!,'이전 비공개 초안');await click('새로고침');const old=requests[1];
+ await act(async()=>{useAuth.setState({user:user('B')});useAuth.setState({user:user('A')});});expect(old.init.signal?.aborted).toBe(true);expect(compose()).toBeNull();expect(container.textContent).not.toContain('이전 A 의견');await settle(requests[2],page('새 A 의견'));expect(compose()!.value).toBe('');await settle(old,page('이전 요청의 늦은 의견'));expect(container.textContent).toContain('새 A 의견');expect(container.textContent).not.toContain('이전 요청의 늦은 의견');
+});
+
+it.each(['viewer','archived'])('hides writing controls on a known private project permission change: %s',async permission=>{
+ await account('A');const id=crypto.randomUUID(),privateProject={id,name:'비공개 전시',role:'editor' as const,archived:false};await mount({shareId:id,privateProject});await settle(requests[0],page('편집자 의견'));await input(compose()!,'역할 변경 전 초안');await mount({shareId:id,privateProject:{...privateProject,...(permission==='viewer'?{role:'viewer' as const}:{archived:true})}});expect(compose()).toBeNull();expect(container.querySelector('.review-reply')).toBeNull();expect(container.textContent).not.toContain('댓글 삭제');await settle(requests[1],page('늦은 권한 정보',true));expect(compose()).toBeNull();
+});
+
+it('cancel preserves an exact draft for immediate retry and an old write cannot clear it or the new busy state',async()=>{
+ await account('A');await mount();await settle(requests[0],page('원래 의견'));await input(compose()!,'같은 내용 재시도');await submit();const first=requests[1],draft=JSON.parse(first.init.body as string);await click('댓글 작업 취소');expect(compose()!.value).toBe('같은 내용 재시도');await submit();const second=requests[2];expect(second.init.body).toBe(first.init.body);await settle(first,{...page('이전 성공'),items:[thread('이전 성공',draft.id)]});expect(compose()!.value).toBe('같은 내용 재시도');expect(container.textContent).toContain('댓글 처리 중');await settle(second,{...page('새 성공'),items:[thread('새 성공',draft.id)]});expect(compose()!.value).toBe('');expect(container.textContent).not.toContain('이전 성공');expect(container.textContent).toContain('새 성공');
+});
+
+it('a private write denial immediately disables further writes while keeping opinions readable',async()=>{
+ await account('A');const id=crypto.randomUUID();await mount({shareId:id,privateProject:{id,name:'비공개 전시'}});await settle(requests[0],page('읽을 수 있는 의견'));await input(compose()!,'권한 변경 중 입력');await submit();await settle(requests[1],{error:'열람자는 의견을 작성할 수 없습니다.'},403);expect(compose()).toBeNull();expect(container.querySelector('.review-reply')).toBeNull();expect(container.textContent).toContain('읽을 수 있는 의견');expect(container.textContent).toContain('열람자는 의견');await click('새로고침');await settle(requests[2],page('권한 재확인',true));expect(compose()!.value).toBe('권한 변경 중 입력');
+});
+
+it('a private edit denial also removes an already open inline editor',async()=>{
+ await account('A');const id=crypto.randomUUID();await mount({shareId:id,privateProject:{id,name:'비공개 전시'}});await settle(requests[0],page('원래 의견'));await click('수정');expect(container.querySelector('.review-post form')).not.toBeNull();await click('수정 저장');await settle(requests[1],{error:'작성 권한이 변경됐습니다.'},403);expect(container.querySelector('.review-post form')).toBeNull();expect(container.textContent).toContain('원래 의견');expect(compose()).toBeNull();
+});

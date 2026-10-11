@@ -16,7 +16,7 @@ export function ProjectArchiveContents({project,layout,section,onScene}:{project
  const length=(n:number)=>formatLength(n,project.displayUnit??'mm'),size=(w:number,h:number,d:number)=>[w,h,d].map(length).join(' × '),pose=(p:{x:number;y:number;z:number})=>`X ${length(p.x)} · Y ${length(p.y)} · Z ${length(p.z)}`;
  const status=(item:{visible:boolean;locked:boolean})=>`${item.visible?'표시':'숨김'} · ${item.locked?'잠김':'잠금 해제'}`;
  if(section==='space')return <div className="archive-records"><RecordCard title="공간 기록" rows={[
-  ['전시장',project.venue||'미지정'],['벽',`${layout.walls.length}개`],['연결된 개구부',`${layout.openings?.length??0}개`],['저장 치수',`${layout.dimensions?.length??0}개`],['바닥',layout.importedFloor?`가져온 외곽선 ${layout.importedFloor.length}개`:'벽 외곽선 기준'],['도면 축척',project.planReference?project.planReference.calibrated?`${length(project.planReference.mmPerPixel)} / px`:'축척 미지정':'도면 없음'],
+  ['전시장',project.venue||'미지정'],['벽',`${layout.walls.length}개`],['연결된 개구부',`${layout.openings?.length??0}개`],['저장 치수',`${layout.dimensions?.length??0}개`],['바닥',layout.importedFloor?`가져온 외곽선 ${layout.importedFloor.length}개`:'벽 외곽선 기준'],['도면 축척',layout.planReference?layout.planReference.calibrated?`${length(layout.planReference.mmPerPixel)} / px`:'축척 미지정':'도면 없음'],
  ]}/>{layout.walls.map(w=><RecordCard key={w.id} title={w.name} rows={[
   ['길이',length(Math.hypot(w.end.x-w.start.x,w.end.z-w.start.z))],['높이',length(w.heightMm)],['두께',length(w.thicknessMm)],['시작점',`X ${length(w.start.x)} · Z ${length(w.start.z)}`],['끝점',`X ${length(w.end.x)} · Z ${length(w.end.z)}`],['상태',status(w)],
  ]}/>)}{layout.referenceModel&&<RecordCard title={'참고 공간 · '+layout.referenceModel.name} rows={[
