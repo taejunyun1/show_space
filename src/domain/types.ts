@@ -73,6 +73,8 @@ export interface ModelArtwork extends ArtworkInformation {
 }
 
 export interface SceneStructure {
+  /** Absent in legacy Scenes; an empty object explicitly captures no plan. */
+  plan?:ScenePlan
   modelArtworks?:ModelArtwork[]
   outdoor?:OutdoorSettings
   lights?:ExhibitionLight[]
@@ -132,3 +134,5 @@ export interface Project {
 }
 
 export interface EntitySelection { type: 'wall' | 'artwork' | 'modelArtwork' | 'light'; id: string }
+
+export type ScenePlan=Pick<Project,'planImageUrl'|'planOpacity'|'planReference'|'planLabels'|'planAnalysis'|'sourcePlan'|'planDraft'>;

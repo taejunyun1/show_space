@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-11",
+  "projectId": "plan-workflow",
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "도면 A",
+      "planReference": {
+        "widthPx": 1000,
+        "heightPx": 800,
+        "origin": {
+          "x": -900,
+          "z": -900
+        },
+        "mmPerPixel": 10,
+        "calibrated": true
+      },
+      "draft": true
+    },
+    {
+      "id": "scene-2",
+      "name": "도면 B",
+      "planReference": {
+        "widthPx": 800,
+        "heightPx": 1000,
+        "origin": {
+          "x": 100,
+          "z": 140
+        },
+        "mmPerPixel": 9.95,
+        "calibrated": false
+      },
+      "draft": false
+    }
+  ],
+  "assetCount": 2,
+  "assets": [
+    {
+      "path": "assets/images/71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d.png",
+      "mime": "image/png",
+      "bytes": 5400,
+      "sha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d"
+    },
+    {
+      "path": "assets/images/edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1.png",
+      "mime": "image/png",
+      "bytes": 5519,
+      "sha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1"
+    }
+  ],
+  "backupExact": true,
+  "zipCrc": true,
+  "sourcePlanDistinct": true,
+  "undoRedo": true,
+  "detachedOutputPlansExact": true,
+  "latestName": "최신 전시 이름",
+  "decoderClosed": 4,
+  "limitations": [
+    "Owned synthetic JPEGs/native decoder and Canvas; local production wall/symbol algorithms",
+    "OCR returns no text; Worker/pointer/DOM transport adapted; no browser/GPU or PDF output rendered",
+    "Not an operational authentication/share/deployment or whole 24-step acceptance"
+  ]
+}

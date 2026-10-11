@@ -1,0 +1,319 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "3b319cde9c57b66192cd64952cfca6fb7c74d9c9",
+  "baseline": {
+    "runtimeFiles": 7,
+    "tests": 46,
+    "failed": 19,
+    "passed": 27,
+    "durationSeconds": 2.77,
+    "method": "Temporary source copy; seven pre-existing runtime files replaced; live worktree unchanged"
+  },
+  "newDomainTests": 19,
+  "extendedNativeWorkflowTests": 1,
+  "related": {
+    "files": 6,
+    "passed": 65,
+    "failed": 0,
+    "results": [
+      {
+        "file": "src/components/Exhibition.workflow.test.tsx",
+        "status": "passed",
+        "tests": 1
+      },
+      {
+        "file": "src/components/PlanImport.workflow.test.tsx",
+        "status": "passed",
+        "tests": 27
+      },
+      {
+        "file": "src/lib/projectPackage.test.ts",
+        "status": "passed",
+        "tests": 9
+      },
+      {
+        "file": "src/domain/editablePlanDraft.test.ts",
+        "status": "passed",
+        "tests": 8
+      },
+      {
+        "file": "src/domain/scenePlan.test.ts",
+        "status": "passed",
+        "tests": 19
+      },
+      {
+        "file": "src/domain/sceneSnapshot.test.ts",
+        "status": "passed",
+        "tests": 1
+      }
+    ]
+  },
+  "full": {
+    "passedFiles": 249,
+    "skippedFiles": 10,
+    "passedTests": 1540,
+    "skippedTests": 10,
+    "durationSeconds": 12.34
+  },
+  "build": {
+    "typescriptPassed": true,
+    "vitePassed": true,
+    "viteDurationSeconds": 5.38
+  },
+  "nativeWorkflow": {
+    "date": "2026-10-11",
+    "projectId": "plan-workflow",
+    "scenes": [
+      {
+        "id": "scene-1",
+        "name": "도면 A",
+        "planReference": {
+          "widthPx": 1000,
+          "heightPx": 800,
+          "origin": {
+            "x": -900,
+            "z": -900
+          },
+          "mmPerPixel": 10,
+          "calibrated": true
+        },
+        "draft": true
+      },
+      {
+        "id": "scene-2",
+        "name": "도면 B",
+        "planReference": {
+          "widthPx": 800,
+          "heightPx": 1000,
+          "origin": {
+            "x": 100,
+            "z": 140
+          },
+          "mmPerPixel": 9.95,
+          "calibrated": false
+        },
+        "draft": false
+      }
+    ],
+    "assetCount": 2,
+    "assets": [
+      {
+        "path": "assets/images/71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d.png",
+        "mime": "image/png",
+        "bytes": 5400,
+        "sha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d"
+      },
+      {
+        "path": "assets/images/edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1.png",
+        "mime": "image/png",
+        "bytes": 5519,
+        "sha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1"
+      }
+    ],
+    "backupExact": true,
+    "zipCrc": true,
+    "sourcePlanDistinct": true,
+    "undoRedo": true,
+    "detachedOutputPlansExact": true,
+    "latestName": "최신 전시 이름",
+    "decoderClosed": 4,
+    "limitations": [
+      "Owned synthetic JPEGs/native decoder and Canvas; local production wall/symbol algorithms",
+      "OCR returns no text; Worker/pointer/DOM transport adapted; no browser/GPU or PDF output rendered",
+      "Not an operational authentication/share/deployment or whole 24-step acceptance"
+    ]
+  },
+  "independentInputCheck": {
+    "samples": [
+      {
+        "plan": "A",
+        "x": 50,
+        "y": 50,
+        "expected": 255,
+        "inputRgb": [
+          255,
+          255,
+          255
+        ],
+        "storedRgb": [
+          255,
+          255,
+          255
+        ],
+        "error": 0
+      },
+      {
+        "plan": "A",
+        "x": 400,
+        "y": 104,
+        "expected": 0,
+        "inputRgb": [
+          0,
+          0,
+          0
+        ],
+        "storedRgb": [
+          0,
+          0,
+          0
+        ],
+        "error": 0
+      },
+      {
+        "plan": "A",
+        "x": 895,
+        "y": 400,
+        "expected": 0,
+        "inputRgb": [
+          0,
+          0,
+          0
+        ],
+        "storedRgb": [
+          0,
+          0,
+          0
+        ],
+        "error": 0
+      },
+      {
+        "plan": "A",
+        "x": 500,
+        "y": 750,
+        "expected": 255,
+        "inputRgb": [
+          255,
+          255,
+          255
+        ],
+        "storedRgb": [
+          255,
+          255,
+          255
+        ],
+        "error": 0
+      },
+      {
+        "plan": "B",
+        "x": 40,
+        "y": 40,
+        "expected": 255,
+        "inputRgb": [
+          255,
+          255,
+          255
+        ],
+        "storedRgb": [
+          255,
+          255,
+          255
+        ],
+        "error": 0
+      },
+      {
+        "plan": "B",
+        "x": 400,
+        "y": 124,
+        "expected": 0,
+        "inputRgb": [
+          0,
+          0,
+          0
+        ],
+        "storedRgb": [
+          0,
+          0,
+          0
+        ],
+        "error": 0
+      },
+      {
+        "plan": "B",
+        "x": 715,
+        "y": 500,
+        "expected": 0,
+        "inputRgb": [
+          0,
+          0,
+          0
+        ],
+        "storedRgb": [
+          0,
+          0,
+          0
+        ],
+        "error": 0
+      },
+      {
+        "plan": "B",
+        "x": 400,
+        "y": 950,
+        "expected": 255,
+        "inputRgb": [
+          255,
+          255,
+          255
+        ],
+        "storedRgb": [
+          255,
+          255,
+          255
+        ],
+        "error": 0
+      }
+    ],
+    "maxError": 0,
+    "files": {
+      "input-A.jpg": {
+        "bytes": 7904,
+        "sha256": "0617f54db6dda0032a5b7451d4470c917998a21ddd96899f9c6f8c0fea668c84"
+      },
+      "input-B.jpg": {
+        "bytes": 5852,
+        "sha256": "d1961e3d58c112f7197237955bf383da5d621576af701b8d6494f66f1c3738de"
+      },
+      "plan-A.png": {
+        "bytes": 5519,
+        "sha256": "edb506553e343ca54a6f8465afaffd832f2ea5f26431f3034c7ad7444e7a38c1"
+      },
+      "plan-B.png": {
+        "bytes": 5400,
+        "sha256": "71fcba95c293344c0c9016b918ebcb801b7ff634936fd1c7f137b4948f20300d"
+      },
+      "project.gonggan.zip": {
+        "bytes": 4304,
+        "sha256": "960603a394cc03cf4f2c5351c6dbcd0932d26fd994b80e96824b159ecb0fb26f"
+      },
+      "project.json": {
+        "bytes": 34341,
+        "sha256": "543adff7aae57e6e88cb10c9eaad47eb70fb24ada778c1f7a0105986c23b5cd4"
+      },
+      "workflow.json": {
+        "bytes": 1684,
+        "sha256": "6d1355d7ba94251e9a86ffe2658a94642218285c991f1bd1a8a943ae62f389d2"
+      }
+    },
+    "zipCrc": true,
+    "assetsExact": true
+  },
+  "sourceHashes": {
+    "src/domain/types.ts": "f67ca9f4abce6f8c02ba42df3482dedb14874f63db35a7347f5b6f13c0ceb48b",
+    "src/domain/scenePlan.ts": "e49fea27bf336c936b7a95c55ffdff10b14c199035564a104da50d3a4033a543",
+    "src/domain/sceneSnapshot.ts": "c60d483eb4c5e1877df7b4676e971d6078db06e99e7be0a40a724ccd67661ae1",
+    "src/domain/sceneProject.ts": "47849bf86a29e7fb54b39304f4133fec2f309dc1114e3412a4756c74756ba70f",
+    "src/domain/model.ts": "757378f7eb49175a795312e4bc9433c3e5fafb9c6b858550a43b6dfaadf3ded7",
+    "src/domain/editablePlanDraft.ts": "af1ad22c1a6887e2ddba5b742b1b9f7045a77427a161069a0885d8ea593f70a0",
+    "src/state/editor.ts": "edccd92bb4f7e5320b09404352097ddfdc1f69dfcd0abbfc60d438f930114e75",
+    "src/lib/projectPackage.ts": "47906455f143d824e63e93512ecf7147084adabb3c1746fcd63b83218c5960fb",
+    "src/domain/scenePlan.test.ts": "b6429cf5e6242e4e2f87603a2b8070b2b912f8c3074f8ac70a2c39630daefe23",
+    "src/components/PlanImport.workflow.test.tsx": "a824c75a52b973d9b09abde38349592a39fe8989aed3fe172c951689e4b65a7a"
+  },
+  "deployed": false,
+  "browserGpuMeasured": false,
+  "newTwoPlanPdfGlbProduced": false,
+  "limitations": [
+    "Owned synthetic JPEGs; native decode/Canvas production algorithms, OCR empty/Worker/DOM pointer adapters",
+    "Detached output input verified, not final two-plan PDF/GLB/GPU pixels",
+    "No operational authentication/share URL, real user drawings/devices, performance/success metrics or whole 24-step completion"
+  ]
+}

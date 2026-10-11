@@ -1,10 +1,13 @@
 import type {Project,Scene} from './types';
+import {restoreScenePlan} from './scenePlan';
 
 /** A detached Scene projection for exports and sharing; never restores the editor. */
 export function sceneProject(project:Project,scene:Scene):Project{
- const result=structuredClone({...project,scenes:[]});
+ let result:Project=structuredClone({...project,scenes:[]});
  if(scene.structure){
-  Object.assign(result,structuredClone(scene.structure));
+  const {plan,...structure}=scene.structure;
+  Object.assign(result,structuredClone(structure));
+  result=restoreScenePlan(result,plan);
   if(scene.structure.lights!==undefined)result.lighting=scene.structure.lighting?structuredClone(scene.structure.lighting):undefined;
   if(scene.structure.floorColor!==undefined)result.floorMaterial=scene.structure.floorMaterial?structuredClone(scene.structure.floorMaterial):undefined;
   result.referenceModel=scene.structure.referenceModel?structuredClone(scene.structure.referenceModel):undefined;

@@ -53,5 +53,14 @@ export function calibrateEditableDraft(project:Project,a:Point,b:Point,lengthMm:
  const opening=(o:Opening):Opening=>({...o,start:o.start.point?{point:point(o.start.point)}:o.start,end:o.end.point?{point:point(o.end.point)}:o.end});
  const dimension=(d:SavedDimension):SavedDimension=>({...d,start:measurement(d.start),end:measurement(d.end),offsetMm:d.offsetMm*ratio});
  const structure=(s:SceneStructure):SceneStructure=>({...s,walls:s.walls.map(wall),openings:s.openings.map(opening),dimensions:s.dimensions.map(dimension),unplacedArtworks:s.unplacedArtworks.map(art=>({...art,alongMm:art.alongMm*ratio}))});
- return {...project,planReference:nextReference,walls:project.walls.map(wall),artworks:project.artworks.map(art=>({...art,alongMm:art.alongMm*ratio})),...(project.unplacedArtworks?{unplacedArtworks:project.unplacedArtworks.map(art=>({...art,alongMm:art.alongMm*ratio}))}:{}),scenes:project.scenes.map(scene=>({...scene,artworks:scene.artworks.map(art=>({...art,alongMm:art.alongMm*ratio})),...(scene.structure?{structure:structure(scene.structure)}:{})})),openings:project.openings?.map(opening),dimensions:project.dimensions?.map(dimension),planDraft:{...project.planDraft,originalWalls:project.planDraft.originalWalls.map(wall)}};
+ const scenes=project.scenes.map(scene=>{
+  const plan=scene.structure?.plan,r=plan?.planReference;
+  // Legacy snapshots assumed one drawing. New snapshots only share this
+  // pixel-to-mm conversion when both the source and coordinate system match.
+  if(plan!==undefined&&(!r||plan.planImageUrl!==project.planImageUrl||plan.planDraft?.sourceEvidenceHash!==project.planDraft!.sourceEvidenceHash||r.widthPx!==reference.widthPx||r.heightPx!==reference.heightPx||r.origin.x!==reference.origin.x||r.origin.z!==reference.origin.z||r.mmPerPixel!==reference.mmPerPixel||r.calibrated!==reference.calibrated))return scene;
+  const next={...scene,artworks:scene.artworks.map(art=>({...art,alongMm:art.alongMm*ratio})),...(scene.structure?{structure:structure(scene.structure)}:{})};
+  if(plan&&next.structure)next.structure.plan={...plan,planReference:structuredClone(nextReference),planDraft:{...plan.planDraft!,originalWalls:plan.planDraft!.originalWalls.map(wall)}};
+  return next;
+ });
+ return {...project,planReference:nextReference,walls:project.walls.map(wall),artworks:project.artworks.map(art=>({...art,alongMm:art.alongMm*ratio})),...(project.unplacedArtworks?{unplacedArtworks:project.unplacedArtworks.map(art=>({...art,alongMm:art.alongMm*ratio}))}:{}),scenes,openings:project.openings?.map(opening),dimensions:project.dimensions?.map(dimension),planDraft:{...project.planDraft,originalWalls:project.planDraft.originalWalls.map(wall)}};
 }

@@ -1,3 +1,4 @@
+import {restoreScenePlan} from '../domain/scenePlan';
 import {snapModelArtworkTransform,type ModelArtworkSnapGuide,type ModelArtworkSnapOptions} from '../domain/modelArtworkSnap';
 import {appendSceneSnapshot} from '../domain/sceneSnapshot';
 import type {SceneThumbnail} from '../domain/types';
@@ -532,7 +533,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const project = get().project
       const scene = project.scenes.find((item) => item.id === id)
       if (!scene) throw new Error('장면을 찾을 수 없습니다.')
-      const commitScene=(next:Project)=>{get().commit(preserveCurrentNotes(project,next));set(state=>({projectContextVersion:state.projectContextVersion+1}));};
+      const commitScene=(next:Project)=>{get().commit(preserveCurrentNotes(project,restoreScenePlan(next,scene.structure?.plan)));set(state=>({projectContextVersion:state.projectContextVersion+1,view:safeView(state.project,state.view)}));};
       if(scene.structure){
         commitScene(parseProject({...project,...(scene.structure.modelArtworks!==undefined?{modelArtworks:clone(scene.structure.modelArtworks)}:{}),...(scene.structure.outdoor?{outdoor:clone(scene.structure.outdoor)}:{}),...(scene.structure.lights!==undefined?{lights:clone(scene.structure.lights),lighting:clone(scene.structure.lighting)}:{}),...(scene.structure.floorColor!==undefined?{floorColor:scene.structure.floorColor,floorMaterial:scene.structure.floorMaterial?clone(scene.structure.floorMaterial):undefined}:{}),importedFloor:scene.structure.importedFloor?clone(scene.structure.importedFloor):undefined,referenceModel:scene.structure.referenceModel?clone(scene.structure.referenceModel):undefined,walls:clone(scene.structure.walls),artworks:clone(scene.artworks),unplacedArtworks:clone(scene.structure.unplacedArtworks),openings:clone(scene.structure.openings),dimensions:clone(scene.structure.dimensions)}))
       }else{

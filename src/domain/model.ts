@@ -1,3 +1,4 @@
+import {scenePlanKeys} from './scenePlan';
 import {MAX_PROJECTORS} from './projection';
 import {wallLength} from './wallGeometry';
 import {parseVideoArtwork} from './mediaArtwork';
@@ -18,7 +19,7 @@ import {validateOpenings} from './openings';
 import {validateDimensions,resolveAnchor} from './measurements';
 import {validatePlanLabels,type PlanLabel} from './planLabels'
 import { validatePlanReference } from './plan'
-import type { Artwork, EntitySelection, Point, Project, UnplacedArtwork, Wall } from './types'
+import type { Artwork, EntitySelection, Point, Project, ScenePlan, UnplacedArtwork, Wall } from './types'
 
 const frames = new Set<Artwork['frame']>(['black', 'natural', 'white', 'none'])
 const imageLimit = 12 * 1024 * 1024
@@ -387,6 +388,7 @@ export function parseProject(input: unknown): Project {
     let sceneWallIds=wallIds
     if(scene.structure!==undefined){
       const structure=object(scene.structure,'장면 구조')
+      if(structure.plan!==undefined){const plan=object(structure.plan,'장면 도면');if(Object.keys(plan).some(key=>!scenePlanKeys.includes(key as typeof scenePlanKeys[number])))throw new Error('장면 도면 필드가 올바르지 않습니다.');parsePlanState(plan);}
       if(structure.lighting!==undefined)parseLighting(structure.lighting)
       if(structure.outdoor!==undefined)parseOutdoor(structure.outdoor)
       if(structure.floorColor!==undefined)text(structure.floorColor,'장면 바닥 색상')
@@ -439,6 +441,18 @@ export function parseProject(input: unknown): Project {
       if(!Number.isFinite(camera.zoom)||Number(camera.zoom)<=0)throw new Error('장면 시점 확대율이 올바르지 않습니다.')
     }
   }
+  const result=structuredClone(raw);
+  if(raw.outdoor!==undefined)result.outdoor=parseOutdoor(raw.outdoor);
+  if(raw.lights!==undefined)result.lights=parseLights(raw.lights);
+  if(raw.lighting!==undefined)result.lighting=parseLighting(raw.lighting);
+  for(const scene of result.scenes as Array<{structure?:Record<string,unknown>}>)if(scene.structure){if(scene.structure.plan!==undefined)scene.structure.plan=parsePlanState(object(scene.structure.plan,'장면 도면'));if(scene.structure.outdoor!==undefined)scene.structure.outdoor=parseOutdoor(scene.structure.outdoor);if(scene.structure.lights!==undefined)scene.structure.lights=parseLights(scene.structure.lights);if(scene.structure.lighting!==undefined)scene.structure.lighting=parseLighting(scene.structure.lighting);}
+  Object.assign(result,parsePlanState(raw));
+  return result as unknown as Project
+}
+
+/** Root documents and saved Scenes validate against their own plan image/coordinate system. */
+function parsePlanState(raw:Record<string,unknown>):ScenePlan {
+  const result=structuredClone(Object.fromEntries(scenePlanKeys.filter(key=>raw[key]!==undefined).map(key=>[key,raw[key]])));
   if ('planImageUrl' in raw && raw.planImageUrl !== undefined) safeImage(raw.planImageUrl, '도면')
   if ('planOpacity' in raw && raw.planOpacity !== undefined) { finite(raw.planOpacity, '도면 투명도'); if (raw.planOpacity < 0 || raw.planOpacity > 1) throw new Error('도면 투명도는 0에서 1 사이여야 합니다.') }
   if (raw.planReference !== undefined) {
@@ -456,11 +470,6 @@ export function parseProject(input: unknown): Project {
     for(const key of ['widthPx','heightPx'])if(typeof source[key]!=='number'||!Number.isFinite(source[key])||source[key]<1||source[key]>10000)throw new Error('원본 도면 크기가 올바르지 않습니다.');
     validatePlanLabels(source.labels,source.widthPx as number,source.heightPx as number);
   }
-  const result=structuredClone(raw);
-  if(raw.outdoor!==undefined)result.outdoor=parseOutdoor(raw.outdoor);
-  if(raw.lights!==undefined)result.lights=parseLights(raw.lights);
-  if(raw.lighting!==undefined)result.lighting=parseLighting(raw.lighting);
-  for(const scene of result.scenes as Array<{structure?:Record<string,unknown>}>)if(scene.structure){if(scene.structure.outdoor!==undefined)scene.structure.outdoor=parseOutdoor(scene.structure.outdoor);if(scene.structure.lights!==undefined)scene.structure.lights=parseLights(scene.structure.lights);if(scene.structure.lighting!==undefined)scene.structure.lighting=parseLighting(scene.structure.lighting);}
   if(raw.planLabels!==undefined){const r=raw.planReference as Project['planReference'];if(!r)throw new Error('표기 인식 결과에 도면 정보가 필요합니다.');result.planLabels=validatePlanLabels(raw.planLabels,r.widthPx,r.heightPx);}
   if(raw.planAnalysis!==undefined){
     const a=raw.planAnalysis as Project['planAnalysis'],r=raw.planReference as Project['planReference'];
@@ -474,5 +483,5 @@ export function parseProject(input: unknown): Project {
     const ids=new Set<string>();
     for(const line of a.lines){if(!line||typeof line.id!=='string'||line.id.length>200||ids.has(line.id)||!Number.isFinite(line.thicknessPx)||line.thicknessPx<=0||(line.solidSupportThicknessPx!==undefined&&(!Number.isFinite(line.solidSupportThicknessPx)||line.solidSupportThicknessPx<=0||line.solidSupportThicknessPx>Math.max(r.widthPx,r.heightPx)))||![line.start,line.end].every(p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>=0&&p.y>=0&&p.x<=r.widthPx&&p.y<=r.heightPx))throw new Error('자동 분석 선 정보가 올바르지 않습니다.');ids.add(line.id);}
   }
-  return result as unknown as Project
+  return result as ScenePlan;
 }

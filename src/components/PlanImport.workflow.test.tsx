@@ -13,7 +13,11 @@ import {transformPlan} from '../lib/planTransform';
 import {analyzePlan} from '../lib/analyzePlan';
 import {selectPlanPage} from '../lib/selectPlanPage';
 import {createCanvas,loadImage,Image as NativeImage,type Canvas} from '@napi-rs/canvas';
-import {File as NodeFile} from 'node:buffer';
+import {Blob as NodeBlob,File as NodeFile} from 'node:buffer';
+import JSZip from 'jszip';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {sceneProject} from '../domain/sceneProject';
+import {exportProjectPackage,importProjectPackage,projectImageUrls} from '../lib/projectPackage';
 
 vi.mock('../lib/planImport',async original=>({...await original<typeof import('../lib/planImport')>(),loadPlanFile:vi.fn()}));
 vi.mock('../lib/analyzePlan',()=>({analyzePlan:vi.fn()}));
@@ -181,7 +185,7 @@ it('ignores automatic PDF selection progress and results after its file is repla
  const job=deferred<Awaited<ReturnType<typeof selectPlanPage>>>();let progress!:(stage:string)=>void,signal!:AbortSignal;vi.mocked(selectPlanPage).mockImplementationOnce((_doc,s,p)=>{signal=s;progress=p;return job.promise;});vi.mocked(loadPlanFile).mockImplementation(async f=>loaded(page(f.name),f.name.endsWith('.pdf')?2:1));await renderDialog(new File(['pdf'],'old.pdf',{type:'application/pdf'}));await renderDialog(new File(['image'],'new.jpg',{type:'image/jpeg'}));expect(signal.aborted).toBe(true);await act(async()=>{progress('OLD PDF STATUS');job.resolve({pageNumber:2,page:page('old-pdf'),inspected:2,verified:false,failures:[]});});expect(container.textContent).not.toContain('OLD PDF STATUS');expect(container.textContent).not.toContain('2페이지를 분석');await click('이 도면 배치');expect(place).toHaveBeenCalledWith(expect.objectContaining({imageUrl:'new.jpg'}));
 });
 
-it('decodes a real JPEG, detects its actual wall pixels and adopts its editable draft through PlanView',async()=>{
+it('decodes two real JPEG plans through draft/calibration and reference placement, then restores Scene A/B, detached output and exact asset backup',async()=>{
  const actualImport=await vi.importActual<typeof import('../lib/planImport')>('../lib/planImport'),actualAnalysis=await vi.importActual<typeof import('../lib/analyzePlan')>('../lib/analyzePlan');
  vi.mocked(loadPlanFile).mockImplementation(actualImport.loadPlanFile);vi.mocked(analyzePlan).mockImplementation(actualAnalysis.analyzePlan);
  // Native JPEG/Image/Canvas transport for real local detector algorithms. OCR
@@ -191,4 +195,28 @@ it('decodes a real JPEG, detects its actual wall pixels and adopts its editable 
  const canvases=new WeakMap<HTMLCanvasElement,Canvas>();const contextBridge=function(this:HTMLCanvasElement,kind:string){if(kind!=='2d')return null;let canvas=canvases.get(this);if(!canvas){canvas=createCanvas(this.width,this.height);canvases.set(this,canvas);}const ctx=canvas.getContext('2d'),draw=ctx.drawImage.bind(ctx);ctx.drawImage=((image:ImageAdapter|NativeImage,...args:unknown[])=>Reflect.apply(draw,ctx,[image instanceof ImageAdapter?image.native!:image,...args])) as typeof ctx.drawImage;return ctx as unknown as RenderingContext;};vi.spyOn(HTMLCanvasElement.prototype,'getContext').mockImplementation(contextBridge as HTMLCanvasElement['getContext']);vi.spyOn(HTMLCanvasElement.prototype,'toDataURL').mockImplementation(function(this:HTMLCanvasElement){return canvases.get(this)!.toDataURL('image/png');});
  const input=createCanvas(1000,800),context=input.getContext('2d');context.fillStyle='white';context.fillRect(0,0,1000,800);context.fillStyle='black';context.fillRect(100,100,800,8);context.fillRect(892,100,8,600);const bytes=new Uint8Array(input.toBuffer('image/jpeg'));source=new File([bytes.buffer],'실제 벽.jpg',{type:'image/jpeg'});await renderPlan();
  await vi.waitFor(async()=>{await act(async()=>{});expect([...container.querySelectorAll<HTMLButtonElement>('button')].find(b=>b.textContent==='벽 초안으로 편집 시작')?.disabled,container.textContent).toBe(false);},{timeout:10000});await click('벽 초안으로 편집 시작');const p=useEditor.getState().project;expect(p.planReference).toMatchObject({widthPx:1000,heightPx:800,calibrated:false});expect(p.planAnalysis?.lineState).toBe('complete');expect(p.walls.length).toBeGreaterThanOrEqual(2);expect(p.planAnalysis?.numericCount).toBe(0);expect(parseProject(p)).toEqual(p);expect(closed).toHaveBeenCalled();expect(useEditor.getState().past).toHaveLength(1);expect(container.querySelector('dialog')).toBeNull();
+ await click('두 점 축척 보정');const svg=container.querySelector('svg.plan-svg')!;Object.defineProperty(svg,'getScreenCTM',{configurable:true,value:()=>({inverse:()=>({a:1,b:0,c:0,d:1,e:0,f:0})})});
+ vi.stubGlobal('DOMPoint',class {constructor(public x:number,public y:number){}matrixTransform(){return {x:this.x,y:this.y};}});
+ for(const x of [100,200])await act(async()=>svg.dispatchEvent(new MouseEvent('pointerdown',{bubbles:true,button:0,clientX:x,clientY:100})));await number('보정 실제 길이','100');await click('축척 적용');
+ await act(async()=>{expect(useEditor.getState().saveScene('도면 A')).toBe(true);});const first=structuredClone(useEditor.getState().project),sceneA=first.scenes.at(-1)!;
+ expect(first.planReference).toMatchObject({calibrated:true,mmPerPixel:10});
+ const inputB=createCanvas(800,1000),ctxB=inputB.getContext('2d');ctxB.fillStyle='white';ctxB.fillRect(0,0,800,1000);ctxB.fillStyle='black';ctxB.fillRect(80,120,640,8);ctxB.fillRect(712,120,8,760);const bytesB=new Uint8Array(inputB.toBuffer('image/jpeg'));
+ await renderPlan(new File([bytesB.buffer],'두 번째 도면.jpg',{type:'image/jpeg'}));
+ await vi.waitFor(async()=>{await act(async()=>{});expect([...container.querySelectorAll<HTMLButtonElement>('button')].find(b=>b.textContent==='이 도면 배치')?.disabled,container.textContent).toBe(false);},{timeout:10000});await click('이 도면 배치');
+ await act(async()=>{const state=useEditor.getState(),wall=state.project.walls[0];state.patchWall(wall.id,{end:{...wall.end,x:wall.end.x+400}});state.renameProject('최신 전시 이름');expect(state.saveScene('도면 B')).toBe(true);});
+ const second=structuredClone(useEditor.getState().project),sceneB=second.scenes.at(-1)!;expect(second.planReference).toMatchObject({widthPx:800,heightPx:1000,calibrated:false});expect(second.planDraft).toBeUndefined();expect(second.planImageUrl).not.toBe(first.planImageUrl);
+ const planKeys=['planImageUrl','planOpacity','planReference','planLabels','planAnalysis','sourcePlan','planDraft'] as const;
+ const samePlan=(actual:typeof first,expected:typeof first)=>{for(const key of planKeys)expect(actual[key],key).toEqual(expected[key]);expect(actual.walls).toEqual(expected.walls);};
+ const history=useEditor.getState().past.length;await act(async()=>useEditor.getState().restoreScene(sceneA.id));samePlan(useEditor.getState().project,first);expect(useEditor.getState().project.name).toBe('최신 전시 이름');expect(svg.querySelector('image')?.getAttribute('href')).toBe(first.planImageUrl);expect(useEditor.getState().past).toHaveLength(history+1);
+ await act(async()=>useEditor.getState().undo());samePlan(useEditor.getState().project,second);await act(async()=>useEditor.getState().redo());samePlan(useEditor.getState().project,first);
+ await act(async()=>useEditor.getState().restoreScene(sceneB.id));samePlan(useEditor.getState().project,second);expect(svg.querySelector('image')?.getAttribute('href')).toBe(second.planImageUrl);
+ const current=useEditor.getState().project;for(const [scene,expected] of [[sceneA,first],[sceneB,second]] as const){const detached=sceneProject(current,scene);samePlan(detached,expected);expect(parseProject(detached)).toEqual(detached);expect(detached).not.toHaveProperty('plan');}
+ vi.stubGlobal('Blob',NodeBlob);const backup=await exportProjectPackage(current,async()=>{throw new Error('Unexpected external source');}),packed=await backup.arrayBuffer(),archive=await JSZip.loadAsync(packed,{checkCRC32:true}),manifest=JSON.parse(await archive.file('manifest.json')!.async('string')),document=JSON.parse(await archive.file('project.json')!.async('string'));
+ expect(manifest.assets).toHaveLength(2);expect(projectImageUrls(current)).toEqual(expect.arrayContaining([first.planImageUrl,second.planImageUrl]));expect(JSON.stringify(document)).not.toContain('data:image');
+ const restored=await importProjectPackage(packed);expect(restored).toEqual(current);samePlan(sceneProject(restored,restored.scenes[0]),first);samePlan(sceneProject(restored,restored.scenes[1]),second);
+ const decodedA=await loadImage(first.planImageUrl!),decodedB=await loadImage(second.planImageUrl!);expect([decodedA.width,decodedA.height]).toEqual([1000,800]);expect([decodedB.width,decodedB.height]).toEqual([800,1000]);
+ if(process.env.GONGGAN_SCENE_PLAN_PROOF==='1'){
+  const dir='docs/validation/scene-plan-2026-10-11';await mkdir(dir,{recursive:true});await writeFile(dir+'/input-A.jpg',bytes);await writeFile(dir+'/input-B.jpg',bytesB);await writeFile(dir+'/plan-A.png',Buffer.from(first.planImageUrl!.split(',')[1],'base64'));await writeFile(dir+'/plan-B.png',Buffer.from(second.planImageUrl!.split(',')[1],'base64'));await writeFile(dir+'/project.gonggan.zip',new Uint8Array(packed));await writeFile(dir+'/project.json',JSON.stringify(current,null,2)+'\n');
+  await writeFile(dir+'/workflow.json',JSON.stringify({date:'2026-10-11',projectId:current.id,scenes:current.scenes.map(s=>({id:s.id,name:s.name,planReference:s.structure?.plan?.planReference,draft:!!s.structure?.plan?.planDraft})),assetCount:manifest.assets.length,assets:manifest.assets,backupExact:true,zipCrc:true,sourcePlanDistinct:true,undoRedo:true,detachedOutputPlansExact:true,latestName:current.name,decoderClosed:closed.mock.calls.length,limitations:['Owned synthetic JPEGs/native decoder and Canvas; local production wall/symbol algorithms','OCR returns no text; Worker/pointer/DOM transport adapted; no browser/GPU or PDF output rendered','Not an operational authentication/share/deployment or whole 24-step acceptance']},null,2)+'\n');
+ }
 },20000);
