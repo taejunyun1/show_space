@@ -1,0 +1,876 @@
+{
+  "outdoor": {
+    "mode": "outdoor",
+    "latitude": 37.5665,
+    "longitude": 126.978,
+    "timeZone": "Asia/Seoul",
+    "date": "2026-10-11",
+    "time": "09:00",
+    "northDeg": 0,
+    "preset": "clear",
+    "sunIntensity": 3,
+    "shadow": true,
+    "occurrence": "earlier"
+  },
+  "lights": [
+    {
+      "id": "light-1",
+      "name": "스팟 조명 1",
+      "kind": "spot",
+      "position": {
+        "x": 3278.5714285714284,
+        "y": 3300,
+        "z": 2891.572407883462
+      },
+      "target": {
+        "x": 3278.5714285714284,
+        "y": 1750,
+        "z": 1691.5724078834617
+      },
+      "intensity": 120,
+      "kelvin": 5500,
+      "beamDeg": 40,
+      "penumbra": 0.3,
+      "distanceMm": 0,
+      "widthMm": 1000,
+      "heightMm": 500,
+      "shadow": true,
+      "visible": true
+    }
+  ],
+  "lighting": {
+    "ambient": 0.12,
+    "hemisphere": 0.15,
+    "fill": 0,
+    "environment": 0.08
+  },
+  "schemaVersion": 1,
+  "displayUnit": "cm",
+  "name": "연속 검증 전시",
+  "venue": "성수 갤러리",
+  "floorColor": "#f1f1ed",
+  "walls": [
+    {
+      "id": "auto-wall-1",
+      "name": "자동 벽 1",
+      "start": {
+        "x": 1678.5714285714284,
+        "z": 1596.5724078834617
+      },
+      "end": {
+        "x": 9521.42857142857,
+        "z": 1596.5724078834617
+      },
+      "heightMm": 3500,
+      "thicknessMm": 150,
+      "color": "#b59a76",
+      "material": {
+        "preset": "wood",
+        "roughness": 0.65,
+        "metalness": 0,
+        "opacity": 1,
+        "transmission": 0,
+        "thicknessMm": 0,
+        "ior": 1.5,
+        "clearcoat": 0,
+        "sheen": 0,
+        "texture": {
+          "imageId": "10",
+          "widthMm": 2000,
+          "heightMm": 1000
+        }
+      },
+      "role": "boundary"
+    },
+    {
+      "id": "auto-wall-2",
+      "name": "자동 벽 2",
+      "start": {
+        "x": 1678.5714285714284,
+        "z": 7603.427592116537
+      },
+      "end": {
+        "x": 9521.42857142857,
+        "z": 7603.427592116537
+      },
+      "heightMm": 3000,
+      "thicknessMm": 150,
+      "color": "#ffffff",
+      "role": "boundary"
+    },
+    {
+      "id": "auto-wall-3",
+      "name": "자동 벽 3",
+      "start": {
+        "x": 1678.5714285714284,
+        "z": 1596.5724078834617
+      },
+      "end": {
+        "x": 1678.5714285714284,
+        "z": 7603.427592116537
+      },
+      "heightMm": 3000,
+      "thicknessMm": 150,
+      "color": "#ffffff",
+      "role": "boundary"
+    },
+    {
+      "id": "auto-wall-4",
+      "name": "자동 벽 4",
+      "start": {
+        "x": 9521.42857142857,
+        "z": 1596.5724078834617
+      },
+      "end": {
+        "x": 9521.42857142857,
+        "z": 7603.427592116537
+      },
+      "heightMm": 3000,
+      "thicknessMm": 150,
+      "color": "#ffffff",
+      "role": "boundary"
+    }
+  ],
+  "artworks": [
+    {
+      "id": "artwork-1",
+      "name": "작품 01",
+      "artist": "",
+      "wallId": "auto-wall-1",
+      "wallSide": "front",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 1600,
+      "centerHeightMm": 1750,
+      "rotationDeg": -90,
+      "frame": "natural",
+      "imageId": "0"
+    },
+    {
+      "id": "artwork-2",
+      "name": "작품 02",
+      "artist": "",
+      "wallId": "auto-wall-1",
+      "wallSide": "front",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 2295,
+      "centerHeightMm": 1750,
+      "frame": "natural",
+      "imageId": "1"
+    },
+    {
+      "id": "artwork-3",
+      "name": "작품 03",
+      "artist": "",
+      "wallId": "auto-wall-1",
+      "wallSide": "front",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 2990,
+      "centerHeightMm": 1750,
+      "frame": "natural",
+      "imageId": "2"
+    },
+    {
+      "id": "artwork-4",
+      "name": "작품 04",
+      "artist": "",
+      "wallId": "auto-wall-1",
+      "wallSide": "front",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 3685,
+      "centerHeightMm": 1750,
+      "frame": "natural",
+      "imageId": "3"
+    },
+    {
+      "id": "artwork-5",
+      "name": "작품 05",
+      "artist": "",
+      "wallId": "auto-wall-1",
+      "wallSide": "front",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 4380,
+      "centerHeightMm": 1750,
+      "frame": "natural",
+      "imageId": "4"
+    },
+    {
+      "id": "artwork-6",
+      "name": "작품 06",
+      "artist": "",
+      "wallId": "auto-wall-1",
+      "wallSide": "front",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 5075,
+      "centerHeightMm": 1750,
+      "frame": "natural",
+      "imageId": "5"
+    },
+    {
+      "id": "artwork-7",
+      "name": "작품 07",
+      "artist": "",
+      "wallId": "auto-wall-1",
+      "wallSide": "front",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 5770,
+      "centerHeightMm": 1750,
+      "frame": "natural",
+      "imageId": "6"
+    },
+    {
+      "id": "artwork-8",
+      "name": "작품 08",
+      "artist": "",
+      "wallId": "auto-wall-1",
+      "wallSide": "front",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 6465,
+      "centerHeightMm": 1750,
+      "frame": "natural",
+      "imageId": "7"
+    },
+    {
+      "id": "artwork-9",
+      "name": "작품 09",
+      "artist": "",
+      "wallId": "auto-wall-1",
+      "wallSide": "front",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 7160,
+      "centerHeightMm": 1750,
+      "frame": "natural",
+      "imageId": "8"
+    },
+    {
+      "id": "artwork-10",
+      "name": "작품 10",
+      "artist": "",
+      "wallId": "auto-wall-1",
+      "wallSide": "front",
+      "widthMm": 400,
+      "heightMm": 600,
+      "depthMm": 30,
+      "alongMm": 905,
+      "centerHeightMm": 1750,
+      "frame": "natural",
+      "imageId": "9"
+    }
+  ],
+  "openings": [],
+  "zones": [],
+  "dimensions": [],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "Scene A",
+      "snapshot": {
+        "outdoor": {
+          "mode": "outdoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-10-11",
+          "time": "09:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [
+          {
+            "id": "light-1",
+            "name": "스팟 조명 1",
+            "kind": "spot",
+            "position": {
+              "x": 3278.5714285714284,
+              "y": 3300,
+              "z": 2891.572407883462
+            },
+            "target": {
+              "x": 3278.5714285714284,
+              "y": 1750,
+              "z": 1691.5724078834617
+            },
+            "intensity": 120,
+            "kelvin": 5500,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true
+          }
+        ],
+        "lighting": {
+          "ambient": 0.12,
+          "hemisphere": 0.15,
+          "fill": 0,
+          "environment": 0.08
+        },
+        "schemaVersion": 1,
+        "displayUnit": "cm",
+        "name": "연속 검증 전시",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [
+          {
+            "id": "auto-wall-1",
+            "name": "자동 벽 1",
+            "start": {
+              "x": 1678.5714285714284,
+              "z": 1596.5724078834617
+            },
+            "end": {
+              "x": 9521.42857142857,
+              "z": 1596.5724078834617
+            },
+            "heightMm": 3500,
+            "thicknessMm": 150,
+            "color": "#b59a76",
+            "material": {
+              "preset": "wood",
+              "roughness": 0.65,
+              "metalness": 0,
+              "opacity": 1,
+              "transmission": 0,
+              "thicknessMm": 0,
+              "ior": 1.5,
+              "clearcoat": 0,
+              "sheen": 0,
+              "texture": {
+                "imageId": "10",
+                "widthMm": 2000,
+                "heightMm": 1000
+              }
+            },
+            "role": "boundary"
+          },
+          {
+            "id": "auto-wall-2",
+            "name": "자동 벽 2",
+            "start": {
+              "x": 1678.5714285714284,
+              "z": 7603.427592116537
+            },
+            "end": {
+              "x": 9521.42857142857,
+              "z": 7603.427592116537
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "role": "boundary"
+          },
+          {
+            "id": "auto-wall-3",
+            "name": "자동 벽 3",
+            "start": {
+              "x": 1678.5714285714284,
+              "z": 1596.5724078834617
+            },
+            "end": {
+              "x": 1678.5714285714284,
+              "z": 7603.427592116537
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "role": "boundary"
+          },
+          {
+            "id": "auto-wall-4",
+            "name": "자동 벽 4",
+            "start": {
+              "x": 9521.42857142857,
+              "z": 1596.5724078834617
+            },
+            "end": {
+              "x": 9521.42857142857,
+              "z": 7603.427592116537
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "role": "boundary"
+          }
+        ],
+        "artworks": [
+          {
+            "id": "artwork-1",
+            "name": "작품 01",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 1600,
+            "centerHeightMm": 1750,
+            "rotationDeg": -90,
+            "frame": "natural",
+            "imageId": "0"
+          },
+          {
+            "id": "artwork-2",
+            "name": "작품 02",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 2295,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "1"
+          },
+          {
+            "id": "artwork-3",
+            "name": "작품 03",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 2990,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "2"
+          },
+          {
+            "id": "artwork-4",
+            "name": "작품 04",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 3685,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "3"
+          },
+          {
+            "id": "artwork-5",
+            "name": "작품 05",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 4380,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "4"
+          },
+          {
+            "id": "artwork-6",
+            "name": "작품 06",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 5075,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "5"
+          },
+          {
+            "id": "artwork-7",
+            "name": "작품 07",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 5770,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "6"
+          },
+          {
+            "id": "artwork-8",
+            "name": "작품 08",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 6465,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "7"
+          },
+          {
+            "id": "artwork-9",
+            "name": "작품 09",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 7160,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "8"
+          },
+          {
+            "id": "artwork-10",
+            "name": "작품 10",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 905,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "9"
+          }
+        ],
+        "openings": [],
+        "zones": [],
+        "dimensions": [],
+        "camera": {
+          "position": [
+            -4.278902639848873,
+            16.568353959773308,
+            14.478902639848872
+          ],
+          "target": [
+            5.6,
+            1.75,
+            4.6
+          ],
+          "zoom": 31.21158974998992
+        }
+      }
+    },
+    {
+      "id": "scene-2",
+      "name": "Scene B",
+      "snapshot": {
+        "outdoor": {
+          "mode": "outdoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-10-11",
+          "time": "17:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [
+          {
+            "id": "light-1",
+            "name": "스팟 조명 1",
+            "kind": "spot",
+            "position": {
+              "x": 3278.5714285714284,
+              "y": 3300,
+              "z": 2891.572407883462
+            },
+            "target": {
+              "x": 3278.5714285714284,
+              "y": 1750,
+              "z": 1691.5724078834617
+            },
+            "intensity": 120,
+            "kelvin": 5500,
+            "beamDeg": 40,
+            "penumbra": 0.3,
+            "distanceMm": 0,
+            "widthMm": 1000,
+            "heightMm": 500,
+            "shadow": true,
+            "visible": true
+          }
+        ],
+        "lighting": {
+          "ambient": 0.12,
+          "hemisphere": 0.15,
+          "fill": 0,
+          "environment": 0.08
+        },
+        "schemaVersion": 1,
+        "displayUnit": "cm",
+        "name": "연속 검증 전시",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [
+          {
+            "id": "auto-wall-1",
+            "name": "자동 벽 1",
+            "start": {
+              "x": 1678.5714285714284,
+              "z": 1596.5724078834617
+            },
+            "end": {
+              "x": 9521.42857142857,
+              "z": 1596.5724078834617
+            },
+            "heightMm": 3500,
+            "thicknessMm": 150,
+            "color": "#b59a76",
+            "material": {
+              "preset": "wood",
+              "roughness": 0.65,
+              "metalness": 0,
+              "opacity": 1,
+              "transmission": 0,
+              "thicknessMm": 0,
+              "ior": 1.5,
+              "clearcoat": 0,
+              "sheen": 0,
+              "texture": {
+                "imageId": "10",
+                "widthMm": 2000,
+                "heightMm": 1000
+              }
+            },
+            "role": "boundary"
+          },
+          {
+            "id": "auto-wall-2",
+            "name": "자동 벽 2",
+            "start": {
+              "x": 1678.5714285714284,
+              "z": 7603.427592116537
+            },
+            "end": {
+              "x": 9521.42857142857,
+              "z": 7603.427592116537
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "role": "boundary"
+          },
+          {
+            "id": "auto-wall-3",
+            "name": "자동 벽 3",
+            "start": {
+              "x": 1678.5714285714284,
+              "z": 1596.5724078834617
+            },
+            "end": {
+              "x": 1678.5714285714284,
+              "z": 7603.427592116537
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "role": "boundary"
+          },
+          {
+            "id": "auto-wall-4",
+            "name": "자동 벽 4",
+            "start": {
+              "x": 9521.42857142857,
+              "z": 1596.5724078834617
+            },
+            "end": {
+              "x": 9521.42857142857,
+              "z": 7603.427592116537
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "role": "boundary"
+          }
+        ],
+        "artworks": [
+          {
+            "id": "artwork-1",
+            "name": "작품 01",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 500,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 1600,
+            "centerHeightMm": 1750,
+            "rotationDeg": -90,
+            "frame": "natural",
+            "imageId": "0"
+          },
+          {
+            "id": "artwork-2",
+            "name": "작품 02",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 2295,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "1"
+          },
+          {
+            "id": "artwork-3",
+            "name": "작품 03",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 2990,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "2"
+          },
+          {
+            "id": "artwork-4",
+            "name": "작품 04",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 3685,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "3"
+          },
+          {
+            "id": "artwork-5",
+            "name": "작품 05",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 4380,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "4"
+          },
+          {
+            "id": "artwork-6",
+            "name": "작품 06",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 5075,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "5"
+          },
+          {
+            "id": "artwork-7",
+            "name": "작품 07",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 5770,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "6"
+          },
+          {
+            "id": "artwork-8",
+            "name": "작품 08",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 6465,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "7"
+          },
+          {
+            "id": "artwork-9",
+            "name": "작품 09",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 7160,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "8"
+          },
+          {
+            "id": "artwork-10",
+            "name": "작품 10",
+            "artist": "",
+            "wallId": "auto-wall-1",
+            "wallSide": "front",
+            "widthMm": 400,
+            "heightMm": 600,
+            "depthMm": 30,
+            "alongMm": 905,
+            "centerHeightMm": 1750,
+            "frame": "natural",
+            "imageId": "9"
+          }
+        ],
+        "openings": [],
+        "zones": [],
+        "dimensions": [],
+        "camera": {
+          "position": [
+            5.6,
+            1.75,
+            17.48233023196541
+          ],
+          "target": [
+            5.6,
+            1.75,
+            4.6
+          ],
+          "zoom": 65.02177068214806
+        }
+      }
+    }
+  ]
+}

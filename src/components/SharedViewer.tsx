@@ -107,6 +107,9 @@ export function SharedElevation({snapshot,wallId,side,selectedId,onSelect,shareI
 }
 
 export default function SharedViewer({shareId}:{shareId:string|null}){
+  return <SharedPublication key={shareId??'invalid'} shareId={shareId}/>;
+}
+function SharedPublication({shareId}:{shareId:string|null}){
   const [publication,setPublication]=useState<PublicShareSnapshot|null>(null);
   const [sceneId,setSceneId]=useState<string|null>(null);
   const snapshot=publication?.scenes?.find(s=>s.id===sceneId)?.snapshot??publication;
@@ -124,12 +127,14 @@ export default function SharedViewer({shareId}:{shareId:string|null}){
   const addMeasurePoint=(point:WorldPoint)=>setMeasurePoints(current=>nextMeasurePoints(current,point));
   const changeView=(next:View)=>{setView(next);setMeasurePoints([]);if(next==='elevation'&&snapshot?.walls.length===0)setMeasuring(false);};
   useEffect(()=>{
+    document.title='공간 공유';
     if(!shareId)return;
     const abort=new AbortController();
     fetch(`/api/public/${shareId}`,{signal:abort.signal,cache:'no-store'}).then(async response=>{
+      abort.signal.throwIfAborted();
       if(!response.ok){let message=response.status===410?'중단된 공유 링크입니다.':response.status===404?'공유 링크를 찾을 수 없습니다.':'공유 화면을 불러오지 못했습니다.';try{const body=await response.json() as {error?:string};if(body.error)message=body.error;}catch{/* Status message is enough. */}throw new Error(message);}
-      return parsePublicShare(await response.json());
-    }).then(data=>{setPublication(data);setWallId(data.walls[0]?.id??null);document.title=`${data.name} — 공간 공유`;}).catch(reason=>{if(!abort.signal.aborted)setError((reason as Error).message);});
+      const data=await response.json();abort.signal.throwIfAborted();return parsePublicShare(data);
+    }).then(data=>{if(abort.signal.aborted)return;setPublication(data);setWallId(data.walls[0]?.id??null);document.title=`${data.name} — 공간 공유`;}).catch(reason=>{if(!abort.signal.aborted)setError((reason as Error).message);});
     return ()=>abort.abort();
   },[shareId]);
   useEffect(()=>{
@@ -137,12 +142,15 @@ export default function SharedViewer({shareId}:{shareId:string|null}){
     const abort=new AbortController();
     let stopped=false;
     const verify=async()=>{
+      if(stopped||abort.signal.aborted)return;
       try{
         const response=await fetch(`/api/public/${shareId}`,{signal:abort.signal,cache:'no-store'});
+        if(stopped||abort.signal.aborted)return;
         if(response.status===410||response.status===404){
           let message=response.status===410?'중단되었거나 만료된 공유 링크입니다.':'공유 링크를 찾을 수 없습니다.';
           try{const body=await response.json() as {error?:string};if(body.error)message=body.error;}catch{/* Keep the status message. */}
-          stopped=true;setPublication(null);setError(message);
+          if(stopped||abort.signal.aborted)return;
+          stopped=true;setPublication(null);setError(message);document.title='중단된 공유 링크 — 공간';
         }
       }catch{/* Keep an already loaded view through a temporary network failure. */}
     };

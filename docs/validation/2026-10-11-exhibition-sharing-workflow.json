@@ -1,0 +1,217 @@
+{
+  "date": "2026-10-11",
+  "projectId": "2047cca9-a99c-4e1d-8e5b-b0a80204c1cd",
+  "walls": 4,
+  "floor": {
+    "surfaces": 1,
+    "areaMm2": 47110907.08777083,
+    "glbThicknessMm": 160,
+    "wallRoles": [
+      "boundary",
+      "boundary",
+      "boundary",
+      "boundary"
+    ]
+  },
+  "artworks": 10,
+  "artworkEdit": {
+    "firstRotationDeg": -90,
+    "centerHeightMm": 1750,
+    "groupSize": 10
+  },
+  "sceneNames": [
+    "Scene A",
+    "Scene B"
+  ],
+  "sharing": {
+    "url": "http://localhost:3000/s/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f",
+    "id": "de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f",
+    "uploadedImages": 11,
+    "publicSceneCount": 2,
+    "publicImagesVerified": 10,
+    "anonymousWriteStatus": 401,
+    "temporaryMeasurementMm": 1000,
+    "revoked": true,
+    "publicStatusAfterRevoke": 410,
+    "imageStatusAfterRevoke": 410,
+    "apiCalls": [
+      {
+        "url": "/api/shares",
+        "method": "POST",
+        "status": 201
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/0",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/1",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/2",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/3",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/4",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/5",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/6",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/7",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/8",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/9",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/images/10",
+        "method": "PUT",
+        "status": 204
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f/publish",
+        "method": "POST",
+        "status": 201
+      },
+      {
+        "url": "/api/shares",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "url": "/api/public/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "url": "/api/public/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "url": "/api/shares/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f",
+        "method": "DELETE",
+        "status": 204
+      },
+      {
+        "url": "/api/shares",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "url": "/api/public/de7e4c9ee1e5a4c1ec8707947db464873e77cd197981fa3f",
+        "method": "GET",
+        "status": 410
+      }
+    ]
+  },
+  "pdfPages": 12,
+  "glbImages": 11,
+  "texture": {
+    "widthMm": 2000,
+    "heightMm": 1000
+  },
+  "outdoor": "09:00",
+  "privateReferenceImages": 1,
+  "capture": {
+    "width": 1920,
+    "height": 1059
+  },
+  "steps": [
+    "Persisted empty project hydrated through App",
+    "Header PDF -> automatic page 2 -> editable draft and door/equipment labels",
+    "50cm two-point scale calibration through actual PlanView",
+    "Bulk boundary role through Inspector -> actual endpoint pointer snap closes four imported corners -> visible plan floor -> undo/redo -> zoom/Hand pan without data edits",
+    "Real wall texture upload -> 2m x 1m physical repeat through Inspector",
+    "Ten real native PNG uploads via Outliner and cm size editing via Inspector",
+    "Ten-point grouped array and 25cm spacing through production dialog",
+    "Actual elevation group pointer drag -> wall-center snap guide -> commit/undo/redo -> ungroup and -90 degree handle rotation -> regroup ten original artworks",
+    "Actual project NOTE, checklist/done and native private reference image",
+    "Spot/Kelvin -> bird/front camera requests -> Scene A/B, including actual native thumbnail encoding with GPU adapter",
+    "Outdoor dialog 09:00 -> slider 17:00 -> restore Scene A time and texture",
+    "Restore Scene A -> actual elevation SVG/native PNG capture at 1920px",
+    "Manual save -> independent repository/readDraft exact project and Scene data",
+    "Current/Scene A/Scene B vector PDF and Korean text inspection, with private notes excluded",
+    "Exact ZIP/asset restore -> two-Scene public payload with private notes excluded",
+    "Actual GLTFExporter GLB -> embedded 11 images, private-note exclusion, Spot/sun -> GLTFLoader geometry read",
+    "Actual ShareDialog legacy test credential -> Worker SQLite/R2 publish and eleven image uploads -> separate locked reader/Scene A/B/temporary ruler -> anonymous write denial -> image pixels -> frozen owner edits -> revoke and reader visibility recheck, with public/image HTTP 410"
+  ],
+  "limitations": [
+    "jsdom/native Canvas/fake-indexeddb, not actual browser or disk durability",
+    "OCR empty and worker transport adapted; production PDF parser/pixel algorithms",
+    "GPU transport and 3D Scene preview image renderer adapted, no 3D pixel proof",
+    "Native SVG rasterizer skips embedded image href pixels; ten embedded images decode separately and SVG XML is verified; PNG evidence covers wall/frame geometry and dimensions",
+    "Synthetic legacy credential/local SQLite/R2 Worker bridge, not deployed public URL or real account login; no SketchUp/real-device/full 24-step acceptance"
+  ],
+  "baseCommit": "6a4600b933e3df0254a80e4097486d4e7d5bf220",
+  "validation": {
+    "baseline": {
+      "command": "npx vitest run src/components/SharedViewer.workflow.test.tsx src/components/Exhibition.workflow.test.tsx",
+      "productSource": "HEAD:src/components/SharedViewer.tsx; final test files unchanged",
+      "failed": 7,
+      "passed": 3,
+      "total": 10
+    },
+    "after": {
+      "command": "GONGGAN_EXHIBITION_PROOF=1 npx vitest run src/components/SharedViewer.workflow.test.tsx src/components/Exhibition.workflow.test.tsx",
+      "passed": 10,
+      "filesPassed": 2
+    },
+    "fullSuite": {
+      "command": "npm test",
+      "passed": 1346,
+      "skipped": 10,
+      "filesPassed": 232,
+      "filesSkipped": 10
+    },
+    "build": {
+      "command": "npm run build",
+      "passed": true,
+      "seconds": 4.46,
+      "existingLargeChunkNotice": true
+    },
+    "deployed": false
+  },
+  "sourceSHA256": {
+    "src/components/SharedViewer.tsx": "e8e281ef8b4b7a49e1a95c89b31c1336671b90328396895ac870e6911c6c2449",
+    "src/components/SharedViewer.workflow.test.tsx": "486faed36a284167b095eaff10690005a6505cc3cd5a251d0011e6b0a6d32dd0",
+    "src/components/Exhibition.workflow.test.tsx": "615b5e07861e5c6198d1947607ae8c32e49c8a0e62b93c538d45882ee20eece1"
+  },
+  "artifactSHA256": {
+    "docs/validation/2026-10-11-exhibition-sharing-elevation.png": "1600e8c31d8ed128a23338c02f1861401ff0fd940f2856f734e5ffc95e65827f",
+    "docs/validation/2026-10-11-exhibition-sharing-elevation.svg": "e4e26a7cea0168af1c6f2b2118677f3345523b177cce3124ca3e185ad4f7b1c5",
+    "docs/validation/2026-10-11-exhibition-sharing-input.pdf": "673d8b949559d28dbfebf98daa5f90a2e3f748cf7e1dd900b0e07597c1ef73e4",
+    "docs/validation/2026-10-11-exhibition-sharing-output.pdf": "9207e25f13109a9610a86249fc4584db87fedd8103d3d3a941f450372c031ee1",
+    "docs/validation/2026-10-11-exhibition-sharing-project.json": "8533029f1cfa9304beb0193c1beccafec318e1b588d09496a7f6ec48fb96949d",
+    "docs/validation/2026-10-11-exhibition-sharing-public.json": "70911248e6178948693e483e4bc837fb6cb28c73a7f84815d609c4b6790a6f76",
+    "docs/validation/2026-10-11-exhibition-sharing.glb": "0eb3f28661e5a2cf5a929fdfa86623095304eba365d97682cefe96b360d917a6",
+    "docs/validation/2026-10-11-exhibition-sharing.gonggan.zip": "45e2ff6e926f21c6077d7cfdf70a7f45083153bd5ff38fcc47bd9f381a1f3fc2"
+  }
+}
