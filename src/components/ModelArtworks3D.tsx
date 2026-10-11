@@ -1,3 +1,4 @@
+import {base64Bytes} from '../lib/base64Bytes';
 import {captureModelBoundsKey,captureModelMatches,captureModelStatus,type LoadedCaptureModel} from '../lib/captureAssets';
 import {placementWarningIndex,type PlacementWarning} from '../domain/placementWarnings';
 import {useEffect,useMemo,useRef,useState} from 'react';
@@ -17,7 +18,7 @@ import {ArtworkModelInstance3D} from './ModelInstance3D';
 
 // Each model's geometry and textures are shared by duplicates; node transforms are independent.
 const assets=new Map<string,{refs:number;promise:Promise<Group>;scene?:Group;scenes?:Group[]}>();
-function acquire(dataUrl:string){let entry=assets.get(dataUrl);if(!entry){const bytes=Uint8Array.from(atob(dataUrl.split(',')[1]),c=>c.charCodeAt(0));entry={refs:0,promise:loadStaticModel(bytes.buffer).then(g=>{owned.scenes=g.scenes;return g.scene;})};assets.set(dataUrl,entry);const owned=entry;void entry.promise.then(scene=>{owned.scene=scene;if(!owned.refs){disposeModelAsset(owned.scenes??scene);owned.scene=undefined;if(assets.get(dataUrl)===owned)assets.delete(dataUrl);}},()=>{if(assets.get(dataUrl)===owned)assets.delete(dataUrl);});}entry.refs++;const owned=entry;return {promise:entry.promise,release:()=>{owned.refs--;setTimeout(()=>{if(!owned.refs&&owned.scene){disposeModelAsset(owned.scenes??owned.scene);if(assets.get(dataUrl)===owned)assets.delete(dataUrl);owned.scene=undefined;}},0);}};}
+function acquire(dataUrl:string){let entry=assets.get(dataUrl);if(!entry){const bytes=base64Bytes(dataUrl.split(',')[1]);entry={refs:0,promise:loadStaticModel(bytes.buffer).then(g=>{owned.scenes=g.scenes;return g.scene;})};assets.set(dataUrl,entry);const owned=entry;void entry.promise.then(scene=>{owned.scene=scene;if(!owned.refs){disposeModelAsset(owned.scenes??scene);owned.scene=undefined;if(assets.get(dataUrl)===owned)assets.delete(dataUrl);}},()=>{if(assets.get(dataUrl)===owned)assets.delete(dataUrl);});}entry.refs++;const owned=entry;return {promise:entry.promise,release:()=>{owned.refs--;setTimeout(()=>{if(!owned.refs&&owned.scene){disposeModelAsset(owned.scenes??owned.scene);if(assets.get(dataUrl)===owned)assets.delete(dataUrl);owned.scene=undefined;}},0);}};}
 function Artwork3D({artwork:a,warnings}:{artwork:ModelArtwork;warnings:PlacementWarning[]}){
  const state=useEditor(),{invalidate,camera,size}=useThree(),[loaded,setLoaded]=useState<LoadedCaptureModel>({dataUrl:'',boundsKey:'',scene:null,error:''}),[measureHint,setMeasureHint]=useState<Vector3|null>(null);
  const boundsKey=captureModelBoundsKey(a.model),source=captureModelMatches(a.model,loaded)?loaded.scene:null,error=captureModelMatches(a.model,loaded)?loaded.error:'';

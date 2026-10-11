@@ -1,3 +1,4 @@
+import {base64Bytes} from './base64Bytes';
 import {modelExportOmissions} from '../domain/modelExportScope';
 import JSZip from 'jszip';
 import type {Project} from '../domain/types';
@@ -10,7 +11,7 @@ function embeddedBytes(uri:unknown,allowed:string[]){
  if(typeof uri!=='string')throw new Error('glTF 자산을 읽지 못했습니다.');
  const match=/^data:([^;,]+);base64,([A-Za-z0-9+/]*={0,2})$/.exec(uri);
  if(!match||!allowed.includes(match[1]))throw new Error('glTF 자산이 파일에 포함되지 않았습니다.');
- try{return {mime:match[1],bytes:Uint8Array.from(atob(match[2]),c=>c.charCodeAt(0))};}
+ try{return {mime:match[1],bytes:base64Bytes(match[2])};}
  catch{throw new Error('glTF 자산 데이터가 손상됐습니다.');}
 }
 

@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-11",
+  "baseCommit": "6c9aeffa364a03935c4dd272f7b70ba81dac1951",
+  "source": {
+    "origin": "https://github.com/KhronosGroup/glTF-Sample-Assets",
+    "pinnedCommit": "0b4f3a5862f3037c7092206e75c6f2a31a504ca5",
+    "author": "Microsoft",
+    "license": "CC0 1.0 Universal",
+    "file": "BoomBox.glb",
+    "bytes": 10614184,
+    "sha256": "f8b918445ebdd006768232205a62f5182d2208ca57f84c6ccc084943c0bc8f15"
+  },
+  "baseline": {
+    "command": "GONGGAN_EXTERNAL_MODEL_PROOF=1 npx vitest run src/lib/externalModel.workflow.test.ts",
+    "productSources": "Unmodified baseCommit; same final test and native transport adapters",
+    "passed": 1,
+    "failed": 0,
+    "testSeconds": 25.32,
+    "comparison": "No functional before/after failure claim; initial test-authoring adapter/expectation failures are excluded"
+  },
+  "after": {
+    "command": "GONGGAN_EXTERNAL_MODEL_PROOF=1 npx vitest run src/lib/externalModel.workflow.test.ts",
+    "passed": 1,
+    "testSeconds": 5.89,
+    "newCases": 1,
+    "timingLimitation": "Isolated workflow timing, not controlled device/browser acceptance"
+  },
+  "existingTarget": {
+    "passed": 46,
+    "filesPassed": 9,
+    "command": "npx vitest run src/domain/referenceModel.test.ts src/lib/localPresentationModel.test.ts src/lib/modelArtworkImport.test.ts src/lib/modelImport.test.ts src/lib/projectPackage.test.ts src/lib/modelExportProjection.test.ts src/lib/gltfPackage.test.ts src/lib/publicModelAsset.test.ts src/components/ModelInstances.lifecycle.test.tsx"
+  },
+  "fullSuite": {
+    "command": "npm test",
+    "passed": 1355,
+    "skipped": 10,
+    "filesPassed": 234,
+    "filesSkipped": 10,
+    "seconds": 12.53
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "seconds": 5.19,
+    "existingLargeChunkNotice": true
+  },
+  "benchmark": {
+    "command": "node --expose-gc scripts/benchmark-model-base64.mjs docs/validation/external-models-2026-10-11/BoomBox.glb docs/validation/external-models-2026-10-11/base64-benchmark.json",
+    "result": "external-models-2026-10-11/base64-benchmark.json",
+    "scope": "Owned byte-buffer CPU conversion only; not browser/GPU/FPS/p95"
+  },
+  "receiver": {
+    "command": "/Applications/Blender.app/Contents/MacOS/Blender --background --factory-startup --python-exit-code 1 --python scripts/verify-blender-external-model.py -- --directory docs/validation/external-models-2026-10-11 --output-dir docs/validation/external-models-2026-10-11/blender --render",
+    "passed": true,
+    "version": "4.4.1",
+    "scenes": 2,
+    "cpuRender": true,
+    "wrongBoundsRejected": true,
+    "browserOrGpu": false
+  },
+  "restorationSemantics": "Original asset bytes exact; project JSON semantic equality including JSON -0 to 0 normalization",
+  "deployed": false,
+  "limitations": [
+    "External static CC0 object, not an entire venue/arbitrary user-model acceptance",
+    "Native PNG/DOM/FileReader transport adapters; actual parser/loader/Scene/ZIP/public sanitization/exporter paths",
+    "Existing GLB/glTF export texture limit 1024px; original 2048px retained in backup and public model",
+    "Actual browser/GPU/auth account/public URL/device/SketchUp/full 24-step/user metrics remain"
+  ],
+  "sourceSHA256": {
+    "src/lib/base64Bytes.ts": "38f9685b97a0b7937cd1ec5479a35006114eaf2b6ea59592885251ce5dd31adb",
+    "src/lib/externalModel.workflow.test.ts": "dc80c01e292e62356f97377c75f5188032e210ea4504a05714faca67be0dec03",
+    "scripts/benchmark-model-base64.mjs": "2fed8818bb889cc9e74b82a2f7713b5f7419db5191456fde95c87e0378d639bd",
+    "scripts/verify-blender-external-model.py": "0622d3774fd3ebfb16e4926f34ed9595e13741404325d41b4aed30a57a7674d6",
+    "src/domain/referenceModel.ts": "2384518765810822ec47796a1df4d929236d5b6655c9d9ee06ec86485104a6f3",
+    "src/domain/modelArtworks.ts": "b140fc36cac24e0e7111cdc1dd5e8466de897bb87268d4a0724ad3b2d19cc155",
+    "src/lib/artworkModelPayload.ts": "b8797444b6daeee2882642a22c3a2363fdb6d7143d07c6bd5bb25e51f51b6416",
+    "src/lib/modelImport.ts": "92f0ec08da69479b166df2b2f4ff43c02ee57220ea07612563bf1727027377cf",
+    "src/lib/modelExport.ts": "0b8c7c36cce3136d85058c272a65ae65731aba8717e88463ce3b4613f4ed6ae2",
+    "src/lib/publicModelAsset.ts": "944cb9c9ba42ff3717e0b50a32076e9a4b73a891448072acbf63a75f18d680b9",
+    "src/lib/localPresentationModel.ts": "888905b76ba79775d4e7b95484d06b6d892d85168486712402951ea134d3ce7d",
+    "src/lib/gltfPackage.ts": "f2f5d69af68d9a689d2fe79cb0d7bf75b9677b06bc2e68dfb421868b92edb9e8",
+    "src/lib/projectPackage.ts": "0a48bf314cb1efaa52d416963a68eb67af2cf3fb51afddc4ffe12cbbcf723f5c",
+    "src/components/ModelArtworks3D.tsx": "e75284b46fd74a7a76dfd7458525278d6dea131f5e66e1eccf22eb0ac64a8121",
+    "src/components/ReferenceModel3D.tsx": "63b778f78a8418b97abf6c43391dc425a5809b3655abbdd162e9dd4d54c982ca"
+  },
+  "artifactSHA256": {
+    "docs/validation/external-models-2026-10-11/BoomBox-source-README.md": "b5d71cf57a9311d7882ed1c4c0ee1ccdc0f5f5b1e90e5bb65f0f9fa7ff9bdd8d",
+    "docs/validation/external-models-2026-10-11/BoomBox.glb": "f8b918445ebdd006768232205a62f5182d2208ca57f84c6ccc084943c0bc8f15",
+    "docs/validation/external-models-2026-10-11/BoomBox.gltf.zip": "b90885f59ebbd77c2a10b9c8435d3d944bec17393ece4dcbaa1a776a224c1e70",
+    "docs/validation/external-models-2026-10-11/BoomBox.gonggan.zip": "6c784c1a4198755a8768796506e19b74f83e27a0c0a693f4fc8b5dc94aab0862",
+    "docs/validation/external-models-2026-10-11/Scene-A.glb": "b62f6af1190a9357a4bd53040642ebef9e14a1e40e9bd1499d7862701ff13ec4",
+    "docs/validation/external-models-2026-10-11/Scene-B.glb": "9938e75f9293db3edc952e36f9049f931cf40f7c79c91939a4fd057eaeddcc8f",
+    "docs/validation/external-models-2026-10-11/base64-benchmark.json": "5be9fa1a84c980da2b737e527225894d6cbe228a1c130a2210df071285c2cf73",
+    "docs/validation/external-models-2026-10-11/blender/Scene-A.png": "717f733cf2a358c56359085ea60a5ff38b8477b4e29a655ea6df6079452d4bec",
+    "docs/validation/external-models-2026-10-11/blender/Scene-B.png": "3882202bf5b374c82d548856e70486ed66f9cd4789abee7f62c4edaa82cba753",
+    "docs/validation/external-models-2026-10-11/blender/receiver.json": "a487cf7a2f93a739190fd09507127f8374f1a2b3cd6989152510b1e5ece76603",
+    "docs/validation/external-models-2026-10-11/verifier-checks.json": "1075b108c527326bbbf92f841d202036e3146272901585d2d9c23dc6a6cbfd64",
+    "docs/validation/external-models-2026-10-11/workflow.json": "2a9f29673a862c44f31eade27b9471356a25e94f2916b2622f80ff1e20a98b30"
+  }
+}

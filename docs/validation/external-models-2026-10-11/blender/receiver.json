@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "blenderVersion": "4.4.1",
+  "gpuMeasured": false,
+  "renderRequested": true,
+  "scenes": [
+    {
+      "name": "Scene-A",
+      "glbSHA256": "b62f6af1190a9357a4bd53040642ebef9e14a1e40e9bd1499d7862701ff13ec4",
+      "meshes": 1,
+      "vertices": 3575,
+      "triangles": 6036,
+      "maxWorldBoundsErrorM": 2.0861625676937834e-08,
+      "packedImages": 4,
+      "imageSize": 1024,
+      "principledTextureLinks": {
+        "Base Color": true,
+        "Metallic": true,
+        "Roughness": true,
+        "Normal": true,
+        "Emission Color": true
+      },
+      "occlusionLinked": true,
+      "cpuRender": "Scene-A.png"
+    },
+    {
+      "name": "Scene-B",
+      "glbSHA256": "9938e75f9293db3edc952e36f9049f931cf40f7c79c91939a4fd057eaeddcc8f",
+      "meshes": 1,
+      "vertices": 3575,
+      "triangles": 6036,
+      "maxWorldBoundsErrorM": 1.1802055910337117e-07,
+      "packedImages": 4,
+      "imageSize": 1024,
+      "principledTextureLinks": {
+        "Base Color": true,
+        "Metallic": true,
+        "Roughness": true,
+        "Normal": true,
+        "Emission Color": true
+      },
+      "occlusionLinked": true,
+      "cpuRender": "Scene-B.png"
+    }
+  ],
+  "limitations": [
+    "CPU importer/render; not browser, GPU, arbitrary venue or SketchUp",
+    "PBR node wiring/packed images checked; no photometric equivalence"
+  ]
+}

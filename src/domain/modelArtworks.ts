@@ -1,3 +1,4 @@
+import {base64Bytes} from '../lib/base64Bytes';
 import {parseArtworkInformation} from './artworkInformation';
 import {Box3,Euler,Matrix4,Quaternion,Vector3} from 'three';
 import type {ModelArtwork,Project,ReferenceModel,WorldPoint} from './types';
@@ -17,7 +18,7 @@ export function parseModelArtwork(value:unknown,checkAsset=true):ModelArtwork{
  if(checkAsset){
  validateReferenceModel({...a.model,visible:true,positionMm:[0,0,0],rotationDeg:0,scale:1});
  if(a.model.sizeMm.some(n=>n<.001))throw new Error('3D 작품에는 폭·높이·깊이가 있는 형상이 필요합니다.');
- inspectStaticArtworkGlb(Uint8Array.from(atob(a.model.dataUrl.split(',')[1]),c=>c.charCodeAt(0)).buffer);
+ inspectStaticArtworkGlb(base64Bytes(a.model.dataUrl.split(',')[1]).buffer);
  }
  return {...a,position:{...a.position},rotation:{...a.rotation}};
 }

@@ -1,0 +1,131 @@
+{
+  "date": "2026-10-11",
+  "sourceHash": "f8b918445ebdd006768232205a62f5182d2208ca57f84c6ccc084943c0bc8f15",
+  "sourceBytes": 10614184,
+  "sourceVertices": 3575,
+  "sourceTriangles": 6036,
+  "sourceImages": 4,
+  "sourceTextureSize": 2048,
+  "backupAssets": 1,
+  "exactRestoration": true,
+  "publicModelAssets": 1,
+  "publicRawImageBytesPreserved": true,
+  "glbTextureLimit": 1024,
+  "scenes": [
+    {
+      "name": "Scene A",
+      "artwork": {
+        "id": "model-artwork-1",
+        "name": "BoomBox",
+        "artist": "Microsoft · CC0",
+        "year": "",
+        "kind": "sculpture",
+        "model": {
+          "sizeMm": [
+            19.84230801463127,
+            19.54326033592224,
+            20.152490586042404
+          ],
+          "sourceOffsetM": [
+            0,
+            0.00977163016796112,
+            0
+          ]
+        },
+        "widthMm": 500,
+        "heightMm": 400,
+        "depthMm": 250,
+        "position": {
+          "x": 3000,
+          "y": 150,
+          "z": -2000
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "visible": true,
+        "locked": false,
+        "note": "PRIVATE_EXTERNAL_MODEL_NOTE"
+      },
+      "bounds": {
+        "min": [
+          2.75,
+          0.15,
+          -2.125
+        ],
+        "max": [
+          3.25,
+          0.55,
+          -1.875
+        ]
+      },
+      "materialSlots": 6,
+      "imagePixelsCompared": 24,
+      "glbSHA256": "b62f6af1190a9357a4bd53040642ebef9e14a1e40e9bd1499d7862701ff13ec4"
+    },
+    {
+      "name": "Scene B",
+      "artwork": {
+        "id": "model-artwork-1",
+        "name": "BoomBox",
+        "artist": "Microsoft · CC0",
+        "year": "",
+        "kind": "sculpture",
+        "model": {
+          "sizeMm": [
+            19.84230801463127,
+            19.54326033592224,
+            20.152490586042404
+          ],
+          "sourceOffsetM": [
+            0,
+            0.00977163016796112,
+            0
+          ]
+        },
+        "widthMm": 700,
+        "heightMm": 500,
+        "depthMm": 350,
+        "position": {
+          "x": 1600,
+          "y": 200,
+          "z": 700
+        },
+        "rotation": {
+          "x": 25,
+          "y": 37,
+          "z": -13
+        },
+        "visible": true,
+        "locked": false,
+        "note": "PRIVATE_EXTERNAL_MODEL_NOTE"
+      },
+      "bounds": {
+        "min": [
+          1.343077030594126,
+          0.1677796070467468,
+          0.49784938609026
+        ],
+        "max": [
+          1.925156472924734,
+          0.741248817613319,
+          1.0082154099550005
+        ]
+      },
+      "materialSlots": 6,
+      "imagePixelsCompared": 24,
+      "glbSHA256": "9938e75f9293db3edc952e36f9049f931cf40f7c79c91939a4fd057eaeddcc8f"
+    }
+  ],
+  "gltfZipReloaded": true,
+  "sourceAndProjectUnchanged": true,
+  "gpuMeasured": false,
+  "limitations": [
+    "Native PNG transport, no actual browser/GPU/UI/3D pixels",
+    "External CC0 BoomBox object; not a whole venue or arbitrary user model acceptance",
+    "GLB/glTF textures deliberately exported at existing 1024px limit; original 2048px bytes retained in project backup/public model",
+    "Actual deployed URL/account/device/SketchUp and full 24-step/user metrics remain"
+  ]
+}

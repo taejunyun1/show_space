@@ -1,3 +1,4 @@
+import {base64Bytes} from './base64Bytes';
 import {inspectStaticArtworkGlb,recordValue} from './artworkModelPayload';
 import {MODEL_MAX_BYTES} from './glbPayload';
 /** Public models keep geometry/UV/PBR, but never source names, extras or generator metadata. */
@@ -41,7 +42,7 @@ export async function preparePublicModels(project:{referenceModel?:{dataUrl:stri
   let asset=cache.get(dataUrl);
   if(!asset){
    if(!/^data:model\/gltf-binary;base64,[A-Za-z0-9+/]+={0,2}$/.test(dataUrl)||dataUrl.length>MODEL_MAX_BYTES*4/3+100)throw new Error('공유 모델 파일 데이터가 올바르지 않습니다.');
-   const raw=Uint8Array.from(atob(dataUrl.split(',')[1]),c=>c.charCodeAt(0)),bytes=publicModelBytes(raw.buffer);
+   const raw=base64Bytes(dataUrl.split(',')[1]),bytes=publicModelBytes(raw.buffer);
    asset={hash:await publicModelHash(bytes),bytes};cache.set(dataUrl,asset);
   }
   if(!uploads.has(asset.hash)){total+=asset.bytes.byteLength;if(total>PUBLIC_MODELS_MAX_BYTES||uploads.size>=PUBLIC_MODEL_ASSETS_MAX)throw new Error('공유 모델 자산 총합은 80MiB·51개 이하여야 합니다.');uploads.set(asset.hash,asset.bytes);}

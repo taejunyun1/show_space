@@ -1,3 +1,4 @@
+import {base64Bytes} from './base64Bytes';
 import {loadStaticModel} from './loadStaticModel';
 import {validateReferenceModel} from '../domain/referenceModel';
 import {inspectStaticArtworkGlb} from './artworkModelPayload';
@@ -19,7 +20,7 @@ export async function readModelFile(file:File):Promise<ReferenceModel>{
 
 export async function readModelWalls(model:ReferenceModel){
  validateReferenceModel(model);
- const bytes=Uint8Array.from(atob(model.dataUrl.split(',')[1]),c=>c.charCodeAt(0));
+ const bytes=base64Bytes(model.dataUrl.split(',')[1]);
  const gltf=await loadStaticModel(bytes.buffer);
  try{const {extractModelWalls}=await import('./modelWalls');return extractModelWalls(gltf.scene,model);}
  finally{disposeModelAsset(gltf.scenes);}

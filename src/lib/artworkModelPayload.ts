@@ -1,3 +1,4 @@
+import {base64Bytes} from './base64Bytes';
 import {inspectGlb,MODEL_MAX_BYTES} from './glbPayload';
 type RecordValue=Record<string,unknown>;
 export function recordValue(value:unknown):RecordValue{if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('모델 구조 정보가 올바르지 않습니다.');return value as RecordValue;}
@@ -62,7 +63,7 @@ export function textureHeaderSize(b:Uint8Array,mime:string):[number,number]{
  throw new Error('모델 텍스처의 실제 형식·크기를 읽을 수 없습니다. PNG·JPG·WebP를 사용하세요.');
 }
 export function modelDataUrl(bytes:ArrayBuffer){let raw='';const b=new Uint8Array(bytes);for(let i=0;i<b.length;i+=32768)raw+=String.fromCharCode(...b.subarray(i,i+32768));return `data:model/gltf-binary;base64,${btoa(raw)}`;}
-function embeddedBytes(uri:string){const m=/^data:(?:application\/(?:octet-stream|gltf-buffer)|image\/(?:png|jpeg|webp));base64,([A-Za-z0-9+/]+={0,2})$/.exec(uri);if(!m||uri.length>MODEL_MAX_BYTES*4/3+100)throw new Error('모델에 포함된 자산 형식·크기가 올바르지 않습니다.');return Uint8Array.from(atob(m[1]),c=>c.charCodeAt(0));}
+function embeddedBytes(uri:string){const m=/^data:(?:application\/(?:octet-stream|gltf-buffer)|image\/(?:png|jpeg|webp));base64,([A-Za-z0-9+/]+={0,2})$/.exec(uri);if(!m||uri.length>MODEL_MAX_BYTES*4/3+100)throw new Error('모델에 포함된 자산 형식·크기가 올바르지 않습니다.');return base64Bytes(m[1]);}
 /** Canonical single GLB, preserving materials and binary data without texture resampling. */
 export function packEmbeddedGltf(value:unknown):ArrayBuffer{
  const doc=structuredClone(inspectStaticArtworkDocument(value)),buffers=list(doc.buffers),views=list(doc.bufferViews),images=list(doc.images),parts:Uint8Array[]=[],offsets:number[]=[];let length=0;

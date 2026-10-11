@@ -1,3 +1,4 @@
+import {base64Bytes} from '../lib/base64Bytes';
 import {captureModelBoundsKey,captureModelMatches,captureModelStatus,type LoadedCaptureModel} from '../lib/captureAssets';
 import {useEffect,useState} from 'react';
 import {type ThreeEvent} from '@react-three/fiber';
@@ -17,7 +18,7 @@ export function ReferenceModel3D({model}:{model:ReferenceModel}){
  useEffect(()=>{
   let cancelled=false,loaded:Group[]|null=null;const identity={dataUrl:model.dataUrl,boundsKey};setAsset({...identity,scene:null,error:''});
   if(!model.visible)return;
-  const bytes=Uint8Array.from(atob(model.dataUrl.split(',')[1]),c=>c.charCodeAt(0));
+  const bytes=base64Bytes(model.dataUrl.split(',')[1]);
   try{inspectStaticArtworkGlb(bytes.buffer);}catch(e){setAsset({...identity,scene:null,error:e instanceof Error?e.message:'모델을 읽지 못했습니다.'});return;}
   void loadStaticModel(bytes.buffer).then(gltf=>{loaded=gltf.scenes;if(cancelled){disposeModelAsset(loaded);loaded=null;return;}checkReferenceModelBounds(gltf.scene,model);gltf.scene.traverse(object=>{if(object instanceof Mesh){object.castShadow=true;object.receiveShadow=true;}});setAsset({...identity,scene:gltf.scene,error:''});}).catch(e=>{if(loaded){disposeModelAsset(loaded);loaded=null;}if(!cancelled)setAsset({...identity,scene:null,error:e instanceof Error?e.message:'모델을 표시하지 못했습니다. GLB를 다시 내보내세요.'});});
   return()=>{cancelled=true;if(loaded){disposeModelAsset(loaded);loaded=null;}};

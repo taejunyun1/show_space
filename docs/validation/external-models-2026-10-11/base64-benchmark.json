@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-11",
+  "node": "v24.14.0",
+  "bytes": 10614184,
+  "sha256": "f8b918445ebdd006768232205a62f5182d2208ca57f84c6ccc084943c0bc8f15",
+  "rounds": 3,
+  "warmup": 1,
+  "alternatingOrder": true,
+  "allBytesEqual": true,
+  "timingsMs": {
+    "legacy": [
+      414.5936670000001,
+      411.22420799999986,
+      412.2613329999999
+    ],
+    "direct": [
+      12.680292000000009,
+      12.750833000000057,
+      12.77150000000006
+    ]
+  },
+  "medianMs": {
+    "legacy": 412.2613329999999,
+    "direct": 12.750833000000057
+  },
+  "limitations": [
+    "CPU base64 decoding only; not browser load latency, GPU, FPS or p95",
+    "Same-machine microbenchmark; do not generalize to all devices"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "correctInputPassed": true,
+  "wrongBoundsOffsetMm": 100,
+  "wrongBoundsRejected": true,
+  "negativeExitCode": 1,
+  "negativeFailure": "AssertionError: Scene-A world bounds mismatch: [[2.75, 1.875, 0.15000002086162567], [3.25, 2.125, 0.550000011920929]] != [[2.85, 1.875, 0.15], [3.25, 2.125, 0.55]]"
+}

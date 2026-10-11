@@ -1,3 +1,4 @@
+import {base64Bytes} from './base64Bytes';
 import {checkVideoSignature} from '../domain/mediaArtwork';
 import JSZip from 'jszip';
 import {parseProject} from '../domain/model';
@@ -35,7 +36,7 @@ async function sha256(bytes:Uint8Array){return [...new Uint8Array(await crypto.s
 function fromDataUrl(value:string){
  const match=/^data:([^;,]+);base64,([A-Za-z0-9+/]+={0,2})$/.exec(value);
  if(!match||!types[match[1]])throw new Error('백업 자산 형식이 올바르지 않습니다.');
- let bytes:Uint8Array;try{bytes=Uint8Array.from(atob(match[2]),c=>c.charCodeAt(0));}catch{throw new Error('백업 자산 데이터가 손상됐습니다.');}
+ let bytes:Uint8Array;try{bytes=base64Bytes(match[2]);}catch{throw new Error('백업 자산 데이터가 손상됐습니다.');}
  checkSignature(bytes,match[1]);return {mime:match[1],bytes};
 }
 const assetKind=(mime:string)=>mime==='model/gltf-binary'?'model':mime.startsWith('video/')?'video':'image';
