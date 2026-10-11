@@ -1,0 +1,279 @@
+{
+  "lights": [],
+  "schemaVersion": 1,
+  "name": "가로·세로 영상 전달",
+  "venue": "성수 갤러리",
+  "floorColor": "#f1f1ed",
+  "walls": [
+    {
+      "id": "wall-a",
+      "name": "벽 A",
+      "start": {
+        "x": 0,
+        "z": 0
+      },
+      "end": {
+        "x": 8700,
+        "z": 0
+      },
+      "heightMm": 3300,
+      "thicknessMm": 160,
+      "color": "#ffffff"
+    }
+  ],
+  "artworks": [
+    {
+      "video": {
+        "videoId": "f464edae62e73650ea3d49f58af0ba8f591e6a498f696a213b4688aaf57923cf",
+        "widthPx": 640,
+        "heightPx": 360,
+        "durationSeconds": 1,
+        "loop": true,
+        "fit": "cover"
+      },
+      "id": "artwork-1",
+      "name": "landscape",
+      "artist": "",
+      "year": "",
+      "wallId": "wall-a",
+      "wallSide": "back",
+      "widthMm": 1200,
+      "heightMm": 1200,
+      "depthMm": 30,
+      "alongMm": 2000,
+      "centerHeightMm": 1650,
+      "rotationDeg": -30,
+      "frame": "none",
+      "imageId": "0"
+    },
+    {
+      "video": {
+        "videoId": "46b7bfe81e1e28097e535f7ce573f0b0b0a23a85890e6881dee056a6f201c6b9",
+        "widthPx": 360,
+        "heightPx": 640,
+        "durationSeconds": 1,
+        "loop": true,
+        "fit": "cover"
+      },
+      "id": "artwork-2",
+      "name": "portrait",
+      "artist": "",
+      "year": "",
+      "wallId": "wall-a",
+      "wallSide": "back",
+      "widthMm": 1200,
+      "heightMm": 1200,
+      "depthMm": 30,
+      "alongMm": 5200,
+      "centerHeightMm": 1650,
+      "rotationDeg": 15,
+      "frame": "none",
+      "imageId": "1"
+    }
+  ],
+  "openings": [],
+  "zones": [],
+  "dimensions": [],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "A면 전체 영상",
+      "snapshot": {
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "schemaVersion": 1,
+        "name": "가로·세로 영상 전달",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [
+          {
+            "id": "wall-a",
+            "name": "벽 A",
+            "start": {
+              "x": 0,
+              "z": 0
+            },
+            "end": {
+              "x": 8700,
+              "z": 0
+            },
+            "heightMm": 3300,
+            "thicknessMm": 160,
+            "color": "#ffffff"
+          }
+        ],
+        "artworks": [
+          {
+            "video": {
+              "videoId": "f464edae62e73650ea3d49f58af0ba8f591e6a498f696a213b4688aaf57923cf",
+              "widthPx": 640,
+              "heightPx": 360,
+              "durationSeconds": 1,
+              "loop": true,
+              "fit": "contain"
+            },
+            "id": "artwork-1",
+            "name": "landscape",
+            "artist": "",
+            "year": "",
+            "wallId": "wall-a",
+            "wallSide": "front",
+            "widthMm": 1200,
+            "heightMm": 1200,
+            "depthMm": 30,
+            "alongMm": 2000,
+            "centerHeightMm": 1650,
+            "rotationDeg": 30,
+            "frame": "none",
+            "imageId": "0"
+          },
+          {
+            "video": {
+              "videoId": "46b7bfe81e1e28097e535f7ce573f0b0b0a23a85890e6881dee056a6f201c6b9",
+              "widthPx": 360,
+              "heightPx": 640,
+              "durationSeconds": 1,
+              "loop": true,
+              "fit": "contain"
+            },
+            "id": "artwork-2",
+            "name": "portrait",
+            "artist": "",
+            "year": "",
+            "wallId": "wall-a",
+            "wallSide": "front",
+            "widthMm": 1200,
+            "heightMm": 1200,
+            "depthMm": 30,
+            "alongMm": 5200,
+            "centerHeightMm": 1650,
+            "rotationDeg": -15,
+            "frame": "none",
+            "imageId": "1"
+          }
+        ],
+        "openings": [],
+        "zones": [],
+        "dimensions": []
+      }
+    },
+    {
+      "id": "scene-2",
+      "name": "B면 스크린 채우기",
+      "snapshot": {
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "schemaVersion": 1,
+        "name": "가로·세로 영상 전달",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [
+          {
+            "id": "wall-a",
+            "name": "벽 A",
+            "start": {
+              "x": 0,
+              "z": 0
+            },
+            "end": {
+              "x": 8700,
+              "z": 0
+            },
+            "heightMm": 3300,
+            "thicknessMm": 160,
+            "color": "#ffffff"
+          }
+        ],
+        "artworks": [
+          {
+            "video": {
+              "videoId": "f464edae62e73650ea3d49f58af0ba8f591e6a498f696a213b4688aaf57923cf",
+              "widthPx": 640,
+              "heightPx": 360,
+              "durationSeconds": 1,
+              "loop": true,
+              "fit": "cover"
+            },
+            "id": "artwork-1",
+            "name": "landscape",
+            "artist": "",
+            "year": "",
+            "wallId": "wall-a",
+            "wallSide": "back",
+            "widthMm": 1200,
+            "heightMm": 1200,
+            "depthMm": 30,
+            "alongMm": 2000,
+            "centerHeightMm": 1650,
+            "rotationDeg": -30,
+            "frame": "none",
+            "imageId": "0"
+          },
+          {
+            "video": {
+              "videoId": "46b7bfe81e1e28097e535f7ce573f0b0b0a23a85890e6881dee056a6f201c6b9",
+              "widthPx": 360,
+              "heightPx": 640,
+              "durationSeconds": 1,
+              "loop": true,
+              "fit": "cover"
+            },
+            "id": "artwork-2",
+            "name": "portrait",
+            "artist": "",
+            "year": "",
+            "wallId": "wall-a",
+            "wallSide": "back",
+            "widthMm": 1200,
+            "heightMm": 1200,
+            "depthMm": 30,
+            "alongMm": 5200,
+            "centerHeightMm": 1650,
+            "rotationDeg": 15,
+            "frame": "none",
+            "imageId": "1"
+          }
+        ],
+        "openings": [],
+        "zones": [],
+        "dimensions": []
+      }
+    }
+  ]
+}

@@ -37,3 +37,7 @@ R2 구간 읽기는 [Cloudflare 공식 API](https://developers.cloudflare.com/r2
 ## 공개 배포 확인
 
 소스 커밋 `109a1d5271b0cc4e923e69411ff0f18f1b946282`를 GitHub main에 푸시하고 Cloudflare Worker `993c93e9-d7f2-49b3-83fe-c5786fee5435`로 배포했다. 기존 D1/R2 바인딩을 유지하며 마이그레이션/운영 자산 수정은 없다. 공개 앱을 실제 브라우저에서 다시 열어 `/assets/index-KpRqJVgy.js`, 영상 작품 추가, 도면·3D 불러오기 메뉴를 확인했다. `2026-10-07-video-deployed-import-menu.png`에 JPG·PNG·PDF, SketchUp export GLB, 저장 프로젝트 복원 선택이 표시된다. `.skp` 직접 입력은 지원하지 않는다고 명시한다. 이는 운영 영상 발행/회수 왕복 및 실기기 인수 증거를 대신하지 않는다.
+
+## 2026-10-11 후속 상태
+
+위 2D 포스터 후속 항목은 이미 2026-10-07 비율 구현이 연결된 상태였다. [같은 프로젝트의 가로·세로 영상 UI·Scene·PNG/PDF·GLB·원본 백업 검증](2026-10-11-video-delivery-workflow.md)으로 native 출력 근거를 갱신했다. 실제 브라우저/기기 코덱·장시간 재생과 운영 영상 발행/회수는 계속 남는다. 이번에는 제품 런타임 수정이나 재배포를 하지 않았다.

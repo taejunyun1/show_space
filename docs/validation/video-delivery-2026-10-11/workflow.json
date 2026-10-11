@@ -1,0 +1,345 @@
+{
+  "date": "2026-10-11",
+  "sources": [
+    {
+      "file": "landscape.mp4",
+      "sha256": "f464edae62e73650ea3d49f58af0ba8f591e6a498f696a213b4688aaf57923cf",
+      "bytes": 2326,
+      "widthPx": 640,
+      "heightPx": 360,
+      "durationSeconds": 1
+    },
+    {
+      "file": "portrait.webm",
+      "sha256": "46b7bfe81e1e28097e535f7ce573f0b0b0a23a85890e6881dee056a6f201c6b9",
+      "bytes": 913,
+      "widthPx": 360,
+      "heightPx": 640,
+      "durationSeconds": 1
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "A면 전체 영상",
+      "artworks": [
+        {
+          "id": "artwork-1",
+          "fit": "contain",
+          "wallSide": "front",
+          "rotationDeg": 30,
+          "widthMm": 1200,
+          "heightMm": 1200
+        },
+        {
+          "id": "artwork-2",
+          "fit": "contain",
+          "wallSide": "front",
+          "rotationDeg": -15,
+          "widthMm": 1200,
+          "heightMm": 1200
+        }
+      ],
+      "thumbnail": [
+        320,
+        200
+      ]
+    },
+    {
+      "id": "scene-2",
+      "name": "B면 스크린 채우기",
+      "artworks": [
+        {
+          "id": "artwork-1",
+          "fit": "cover",
+          "wallSide": "back",
+          "rotationDeg": -30,
+          "widthMm": 1200,
+          "heightMm": 1200
+        },
+        {
+          "id": "artwork-2",
+          "fit": "cover",
+          "wallSide": "back",
+          "rotationDeg": 15,
+          "widthMm": 1200,
+          "heightMm": 1200
+        }
+      ],
+      "thumbnail": [
+        320,
+        200
+      ]
+    }
+  ],
+  "captureDimensions": [
+    [
+      1920,
+      931
+    ],
+    [
+      1920,
+      931
+    ],
+    [
+      1920,
+      959
+    ]
+  ],
+  "nativePngRgbErrors": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "nativePdfRgbErrors": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "glbRgbErrors": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "glbs": [
+    {
+      "file": "Scene-A.glb",
+      "sha256": "da54579df79d115e726284be3022d9d6ff08a07b547480b8a042ad4281eebf65",
+      "bytes": 17856
+    },
+    {
+      "file": "Scene-B.glb",
+      "sha256": "9f68809e943463255383ca5dcf689430812fd5f7143a7bf328d313bdaf05148b",
+      "bytes": 18196
+    }
+  ],
+  "negativeWrongFitRejected": true,
+  "negativeWrongRotationRejected": true,
+  "pdfPages": 6,
+  "pdfSha256": "eeea5c05e3ee4a1cb28953fa0d87b57426d10f76ed976096b06478cdecad43cc",
+  "publicSourceAssets": 2,
+  "publicPosters": 2,
+  "backupExact": true,
+  "gpuMeasured": false,
+  "limits": [
+    "Owned FFmpeg-decoded frames adapt HTML video decoder/metadata; actual browser codec/GPU not measured",
+    "Actual React/jsdom controls/Workspace, native SVG sharp/Canvas and PDF.js raster; 24 samples per image/page",
+    "Public asset preparation only; no operational publication/auth/two-device acceptance",
+    "PDF/capture/GLB are stationary posters; no video animation export"
+  ]
+}

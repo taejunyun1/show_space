@@ -1,0 +1,60 @@
+{
+  "ownedProceduralSource": true,
+  "colors": [
+    "red",
+    "lime",
+    "blue",
+    "yellow",
+    "cyan",
+    "magenta"
+  ],
+  "seekSeconds": 0.05,
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "sources": [
+    {
+      "file": "landscape.mp4",
+      "sha256": "f464edae62e73650ea3d49f58af0ba8f591e6a498f696a213b4688aaf57923cf",
+      "bytes": 2326,
+      "decodedFrame": "landscape-decoded.png",
+      "decodedSha256": "4c84307611fef06c3ede4065154b0c7112ff9722cab7762a7c848feb3ba36e0f",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 640,
+            "height": 360,
+            "nb_frames": "12"
+          }
+        ],
+        "format": {
+          "duration": "1.000000"
+        }
+      }
+    },
+    {
+      "file": "portrait.webm",
+      "sha256": "46b7bfe81e1e28097e535f7ce573f0b0b0a23a85890e6881dee056a6f201c6b9",
+      "bytes": 913,
+      "decodedFrame": "portrait-decoded.png",
+      "decodedSha256": "456f5a0572a2d4880bb1a59a39850cbfb031397b57b2a4907c9386488916bf42",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp9",
+            "width": 360,
+            "height": 640
+          }
+        ],
+        "format": {
+          "duration": "1.000000"
+        }
+      }
+    }
+  ],
+  "freshDecodeMatchesCommittedFrames": true,
+  "browserCodecMeasured": false
+}

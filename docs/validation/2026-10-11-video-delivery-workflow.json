@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-11",
+  "runtimeBaseline": "e1bf9c48f80ed87aa649e7d57e09e5992b7a88f0",
+  "runtimeChanged": false,
+  "newWorkflowTests": 1,
+  "fullTests": {
+    "passedFiles": 246,
+    "skippedFiles": 10,
+    "passedTests": 1495,
+    "skippedTests": 10,
+    "durationSeconds": 10.97
+  },
+  "build": {
+    "typescriptPassed": true,
+    "vitePassed": true,
+    "viteDurationSeconds": 5.25
+  },
+  "nativeCodecFreshDecodeMatches": true,
+  "rgbSamples": {
+    "png": 72,
+    "pdf": 96,
+    "glb": 34,
+    "maximumError": 0
+  },
+  "backupCrcPassed": true,
+  "backupEntries": 9,
+  "allSavedAssetHashesPassed": true,
+  "deploymentPerformed": false,
+  "browserGpuMeasured": false,
+  "next": "Projection image/settings Scene/share preparation/capture path workflow; real GPU pixels remain deferred",
+  "files": {
+    "PDF-A.png": {
+      "bytes": 89600,
+      "sha256": "ede5e899e402e499ad8dff23412d0148e19bfe218f292a96513a1bf5c103ea15"
+    },
+    "PDF-B.png": {
+      "bytes": 92249,
+      "sha256": "5088eb56202ad726875755bc323257bd0fb536e0c50671edba150d35e974bfdb"
+    },
+    "Scene-A.glb": {
+      "bytes": 17856,
+      "sha256": "da54579df79d115e726284be3022d9d6ff08a07b547480b8a042ad4281eebf65"
+    },
+    "Scene-A.png": {
+      "bytes": 42273,
+      "sha256": "3b4ab8af65e1449b4dc7e6ff4124a5e580f708f1ff055ec658bfe6ee6a9007be"
+    },
+    "Scene-A.svg": {
+      "bytes": 12884,
+      "sha256": "98e33b9dfc1f79965da61783d0d94b59ce999a394da08eeda338fc98c538cdbf"
+    },
+    "Scene-B.glb": {
+      "bytes": 18196,
+      "sha256": "9f68809e943463255383ca5dcf689430812fd5f7143a7bf328d313bdaf05148b"
+    },
+    "Scene-B.png": {
+      "bytes": 49055,
+      "sha256": "90389db3fe0d27db92c35c6b7a5f9d02fd96e89f60b888adeaaea17ebecb2048"
+    },
+    "Scene-B.svg": {
+      "bytes": 12879,
+      "sha256": "c4f6e2cc2aaadd998e25d7f231f75148b79c4374fc8ee186fa1b873ce2fb078e"
+    },
+    "field-B.png": {
+      "bytes": 45044,
+      "sha256": "ac5d7a46960ad22abf966a778abd7e15bf411612462e4181ff48fa8f05068e03"
+    },
+    "field-B.svg": {
+      "bytes": 9771,
+      "sha256": "bc68d954435ab885537ce8845587348c83da4e700b377cf52ac7678a2e349f17"
+    },
+    "fixtures.json": {
+      "bytes": 1500,
+      "sha256": "346a0859d832a4b1b99bfaa74b3879e3f4ae29eafb07568a8e4f131b420cee29"
+    },
+    "landscape-decoded.png": {
+      "bytes": 1544,
+      "sha256": "4c84307611fef06c3ede4065154b0c7112ff9722cab7762a7c848feb3ba36e0f"
+    },
+    "landscape.mp4": {
+      "bytes": 2326,
+      "sha256": "f464edae62e73650ea3d49f58af0ba8f591e6a498f696a213b4688aaf57923cf"
+    },
+    "portrait-decoded.png": {
+      "bytes": 2056,
+      "sha256": "456f5a0572a2d4880bb1a59a39850cbfb031397b57b2a4907c9386488916bf42"
+    },
+    "portrait.webm": {
+      "bytes": 913,
+      "sha256": "46b7bfe81e1e28097e535f7ce573f0b0b0a23a85890e6881dee056a6f201c6b9"
+    },
+    "project.gonggan.zip": {
+      "bytes": 15472,
+      "sha256": "698e0742e272646186827266f27095de98f67bc0be830a9f3dd10fc9678d8600"
+    },
+    "project.pdf": {
+      "bytes": 3313160,
+      "sha256": "eeea5c05e3ee4a1cb28953fa0d87b57426d10f76ed976096b06478cdecad43cc"
+    },
+    "public.json": {
+      "bytes": 7057,
+      "sha256": "b1640adb900737d3612c7cd06bc10054204a04c5da12a8771d91cb6c20169f6a"
+    },
+    "workflow.json": {
+      "bytes": 4740,
+      "sha256": "90ec0affc0e871c146db466b1598169c3a5adf2d60b5e28d53b91b90d62fe9ec"
+    }
+  }
+}
