@@ -1,11 +1,30 @@
 import {expect,it} from 'vitest';
 import {readFile} from 'node:fs/promises';
 import {createDemoProject} from '../domain/model';
+import {appendSceneSnapshot} from '../domain/sceneSnapshot';
 import type {ModelArtwork} from '../domain/types';
 import {pdfDefaultPages,pdfNeeds3d,pdfPreviewSection,pdfSections,type PdfOptions} from './pdfLayout';
 import {buildExhibitionPdf} from './pdfDocument';
 const base:PdfOptions={current:true,sceneIds:[],threeD:true,plan:true,elevation:true,allWallFaces:false,includeSchedule:true};
 const model:ModelArtwork={id:'model',name:'오브젝트',artist:'작가',year:'2026',kind:'object',model:{name:'object.glb',dataUrl:'not-loaded-in-layout-test',sizeMm:[1000,2000,500],sourceOffsetM:[0,0,0]},widthMm:1000,heightMm:2000,depthMm:500,position:{x:9000,y:300,z:3000},rotation:{x:0,y:30,z:0},visible:true,locked:false,note:'PRIVATE_MODEL'};
+function savedPlan(calibrated:boolean){
+ const p=createDemoProject();p.artworks=[];p.scenes=[];p.planImageUrl='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a2ioAAAAASUVORK5CYII=';
+ p.planReference={widthPx:1000,heightPx:800,origin:{x:0,z:0},mmPerPixel:10,calibrated};return appendSceneSnapshot(p,p,calibrated?'보정 완료':'축척 미정');
+}
+it.each(['batch','ordered'] as const)('rejects an uncalibrated selected Scene in %s PDF even when the current plan is calibrated',mode=>{
+ const p=savedPlan(false);p.planReference!.calibrated=true;
+ const options={...base,current:false,sceneIds:[p.scenes[0].id],...(mode==='ordered'?{pages:[{id:'p',kind:'plan' as const,sceneId:p.scenes[0].id}]}:{})};
+ expect(()=>pdfSections(p,options)).toThrow(/축척 미정.*축척/);
+});
+it.each(['batch','ordered'] as const)('exports only a calibrated Scene in %s PDF while leaving the unselected current plan uncalibrated',mode=>{
+ const p=savedPlan(true);p.planReference!.calibrated=false;const before=structuredClone(p);
+ const sections=pdfSections(p,{...base,current:false,sceneIds:[p.scenes[0].id],threeD:false,elevation:false,...(mode==='ordered'?{pages:[{id:'p',kind:'plan' as const,sceneId:p.scenes[0].id}]}:{})});
+ expect(sections).toHaveLength(1);expect(sections[0].project.planReference?.calibrated).toBe(true);expect(p).toEqual(before);
+});
+it('still rejects an uncalibrated current plan when it is actually included beside a calibrated Scene',()=>{
+ const p=savedPlan(true);p.planReference!.calibrated=false;expect(()=>pdfSections(p,{...base,current:true,sceneIds:[p.scenes[0].id]})).toThrow(/현재 배치.*축척/);
+ expect(()=>pdfSections(p,{...base,current:false,pages:[{id:'scene',kind:'plan',sceneId:p.scenes[0].id},{id:'current',kind:'schedule'}]})).toThrow(/현재 배치.*축척/);
+});
 it('follows explicit interleaved page order and the saved structural batch without editing the project',()=>{
  const p=createDemoProject();p.scenes=[{id:'saved',name:'저장 배치',artworks:[{...p.artworks[0],widthMm:777}],wallVisibility:{},cameraView:{position:[1,2,3],target:[0,0,0],zoom:8}}];const before=structuredClone(p);
  const sections=pdfSections(p,{...base,current:false,pages:[{id:'a',kind:'cover',sceneId:'saved',title:'  첫 표지  '},{id:'b',kind:'detail',artworkId:p.artworks[0].id},{id:'c',kind:'plan',sceneId:'saved'},{id:'d',kind:'3d',sceneId:'saved'},{id:'e',kind:'plan'},{id:'f',kind:'schedule',sceneId:'saved'}]});

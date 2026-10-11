@@ -1,0 +1,269 @@
+{
+  "date": "2026-10-11",
+  "baselineCommit": "ce0c79fbdfa8f6a512bd8ba7227a2e17c93ae59f",
+  "runtimeFiles": [
+    "src/lib/pdfLayout.ts"
+  ],
+  "baseline": {
+    "method": "Temporary final-source copy; only pdfLayout.ts replaced from baseline commit; same final two test files",
+    "tests": 12,
+    "failed": 6,
+    "passed": 6,
+    "exitCode": 1,
+    "durationSeconds": 11.21
+  },
+  "regression": {
+    "added": 6,
+    "targetFiles": 4,
+    "targetTests": 43,
+    "fullPassed": 1546,
+    "fullSkipped": 10,
+    "fullPassedFiles": 250,
+    "fullSkippedFiles": 10,
+    "fullDurationSeconds": 12.93,
+    "productionBuild": true,
+    "viteBuildSeconds": 5.62,
+    "existingLargeChunkWarning": true
+  },
+  "nativeWorkflow": {
+    "date": "2026-10-11",
+    "inputBackupSha256": "960603a394cc03cf4f2c5351c6dbcd0932d26fd994b80e96824b159ecb0fb26f",
+    "pdfPages": 8,
+    "selectedAOnlyPages": 2,
+    "pdfSha256": "60d2e5291aa10325fa2f8c421b5a361a819ee418044c7955fcfd88be25591764",
+    "pdfWallCenterlineRgbSamples": 12,
+    "pdfWallCenterlineRgbMaxError": 0,
+    "negativeWrongPdfSceneRejected": true,
+    "glbWallCornerMaxErrorMm": 0.00017168724531896432,
+    "negative100mmShiftRejected": true,
+    "scenes": [
+      {
+        "file": "Scene-A.glb",
+        "projectFile": "Scene-A.json",
+        "sha256": "39ca903e6d9412795a882cf25f24df58eda5ae946c6015ae6c8438f4fe1b18c2",
+        "walls": [
+          {
+            "id": "auto-wall-1",
+            "start": {
+              "x": 100,
+              "z": 140
+            },
+            "end": {
+              "x": 8060,
+              "z": 140
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150
+          },
+          {
+            "id": "auto-wall-2",
+            "start": {
+              "x": 8060,
+              "z": 140
+            },
+            "end": {
+              "x": 8060,
+              "z": 6100
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150
+          }
+        ]
+      },
+      {
+        "file": "Scene-B.glb",
+        "projectFile": "Scene-B.json",
+        "sha256": "125363d2bb43e064af333ec329f8017786a31af294974706893191e63ddd2807",
+        "walls": [
+          {
+            "id": "auto-wall-1",
+            "start": {
+              "x": 100,
+              "z": 140
+            },
+            "end": {
+              "x": 8460,
+              "z": 140
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150
+          },
+          {
+            "id": "auto-wall-2",
+            "start": {
+              "x": 8460,
+              "z": 140
+            },
+            "end": {
+              "x": 8060,
+              "z": 6100
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150
+          }
+        ]
+      }
+    ],
+    "sharing": {
+      "localWorker": true,
+      "scenes": 2,
+      "readOnly": true,
+      "apiCalls": [
+        {
+          "path": "/api/public/f3166ba80a3c122848cf35f93971a496714ae133e610d634",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/public/f3166ba80a3c122848cf35f93971a496714ae133e610d634",
+          "method": "GET",
+          "status": 200
+        },
+        {
+          "path": "/api/public/f3166ba80a3c122848cf35f93971a496714ae133e610d634",
+          "method": "GET",
+          "status": 410
+        }
+      ],
+      "wrongOwnerDelete": 404,
+      "ownerDelete": 204,
+      "publicAfterRevoke": 410
+    },
+    "backupExact": true,
+    "gpuMeasured": false,
+    "limitations": [
+      "Owned two-JPEG fixture from prior UI/native plan workflow; B reference calibrated through actual PlanView",
+      "Native PDF.js vector raster and Three GLB importer, no browser/GPU or 3D capture pixels",
+      "Synthetic local SQLite/R2/auth Worker publication; not operational URL/account/two-device acceptance"
+    ]
+  },
+  "blender": {
+    "version": "4.4.1",
+    "receivers": [
+      {
+        "file": "Scene-A.glb",
+        "sha256": "39ca903e6d9412795a882cf25f24df58eda5ae946c6015ae6c8438f4fe1b18c2",
+        "passed": true,
+        "status": "complete",
+        "meshes": 2,
+        "walls": [
+          {
+            "id": "auto-wall-1",
+            "lengthM": 7.96,
+            "heightM": 3.0,
+            "thicknessM": 0.15,
+            "maxWorldBoundsErrorM": 5.340576176848799e-07
+          },
+          {
+            "id": "auto-wall-2",
+            "lengthM": 5.96,
+            "heightM": 3.0,
+            "thicknessM": 0.15,
+            "maxWorldBoundsErrorM": 1.1825561525569128e-06
+          }
+        ]
+      },
+      {
+        "file": "Scene-B.glb",
+        "sha256": "125363d2bb43e064af333ec329f8017786a31af294974706893191e63ddd2807",
+        "passed": true,
+        "status": "complete",
+        "meshes": 2,
+        "walls": [
+          {
+            "id": "auto-wall-1",
+            "lengthM": 8.36,
+            "heightM": 3.0,
+            "thicknessM": 0.15,
+            "maxWorldBoundsErrorM": 3.814697265569489e-07
+          },
+          {
+            "id": "auto-wall-2",
+            "lengthM": 5.973407737631845,
+            "heightM": 3.0,
+            "thicknessM": 0.15,
+            "maxWorldBoundsErrorM": 3.4355557332332864e-07
+          }
+        ]
+      }
+    ],
+    "maxWorldBoundsErrorMm": 0.0011825561525569128,
+    "negative": {
+      "sameSceneAGlb": true,
+      "expectedFirstWallXOffsetMm": 100,
+      "exitCode": 1,
+      "assertion": "auto-wall-1: [0.09999990463256836, -0.2150000035762787, 0.0] differs from [0.2, -0.215, 0]",
+      "outputLocation": "temporary; not a passed receipt"
+    }
+  },
+  "artifacts": {
+    "PDF-A.png": {
+      "sha256": "8c36268d9ab259f0451a0c05fbc9b63c467c93825c06e36ea8c17a4064f9f976",
+      "bytes": 41223
+    },
+    "PDF-B.png": {
+      "sha256": "e726ddde45d4fa9a4a808d56f834c717ae293644e720aa127ce76c10d30c6604",
+      "bytes": 47904
+    },
+    "Scene-A.glb": {
+      "sha256": "39ca903e6d9412795a882cf25f24df58eda5ae946c6015ae6c8438f4fe1b18c2",
+      "bytes": 4112
+    },
+    "Scene-A.json": {
+      "sha256": "d9f43ac0e9625b2261b189a74ae71668503343e644927e0c0a59927ac651120c",
+      "bytes": 11788
+    },
+    "Scene-B.glb": {
+      "sha256": "125363d2bb43e064af333ec329f8017786a31af294974706893191e63ddd2807",
+      "bytes": 4140
+    },
+    "Scene-B.json": {
+      "sha256": "242b4b771e8d14d522af7666e48b0a9911cc752544919a693f8f4cbe9a11cb31",
+      "bytes": 10317
+    },
+    "project.gonggan.zip": {
+      "sha256": "f8a91f1083b34880a4d5e5fbe7b6f381d2d0cd884adfed0d96cdf499d6c85e8e",
+      "bytes": 4417
+    },
+    "project.json": {
+      "sha256": "e3ac988b6391e59fc1dc8afb0c9880f5b248cda14d09c1d6110111e82577283f",
+      "bytes": 45581
+    },
+    "project.pdf": {
+      "sha256": "60d2e5291aa10325fa2f8c421b5a361a819ee418044c7955fcfd88be25591764",
+      "bytes": 3135784
+    },
+    "public.json": {
+      "sha256": "88315369142e2058610b1d8f5addb69d833d92b5e599b0db5ae7ace978daadc7",
+      "bytes": 4652
+    },
+    "receiver-A/receiver.json": {
+      "sha256": "fa21647e63a1bec84c2984113f6d1be11d5fb1d0fd0b9abec33e192eaf910f7a",
+      "bytes": 1122
+    },
+    "receiver-B/receiver.json": {
+      "sha256": "282c1b949a9ce5718304b5f0edac4ad27e4f0b11e1846792425df5c7390196ee",
+      "bytes": 1135
+    },
+    "selected-A.pdf": {
+      "sha256": "1f8def5733924d32d8cd17f7d8355ab67d6bdfdfddbe14244b0878b714d9fec6",
+      "bytes": 3130835
+    },
+    "workflow.json": {
+      "sha256": "02b29d9dcb681a4b06f276354829cc67eb54ea566a3f558d5382af3c809ed487",
+      "bytes": 2903
+    }
+  },
+  "deployment": {
+    "performed": false
+  },
+  "acceptance": {
+    "actualBrowserGpu": false,
+    "actualAccountPublicUrl": false,
+    "twoDevices": false,
+    "realUserDrawings": false,
+    "original24StepComplete": false,
+    "sketchUpReceiver": false,
+    "allFeaturesComplete": false
+  }
+}

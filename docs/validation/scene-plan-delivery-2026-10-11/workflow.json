@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-11",
+  "inputBackupSha256": "960603a394cc03cf4f2c5351c6dbcd0932d26fd994b80e96824b159ecb0fb26f",
+  "pdfPages": 8,
+  "selectedAOnlyPages": 2,
+  "pdfSha256": "60d2e5291aa10325fa2f8c421b5a361a819ee418044c7955fcfd88be25591764",
+  "pdfWallCenterlineRgbSamples": 12,
+  "pdfWallCenterlineRgbMaxError": 0,
+  "negativeWrongPdfSceneRejected": true,
+  "glbWallCornerMaxErrorMm": 0.00017168724531896432,
+  "negative100mmShiftRejected": true,
+  "scenes": [
+    {
+      "file": "Scene-A.glb",
+      "projectFile": "Scene-A.json",
+      "sha256": "39ca903e6d9412795a882cf25f24df58eda5ae946c6015ae6c8438f4fe1b18c2",
+      "walls": [
+        {
+          "id": "auto-wall-1",
+          "start": {
+            "x": 100,
+            "z": 140
+          },
+          "end": {
+            "x": 8060,
+            "z": 140
+          },
+          "heightMm": 3000,
+          "thicknessMm": 150
+        },
+        {
+          "id": "auto-wall-2",
+          "start": {
+            "x": 8060,
+            "z": 140
+          },
+          "end": {
+            "x": 8060,
+            "z": 6100
+          },
+          "heightMm": 3000,
+          "thicknessMm": 150
+        }
+      ]
+    },
+    {
+      "file": "Scene-B.glb",
+      "projectFile": "Scene-B.json",
+      "sha256": "125363d2bb43e064af333ec329f8017786a31af294974706893191e63ddd2807",
+      "walls": [
+        {
+          "id": "auto-wall-1",
+          "start": {
+            "x": 100,
+            "z": 140
+          },
+          "end": {
+            "x": 8460,
+            "z": 140
+          },
+          "heightMm": 3000,
+          "thicknessMm": 150
+        },
+        {
+          "id": "auto-wall-2",
+          "start": {
+            "x": 8460,
+            "z": 140
+          },
+          "end": {
+            "x": 8060,
+            "z": 6100
+          },
+          "heightMm": 3000,
+          "thicknessMm": 150
+        }
+      ]
+    }
+  ],
+  "sharing": {
+    "localWorker": true,
+    "scenes": 2,
+    "readOnly": true,
+    "apiCalls": [
+      {
+        "path": "/api/public/f3166ba80a3c122848cf35f93971a496714ae133e610d634",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/public/f3166ba80a3c122848cf35f93971a496714ae133e610d634",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/public/f3166ba80a3c122848cf35f93971a496714ae133e610d634",
+        "method": "GET",
+        "status": 410
+      }
+    ],
+    "wrongOwnerDelete": 404,
+    "ownerDelete": 204,
+    "publicAfterRevoke": 410
+  },
+  "backupExact": true,
+  "gpuMeasured": false,
+  "limitations": [
+    "Owned two-JPEG fixture from prior UI/native plan workflow; B reference calibrated through actual PlanView",
+    "Native PDF.js vector raster and Three GLB importer, no browser/GPU or 3D capture pixels",
+    "Synthetic local SQLite/R2/auth Worker publication; not operational URL/account/two-device acceptance"
+  ]
+}

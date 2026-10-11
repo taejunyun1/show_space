@@ -25,7 +25,7 @@ function orderedSections(project:Project,pages:PdfPageRequest[]):PdfSection[]{
  const batches=new Map<string,ReturnType<typeof pdfBatch>>();
  return pages.map(page=>{
   if(!['cover','3d','plan','elevation','detail','schedule'].includes(page.kind))throw new Error('PDF 보기 종류가 올바르지 않습니다.');
-  const key=page.sceneId??'',batch=batches.get(key)??pdfBatch(project,page.sceneId);batches.set(key,batch);
+  const key=page.sceneId??'',batch=batches.get(key)??pdfBatch(project,page.sceneId);requirePdfScale(batch);batches.set(key,batch);
   const section:PdfSection={...batch,kind:page.kind,title:page.title?.trim().slice(0,120)||undefined};
   if(page.kind==='elevation'){
    const wall=batch.project.walls.find(w=>w.visible&&w.id===page.wallId);if(!wall)throw new Error(`${batch.name}: 벽면도에 넣을 표시 벽을 선택하세요.`);
@@ -44,7 +44,6 @@ function orderedSections(project:Project,pages:PdfPageRequest[]):PdfSection[]{
  });
 }
 export function pdfSections(project:Project,options:PdfOptions):PdfSection[]{
- if(project.planReference&&!project.planReference.calibrated)throw new Error('도면 축척을 설정한 뒤 PDF를 내보내세요.');
  if(options.pages!==undefined)return orderedSections(project,options.pages);
  if(!options.current&&!options.sceneIds.length)throw new Error('내보낼 배치를 선택하세요.');
  if(!options.threeD&&!options.plan&&!options.elevation)throw new Error('내보낼 보기를 하나 이상 선택하세요.');
@@ -56,6 +55,7 @@ export function pdfSections(project:Project,options:PdfOptions):PdfSection[]{
  }
  const result:PdfSection[]=[];
  for(const batch of batches){
+  requirePdfScale(batch);
   if(options.threeD)result.push({...batch,kind:'3d'});
   if(options.plan)result.push({...batch,kind:'plan'});
   if(options.elevation)for(const wall of batch.project.walls.filter(w=>w.visible))for(const side of ['front','back'] as const){
@@ -64,6 +64,9 @@ export function pdfSections(project:Project,options:PdfOptions):PdfSection[]{
  }
  if(!result.length)throw new Error('선택한 보기에 내보낼 벽면이 없습니다.');
  return result;
+}
+function requirePdfScale(batch:{project:Project;name:string}){
+ if(batch.project.planReference&&!batch.project.planReference.calibrated)throw new Error(`${batch.name}: 도면 축척을 설정한 뒤 PDF를 내보내세요.`);
 }
 /** Seed a editable page list from the existing batch export without changing its order. */
 export function pdfDefaultPages(project:Project,options:PdfOptions):PdfPageRequest[]{

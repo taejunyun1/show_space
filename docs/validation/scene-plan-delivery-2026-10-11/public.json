@@ -1,0 +1,206 @@
+{
+  "outdoor": {
+    "mode": "indoor",
+    "latitude": 37.5665,
+    "longitude": 126.978,
+    "timeZone": "Asia/Seoul",
+    "date": "2026-06-21",
+    "time": "12:00",
+    "northDeg": 0,
+    "preset": "clear",
+    "sunIntensity": 3,
+    "shadow": true,
+    "occurrence": "earlier"
+  },
+  "lights": [],
+  "lighting": {
+    "ambient": 0.65,
+    "hemisphere": 0.7,
+    "fill": 2.3,
+    "environment": 0.35
+  },
+  "schemaVersion": 1,
+  "displayUnit": "cm",
+  "name": "최신 전시 이름",
+  "venue": "성수 갤러리",
+  "floorColor": "#f1f1ed",
+  "walls": [
+    {
+      "id": "auto-wall-1",
+      "name": "자동 벽 1",
+      "start": {
+        "x": 100,
+        "z": 140
+      },
+      "end": {
+        "x": 8460,
+        "z": 140
+      },
+      "heightMm": 3000,
+      "thicknessMm": 150,
+      "color": "#ffffff",
+      "role": "partition"
+    },
+    {
+      "id": "auto-wall-2",
+      "name": "자동 벽 2",
+      "start": {
+        "x": 8460,
+        "z": 140
+      },
+      "end": {
+        "x": 8060,
+        "z": 6100
+      },
+      "heightMm": 3000,
+      "thicknessMm": 150,
+      "color": "#ffffff",
+      "role": "partition"
+    }
+  ],
+  "artworks": [],
+  "openings": [],
+  "zones": [],
+  "dimensions": [],
+  "includeArtworkDetails": true,
+  "scenes": [
+    {
+      "id": "scene-1",
+      "name": "도면 A",
+      "snapshot": {
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "schemaVersion": 1,
+        "displayUnit": "cm",
+        "name": "최신 전시 이름",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [
+          {
+            "id": "auto-wall-1",
+            "name": "자동 벽 1",
+            "start": {
+              "x": 100,
+              "z": 140
+            },
+            "end": {
+              "x": 8060,
+              "z": 140
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "role": "partition"
+          },
+          {
+            "id": "auto-wall-2",
+            "name": "자동 벽 2",
+            "start": {
+              "x": 8060,
+              "z": 140
+            },
+            "end": {
+              "x": 8060,
+              "z": 6100
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "role": "partition"
+          }
+        ],
+        "artworks": [],
+        "openings": [],
+        "zones": [],
+        "dimensions": []
+      }
+    },
+    {
+      "id": "scene-3",
+      "name": "도면 B · 보정",
+      "snapshot": {
+        "outdoor": {
+          "mode": "indoor",
+          "latitude": 37.5665,
+          "longitude": 126.978,
+          "timeZone": "Asia/Seoul",
+          "date": "2026-06-21",
+          "time": "12:00",
+          "northDeg": 0,
+          "preset": "clear",
+          "sunIntensity": 3,
+          "shadow": true,
+          "occurrence": "earlier"
+        },
+        "lights": [],
+        "lighting": {
+          "ambient": 0.65,
+          "hemisphere": 0.7,
+          "fill": 2.3,
+          "environment": 0.35
+        },
+        "schemaVersion": 1,
+        "displayUnit": "cm",
+        "name": "최신 전시 이름",
+        "venue": "성수 갤러리",
+        "floorColor": "#f1f1ed",
+        "walls": [
+          {
+            "id": "auto-wall-1",
+            "name": "자동 벽 1",
+            "start": {
+              "x": 100,
+              "z": 140
+            },
+            "end": {
+              "x": 8460,
+              "z": 140
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "role": "partition"
+          },
+          {
+            "id": "auto-wall-2",
+            "name": "자동 벽 2",
+            "start": {
+              "x": 8460,
+              "z": 140
+            },
+            "end": {
+              "x": 8060,
+              "z": 6100
+            },
+            "heightMm": 3000,
+            "thicknessMm": 150,
+            "color": "#ffffff",
+            "role": "partition"
+          }
+        ],
+        "artworks": [],
+        "openings": [],
+        "zones": [],
+        "dimensions": []
+      }
+    }
+  ]
+}

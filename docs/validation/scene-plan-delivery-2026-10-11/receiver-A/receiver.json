@@ -1,0 +1,49 @@
+{
+  "blenderVersion": "4.4.1",
+  "glbFile": "Scene-A.glb",
+  "glbSHA256": "39ca903e6d9412795a882cf25f24df58eda5ae946c6015ae6c8438f4fe1b18c2",
+  "projectId": "plan-workflow",
+  "importedObjects": 2,
+  "meshObjects": 2,
+  "images": [],
+  "lights": [],
+  "walls": [
+    {
+      "id": "auto-wall-1",
+      "lengthM": 7.96,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 5.340576176848799e-07
+    },
+    {
+      "id": "auto-wall-2",
+      "lengthM": 5.96,
+      "heightM": 3.0,
+      "thicknessM": 0.15,
+      "maxWorldBoundsErrorM": 1.1825561525569128e-06
+    }
+  ],
+  "artworks": [],
+  "privateNoteDetailsAbsent": true,
+  "externalAssetDependencies": false,
+  "geometryAndTexturesPassed": true,
+  "renderRequested": false,
+  "passed": true,
+  "status": "complete",
+  "renders": [],
+  "scope": [
+    "solid-straight-walls",
+    "mounted-image-dimensions",
+    "packed-images",
+    "wall-texture-repeat"
+  ],
+  "notChecked": [
+    "floor",
+    "openings",
+    "reference-models",
+    "independent-3d-artworks",
+    "artwork-placement",
+    "lighting-fidelity",
+    "SketchUp-compatibility"
+  ]
+}
