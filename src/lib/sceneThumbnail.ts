@@ -19,7 +19,7 @@ export async function renderSceneThumbnail(project:Project,camera:PdfCurrentCame
  const png=await queueTemporaryRender(signal,async()=>{
   if(render)return render(source,view);
   const {renderPdf3d}=await import('./pdfRender3d');
-  return renderPdf3d({project:source,name:'Scene 미리보기',kind:'3d',current:true},view,SCENE_THUMBNAIL_EDGE);
+  return renderPdf3d({project:source,name:'Scene 미리보기',kind:'3d',current:true},view,SCENE_THUMBNAIL_EDGE,signal);
  });
  return encode(new Blob([new Uint8Array(png)],{type:'image/png'}),'3d',signal);
 }

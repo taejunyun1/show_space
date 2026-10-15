@@ -71,12 +71,12 @@ export function Workspace({ captureRef,cameraGetterRef,incomingPlan,onPlanReceiv
     mounted.current=true;
     // Observe every transition, including A→B→A before React renders again.
     const unsubscribe=useEditor.subscribe((next,previous)=>{
-      if(next.project.id!==previous.project.id||hasEditorGesture(next)){
+      if(next.project.id!==previous.project.id||next.projectContextVersion!==previous.projectContextVersion||hasEditorGesture(next)){
         sceneJob.current?.abort();sceneJob.current=null;setSavingScene(false);
         if(next.project.id!==previous.project.id&&sceneName.current)sceneName.current.value='';
       }
-      if(next.project!==previous.project||next.previewProject!==previous.previewProject||next.view!==previous.view||hasEditorGesture(next))captureJob.current?.abort();
-      if(next.project.id!==previous.project.id||next.view!==previous.view)setCaptureOpen(false);
+      if(next.project!==previous.project||next.projectContextVersion!==previous.projectContextVersion||next.previewProject!==previous.previewProject||next.view!==previous.view||hasEditorGesture(next))captureJob.current?.abort();
+      if(next.project.id!==previous.project.id||next.projectContextVersion!==previous.projectContextVersion||next.view!==previous.view)setCaptureOpen(false);
     });
     return()=>{unsubscribe();mounted.current=false;sceneJob.current?.abort();sceneJob.current=null;captureJob.current?.abort();};
   },[]);
@@ -86,11 +86,11 @@ export function Workspace({ captureRef,cameraGetterRef,incomingPlan,onPlanReceiv
     const state=useEditor.getState();
     if(!mounted.current||sceneJob.current||!state.hydrated||hasEditorGesture(state))return;
     const controller=new AbortController();sceneJob.current=controller;setSavingScene(true);
+    try{
     const source=structuredClone({...state.project,scenes:[]}),rawName=sceneName.current?.value??'',name=rawName.trim()||`Scene ${String.fromCharCode(65+state.project.scenes.length)}`;
     const camera=view==='3d'?structuredClone(cameraGetterRef.current?.()):undefined,box=stageRef.current?.getBoundingClientRect();
     const currentCamera=camera&&box&&box.width>0&&box.height>0?{view:structuredClone(camera),width:box.width,height:box.height,cutaway}:undefined;
     let thumbnail:SceneThumbnail|undefined;
-    try{
       try{
         if(view==='3d'){
           const {renderSceneThumbnail}=await import('../lib/sceneThumbnail');controller.signal.throwIfAborted();

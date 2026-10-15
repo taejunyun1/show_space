@@ -1,0 +1,187 @@
+{
+  "date": "2026-10-15",
+  "baselineCommit": "3bbce851896f49b6d0e086af324a7ca98c1dd040",
+  "runtimeFiles": [
+    "src/components/useOutputJob.ts",
+    "src/components/ExportDialog.tsx",
+    "src/components/PdfDialog.tsx",
+    "src/components/Workspace.tsx",
+    "src/lib/pdfExport.ts",
+    "src/lib/pdfRender3d.ts",
+    "src/lib/sceneThumbnail.ts"
+  ],
+  "regression": {
+    "added": 25,
+    "focused": {
+      "passed": 55,
+      "failed": 0,
+      "skipped": 0,
+      "passedFiles": 4,
+      "skippedFiles": 0,
+      "durationSeconds": 2.339
+    },
+    "full": {
+      "passed": 1657,
+      "failed": 0,
+      "skipped": 10,
+      "passedFiles": 261,
+      "skippedFiles": 10,
+      "durationSeconds": 17.554
+    },
+    "typeScriptAndProductionBuild": true,
+    "viteBuildSeconds": 6.99,
+    "existingLargeChunkWarning": true
+  },
+  "baseline": {
+    "outputUi": {
+      "method": "Temporary final-source copy with existing five output runtime files restored from previous main; same ten selected new UI assertions. New hook unused by old components.",
+      "result": {
+        "passed": 0,
+        "failed": 10,
+        "skipped": 12,
+        "passedFiles": 0,
+        "skippedFiles": 0,
+        "durationSeconds": 2.225
+      }
+    },
+    "workspace": {
+      "method": "Four identical new restoration cases run before Workspace changes against previous main runtime.",
+      "result": {
+        "passed": 0,
+        "failed": 4,
+        "skipped": 18,
+        "passedFiles": 0,
+        "skippedFiles": 0,
+        "durationSeconds": 0.972
+      }
+    },
+    "limits": "Selected 14 UI regressions, not all 25 new cases or full-suite counterfactual. Render disposal and font cancellation are separate controlled tests."
+  },
+  "nativeWorkflow": {
+    "ui": [
+      "actual PdfDialog/PageBuilder current/Scene pages",
+      "production font request signal -> first response adapter awaits abort",
+      "generation cancel -> forwarded font signal aborted -> no download",
+      "retry -> actual font/image decode/PDF encoding",
+      "independent PDF.js text and page 7/8 raster checks",
+      "ExportDialog -> actual ZIP/export/read and private metadata preservation"
+    ],
+    "pages": 8,
+    "artworks": 10,
+    "sceneCount": 1,
+    "currentFirstArtworkWidthMm": 400,
+    "sceneFirstArtworkWidthMm": 777,
+    "pdfExcludesPrivateNotes": true,
+    "zipRestoresExactProject": true,
+    "zipCrcIndependent": true,
+    "publicSnapshotPrivateExclusionChecked": true,
+    "artifacts": [
+      {
+        "path": "docs/validation/output-cancel-2026-10-15/current-artwork.png",
+        "bytes": 16587,
+        "sha256": "0c1cbfdc4ad811b252a4c1a924bb5e9e36ce1dd12b36c6c153513069ac65178d",
+        "dimensions": [
+          842,
+          596
+        ]
+      },
+      {
+        "path": "docs/validation/output-cancel-2026-10-15/exhibition.pdf",
+        "bytes": 3138250,
+        "sha256": "4252b07919850deffde11fc5112c56bce3896b84fa2a406335c0dc7653fcf21a"
+      },
+      {
+        "path": "docs/validation/output-cancel-2026-10-15/project.gonggan.zip",
+        "bytes": 6638,
+        "sha256": "a52bbd14fd77a888686ec7c2194e864f519777eea1accda1177e3c56163c95bc"
+      },
+      {
+        "path": "docs/validation/output-cancel-2026-10-15/scene-artwork.png",
+        "bytes": 16403,
+        "sha256": "43b799bc3ca64e5486c6c0df97c71f2ca08e69bc040703c97178f5ccadb33e29",
+        "dimensions": [
+          842,
+          596
+        ]
+      }
+    ],
+    "zipAssets": [
+      {
+        "path": "assets/images/2fcf604c84959f7d4d4f69ecf0bcdf7911936cbf9a403787bc0110c6460b323f.png",
+        "sha256": "2fcf604c84959f7d4d4f69ecf0bcdf7911936cbf9a403787bc0110c6460b323f",
+        "bytes": 205
+      },
+      {
+        "path": "assets/images/47205e27ad0b76cbc0330aaa21485a436583a531934021c55a11b97647fa3616.png",
+        "sha256": "47205e27ad0b76cbc0330aaa21485a436583a531934021c55a11b97647fa3616",
+        "bytes": 209
+      },
+      {
+        "path": "assets/images/4a084ae7428d80b2c7acfb0a97df781f349aee344e6a0d4412d520a06b664867.png",
+        "sha256": "4a084ae7428d80b2c7acfb0a97df781f349aee344e6a0d4412d520a06b664867",
+        "bytes": 210
+      },
+      {
+        "path": "assets/images/a1d101ee28ce6557824be0dec8b33f412f1ee6af10d4caa49c700e97d57edc55.png",
+        "sha256": "a1d101ee28ce6557824be0dec8b33f412f1ee6af10d4caa49c700e97d57edc55",
+        "bytes": 210
+      },
+      {
+        "path": "assets/images/0712c343874c9a4926a5e039f9a38a6c62cd0ec6d3254c90f74f9fc4478363a4.png",
+        "sha256": "0712c343874c9a4926a5e039f9a38a6c62cd0ec6d3254c90f74f9fc4478363a4",
+        "bytes": 209
+      },
+      {
+        "path": "assets/images/34e2b05cf86dab2f04153a4fe5d7d8876804efb60df4584dbe6a2181eb65059b.png",
+        "sha256": "34e2b05cf86dab2f04153a4fe5d7d8876804efb60df4584dbe6a2181eb65059b",
+        "bytes": 208
+      },
+      {
+        "path": "assets/images/11e6a89d97386330ef3cb6f394791c7f4dd7e48121a60578259d56c30f83ecff.png",
+        "sha256": "11e6a89d97386330ef3cb6f394791c7f4dd7e48121a60578259d56c30f83ecff",
+        "bytes": 209
+      },
+      {
+        "path": "assets/images/9e3931ce33fcd76900fc5d752e826f2e52767e8592507a5822637169abcaf52a.png",
+        "sha256": "9e3931ce33fcd76900fc5d752e826f2e52767e8592507a5822637169abcaf52a",
+        "bytes": 210
+      },
+      {
+        "path": "assets/images/488d0b6511b0b047c99d1c5104b7ae29041d79bfb08d0895b3aad5a9e6bfb2ca.png",
+        "sha256": "488d0b6511b0b047c99d1c5104b7ae29041d79bfb08d0895b3aad5a9e6bfb2ca",
+        "bytes": 210
+      },
+      {
+        "path": "assets/images/21c20c918d92444295c2771b3de7ac9ffe53257cd44a1dca90027c5a1cf0e39a.png",
+        "sha256": "21c20c918d92444295c2771b3de7ac9ffe53257cd44a1dca90027c5a1cf0e39a",
+        "bytes": 209
+      }
+    ],
+    "pngVisualInspection": "Current portrait red panel vs wider saved-Scene red panel, Korean labels, 400/777 x 600 dimensions, no private Notes in page text."
+  },
+  "verifiedCases": [
+    "Four output formats cancel/retry; older success cannot download or clear replacement busy",
+    "PDF/backup close while busy and ignore old failure; same-ID Scene restoration closes all output jobs",
+    "Font abort forwarding and cancellation remains AbortError; stopped/pre-aborted PDF does no next stage",
+    "Decoded canceled artwork texture disposed before encoding; queued GPU work skipped",
+    "In-flight render settles before next queued render; scene/geometry/material/map resources disposed without creating renderer after abort",
+    "Controlled PNG encoding completes then renderer.dispose/forceContextLoss and projector/scene disposal run",
+    "Scene rendering canceled on same-ID document/Scene restore; previous thumbnail never attaches",
+    "Capture dialog closes on context restoration, old PNG not delivered; new capture works",
+    "Camera getter error releases Scene-save busy state and allows retry",
+    "Existing one-exhibition App editing/save/PDF/ZIP/GLB/local Worker locked share/revocation test still passed in full suite"
+  ],
+  "limits": [
+    "React/jsdom/fake-indexeddb/native Canvas/PDF.js, not actual browser interaction or disk durability",
+    "New render lifecycle tests use scene/render/encode adapters, no real GPU pixels or VRAM guarantee",
+    "Cancellation is cooperative: already-running image/model decoder, font/pdf CPU encoder, toBlob or ZIP/GLTF encoder may settle before cleanup; delivery is retired immediately",
+    "Model/backup preparation stops at subsequent progress checkpoints; no hard termination of synchronous encoding",
+    "No operational auth/email/account/device/URL, actual SketchUp or real-user/whole original 24-step acceptance",
+    "No deployment; prior operational authentication/browser wait and paid-generation/equipment-editor exclusions maintained"
+  ],
+  "commands": [
+    "npx vitest run src/components/Workspace.sceneWorkflow.test.tsx src/components/Delivery.workflow.test.tsx src/lib/pdfExport.cancellation.test.ts src/lib/pdfRender3d.cancellation.test.ts --reporter=json --outputFile=/tmp/show-space-output-focused-final.json",
+    "GONGGAN_DELIVERY_PROOF=1 npm test -- --reporter=json --outputFile=/tmp/show-space-output-full-final.json",
+    "npm run build"
+  ]
+}
