@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-15",
+  "projectId": "4af789fd-c8fe-4ec8-addb-71d473cfc498",
+  "artworks": 10,
+  "sceneCount": 1,
+  "sha256": "6877cf262a5ddd035523cdad4c969df91922dd5e6064e116bbd2a8f9be67ecfe",
+  "measurementMm": {
+    "backElevation": 1000,
+    "plan": 5000
+  },
+  "beforeField": {
+    "mounted": 9,
+    "hidden": 1,
+    "unplaced": 1,
+    "installationRows": 10
+  },
+  "privatePhoto": {
+    "width": 64,
+    "height": 32,
+    "rgba": [
+      22,
+      107,
+      190,
+      255
+    ],
+    "sha256": "ae908e3365edff4bcf868b96f58019f101d61cc61b4c558209f80b9e9ee0f925"
+  },
+  "assertions": {
+    "fieldGeometryPreserved": true,
+    "temporaryMeasurementsNotSaved": true,
+    "latestNotesStagesSurviveScene": true,
+    "exactLocalReadback": true,
+    "presentationEditorStateUnchanged": true,
+    "exactZipRestore": true,
+    "privateNotesExcludedFromPublicSnapshot": true,
+    "privatePhotoNotUploaded": true
+  },
+  "limits": [
+    "Actual React field/note/presentation controls with native image decode/encode and production package/read/save paths",
+    "Harness opens modes; Scene restoration uses actual store command, not full App or real browser navigation",
+    "fake-indexeddb and synthetic pointer coordinates/identity CTM; not real device touch/mouse geometry",
+    "Only GPU transport is replaced; no actual 3D pixels, fullscreen/browser or original whole 24-step acceptance",
+    "No operational accounts, email, network publication or deployment"
+  ]
+}

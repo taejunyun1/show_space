@@ -2,22 +2,31 @@ import {useEffect,useRef,useState} from 'react';
 import {ImagePlus,Plus,Trash2} from 'lucide-react';
 import {TextEditor} from './Controls';
 import {useEditor} from '../state/editor';
-import {readNote,NOTE_CHECKS_MAX,NOTE_IMAGES_MAX,NOTE_TEXT_MAX,type NoteTarget} from '../domain/notes';
+import {readNote,NOTE_CHECKS_MAX,NOTE_IMAGES_MAX,NOTE_TEXT_MAX,type NoteTarget,type NoteDetails} from '../domain/notes';
 import {readNoteImage} from '../lib/noteImage';
-export function NoteEditor({target,label='NOTE'}:{target:NoteTarget;label?:string}){
- const project=useEditor(s=>s.project),patch=useEditor(s=>s.patchNote),input=useRef<HTMLInputElement>(null),alive=useRef(true),request=useRef(0);
+type Props={target:NoteTarget;label?:string};
+export function NoteEditor(props:Props){
+ const project=useEditor(s=>s.project),version=useEditor(s=>s.projectContextVersion),[referenceEpoch,setReferenceEpoch]=useState(0);
+ useEffect(()=>{if(props.target.type!=='referenceModel')return;return useEditor.subscribe((next,previous)=>{if(next.project.referenceModel?.dataUrl!==previous.project.referenceModel?.dataUrl)setReferenceEpoch(value=>value+1);});},[props.target.type]);
+ try{readNote(project,props.target);}catch{return <section className="note-editor" role="status">메모 대상을 다시 선택해주세요.</section>;}
+ return <NoteContents key={JSON.stringify([project.id,version,props.target.type,'id' in props.target?props.target.id:'',referenceEpoch])} {...props} version={version}/>;
+}
+function NoteContents({target,label='NOTE',version:contextVersion}:Props&{version:number}){
+ const project=useEditor(s=>s.project),input=useRef<HTMLInputElement>(null),alive=useRef(true),request=useRef(0);
  const [busy,setBusy]=useState(false),[error,setError]=useState('');
  const key=project.id+':'+target.type+('id' in target?':'+target.id:''),referenceSource=target.type==='referenceModel'?project.referenceModel?.dataUrl:undefined;
- useEffect(()=>{alive.current=true;setBusy(false);setError('');return()=>{alive.current=false;request.current++;};},[key,referenceSource]);
+ function inScope(){const state=useEditor.getState();if(!alive.current||state.project.id!==project.id||state.projectContextVersion!==contextVersion||target.type==='referenceModel'&&state.project.referenceModel?.dataUrl!==referenceSource)return false;try{readNote(state.project,target);return true;}catch{return false;}}
+ function patch(value:NoteTarget,change:{text?:string;details?:NoteDetails}){if(inScope())useEditor.getState().patchNote(value,change);}
+ useEffect(()=>{alive.current=true;setBusy(false);setError('');const unsubscribe=useEditor.subscribe((next,previous)=>{let missing=false;try{readNote(next.project,target);}catch{missing=true;}if(next.project.id!==previous.project.id||next.projectContextVersion!==previous.projectContextVersion||missing||target.type==='referenceModel'&&next.project.referenceModel?.dataUrl!==previous.project.referenceModel?.dataUrl){request.current++;setBusy(false);setError('');}});return()=>{unsubscribe();alive.current=false;request.current++;};},[key,referenceSource]);
  const note=readNote(project,target),details=note.details;
- const latest=()=>readNote(useEditor.getState().project,target).details;
+ const latest=()=>inScope()?readNote(useEditor.getState().project,target).details:details;
  function checklist(id:string,value:{text?:string;done?:boolean}){const current=latest();patch(target,{details:{...current,checklist:current.checklist.map(c=>c.id===id?{...c,...value}:c)}});}
  async function load(file:File){const version=++request.current,projectId=project.id;setBusy(true);setError('');try{
-  const image=await readNoteImage(file);if(!alive.current||version!==request.current)return;
-  const state=useEditor.getState();if(state.project.id!==projectId||(target.type==='referenceModel'&&state.project.referenceModel?.dataUrl!==referenceSource))return;
+  const image=await readNoteImage(file);if(!inScope()||version!==request.current)return;
+  const state=useEditor.getState();if(state.project.id!==projectId||state.projectContextVersion!==contextVersion||(target.type==='referenceModel'&&state.project.referenceModel?.dataUrl!==referenceSource))return;
   const current=readNote(state.project,target).details;state.patchNote(target,{details:{...current,images:[...current.images,image]}});
   if(useEditor.getState().message)setError(useEditor.getState().message!);
- }catch(e){if(alive.current&&version===request.current)setError(e instanceof Error?e.message:'이미지를 읽지 못했습니다.');}finally{if(alive.current&&version===request.current)setBusy(false);}}
+ }catch(e){if(inScope()&&version===request.current)setError(e instanceof Error?e.message:'이미지를 읽지 못했습니다.');}finally{if(inScope()&&version===request.current)setBusy(false);}}
  return <section className="note-editor" aria-label={label+' 메모'}><div className="section-label">{label}</div>
  <TextEditor key={key} label={label} multiline maxLength={NOTE_TEXT_MAX} value={note.text} placeholder="설치 메모를 남겨보세요" onCommit={text=>patch(target,{text})}/><small className="field-hint">최대 {NOTE_TEXT_MAX.toLocaleString()}자 · 메모는 공유·PDF·3D 출력에 포함되지 않습니다.</small>
  <div className="note-check-heading"><strong>체크리스트</strong><span>{details.checklist.filter(c=>c.done).length}/{details.checklist.length}</span></div>

@@ -1,0 +1,213 @@
+{
+  "date": "2026-10-15",
+  "baselineCommit": "52f6743bb4e17bac6076fba883b0431e868ee0d7",
+  "runtimeFiles": [
+    "src/components/InstallationMode.tsx",
+    "src/components/NoteEditor.tsx",
+    "src/components/PresentationMode.tsx"
+  ],
+  "baseline": {
+    "method": "Temporary current-source copy with three runtime files replaced by previous main; same 18 assertion cases including native workflow. Live checkout unchanged. Final harness LengthUnitContext correction changes transport only, not assertion cases.",
+    "result": {
+      "passed": 4,
+      "failed": 14,
+      "skipped": 0,
+      "passedFiles": 1,
+      "skippedFiles": 0,
+      "durationSeconds": 17.299
+    },
+    "limits": "Two old-source cases time out waiting for valid presentation GPU transport after stale Scene selection; late fullscreen case times out waiting for owned exit. Old native flow fails at face selection, not every downstream assertion."
+  },
+  "regression": {
+    "added": 18,
+    "focused": {
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0,
+      "passedFiles": 2,
+      "skippedFiles": 0,
+      "durationSeconds": 1.424
+    },
+    "full": {
+      "passed": 1675,
+      "failed": 0,
+      "skipped": 10,
+      "passedFiles": 262,
+      "skippedFiles": 10,
+      "durationSeconds": 15.607
+    },
+    "typeScriptAndProductionBuild": true,
+    "viteBuildSeconds": 6.3,
+    "existingLargeChunkWarning": true,
+    "finalEvidenceNote": "After full run, only native harness LengthUnitContext was aligned with App; final focused 23, proof and TS passed. Runtime code unchanged."
+  },
+  "input": {
+    "path": "docs/validation/output-cancel-2026-10-15/project.gonggan.zip",
+    "sha256": "a52bbd14fd77a888686ec7c2194e864f519777eea1accda1177e3c56163c95bc"
+  },
+  "nativeWorkflow": {
+    "date": "2026-10-15",
+    "projectId": "4af789fd-c8fe-4ec8-addb-71d473cfc498",
+    "artworks": 10,
+    "sceneCount": 1,
+    "sha256": "6877cf262a5ddd035523cdad4c969df91922dd5e6064e116bbd2a8f9be67ecfe",
+    "measurementMm": {
+      "backElevation": 1000,
+      "plan": 5000
+    },
+    "beforeField": {
+      "mounted": 9,
+      "hidden": 1,
+      "unplaced": 1,
+      "installationRows": 10
+    },
+    "privatePhoto": {
+      "width": 64,
+      "height": 32,
+      "rgba": [
+        22,
+        107,
+        190,
+        255
+      ],
+      "sha256": "ae908e3365edff4bcf868b96f58019f101d61cc61b4c558209f80b9e9ee0f925"
+    },
+    "assertions": {
+      "fieldGeometryPreserved": true,
+      "temporaryMeasurementsNotSaved": true,
+      "latestNotesStagesSurviveScene": true,
+      "exactLocalReadback": true,
+      "presentationEditorStateUnchanged": true,
+      "exactZipRestore": true,
+      "privateNotesExcludedFromPublicSnapshot": true,
+      "privatePhotoNotUploaded": true
+    },
+    "limits": [
+      "Actual React field/note/presentation controls with native image decode/encode and production package/read/save paths",
+      "Harness opens modes; Scene restoration uses actual store command, not full App or real browser navigation",
+      "fake-indexeddb and synthetic pointer coordinates/identity CTM; not real device touch/mouse geometry",
+      "Only GPU transport is replaced; no actual 3D pixels, fullscreen/browser or original whole 24-step acceptance",
+      "No operational accounts, email, network publication or deployment"
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "docs/validation/field-modes-2026-10-15/field-elevation.svg",
+      "bytes": 3626,
+      "sha256": "994bab686c49e9d0fa1924ba948e74a774e9bc8b08a2813f143af3b9d9c4297a"
+    },
+    {
+      "path": "docs/validation/field-modes-2026-10-15/private-note.webp",
+      "bytes": 566,
+      "sha256": "ae908e3365edff4bcf868b96f58019f101d61cc61b4c558209f80b9e9ee0f925"
+    },
+    {
+      "path": "docs/validation/field-modes-2026-10-15/project.gonggan.zip",
+      "bytes": 7601,
+      "sha256": "6877cf262a5ddd035523cdad4c969df91922dd5e6064e116bbd2a8f9be67ecfe"
+    },
+    {
+      "path": "docs/validation/field-modes-2026-10-15/workflow.json",
+      "bytes": 1469,
+      "sha256": "a03fa27817feaa84a4b7f2d39ae55e3b9a791a10d095f7a7f2aabdd850668bdf"
+    }
+  ],
+  "independentChecks": {
+    "zipCrc": true,
+    "zipArtworkCount": 10,
+    "zipSceneCount": 1,
+    "firstRestoredWidthMm": 777,
+    "imageAssets": [
+      {
+        "path": "assets/images/ae908e3365edff4bcf868b96f58019f101d61cc61b4c558209f80b9e9ee0f925.webp",
+        "bytes": 566,
+        "sha256": "ae908e3365edff4bcf868b96f58019f101d61cc61b4c558209f80b9e9ee0f925"
+      },
+      {
+        "path": "assets/images/2fcf604c84959f7d4d4f69ecf0bcdf7911936cbf9a403787bc0110c6460b323f.png",
+        "bytes": 205,
+        "sha256": "2fcf604c84959f7d4d4f69ecf0bcdf7911936cbf9a403787bc0110c6460b323f"
+      },
+      {
+        "path": "assets/images/47205e27ad0b76cbc0330aaa21485a436583a531934021c55a11b97647fa3616.png",
+        "bytes": 209,
+        "sha256": "47205e27ad0b76cbc0330aaa21485a436583a531934021c55a11b97647fa3616"
+      },
+      {
+        "path": "assets/images/4a084ae7428d80b2c7acfb0a97df781f349aee344e6a0d4412d520a06b664867.png",
+        "bytes": 210,
+        "sha256": "4a084ae7428d80b2c7acfb0a97df781f349aee344e6a0d4412d520a06b664867"
+      },
+      {
+        "path": "assets/images/a1d101ee28ce6557824be0dec8b33f412f1ee6af10d4caa49c700e97d57edc55.png",
+        "bytes": 210,
+        "sha256": "a1d101ee28ce6557824be0dec8b33f412f1ee6af10d4caa49c700e97d57edc55"
+      },
+      {
+        "path": "assets/images/0712c343874c9a4926a5e039f9a38a6c62cd0ec6d3254c90f74f9fc4478363a4.png",
+        "bytes": 209,
+        "sha256": "0712c343874c9a4926a5e039f9a38a6c62cd0ec6d3254c90f74f9fc4478363a4"
+      },
+      {
+        "path": "assets/images/34e2b05cf86dab2f04153a4fe5d7d8876804efb60df4584dbe6a2181eb65059b.png",
+        "bytes": 208,
+        "sha256": "34e2b05cf86dab2f04153a4fe5d7d8876804efb60df4584dbe6a2181eb65059b"
+      },
+      {
+        "path": "assets/images/11e6a89d97386330ef3cb6f394791c7f4dd7e48121a60578259d56c30f83ecff.png",
+        "bytes": 209,
+        "sha256": "11e6a89d97386330ef3cb6f394791c7f4dd7e48121a60578259d56c30f83ecff"
+      },
+      {
+        "path": "assets/images/9e3931ce33fcd76900fc5d752e826f2e52767e8592507a5822637169abcaf52a.png",
+        "bytes": 210,
+        "sha256": "9e3931ce33fcd76900fc5d752e826f2e52767e8592507a5822637169abcaf52a"
+      },
+      {
+        "path": "assets/images/488d0b6511b0b047c99d1c5104b7ae29041d79bfb08d0895b3aad5a9e6bfb2ca.png",
+        "bytes": 210,
+        "sha256": "488d0b6511b0b047c99d1c5104b7ae29041d79bfb08d0895b3aad5a9e6bfb2ca"
+      },
+      {
+        "path": "assets/images/21c20c918d92444295c2771b3de7ac9ffe53257cd44a1dca90027c5a1cf0e39a.png",
+        "bytes": 209,
+        "sha256": "21c20c918d92444295c2771b3de7ac9ffe53257cd44a1dca90027c5a1cf0e39a"
+      }
+    ],
+    "svgXmlParsed": true,
+    "svgFiniteCoordinates": true,
+    "svgMeasurementText": "임시 측정 100 cm",
+    "privatePhotoVisuallyInspected": true
+  },
+  "cases": [
+    "Installation closes on same-ID restore, Scene restore and project roundtrip; old private image is retired",
+    "Private note text draft resets across restored context and equal-text reference source replacement",
+    "Standalone note image is not attached across restored context or reference source A-B-A; missing target has safe prompt",
+    "Image merges latest text/checklist/stage data and old failure cannot clear replacement progress",
+    "Opposite wall face clears prior artwork/note target and temporary measurement",
+    "New presentation project resets Scene/selection; deleted selected Scene falls back to current",
+    "Fullscreen request is single-flight, handles rejection and retires a late entry belonging to the closed presentation",
+    "Closed presentation never exits a different fullscreen element",
+    "Actual field B-face 1000mm/plan 5000mm temporary measurements preserve geometry and history",
+    "Native 64x32 PNG input -> private WebP decode/RGBA -> auto-save/readback -> latest installation Notes/stages after Scene restore",
+    "Actual detached presentation navigation leaves entire editor state and IndexedDB startup/document unchanged",
+    "Exact asset ZIP restore and public snapshot/uploads exclude private Notes/photo"
+  ],
+  "commands": [
+    "npx vitest run src/components/FieldModes.workflow.test.tsx src/components/InstallationMode.test.tsx",
+    "GONGGAN_FIELD_PROOF=1 npm test -- --reporter=json --outputFile=/tmp/show-space-field-full.json",
+    "GONGGAN_FIELD_PROOF=1 npx vitest run src/components/FieldModes.workflow.test.tsx src/components/InstallationMode.test.tsx --reporter=json --outputFile=/tmp/show-space-field-focused-final.json",
+    "npm run build",
+    "npx tsc -b"
+  ],
+  "limits": [
+    "Actual React field/note/presentation controls with native image decode/encode and production package/read/save paths",
+    "Harness opens modes; Scene restoration uses actual store command, not full App or real browser navigation",
+    "fake-indexeddb and synthetic pointer coordinates/identity CTM; not real device touch/mouse geometry",
+    "Only GPU transport is replaced; no actual 3D pixels, fullscreen/browser or original whole 24-step acceptance",
+    "No operational accounts, email, network publication or deployment",
+    "Fullscreen is a controlled DOM API adapter, not actual browser/OS fullscreen behavior",
+    "No real project/account/device/browser/GPU/auth/email or original 24-step/user-success acceptance",
+    "No deployment; authentication/browser setup wait and paid-generation/equipment-editor exclusions remain"
+  ]
+}
